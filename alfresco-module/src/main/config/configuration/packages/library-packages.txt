@@ -1,0 +1,18 @@
+# Configures the Java packages that are exported as OSGI system packages.
+# The classes in these packages are made available to bundles in the OSGI container.
+
+javax.inject;1
+javax.annotation;1.1
+
+org.aopalliance.aop
+org.aopalliance.intercept
+org.aspectj.lang
+org.aspectj.lang.annotation
+
+org.apache.commons.logging
+
+# Note: SLF4J version must be >= 1.5.0
+org.slf4j;1.5.6
+
+# For extender.
+org.xml.sax

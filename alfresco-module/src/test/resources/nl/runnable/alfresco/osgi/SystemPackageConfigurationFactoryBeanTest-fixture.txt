@@ -1,0 +1,7 @@
+# Comment line
+
+# System package with explicit version.
+org.alfresco.service.cmr.repository; 3.2
+
+# System package with implicit version. (Determined by the factory bean.)
+org.alfresco.service.cmr.search

@@ -1,0 +1,147 @@
+{{#with content}}
+  <h1>
+    {{name}}
+    {{#if aspect}}
+      aspect
+    {{else}}
+      type
+    {{/if}}
+  </h1>
+
+  <table class="metadata table well">
+    <tr>
+      <th class="name">Parent</th>
+      <td value="value">
+        <a {{action showClassDefinition parent href="true"}}>{{parent.name}}</a>
+      </td>
+    </tr>
+    <tr>
+      <th class="name">Default aspects</th>
+      <td value="value">
+        {{#if defaultAspects}}
+          <ul class="aspects">
+            {{#each defaultAspects}}
+              <li>
+                <a {{action showClassDefinition this href="true"}}>{{name}}</a>
+              </li>
+            {{/each}}
+          </ul>
+        {{/if}}
+      </td>      
+    </tr>
+    <tr>
+      <th class="name">Model</th>
+      <td value="value">
+        <a {{action showModelDefinition model href="true"}}>{{model.name}}</a>
+      </td>
+    </tr>
+    <tr>
+      <th class="name">Title</th>
+      <td value="value">{{title}}</td>
+    </tr>
+    <tr>
+      <th class="name">Description</th>
+      <td value="value">{{description}}</td>
+    </tr>
+    <tr>
+      <th class="name">Archive</th>
+      <td value="value">{{archive}}</td>
+    </tr>
+    <tr>
+      <th class="name">Included in supertype query</th>
+      <td value="value">{{includedInSuperTypeQuery}}</td>
+    </tr>
+    <tr>
+      <th class="name">Container</th>
+      <td value="value">{{container}}</td>
+    </tr>
+  </table>
+  
+  <h2>Properties</h2>
+
+  {{#if properties}}
+    <table class="properties table well">
+      <thead>
+        <tr>
+          <th class="name">Property</th>
+          <th class="data-type">
+            Type 
+          </th>
+          <th class="mandatory">Mandatory</th>
+          <th class="default">Default</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each properties}}
+          <tr>
+            <td>
+              {{name}}
+            </td>
+            <td>
+              {{dataType}}
+              {{#if multiValued}}
+                (multiple)
+              {{/if}}
+            </td>
+            <td>
+              {{view App.MandatoryIndication}}
+            </td>
+            <td>{{defaultValue}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  {{else}}
+    <p>
+      This
+      {{#if aspect}}
+        aspect
+      {{else}}
+        type
+      {{/if}}
+    does not define any properties.
+    </p>
+  {{/if}}
+  
+  <h2>Associations</h2>
+  
+  {{#if associations}}
+    <table class="associations table well">      
+      <thead>
+        <tr>
+          <th class="name">Association</th>
+          <th class="source">Source</th>
+          <th class="target">Target</th>
+        </tr>
+      </thead>
+      {{#each associations}}
+        <tbody>        
+          <tr>
+            <td>{{name}}</td>
+            <td>
+              {{#with source}}
+                {{view App.AssociationSide}}
+              {{/with}}
+            </td>
+            <td>
+              {{#with target}}
+                {{view App.AssociationSide}}
+              {{/with}}
+            </td>
+          </tr>
+        </tbody>    
+      {{/each}}
+    </table>
+  {{else}}
+  <p>
+    This
+    {{#if aspect}}
+      aspect
+    {{else}}
+      type
+    {{/if}}
+  does not define any associations.
+  </p>
+  {{/if}}
+  
+{{/with}}

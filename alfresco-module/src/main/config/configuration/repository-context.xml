@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<description>
+		Configures integration for managing OSGi Bundles as repository content.
+	</description>
+
+	<bean id="osgi.container.BundleFolderPatch" class="nl.runnable.alfresco.osgi.container.OsgiContainerBundleFolderPatch">
+		<description>
+			Creates the default folder structure in the Alfresco repository for storing OSGi bundles.
+		</description>
+		<property name="searchService" ref="searchService" />
+		<property name="nodeService" ref="nodeService" />
+		<property name="namespaceService" ref="namespaceService" />
+		<property name="fileFolderService" ref="fileFolderService" />
+		<property name="mimetypeService" ref="mimetypeService" />
+		<property name="nodeHelper" ref="nodeHelper" />
+		<property name="bundleFolders">
+			<list>
+				<bean class="nl.runnable.alfresco.osgi.container.OsgiContainerBundleFolderPatch.BundleFolder">
+					<property name="path" value="/Data Dictionary/Dynamic Extensions/Extension Bundles" />
+					<property name="autoStart" value="ENABLED" />
+					<property name="description">
+						<value>
+							Contains Alfresco extension bundles.
+						</value>
+					</property>
+				</bean>
+				<bean class="nl.runnable.alfresco.osgi.container.OsgiContainerBundleFolderPatch.BundleFolder">
+					<property name="path" value="/Data Dictionary/Dynamic Extensions/Library Bundles" />
+					<property name="autoStart" value="FRAMEWORK" />
+					<property name="description">
+						<value>
+							Contains library bundles.
+						</value>
+					</property>
+				</bean>
+			</list>
+		</property>
+		<property name="enabled" value="${osgi.container.create-default-bundle-folders:true}" />
+	</bean>
+
+	<bean id="osgi.container.BundleService" class="nl.runnable.alfresco.osgi.container.RepositoryBundleService">
+		<description>
+			Manages Bundles stored as nodes in the Alfresco repository.
+		</description>
+		<property name="framework" ref="osgi.container.Framework" />
+		<property name="contentService" ref="contentService" />
+		<property name="nodeHelper" ref="nodeHelper" />
+		<property name="nodeService" ref="nodeService" />
+		<property name="transactionService" ref="transactionService" />
+		<property name="queryBuilderFactory" ref="queryBuilderFactory" />
+		<property name="queryHelper" ref="luceneQueryHelper" />
+		<property name="bundleHelper" ref="osgi.container.BundleHelper" />
+		<property name="managedBundleLocator" ref="osgi.container.ManagedBundleLocator" />
+		<property name="repositoryHelper" ref="osgi.container.RepositoryHelper" />
+	</bean>
+
+	<bean id="osgi.container.ManagedBundleLocator" class="nl.runnable.alfresco.osgi.container.NodeServiceManagedBundleLocator">
+		<property name="nodeService" ref="nodeService" />
+		<property name="nodeHelper" ref="nodeHelper" />
+	</bean>
+
+	<bean id="osgi.container.BundleWebScriptService" class="nl.runnable.alfresco.osgi.container.webscripts.BundleWebScriptService">
+		<description>
+			Helper for handling Bundle operations from Web Scripts.
+			This service will be injected in WebScript beans
+			in the parent application context.
+		</description>
+		<property name="bundleService" ref="osgi.container.BundleService" />
+		<property name="fileFolderService" ref="fileFolderService" />
+		<property name="nodeService" ref="nodeService" />
+		<property name="nodeHelper" ref="nodeHelper" />
+		<property name="framework" ref="osgi.container.Framework" />
+	</bean>
+
+	<bean id="osgi.container.RepositoryHelper" class="nl.runnable.alfresco.osgi.container.RepositoryHelper">
+		<property name="nodeService" ref="nodeService" />
+		<property name="contentService" ref="contentService" />
+	</bean>
+
+	<!-- Behaviours -->
+
+	<bean name="abstractBundleBehaviour" abstract="true">
+		<description>
+			Abstract bean definition for Bundle-related Behaviours.
+		</description>
+		<property name="policyComponent" ref="policyComponent" />
+		<property name="bundleService" ref="osgi.container.BundleService" />
+	</bean>
+
+	<bean id="osgi.container.BundleFolderBehaviour" parent="abstractBundleBehaviour" class="nl.runnable.alfresco.osgi.container.BundleFolderBehaviour">
+		<description>Manages the installation and removal of Bundle nodes.</description>
+		<property name="nodeService" ref="nodeService" />
+		<property name="nodeHelper" ref="nodeHelper" />
+		<property name="contentService" ref="contentService" />
+		<property name="bundleHelper" ref="osgi.container.BundleHelper" />
+		<property name="queryBuilderFactory" ref="queryBuilderFactory" />
+		<property name="queryHelper" ref="luceneQueryHelper" />
+		<property name="repositoryHelper" ref="osgi.container.RepositoryHelper" />
+	</bean>
+
+	<bean id="osgi.container.ManagedBundleBehaviour" parent="abstractBundleBehaviour"
+		class="nl.runnable.alfresco.osgi.container.ManagedBundleBehaviour">
+		<description>Manages Bundle node updates.</description>
+	</bean>
+
+	<bean id="osgi.container.ContentBehaviour" parent="abstractBundleBehaviour" class="nl.runnable.alfresco.osgi.container.ContentBehaviour">
+		<property name="nodeService" ref="nodeService" />
+		<property name="nodeHelper" ref="nodeHelper" />
+		<property name="bundleHelper" ref="osgi.container.BundleHelper" />
+	</bean>
+
+</beans>

@@ -1,0 +1,20 @@
+<table class="namespaces table table-striped table-bordered table-condensed">
+  <thead>
+    <tr>
+      <th class="uri">URI</th>
+      <th class="prefixes">Prefixes</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each controller.arrangedContent}}
+      <tr>
+        <td class="uri">{{uri}}</td>
+        <td class="prefixes">
+          {{#each prefix in prefixes}}
+            {{prefix}}
+          {{/each}}
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

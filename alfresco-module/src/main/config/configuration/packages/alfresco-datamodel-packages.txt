@@ -1,0 +1,37 @@
+# Configures the Alfresco Java packages that are exported as OSGI system packages.
+# The classes in these packages are made available to bundles in the OSGI container.
+#
+# This list is copied from the Alfresco 3.4.d SDK JavaDoc.
+
+org.alfresco.encoding
+org.alfresco.model
+org.alfresco.opencmis
+org.alfresco.opencmis.dictionary
+org.alfresco.opencmis.mapping
+org.alfresco.opencmis.search
+org.alfresco.repo.cache
+org.alfresco.repo.content
+org.alfresco.repo.content.encoding
+org.alfresco.repo.dictionary
+org.alfresco.repo.dictionary.constraint
+org.alfresco.repo.search
+org.alfresco.repo.search.impl.lucene
+org.alfresco.repo.search.impl.lucene.analysis
+org.alfresco.repo.search.impl.lucene.index
+org.alfresco.repo.search.impl.lucene.query
+org.alfresco.repo.search.impl.parsers
+org.alfresco.repo.search.impl.querymodel
+org.alfresco.repo.search.impl.querymodel.impl
+org.alfresco.repo.search.impl.querymodel.impl.functions
+org.alfresco.repo.search.impl.querymodel.impl.lucene
+org.alfresco.repo.search.impl.querymodel.impl.lucene.functions
+org.alfresco.repo.security.authentication
+org.alfresco.repo.tenant
+org.alfresco.service
+org.alfresco.service.cmr.dictionary
+org.alfresco.service.cmr.repository
+org.alfresco.service.cmr.repository.datatype
+org.alfresco.service.cmr.search
+org.alfresco.service.cmr.security
+org.alfresco.service.namespace
+org.alfresco.util

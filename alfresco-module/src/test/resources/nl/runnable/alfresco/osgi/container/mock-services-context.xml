@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<description>Mock services for integraton tests.</description>
+
+	<context:annotation-config />
+
+	<bean id="module.baseComponent" abstract="true" />
+
+	<bean id="dictionaryModelBootstrap" class="nl.runnable.alfresco.osgi.container.MockDictionaryBootstrap" />
+
+	<bean id="dictionaryBootstrap" parent="dictionaryModelBootstrap" />
+	
+	<bean name="service" class="nl.runnable.alfresco.osgi.container.MockServiceFactoryBean" abstract="true">
+		<description>Acts as a template to make the mock service bean definitions shorter.</description>
+	</bean>
+
+	<bean id="webscripts.searchpath" parent="service">
+		<property name="class" value="org.springframework.extensions.webscripts.SearchPath" />
+	</bean>
+
+	<bean id="categoryService" parent="service">
+		<property name="class" value="org.alfresco.service.cmr.search.CategoryService" />
+	</bean>
+
+	<bean id="contentService" parent="service">
+		<property name="class" value="org.alfresco.service.cmr.repository.ContentService" />
+	</bean>
+
+	<bean id="dictionaryService" parent="service">
+		<property name="class" value="org.alfresco.service.cmr.dictionary.DictionaryService" />
+	</bean>
+
+	<bean id="fileFolderService" parent="service">
+		<property name="class" value="org.alfresco.service.cmr.model.FileFolderService" />
+	</bean>
+
+	<bean id="mimetypeService" parent="service">
+		<property name="class" value="org.alfresco.service.cmr.repository.MimetypeService" />
+	</bean>
+
+	<bean id="namespaceService" parent="service">
+		<property name="class" value="org.alfresco.service.namespace.NamespaceService" />
+	</bean>
+
+	<bean id="nodeService" parent="service">
+		<property name="class" value="org.alfresco.service.cmr.repository.NodeService" />
+	</bean>
+
+	<bean id="policyComponent" parent="service">
+		<property name="class" value="org.alfresco.repo.policy.PolicyComponent" />
+	</bean>
+
+	<bean id="searchService" parent="service">
+		<property name="class" value="org.alfresco.repo.search.SearcherComponent" />
+	</bean>
+
+	<bean id="transactionService" parent="service">
+		<property name="class" value="org.alfresco.service.transaction.TransactionService" />
+	</bean>
+	
+	<bean id="DescriptorService" parent="service">
+		<property name="class" value="org.alfresco.service.descriptor.DescriptorService" />
+	</bean>
+
+</beans>

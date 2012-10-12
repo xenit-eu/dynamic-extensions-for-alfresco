@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd http://www.springframework.org/schema/util
+http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+	<import resource="classpath:/org/springframework/extensions/webscripts/spring-webscripts-application-context.xml" />
+	
+	<bean id="webscripts.registry" class="nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptRegistry">
+		<property name="annotationBasedWebScriptBuilder">
+			<bean class="nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptBuilder">
+				<property name="annotationBasedWebScriptHandler">
+					<bean class="nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptHandler"/>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean class="nl.runnable.alfresco.webscripts.ExampleWebScript" />
+
+</beans>

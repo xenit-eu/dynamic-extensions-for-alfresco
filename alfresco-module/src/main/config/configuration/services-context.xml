@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<description>
+		Configures the services from the host application (i.e. Alfresco) that are registered as OSGI services.
+		See the configuration files for more information.
+	</description>
+
+	<bean id="osgi.container.HostServices" class="nl.runnable.alfresco.osgi.ListMergingFactoryBean">
+		<property name="lists">
+			<list>
+				<ref bean="osgi.container.CoreServices" />
+				<ref bean="osgi.container.UserServices" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="osgi.container.CoreServices" class="nl.runnable.alfresco.osgi.ServiceDefinitionConfigurationFactoryBean">
+		<property name="configurations">
+			<list>
+				<value>classpath:/alfresco/module/%module.id%/configuration/services/alfresco-services.txt</value>
+				<value>classpath:/alfresco/module/%module.id%/configuration/services/osgi-container-services.txt</value>
+				<value>classpath:/alfresco/module/%module.id%/configuration/services/alfresco-api-util-services.txt</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="osgi.container.UserServices" class="nl.runnable.alfresco.osgi.ServiceDefinitionConfigurationFactoryBean">
+		<property name="configurationLocations">
+			<list>
+				<value>classpath*:/dynamic-extensions/configuration/services/*.txt</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="osgi.container.NamespaceHandlerResolver" class="org.springframework.beans.factory.xml.DefaultNamespaceHandlerResolver" />
+
+	<bean id="osgi.container.EntityResolver" class="nl.runnable.alfresco.osgi.EmbeddingApplicationSchemaResolver" />
+	
+</beans>

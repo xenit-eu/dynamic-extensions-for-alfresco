@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<description>Configured OSGi framework and related services.</description>
+
+	<bean id="osgi.container.FrameworkConfiguration" class="nl.runnable.alfresco.osgi.FrameworkConfiguration">
+		<description>
+			Provides the OSGi Framework configuration.
+		</description>
+		<property name="flushBundleCacheOnFirstInit" value="${osgi.container.flush-bundle-cache-on-startup:true}" />
+		<property name="storageDirectory" value="${osgi.container.storage-directory:tmp}" />
+		<property name="additionalSystemPackages" ref="osgi.container.HostPackages">
+			<description>Refers to the system package configuration.</description>
+		</property>
+	</bean>
+
+	<!-- Imports the OSGI framework configuration. Framework-specific configuration is kept separate to allow the possibility 
+		of switching OSGi implementations. The context configuration must provide a bean named "osgi.container.Framework". The default 
+		framework context file is "felix-framework-context.xml" -->
+	<import resource="frameworks/${osgi.container.framework:felix}-framework-context.xml" />
+
+	<bean id="osgi.container.BundleHelper" class="nl.runnable.alfresco.osgi.container.BundleHelper">
+		<description>
+			Helper for performing Bundle operations.
+		</description>
+	</bean>
+
+	<bean id="osgi.container.BundleContextRegistrar" class="nl.runnable.alfresco.osgi.ServiceBundleContextRegistrar">
+		<description>
+			Registers the host application services with the OSGi Framework.
+		</description>
+		<property name="descriptorService" ref="DescriptorService" />
+		<property name="serviceDefinitions" ref="osgi.container.HostServices" />
+		<property name="servicePropertiesProviders">
+			<list>
+				<bean class="nl.runnable.alfresco.osgi.HostApplicationServicePropertiesProvider">
+					<description>
+						Adds a "hostApplication" property to each host application service registered as an OSGi service.
+					</description>
+					<property name="hostApplication" value="alfresco" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="osgi.container.FrameworkManager" class="nl.runnable.alfresco.osgi.container.OsgiContainerFrameworkManager"
+		destroy-method="destroy">
+		<description>
+			Manages the lifecycle of the OSGi Framework and registers services and listeners.
+		</description>
+		<property name="framework" ref="osgi.container.Framework" />
+		<property name="folderPatch" ref="osgi.container.BundleFolderPatch" />
+		<property name="bundleService" ref="osgi.container.BundleService" />
+		<property name="bundleHelper" ref="osgi.container.BundleHelper" />
+		<property name="bundleContextRegistrars">
+			<list>
+				<ref bean="osgi.container.BundleContextRegistrar" />
+			</list>
+		</property>
+		<property name="bundleListeners">
+			<list>
+				<ref bean="osgi.container.BundleService" />
+			</list>
+		</property>
+		<property name="bundleBehaviours">
+			<list>
+				<ref bean="osgi.container.BundleFolderBehaviour" />
+				<ref bean="osgi.container.ManagedBundleBehaviour" />
+				<ref bean="osgi.container.ContentBehaviour" />
+			</list>
+		</property>
+		<property name="repositoryBundleManagementEnabled" value="${osgi.container.enable-repository-bundle-management:false}" />
+		<property name="blueprintBundlesLocation" value="classpath:/alfresco/module/%module.id%/blueprint-bundles/*.jar" />
+		<property name="fileInstallBundlesLocation" value="classpath:/alfresco/module/%module.id%/file-install-bundles/*.jar" />
+		<property name="fileInstallConfigurer" ref="osgi.container.FileInstallConfigurer" />
+		<property name="fileInstallEnabled" value="${osgi.container.bundle-update:true}" />
+	</bean>
+
+	<bean id="osgi.container.FileInstallConfigurer" class="nl.runnable.alfresco.osgi.FileInstallConfigurer"
+		init-method="configureSettings">
+		<property name="directories">
+			<list>
+				<value>${osgi.container.bundle-directory:dynamic-extensions}</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="osgi.container.MetadataRegistry" class="nl.runnable.alfresco.metadata.impl.MetadataRegistryImpl">
+		<description>Provides a means for registering and retrieving metadata on Dynamic Extensions.</description>
+	</bean>
+
+</beans>

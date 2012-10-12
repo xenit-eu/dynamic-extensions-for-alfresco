@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="example:simpleModel" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+	<description>Example model used for demonstration purposes.</description>
+	<author>Laurens Fridael</author>
+	<version>1.0</version>
+
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d" />
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm" />
+	</imports>
+
+	<namespaces>
+		<namespace prefix="example" uri="http://www.runnable.nl/alfresco/example/1.0" />
+	</namespaces>
+
+	<aspects>
+		<aspect name="example:simpleAspect">
+			<title>Simple aspect</title>
+			<properties>
+				<property name="example:text">
+					<title>text</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+			</properties>
+		</aspect>
+	</aspects>
+
+</model>

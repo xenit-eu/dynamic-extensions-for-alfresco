@@ -1,0 +1,22 @@
+<table class="models table table-striped table-bordered table-condensed">
+  <thead>
+      <th class="name">Name</th>
+      <th class="version">Version</th>
+      <th class="description">Description</th>
+  </thead>
+  <tbody>  
+    {{#each arrangedContent}}
+      <tr>
+        <td class="name">
+          <a {{action showModelDefinition this href="true"}}>{{name}}</a>
+        </td>
+        <td class="version">
+          {{version}}
+        </td>
+        <td class="description">
+          {{description}}
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

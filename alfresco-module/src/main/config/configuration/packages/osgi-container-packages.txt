@@ -1,0 +1,12 @@
+# Configures the Alfresco Java packages that are exported as OSGI system packages.
+# The classes in these packages are made available to bundles in the OSGI container.
+
+nl.runnable.alfresco.actions.annotations
+nl.runnable.alfresco.annotations
+nl.runnable.alfresco.behaviours.annotations
+nl.runnable.alfresco.policy
+nl.runnable.alfresco.actions
+nl.runnable.alfresco.webscripts
+nl.runnable.alfresco.webscripts.annotations
+nl.runnable.alfresco.webscripts.integration
+nl.runnable.alfresco.metadata

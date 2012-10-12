@@ -1,0 +1,1 @@
+Model XML files in this class path folder will be automatically registered and unregistered when a Dynamic Extension is deployed and undeployed.

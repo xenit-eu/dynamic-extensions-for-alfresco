@@ -1,0 +1,2 @@
+namespaceService:org.alfresco.service.namespace.NamespaceService,org.alfresco.service.namespace.NamespacePrefixResolver
+nodeService:org.alfresco.service.cmr.repository.NodeService

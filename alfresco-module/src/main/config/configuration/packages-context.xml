@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<description>
+		Configures the Java packages that are registered as system packages in the OSGi Framework. The classes in
+		these packages are then available to Bundles managed by the OSGi Framework.
+	</description>
+
+	<bean id="osgi.container.HostPackages" class="nl.runnable.alfresco.osgi.ListMergingFactoryBean">
+		<property name="lists">
+			<list>
+				<ref bean="osgi.container.AlfrescoPackages" />
+				<ref bean="osgi.container.SpringPackages" />
+				<ref bean="osgi.container.OsgiContainerPackages" />
+				<ref bean="osgi.container.LibraryPackages" />
+				<ref bean="osgi.container.UserPackages" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="osgi.container.AlfrescoPackages" class="nl.runnable.alfresco.osgi.SystemPackageConfigurationFactoryBean">
+		<property name="configurations">
+			<list>
+				<value>classpath:/alfresco/module/%module.id%/configuration/packages/alfresco-core-packages.txt</value>
+				<value>classpath:/alfresco/module/%module.id%/configuration/packages/alfresco-datamodel-packages.txt</value>
+				<value>classpath:/alfresco/module/%module.id%/configuration/packages/alfresco-deployment-packages.txt</value>
+				<value>classpath:/alfresco/module/%module.id%/configuration/packages/alfresco-repository-packages.txt</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="osgi.container.SpringPackages" class="nl.runnable.alfresco.osgi.SystemPackageConfigurationFactoryBean">
+		<property name="configurations">
+			<list>
+				<value>classpath:/alfresco/module/%module.id%/configuration/packages/spring-packages.txt</value>
+			</list>
+		</property>
+		<property name="defaultVersion" value="${osgi.container.spring-packages-version:3.0.0}">
+			<description>Blueprint implementation requires Spring version >= 3.0.0</description>
+		</property>
+	</bean>
+
+	<bean id="osgi.container.OsgiContainerPackages" class="nl.runnable.alfresco.osgi.SystemPackageConfigurationFactoryBean">
+		<property name="configurations">
+			<list>
+				<value>classpath:/alfresco/module/%module.id%/configuration/packages/osgi-container-packages.txt</value>
+			</list>
+		</property>
+		<property name="defaultVersion" value="1.0.0" />
+	</bean>
+
+	<bean id="osgi.container.LibraryPackages" class="nl.runnable.alfresco.osgi.SystemPackageConfigurationFactoryBean">
+		<property name="configurations">
+			<list>
+				<value>classpath:/alfresco/module/%module.id%/configuration/packages/alfresco-api-util-packages.txt</value>
+				<value>classpath:/alfresco/module/%module.id%/configuration/packages/library-packages.txt</value>
+				<value>classpath:/alfresco/module/%module.id%/configuration/packages/webscripts-packages.txt</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="osgi.container.UserPackages" class="nl.runnable.alfresco.osgi.SystemPackageConfigurationFactoryBean">
+		<description>For user-configured packages on the classpath.</description>
+		<property name="configurationLocations">
+			<list>
+				<value>classpath*:/dynamic-extensions/configuration/packages/*.txt</value>
+			</list>
+		</property>
+	</bean>
+
+</beans>

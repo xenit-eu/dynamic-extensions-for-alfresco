@@ -1,0 +1,18 @@
+<table class="data-types table table-striped table-bordered table-condensed">
+  <thead>
+    <tr>
+      <th class="name">Name</th>
+      <th class="model">Model</th>
+      <th class="java-class">Java Class</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each arrangedContent}}
+      <tr>
+        <td class="name">{{name}}</td>
+        <td class="model">{{model}}</td>
+        <td class="java-class">{{javaClassName}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

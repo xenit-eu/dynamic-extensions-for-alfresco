@@ -1,0 +1,12 @@
+# Configures the Alfresco Java packages that are exported as OSGI system packages.
+# The classes in these packages are made available to bundles in the OSGI container.
+#
+# This list is copied from the Alfresco 3.4.d SDK JavaDoc.
+
+org.alfresco.deployment
+org.alfresco.deployment.impl
+org.alfresco.deployment.impl.fsr
+org.alfresco.deployment.impl.server
+org.alfresco.deployment.test
+org.alfresco.deployment.transformers
+org.alfresco.deployment.util

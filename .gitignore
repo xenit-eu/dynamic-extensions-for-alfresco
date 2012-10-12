@@ -1,0 +1,7 @@
+.classpath
+.settings
+.project
+*.sh
+*.bat
+target
+tmp

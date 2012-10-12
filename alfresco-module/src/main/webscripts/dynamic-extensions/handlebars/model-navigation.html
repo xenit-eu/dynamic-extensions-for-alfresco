@@ -1,0 +1,30 @@
+{{#with content}}
+  <div class="well sidebar">
+    <ul class="nav nav-list">
+      <li class="nav-header">Model</li>
+      {{#view App.SelectionLink selectionBinding="controller.selection" content=this}}
+        <a {{action showModelDefinition this href="true"}}>{{name}}</a>
+      {{/view}}
+      {{#if types}}
+        <li class="nav-header">
+          <span>Types</span>
+        </li>
+        {{#each types}}
+          {{#view App.SelectionLink selectionBinding="controller.selection" content=this property="name"}}
+            <a {{action showClassDefinition this href="true"}}>{{name}}</a>
+          {{/view}}
+        {{/each}}
+      {{/if}}
+      {{#if aspects}}
+        <li class="nav-header">
+          <span>Aspects</span>
+        </li>
+        {{#each aspects}}      
+          {{#view App.SelectionLink selectionBinding="controller.selection" content=this property="name"}}
+            <a {{action showClassDefinition this href="true"}}>{{name}}</a>
+          {{/view}}
+        {{/each}}
+      {{/if}}
+    </ul>
+  </div>
+{{/with}}

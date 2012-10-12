@@ -1,0 +1,7 @@
+# Contains the bean names of the Web Script services and the service names under which 
+# they are registered in OSGI space.
+
+luceneQueryHelper:nl.runnable.alfresco.repository.query.QueryHelper
+queryBuilderFactory:nl.runnable.alfresco.repository.query.QueryBuilderFactory
+nodeHelper:nl.runnable.alfresco.repository.node.NodeHelper
+pathHelper:nl.runnable.alfresco.repository.node.PathHelper

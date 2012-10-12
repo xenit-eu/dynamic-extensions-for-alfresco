@@ -1,0 +1,12 @@
+# Configures the Alfresco Java packages that are exported as OSGI system packages.
+# The classes in these packages are made available to bundles in the OSGI container.
+
+org.springframework.extensions.webscripts
+org.springframework.extensions.webscripts.atom
+org.springframework.extensions.webscripts.connector
+org.springframework.extensions.webscripts.json
+org.springframework.extensions.webscripts.processor
+org.springframework.extensions.webscripts.servlet
+
+# Needed for webscripts-extensions
+freemarker.cache

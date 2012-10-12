@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<description>
+		Main configuration for the Alfresco OSGI container.
+
+		This is instantiated as a child application context, with the advantage being that configuration
+		settings such as property placeholders and annotation post processors do not affect the main Alfresco 
+		application context.
+	</description>
+
+	<!-- Note: providing a configuration file is optional, as default values are provided. -->
+	<context:property-placeholder location="classpath:/dynamic-extensions/osgi-container.properties"
+		ignore-resource-not-found="true" />
+
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<description>
+			Defines a PropertyPlaceholderConfigurer for referencing module properties.
+			
+			Uses this format: %module.property%
+		</description>
+		<property name="location"
+			value="classpath:/alfresco/module/nl.runnable.alfresco.dynamicextensions/module.properties" />
+		<property name="placeholderPrefix" value="%" />
+		<property name="placeholderSuffix" value="%" />
+	</bean>
+
+	<context:annotation-config />
+
+	<import resource="classpath:/nl/runnable/alfresco/repository/all-services-context.xml" />
+	
+	<import resource="framework-context.xml" />
+
+	<import resource="packages-context.xml" />
+
+	<import resource="services-context.xml" />
+
+	<import resource="repository-context.xml" />
+	
+</beans>
