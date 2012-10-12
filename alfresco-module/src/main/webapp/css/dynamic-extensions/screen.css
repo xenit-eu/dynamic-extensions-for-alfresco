@@ -15,7 +15,7 @@ table.type tbody .data-type { width: 34%; }
 
 table.metadata .name { width: 34%; }
 table.metadata .value { width: 66%; }
-table.metadata ul.aspects { list-style: none; margin: 0; }
+table.metadata ul { list-style: none; margin: 0; }
 
 table.properties .name { width: 34%; }
 table.properties .data-type { width: 22%; }

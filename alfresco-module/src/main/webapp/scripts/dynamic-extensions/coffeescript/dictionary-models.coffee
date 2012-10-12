@@ -49,6 +49,8 @@ Dictionary.ClassDefinition.reopenClass
     App.api.getClassDefinition(name).done (data) ->
       if data.parent
         data.parent = Dictionary.ClassDefinition.create(data.parent)
+      if data.children
+        data.children = data.children.map (child) -> Dictionary.ClassDefinition.create(child)
       data.defaultAspects = data.defaultAspects.map (aspect) -> Dictionary.ClassDefinition.create(aspect)
       data.model = Dictionary.ModelDefinition.create({ name: data.model })
       data.associations.forEach (association) -> 

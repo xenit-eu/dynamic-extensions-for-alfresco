@@ -76,6 +76,11 @@
         if (data.parent) {
           data.parent = Dictionary.ClassDefinition.create(data.parent);
         }
+        if (data.children) {
+          data.children = data.children.map(function(child) {
+            return Dictionary.ClassDefinition.create(child);
+          });
+        }
         data.defaultAspects = data.defaultAspects.map(function(aspect) {
           return Dictionary.ClassDefinition.create(aspect);
         });

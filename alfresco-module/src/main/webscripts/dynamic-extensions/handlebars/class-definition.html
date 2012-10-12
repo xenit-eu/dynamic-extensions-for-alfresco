@@ -16,6 +16,18 @@
       </td>
     </tr>
     <tr>
+      <th class="name">Children</th>
+      <td value="value">
+        {{#if children}}
+          <ul class="children">
+            {{#each children}}
+              <li><a {{action showClassDefinition this href="true"}}>{{name}}</a></li>
+            {{/each}}
+          </ul>
+        {{/if}}
+      </td>
+    </tr>
+    <tr>
       <th class="name">Default aspects</th>
       <td value="value">
         {{#if defaultAspects}}

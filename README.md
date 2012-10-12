@@ -26,7 +26,7 @@ In practice Dynamic Extensions works just fine on Alfresco Enterprise 4.0 and it
 Supports Alfresco repository only
 ---------------------------------
 
-Dynamic Extensions supports extending the Alfresco repository, which is Java-based and uses Spring as a core framework. Extending Alfresco Share is outside the scope of this project, as Share is built on an entirely different framework, that is heavily based on scripting.
+Dynamic Extensions is intended for developing extensions to the Alfresco repository only. The repository is Java-based and uses Spring as a core framework.  Extending Alfresco Share is outside the scope of this project, as Share is built on an entirely different framework.
 
 OSGi
 ----
@@ -35,8 +35,8 @@ Dynamic Extensions adds an OSGi container to Alfresco, enabling live deployment 
 
 Basically the OSGi container is responsible for:
 
-* Managing ClassLoading of OSGi bundles
+* Loading and managing the lifecycle of OSGi bundles.
 * Injecting dependencies on Alfresco repository services. I.e. NodeService, CategoryService, etc.
 * Providing support for Alfresco-oriented Java annotations. These annotations improve developer productivity by reducing boilerplate code for Web Scripts, Behaviours and Actions.
 
-The use of OSGi is kept to an absolute minimum. Code written for Dynamic Extensions has no OSGi API dependencies.
+OSGi usage is kept completely under the hood. Your Alfresco extensions have no OSGi API dependencies.

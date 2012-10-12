@@ -182,6 +182,19 @@ public class DictionarySerializationServiceImpl extends AbstractSerializationSer
 			generator.writeNullField("parent");
 		}
 		generator.writeBooleanField("aspect", classDefinition.isAspect());
+		final List<QName> children;
+		if (classDefinition.isAspect()) {
+			children = new ArrayList<QName>(getDictionaryService().getSubAspects(classDefinition.getName(), false));
+		} else {
+			children = new ArrayList<QName>(getDictionaryService().getSubTypes(classDefinition.getName(), false));
+		}
+		Collections.sort(children);
+		generator.writeArrayFieldStart("children");
+		for (final QName childName : children) {
+			final ClassDefinition childDefinition = getDictionaryService().getClass(childName);
+			serializeClassDefinitionReference(childDefinition, settings, generator);
+		}
+		generator.writeEndArray();
 		final Boolean archive = classDefinition.getArchive();
 		if (archive != null) {
 			generator.writeBooleanField("archive", archive);
