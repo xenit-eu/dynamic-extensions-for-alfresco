@@ -65,19 +65,6 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		<property name="nodeHelper" ref="nodeHelper" />
 	</bean>
 
-	<bean id="osgi.container.BundleWebScriptService" class="nl.runnable.alfresco.osgi.container.webscripts.BundleWebScriptService">
-		<description>
-			Helper for handling Bundle operations from Web Scripts.
-			This service will be injected in WebScript beans
-			in the parent application context.
-		</description>
-		<property name="bundleService" ref="osgi.container.BundleService" />
-		<property name="fileFolderService" ref="fileFolderService" />
-		<property name="nodeService" ref="nodeService" />
-		<property name="nodeHelper" ref="nodeHelper" />
-		<property name="framework" ref="osgi.container.Framework" />
-	</bean>
-
 	<bean id="osgi.container.RepositoryHelper" class="nl.runnable.alfresco.osgi.container.RepositoryHelper">
 		<property name="nodeService" ref="nodeService" />
 		<property name="contentService" ref="contentService" />

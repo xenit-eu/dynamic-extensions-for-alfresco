@@ -28,8 +28,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package nl.runnable.alfresco.osgi.container;
 
 import nl.runnable.alfresco.osgi.FrameworkManager;
-import nl.runnable.alfresco.osgi.container.webscripts.BundleWebScriptService;
-import nl.runnable.alfresco.osgi.container.webscripts.BundleWebScriptServiceAware;
 
 import org.alfresco.repo.module.AbstractModuleComponent;
 import org.springframework.beans.factory.annotation.Required;
@@ -75,21 +73,9 @@ public class OsgiContainerModuleComponent extends AbstractModuleComponent implem
 				FrameworkManager.class);
 	}
 
-	protected BundleWebScriptService getBundleWebScriptService() {
-		return getOsgiContainerApplicationContext().getBean(BundleWebScriptService.class);
-	}
-
 	@Override
 	protected void executeInternal() {
-		injectBundleWebScriptServiceDependencies();
 		initializeFrameworkManager();
-	}
-
-	protected void injectBundleWebScriptServiceDependencies() {
-		for (final BundleWebScriptServiceAware bean : getApplicationContext().getBeansOfType(
-				BundleWebScriptServiceAware.class).values()) {
-			bean.setBundleWebScriptService(getBundleWebScriptService());
-		}
 	}
 
 	protected void initializeFrameworkManager() {
