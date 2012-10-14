@@ -9,8 +9,8 @@ import nl.runnable.alfresco.json.DynamicExtensionsMetadataSerializationService;
 import nl.runnable.alfresco.metadata.Metadata;
 import nl.runnable.alfresco.metadata.Model;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.JsonGenerator;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonGenerator;
 
 @ManagedBean
 public class DynamicExtensionsMetadataSerializationServiceImpl implements DynamicExtensionsMetadataSerializationService {

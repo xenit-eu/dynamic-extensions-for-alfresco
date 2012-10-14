@@ -17,8 +17,10 @@
 		<amp.outputDirectory>${project.build.outputDirectory}/alfresco/module/${project.groupId}</amp.outputDirectory>
 		<blueprint.outputDirectory>${amp.outputDirectory}/blueprint-bundles</blueprint.outputDirectory>
 		<fileInstall.outputDirectory>${amp.outputDirectory}/file-install-bundles</fileInstall.outputDirectory>
+		<standardBundles.outputDirectory>${amp.outputDirectory}/standard-bundles</standardBundles.outputDirectory>
 		<blueprint.gemini-blueprint.version>1.0.0.RELEASE</blueprint.gemini-blueprint.version>
 		<fileinstall.version>3.2.0</fileinstall.version>
+		<jackson.version>2.1.0</jackson.version>
 	</properties>
 
 	<dependencies>
@@ -50,7 +52,7 @@
 			<artifactId>javax.annotation</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		<!-- The core asm library is already included in Alfresco distributions, so we just add asm-commons.  -->
+		<!-- The core asm library is already included in Alfresco distributions, so we just add asm-commons. -->
 		<dependency>
 			<groupId>asm</groupId>
 			<artifactId>asm-commons</artifactId>
@@ -159,6 +161,23 @@
 								</artifactItem>
 							</artifactItems>
 							<outputDirectory>${fileInstall.outputDirectory}</outputDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-standard-artifacts</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>com.fasterxml.jackson.core</groupId>
+									<artifactId>jackson-core</artifactId>
+									<version>${jackson.version}</version>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>${standardBundles.outputDirectory}</outputDirectory>
 						</configuration>
 					</execution>
 				</executions>

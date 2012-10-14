@@ -76,6 +76,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		<property name="repositoryBundleManagementEnabled" value="${osgi.container.enable-repository-bundle-management:false}" />
 		<property name="blueprintBundlesLocation" value="classpath:/alfresco/module/%module.id%/blueprint-bundles/*.jar" />
 		<property name="fileInstallBundlesLocation" value="classpath:/alfresco/module/%module.id%/file-install-bundles/*.jar" />
+		<property name="standardBundlesLocation" value="classpath:/alfresco/module/%module.id%/standard-bundles/*.jar" />
 		<property name="fileInstallConfigurer" ref="osgi.container.FileInstallConfigurer" />
 		<property name="fileInstallEnabled" value="${osgi.container.bundle-update:true}" />
 	</bean>

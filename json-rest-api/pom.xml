@@ -17,7 +17,7 @@
 		<alfresco-api.version>4.0.e</alfresco-api.version>
 		<spring-webscripts.version>1.0.0</spring-webscripts.version>
 		<maven-bundle-plugin.version>2.3.5</maven-bundle-plugin.version>
-		<jackson.version>1.9.2</jackson.version>
+		<jackson.version>2.1.0</jackson.version>
 		<dependencies.outputDirectory>${project.build.directory}/dependencies</dependencies.outputDirectory>
 	</properties>
 
@@ -71,9 +71,10 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-core-asl</artifactId>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
 			<version>${jackson.version}</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
@@ -86,35 +87,12 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
+						<!-- This instruction no longer has any effect, as the Jackson library is now a standard component of Dynamic Extensions. We leave this in for now. -->
 						<Embed-Dependency>
 							*;scope=compile|runtime
 						</Embed-Dependency>
 					</instructions>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.2</version><!--$NO-MVN-MAN-VER$ -->
-				<executions>
-					<execution>
-						<id>copy-dependencies</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>org.codehaus.jackson</groupId>
-									<artifactId>jackson-core-asl</artifactId>
-									<version>${jackson.version}</version>
-								</artifactItem>
-							</artifactItems>
-							<outputDirectory>${dependencies.outputDirectory}</outputDirectory>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 		<pluginManagement>

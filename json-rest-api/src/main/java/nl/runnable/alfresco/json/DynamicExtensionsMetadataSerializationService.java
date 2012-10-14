@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import nl.runnable.alfresco.metadata.Metadata;
 
-import org.codehaus.jackson.JsonGenerator;
+import com.fasterxml.jackson.core.JsonGenerator;
 
 /**
  * Defines operations for serializing Dynamic Extensions {@link Metadata}.

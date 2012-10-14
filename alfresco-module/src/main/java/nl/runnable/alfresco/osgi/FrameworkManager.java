@@ -91,6 +91,8 @@ public class FrameworkManager implements ResourceLoaderAware {
 
 	private String fileInstallBundlesLocation;
 
+	private String standardBundlesLocation;
+
 	private boolean fileInstallEnabled = true;
 
 	/**
@@ -100,7 +102,7 @@ public class FrameworkManager implements ResourceLoaderAware {
 	 */
 	public void initialize() {
 		startFramework();
-		final List<Bundle> standardBundles = installStandardBundles();
+		final List<Bundle> standardBundles = installBundles();
 		registerServices();
 		startBundles(standardBundles);
 		if (isFileInstallEnabled() == false) {
@@ -122,13 +124,16 @@ public class FrameworkManager implements ResourceLoaderAware {
 		}
 	}
 
-	protected List<Bundle> installStandardBundles() {
+	protected List<Bundle> installBundles() {
 		final List<Bundle> bundles = new ArrayList<Bundle>();
 		try {
 			final List<String> locationPatterns = new ArrayList<String>();
 			locationPatterns.add(getBlueprintBundlesLocation());
 			if (isFileInstallEnabled() && StringUtils.hasText(getFileInstallBundlesLocation())) {
 				locationPatterns.add(getFileInstallBundlesLocation());
+			}
+			if (StringUtils.hasText(getStandardBundlesLocation())) {
+				locationPatterns.add(getStandardBundlesLocation());
 			}
 			for (final String locationPattern : locationPatterns) {
 				for (final Resource bundleResource : getResourcePatternResolver().getResources(locationPattern)) {
@@ -361,6 +366,14 @@ public class FrameworkManager implements ResourceLoaderAware {
 
 	protected String getFileInstallBundlesLocation() {
 		return fileInstallBundlesLocation;
+	}
+
+	public void setStandardBundlesLocation(final String standardBundlesLocation) {
+		this.standardBundlesLocation = standardBundlesLocation;
+	}
+
+	protected String getStandardBundlesLocation() {
+		return standardBundlesLocation;
 	}
 
 	public void setFileInstallEnabled(final boolean installFileInstallBundles) {

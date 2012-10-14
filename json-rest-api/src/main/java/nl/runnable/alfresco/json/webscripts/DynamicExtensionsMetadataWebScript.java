@@ -11,9 +11,10 @@ import nl.runnable.alfresco.metadata.MetadataRegistry;
 import nl.runnable.alfresco.webscripts.annotations.Uri;
 import nl.runnable.alfresco.webscripts.annotations.WebScript;
 
-import org.codehaus.jackson.JsonGenerator;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
+
+import com.fasterxml.jackson.core.JsonGenerator;
 
 @ManagedBean
 @WebScript

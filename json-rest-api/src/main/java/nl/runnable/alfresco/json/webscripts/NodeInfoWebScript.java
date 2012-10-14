@@ -43,9 +43,10 @@ import nl.runnable.alfresco.webscripts.annotations.WebScript;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.StoreRef;
-import org.codehaus.jackson.JsonGenerator;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
+
+import com.fasterxml.jackson.core.JsonGenerator;
 
 /**
  * Handles Web Script requests for node information.

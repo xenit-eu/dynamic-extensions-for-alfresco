@@ -30,7 +30,8 @@ package nl.runnable.alfresco.json;
 import java.io.IOException;
 
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.codehaus.jackson.JsonGenerator;
+
+import com.fasterxml.jackson.core.JsonGenerator;
 
 /**
  * Defines operations for serializing node information to JSON format.

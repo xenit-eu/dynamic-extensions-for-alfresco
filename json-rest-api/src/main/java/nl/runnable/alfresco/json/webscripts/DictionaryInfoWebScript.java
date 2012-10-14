@@ -43,10 +43,11 @@ import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.dictionary.ModelDefinition;
 import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.alfresco.service.namespace.QName;
-import org.codehaus.jackson.JsonGenerator;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.util.Assert;
+
+import com.fasterxml.jackson.core.JsonGenerator;
 
 /**
  * Handles Web Script requests for information from the dictionary.
