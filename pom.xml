@@ -25,7 +25,6 @@
 		<asm-commons.version>3.1</asm-commons.version>
 		<maven-bundle-plugin.version>2.3.5</maven-bundle-plugin.version>
 		<felix.version>4.0.2</felix.version>
-		<equinox.version>3.6.1.R36x_v20100806</equinox.version>
 		<java.source.version>1.6</java.source.version>
 		<java.target.version>1.6</java.target.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -47,7 +46,7 @@
 		<dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-core</artifactId>
-			<version>${alfresco.version}</version>			
+			<version>${alfresco.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -115,11 +114,11 @@
 				<version>${javax-inject.version}</version>
 				<scope>provided</scope>
 			</dependency>
-      <dependency>
-         <groupId>org.glassfish</groupId>
-         <artifactId>javax.annotation</artifactId>
-         <version>${javax.annotation.version}</version>
-      </dependency>
+			<dependency>
+				<groupId>org.glassfish</groupId>
+				<artifactId>javax.annotation</artifactId>
+				<version>${javax.annotation.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.springframework.extensions.surf</groupId>
 				<artifactId>spring-webscripts</artifactId>
@@ -139,35 +138,29 @@
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.sonatype.tycho</groupId>
-				<artifactId>org.eclipse.osgi</artifactId>
-				<version>${equinox.version}</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
 				<groupId>org.osgi</groupId>
 				<artifactId>org.osgi.core</artifactId>
 				<version>${osgi.version}</version>
 				<scope>provided</scope>
 			</dependency>
-  		<dependency>
-  			<groupId>asm</groupId>
-  			<artifactId>asm-commons</artifactId>
-  			<version>${asm-commons.version}</version>
-  			<exclusions>
-  			 <exclusion>
-  			   <!-- Exclude core asm library, as it is already included in the Alfresco distribution. -->
-  			   <groupId>asm</groupId>
-  			   <artifactId>asm</artifactId>
-  			 </exclusion>
-  			 <exclusion>
-  			   <!-- asm-tree is not necessary. -->
-  			   <groupId>asm</groupId>
-  			   <artifactId>asm-tree</artifactId>
-  			 </exclusion>
-  			</exclusions>
-  			<scope>runtime</scope>
-  		</dependency>
+			<dependency>
+				<groupId>asm</groupId>
+				<artifactId>asm-commons</artifactId>
+				<version>${asm-commons.version}</version>
+				<exclusions>
+					<exclusion>
+						<!-- Exclude core asm library, as it is already included in the Alfresco distribution. -->
+						<groupId>asm</groupId>
+						<artifactId>asm</artifactId>
+					</exclusion>
+					<exclusion>
+						<!-- asm-tree is not necessary. -->
+						<groupId>asm</groupId>
+						<artifactId>asm-tree</artifactId>
+					</exclusion>
+				</exclusions>
+				<scope>runtime</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -217,7 +210,7 @@
 		<repository>
 			<id>sonatype-forge</id>
 			<url>https://repository.sonatype.org/content/groups/forge</url>
-		</repository>		
+		</repository>
 	</repositories>
 
 </project>
