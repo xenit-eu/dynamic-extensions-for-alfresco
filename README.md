@@ -13,8 +13,8 @@ Getting started
   <code>Dynamic Extension bundles can be placed in the following directories: /path/to/directory</code>.
   This is the directory in which you can deploy Dynamic Extensions.
 
-Installing the JSON REST API
-----------------------------
+Installing a Dynamic Extensions: the JSON REST API
+--------------------------------------------------
 
 The JSON REST API is a Dynamic Extension that provides JavaScript clients (i.e. web browsers) access to core Alfresco services.
 
@@ -48,4 +48,4 @@ Basically the OSGi container is responsible for:
 * Injecting dependencies on Alfresco repository services. I.e. NodeService, CategoryService, etc.
 * Providing support for Alfresco-oriented Java annotations. These annotations improve developer productivity by reducing boilerplate code for Web Scripts, Behaviours and Actions.
 
-OSGi usage is kept completely under the hood. Your Alfresco extensions have no OSGi API dependencies.
+OSGi usage is kept completely under the hood. Alfresco extensions have no OSGi API dependencies.
