@@ -6,21 +6,12 @@ Rapid development of Alfresco repository extensions in Java. Deploy your code in
 Getting started
 ---------------
 
+Prerequisites: make sure you have a local Alfresco development server installed.
+
 * Download the <a href="https://github.com/downloads/lfridael/dynamic-extensions-for-alfresco/nl.runnable.alfresco.dynamicextensions-1.0.0.M3-SNAPSHOT.amp">Dynamic Extensions milestone 3 AMP</a>.
 * Install the AMP in Alfresco using the <a href="https://wiki.alfresco.com/wiki/Module_Management_Tool">Module Management Tool</a>.
-* Start Alfresco.
-* Watch the Alfresco log for this line:
-  <code>Dynamic Extension bundles can be placed in the following directories: /path/to/directory</code>.
-  This is the directory in which you can deploy Dynamic Extensions.
-
-Installing a Dynamic Extension: the JSON REST API
---------------------------------------------------
-
-The JSON REST API is a Dynamic Extension that provides JavaScript clients (i.e. web browsers) access to core Alfresco services.
-
-* Download the <a href="https://github.com/downloads/lfridael/dynamic-extensions-for-alfresco/json-rest-api-1.0.0.M3-SNAPSHOT.jar">JSON REST API milestone 3 JAR</a>.
-* Copy the JAR to the Dynamic Extensions deployment directory. (See above.)
-* Open the <a href="http://localhost:8080/alfresco/service/dynamic-extensions#/dictionary/models">Data Dictionary browser</a>. This is a JavaScript application that uses the JSON REST API.
+* Start your local Alfresco development server.
+* Open <a href="http://localhost:8080/alfresco/service/dynamic-extensions">http://localhost:8080/alfresco/service/dynamic-extensions</a>. This shows the Dynamic Extensions console with some information.
 
 Officially supported Alfresco versions
 --------------------------------------
