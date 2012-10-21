@@ -36,6 +36,7 @@
 		<module>annotations</module>
 		<module>annotation-handling</module>
 		<module>blueprint-integration</module>
+		<module>management-api</module>
 		<module>alfresco-module</module>
 		<module>example-dynamic-extension</module>
 		<module>json-rest-api</module>

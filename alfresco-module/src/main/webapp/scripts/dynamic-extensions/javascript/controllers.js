@@ -6,7 +6,37 @@
 
   App.ApplicationController = Em.Controller.extend();
 
-  App.DashboardController = Em.Controller.extend();
+  App.DashboardController = Em.Controller.extend({
+    updateContent: function() {
+      var info,
+        _this = this;
+      info = Management.Info.find();
+      return info.done(function() {
+        return _this.set('content', info);
+      });
+    },
+    extensionBundles: (function() {
+      return this._filterExtensions({
+        isCoreBundle: false
+      });
+    }).property('content'),
+    coreBundles: (function() {
+      return this._filterExtensions({
+        isCoreBundle: true
+      });
+    }).property('content'),
+    _filterExtensions: function(options) {
+      var extensions;
+      extensions = this.get('content.extensions');
+      if (extensions) {
+        return this.get('content.extensions').filter(function(extension) {
+          return extension.isCoreBundle === options.isCoreBundle;
+        });
+      } else {
+        return [];
+      }
+    }
+  });
 
   App.RepositoryController = Em.Controller.extend();
 

@@ -21,6 +21,9 @@
 
   App.Api = Em.Object.extend({
     baseUri: 'http://localhost:8080/alfresco/service',
+    managementInfoUri: (function() {
+      return this._uri('/dynamic-extensions/management/info');
+    }).property('baseUri'),
     dictionaryUri: (function() {
       return this._uri('/json-api/dictionary');
     }).property('baseUri'),
@@ -39,6 +42,11 @@
           return data.replace(/"\/Date\((\d+)\)\/"/, '$1');
         }
       });
+    },
+    getManagementInfo: function() {
+      var location;
+      location = this.get('managementInfoUri');
+      return $.getJSON(location).promise();
     },
     getModelDefinitions: function() {
       var location;

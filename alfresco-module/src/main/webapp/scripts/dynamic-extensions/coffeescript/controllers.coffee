@@ -2,11 +2,32 @@ App = (exports ? this).App
 
 # -----------------------------------------------------------------------------
 
-App.ApplicationController = Em.Controller.extend();
+App.ApplicationController = Em.Controller.extend()
 
 # -----------------------------------------------------------------------------
 
-App.DashboardController = Em.Controller.extend()
+App.DashboardController = Em.Controller.extend
+  updateContent: ->
+    info = Management.Info.find()
+    info.done =>
+      @set('content', info)
+      
+  extensionBundles: (->
+    this._filterExtensions({isCoreBundle: false})
+  ).property('content')
+
+  coreBundles: (->
+    this._filterExtensions({isCoreBundle: true})
+  ).property('content')
+
+  _filterExtensions: (options) ->
+    extensions = @get('content.extensions')
+    if extensions
+      @get('content.extensions').filter (extension) ->
+        extension.isCoreBundle == options.isCoreBundle
+    else 
+      [ ]
+  
 
 # -----------------------------------------------------------------------------
 

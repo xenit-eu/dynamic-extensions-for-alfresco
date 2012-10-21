@@ -40,7 +40,7 @@ public class M2ModelFactoryBean implements FactoryBean<M2Model> {
 
 	@Override
 	public M2Model getObject() throws IOException {
-		Assert.state(getModel() != null, "Model has not been configured.");
+		Assert.state(getModel() != null, "ModelMetadata has not been configured.");
 
 		if (m2Model == null) {
 			m2Model = createM2Model();

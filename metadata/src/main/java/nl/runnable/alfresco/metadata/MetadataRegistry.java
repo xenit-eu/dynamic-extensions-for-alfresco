@@ -3,7 +3,7 @@ package nl.runnable.alfresco.metadata;
 import java.util.Collection;
 
 /**
- * Provides a means for registering and looking up {@link Metadata} across Dynamic Extensions.
+ * Provides a means for registering and looking up {@link ExtensionMetadata} across Dynamic Extensions.
  * 
  * @author Laurens Fridael
  * 
@@ -11,25 +11,32 @@ import java.util.Collection;
 public interface MetadataRegistry {
 
 	/**
-	 * Registers {@link Metadata} during bundle installation.
-	 * 
-	 * @param metadata
-	 */
-	public void registerMetadata(Metadata metadata);
-
-	/**
-	 * Unregisters {@link Metadata}. Should be called when a bundle is uninstalled.
-	 * 
-	 * @param metadata
-	 */
-	public void unregisterMetadata(Metadata metadata);
-
-	/**
-	 * Obtains all {@link Metadata}.
+	 * Provides access to the {@link ContainerMetadata}.
 	 * 
 	 * @return
 	 */
-	public Collection<Metadata> getAllMetadata();
+	public ContainerMetadata getContainerMetadata();
+
+	/**
+	 * Registers {@link ExtensionMetadata} during bundle installation.
+	 * 
+	 * @param metadata
+	 */
+	public void registerExtension(ExtensionMetadata metadata);
+
+	/**
+	 * Unregisters {@link ExtensionMetadata}. Should be called when a bundle is uninstalled.
+	 * 
+	 * @param metadata
+	 */
+	public void unregisterExtension(ExtensionMetadata metadata);
+
+	/**
+	 * Obtains all {@link ExtensionMetadata}.
+	 * 
+	 * @return
+	 */
+	public Collection<ExtensionMetadata> getExtensionsMetadata();
 
 	/**
 	 * Registers a bundle ID as being a core bundle. These ID's can then be used to distinguish between bundles

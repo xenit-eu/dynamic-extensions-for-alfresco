@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import nl.runnable.alfresco.metadata.Metadata;
-import nl.runnable.alfresco.metadata.Model;
+import nl.runnable.alfresco.metadata.ExtensionMetadata;
+import nl.runnable.alfresco.metadata.ModelMetadata;
 
 import org.alfresco.repo.dictionary.DictionaryDAO;
 import org.alfresco.repo.dictionary.M2Model;
@@ -33,7 +33,7 @@ public class ModelRegistrar {
 	private DictionaryDAO dictionaryDao;
 
 	// Note: dependency is optional.
-	private Metadata metadata;
+	private ExtensionMetadata metadata;
 
 	/* Configuration */
 
@@ -83,8 +83,9 @@ public class ModelRegistrar {
 		if (getMetadata() == null) {
 			return;
 		}
-		final Model model = new Model();
+		final ModelMetadata model = new ModelMetadata();
 		model.setName(m2Model.getName());
+		model.setVersion(m2Model.getVersion());
 		model.setDescription(m2Model.getDescription());
 		getMetadata().registerModel(qName, model);
 	}
@@ -107,11 +108,11 @@ public class ModelRegistrar {
 		return dictionaryDao;
 	}
 
-	public void setMetadata(final Metadata metadata) {
+	public void setMetadata(final ExtensionMetadata metadata) {
 		this.metadata = metadata;
 	}
 
-	protected Metadata getMetadata() {
+	protected ExtensionMetadata getMetadata() {
 		return metadata;
 	}
 

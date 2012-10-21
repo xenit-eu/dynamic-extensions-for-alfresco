@@ -176,6 +176,16 @@
 									<artifactId>jackson-core</artifactId>
 									<version>${jackson.version}</version>
 								</artifactItem>
+								<artifactItem>
+									<groupId>nl.runnable.alfresco.dynamicextensions</groupId>
+									<artifactId>json-rest-api</artifactId>
+									<version>${project.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<groupId>nl.runnable.alfresco.dynamicextensions</groupId>
+									<artifactId>management-api</artifactId>
+									<version>${project.version}</version>
+								</artifactItem>
 							</artifactItems>
 							<outputDirectory>${standardBundles.outputDirectory}</outputDirectory>
 						</configuration>

@@ -20,6 +20,7 @@
 		<script type="text/javascript" src="${url.context}/scripts/dynamic-extensions/javascript/util.js"></script>
 		<script type="text/javascript" src="${url.context}/scripts/dynamic-extensions/javascript/app-models.js"></script>
 		<script type="text/javascript" src="${url.context}/scripts/dynamic-extensions/javascript/dictionary-models.js"></script>
+		<script type="text/javascript" src="${url.context}/scripts/dynamic-extensions/javascript/management-models.js"></script>
 		<script type="text/javascript" src="${url.context}/scripts/dynamic-extensions/javascript/views.js"></script>
 		<script type="text/javascript" src="${url.context}/scripts/dynamic-extensions/javascript/bootstrap-views.js"></script>
 		<script type="text/javascript" src="${url.context}/scripts/dynamic-extensions/javascript/controllers.js"></script>
@@ -27,7 +28,9 @@
     <@handlebars.templates names = [
       "application", 
       "dashboard", 
-      "dictionary"
+      "dictionary",
+      "extension-index",
+      "extension-table"
       "repository", 
       "model-index", 
       "model", 

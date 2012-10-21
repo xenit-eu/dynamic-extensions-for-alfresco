@@ -36,7 +36,7 @@ public class DynamicExtensionsMetadataWebScript extends AbstractJsonWebScript {
 	@Uri("/json-api/dynamic-extensions/metadata")
 	public void getMetadata(final WebScriptRequest request, final WebScriptResponse response) throws IOException {
 		final JsonGenerator generator = createJsonGenerator(response, createSerializationSettings(request));
-		serializationService.serializeDynamicExtensionsMetadata(metadataRegistry.getAllMetadata(), generator);
+		serializationService.serializeDynamicExtensionsMetadata(metadataRegistry.getExtensionsMetadata(), generator);
 		generator.close();
 	}
 

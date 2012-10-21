@@ -23,6 +23,10 @@ App.Api = Em.Object.extend
   
   baseUri: 'http://localhost:8080/alfresco/service'
   
+  managementInfoUri: (->
+    @_uri('/dynamic-extensions/management/info')
+  ).property('baseUri')
+  
   dictionaryUri: (->
     @_uri('/json-api/dictionary')
   ).property('baseUri')
@@ -48,7 +52,11 @@ App.Api = Em.Object.extend
         
   # Main operations
   
-  getModelDefinitions:  ->
+  getManagementInfo: ->
+    location = @get('managementInfoUri')
+    $.getJSON(location).promise()
+    
+  getModelDefinitions: ->
     location = "#{@get('dictionaryUri')}/models"
     $.getJSON(location).promise()
       

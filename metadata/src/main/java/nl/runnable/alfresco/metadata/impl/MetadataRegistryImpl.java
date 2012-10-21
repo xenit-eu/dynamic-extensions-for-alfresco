@@ -5,34 +5,42 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import nl.runnable.alfresco.metadata.Metadata;
+import nl.runnable.alfresco.metadata.ContainerMetadata;
+import nl.runnable.alfresco.metadata.ExtensionMetadata;
 import nl.runnable.alfresco.metadata.MetadataRegistry;
 
 public class MetadataRegistryImpl implements MetadataRegistry {
 
-	private final List<Metadata> allMetadata = new ArrayList<Metadata>();
+	private final ContainerMetadata containerMetadata = new ContainerMetadata();
+
+	private final List<ExtensionMetadata> extensionsMetadata = new ArrayList<ExtensionMetadata>();
 
 	private final Set<Long> coreBundleIds = new HashSet<Long>();
 
 	@Override
-	public void registerMetadata(final Metadata metadata) {
-		if (allMetadata.contains(metadata) == false) {
+	public ContainerMetadata getContainerMetadata() {
+		return containerMetadata;
+	}
+
+	@Override
+	public void registerExtension(final ExtensionMetadata metadata) {
+		if (extensionsMetadata.contains(metadata) == false) {
 			metadata.setMetadataRegistry(this);
-			allMetadata.add(metadata);
+			extensionsMetadata.add(metadata);
 		}
 	}
 
 	@Override
-	public void unregisterMetadata(final Metadata metadata) {
-		if (allMetadata.contains(metadata)) {
-			allMetadata.remove(metadata);
+	public void unregisterExtension(final ExtensionMetadata metadata) {
+		if (extensionsMetadata.contains(metadata)) {
+			extensionsMetadata.remove(metadata);
 			metadata.setMetadataRegistry(null);
 		}
 	}
 
 	@Override
-	public List<Metadata> getAllMetadata() {
-		return allMetadata;
+	public List<ExtensionMetadata> getExtensionsMetadata() {
+		return extensionsMetadata;
 	}
 
 	@Override

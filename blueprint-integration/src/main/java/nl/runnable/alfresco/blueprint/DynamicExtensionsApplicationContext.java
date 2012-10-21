@@ -31,7 +31,7 @@ import java.io.IOException;
 import java.util.Date;
 
 import nl.runnable.alfresco.actions.AnnotationBasedActionRegistrar;
-import nl.runnable.alfresco.metadata.Metadata;
+import nl.runnable.alfresco.metadata.ExtensionMetadata;
 import nl.runnable.alfresco.policy.AnnotationBasedBehaviourRegistrar;
 import nl.runnable.alfresco.policy.DefaultBehaviourProxyFactory;
 import nl.runnable.alfresco.policy.ProxyPolicyComponentFactoryBean;
@@ -217,7 +217,7 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 	}
 
 	/**
-	 * Registers the {@link Metadata} bean for recording information on the dynamic extensions.
+	 * Registers the {@link ExtensionMetadata} bean for recording information on the dynamic extensions.
 	 * <p>
 	 * This implementation initializes the bean's properties with settings from the extension's {@link Bundle}.
 	 * 
@@ -227,7 +227,7 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 		if (beanFactory.containsBeanDefinition(METADATA_BEAN_NAME) == false) {
 			beanFactory.registerBeanDefinition(
 					METADATA_BEAN_NAME,
-					BeanDefinitionBuilder.rootBeanDefinition(Metadata.class)
+					BeanDefinitionBuilder.rootBeanDefinition(ExtensionMetadata.class)
 							.addPropertyValue("bundleId", getBundle().getBundleId())
 							.addPropertyValue("name", getBundle().getSymbolicName())
 							.addPropertyValue("version", getBundle().getVersion().toString())
@@ -388,13 +388,13 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 	}
 
 	/**
-	 * Creates a {@link Metadata} metadata object using this application context's {@link Bundle}.
+	 * Creates a {@link ExtensionMetadata} metadata object using this application context's {@link Bundle}.
 	 * 
 	 * @return
 	 */
-	protected Metadata createMetadata() {
+	protected ExtensionMetadata createMetadata() {
 		final Bundle bundle = getBundle();
-		final Metadata metadata = new Metadata();
+		final ExtensionMetadata metadata = new ExtensionMetadata();
 		metadata.setBundleId(bundle.getBundleId());
 		metadata.setName(bundle.getSymbolicName());
 		metadata.setVersion(bundle.getVersion().toString());

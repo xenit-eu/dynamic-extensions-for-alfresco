@@ -5,13 +5,13 @@ package nl.runnable.alfresco.metadata;
  * 
  * @author Laurens Fridael
  */
-public class Model {
+public class ModelMetadata {
 
 	private String name;
 
 	private String description;
 
-	private String filename;
+	private String version;
 
 	public String getName() {
 		return name;
@@ -29,12 +29,12 @@ public class Model {
 		this.description = description;
 	}
 
-	public void setFilename(final String filename) {
-		this.filename = filename;
+	public void setVersion(final String version) {
+		this.version = version;
 	}
 
-	public String getFilename() {
-		return filename;
+	public String getVersion() {
+		return version;
 	}
 
 }

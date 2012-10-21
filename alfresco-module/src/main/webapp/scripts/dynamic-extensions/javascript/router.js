@@ -13,6 +13,7 @@
       dashboard: Em.Route.extend({
         route: '/dashboard',
         connectOutlets: function(router) {
+          router.get('dashboardController').updateContent();
           return router.get('applicationController').connectOutlet('dashboard');
         }
       }),

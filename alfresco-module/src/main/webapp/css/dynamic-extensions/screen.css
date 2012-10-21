@@ -25,3 +25,6 @@ table.properties .default { width: 22%; }
 table.associations .name { width: 34%; }
 table.associations .source { width: 33%; }
 table.associations .target { width: 33%; }
+
+table.extensions .name { width: 66%; }
+table.extensions .version { width: 34%; }

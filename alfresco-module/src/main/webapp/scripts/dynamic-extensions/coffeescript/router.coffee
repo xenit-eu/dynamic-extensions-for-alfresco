@@ -11,6 +11,7 @@ App.Router = Em.Router.extend
     dashboard: Em.Route.extend
       route: '/dashboard'
       connectOutlets: (router) ->
+        router.get('dashboardController').updateContent()
         router.get('applicationController').connectOutlet('dashboard')
         
     dictionary: Em.Route.extend

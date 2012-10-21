@@ -13,7 +13,7 @@ import org.alfresco.service.namespace.QName;
  * @author Laurens Fridael
  * 
  */
-public class Metadata {
+public class ExtensionMetadata {
 
 	/* Dependencies */
 
@@ -29,7 +29,7 @@ public class Metadata {
 
 	private Date createdAt;
 
-	private final Map<QName, Model> modelsByQName = new LinkedHashMap<QName, Model>();
+	private final Map<QName, ModelMetadata> modelsByQName = new LinkedHashMap<QName, ModelMetadata>();
 
 	/* Dependencies */
 
@@ -83,7 +83,7 @@ public class Metadata {
 		return createdAt;
 	}
 
-	public void registerModel(final QName qName, final Model model) {
+	public void registerModel(final QName qName, final ModelMetadata model) {
 		modelsByQName.put(qName, model);
 	}
 
@@ -91,18 +91,18 @@ public class Metadata {
 		modelsByQName.remove(qName);
 	}
 
-	public Collection<Model> getModels() {
+	public Collection<ModelMetadata> getModels() {
 		return modelsByQName.values();
 	}
 
 	/* Lifecycle */
 
 	public void register() {
-		getMetadataRegistry().registerMetadata(this);
+		getMetadataRegistry().registerExtension(this);
 	}
 
 	public void unregister() {
-		getMetadataRegistry().unregisterMetadata(this);
+		getMetadataRegistry().unregisterExtension(this);
 	}
 
 	/* Equality */
@@ -127,7 +127,7 @@ public class Metadata {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		final Metadata other = (Metadata) obj;
+		final ExtensionMetadata other = (ExtensionMetadata) obj;
 		if (name == null) {
 			if (other.name != null) {
 				return false;

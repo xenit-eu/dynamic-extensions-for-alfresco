@@ -36,6 +36,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import nl.runnable.alfresco.metadata.ContainerMetadata;
 import nl.runnable.alfresco.metadata.MetadataRegistry;
 import nl.runnable.alfresco.osgi.container.BundleHelper;
 
@@ -105,11 +106,11 @@ public class FrameworkManager implements ResourceLoaderAware {
 	 */
 	public void initialize() {
 		startFramework();
-		getMetadataRegistry().registerCoreBundle(getFramework().getBundleId());
+		registerFrameworkMetadata();
 		final List<Bundle> coreBundles = installCoreBundles();
 		registerServices();
 		startBundles(coreBundles);
-		registerCoreBundles(coreBundles);
+		registerCoreBundleMetadata(coreBundles);
 		if (isFileInstallEnabled() == false) {
 			final List<Bundle> extensionBundles = installExtensionBundles();
 			startBundles(extensionBundles);
@@ -130,7 +131,7 @@ public class FrameworkManager implements ResourceLoaderAware {
 	}
 
 	/**
-	 * Installs thebBundles that make up the core of the framework. These bundles are started before any extension
+	 * Installs the Bundles that make up the core of the framework. These bundles are started before any extension
 	 * bundles.
 	 * <p>
 	 * The core bundles consist of:
@@ -213,11 +214,21 @@ public class FrameworkManager implements ResourceLoaderAware {
 	}
 
 	/**
-	 * Registers the given Bundles as core bundles with the {@link MetadataRegistry}.
+	 * Registers the {@link Framework} with the {@link MetadataRegistry}.
+	 */
+	protected void registerFrameworkMetadata() {
+		getMetadataRegistry().registerCoreBundle(getFramework().getBundleId());
+		final ContainerMetadata containerMetadata = getMetadataRegistry().getContainerMetadata();
+		containerMetadata.setFrameworkBundleId(getFramework().getBundleId());
+		containerMetadata.setFileInstallPaths(fileInstallConfigurer.getDirectoriesAsAbsolutePaths());
+	}
+
+	/**
+	 * Registers the given core Bundles with the {@link MetadataRegistry}.
 	 * 
 	 * @param coreBundles
 	 */
-	protected void registerCoreBundles(final List<Bundle> coreBundles) {
+	protected void registerCoreBundleMetadata(final List<Bundle> coreBundles) {
 		for (final Bundle coreBundle : coreBundles) {
 			getMetadataRegistry().registerCoreBundle(coreBundle.getBundleId());
 		}
