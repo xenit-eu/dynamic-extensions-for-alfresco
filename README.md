@@ -46,6 +46,6 @@ Basically the OSGi container is responsible for:
 
 * Loading and managing the lifecycle of OSGi bundles.
 * Injecting dependencies on Alfresco repository services. I.e. NodeService, CategoryService, etc.
-* Providing support for Alfresco-oriented Java annotations. These annotations improve developer productivity by reducing boilerplate code for Web Scripts, Behaviours and Actions.
+* Providing support for Java annotations that reduce boilerplate code for Web Scripts, Behaviours and Actions. These annotations are unique to Dynamic Extensions.
 
 OSGi usage is kept completely under the hood. Alfresco extensions have no OSGi API dependencies.
