@@ -1,4 +1,4 @@
-# Contains the bean names of the Web Script services and the service names under which 
+# Contains the bean names of the OSGi container services and the service names under which 
 # they are registered in OSGI space.
 #
 # Format: <bean name>:<service name>[,<servicename>...]

@@ -28,6 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package nl.runnable.alfresco.blueprint;
 
 import java.io.IOException;
+import java.util.Date;
 
 import nl.runnable.alfresco.actions.AnnotationBasedActionRegistrar;
 import nl.runnable.alfresco.metadata.Metadata;
@@ -226,11 +227,12 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 		if (beanFactory.containsBeanDefinition(METADATA_BEAN_NAME) == false) {
 			beanFactory.registerBeanDefinition(
 					METADATA_BEAN_NAME,
-					BeanDefinitionBuilder.rootBeanDefinition(Metadata.class).setInitMethodName("register")
+					BeanDefinitionBuilder.rootBeanDefinition(Metadata.class)
+							.addPropertyValue("bundleId", getBundle().getBundleId())
 							.addPropertyValue("name", getBundle().getSymbolicName())
 							.addPropertyValue("version", getBundle().getVersion().toString())
-							.setDestroyMethodName("unregister")
-							.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE).getBeanDefinition());
+							.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE).setInitMethodName("register")
+							.setDestroyMethodName("unregister").getBeanDefinition());
 		}
 	}
 
@@ -249,10 +251,11 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 		if (beanFactory.containsBeanDefinition(MODEL_REGISTRAR_BEAN_NAME) == false) {
 			beanFactory.registerBeanDefinition(
 					MODEL_REGISTRAR_BEAN_NAME,
-					BeanDefinitionBuilder.rootBeanDefinition(ModelRegistrar.class).setInitMethodName("registerModels")
-							.setDestroyMethodName("unregisterModels")
+					BeanDefinitionBuilder.rootBeanDefinition(ModelRegistrar.class)
 							.addPropertyReference("models", M2_MODEL_LIST_FACTORY_BEAN_NAME)
-							.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE).getBeanDefinition());
+							.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE)
+							.setInitMethodName("registerModels").setDestroyMethodName("unregisterModels")
+							.getBeanDefinition());
 		}
 	}
 
@@ -278,9 +281,9 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 			beanFactory.registerBeanDefinition(
 					ANNOTATION_BASED_BEHAVIOUR_REGISTRAR_BEAN_NAME,
 					BeanDefinitionBuilder.rootBeanDefinition(AnnotationBasedBehaviourRegistrar.class)
-							.setInitMethodName("bindBehaviours")
 							.addPropertyReference("policyComponent", PROXY_POLICY_COMPONENT_BEAN_NAME)
-							.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE).getBeanDefinition());
+							.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE)
+							.setInitMethodName("bindBehaviours").getBeanDefinition());
 		}
 	}
 
@@ -294,9 +297,9 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 			beanFactory.registerBeanDefinition(
 					ANNOTATION_BASED_ACTION_REGISTRAR_BEAN_NAME,
 					BeanDefinitionBuilder.rootBeanDefinition(AnnotationBasedActionRegistrar.class)
+							.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE)
 							.setInitMethodName("registerAnnotationBasedActions")
-							.setDestroyMethodName("unregisterAnnotationBasedActions")
-							.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE).getBeanDefinition());
+							.setDestroyMethodName("unregisterAnnotationBasedActions").getBeanDefinition());
 		}
 	}
 
@@ -322,18 +325,19 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 			beanFactory.registerBeanDefinition(
 					COMPOSITE_REGISTRY_MANAGER_BEAN_NAME,
 					BeanDefinitionBuilder.rootBeanDefinition(CompositeRegistryManager.class)
-							.setInitMethodName("registerRegistries").setDestroyMethodName("unregisterRegistries")
 							.addPropertyValue("compositeRegistry", getService(CompositeRegistry.class))
 							.addPropertyReference("registries", ANNOTATION_BASED_WEB_SCRIPT_REGISTRY_BEAN_NAME)
+							.setInitMethodName("registerRegistries").setDestroyMethodName("unregisterRegistries")
 							.getBeanDefinition());
 		}
 		if (beanFactory.containsBeanDefinition(SEARCH_PATH_REGISTRY_MANAGER_BEAN_NAME) == false) {
 			beanFactory.registerBeanDefinition(
 					SEARCH_PATH_REGISTRY_MANAGER_BEAN_NAME,
 					BeanDefinitionBuilder.rootBeanDefinition(SearchPathRegistryManager.class)
-							.setInitMethodName("registerStores").setDestroyMethodName("unregisterStores")
 							.addPropertyValue("searchPathRegistry", getService(SearchPathRegistry.class))
-							.addPropertyValue("stores", new BundleStore(getBundle())).getBeanDefinition());
+							.addPropertyValue("stores", new BundleStore(getBundle()))
+							.setInitMethodName("registerStores").setDestroyMethodName("unregisterStores")
+							.getBeanDefinition());
 		}
 	}
 
@@ -388,12 +392,14 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 	 * 
 	 * @return
 	 */
-	protected Metadata createDynamicExtension() {
+	protected Metadata createMetadata() {
 		final Bundle bundle = getBundle();
-		final Metadata dynamicExtension = new Metadata();
-		dynamicExtension.setName(bundle.getSymbolicName());
-		dynamicExtension.setVersion(bundle.getVersion().toString());
-		return dynamicExtension;
+		final Metadata metadata = new Metadata();
+		metadata.setBundleId(bundle.getBundleId());
+		metadata.setName(bundle.getSymbolicName());
+		metadata.setVersion(bundle.getVersion().toString());
+		metadata.setCreatedAt(new Date());
+		return metadata;
 	}
 
 	/* Configuration */

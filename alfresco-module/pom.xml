@@ -19,7 +19,7 @@
 		<fileInstall.outputDirectory>${amp.outputDirectory}/file-install-bundles</fileInstall.outputDirectory>
 		<standardBundles.outputDirectory>${amp.outputDirectory}/standard-bundles</standardBundles.outputDirectory>
 		<blueprint.gemini-blueprint.version>1.0.0.RELEASE</blueprint.gemini-blueprint.version>
-		<fileinstall.version>3.2.0</fileinstall.version>
+		<fileinstall.version>3.2.4</fileinstall.version>
 		<jackson.version>2.1.0</jackson.version>
 	</properties>
 

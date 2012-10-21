@@ -36,6 +36,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import nl.runnable.alfresco.metadata.MetadataRegistry;
 import nl.runnable.alfresco.osgi.container.BundleHelper;
 
 import org.osgi.framework.Bundle;
@@ -81,6 +82,8 @@ public class FrameworkManager implements ResourceLoaderAware {
 
 	private FileInstallConfigurer fileInstallConfigurer;
 
+	private MetadataRegistry metadataRegistry;
+
 	/* Configuration */
 
 	private List<BundleListener> bundleListeners = Collections.emptyList();
@@ -102,9 +105,11 @@ public class FrameworkManager implements ResourceLoaderAware {
 	 */
 	public void initialize() {
 		startFramework();
-		final List<Bundle> standardBundles = installBundles();
+		getMetadataRegistry().registerCoreBundle(getFramework().getBundleId());
+		final List<Bundle> coreBundles = installCoreBundles();
 		registerServices();
-		startBundles(standardBundles);
+		startBundles(coreBundles);
+		registerCoreBundles(coreBundles);
 		if (isFileInstallEnabled() == false) {
 			final List<Bundle> extensionBundles = installExtensionBundles();
 			startBundles(extensionBundles);
@@ -124,7 +129,21 @@ public class FrameworkManager implements ResourceLoaderAware {
 		}
 	}
 
-	protected List<Bundle> installBundles() {
+	/**
+	 * Installs thebBundles that make up the core of the framework. These bundles are started before any extension
+	 * bundles.
+	 * <p>
+	 * The core bundles consist of:
+	 * <ul>
+	 * <li>Gemini Blueprint
+	 * <li>File Install
+	 * <li>Any additional standard bundles configured through {@link #setStandardBundlesLocation(String)}. (Currently
+	 * contains the Jackson JSON library.)
+	 * </ul>
+	 * 
+	 * @return
+	 */
+	protected List<Bundle> installCoreBundles() {
 		final List<Bundle> bundles = new ArrayList<Bundle>();
 		try {
 			final List<String> locationPatterns = new ArrayList<String>();
@@ -151,7 +170,7 @@ public class FrameworkManager implements ResourceLoaderAware {
 				}
 			}
 		} catch (final IOException e) {
-			throw new RuntimeException("Error installing standard Bundles: " + e.getMessage(), e);
+			throw new RuntimeException("Error installing core Bundles: " + e.getMessage(), e);
 		}
 		return bundles;
 
@@ -191,6 +210,17 @@ public class FrameworkManager implements ResourceLoaderAware {
 			}
 		}
 		return bundles;
+	}
+
+	/**
+	 * Registers the given Bundles as core bundles with the {@link MetadataRegistry}.
+	 * 
+	 * @param coreBundles
+	 */
+	protected void registerCoreBundles(final List<Bundle> coreBundles) {
+		for (final Bundle coreBundle : coreBundles) {
+			getMetadataRegistry().registerCoreBundle(coreBundle.getBundleId());
+		}
 	}
 
 	protected void startBundles(final List<Bundle> bundles) {
@@ -318,6 +348,14 @@ public class FrameworkManager implements ResourceLoaderAware {
 
 	protected FileInstallConfigurer getFileInstallConfigurer() {
 		return fileInstallConfigurer;
+	}
+
+	public void setMetadataRegistry(final MetadataRegistry metadataRegistry) {
+		this.metadataRegistry = metadataRegistry;
+	}
+
+	protected MetadataRegistry getMetadataRegistry() {
+		return metadataRegistry;
 	}
 
 	/* Configuration */

@@ -21,6 +21,8 @@ public class Metadata {
 
 	/* State */
 
+	private long bundleId;
+
 	private String name;
 
 	private String version;
@@ -40,6 +42,22 @@ public class Metadata {
 	}
 
 	/* State */
+
+	public void setBundleId(final long bundleId) {
+		this.bundleId = bundleId;
+	}
+
+	public long getBundleId() {
+		return bundleId;
+	}
+
+	public boolean isCoreBundle() {
+		boolean coreBundle = false;
+		if (getMetadataRegistry() != null) {
+			coreBundle = getMetadataRegistry().isCoreBundle(getBundleId());
+		}
+		return coreBundle;
+	}
 
 	public String getName() {
 		return name;

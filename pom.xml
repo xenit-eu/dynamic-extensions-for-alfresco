@@ -24,7 +24,7 @@
 		<!-- The asm-commons version should match the version of the core asm library used by Alfresco -->
 		<asm-commons.version>3.1</asm-commons.version>
 		<maven-bundle-plugin.version>2.3.5</maven-bundle-plugin.version>
-		<felix.version>4.0.2</felix.version>
+		<felix.version>4.0.3</felix.version>
 		<java.source.version>1.6</java.source.version>
 		<java.target.version>1.6</java.target.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

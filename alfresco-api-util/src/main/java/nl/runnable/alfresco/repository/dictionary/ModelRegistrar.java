@@ -53,7 +53,7 @@ public class ModelRegistrar {
 				}
 				final QName modelName = getDictionaryDao().putModel(model);
 				registeredModelNames.add(modelName);
-				registerMetadata(modelName, model);
+				registerModelMetadata(modelName, model);
 			} catch (final DictionaryException e) {
 				if (logger.isWarnEnabled()) {
 					logger.warn("Could not register model '{}': ", model.getName(), e.getMessage());
@@ -79,15 +79,21 @@ public class ModelRegistrar {
 
 	/* Utility operations */
 
-	protected void registerMetadata(final QName qName, final M2Model m2Model) {
+	protected void registerModelMetadata(final QName qName, final M2Model m2Model) {
+		if (getMetadata() == null) {
+			return;
+		}
 		final Model model = new Model();
 		model.setName(m2Model.getName());
 		model.setDescription(m2Model.getDescription());
-		metadata.registerModel(qName, model);
+		getMetadata().registerModel(qName, model);
 	}
 
 	protected void unregisterMetadata(final QName modelName) {
-		metadata.unregisterModel(modelName);
+		if (getMetadata() == null) {
+			return;
+		}
+		getMetadata().unregisterModel(modelName);
 	}
 
 	/* Dependencies */
