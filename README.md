@@ -13,7 +13,7 @@ Getting started
   <code>Dynamic Extension bundles can be placed in the following directories: /path/to/directory</code>.
   This is the directory in which you can deploy Dynamic Extensions.
 
-Installing a Dynamic Extensions: the JSON REST API
+Installing a Dynamic Extension: the JSON REST API
 --------------------------------------------------
 
 The JSON REST API is a Dynamic Extension that provides JavaScript clients (i.e. web browsers) access to core Alfresco services.
