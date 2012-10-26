@@ -35,7 +35,9 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+import org.dom4j.Document;
 import org.osgi.framework.Bundle;
+import org.springframework.extensions.surf.util.Pair;
 import org.springframework.extensions.webscripts.ScriptLoader;
 import org.springframework.extensions.webscripts.Store;
 import org.springframework.extensions.webscripts.WebScript;
@@ -204,5 +206,14 @@ public class BundleStore implements Store {
 	@Override
 	public boolean removeDocument(final String documentPath) throws IOException {
 		throw new UnsupportedOperationException("Not supported");
+	}
+
+	@Override
+	public void createDocuments(final List<Pair<String, Document>> arg0) throws IOException {
+	}
+
+	@Override
+	public boolean isReadOnly() {
+		return true;
 	}
 }

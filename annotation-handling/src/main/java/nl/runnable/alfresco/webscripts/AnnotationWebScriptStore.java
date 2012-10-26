@@ -29,7 +29,10 @@ package nl.runnable.alfresco.webscripts;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
+import org.dom4j.Document;
+import org.springframework.extensions.surf.util.Pair;
 import org.springframework.extensions.webscripts.ScriptLoader;
 import org.springframework.extensions.webscripts.Store;
 import org.springframework.extensions.webscripts.WebScript;
@@ -138,6 +141,12 @@ class AnnotationWebScriptStore implements Store {
 	@Override
 	public boolean isReadOnly() {
 		return true;
+	}
+
+	// New in 1.1.0 or 1.2.0
+
+	@Override
+	public void createDocuments(final List<Pair<String, Document>> arg0) throws IOException {
 	}
 
 }

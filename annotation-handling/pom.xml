@@ -28,7 +28,7 @@
 		<dependency>
 			<groupId>org.springframework.extensions.surf</groupId>
 			<artifactId>spring-webscripts-api</artifactId>
-			<version>1.0.0-RC2</version>
+			<version>${spring-webscripts.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

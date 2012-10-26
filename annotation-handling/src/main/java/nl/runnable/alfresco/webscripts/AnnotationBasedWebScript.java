@@ -34,6 +34,7 @@ import java.util.ResourceBundle;
 import org.springframework.extensions.webscripts.Container;
 import org.springframework.extensions.webscripts.Description;
 import org.springframework.extensions.webscripts.DescriptionImpl;
+import org.springframework.extensions.webscripts.URLModelFactory;
 import org.springframework.extensions.webscripts.WebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
@@ -95,6 +96,11 @@ class AnnotationBasedWebScript implements WebScript {
 	public ResourceBundle getResources() {
 		/* Not yet supported. */
 		return null;
+	}
+
+	@Override
+	public void setURLModelFactory(final URLModelFactory arg0) {
+		/* Not yet implemented. */
 	}
 
 	@Override

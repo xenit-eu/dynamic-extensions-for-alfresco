@@ -11,12 +11,11 @@
 	<properties>
 		<alfresco.version>4.0.e</alfresco.version>
 		<spring.version>3.0.0.RELEASE</spring.version>
-		<spring-surf.version>1.0.0-RC2</spring-surf.version>
-		<spring-webscripts.version>1.0.0</spring-webscripts.version>
+		<spring-surf.version>1.2.0-SNAPSHOT</spring-surf.version>
+		<spring-webscripts.version>1.2.0-SNAPSHOT</spring-webscripts.version>
 		<servlet-api.version>2.5</servlet-api.version>
 		<javax-inject.version>1</javax-inject.version>
 		<geronimo-annotation.version>1.0.1</geronimo-annotation.version>
-		<javax.annotation.version>3.1.1</javax.annotation.version>
 		<slf4j.version>1.5.11</slf4j.version>
 		<junit.version>4.8.2</junit.version>
 		<mockito.version>1.8.5</mockito.version>
@@ -37,9 +36,9 @@
 		<module>annotation-handling</module>
 		<module>blueprint-integration</module>
 		<module>management-api</module>
+		<module>json-rest-api</module>
 		<module>alfresco-module</module>
 		<module>example-dynamic-extension</module>
-		<module>json-rest-api</module>
 	</modules>
 
 	<dependencies>
@@ -116,9 +115,9 @@
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.glassfish</groupId>
-				<artifactId>javax.annotation</artifactId>
-				<version>${javax.annotation.version}</version>
+				<groupId>org.apache.geronimo.specs</groupId>
+				<artifactId>geronimo-annotation_1.1_spec</artifactId>
+				<version>${geronimo-annotation.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.extensions.surf</groupId>
@@ -203,6 +202,15 @@
 		<repository>
 			<id>alfresco-public</id>
 			<url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
+		</repository>
+		<repository>
+			<id>surf</id>
+			<url>https://maven.alfresco.com/nexus/service/local/repositories/snapshot.extensions.springframework.org/content</url>
+		</repository>
+		<repository>
+			<id>springsource-repo</id>
+			<name>SpringSource Repository</name>
+			<url>http://repo.springsource.org/release</url>
 		</repository>
 		<repository>
 			<id>zodiac-repository</id>

@@ -48,8 +48,8 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.glassfish</groupId>
-			<artifactId>javax.annotation</artifactId>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-annotation_1.1_spec</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 		<!-- The core asm library is already included in Alfresco distributions, so we just add asm-commons. -->
@@ -240,7 +240,7 @@
 	<pluginRepositories>
 		<pluginRepository>
 			<id>alfresco-public</id>
-			<url>http://maven.alfresco.com/nexus/content/groups/public</url>
+			<url>https://maven.alfresco.com/nexus/content/groups/public</url>
 		</pluginRepository>
 	</pluginRepositories>
 

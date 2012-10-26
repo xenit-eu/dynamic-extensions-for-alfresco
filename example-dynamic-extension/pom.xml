@@ -11,11 +11,11 @@
 
 	<properties>
 		<javax-inject.version>1</javax-inject.version>
-		<javax.annotation.version>3.1.1</javax.annotation.version>
+		<geronimo-annotation.version>1.0.1</geronimo-annotation.version>
 		<dynamicextensions-metadata.version>1.0.0.M3-SNAPSHOT</dynamicextensions-metadata.version>
 		<dynamicextensions-annotations.version>1.0.0.M3-SNAPSHOT</dynamicextensions-annotations.version>
 		<alfresco-api.version>4.0.e</alfresco-api.version>
-		<spring-webscripts.version>1.0.0</spring-webscripts.version>
+		<spring-webscripts.version>1.2.0-SNAPSHOT</spring-webscripts.version>
 		<maven-bundle-plugin.version>2.3.5</maven-bundle-plugin.version>
 	</properties>
 
@@ -27,9 +27,9 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.glassfish</groupId>
-			<artifactId>javax.annotation</artifactId>
-			<version>${javax.annotation.version}</version>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-annotation_1.1_spec</artifactId>
+			<version>${geronimo-annotation.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -84,7 +84,16 @@
 	<repositories>
 		<repository>
 			<id>alfresco-public</id>
-			<url>http://maven.alfresco.com/nexus/content/groups/public</url>
+			<url>https://maven.alfresco.com/nexus/content/groups/public</url>
+		</repository>
+		<repository>
+			<id>surf</id>
+			<url>https://maven.alfresco.com/nexus/service/local/repositories/snapshot.extensions.springframework.org/content</url>
+		</repository>
+		<repository>
+			<id>springsource-repo</id>
+			<name>SpringSource Repository</name>
+			<url>http://repo.springsource.org/release</url>
 		</repository>
 	</repositories>
 	

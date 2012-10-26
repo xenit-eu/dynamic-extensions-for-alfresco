@@ -17,7 +17,6 @@
 
 	<properties>
 		<gemini-blueprint.version>1.0.0.RELEASE</gemini-blueprint.version>
-		<spring-webscripts.version>1.0.0-RC2</spring-webscripts.version>
 		<webscripts-extensions.version>1.0.0-SNAPSHOT</webscripts-extensions.version>
 		<com-springsource-osgi-util.version>2.0.5.RELEASE</com-springsource-osgi-util.version>
 	</properties>
