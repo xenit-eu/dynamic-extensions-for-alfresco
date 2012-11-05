@@ -37,8 +37,8 @@
 		<module>blueprint-integration</module>
 		<module>management-api</module>
 		<module>json-rest-api</module>
+		<module>alfresco-integration</module>
 		<module>alfresco-module</module>
-		<module>alfresco-amp</module>
 		<module>example-dynamic-extension</module>
 	</modules>
 
