@@ -61,6 +61,11 @@ public class AugmentingRegistry implements Registry {
 
 	private final List<Registry> registries;
 
+	/**
+	 * Constructs an instance using the given {@link Registry} instances.
+	 * 
+	 * @param registries
+	 */
 	public AugmentingRegistry(final List<Registry> registries) {
 		Assert.notEmpty(registries, "Registries cannot be empty.");
 		this.registries = registries;
@@ -69,6 +74,18 @@ public class AugmentingRegistry implements Registry {
 	protected List<Registry> getRegistries() {
 		return registries;
 	}
+
+	/**
+	 * Adds Registries after initialization.
+	 * 
+	 * @param registries
+	 * @see AugmentingRegistryBeanPostProcessor#postProcessBeforeInitialization(Object, String)
+	 */
+	public void addRegistries(final Collection<Registry> registries) {
+		getRegistries().addAll(registries);
+	}
+
+	/* Registry implementation */
 
 	@Override
 	public Path getPackage(final String packagePath) {

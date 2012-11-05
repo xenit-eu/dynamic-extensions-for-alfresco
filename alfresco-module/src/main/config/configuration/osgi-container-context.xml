@@ -35,6 +35,8 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	
 	<import resource="framework-context.xml" />
 
+	<import resource="web-scripts-context.xml" />
+
 	<import resource="packages-context.xml" />
 
 	<import resource="services-context.xml" />

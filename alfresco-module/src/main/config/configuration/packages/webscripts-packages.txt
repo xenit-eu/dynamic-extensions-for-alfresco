@@ -7,6 +7,7 @@ org.springframework.extensions.webscripts.connector
 org.springframework.extensions.webscripts.json
 org.springframework.extensions.webscripts.processor
 org.springframework.extensions.webscripts.servlet
+org.springframework.extensions.surf.util
 
-# Needed for webscripts-extensions
 freemarker.cache
+org.dom4j

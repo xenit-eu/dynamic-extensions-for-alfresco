@@ -45,9 +45,34 @@ import org.springframework.util.Assert;
  */
 public class OsgiContainerModuleComponent extends AbstractModuleComponent implements ApplicationContextAware {
 
+	/* Dependencies */
+
 	private ApplicationContext applicationContext;
 
 	private ConfigurableApplicationContext osgiContainerApplicationContext;
+
+	/* Main operations */
+
+	@Override
+	protected void executeInternal() {
+		initializeFrameworkManager();
+	}
+
+	public void destroy() {
+		closeApplicationContext();
+	}
+
+	/* Utility operations */
+
+	protected void initializeFrameworkManager() {
+		getFrameworkManager().initialize();
+	}
+
+	protected void closeApplicationContext() {
+		getOsgiContainerApplicationContext().close();
+	}
+
+	/* Dependencies */
 
 	@Override
 	public void setApplicationContext(final ApplicationContext applicationContext) {
@@ -68,26 +93,11 @@ public class OsgiContainerModuleComponent extends AbstractModuleComponent implem
 		return osgiContainerApplicationContext;
 	}
 
+	/* State */
+
 	protected FrameworkManager getFrameworkManager() {
 		return getOsgiContainerApplicationContext().getBean(BeanNames.CONTAINER_FRAMEWORK_MANAGER,
 				FrameworkManager.class);
-	}
-
-	@Override
-	protected void executeInternal() {
-		initializeFrameworkManager();
-	}
-
-	protected void initializeFrameworkManager() {
-		getFrameworkManager().initialize();
-	}
-
-	public void destroy() {
-		closeApplicationContext();
-	}
-
-	protected void closeApplicationContext() {
-		getOsgiContainerApplicationContext().close();
 	}
 
 }
