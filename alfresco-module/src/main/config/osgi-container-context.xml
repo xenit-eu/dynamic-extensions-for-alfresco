@@ -5,13 +5,7 @@
 http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context
 http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<description>
-		Main configuration for the Alfresco OSGI container.
-
-		This is instantiated as a child application context, with the advantage being that configuration
-		settings such as property placeholders and annotation post processors do not affect the main Alfresco 
-		application context.
-	</description>
+	<description>Configures a child application context containing OSGi container services.</description>
 
 	<!-- Note: providing a configuration file is optional, as default values are provided. -->
 	<context:property-placeholder location="classpath:/dynamic-extensions/osgi-container.properties"
@@ -31,16 +25,6 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<context:annotation-config />
 
-	<import resource="classpath:/nl/runnable/alfresco/repository/all-services-context.xml" />
-	
-	<import resource="framework-context.xml" />
-
-	<import resource="web-scripts-context.xml" />
-
-	<import resource="packages-context.xml" />
-
-	<import resource="services-context.xml" />
-
-	<import resource="repository-context.xml" />
+	<import resource="classpath:/META-INF/spring/osgi-container/all-context.xml" />
 	
 </beans>

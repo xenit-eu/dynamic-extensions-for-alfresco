@@ -26,7 +26,7 @@
 			<artifactId>alfresco-integration</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- Runtime dependencies will be added to AMP.-->
+		<!-- Runtime dependencies will be added to AMP. -->
 		<dependency>
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
@@ -55,6 +55,10 @@
 			<artifactId>spring-webscripts</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>org.apache.felix.framework</artifactId>
+		</dependency>
 	</dependencies>
 	<profiles>
 		<profile>
@@ -67,13 +71,6 @@
 				</property>
 			</activation>
 			<!-- We override the dependency scope. -->
-			<dependencies>
-				<dependency>
-					<groupId>org.apache.felix</groupId>
-					<artifactId>org.apache.felix.framework</artifactId>
-					<scope>compile</scope>
-				</dependency>
-			</dependencies>
 		</profile>
 	</profiles>
 	<build>

@@ -5,7 +5,7 @@
 http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context
 http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<description>Configured OSGi framework and related services.</description>
+	<description>Configures OSGi framework and related services.</description>
 
 	<bean id="osgi.container.FrameworkConfiguration" class="nl.runnable.alfresco.osgi.FrameworkConfiguration">
 		<description>

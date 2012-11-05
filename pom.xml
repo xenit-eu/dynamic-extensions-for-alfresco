@@ -137,7 +137,6 @@
 				<groupId>org.apache.felix</groupId>
 				<artifactId>org.apache.felix.framework</artifactId>
 				<version>${felix.version}</version>
-				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.osgi</groupId>

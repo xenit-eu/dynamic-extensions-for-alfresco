@@ -30,6 +30,7 @@ package nl.runnable.alfresco.osgi;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -156,18 +157,22 @@ public class FrameworkManager implements ResourceLoaderAware {
 				locationPatterns.add(getStandardBundlesLocation());
 			}
 			for (final String locationPattern : locationPatterns) {
-				for (final Resource bundleResource : getResourcePatternResolver().getResources(locationPattern)) {
-					final String location = bundleResource.getURI().toString();
-					if (logger.isDebugEnabled()) {
-						logger.debug("Installing Bundle: {}", location);
+				try {
+					for (final Resource bundleResource : getResourcePatternResolver().getResources(locationPattern)) {
+						final String location = bundleResource.getURI().toString();
+						if (logger.isDebugEnabled()) {
+							logger.debug("Installing Bundle: {}", location);
+						}
+						try {
+							final Bundle bundle = getFramework().getBundleContext().installBundle(location,
+									bundleResource.getInputStream());
+							bundles.add(bundle);
+						} catch (final BundleException e) {
+							logger.error("Error installing Bundle: {}", e);
+						}
 					}
-					try {
-						final Bundle bundle = getFramework().getBundleContext().installBundle(location,
-								bundleResource.getInputStream());
-						bundles.add(bundle);
-					} catch (final BundleException e) {
-						logger.error("Error installing Bundle: {}", e);
-					}
+				} catch (final FileNotFoundException e) {
+					logger.warn("Could not find Bundles at location '{}'.", locationPattern);
 				}
 			}
 		} catch (final IOException e) {
