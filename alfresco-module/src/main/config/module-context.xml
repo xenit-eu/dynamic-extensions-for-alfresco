@@ -5,21 +5,7 @@
 http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context
 http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<description>
-		This configuration does the following:
-
-		- Register the OSGi Bundle Model.
-		- Configure Web Scripts integration with OSGi bundles.
-		- Instantiate the child application context that holds the OSGi container.
-
-		Further OSGi container configuration is specified in the child application context.
-
-		Beans in this configuration become part of	main Alfresco application context. 
-		Care should be taken when using property placeholders and annotation post processors
-		as these might affect the configuration of bean in the main Alfresco application context.
-	</description>
-
-	<!-- Model bootstrap -->
+	<!-- Models -->
 
 	<bean id="osgi.container.BundleModelBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
 		<description>Bootstraps the OSGi Bundle Model.</description>
@@ -28,49 +14,31 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<!-- Web Script integration. -->
 
-	<bean id="osgi.container.WebScriptRegistry" class="nl.runnable.alfresco.webscripts.integration.ConcurrentCompositeRegistry">
-		<description>
-			This Registry instance will be made available as an OSGi service.
-			OSGi bundles can register their Web Script Registries with this service.
+	<bean class="nl.runnable.alfresco.webscripts.integration.AugmentingRegistryBeanPostProcessor">
+		<description>Replaces the Web Scripts Registry with an AugmentingRegistry, enabling integration with OSGi bundles.
 		</description>
-	</bean>
-	
-	<bean id="osgi.container.WebScriptSearchPathRegistry" class="nl.runnable.alfresco.webscripts.integration.SearchPathRegistryImpl">
-		<description>
-			Will be made available as an OSGi service.
-			OSGi bundles can register additional Web Script Stores with this service.
-		</description>	
-		<property name="searchPath" ref="webscripts.searchpath" />
-	</bean>
-	
-	<!-- The Web Script Container will be made available as an OSGi service. -->
-	<alias name="webscripts.container" alias="osgi.container.WebScriptContainer" />
-	
-	<bean id="osgi.container.WebScriptIntegrationService" class="nl.runnable.alfresco.webscripts.integration.CompositeRegistryBeanPostProcessor">
 		<property name="registryBeanName" value="webscripts.registry.prototype">
 			<description>
 				Refers to the Web Scripts Registry as defined in standard Alfresco configuration.
 
 				This Registry will be augmented with a proxy to the Web Script Registries in the OSGi container.
 
-				Note: we must refer to the prototype bean "webscripts.registry.prototype" and NOT to the 
+				Note: we must refer to the prototype bean
+				"webscripts.registry.prototype" and NOT to the
 				singleton bean "webscripts.registry".
 			</description>
 		</property>
-		<property name="additionalRegistries">
-			<list>
-				<ref bean="osgi.container.WebScriptRegistry" />
-			</list>
-		</property>
+		<property name="osgiContainerApplicationContextBeanName" value="osgi.container.OsgiContainerApplicationContext" />
 	</bean>
-	
+
 	<!-- Action integration -->
-	
+
 	<bean id="osgi.container.ActionExecuterRegistry" class="nl.runnable.alfresco.actions.DefaultActionExecuterRegistry" />
-	
+
 	<bean class="nl.runnable.alfresco.actions.ActionServiceBeanPostProcessor">
 		<description>Processes the ActionService bean so that calls for obtaining ActionExecuters are routed to the
-		 ActionExecuterRegistry as well.</description>
+			ActionExecuterRegistry as well.
+		</description>
 		<property name="actionServiceBeanName" value="actionService" />
 		<property name="actionApplicationContextProxy">
 			<bean class="nl.runnable.alfresco.actions.ActionApplicationContextProxy">
@@ -78,7 +46,9 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 			</bean>
 		</property>
 	</bean>
-	
+
+	<!-- Module -->
+
 	<bean id="osgi.container.ModuleComponent" class="nl.runnable.alfresco.osgi.container.OsgiContainerModuleComponent"
 		parent="module.baseComponent" destroy-method="destroy">
 		<description>Instantiates the child application context and initializes the FrameworkManager within it.</description>
@@ -96,5 +66,5 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		<property name="configLocations"
 			value="classpath:alfresco/module/nl.runnable.alfresco.dynamicextensions/configuration/osgi-container-context.xml" />
 	</bean>
-	
+
 </beans>
