@@ -38,6 +38,7 @@
 		<module>management-api</module>
 		<module>json-rest-api</module>
 		<module>alfresco-module</module>
+		<module>alfresco-amp</module>
 		<module>example-dynamic-extension</module>
 	</modules>
 
@@ -118,6 +119,7 @@
 				<groupId>org.apache.geronimo.specs</groupId>
 				<artifactId>geronimo-annotation_1.1_spec</artifactId>
 				<version>${geronimo-annotation.version}</version>
+				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.extensions.surf</groupId>

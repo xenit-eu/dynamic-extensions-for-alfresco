@@ -25,10 +25,10 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	<bean id="osgi.container.AlfrescoPackages" class="nl.runnable.alfresco.osgi.SystemPackageConfigurationFactoryBean">
 		<property name="configurations">
 			<list>
-				<value>classpath:/alfresco/module/%module.id%/configuration/packages/alfresco-core-packages.txt</value>
-				<value>classpath:/alfresco/module/%module.id%/configuration/packages/alfresco-datamodel-packages.txt</value>
-				<value>classpath:/alfresco/module/%module.id%/configuration/packages/alfresco-deployment-packages.txt</value>
-				<value>classpath:/alfresco/module/%module.id%/configuration/packages/alfresco-repository-packages.txt</value>
+				<value>classpath:/META-INF/spring/packages/alfresco-core-packages.txt</value>
+				<value>classpath:/META-INF/spring/packages/alfresco-datamodel-packages.txt</value>
+				<value>classpath:/META-INF/spring/packages/alfresco-deployment-packages.txt</value>
+				<value>classpath:/META-INF/spring/packages/alfresco-repository-packages.txt</value>
 			</list>
 		</property>
 	</bean>
@@ -36,7 +36,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	<bean id="osgi.container.SpringPackages" class="nl.runnable.alfresco.osgi.SystemPackageConfigurationFactoryBean">
 		<property name="configurations">
 			<list>
-				<value>classpath:/alfresco/module/%module.id%/configuration/packages/spring-packages.txt</value>
+				<value>classpath:/META-INF/spring/packages/spring-packages.txt</value>
 			</list>
 		</property>
 		<property name="defaultVersion" value="${osgi.container.spring-packages-version:3.0.0}">
@@ -47,7 +47,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	<bean id="osgi.container.OsgiContainerPackages" class="nl.runnable.alfresco.osgi.SystemPackageConfigurationFactoryBean">
 		<property name="configurations">
 			<list>
-				<value>classpath:/alfresco/module/%module.id%/configuration/packages/osgi-container-packages.txt</value>
+				<value>classpath:/META-INF/spring/packages/osgi-container-packages.txt</value>
 			</list>
 		</property>
 		<property name="defaultVersion" value="1.0.0" />
@@ -56,9 +56,9 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	<bean id="osgi.container.LibraryPackages" class="nl.runnable.alfresco.osgi.SystemPackageConfigurationFactoryBean">
 		<property name="configurations">
 			<list>
-				<value>classpath:/alfresco/module/%module.id%/configuration/packages/alfresco-api-util-packages.txt</value>
-				<value>classpath:/alfresco/module/%module.id%/configuration/packages/library-packages.txt</value>
-				<value>classpath:/alfresco/module/%module.id%/configuration/packages/webscripts-packages.txt</value>
+				<value>classpath:/META-INF/spring/packages/alfresco-api-util-packages.txt</value>
+				<value>classpath:/META-INF/spring/packages/library-packages.txt</value>
+				<value>classpath:/META-INF/spring/packages/webscripts-packages.txt</value>
 			</list>
 		</property>
 	</bean>
