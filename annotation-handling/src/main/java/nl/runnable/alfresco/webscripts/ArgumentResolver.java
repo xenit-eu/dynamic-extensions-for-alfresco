@@ -61,7 +61,7 @@ public interface ArgumentResolver<ArgumentType extends Object, AnnotationType ex
 	 *            The parameter annotation. Will be null if no annotation is present. Implementations may choose to
 	 *            disregard this.
 	 * @param name
-	 *            The argument name. May be null if the calling cannot determine the argument name.
+	 *            The argument name. May be null if the calling code cannot determine the argument name.
 	 * @param request
 	 * @param response
 	 * @return The parameter value, may be null if the result of the evaluation is indeed null.

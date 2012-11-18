@@ -70,10 +70,10 @@ public class RequestParameterArgumentResolver implements ArgumentResolver<Object
 	}
 
 	@Override
-	public Object resolveArgument(final Class<?> parameterType, final RequestParam requestParameter,
+	public Object resolveArgument(final Class<?> parameterType, final RequestParam requestParam,
 			final String name, final WebScriptRequest request, final WebScriptResponse response) {
-		Assert.notNull(requestParameter, "RequestParam annotation cannot be null.");
-		String parameterName = requestParameter.value();
+		Assert.notNull(requestParam, "RequestParam annotation cannot be null.");
+		String parameterName = requestParam.value();
 		if (StringUtils.hasText(parameterName) == false) {
 			parameterName = name;
 		}
@@ -85,9 +85,9 @@ public class RequestParameterArgumentResolver implements ArgumentResolver<Object
 		if (parameterType.isArray() == false) {
 			String parameterValue = request.getParameter(parameterName);
 			if (parameterValue == null) {
-				if (StringUtils.hasText(requestParameter.defaultValue())) {
-					parameterValue = requestParameter.defaultValue();
-				} else if (requestParameter.required()) {
+				if (StringUtils.hasText(requestParam.defaultValue())) {
+					parameterValue = requestParam.defaultValue();
+				} else if (requestParam.required()) {
 					throw new IllegalStateException(String.format("Request parameter not available: %s", parameterName));
 				}
 			}
@@ -95,10 +95,10 @@ public class RequestParameterArgumentResolver implements ArgumentResolver<Object
 		} else {
 			String[] parameterValues = request.getParameterValues(parameterName);
 			if (parameterValues == null) {
-				if (requestParameter.required()) {
+				if (requestParam.required()) {
 					throw new IllegalStateException(String.format("Request parameter not available: %s", parameterName));
 				} else {
-					parameterValues = new String[] { requestParameter.defaultValue() };
+					parameterValues = new String[] { requestParam.defaultValue() };
 				}
 			}
 			final Object[] values = new Object[parameterValues.length];

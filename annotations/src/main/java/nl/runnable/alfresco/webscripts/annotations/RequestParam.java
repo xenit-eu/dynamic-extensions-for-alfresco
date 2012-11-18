@@ -39,8 +39,6 @@ public @interface RequestParam {
 	/**
 	 * The request parameter name. If not specified, the parameter's Java variable name will be used instead. (The
 	 * variable name is only available if classes are compiled with debug info.)
-	 * <p>
-	 * Specifying the parameter name explicitly is a matter of personal preference.
 	 */
 	String value() default "";
 

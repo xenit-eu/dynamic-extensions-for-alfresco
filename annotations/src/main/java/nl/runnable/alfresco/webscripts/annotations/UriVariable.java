@@ -35,7 +35,11 @@ import java.lang.annotation.Target;
 @Target({ ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UriVariable {
-	String value();
+	/**
+	 * The URI variable name. If not specified, the parameter's Java variable name will be used instead. (The variable
+	 * name is only available if classes are compiled with debug info.)
+	 */
+	String value() default "";
 
 	boolean required() default true;
 }

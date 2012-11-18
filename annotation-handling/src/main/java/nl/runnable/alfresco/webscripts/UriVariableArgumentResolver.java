@@ -33,6 +33,7 @@ import nl.runnable.alfresco.webscripts.annotations.UriVariable;
 
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
+import org.springframework.util.StringUtils;
 
 public class UriVariableArgumentResolver implements ArgumentResolver<String, UriVariable> {
 
@@ -44,7 +45,14 @@ public class UriVariableArgumentResolver implements ArgumentResolver<String, Uri
 	@Override
 	public String resolveArgument(final Class<?> parameterType, final UriVariable uriVariable, final String name,
 			final WebScriptRequest request, final WebScriptResponse response) {
-		final String variableName = uriVariable.value();
+		String variableName = uriVariable.value();
+		if (StringUtils.hasText(variableName) == false) {
+			variableName = name;
+		}
+		if (StringUtils.hasText(variableName) == false) {
+			throw new RuntimeException(
+					"Cannot determine name of URI variable. Specify the name using the @UriVariable annotation.");
+		}
 		final String variable = request.getServiceMatch().getTemplateVars().get(variableName);
 		if (variable == null && uriVariable.required()) {
 			throw new IllegalStateException(String.format("URI variable not available: %s", variableName));
