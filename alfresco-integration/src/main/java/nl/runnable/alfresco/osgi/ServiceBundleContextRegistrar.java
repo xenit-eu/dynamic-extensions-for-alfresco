@@ -90,7 +90,7 @@ public class ServiceBundleContextRegistrar implements BundleContextRegistrar, Ap
 		Assert.notNull(bundleContext, "BundleContext cannot be null.");
 
 		final Descriptor descriptor = getDescriptorService().getServerDescriptor();
-		if (descriptor != null) {
+		if (descriptor == null) {
 			if (logger.isDebugEnabled()) {
 				logger.debug("Could not obtain Descriptor. This is normal when running an integration test.");
 			}
