@@ -68,6 +68,8 @@ class DefaultHandlerMethodArgumentsResolver implements HandlerMethodArgumentsRes
 		argumentResolvers.add((ArgumentResolver) new MatchArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new RuntimeArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new NodeRefArgumentResolver());
+		argumentResolvers.add((ArgumentResolver) new NodeRefArgumentResolver());
+		argumentResolvers.add((ArgumentResolver) new CommandArgumentResolver());
 	}
 
 	@Override
@@ -103,8 +105,8 @@ class DefaultHandlerMethodArgumentsResolver implements HandlerMethodArgumentsRes
 			if (methodParameterNames != null) {
 				name = methodParameterNames[index];
 			}
-			arguments[index] = argumentResolver.resolveArgument(parameterTypes[index], mappingAnnotation, name, request,
-					response);
+			arguments[index] = argumentResolver.resolveArgument(parameterTypes[index], mappingAnnotation, name,
+					request, response);
 		}
 		return arguments;
 	}

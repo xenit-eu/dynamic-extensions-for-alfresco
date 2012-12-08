@@ -1,0 +1,2 @@
+# Contains references to internal Alfresco services.
+fileFolderCannedQueryRegistry:org.alfresco.util.registry.NamedObjectRegistry:low-level:4.0
