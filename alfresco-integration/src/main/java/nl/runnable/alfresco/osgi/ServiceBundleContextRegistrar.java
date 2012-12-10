@@ -113,17 +113,27 @@ public class ServiceBundleContextRegistrar implements BundleContextRegistrar, Ap
 					}
 				}
 				if (getApplicationContext().containsBean(beanName) == false) {
-					logger.warn(
-							"Could not find service \"{}\". This service will not be registered in the OSGI container.",
-							beanName);
+					if (logger.isWarnEnabled()) {
+						logger.warn(
+								"Could not find service \"{}\". This service will not be registered in the OSGI container.",
+								beanName);
+					}
 					continue;
 				}
 				if (getApplicationContext().isSingleton(beanName) == false) {
-					logger.warn(String.format("Service \"{}\" is not a singleton. Can only register singleton beans.",
-							beanName));
+					if (logger.isWarnEnabled()) {
+						logger.warn(String.format(
+								"Service \"{}\" is not a singleton. Can only register singleton beans.", beanName));
+					}
 					continue;
 				}
 				final Object service = getApplicationContext().getBean(beanName);
+				if (service == null) {
+					if (logger.isWarnEnabled()) {
+						logger.warn("Cannot find bean '{}'", beanName);
+					}
+					continue;
+				}
 				if (isVerifyServicesImplementInterfaces()
 						&& verifyServiceImplementsInterfaces(service, serviceNames) == false) {
 					continue;

@@ -70,6 +70,8 @@ class DefaultHandlerMethodArgumentsResolver implements HandlerMethodArgumentsRes
 		argumentResolvers.add((ArgumentResolver) new NodeRefArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new NodeRefArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new CommandArgumentResolver());
+		argumentResolvers.add((ArgumentResolver) new HttpServletRequestArgumentResolver());
+		argumentResolvers.add((ArgumentResolver) new HttpServletResponseArgumentResolver());
 	}
 
 	@Override

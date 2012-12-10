@@ -9,5 +9,7 @@ org.springframework.extensions.webscripts.processor
 org.springframework.extensions.webscripts.servlet
 org.springframework.extensions.surf.util
 
+javax.servlet
+javax.servlet.http
 freemarker.cache
 org.dom4j
