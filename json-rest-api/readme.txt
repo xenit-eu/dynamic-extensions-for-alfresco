@@ -2,7 +2,14 @@
 JSON REST API
 ===============================================================================
 
-This is an experimental Dynamic Extension implementating a JSON-based REST API. 
+-------------------------------------------------------------------------------
+NOTE: this API is now deprecated.
+
+Work on the JSON-based REST API lives on in the Vault project:
+https://github.com/lfridael/vault/
+-------------------------------------------------------------------------------
+
+This is an experimental Dynamic Extension implementing a JSON-based REST API. 
 This API is an alternative to CMIS and the standard Alfresco API for accessing 
 the repository and is intended for JavaScript client-side development.
 
