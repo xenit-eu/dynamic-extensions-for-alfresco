@@ -29,6 +29,7 @@ package nl.runnable.alfresco.webscripts;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import org.springframework.extensions.webscripts.Container;
@@ -50,18 +51,24 @@ class AnnotationBasedWebScript implements WebScript {
 
 	private final Method handlerMethod;
 
+	private final List<Method> referenceDataMethods;
+
 	private final AnnotationBasedWebScriptHandler annotationMethodHandler;
 
 	public AnnotationBasedWebScript(final DescriptionImpl description, final Object handler,
-			final Method handlerMethod, final AnnotationBasedWebScriptHandler annotationMethodHandler) {
-		Assert.notNull(handler, "Handler cannot be null.");
-		Assert.notNull(handlerMethod, "Method cannot be null.");
+			final Method handlerMethod, final List<Method> referenceDataMethods,
+			final AnnotationBasedWebScriptHandler annotationMethodHandler) {
 		Assert.notNull(description, "Description cannot be null.");
 		Assert.hasText(description.getId(), "No ID provided in Description.");
+		Assert.notNull(handler, "Handler cannot be null.");
+		Assert.notNull(handlerMethod, "Method cannot be null.");
+		Assert.notNull(referenceDataMethods);
+		Assert.notNull(annotationMethodHandler);
 
 		this.description = description;
 		this.handler = handler;
 		this.handlerMethod = handlerMethod;
+		this.referenceDataMethods = referenceDataMethods;
 		this.annotationMethodHandler = annotationMethodHandler;
 		this.id = description.getId();
 	}
@@ -72,6 +79,10 @@ class AnnotationBasedWebScript implements WebScript {
 
 	public Method getHandlerMethod() {
 		return handlerMethod;
+	}
+
+	public List<Method> getReferenceDataMethods() {
+		return referenceDataMethods;
 	}
 
 	@Override

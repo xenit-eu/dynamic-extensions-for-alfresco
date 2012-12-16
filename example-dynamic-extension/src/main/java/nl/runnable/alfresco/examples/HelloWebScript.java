@@ -34,12 +34,14 @@ import javax.annotation.ManagedBean;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import nl.runnable.alfresco.webscripts.annotations.ReferenceData;
 import nl.runnable.alfresco.webscripts.annotations.RequestParam;
 import nl.runnable.alfresco.webscripts.annotations.Uri;
 import nl.runnable.alfresco.webscripts.annotations.UriVariable;
 import nl.runnable.alfresco.webscripts.annotations.WebScript;
 
 import org.alfresco.service.namespace.QName;
+import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.web.bind.ServletRequestDataBinder;
 
@@ -118,6 +120,34 @@ public class HelloWebScript {
 		dataBinder.bind(request);
 		final String message = String.format("Hello, %s", person.getName());
 		response.getWriter().write(message);
+	}
+
+	/**
+	 * Obtains Illustrates request handling using {@link ReferenceData}.
+	 * 
+	 * @param name
+	 * @param response
+	 * @throws IOException
+	 */
+	@Uri("/dynamic-extensions/examples/hello-reference-data")
+	public void handleHelloReferenceData(@ReferenceData final String name, final WebScriptResponse response)
+			throws IOException {
+		final String message = String.format("Hello, %s", name);
+		response.getWriter().write(message);
+	}
+
+	/**
+	 * Methods annotated with {@link ReferenceData} provide reference data for arguments in {@link Uri} handling
+	 * methods. These arguments must be annotated with {@link ReferenceData} as well.
+	 * <p>
+	 * In this case, the method provides a String named 'name'.
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@ReferenceData
+	protected String getName(final WebScriptRequest request) {
+		return request.getParameter("name");
 	}
 
 	/**

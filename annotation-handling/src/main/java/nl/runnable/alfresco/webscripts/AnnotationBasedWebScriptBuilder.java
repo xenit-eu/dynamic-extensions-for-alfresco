@@ -37,6 +37,7 @@ import java.util.Set;
 
 import nl.runnable.alfresco.webscripts.annotations.Authentication;
 import nl.runnable.alfresco.webscripts.annotations.Cache;
+import nl.runnable.alfresco.webscripts.annotations.ReferenceData;
 import nl.runnable.alfresco.webscripts.annotations.Transaction;
 import nl.runnable.alfresco.webscripts.annotations.Uri;
 import nl.runnable.alfresco.webscripts.annotations.WebScript;
@@ -98,13 +99,32 @@ public class AnnotationBasedWebScriptBuilder implements BeanFactoryAware {
 		}
 
 		final List<AnnotationBasedWebScript> webScripts = new ArrayList<AnnotationBasedWebScript>();
+		final List<Method> referenceDataMethods = new ArrayList<Method>();
+		ReflectionUtils.doWithMethods(beanType, new ReflectionUtils.MethodCallback() {
+
+			@Override
+			public void doWith(final Method method) throws IllegalArgumentException, IllegalAccessException {
+				final ReferenceData referenceDataAnnotation = AnnotationUtils.findAnnotation(method,
+						ReferenceData.class);
+				if (referenceDataAnnotation != null) {
+					if (AnnotationUtils.findAnnotation(method, Uri.class) != null) {
+						throw new RuntimeException("Cannot mark a method with both @ReferenceData and @Uri.");
+					}
+					if (method.getReturnType().equals(Void.TYPE)) {
+						throw new RuntimeException("@ReferenceData methods cannot have a void return type.");
+					}
+					referenceDataMethods.add(method);
+				}
+			}
+		});
 		ReflectionUtils.doWithMethods(beanType, new ReflectionUtils.MethodCallback() {
 
 			@Override
 			public void doWith(final Method method) throws IllegalArgumentException, IllegalAccessException {
 				final Uri uriAnnotation = AnnotationUtils.findAnnotation(method, Uri.class);
 				if (uriAnnotation != null) {
-					final AnnotationBasedWebScript webScript = createWebScript(beanName, uriAnnotation, method);
+					final AnnotationBasedWebScript webScript = createWebScript(beanName, uriAnnotation, method,
+							referenceDataMethods);
 					if (webScript != null) {
 						webScripts.add(webScript);
 					}
@@ -125,7 +145,8 @@ public class AnnotationBasedWebScriptBuilder implements BeanFactoryAware {
 
 	/* Utility operations */
 
-	protected AnnotationBasedWebScript createWebScript(final String beanName, final Uri uri, final Method handlerMethod) {
+	protected AnnotationBasedWebScript createWebScript(final String beanName, final Uri uri,
+			final Method handlerMethod, final List<Method> helperMethods) {
 		Assert.hasText(beanName, "Bean name cannot be empty.");
 		try {
 			final DescriptionImpl description = new DescriptionImpl();
@@ -136,10 +157,10 @@ public class AnnotationBasedWebScriptBuilder implements BeanFactoryAware {
 			description.setId(id);
 			final Object handler = getBeanFactory().getBean(beanName);
 			description.setStore(new AnnotationWebScriptStore());
-			return new AnnotationBasedWebScript(description, handler, handlerMethod,
+			return new AnnotationBasedWebScript(description, handler, handlerMethod, helperMethods,
 					getAnnotationBasedWebScriptHandler());
 		} catch (final Exception e) {
-			logger.warn("Error creating annotation-based Web Script for  bean {}", beanName, e);
+			logger.warn("Error creating annotation-based Web Script for bean '{}'.", beanName, e);
 			return null;
 		}
 	}
