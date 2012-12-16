@@ -28,6 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package nl.runnable.alfresco.examples;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.annotation.ManagedBean;
 import javax.servlet.http.HttpServletRequest;
@@ -70,15 +71,17 @@ public class HelloWebScript {
 
 	/**
 	 * Illustrates that {@link QName} can now be resolved as {@link RequestParam} arguments.
+	 * <p>
+	 * Note also the use of the delimiter to split a single parameter into an array of values.
 	 * 
 	 * @param name
 	 * @param response
 	 * @throws IOException
 	 */
 	@Uri("/dynamic-extensions/examples/hello-qname")
-	public void handleHelloQNameParameter(@RequestParam final QName name, final WebScriptResponse response)
-			throws IOException {
-		final String message = String.format("Hello, %s", name);
+	public void handleHelloQNameParameter(@RequestParam(delimiter = ",") final QName[] names,
+			final WebScriptResponse response) throws IOException {
+		final String message = String.format("Hello, %s", Arrays.asList(names));
 		response.getWriter().write(message);
 	}
 

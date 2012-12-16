@@ -28,6 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package nl.runnable.alfresco.webscripts;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Array;
 
 import nl.runnable.alfresco.webscripts.annotations.RequestParam;
 
@@ -55,7 +56,10 @@ public class RequestParamArgumentResolver implements ArgumentResolver<Object, Re
 	}
 
 	@Override
-	public boolean supports(final Class<?> parameterType, final Class<? extends Annotation> annotationType) {
+	public boolean supports(Class<?> parameterType, final Class<? extends Annotation> annotationType) {
+		if (parameterType.isArray()) {
+			parameterType = parameterType.getComponentType();
+		}
 		return getStringValueConverter().isSupportedType(parameterType) && RequestParam.class.equals(annotationType);
 	}
 
@@ -73,33 +77,64 @@ public class RequestParamArgumentResolver implements ArgumentResolver<Object, Re
 		}
 		final Object parameter;
 		if (parameterType.isArray() == false) {
-			String parameterValue = request.getParameter(parameterName);
-			if (parameterValue == null) {
-				if (StringUtils.hasText(requestParam.defaultValue())) {
-					parameterValue = requestParam.defaultValue();
-				} else if (requestParam.required()) {
-					throw new IllegalStateException(String.format("Request parameter not available: %s", parameterName));
-				}
-			}
-			parameter = getStringValueConverter().convertStringValue(parameterType, parameterValue);
+			parameter = handleSingleParameter(parameterType, requestParam, request, parameterName);
+		} else if (StringUtils.hasText(requestParam.delimiter())) {
+			parameter = handleDelimitedParameter(parameterType, requestParam, request, parameterName);
 		} else {
-			String[] parameterValues = request.getParameterValues(parameterName);
-			if (parameterValues == null) {
-				if (requestParam.required()) {
-					throw new IllegalStateException(String.format("Request parameter not available: %s", parameterName));
-				} else {
-					parameterValues = new String[] { requestParam.defaultValue() };
-				}
-			}
-			final Object[] values = new Object[parameterValues.length];
-			for (int i = 0; i < parameterValues.length; i++) {
-				values[i] = getStringValueConverter().convertStringValue(parameterType.getComponentType(),
-						parameterValues[i]);
-			}
-			parameter = values;
+			parameter = handleMultipleParameters(parameterType, requestParam, request, parameterName);
 
 		}
 		return parameter;
+	}
+
+	/* Utility operations */
+
+	private Object handleSingleParameter(final Class<?> parameterType, final RequestParam requestParam,
+			final WebScriptRequest request, final String parameterName) {
+		String parameterValue = request.getParameter(parameterName);
+		if (parameterValue == null) {
+			if (StringUtils.hasText(requestParam.defaultValue())) {
+				parameterValue = requestParam.defaultValue();
+			} else if (requestParam.required()) {
+				throw new IllegalStateException(String.format("Request parameter not available: %s", parameterName));
+			}
+		}
+		return getStringValueConverter().convertStringValue(parameterType, parameterValue);
+	}
+
+	private Object handleDelimitedParameter(final Class<?> parameterType, final RequestParam requestParam,
+			final WebScriptRequest request, final String parameterName) {
+		String parameterValue = request.getParameter(parameterName);
+		if (parameterValue == null) {
+			if (StringUtils.hasText(requestParam.defaultValue())) {
+				parameterValue = requestParam.defaultValue();
+			} else if (requestParam.required()) {
+				throw new IllegalStateException(String.format("Request parameter not available: %s", parameterName));
+			}
+		}
+		final String[] parameterValues = parameterValue.split(requestParam.delimiter());
+		return convertToArray(parameterType.getComponentType(), parameterValues);
+	}
+
+	private Object handleMultipleParameters(final Class<?> parameterType, final RequestParam requestParam,
+			final WebScriptRequest request, final String parameterName) {
+		String[] parameterValues = request.getParameterValues(parameterName);
+		if (parameterValues == null) {
+			if (requestParam.required()) {
+				throw new IllegalStateException(String.format("Request parameter not available: %s", parameterName));
+			} else {
+				parameterValues = new String[] { requestParam.defaultValue() };
+			}
+		}
+		return convertToArray(parameterType.getComponentType(), parameterValues);
+	}
+
+	private Object[] convertToArray(final Class<?> arrayComponentType, final String[] parameterValues) {
+		final Object[] values = (Object[]) Array.newInstance(arrayComponentType, parameterValues.length);
+		for (int i = 0; i < parameterValues.length; i++) {
+			values[i] = getStringValueConverter().convertStringValue(arrayComponentType, parameterValues[i]);
+		}
+		return values;
 	}
 
 	/* Dependencies */
