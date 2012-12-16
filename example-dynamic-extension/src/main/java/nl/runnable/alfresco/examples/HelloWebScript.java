@@ -35,8 +35,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import nl.runnable.alfresco.webscripts.annotations.RequestParam;
 import nl.runnable.alfresco.webscripts.annotations.Uri;
+import nl.runnable.alfresco.webscripts.annotations.UriVariable;
 import nl.runnable.alfresco.webscripts.annotations.WebScript;
 
+import org.alfresco.service.namespace.QName;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.web.bind.ServletRequestDataBinder;
 
@@ -62,6 +64,34 @@ public class HelloWebScript {
 	 */
 	@Uri("/dynamic-extensions/examples/hello")
 	public void handleHello(@RequestParam final String name, final WebScriptResponse response) throws IOException {
+		final String message = String.format("Hello, %s", name);
+		response.getWriter().write(message);
+	}
+
+	/**
+	 * Illustrates that {@link QName} can now be resolved as {@link RequestParam} arguments.
+	 * 
+	 * @param name
+	 * @param response
+	 * @throws IOException
+	 */
+	@Uri("/dynamic-extensions/examples/hello-qname")
+	public void handleHelloQNameParameter(@RequestParam final QName name, final WebScriptResponse response)
+			throws IOException {
+		final String message = String.format("Hello, %s", name);
+		response.getWriter().write(message);
+	}
+
+	/**
+	 * Illustrates that {@link QName} can now be resolved as {@link UriVariable} arguments.
+	 * 
+	 * @param name
+	 * @param response
+	 * @throws IOException
+	 */
+	@Uri("/dynamic-extensions/examples/hello/{name}")
+	public void handleHelloQNameVariable(@UriVariable final QName name, final WebScriptResponse response)
+			throws IOException {
 		final String message = String.format("Hello, %s", name);
 		response.getWriter().write(message);
 	}

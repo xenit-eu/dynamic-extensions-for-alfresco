@@ -28,13 +28,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package nl.runnable.alfresco.webscripts;
 
 import java.lang.annotation.Annotation;
-import java.util.HashSet;
-import java.util.Set;
 
 import nl.runnable.alfresco.webscripts.annotations.RequestParam;
 
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.namespace.QName;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.util.Assert;
@@ -44,34 +40,28 @@ import org.springframework.util.StringUtils;
  * {@link ArgumentResolver} that handles parameters annotated with {@link RequestParam}.
  * 
  * @author Laurens Fridael
- * 
  */
-public class RequestParameterArgumentResolver implements ArgumentResolver<Object, RequestParam> {
+public class RequestParamArgumentResolver implements ArgumentResolver<Object, RequestParam> {
 
-	private static final Set<Class<?>> SUPPORTED_TYPES = new HashSet<Class<?>>();
-	static {
-		SUPPORTED_TYPES.add(String.class);
-		SUPPORTED_TYPES.add(String[].class);
-		SUPPORTED_TYPES.add(Integer.TYPE);
-		SUPPORTED_TYPES.add(int[].class);
-		SUPPORTED_TYPES.add(Integer.class);
-		SUPPORTED_TYPES.add(Integer[].class);
-		SUPPORTED_TYPES.add(Boolean.TYPE);
-		SUPPORTED_TYPES.add(boolean[].class);
-		SUPPORTED_TYPES.add(Boolean.class);
-		SUPPORTED_TYPES.add(Boolean[].class);
-		SUPPORTED_TYPES.add(QName.class);
-		SUPPORTED_TYPES.add(NodeRef.class);
+	/* Dependencies */
+
+	private final StringValueConverter stringValueConverter;
+
+	/* Main operations */
+
+	RequestParamArgumentResolver(final StringValueConverter stringValueConverter) {
+		Assert.notNull(stringValueConverter);
+		this.stringValueConverter = stringValueConverter;
 	}
 
 	@Override
 	public boolean supports(final Class<?> parameterType, final Class<? extends Annotation> annotationType) {
-		return SUPPORTED_TYPES.contains(parameterType) && RequestParam.class.equals(annotationType);
+		return getStringValueConverter().isSupportedType(parameterType) && RequestParam.class.equals(annotationType);
 	}
 
 	@Override
-	public Object resolveArgument(final Class<?> parameterType, final RequestParam requestParam,
-			final String name, final WebScriptRequest request, final WebScriptResponse response) {
+	public Object resolveArgument(final Class<?> parameterType, final RequestParam requestParam, final String name,
+			final WebScriptRequest request, final WebScriptResponse response) {
 		Assert.notNull(requestParam, "RequestParam annotation cannot be null.");
 		String parameterName = requestParam.value();
 		if (StringUtils.hasText(parameterName) == false) {
@@ -91,7 +81,7 @@ public class RequestParameterArgumentResolver implements ArgumentResolver<Object
 					throw new IllegalStateException(String.format("Request parameter not available: %s", parameterName));
 				}
 			}
-			parameter = convertStringValue(parameterType, parameterValue);
+			parameter = getStringValueConverter().convertStringValue(parameterType, parameterValue);
 		} else {
 			String[] parameterValues = request.getParameterValues(parameterName);
 			if (parameterValues == null) {
@@ -103,7 +93,8 @@ public class RequestParameterArgumentResolver implements ArgumentResolver<Object
 			}
 			final Object[] values = new Object[parameterValues.length];
 			for (int i = 0; i < parameterValues.length; i++) {
-				values[i] = convertStringValue(parameterType.getComponentType(), parameterValues[i]);
+				values[i] = getStringValueConverter().convertStringValue(parameterType.getComponentType(),
+						parameterValues[i]);
 			}
 			parameter = values;
 
@@ -111,36 +102,10 @@ public class RequestParameterArgumentResolver implements ArgumentResolver<Object
 		return parameter;
 	}
 
-	@SuppressWarnings("unchecked")
-	private static <T> T convertStringValue(final Class<T> type, final String stringValue) {
-		Object value;
-		if (String.class.equals(type)) {
-			value = stringValue;
-		} else if (Integer.TYPE.equals(type)) {
-			value = Integer.parseInt(stringValue);
-		} else if (Integer.class.equals(type)) {
-			value = Integer.valueOf(stringValue);
-		} else if (Boolean.TYPE.equals(type)) {
-			value = Boolean.parseBoolean(stringValue);
-		} else if (Boolean.class.equals(type)) {
-			value = Boolean.valueOf(stringValue);
-		} else if (QName.class.equals(type)) {
-			if (stringValue.matches("\\{\\.+?\\}\\.+?")) {
-				value = QName.createQName(stringValue);
-			} else if (stringValue.matches("\\.+?:\\.+?")) {
-				throw new IllegalArgumentException("Specifying QNames in prefix format is not yet supported: "
-						+ stringValue);
-				// TODO: Find a way to obtain a NamespacePrefixResolver.
-				// value = QName.createQName(stringValue, namespacePrefixResolver);
-			} else {
-				throw new IllegalArgumentException("Invalid QName format: " + stringValue);
-			}
-		} else if (NodeRef.class.equals(type)) {
-			value = new NodeRef(stringValue);
-		} else {
-			throw new IllegalArgumentException(String.format("Unhandled parameter type %s", type));
-		}
-		return (T) value;
+	/* Dependencies */
+
+	protected StringValueConverter getStringValueConverter() {
+		return stringValueConverter;
 	}
 
 }

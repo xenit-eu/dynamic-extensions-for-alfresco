@@ -38,7 +38,10 @@ import nl.runnable.alfresco.policy.ProxyPolicyComponentFactoryBean;
 import nl.runnable.alfresco.repository.dictionary.M2ModelListFactoryBean;
 import nl.runnable.alfresco.repository.dictionary.ModelRegistrar;
 import nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptBuilder;
+import nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptHandler;
 import nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptRegistry;
+import nl.runnable.alfresco.webscripts.DefaultHandlerMethodArgumentsResolver;
+import nl.runnable.alfresco.webscripts.StringValueConverter;
 import nl.runnable.alfresco.webscripts.integration.CompositeRegistry;
 import nl.runnable.alfresco.webscripts.integration.CompositeRegistryManager;
 import nl.runnable.alfresco.webscripts.integration.SearchPathRegistry;
@@ -47,6 +50,7 @@ import nl.runnable.alfresco.webscripts.integration.SearchPathRegistryManager;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.descriptor.Descriptor;
 import org.alfresco.service.descriptor.DescriptorService;
+import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationContext;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
@@ -105,6 +109,12 @@ import org.xml.sax.EntityResolver;
 class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContext {
 
 	private static final String SEARCH_PATH_REGISTRY_MANAGER_BEAN_NAME = "searchPathRegistryManager";
+
+	private static final String STRING_VALUE_CONVERTER_BEAN_NAME = "stringValueConverter";
+
+	private static final String HANDLER_METHOD_ARGUMENTS_RESOLVER_BEAN_NAME = "handlerMethodArgumentsResolver";
+
+	private static final String ANNOTATION_BASED_WEB_SCRIPT_HANDLER_BEAN_NAME = "annotationBasedWebScriptHandler";
 
 	private static final String ANNOTATION_BASED_WEB_SCRIPT_BUILDER_BEAN_NAME = "annotationBasedWebScriptBuilder";
 
@@ -305,13 +315,41 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 
 	/**
 	 * Registers the infrastructure beans for annotation-based Web Scripts.
+	 * <p>
+	 * TODO: Find out if we can load the bean definitions from Spring XML configuration. This code is too hard to
+	 * maintain.
 	 * 
 	 * @param beanFactory
 	 */
 	protected void registerAnnotationBasedWebScriptBeans(final DefaultListableBeanFactory beanFactory) {
+		if (beanFactory.containsBeanDefinition(STRING_VALUE_CONVERTER_BEAN_NAME) == false) {
+			beanFactory.registerBeanDefinition(
+					STRING_VALUE_CONVERTER_BEAN_NAME,
+					BeanDefinitionBuilder.rootBeanDefinition(StringValueConverter.class)
+							.addPropertyValue("namespacePrefixResolver", getService(NamespacePrefixResolver.class))
+							.getBeanDefinition());
+		}
+		if (beanFactory.containsBeanDefinition(HANDLER_METHOD_ARGUMENTS_RESOLVER_BEAN_NAME) == false) {
+			beanFactory.registerBeanDefinition(HANDLER_METHOD_ARGUMENTS_RESOLVER_BEAN_NAME,
+					BeanDefinitionBuilder.rootBeanDefinition(DefaultHandlerMethodArgumentsResolver.class)
+							.addPropertyReference("stringValueConverter", STRING_VALUE_CONVERTER_BEAN_NAME)
+							.setInitMethodName("initializeArgumentResolvers").getBeanDefinition());
+		}
+		if (beanFactory.containsBeanDefinition(ANNOTATION_BASED_WEB_SCRIPT_HANDLER_BEAN_NAME) == false) {
+			beanFactory.registerBeanDefinition(
+					ANNOTATION_BASED_WEB_SCRIPT_HANDLER_BEAN_NAME,
+					BeanDefinitionBuilder
+							.rootBeanDefinition(AnnotationBasedWebScriptHandler.class)
+							.addPropertyReference("handlerMethodArgumentsResolver",
+									HANDLER_METHOD_ARGUMENTS_RESOLVER_BEAN_NAME).getBeanDefinition());
+		}
 		if (beanFactory.containsBeanDefinition(ANNOTATION_BASED_WEB_SCRIPT_BUILDER_BEAN_NAME) == false) {
-			beanFactory.registerBeanDefinition(ANNOTATION_BASED_WEB_SCRIPT_BUILDER_BEAN_NAME, BeanDefinitionBuilder
-					.rootBeanDefinition(AnnotationBasedWebScriptBuilder.class).getBeanDefinition());
+			beanFactory.registerBeanDefinition(
+					ANNOTATION_BASED_WEB_SCRIPT_BUILDER_BEAN_NAME,
+					BeanDefinitionBuilder
+							.rootBeanDefinition(AnnotationBasedWebScriptBuilder.class)
+							.addPropertyReference("annotationBasedWebScriptHandler",
+									ANNOTATION_BASED_WEB_SCRIPT_HANDLER_BEAN_NAME).getBeanDefinition());
 		}
 		if (beanFactory.containsBeanDefinition(ANNOTATION_BASED_WEB_SCRIPT_REGISTRY_BEAN_NAME) == false) {
 			beanFactory.registerBeanDefinition(

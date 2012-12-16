@@ -40,7 +40,11 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.util.Assert;
 
-class DefaultHandlerMethodArgumentsResolver implements HandlerMethodArgumentsResolver {
+public class DefaultHandlerMethodArgumentsResolver implements HandlerMethodArgumentsResolver {
+
+	/* Dependencies */
+
+	private StringValueConverter stringValueConverter;
 
 	/* Configuration */
 
@@ -52,15 +56,11 @@ class DefaultHandlerMethodArgumentsResolver implements HandlerMethodArgumentsRes
 
 	/* Main Operations */
 
-	public DefaultHandlerMethodArgumentsResolver() {
-		initializeArgumentResolvers();
-	}
-
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void initializeArgumentResolvers() {
 		argumentResolvers = new ArrayList<ArgumentResolver<Object, Annotation>>();
-		argumentResolvers.add((ArgumentResolver) new RequestParameterArgumentResolver());
-		argumentResolvers.add((ArgumentResolver) new UriVariableArgumentResolver());
+		argumentResolvers.add((ArgumentResolver) new RequestParamArgumentResolver(getStringValueConverter()));
+		argumentResolvers.add((ArgumentResolver) new UriVariableArgumentResolver(getStringValueConverter()));
 		argumentResolvers.add((ArgumentResolver) new WebScriptRequestArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new WebScriptResponseArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new WebScriptSessionArgumentResolver());
@@ -145,6 +145,16 @@ class DefaultHandlerMethodArgumentsResolver implements HandlerMethodArgumentsRes
 			result = prime * result + (clazz != null ? clazz.hashCode() : 0);
 		}
 		return result;
+	}
+
+	/* Dependencies */
+
+	public void setStringValueConverter(final StringValueConverter stringValueConverter) {
+		this.stringValueConverter = stringValueConverter;
+	}
+
+	protected StringValueConverter getStringValueConverter() {
+		return stringValueConverter;
 	}
 
 }
