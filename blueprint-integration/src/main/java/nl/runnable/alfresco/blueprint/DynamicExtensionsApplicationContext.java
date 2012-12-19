@@ -68,6 +68,7 @@ import org.springframework.beans.factory.xml.NamespaceHandlerResolver;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
+import org.springframework.extensions.webscripts.TemplateProcessor;
 import org.springframework.util.StringUtils;
 import org.xml.sax.EntityResolver;
 
@@ -374,6 +375,7 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 					BeanDefinitionBuilder.rootBeanDefinition(SearchPathRegistryManager.class)
 							.addPropertyValue("searchPathRegistry", getService(SearchPathRegistry.class))
 							.addPropertyValue("stores", new BundleStore(getBundle()))
+                            .addPropertyValue("templateProcessor", getService(TemplateProcessor.class))
 							.setInitMethodName("registerStores").setDestroyMethodName("unregisterStores")
 							.getBeanDefinition());
 		}

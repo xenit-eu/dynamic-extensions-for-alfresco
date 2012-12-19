@@ -6,13 +6,14 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.Store;
+import org.springframework.extensions.webscripts.TemplateProcessor;
 import org.springframework.util.Assert;
 
 /**
  * Manages the registration and unregistration of {@link Store}s in a {@link SearchPathRegistry}.
- * 
+ *
  * @author Laurens Fridael
- * 
+ *
  */
 public class SearchPathRegistryManager {
 
@@ -21,6 +22,7 @@ public class SearchPathRegistryManager {
 	/* Dependencies */
 
 	private SearchPathRegistry searchPathRegistry;
+    private TemplateProcessor templateProcessor;
 
 	/* Configuration */
 
@@ -37,7 +39,9 @@ public class SearchPathRegistryManager {
 		for (final Store store : getStores()) {
 			getSearchPathRegistry().addStore(store);
 		}
-	}
+
+        resetTemplateProcessor();
+    }
 
 	public void unregisterStores() {
 		Assert.state(getSearchPathRegistry() != null);
@@ -50,6 +54,21 @@ public class SearchPathRegistryManager {
 		}
 	}
 
+    /**
+     * reset TemplateProcessor when new stores become available
+     */
+    private void resetTemplateProcessor() {
+        // need to change ContextClassLoader to UserTransaction aware ClassLoader
+        final Thread currentThread = Thread.currentThread();
+        final ClassLoader original = currentThread.getContextClassLoader();
+        currentThread.setContextClassLoader(TemplateProcessor.class.getClassLoader());
+        try {
+            templateProcessor.reset();
+        } finally {
+            currentThread.setContextClassLoader(original);
+        }
+    }
+
 	/* Dependencies */
 
 	public void setSearchPathRegistry(final SearchPathRegistry searchPathRegistry) {
@@ -60,7 +79,11 @@ public class SearchPathRegistryManager {
 		return searchPathRegistry;
 	}
 
-	/* Configuration */
+    public void setTemplateProcessor(final TemplateProcessor templateProcessor) {
+        this.templateProcessor = templateProcessor;
+    }
+
+    /* Configuration */
 
 	public void setStores(final List<Store> stores) {
 		Assert.notNull(stores);
