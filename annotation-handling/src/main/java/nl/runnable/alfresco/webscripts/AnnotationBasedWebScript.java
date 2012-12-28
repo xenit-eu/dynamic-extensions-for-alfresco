@@ -51,24 +51,24 @@ class AnnotationBasedWebScript implements WebScript {
 
 	private final Method handlerMethod;
 
-	private final List<Method> referenceDataMethods;
+	private final List<Method> attributeMethods;
 
 	private final AnnotationBasedWebScriptHandler annotationMethodHandler;
 
 	public AnnotationBasedWebScript(final DescriptionImpl description, final Object handler,
-			final Method handlerMethod, final List<Method> referenceDataMethods,
+			final Method handlerMethod, final List<Method> attributeMethods,
 			final AnnotationBasedWebScriptHandler annotationMethodHandler) {
 		Assert.notNull(description, "Description cannot be null.");
 		Assert.hasText(description.getId(), "No ID provided in Description.");
 		Assert.notNull(handler, "Handler cannot be null.");
 		Assert.notNull(handlerMethod, "Method cannot be null.");
-		Assert.notNull(referenceDataMethods);
+		Assert.notNull(attributeMethods);
 		Assert.notNull(annotationMethodHandler);
 
 		this.description = description;
 		this.handler = handler;
 		this.handlerMethod = handlerMethod;
-		this.referenceDataMethods = referenceDataMethods;
+		this.attributeMethods = attributeMethods;
 		this.annotationMethodHandler = annotationMethodHandler;
 		this.id = description.getId();
 	}
@@ -81,8 +81,8 @@ class AnnotationBasedWebScript implements WebScript {
 		return handlerMethod;
 	}
 
-	public List<Method> getReferenceDataMethods() {
-		return referenceDataMethods;
+	public List<Method> getAttributeMethods() {
+		return attributeMethods;
 	}
 
 	@Override

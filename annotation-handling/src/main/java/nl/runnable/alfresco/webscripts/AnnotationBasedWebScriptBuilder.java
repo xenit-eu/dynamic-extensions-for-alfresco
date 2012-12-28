@@ -37,7 +37,7 @@ import java.util.Set;
 
 import nl.runnable.alfresco.webscripts.annotations.Authentication;
 import nl.runnable.alfresco.webscripts.annotations.Cache;
-import nl.runnable.alfresco.webscripts.annotations.ReferenceData;
+import nl.runnable.alfresco.webscripts.annotations.Attribute;
 import nl.runnable.alfresco.webscripts.annotations.Transaction;
 import nl.runnable.alfresco.webscripts.annotations.Uri;
 import nl.runnable.alfresco.webscripts.annotations.WebScript;
@@ -104,14 +104,14 @@ public class AnnotationBasedWebScriptBuilder implements BeanFactoryAware {
 
 			@Override
 			public void doWith(final Method method) throws IllegalArgumentException, IllegalAccessException {
-				final ReferenceData referenceDataAnnotation = AnnotationUtils.findAnnotation(method,
-						ReferenceData.class);
+				final Attribute referenceDataAnnotation = AnnotationUtils.findAnnotation(method,
+						Attribute.class);
 				if (referenceDataAnnotation != null) {
 					if (AnnotationUtils.findAnnotation(method, Uri.class) != null) {
-						throw new RuntimeException("Cannot mark a method with both @ReferenceData and @Uri.");
+						throw new RuntimeException("Cannot mark a method with both @Attribute and @Uri.");
 					}
 					if (method.getReturnType().equals(Void.TYPE)) {
-						throw new RuntimeException("@ReferenceData methods cannot have a void return type.");
+						throw new RuntimeException("@Attribute methods cannot have a void return type.");
 					}
 					referenceDataMethods.add(method);
 				}

@@ -32,7 +32,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import nl.runnable.alfresco.webscripts.annotations.ReferenceData;
+import nl.runnable.alfresco.webscripts.annotations.Attribute;
 
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.extensions.webscripts.WebScriptRequest;
@@ -70,39 +70,42 @@ public class AnnotationBasedWebScriptHandler {
 		Assert.notNull(request, "Request cannot be null.");
 		Assert.notNull(response, "Response cannot be null.");
 
-		final Map<String, Object> referenceDataByName = invokeReferenceDataMethods(webScript, request, response);
-		invokeHandlerMethod(webScript, request, response, referenceDataByName);
+		final Map<String, Object> attributesByName = invokeAttributeMethods(webScript, request, response);
+		invokeHandlerMethod(webScript, request, response, attributesByName);
 	}
 
 	/* Utility operations */
 
-	protected Map<String, Object> invokeReferenceDataMethods(final AnnotationBasedWebScript webScript,
+	protected Map<String, Object> invokeAttributeMethods(final AnnotationBasedWebScript webScript,
 			final WebScriptRequest request, final WebScriptResponse response) {
 
-		final Map<String, Object> referenceDataByName = new HashMap<String, Object>();
-		for (final Method method : webScript.getReferenceDataMethods()) {
+		final Map<String, Object> attributesByName = new HashMap<String, Object>();
+		for (final Method method : webScript.getAttributeMethods()) {
 			method.setAccessible(true);
 			final Object[] arguments = getHandlerMethodArgumentsResolver().resolveHandlerMethodArguments(method,
 					webScript.getHandler(), request, response);
-			final Object referenceData = ReflectionUtils.invokeMethod(method, webScript.getHandler(), arguments);
-			final ReferenceData annotation = AnnotationUtils.findAnnotation(method, ReferenceData.class);
+			final Object attribute = ReflectionUtils.invokeMethod(method, webScript.getHandler(), arguments);
+			if (attribute == null) {
+				continue;
+			}
+			final Attribute annotation = AnnotationUtils.findAnnotation(method, Attribute.class);
 			if (StringUtils.hasText(annotation.value())) {
-				referenceDataByName.put(annotation.value(), referenceData);
+				attributesByName.put(annotation.value(), attribute);
 			} else {
 				String name = method.getName();
 				if (name.startsWith("get") && name.length() > 3) {
 					name = name.substring(3, 4).toLowerCase() + name.substring(4);
 				}
-				referenceDataByName.put(name, referenceData);
+				attributesByName.put(name, attribute);
 			}
 
 		}
-		return referenceDataByName;
+		return attributesByName;
 	}
 
 	protected void invokeHandlerMethod(final AnnotationBasedWebScript webScript, final WebScriptRequest request,
-			final WebScriptResponse response, final Map<String, Object> referenceDataByName) throws IOException {
-		ReferenceDataArgumentResolver.setCurrentReferenceData(referenceDataByName);
+			final WebScriptResponse response, final Map<String, Object> attributesByName) throws IOException {
+		AttributeArgumentResolver.setCurrentAttributes(attributesByName);
 		try {
 			final Object[] arguments = getHandlerMethodArgumentsResolver().resolveHandlerMethodArguments(
 					webScript.getHandlerMethod(), webScript.getHandler(), request, response);
@@ -110,7 +113,7 @@ public class AnnotationBasedWebScriptHandler {
 					webScript.getHandler(), arguments);
 			processHandlerMethodReturnValue(returnValue, request, response);
 		} finally {
-			ReferenceDataArgumentResolver.clearCurrentReferenceData();
+			AttributeArgumentResolver.clearCurrentAttributes();
 		}
 	}
 

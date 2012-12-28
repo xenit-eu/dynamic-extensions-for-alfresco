@@ -34,7 +34,7 @@ import javax.annotation.ManagedBean;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import nl.runnable.alfresco.webscripts.annotations.ReferenceData;
+import nl.runnable.alfresco.webscripts.annotations.Attribute;
 import nl.runnable.alfresco.webscripts.annotations.RequestParam;
 import nl.runnable.alfresco.webscripts.annotations.Uri;
 import nl.runnable.alfresco.webscripts.annotations.UriVariable;
@@ -123,29 +123,28 @@ public class HelloWebScript {
 	}
 
 	/**
-	 * Obtains Illustrates request handling using {@link ReferenceData}.
+	 * Obtains Illustrates request handling using {@link Attribute}.
 	 * 
 	 * @param name
 	 * @param response
 	 * @throws IOException
 	 */
-	@Uri("/dynamic-extensions/examples/hello-reference-data")
-	public void handleHelloReferenceData(@ReferenceData final String name, final WebScriptResponse response)
-			throws IOException {
+	@Uri("/dynamic-extensions/examples/hello-attribute")
+	public void handleHelloAttribute(@Attribute final String name, final WebScriptResponse response) throws IOException {
 		final String message = String.format("Hello, %s", name);
 		response.getWriter().write(message);
 	}
 
 	/**
-	 * Methods annotated with {@link ReferenceData} provide reference data for arguments in {@link Uri} handling
-	 * methods. These arguments must be annotated with {@link ReferenceData} as well.
+	 * Methods annotated with {@link Attribute} provide reference data for arguments in {@link Uri} handling methods.
+	 * These metho arguments must be annotated with {@link Attribute} as well.
 	 * <p>
-	 * In this case, the method provides a String named 'name'.
+	 * In this case, the method provides a String attribute named 'name'.
 	 * 
 	 * @param request
 	 * @return
 	 */
-	@ReferenceData
+	@Attribute
 	protected String getName(final WebScriptRequest request) {
 		return request.getParameter("name");
 	}

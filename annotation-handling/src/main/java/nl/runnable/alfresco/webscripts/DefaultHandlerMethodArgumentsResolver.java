@@ -67,12 +67,11 @@ public class DefaultHandlerMethodArgumentsResolver implements HandlerMethodArgum
 		argumentResolvers.add((ArgumentResolver) new WebScriptArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new MatchArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new RuntimeArgumentResolver());
-		argumentResolvers.add((ArgumentResolver) new NodeRefArgumentResolver());
-		argumentResolvers.add((ArgumentResolver) new NodeRefArgumentResolver());
+		// argumentResolvers.add((ArgumentResolver) new NodeRefArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new CommandArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new HttpServletRequestArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new HttpServletResponseArgumentResolver());
-		argumentResolvers.add((ArgumentResolver) new ReferenceDataArgumentResolver());
+		argumentResolvers.add((ArgumentResolver) new AttributeArgumentResolver());
 	}
 
 	@Override
