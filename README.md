@@ -26,7 +26,11 @@ In practice Dynamic Extensions works just fine on Alfresco Enterprise 4.0 and it
 Supports Alfresco repository only
 ---------------------------------
 
-Dynamic Extensions is intended for developing extensions to the Alfresco repository only. The repository is Java-based and uses Spring as a core framework.  Extending Alfresco Share is outside the scope of this project, as Share is built on an entirely different framework.
+Dynamic Extensions is intended for developing extensions to the Alfresco repository only. The repository is Java-based and uses Spring as a core framework. 
+
+Extending Alfresco Share is outside the scope of this project, as Share is built on an entirely different framework.
+
+However: we are building an all-new Alfresco UI, code-named <a href="https://github.com/lfridael/vault">Vault</a>. Expects to a see a lot of synergy between these two projects.
 
 OSGi
 ----
