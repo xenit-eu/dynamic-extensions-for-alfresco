@@ -30,7 +30,7 @@ Dynamic Extensions is intended for developing extensions to the Alfresco reposit
 
 Extending Alfresco Share is outside the scope of this project, as Share is built on an entirely different framework.
 
-However: we are building an all-new Alfresco UI, code-named <a href="https://github.com/lfridael/vault">Vault</a>. Expects to a see a lot of synergy between these two projects.
+However: we are building an all-new Alfresco UI, code-named <a href="https://github.com/lfridael/vault">Vault</a>. You can expect to a see a lot of synergy between these two projects.
 
 OSGi
 ----
