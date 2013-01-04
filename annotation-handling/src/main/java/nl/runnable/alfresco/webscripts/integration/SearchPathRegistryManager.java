@@ -11,9 +11,9 @@ import org.springframework.util.Assert;
 
 /**
  * Manages the registration and unregistration of {@link Store}s in a {@link SearchPathRegistry}.
- *
+ * 
  * @author Laurens Fridael
- *
+ * 
  */
 public class SearchPathRegistryManager {
 
@@ -22,7 +22,7 @@ public class SearchPathRegistryManager {
 	/* Dependencies */
 
 	private SearchPathRegistry searchPathRegistry;
-    private TemplateProcessor templateProcessor;
+	private TemplateProcessor templateProcessor;
 
 	/* Configuration */
 
@@ -40,8 +40,8 @@ public class SearchPathRegistryManager {
 			getSearchPathRegistry().addStore(store);
 		}
 
-        resetTemplateProcessor();
-    }
+		resetTemplateProcessor();
+	}
 
 	public void unregisterStores() {
 		Assert.state(getSearchPathRegistry() != null);
@@ -54,20 +54,26 @@ public class SearchPathRegistryManager {
 		}
 	}
 
-    /**
-     * reset TemplateProcessor when new stores become available
-     */
-    private void resetTemplateProcessor() {
-        // need to change ContextClassLoader to UserTransaction aware ClassLoader
-        final Thread currentThread = Thread.currentThread();
-        final ClassLoader original = currentThread.getContextClassLoader();
-        currentThread.setContextClassLoader(TemplateProcessor.class.getClassLoader());
-        try {
-            templateProcessor.reset();
-        } finally {
-            currentThread.setContextClassLoader(original);
-        }
-    }
+	/**
+	 * reset TemplateProcessor when new stores become available
+	 */
+	private void resetTemplateProcessor() {
+		// need to change ContextClassLoader to UserTransaction aware ClassLoader
+		final Thread currentThread = Thread.currentThread();
+		final ClassLoader original = currentThread.getContextClassLoader();
+		currentThread.setContextClassLoader(TemplateProcessor.class.getClassLoader());
+		try {
+			/*
+			 * Workaround for issue with ConcurrentModificationException occurring during startup. See:
+			 * https://github.com/lfridael/dynamic-extensions-for-alfresco/pull/8
+			 */
+			synchronized (templateProcessor) {
+				templateProcessor.reset();
+			}
+		} finally {
+			currentThread.setContextClassLoader(original);
+		}
+	}
 
 	/* Dependencies */
 
@@ -79,11 +85,11 @@ public class SearchPathRegistryManager {
 		return searchPathRegistry;
 	}
 
-    public void setTemplateProcessor(final TemplateProcessor templateProcessor) {
-        this.templateProcessor = templateProcessor;
-    }
+	public void setTemplateProcessor(final TemplateProcessor templateProcessor) {
+		this.templateProcessor = templateProcessor;
+	}
 
-    /* Configuration */
+	/* Configuration */
 
 	public void setStores(final List<Store> stores) {
 		Assert.notNull(stores);
