@@ -3,12 +3,10 @@ package nl.runnable.alfresco.webscripts.integration;
 import java.util.Collections;
 import java.util.List;
 
-import nl.runnable.alfresco.webscripts.TemplateProcessorRegistryHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.Store;
 import org.springframework.extensions.webscripts.TemplateProcessor;
-import org.springframework.extensions.webscripts.TemplateProcessorRegistry;
 import org.springframework.util.Assert;
 
 /**
@@ -24,7 +22,7 @@ public class SearchPathRegistryManager {
 	/* Dependencies */
 
 	private SearchPathRegistry searchPathRegistry;
-	private TemplateProcessorRegistryHelper templateProcessorRegistryHelper;
+	private TemplateProcessor templateProcessor;
 
 	/* Configuration */
 
@@ -38,11 +36,17 @@ public class SearchPathRegistryManager {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Registering {} stores with the SearchPathRegistry.", getStores().size());
 		}
-		for (final Store store : getStores()) {
-			getSearchPathRegistry().addStore(store);
-		}
 
-		resetTemplateProcessor();
+        // need to sync read & write
+        synchronized (templateProcessor) {
+            // write
+            for (final Store store : getStores()) {
+                getSearchPathRegistry().addStore(store);
+            }
+
+            // read
+            resetTemplateProcessor();
+        }
 	}
 
 	public void unregisterStores() {
@@ -51,10 +55,13 @@ public class SearchPathRegistryManager {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Unregistering {} stores with the SearchPathRegistry.", getStores().size());
 		}
-		for (final Store store : getStores()) {
-			getSearchPathRegistry().removeStore(store);
-		}
-	}
+
+        synchronized (templateProcessor) {
+            for (final Store store : getStores()) {
+                getSearchPathRegistry().removeStore(store);
+            }
+        }
+    }
 
 	/**
 	 * reset TemplateProcessor when new stores become available
@@ -64,12 +71,15 @@ public class SearchPathRegistryManager {
 		final Thread currentThread = Thread.currentThread();
 		final ClassLoader original = currentThread.getContextClassLoader();
 		currentThread.setContextClassLoader(TemplateProcessor.class.getClassLoader());
-		try {
-            templateProcessorRegistryHelper.getTemplateProcessorRegistry().reset();
+        try {
+            templateProcessor.reset();
+        } catch (Exception ex) {
+            // this is only a warning as reset is only required for hot deploy
+            logger.warn("failed to reset template processor cache", ex);
         } finally {
-			currentThread.setContextClassLoader(original);
-		}
-	}
+            currentThread.setContextClassLoader(original);
+        }
+    }
 
 	/* Dependencies */
 
@@ -81,8 +91,8 @@ public class SearchPathRegistryManager {
 		return searchPathRegistry;
 	}
 
-	public void setTemplateProcessorRegistryHelper(final TemplateProcessorRegistryHelper templateProcessorRegistryHelper) {
-		this.templateProcessorRegistryHelper = templateProcessorRegistryHelper;
+	public void setTemplateProcessor(final TemplateProcessor templateProcessor) {
+		this.templateProcessor = templateProcessor;
 	}
 
 	/* Configuration */

@@ -11,6 +11,4 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<import resource="query-services-context.xml" />
 
-	<import resource="template-services-context.xml" />
-
 </beans>
