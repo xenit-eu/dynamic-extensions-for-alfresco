@@ -12,6 +12,7 @@ import java.util.List;
 import nl.runnable.alfresco.AbstractAnnotationBasedRegistrar;
 import nl.runnable.alfresco.actions.annotations.ActionMethod;
 import nl.runnable.alfresco.actions.annotations.ActionParam;
+import nl.runnable.alfresco.util.ApiCompatibilityUtil;
 
 import org.alfresco.repo.action.ActionDefinitionImpl;
 import org.alfresco.repo.action.ParameterDefinitionImpl;
@@ -110,7 +111,8 @@ public class AnnotationBasedActionRegistrar extends AbstractAnnotationBasedRegis
 		final ActionDefinitionImpl actionDefinition = new ActionDefinitionImpl(name);
 		actionDefinition.setParameterDefinitions(parameterDefinitions);
 		actionDefinition.setAdhocPropertiesAllowed(actionMethod.adhocPropertiesAllowed());
-		actionDefinition.setApplicableTypes(Arrays.asList(parseQNames(actionMethod.applicableTypes(), actionMethod)));
+		ApiCompatibilityUtil.setApplicableTypes(actionDefinition,
+				Arrays.asList(parseQNames(actionMethod.applicableTypes(), actionMethod)));
 		actionDefinition.setTitleKey(nullForEmptyString(actionMethod.titleKey()));
 		actionDefinition.setDescriptionKey(nullForEmptyString(actionMethod.descriptionKey()));
 		actionDefinition.setRuleActionExecutor(nullForEmptyString(actionMethod.ruleActionExecutor()));
