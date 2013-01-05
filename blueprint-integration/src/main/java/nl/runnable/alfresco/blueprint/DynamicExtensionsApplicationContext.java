@@ -37,11 +37,7 @@ import nl.runnable.alfresco.policy.DefaultBehaviourProxyFactory;
 import nl.runnable.alfresco.policy.ProxyPolicyComponentFactoryBean;
 import nl.runnable.alfresco.repository.dictionary.M2ModelListFactoryBean;
 import nl.runnable.alfresco.repository.dictionary.ModelRegistrar;
-import nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptBuilder;
-import nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptHandler;
-import nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptRegistry;
-import nl.runnable.alfresco.webscripts.DefaultHandlerMethodArgumentsResolver;
-import nl.runnable.alfresco.webscripts.StringValueConverter;
+import nl.runnable.alfresco.webscripts.*;
 import nl.runnable.alfresco.webscripts.integration.CompositeRegistry;
 import nl.runnable.alfresco.webscripts.integration.CompositeRegistryManager;
 import nl.runnable.alfresco.webscripts.integration.SearchPathRegistry;
@@ -375,7 +371,7 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 					BeanDefinitionBuilder.rootBeanDefinition(SearchPathRegistryManager.class)
 							.addPropertyValue("searchPathRegistry", getService(SearchPathRegistry.class))
 							.addPropertyValue("stores", new BundleStore(getBundle()))
-                            .addPropertyValue("templateProcessor", getService(TemplateProcessor.class))
+                            .addPropertyValue("templateProcessorRegistryHelper", getService(TemplateProcessorRegistryHelper.class))
 							.setInitMethodName("registerStores").setDestroyMethodName("unregisterStores")
 							.getBeanDefinition());
 		}
