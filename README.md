@@ -13,24 +13,24 @@ Prerequisites: make sure you have a local Alfresco development server installed.
 * Start your local Alfresco development server.
 * Open <a href="http://localhost:8080/alfresco/service/dynamic-extensions">http://localhost:8080/alfresco/service/dynamic-extensions</a>. This shows the Dynamic Extensions console with some information.
 
-Officially supported Alfresco versions
---------------------------------------
+Supported Alfresco versions
+---------------------------
 
 Dynamic Extensions is developed and tested against
 
 * Alfresco Community 3.4
 * Alfresco Community 4.0
 
-In practice Dynamic Extensions works just fine on Alfresco Enterprise 4.0 and it will probably work on the recently released Community 4.2 as well.
+Dynamic Extensions can also be used with Alfresco Enterprise 4.0 and 4.1. Recent user feedback indicates it works on Community 4.2 as well.
 
-Supports Alfresco repository only
----------------------------------
+Intended usage
+--------------
 
-Dynamic Extensions is intended for developing extensions to the Alfresco repository only. The repository is Java-based and uses Spring as a core framework. 
+Dynamic Extensions is intended for developing extensions to the Alfresco repository. The repository is Java-based and uses Spring as a core framework. 
 
 Extending Alfresco Share is outside the scope of this project, as Share is built on an entirely different framework.
 
-However: we are building an all-new Alfresco UI, code-named <a href="https://github.com/lfridael/vault">Vault</a>. You can expect to a see a lot of synergy between these two projects.
+However: we are building an all-new Alfresco user interface, code-named <a href="https://github.com/lfridael/vault">Vault</a>. You can expect to a see a lot of synergy between the two projects.
 
 OSGi
 ----
