@@ -29,6 +29,7 @@ package nl.runnable.alfresco.osgi.container;
 
 import static org.junit.Assert.*;
 
+import nl.runnable.alfresco.webscripts.TemplateProcessorRegistryHelper;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.repository.ContentService;
@@ -79,6 +80,7 @@ public class OsgiContainerModuleComponentTest {
 		assertNotNull(bundleContext.getServiceReference(PolicyComponent.class.getName()));
 		assertNotNull(bundleContext.getServiceReference(SearchService.class.getName()));
 		assertNotNull(bundleContext.getServiceReference(TransactionService.class.getName()));
+		assertNotNull(bundleContext.getServiceReference(TemplateProcessorRegistryHelper.class.getName()));
 	}
 
 }
