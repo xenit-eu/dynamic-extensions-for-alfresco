@@ -3,10 +3,12 @@ package nl.runnable.alfresco.webscripts.integration;
 import java.util.Collections;
 import java.util.List;
 
+import nl.runnable.alfresco.webscripts.TemplateProcessorRegistryHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.Store;
 import org.springframework.extensions.webscripts.TemplateProcessor;
+import org.springframework.extensions.webscripts.TemplateProcessorRegistry;
 import org.springframework.util.Assert;
 
 /**
@@ -22,7 +24,7 @@ public class SearchPathRegistryManager {
 	/* Dependencies */
 
 	private SearchPathRegistry searchPathRegistry;
-	private TemplateProcessor templateProcessor;
+	private TemplateProcessorRegistryHelper templateProcessorRegistryHelper;
 
 	/* Configuration */
 
@@ -63,14 +65,8 @@ public class SearchPathRegistryManager {
 		final ClassLoader original = currentThread.getContextClassLoader();
 		currentThread.setContextClassLoader(TemplateProcessor.class.getClassLoader());
 		try {
-			/*
-			 * Workaround for issue with ConcurrentModificationException occurring during startup. See:
-			 * https://github.com/lfridael/dynamic-extensions-for-alfresco/pull/8
-			 */
-			synchronized (templateProcessor) {
-				templateProcessor.reset();
-			}
-		} finally {
+            templateProcessorRegistryHelper.getTemplateProcessorRegistry().reset();
+        } finally {
 			currentThread.setContextClassLoader(original);
 		}
 	}
@@ -85,8 +81,8 @@ public class SearchPathRegistryManager {
 		return searchPathRegistry;
 	}
 
-	public void setTemplateProcessor(final TemplateProcessor templateProcessor) {
-		this.templateProcessor = templateProcessor;
+	public void setTemplateProcessorRegistryHelper(final TemplateProcessorRegistryHelper templateProcessorRegistryHelper) {
+		this.templateProcessorRegistryHelper = templateProcessorRegistryHelper;
 	}
 
 	/* Configuration */
