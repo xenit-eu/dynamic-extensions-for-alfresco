@@ -36,11 +36,17 @@ public class SearchPathRegistryManager {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Registering {} stores with the SearchPathRegistry.", getStores().size());
 		}
-		for (final Store store : getStores()) {
-			getSearchPathRegistry().addStore(store);
-		}
 
-		resetTemplateProcessor();
+        // need to sync read & write
+        synchronized (templateProcessor) {
+            // write
+            for (final Store store : getStores()) {
+                getSearchPathRegistry().addStore(store);
+            }
+
+            // read
+            resetTemplateProcessor();
+        }
 	}
 
 	public void unregisterStores() {
@@ -49,10 +55,13 @@ public class SearchPathRegistryManager {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Unregistering {} stores with the SearchPathRegistry.", getStores().size());
 		}
-		for (final Store store : getStores()) {
-			getSearchPathRegistry().removeStore(store);
-		}
-	}
+
+        synchronized (templateProcessor) {
+            for (final Store store : getStores()) {
+                getSearchPathRegistry().removeStore(store);
+            }
+        }
+    }
 
 	/**
 	 * reset TemplateProcessor when new stores become available
@@ -62,18 +71,15 @@ public class SearchPathRegistryManager {
 		final Thread currentThread = Thread.currentThread();
 		final ClassLoader original = currentThread.getContextClassLoader();
 		currentThread.setContextClassLoader(TemplateProcessor.class.getClassLoader());
-		try {
-			/*
-			 * Workaround for issue with ConcurrentModificationException occurring during startup. See:
-			 * https://github.com/lfridael/dynamic-extensions-for-alfresco/pull/8
-			 */
-			synchronized (templateProcessor) {
-				templateProcessor.reset();
-			}
-		} finally {
-			currentThread.setContextClassLoader(original);
-		}
-	}
+        try {
+            templateProcessor.reset();
+        } catch (Exception ex) {
+            // this is only a warning as reset is only required for hot deploy
+            logger.warn("failed to reset template processor cache", ex);
+        } finally {
+            currentThread.setContextClassLoader(original);
+        }
+    }
 
 	/* Dependencies */
 
