@@ -20,7 +20,7 @@
   });
 
   App.Api = Em.Object.extend({
-    baseUri: '/alfresco/service',
+    baseUri: '.',
     managementInfoUri: (function() {
       return this._uri('/dynamic-extensions/management/info');
     }).property('baseUri'),
