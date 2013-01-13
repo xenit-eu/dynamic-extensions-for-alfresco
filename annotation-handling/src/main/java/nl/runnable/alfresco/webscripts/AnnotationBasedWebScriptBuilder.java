@@ -35,9 +35,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import nl.runnable.alfresco.webscripts.annotations.Attribute;
 import nl.runnable.alfresco.webscripts.annotations.Authentication;
 import nl.runnable.alfresco.webscripts.annotations.Cache;
-import nl.runnable.alfresco.webscripts.annotations.Attribute;
 import nl.runnable.alfresco.webscripts.annotations.Transaction;
 import nl.runnable.alfresco.webscripts.annotations.Uri;
 import nl.runnable.alfresco.webscripts.annotations.WebScript;
@@ -104,8 +104,7 @@ public class AnnotationBasedWebScriptBuilder implements BeanFactoryAware {
 
 			@Override
 			public void doWith(final Method method) throws IllegalArgumentException, IllegalAccessException {
-				final Attribute referenceDataAnnotation = AnnotationUtils.findAnnotation(method,
-						Attribute.class);
+				final Attribute referenceDataAnnotation = AnnotationUtils.findAnnotation(method, Attribute.class);
 				if (referenceDataAnnotation != null) {
 					if (AnnotationUtils.findAnnotation(method, Uri.class) != null) {
 						throw new RuntimeException("Cannot mark a method with both @Attribute and @Uri.");
@@ -190,6 +189,9 @@ public class AnnotationBasedWebScriptBuilder implements BeanFactoryAware {
 			break;
 		case DELETE:
 			httpMethod = "DELETE";
+			break;
+		case OPTIONS:
+			httpMethod = "OPTIONS";
 			break;
 		}
 		description.setMethod(httpMethod);

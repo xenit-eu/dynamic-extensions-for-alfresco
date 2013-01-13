@@ -28,5 +28,5 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package nl.runnable.alfresco.webscripts.annotations;
 
 public enum HttpMethod {
-	GET, POST, PUT, DELETE;
+	GET, POST, PUT, DELETE, OPTIONS;
 }
