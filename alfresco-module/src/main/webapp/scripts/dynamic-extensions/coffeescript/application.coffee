@@ -21,7 +21,7 @@ App.Api = Em.Object.extend
 
   # Configuration
   
-  baseUri: 'http://localhost:8080/alfresco/service'
+  baseUri: '.'
   
   managementInfoUri: (->
     @_uri('/dynamic-extensions/management/info')
