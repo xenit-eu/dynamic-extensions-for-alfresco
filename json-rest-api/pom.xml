@@ -7,7 +7,7 @@
 	<version>1.0.0.M3-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 	<name>JSON REST API</name>
-	<description>Provides a JSON-based REST API for accessing the Alfresco repository. See readme.txt for more information.</description>
+	<description>This API is deprecated in favour of the Vault API. See readme.txt for more information.</description>
 
 	<properties>
 		<javax-inject.version>1</javax-inject.version>
@@ -15,7 +15,7 @@
 		<dynamicextensions-annotations.version>1.0.0.M3-SNAPSHOT</dynamicextensions-annotations.version>
 		<dynamicextensions-metadata.version>1.0.0.M3-SNAPSHOT</dynamicextensions-metadata.version>
 		<alfresco-api.version>4.0.e</alfresco-api.version>
-		<spring-webscripts.version>1.2.0-SNAPSHOT</spring-webscripts.version>
+		<spring-webscripts.version>1.2.0-M3</spring-webscripts.version>
 		<maven-bundle-plugin.version>2.3.5</maven-bundle-plugin.version>
 		<jackson.version>2.1.0</jackson.version>
 		<dependencies.outputDirectory>${project.build.directory}/dependencies</dependencies.outputDirectory>
