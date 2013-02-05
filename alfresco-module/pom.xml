@@ -16,7 +16,7 @@
 		<blueprint.outputDirectory>${amp.outputDirectory}/blueprint-bundles</blueprint.outputDirectory>
 		<fileInstall.outputDirectory>${amp.outputDirectory}/file-install-bundles</fileInstall.outputDirectory>
 		<standardBundles.outputDirectory>${amp.outputDirectory}/standard-bundles</standardBundles.outputDirectory>
-		<blueprint.gemini-blueprint.version>1.0.0.RELEASE</blueprint.gemini-blueprint.version>
+		<blueprint.gemini-blueprint.version>1.0.2.RELEASE</blueprint.gemini-blueprint.version>
 		<fileinstall.version>3.2.4</fileinstall.version>
 		<jackson.version>2.1.0</jackson.version>
 	</properties>
@@ -102,18 +102,18 @@
 						<configuration>
 							<artifactItems>
 								<artifactItem>
-									<groupId>org.eclipse.gemini.blueprint</groupId>
-									<artifactId>gemini-blueprint-core</artifactId>
+									<groupId>org.eclipse.gemini</groupId>
+									<artifactId>org.eclipse.gemini.blueprint.core</artifactId>
 									<version>${blueprint.gemini-blueprint.version}</version>
 								</artifactItem>
 								<artifactItem>
-									<groupId>org.eclipse.gemini.blueprint</groupId>
-									<artifactId>gemini-blueprint-io</artifactId>
+									<groupId>org.eclipse.gemini</groupId>
+									<artifactId>org.eclipse.gemini.blueprint.io</artifactId>
 									<version>${blueprint.gemini-blueprint.version}</version>
 								</artifactItem>
 								<artifactItem>
-									<groupId>org.eclipse.gemini.blueprint</groupId>
-									<artifactId>gemini-blueprint-extender</artifactId>
+									<groupId>org.eclipse.gemini</groupId>
+									<artifactId>org.eclipse.gemini.blueprint.extender</artifactId>
 									<version>${blueprint.gemini-blueprint.version}</version>
 								</artifactItem>
 								<artifactItem>

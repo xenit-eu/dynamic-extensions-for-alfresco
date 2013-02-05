@@ -16,7 +16,7 @@
 	</description>
 
 	<properties>
-		<gemini-blueprint.version>1.0.0.RELEASE</gemini-blueprint.version>
+		<gemini-blueprint.version>1.0.2.RELEASE</gemini-blueprint.version>
 		<webscripts-extensions.version>1.0.0-SNAPSHOT</webscripts-extensions.version>
 		<com-springsource-osgi-util.version>2.0.5.RELEASE</com-springsource-osgi-util.version>
 	</properties>
@@ -27,8 +27,8 @@
 			<artifactId>org.osgi.core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.gemini.blueprint</groupId>
-			<artifactId>gemini-blueprint-extender</artifactId>
+			<groupId>org.eclipse.gemini</groupId>
+			<artifactId>org.eclipse.gemini.blueprint.extender</artifactId>
 			<version>${gemini-blueprint.version}</version>
 			<exclusions>
 				<!-- Excluding Spring dependencies here prevents newer versions from being imported into Eclipse project settings. For 

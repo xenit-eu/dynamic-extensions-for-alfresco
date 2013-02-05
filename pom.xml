@@ -211,22 +211,18 @@
 			<url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
 		</repository>
 		<repository>
-			<id>surf</id>
-			<url>https://maven.alfresco.com/nexus/service/local/repositories/snapshot.extensions.springframework.org/content</url>
-		</repository>
-		<repository>
 			<id>springsource-repo</id>
 			<name>SpringSource Repository</name>
 			<url>http://repo.springsource.org/release</url>
 		</repository>
-		<repository>
-			<id>zodiac-repository</id>
-			<url>http://zodiac.springsource.com/maven/bundles/release</url>
-		</repository>
-		<repository>
-			<id>sonatype-forge</id>
-			<url>https://repository.sonatype.org/content/groups/forge</url>
-		</repository>
+    <repository>
+        <id>com.springsource.repository.bundles.external</id>
+        <url>http://repository.springsource.com/maven/bundles/external</url>
+    </repository>
+        <repository>
+        <id>com.springsource.repository.bundles.release</id>
+        <url>http://repository.springsource.com/maven/bundles/release</url>
+    </repository>
 	</repositories>
 
 </project>

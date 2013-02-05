@@ -11,15 +11,6 @@
 	<packaging>jar</packaging>
 	<name>Alfresco integration</name>
 	<description>Provides integration for running Dynamic Extensions in an Alfresco module.</description>
-	<properties>
-		<amp.outputDirectory>${project.build.outputDirectory}/alfresco/module/${project.groupId}</amp.outputDirectory>
-		<blueprint.outputDirectory>${amp.outputDirectory}/blueprint-bundles</blueprint.outputDirectory>
-		<fileInstall.outputDirectory>${amp.outputDirectory}/file-install-bundles</fileInstall.outputDirectory>
-		<standardBundles.outputDirectory>${amp.outputDirectory}/standard-bundles</standardBundles.outputDirectory>
-		<blueprint.gemini-blueprint.version>1.0.0.RELEASE</blueprint.gemini-blueprint.version>
-		<fileinstall.version>3.2.4</fileinstall.version>
-		<jackson.version>2.1.0</jackson.version>
-	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>nl.runnable.alfresco.dynamicextensions</groupId>
