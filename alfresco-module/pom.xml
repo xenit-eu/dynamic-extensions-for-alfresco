@@ -18,7 +18,6 @@
 		<standardBundles.outputDirectory>${amp.outputDirectory}/standard-bundles</standardBundles.outputDirectory>
 		<blueprint.gemini-blueprint.version>1.0.2.RELEASE</blueprint.gemini-blueprint.version>
 		<fileinstall.version>3.2.4</fileinstall.version>
-		<jackson.version>2.1.0</jackson.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -142,33 +141,6 @@
 							<outputDirectory>${fileInstall.outputDirectory}</outputDirectory>
 						</configuration>
 					</execution>
-					<execution>
-						<id>copy-standard-artifacts</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>com.fasterxml.jackson.core</groupId>
-									<artifactId>jackson-core</artifactId>
-									<version>${jackson.version}</version>
-								</artifactItem>
-								<artifactItem>
-									<groupId>nl.runnable.alfresco.dynamicextensions</groupId>
-									<artifactId>json-rest-api</artifactId>
-									<version>${project.version}</version>
-								</artifactItem>
-								<artifactItem>
-									<groupId>nl.runnable.alfresco.dynamicextensions</groupId>
-									<artifactId>management-api</artifactId>
-									<version>${project.version}</version>
-								</artifactItem>
-							</artifactItems>
-							<outputDirectory>${standardBundles.outputDirectory}</outputDirectory>
-						</configuration>
-					</execution>
 				</executions>
 			</plugin>
 		</plugins>
@@ -179,10 +151,6 @@
 			<resource>
 				<directory>src/main/config</directory>
 				<targetPath>alfresco/module/${project.groupId}</targetPath>
-			</resource>
-			<resource>
-				<directory>src/main/webscripts</directory>
-				<targetPath>alfresco/extension/templates/webscripts</targetPath>
 			</resource>
 		</resources>
 		<pluginManagement>

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<webscript>
-	<shortname>Dynamic Extensions Console</shortname>
-	<description>Displays the Dynamic Extensions console.</description>
-	<url>/dynamic-extensions</url>
-	<family>Dynamic Extensions/Management</family>
-	<authentication>admin</authentication>
-</webscript>
