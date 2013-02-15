@@ -17,7 +17,4 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<import resource="services-context.xml" />
 
-	<import resource="repository-context.xml" />
-	
-
 </beans>

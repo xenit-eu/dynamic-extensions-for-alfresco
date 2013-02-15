@@ -25,9 +25,11 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package nl.runnable.alfresco.osgi.container;
+package nl.runnable.alfresco.osgi;
 
 import static org.junit.Assert.*;
+import nl.runnable.alfresco.osgi.BeanNames;
+import nl.runnable.alfresco.osgi.OsgiContainerModuleComponent;
 
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.model.FileFolderService;

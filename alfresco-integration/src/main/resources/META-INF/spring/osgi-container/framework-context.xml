@@ -23,7 +23,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		framework context file is "felix-framework-context.xml" -->
 	<import resource="frameworks/${osgi.container.framework:felix}-framework-context.xml" />
 
-	<bean id="osgi.container.BundleHelper" class="nl.runnable.alfresco.osgi.container.BundleHelper">
+	<bean id="osgi.container.BundleHelper" class="nl.runnable.alfresco.osgi.BundleHelper">
 		<description>
 			Helper for performing Bundle operations.
 		</description>
@@ -47,33 +47,17 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		</property>
 	</bean>
 
-	<bean id="osgi.container.FrameworkManager" class="nl.runnable.alfresco.osgi.container.OsgiContainerFrameworkManager"
+	<bean id="osgi.container.FrameworkManager" class="nl.runnable.alfresco.osgi.FrameworkManager"
 		destroy-method="destroy">
 		<description>
 			Manages the lifecycle of the OSGi Framework and registers services and listeners.
 		</description>
 		<property name="framework" ref="osgi.container.Framework" />
-		<property name="folderPatch" ref="osgi.container.BundleFolderPatch" />
-		<property name="bundleService" ref="osgi.container.BundleService" />
-		<property name="bundleHelper" ref="osgi.container.BundleHelper" />
 		<property name="bundleContextRegistrars">
 			<list>
 				<ref bean="osgi.container.BundleContextRegistrar" />
 			</list>
 		</property>
-		<property name="bundleListeners">
-			<list>
-				<ref bean="osgi.container.BundleService" />
-			</list>
-		</property>
-		<property name="bundleBehaviours">
-			<list>
-				<ref bean="osgi.container.BundleFolderBehaviour" />
-				<ref bean="osgi.container.ManagedBundleBehaviour" />
-				<ref bean="osgi.container.ContentBehaviour" />
-			</list>
-		</property>
-		<property name="repositoryBundleManagementEnabled" value="${osgi.container.enable-repository-bundle-management:false}" />
 		<property name="blueprintBundlesLocation" value="classpath:/alfresco/module/%module.id%/blueprint-bundles/*.jar" />
 		<property name="fileInstallBundlesLocation" value="classpath:/alfresco/module/%module.id%/file-install-bundles/*.jar" />
 		<property name="standardBundlesLocation" value="classpath:/alfresco/module/%module.id%/standard-bundles/*.jar" />

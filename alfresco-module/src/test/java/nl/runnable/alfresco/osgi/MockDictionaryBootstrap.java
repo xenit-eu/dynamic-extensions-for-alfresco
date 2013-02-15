@@ -25,47 +25,32 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package nl.runnable.alfresco.osgi.container;
+package nl.runnable.alfresco.osgi;
 
-import nl.runnable.alfresco.osgi.BundleModel;
+import java.util.List;
+
+import org.alfresco.repo.dictionary.DictionaryBootstrap;
+import org.alfresco.repo.dictionary.DictionaryDAO;
+import org.alfresco.repo.tenant.TenantService;
 
 /**
- * Controls whether bundles are started automatically. Used for {@link BundleModel#PROP_AUTOSTART_BUNDLES}.
+ * Simulated {@link DictionaryBootstrap}-like class for use in integration tests.
  * 
  * @author Laurens Fridael
- * @deprecated No longer relevant.
+ * 
  */
-public enum AutoStart {
+public class MockDictionaryBootstrap {
 
-	/** Indicates that Bundles should be started automatically. */
-	ENABLED(true),
-	/** Indicates Bundles that should be started to facilitate OSGI application framework. */
-	FRAMEWORK(true),
-	/** Indicates that Bundles should be started automatically, before other Bundles. */
-	BOOTSTRAP(true),
-	/** Indicates that Bundles should not be started automatically. */
-	DISABLED(false);
-
-	public static AutoStart getDefault() {
-		return DISABLED;
+	public void setDictionaryDAO(final DictionaryDAO dictionaryDAO) {
 	}
 
-	public static AutoStart[] valuesByInitializationLevel() {
-		return new AutoStart[] { DISABLED, BOOTSTRAP, FRAMEWORK, ENABLED };
+	public void setTenantService(final TenantService tenantService) {
 	}
 
-	private final boolean startBundlesAutomatically;
-
-	private AutoStart(final boolean startBundlesAutomatically) {
-		this.startBundlesAutomatically = startBundlesAutomatically;
+	public void setModels(final List<String> models) {
 	}
 
-	/**
-	 * Indicates whether this value signifies that Bundles should be started automatically.
-	 * 
-	 * @return
-	 */
-	public boolean isStartBundlesAutomatically() {
-		return startBundlesAutomatically;
+	public void setLabels(final List<String> labels) {
 	}
+
 }

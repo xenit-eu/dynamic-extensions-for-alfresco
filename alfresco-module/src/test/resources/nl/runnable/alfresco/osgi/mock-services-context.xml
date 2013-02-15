@@ -11,11 +11,11 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<bean id="module.baseComponent" abstract="true" />
 
-	<bean id="dictionaryModelBootstrap" class="nl.runnable.alfresco.osgi.container.MockDictionaryBootstrap" />
+	<bean id="dictionaryModelBootstrap" class="nl.runnable.alfresco.osgi.MockDictionaryBootstrap" />
 
 	<bean id="dictionaryBootstrap" parent="dictionaryModelBootstrap" />
 	
-	<bean name="service" class="nl.runnable.alfresco.osgi.container.MockServiceFactoryBean" abstract="true">
+	<bean name="service" class="nl.runnable.alfresco.osgi.MockServiceFactoryBean" abstract="true">
 		<description>Acts as a template to make the mock service bean definitions shorter.</description>
 	</bean>
 

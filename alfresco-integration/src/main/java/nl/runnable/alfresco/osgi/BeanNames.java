@@ -25,32 +25,27 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package nl.runnable.alfresco.osgi.container;
+package nl.runnable.alfresco.osgi;
 
-import java.util.List;
-
-import org.alfresco.repo.dictionary.DictionaryDAO;
-import org.alfresco.repo.model.Repository;
-import org.alfresco.repo.tenant.TenantService;
+import org.springframework.context.ApplicationContext;
 
 /**
- * Simulated {@link Repository}-like class for use in integration tests.
+ * Holds constants for well-known names of beans in the OSGI child {@link ApplicationContext}.
  * 
  * @author Laurens Fridael
  * 
  */
-public class MockRepository {
+public class BeanNames {
 
-	public void setDictionaryDAO(final DictionaryDAO dictionaryDAO) {
+	public static final String CONTAINER_FRAMEWORK = "osgi.container.Framework";
+
+	public static final String CONTAINER_FRAMEWORK_MANAGER = "osgi.container.FrameworkManager";
+
+	public static final String CONTAINER_FRAMEWORK_CONFIGURATION = "osgi.container.FrameworkConfiguration";
+
+	/**
+	 * Constructor made private to prevent instantiation and subclassing.
+	 */
+	private BeanNames() {
 	}
-
-	public void setTenantService(final TenantService tenantService) {
-	}
-
-	public void setModels(final List<String> models) {
-	}
-
-	public void setLabels(final List<String> labels) {
-	}
-
 }

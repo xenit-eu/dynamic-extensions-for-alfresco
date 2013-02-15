@@ -25,46 +25,32 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package nl.runnable.alfresco.osgi.container;
+package nl.runnable.alfresco.osgi;
 
-import org.alfresco.repo.policy.PolicyComponent;
-import org.osgi.framework.Bundle;
-import org.springframework.beans.factory.annotation.Required;
-import org.springframework.util.Assert;
+import java.util.List;
+
+import org.alfresco.repo.dictionary.DictionaryDAO;
+import org.alfresco.repo.model.Repository;
+import org.alfresco.repo.tenant.TenantService;
 
 /**
- * Abstract base class for Behaviours that perform {@link Bundle} operations.
+ * Simulated {@link Repository}-like class for use in integration tests.
  * 
  * @author Laurens Fridael
- * @deprecated Repository bundle management will be removed in the future.
+ * 
  */
-@Deprecated
-public abstract class AbstractBundleBehaviour {
+public class MockRepository {
 
-	private PolicyComponent policyComponent;
-
-	private BundleService bundleService;
-
-	@Required
-	public void setPolicyComponent(final PolicyComponent policyComponent) {
-		Assert.notNull(policyComponent);
-		this.policyComponent = policyComponent;
+	public void setDictionaryDAO(final DictionaryDAO dictionaryDAO) {
 	}
 
-	protected PolicyComponent getPolicyComponent() {
-		return policyComponent;
+	public void setTenantService(final TenantService tenantService) {
 	}
 
-	@Required
-	public void setBundleService(final BundleService bundleService) {
-		Assert.notNull(bundleService);
-		this.bundleService = bundleService;
+	public void setModels(final List<String> models) {
 	}
 
-	protected BundleService getBundleService() {
-		return bundleService;
+	public void setLabels(final List<String> labels) {
 	}
-
-	public abstract void register();
 
 }

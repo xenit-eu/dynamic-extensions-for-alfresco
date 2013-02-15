@@ -25,16 +25,47 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package nl.runnable.alfresco.osgi.container;
+package nl.runnable.alfresco.osgi;
 
-import nl.runnable.alfresco.osgi.BundleModel;
+import static org.mockito.Mockito.*;
+
+import org.springframework.beans.factory.FactoryBean;
+import org.springframework.beans.factory.annotation.Required;
+import org.springframework.util.Assert;
 
 /**
- * Indicates the type of Bundles stored in a Bundle folder. Used by {@link BundleModel#PROP_BUNDLE_TYPE}.
+ * FactoryBean that creates a mock for a given class.
  * 
  * @author Laurens Fridael
- * @deprecated Repository bundle management will be removed in the future.
+ * 
  */
-public enum BundleType {
-	REPOSITORY_EXTENSIONS, LIBRARY;
+public class MockServiceFactoryBean implements FactoryBean<Object> {
+
+	private Class<?> clazz;
+
+	private Object service;
+
+	@Required
+	public void setClass(final Class<?> clazz) {
+		Assert.notNull(clazz);
+		this.clazz = clazz;
+	}
+
+	@Override
+	public boolean isSingleton() {
+		return true;
+	}
+
+	@Override
+	public Class<? extends Object> getObjectType() {
+		return clazz;
+	}
+
+	@Override
+	public Object getObject() throws Exception {
+		if (service == null) {
+			service = mock(clazz);
+		}
+		return service;
+	}
 }

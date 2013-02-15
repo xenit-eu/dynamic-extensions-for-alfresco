@@ -39,7 +39,6 @@ import java.util.List;
 
 import nl.runnable.alfresco.metadata.ContainerMetadata;
 import nl.runnable.alfresco.metadata.MetadataRegistry;
-import nl.runnable.alfresco.osgi.container.BundleHelper;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
@@ -80,7 +79,7 @@ public class FrameworkManager implements ResourceLoaderAware {
 
 	private ResourcePatternResolver resourcePatternResolver;
 
-	private BundleHelper bundleHelper;
+	private final BundleHelper bundleHelper = new BundleHelper();
 
 	private FileInstallConfigurer fileInstallConfigurer;
 
@@ -375,12 +374,6 @@ public class FrameworkManager implements ResourceLoaderAware {
 	}
 
 	/* Configuration */
-
-	@Required
-	public void setBundleHelper(final BundleHelper bundleHelper) {
-		Assert.notNull(bundleHelper);
-		this.bundleHelper = bundleHelper;
-	}
 
 	protected BundleHelper getBundleHelper() {
 		return bundleHelper;
