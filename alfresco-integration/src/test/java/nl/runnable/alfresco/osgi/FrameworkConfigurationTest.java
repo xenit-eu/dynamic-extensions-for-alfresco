@@ -56,7 +56,6 @@ public class FrameworkConfigurationTest {
 
 		frameworkConfiguration.setAdditionalSystemPackages(Arrays.asList(
 				new SystemPackage("additional-package1", "1.0"), new SystemPackage("additional-package2", "2.0")));
-		frameworkConfiguration.setFrameworkBundleParent(FrameworkBundleParent.FRAMEWORK);
 	}
 
 	@Test
@@ -67,7 +66,6 @@ public class FrameworkConfigurationTest {
 		assertEquals("core-package; version=1.0", map.get(Constants.FRAMEWORK_SYSTEMPACKAGES));
 		assertEquals("additional-package1; version=1.0,additional-package2; version=2.0",
 				map.get(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA));
-		assertEquals(Constants.FRAMEWORK_BUNDLE_PARENT_FRAMEWORK, map.get(Constants.FRAMEWORK_BUNDLE_PARENT));
 	}
 
 }

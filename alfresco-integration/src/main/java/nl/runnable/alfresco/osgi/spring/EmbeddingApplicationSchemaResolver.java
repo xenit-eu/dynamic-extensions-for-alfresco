@@ -25,31 +25,19 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package nl.runnable.alfresco.osgi;
+package nl.runnable.alfresco.osgi.spring;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-import org.osgi.framework.BundleEvent;
+import org.springframework.beans.factory.xml.PluggableSchemaResolver;
 
 /**
- * {@link BundleEventType} unit test
+ * TODO: Describe the classloading implications. Quite important to communicate the intention behind this.
  * 
  * @author Laurens Fridael
  * 
  */
-public class BundleEventTypeTest {
+public class EmbeddingApplicationSchemaResolver extends PluggableSchemaResolver {
 
-	@Test
-	public void testFromEventTypeId() {
-		assertEquals(BundleEventType.INSTALLED, BundleEventType.fromBundleEventTypeId(BundleEvent.INSTALLED));
-		assertEquals(BundleEventType.RESOLVED, BundleEventType.fromBundleEventTypeId(BundleEvent.RESOLVED));
-		assertEquals(BundleEventType.STARTING, BundleEventType.fromBundleEventTypeId(BundleEvent.STARTING));
-		assertEquals(BundleEventType.STARTED, BundleEventType.fromBundleEventTypeId(BundleEvent.STARTED));
-		assertEquals(BundleEventType.STOPPING, BundleEventType.fromBundleEventTypeId(BundleEvent.STOPPING));
-		assertEquals(BundleEventType.STOPPED, BundleEventType.fromBundleEventTypeId(BundleEvent.STOPPED));
-		// Test mistake
-		assertEquals(null, BundleEventType.fromBundleEventTypeId(0));
+	public EmbeddingApplicationSchemaResolver() {
+		super(EmbeddingApplicationSchemaResolver.class.getClassLoader());
 	}
-
 }

@@ -23,12 +23,6 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		framework context file is "felix-framework-context.xml" -->
 	<import resource="frameworks/${osgi.container.framework:felix}-framework-context.xml" />
 
-	<bean id="osgi.container.BundleHelper" class="nl.runnable.alfresco.osgi.BundleHelper">
-		<description>
-			Helper for performing Bundle operations.
-		</description>
-	</bean>
-
 	<bean id="osgi.container.BundleContextRegistrar" class="nl.runnable.alfresco.osgi.ServiceBundleContextRegistrar">
 		<description>
 			Registers the host application services with the OSGi Framework.

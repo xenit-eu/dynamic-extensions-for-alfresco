@@ -40,7 +40,7 @@ import org.springframework.util.Assert;
  * @author Laurens Fridael
  * 
  */
-public class BundleHelper {
+class BundleHelper {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 

@@ -33,6 +33,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import nl.runnable.alfresco.osgi.spring.SystemPackageConfigurationFactoryBean;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;

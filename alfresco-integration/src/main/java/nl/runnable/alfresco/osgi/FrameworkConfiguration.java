@@ -56,8 +56,6 @@ public class FrameworkConfiguration {
 
 	private List<SystemPackage> additionalSystemPackages = Collections.emptyList();
 
-	private FrameworkBundleParent frameworkBundleParent;
-
 	public File getStorageDirectory() {
 		return storageDirectory;
 	}
@@ -92,14 +90,6 @@ public class FrameworkConfiguration {
 		this.additionalSystemPackages = hostPackages;
 	}
 
-	public FrameworkBundleParent getFrameworkBundleParent() {
-		return frameworkBundleParent;
-	}
-
-	public void setFrameworkBundleParent(final FrameworkBundleParent frameworkBundleParent) {
-		this.frameworkBundleParent = frameworkBundleParent;
-	}
-
 	/**
 	 * Converts this configuration to a Map suitable for passing to <code>FrameworkFactory.newFramework(Map)</code>.
 	 * 
@@ -119,9 +109,6 @@ public class FrameworkConfiguration {
 		if (CollectionUtils.isEmpty(getAdditionalSystemPackages()) == false) {
 			configuration.put(FRAMEWORK_SYSTEMPACKAGES_EXTRA,
 					createSystemPackagesConfiguration(getAdditionalSystemPackages()));
-		}
-		if (getFrameworkBundleParent() != null) {
-			configuration.put(FRAMEWORK_BUNDLE_PARENT, getFrameworkBundleParent().getValue());
 		}
 		return configuration;
 	}

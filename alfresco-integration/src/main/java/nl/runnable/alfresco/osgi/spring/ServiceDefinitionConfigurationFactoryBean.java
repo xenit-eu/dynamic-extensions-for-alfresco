@@ -25,7 +25,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package nl.runnable.alfresco.osgi;
+package nl.runnable.alfresco.osgi.spring;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -33,36 +33,35 @@ import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import nl.runnable.alfresco.osgi.ServiceDefinition;
+import nl.runnable.alfresco.osgi.ServiceDefinitionEditor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.core.io.Resource;
-import org.springframework.util.Assert;
 
 /**
- * {@link FactoryBean} for creating a List of {@link SystemPackage}s from a text file.
+ * {@link FactoryBean} for creating a List of {@link ServiceDefinition}s from a text file.
  * 
  * @author Laurens Fridael
  * 
  */
-public class SystemPackageConfigurationFactoryBean extends AbstractConfigurationFileFactoryBean<List<SystemPackage>> {
+public class ServiceDefinitionConfigurationFactoryBean extends
+		AbstractConfigurationFileFactoryBean<List<ServiceDefinition>> {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	/* Configuration */
-
-	private String defaultVersion = "1.0";
-
 	/* State */
 
-	private List<SystemPackage> systemPackages;
+	private List<ServiceDefinition> serviceDefinitions;
 
 	/* Operations */
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Class<? extends List<SystemPackage>> getObjectType() {
-		return (Class<? extends List<SystemPackage>>) (Class<?>) List.class;
+	public Class<? extends List<ServiceDefinition>> getObjectType() {
+		return (Class<? extends List<ServiceDefinition>>) (Class<?>) List.class;
 	}
 
 	@Override
@@ -71,19 +70,18 @@ public class SystemPackageConfigurationFactoryBean extends AbstractConfiguration
 	}
 
 	@Override
-	public List<SystemPackage> getObject() throws IOException {
-		if (systemPackages == null) {
-			systemPackages = createSystemPackages();
+	public List<ServiceDefinition> getObject() throws IOException {
+		if (serviceDefinitions == null) {
+			serviceDefinitions = createServiceDefinitions();
 		}
-		return systemPackages;
+		return serviceDefinitions;
 	}
 
 	/* Utility operations */
 
-	protected List<SystemPackage> createSystemPackages() throws IOException {
-		final List<SystemPackage> systemPackages = new ArrayList<SystemPackage>();
-		final SystemPackageEditor systemPackageEditor = new SystemPackageEditor();
-		systemPackageEditor.setDefaultVersion(getDefaultVersion());
+	protected List<ServiceDefinition> createServiceDefinitions() throws IOException {
+		final List<ServiceDefinition> serviceDefinitions = new ArrayList<ServiceDefinition>();
+		final ServiceDefinitionEditor serviceDefinitionEditor = new ServiceDefinitionEditor();
 		for (final Resource configuration : resolveConfigurations()) {
 			final LineNumberReader in = new LineNumberReader(new InputStreamReader(configuration.getInputStream()));
 			for (String line; (line = in.readLine()) != null;) {
@@ -93,26 +91,16 @@ public class SystemPackageConfigurationFactoryBean extends AbstractConfiguration
 					continue;
 				}
 				try {
-					systemPackageEditor.setAsText(line);
-					final SystemPackage systemPackage = (SystemPackage) systemPackageEditor.getValue();
-					systemPackages.add(systemPackage);
+					serviceDefinitionEditor.setAsText(line);
+					final ServiceDefinition serviceDefinition = (ServiceDefinition) serviceDefinitionEditor.getValue();
+					serviceDefinitions.add(serviceDefinition);
 				} catch (final IllegalArgumentException e) {
 					logger.warn("Could not parse SystemPackage configuration line: {}", e.getMessage());
 				}
+
 			}
 		}
-		return systemPackages;
-	}
-
-	/* Configuration */
-
-	public void setDefaultVersion(final String defaultVersion) {
-		Assert.hasText(defaultVersion);
-		this.defaultVersion = defaultVersion;
-	}
-
-	public String getDefaultVersion() {
-		return defaultVersion;
+		return serviceDefinitions;
 	}
 
 }

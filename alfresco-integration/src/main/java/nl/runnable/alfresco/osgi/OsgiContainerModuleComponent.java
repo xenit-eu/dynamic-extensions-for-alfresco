@@ -27,7 +27,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package nl.runnable.alfresco.osgi;
 
-
 import org.alfresco.repo.module.AbstractModuleComponent;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.ApplicationContext;
@@ -46,29 +45,57 @@ public class OsgiContainerModuleComponent extends AbstractModuleComponent implem
 
 	/* Dependencies */
 
+	/**
+	 * The containing {@link ApplicationContext}. I.e. the context that this bean is defined in.
+	 */
 	private ApplicationContext applicationContext;
 
+	/**
+	 * The child {@link ApplicationContext} that contains the OSGi framework.
+	 */
 	private ConfigurableApplicationContext osgiContainerApplicationContext;
 
 	/* Main operations */
 
+	/**
+	 * Initializes this module.
+	 */
 	@Override
 	protected void executeInternal() {
 		initializeFrameworkManager();
 	}
 
+	/**
+	 * Called on bean destroy.
+	 */
 	public void destroy() {
-		closeApplicationContext();
+		closeOsgiContainerApplicationContext();
 	}
 
 	/* Utility operations */
 
+	/**
+	 * Initializes the {@link FrameworkManager} in the child application context;
+	 */
 	protected void initializeFrameworkManager() {
 		getFrameworkManager().initialize();
 	}
 
-	protected void closeApplicationContext() {
+	/**
+	 * Closes the OSGi container {@link ApplicationContext}.
+	 */
+	protected void closeOsgiContainerApplicationContext() {
 		getOsgiContainerApplicationContext().close();
+	}
+
+	/* State */
+
+	/**
+	 * Obtains the {@link FrameworkManager} from the OSGi container{@link ApplicationContext}.
+	 */
+	protected FrameworkManager getFrameworkManager() {
+		return getOsgiContainerApplicationContext().getBean(BeanNames.CONTAINER_FRAMEWORK_MANAGER,
+				FrameworkManager.class);
 	}
 
 	/* Dependencies */
@@ -90,13 +117,6 @@ public class OsgiContainerModuleComponent extends AbstractModuleComponent implem
 
 	protected ConfigurableApplicationContext getOsgiContainerApplicationContext() {
 		return osgiContainerApplicationContext;
-	}
-
-	/* State */
-
-	protected FrameworkManager getFrameworkManager() {
-		return getOsgiContainerApplicationContext().getBean(BeanNames.CONTAINER_FRAMEWORK_MANAGER,
-				FrameworkManager.class);
 	}
 
 }

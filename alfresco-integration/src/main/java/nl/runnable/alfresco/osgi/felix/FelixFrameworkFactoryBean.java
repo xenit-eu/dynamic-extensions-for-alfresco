@@ -27,7 +27,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package nl.runnable.alfresco.osgi.felix;
 
-import nl.runnable.alfresco.osgi.AbstractFrameworkFactoryBean;
+import nl.runnable.alfresco.osgi.spring.AbstractFrameworkFactoryBean;
 
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;

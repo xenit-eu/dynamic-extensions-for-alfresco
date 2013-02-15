@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.osgi;
+package nl.runnable.alfresco.osgi.spring;
 
 import java.io.IOException;
 import java.util.ArrayList;

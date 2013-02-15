@@ -35,13 +35,11 @@ import org.springframework.context.ApplicationContext;
  * @author Laurens Fridael
  * 
  */
-public class BeanNames {
+class BeanNames {
 
 	public static final String CONTAINER_FRAMEWORK = "osgi.container.Framework";
 
 	public static final String CONTAINER_FRAMEWORK_MANAGER = "osgi.container.FrameworkManager";
-
-	public static final String CONTAINER_FRAMEWORK_CONFIGURATION = "osgi.container.FrameworkConfiguration";
 
 	/**
 	 * Constructor made private to prevent instantiation and subclassing.
