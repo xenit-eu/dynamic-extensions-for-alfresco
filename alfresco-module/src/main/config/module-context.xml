@@ -9,7 +9,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<import resource="classpath:/META-INF/spring/module/action-integration-context.xml" />
 
-	<bean id="osgi.container.OsgiContainerApplicationContext" class="nl.runnable.alfresco.spring.ChildApplicationContextFactoryBean"
+	<bean id="osgi.applicationcontext.DynamicExtensions" class="nl.runnable.alfresco.osgi.spring.ChildApplicationContextFactoryBean"
 		destroy-method="destroy">
 		<property name="configLocations" value="classpath:/alfresco/module/nl.runnable.alfresco.dynamicextensions/osgi-container-context.xml" />
 	</bean>
@@ -22,7 +22,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		<property name="appliesFromVersion" value="0.0.1" />
 		<property name="appliesToVersion" value="1.0.0" />
 		<property name="executeOnceOnly" value="false" />
-		<property name="osgiContainerApplicationContext" ref="osgi.container.OsgiContainerApplicationContext" />
+		<property name="osgiContainerApplicationContext" ref="osgi.applicationcontext.DynamicExtensions" />
 	</bean>
 
 </beans>

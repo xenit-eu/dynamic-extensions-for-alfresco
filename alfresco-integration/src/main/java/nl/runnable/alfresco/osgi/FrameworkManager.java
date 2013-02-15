@@ -171,7 +171,7 @@ public class FrameworkManager implements ResourceLoaderAware {
 						}
 					}
 				} catch (final FileNotFoundException e) {
-					logger.warn("Could not find Bundles at location '{}'.", locationPattern);
+					logger.debug("Could not find Bundles at location '{}'.", locationPattern);
 				}
 			}
 		} catch (final IOException e) {

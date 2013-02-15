@@ -52,6 +52,8 @@ import org.springframework.util.Assert;
  */
 public class AugmentingRegistryBeanPostProcessor implements BeanPostProcessor, ApplicationContextAware {
 
+	private static final String APPLICATIONCONTEXT_PREFIX = "osgi.applicationcontext.";
+
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	/* Dependencies */
@@ -61,8 +63,6 @@ public class AugmentingRegistryBeanPostProcessor implements BeanPostProcessor, A
 	/* Configuration */
 
 	private String registryBeanName;
-
-	private String osgiContainerApplicationContextBeanName;
 
 	/* Main operations */
 
@@ -75,17 +75,14 @@ public class AugmentingRegistryBeanPostProcessor implements BeanPostProcessor, A
 	 */
 	@Override
 	public Object postProcessBeforeInitialization(Object bean, final String beanName) throws BeansException {
-		if (beanName.equals(getRegistryBeanName()) && bean instanceof Registry) {
-			if (getAdditionalRegistries().isEmpty() == false) {
+		if (beanName.equals(getRegistryBeanName()) && bean instanceof Registry && !(bean instanceof AugmentingRegistry)) {
+			final Collection<Registry> additionalRegistries = getAdditionalRegistries();
+			if (additionalRegistries.isEmpty() == false) {
 				if (logger.isDebugEnabled()) {
 					logger.debug("Augmenting Web Script Registry bean {} with {} additional Registries.", beanName,
-							getAdditionalRegistries().size());
+							additionalRegistries.size());
 				}
-				if (bean instanceof AugmentingRegistry) {
-					((AugmentingRegistry) bean).addRegistries(getAdditionalRegistries());
-				} else {
-					bean = createAugmentingRegistry((Registry) bean);
-				}
+				bean = createAugmentingRegistry((Registry) bean);
 			}
 		}
 		return bean;
@@ -123,12 +120,22 @@ public class AugmentingRegistryBeanPostProcessor implements BeanPostProcessor, A
 		this.applicationContext = applicationContext;
 	}
 
-	protected ApplicationContext getOsgiContainerApplicationContext() {
-		return applicationContext.getBean(getOsgiContainerApplicationContextBeanName(), ApplicationContext.class);
+	protected Collection<ApplicationContext> getOsgiContainerApplicationContexts() {
+		final List<ApplicationContext> applicationContexts = new ArrayList<ApplicationContext>();
+		for (final String beanName : applicationContext.getBeanNamesForType(ApplicationContext.class)) {
+			if (beanName.startsWith(APPLICATIONCONTEXT_PREFIX)) {
+				applicationContexts.add(applicationContext.getBean(beanName, ApplicationContext.class));
+			}
+		}
+		return applicationContexts;
 	}
 
 	protected Collection<Registry> getAdditionalRegistries() {
-		return getOsgiContainerApplicationContext().getBeansOfType(Registry.class).values();
+		final List<Registry> registries = new ArrayList<Registry>();
+		for (final ApplicationContext osgiApplicationContext : getOsgiContainerApplicationContexts()) {
+			registries.addAll(osgiApplicationContext.getBeansOfType(Registry.class).values());
+		}
+		return registries;
 	}
 
 	/* Configuration */
@@ -140,14 +147,6 @@ public class AugmentingRegistryBeanPostProcessor implements BeanPostProcessor, A
 
 	protected String getRegistryBeanName() {
 		return registryBeanName;
-	}
-
-	public void setOsgiContainerApplicationContextBeanName(final String osgiContainerApplicationContextBeanName) {
-		this.osgiContainerApplicationContextBeanName = osgiContainerApplicationContextBeanName;
-	}
-
-	public String getOsgiContainerApplicationContextBeanName() {
-		return osgiContainerApplicationContextBeanName;
 	}
 
 }

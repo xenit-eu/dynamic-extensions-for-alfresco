@@ -75,16 +75,6 @@ public class AugmentingRegistry implements Registry {
 		return registries;
 	}
 
-	/**
-	 * Adds Registries after initialization.
-	 * 
-	 * @param registries
-	 * @see AugmentingRegistryBeanPostProcessor#postProcessBeforeInitialization(Object, String)
-	 */
-	public void addRegistries(final Collection<Registry> registries) {
-		getRegistries().addAll(registries);
-	}
-
 	/* Registry implementation */
 
 	@Override
