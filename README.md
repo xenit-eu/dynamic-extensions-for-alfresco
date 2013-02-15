@@ -3,15 +3,29 @@ Dynamic Extensions for Alfresco
 
 Rapid development of Alfresco repository extensions in Java. Deploy your code in seconds, not minutes. Life is too short for endless server restarts.
 
-Getting started
----------------
+Status
+------
 
-Prerequisites: make sure you have a local Alfresco development server installed.
+All unused and unsupported old code has been removed; we can now move forward with a lean code base.
 
-* Download the <a href="https://github.com/downloads/lfridael/dynamic-extensions-for-alfresco/nl.runnable.alfresco.dynamicextensions-1.0.0.M3-SNAPSHOT.amp">Dynamic Extensions milestone 3 AMP</a>.
-* Install the AMP in Alfresco using the <a href="https://wiki.alfresco.com/wiki/Module_Management_Tool">Module Management Tool</a>.
-* Start your local Alfresco development server.
-* Open <a href="http://localhost:8080/alfresco/service/dynamic-extensions">http://localhost:8080/alfresco/service/dynamic-extensions</a>. This shows the Dynamic Extensions console with some information.
+Most of the recent development effort has focused on the <a href="https://github.com/lfridael/vault">Vault UI platform</a>, but this project has not been forgotten.
+
+Coming Soon
+-----------
+
+* Async Servlet 3.0 support for annotation-based Web Scripts.
+* Mapping Web Script requests to annotation-based Spring MVC controllers.
+* More documentation.
+
+Coming Later
+------------
+
+While Dynamic Extensions has billed itself as "OSGi for Alfresco" from the start, in the long term it will transform into a more general solution for rapid development of Alfresco repository extensions. 
+
+The current line of thinking is to introduce a new server-side, repository JavaScript API. While Alfresco already offers server-side scripting, this new framework will be more like a Domain Specific Language.
+
+Java, Spring and OSGi will continue to be supported.
+
 
 Supported Alfresco versions
 ---------------------------
