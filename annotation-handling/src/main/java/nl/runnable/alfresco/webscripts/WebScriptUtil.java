@@ -27,10 +27,11 @@ class WebScriptUtil {
 	static HttpServletRequest extractHttpServletRequest(final WebScriptRequest request) {
 		HttpServletRequest servletRequest = null;
 		if (request instanceof WrappingWebScriptRequest) {
-			final WrappingWebScriptRequest wrappingRequest = (WrappingWebScriptRequest) request;
-			final WebScriptRequest nextRequest = wrappingRequest.getNext();
+			final WebScriptRequest nextRequest = ((WrappingWebScriptRequest) request).getNext();
 			if (nextRequest instanceof WebScriptServletRequest) {
 				servletRequest = ((WebScriptServletRequest) nextRequest).getHttpServletRequest();
+			} else if (nextRequest != null) {
+				servletRequest = extractHttpServletRequest(nextRequest);
 			}
 		}
 		return servletRequest;
@@ -45,10 +46,11 @@ class WebScriptUtil {
 	static HttpServletResponse extractHttpServletResponse(final WebScriptResponse request) {
 		HttpServletResponse servletResponse = null;
 		if (request instanceof WrappingWebScriptResponse) {
-			final WrappingWebScriptResponse wrappingResponse = (WrappingWebScriptResponse) request;
-			final WebScriptResponse nextResponse = wrappingResponse.getNext();
+			final WebScriptResponse nextResponse = ((WrappingWebScriptResponse) request).getNext();
 			if (nextResponse instanceof WebScriptServletResponse) {
 				servletResponse = ((WebScriptServletResponse) nextResponse).getHttpServletResponse();
+			} else if (nextResponse != null) {
+				servletResponse = extractHttpServletResponse(nextResponse);
 			}
 		}
 		return servletResponse;
