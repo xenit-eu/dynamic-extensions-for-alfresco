@@ -16,12 +16,11 @@ These parts of the codebase were considered to be too hard to maintain. But do n
 
 Having shed the technical debt accumulated over the past 2 years, the project can now move forward with a much leaner codebase. It's about time for Dynamic Extensions to have a proper milestone release.
 
-Coming Soon
------------
+Coming Soon: Milestone 3 release
+--------------------------------
 
-* Simpler status page that replaces the previous console. 
+* Status page. Replaces the previous console.
 * Loading OSGi extensions from the Alfresco repository.
-* Async Servlet 3.0 support for annotation-based Web Scripts.
 * More documentation.
 
 Coming Later
@@ -33,19 +32,26 @@ The project will introduce a new server-side JavaScript API for accessing the Al
 
 Java and OSGi will continue to be supported, but should be considered foundational technologies.
 
+Support for Alfresco Community
+------------------------------
 
-Supported Alfresco versions
----------------------------
-
-Dynamic Extensions is developed and tested against
+Dynamic Extensions is developed and tested against:
 
 * Alfresco Community 3.4
 * Alfresco Community 4.0
+* Alfresco Community 4.2
 
-Dynamic Extensions can also be used with Alfresco Enterprise 4.0 and 4.1. Recent user feedback indicates it works on Community 4.2 as well.
+Support for Alfresco Enterprise
+-------------------------------
 
-Use of OSGi under the hood
---------------------------
+* Alfresco Enterprise 4.0
+* Alfresco Enterprise 4.1
+
+Even though the Enterprise editions are not part of the development and testing environment, there is is no reason why Dynamic Extensions should not work on them.
+
+
+OSGi under the hood
+-------------------
 
 Dynamic Extensions adds an OSGi container to Alfresco, enabling live deployment of Java code packaged as OSGi bundles. This is where the magic happens. Alfresco itself is not "OSGi"-fied in any way: the OSGi container runs completely separate from the core Alfresco platform.
 
