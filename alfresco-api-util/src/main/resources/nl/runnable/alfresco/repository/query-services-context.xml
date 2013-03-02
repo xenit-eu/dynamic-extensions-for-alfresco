@@ -22,8 +22,4 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		<property name="pathHelper" ref="pathHelper" />
 	</bean>
 
-	<bean id="cannedQueryHelper" class="nl.runnable.alfresco.repository.query.impl.CannedQueryHelperFactoryBean">
-		<property name="descriptorService" ref="DescriptorService" />
-	</bean>
-
 </beans>

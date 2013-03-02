@@ -6,4 +6,3 @@ queryBuilderFactory:nl.runnable.alfresco.repository.query.QueryBuilderFactory
 fileFolderHelper:nl.runnable.alfresco.repository.node.FileFolderHelper
 nodeHelper:nl.runnable.alfresco.repository.node.NodeHelper
 pathHelper:nl.runnable.alfresco.repository.node.PathHelper
-cannedQueryHelper:nl.runnable.alfresco.repository.query.CannedQueryHelper:default:4.0
