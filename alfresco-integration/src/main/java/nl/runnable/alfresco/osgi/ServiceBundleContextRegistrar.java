@@ -81,7 +81,7 @@ public class ServiceBundleContextRegistrar implements BundleContextRegistrar, Ap
 
 	private final List<ServiceRegistration<?>> serviceRegistrations = new ArrayList<ServiceRegistration<?>>();
 
-	private boolean verifyServicesImplementInterfaces = true;
+	private boolean verifyServicesImplementInterfaces = false;
 
 	/* Operations */
 
