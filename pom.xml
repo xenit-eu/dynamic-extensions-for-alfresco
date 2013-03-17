@@ -4,7 +4,7 @@
 
 	<groupId>nl.runnable.alfresco.dynamicextensions</groupId>
 	<artifactId>parent-pom</artifactId>
-	<version>1.0.0.M3-SNAPSHOT</version>
+	<version>1.0.0.M3</version>
 	<packaging>pom</packaging>
 	<name>Parent POM</name>
 
@@ -27,6 +27,9 @@
 		<java.source.version>1.6</java.source.version>
 		<java.target.version>1.6</java.target.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<github.global.server>github</github.global.server>
+		<site-maven-plugin.version>0.7</site-maven-plugin.version>
+		<mvn-repo-branch>mvn-repo</mvn-repo-branch>
 	</properties>
 
 	<modules>
@@ -37,7 +40,6 @@
 		<module>blueprint-integration</module>
 		<module>alfresco-integration</module>
 		<module>alfresco-module</module>
-		<module>example-dynamic-extension</module>
 	</modules>
 
 	<dependencies>
@@ -169,6 +171,13 @@
 		</dependencies>
 	</dependencyManagement>
 
+	<distributionManagement>
+    <repository>
+      <id>internal.repo</id>
+      <url>file://${project.build.directory}/${mvn-repo-branch}</url>
+    </repository>
+  </distributionManagement>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -200,9 +209,32 @@
 				<version>${maven-bundle-plugin.version}</version>
 				<extensions>true</extensions>
 			</plugin>
+			<plugin>
+        <groupId>com.github.github</groupId>
+        <artifactId>site-maven-plugin</artifactId>
+        <version>${site-maven-plugin.version}</version>
+        <configuration>
+            <message>Maven artifacts for ${project.version}</message>
+            <noJekyll>true</noJekyll>
+            <merge>true</merge>
+            <outputDirectory>${project.build.directory}/${mvn-repo-branch}</outputDirectory>
+            <branch>refs/heads/${mvn-repo-branch}</branch>
+            <includes><include>**/*</include></includes>
+            <repositoryOwner>lfridael</repositoryOwner>
+            <repositoryName>dynamic-extensions-for-alfresco</repositoryName>     
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>site</goal>
+            </goals>
+            <phase>deploy</phase>
+          </execution>
+        </executions>
+      </plugin>
 		</plugins>
 	</build>
-
+	
 	<repositories>
 		<repository>
 			<id>alfresco-public</id>
@@ -210,7 +242,6 @@
 		</repository>
 		<repository>
 			<id>springsource-repo</id>
-			<name>SpringSource Repository</name>
 			<url>http://repo.springsource.org/release</url>
 		</repository>
     <repository>
