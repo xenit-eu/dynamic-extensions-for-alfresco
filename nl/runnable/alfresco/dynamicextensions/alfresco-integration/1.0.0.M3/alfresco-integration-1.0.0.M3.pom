@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>nl.runnable.alfresco.dynamicextensions</groupId>
+		<artifactId>parent-pom</artifactId>
+		<version>1.0.0.M3</version>
+	</parent>
+	<artifactId>alfresco-integration</artifactId>
+	<packaging>jar</packaging>
+	<name>Alfresco integration</name>
+	<description>Provides integration for running Dynamic Extensions in an Alfresco module.</description>
+	<dependencies>
+		<dependency>
+			<groupId>nl.runnable.alfresco.dynamicextensions</groupId>
+			<artifactId>alfresco-api-util</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>nl.runnable.alfresco.dynamicextensions</groupId>
+			<artifactId>annotation-handling</artifactId>
+			<version>${project.version}</version>			
+		</dependency>
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.extensions.surf</groupId>
+			<artifactId>spring-webscripts</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>org.apache.felix.framework</artifactId>
+		</dependency>
+	</dependencies>
+</project>
