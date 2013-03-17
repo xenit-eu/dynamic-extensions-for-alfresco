@@ -3,34 +3,34 @@ Dynamic Extensions for Alfresco
 
 Rapid development of Alfresco repository extensions in Java. Deploy your code in seconds, not minutes. Life is too short for endless server restarts.
 
-Status
-------
+Milestone 3 available
+---------------------
 
-All unused and unsupported old code has been removed:
+This release has been sitting in limbo for far too long. The Maven artifacts are now hosted under the <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/tree/mvn-repo">`mvn-repo`</a> tag.
 
-* **Removed**: Dynamic Extensions console
-* **Removed**: Loading extension JARs from the repository.
-* **Removed**: Data Dictionary browser.
+Installing
+----------
 
-These parts of the codebase were considered to be too hard to maintain. But do not worry: the console and loading extensions from repository will be reimplemented soon, in a much more lightweight fashion. The Data Dictionary browser will find a new home in the <a href="../vault">Vault</a> user interface.
+Dynamic Extensions is distributed as an Alfresco Module Package (AMP). For more info on AMPs see: <a href="http://docs.alfresco.com/4.0/index.jsp?topic=%2Fcom.alfresco.enterprise.doc%2Ftasks%2Famp-install.html">Installing an Alfresco Module Package</a>.
 
-Having shed the technical debt accumulated over the past 2 years, the project can now move forward with a much leaner codebase. It's about time for Dynamic Extensions to have a proper milestone release.
+* Download the <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/raw/mvn-repo/nl/runnable/alfresco/dynamicextensions/alfresco-module/1.0.0.M3/alfresco-module-1.0.0.M3.amp">Milestone 3 AMP</a>.
+* Install the AMP in your local Alfresco repository using the Module Management Tool.
+* Optional: Configure the directory for deploying Dynamic Extensions using the `osgi.container.bundle-directory` setting in the <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/blob/master/alfresco-module/configuration/osgi-container.properties">configuration file</a>. 
+* Build and deploy the <a href="https://github.com/lfridael/example-dynamic-extension">example Dynamic Extension</a>.
+* Open the <a href="http://localhost:8080/alfresco/service/dynamic-extensions/hello">Hello Web Script</a> to verify everything is working.
 
-Coming Soon: Milestone 3 release
---------------------------------
+Creating your own Alfresco extensions
+-------------------------------------
 
-* Status page. Replaces the previous console.
-* Loading OSGi extensions from the Alfresco repository.
-* More documentation.
+While there is currently very little documentation on creating your own extensions, the <a href="https://github.com/lfridael/example-dynamic-extension">example Dynamic Extension</a> provides a good starting point.
 
-Coming Later
-------------
+Clone the example repo and explore it. Here are some pointers to get you going:
 
-While Dynamic Extensions has billed itself as "OSGi for Alfresco" from the start, in the long term it will transform into a more general solution for rapid development of Alfresco repository extensions.
-
-The project will introduce a new server-side JavaScript API for accessing the Alfresco repository. This brings the overall development approach in line with <a href="../vault">Vault</a>, which is a modern JavaScript web application that runs completely in the browser. While Alfresco already supports server-side JavaScript, the new framework will be more like a Domain Specific Language, taking inspiration from the myriad of libraries in the ecosystem that has sprung up around <a href="http://nodejs.org/">node.js</a>.
-
-Java and OSGi will continue to be supported, but should be considered foundational technologies.
+* The <a href="https://github.com/lfridael/example-dynamic-extension/blob/master/pom.xml">pom.xml</a> serves as a template for your own Maven-based projects.
+* Annotation-based Web Scripts: <a href="https://github.com/lfridael/example-dynamic-extension/blob/master/src/main/java/nl/runnable/alfresco/examples/CategoriesWebScript.java">First example</a> and <a href="https://github.com/lfridael/example-dynamic-extension/blob/master/src/main/java/nl/runnable/alfresco/examples/HelloWebScript.java">another example</a>.
+* <a href="https://github.com/lfridael/example-dynamic-extension/blob/master/src/main/java/nl/runnable/alfresco/examples/ExampleActions.java">Annotation-based Action example</a>.
+* <a href="https://github.com/lfridael/example-dynamic-extension/blob/master/src/main/java/nl/runnable/alfresco/examples/ExampleBehaviour.java">Annotation-based Behaviour example</a>
+* <a href="https://github.com/lfridael/example-dynamic-extension/tree/master/src/main/java/nl/runnable/alfresco/examples">All examples</a>.
 
 Support for Alfresco Community
 ------------------------------
@@ -49,6 +49,13 @@ Support for Alfresco Enterprise
 
 Even though the Enterprise editions are not part of the development and testing environment, there is is no reason why Dynamic Extensions should not work on them.
 
+Coming Soon
+-----------
+
+* Status page. Replaces the previous console.
+* Loading OSGi extensions from the Alfresco repository.
+* More documentation.
+* Maven archetypes to jumpstart extension development.
 
 OSGi under the hood
 -------------------
