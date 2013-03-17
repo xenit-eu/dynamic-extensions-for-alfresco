@@ -4,7 +4,7 @@
 
 	<groupId>nl.runnable.alfresco.dynamicextensions</groupId>
 	<artifactId>parent-pom</artifactId>
-	<version>1.0.0.M3</version>
+	<version>1.0.0.M4-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Parent POM</name>
 
