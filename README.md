@@ -6,7 +6,9 @@ Rapid development of Alfresco repository extensions in Java. Deploy your code in
 Milestone 3 available
 ---------------------
 
-This release has been sitting in limbo for far too long. The Maven artifacts are now hosted under the <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/tree/mvn-repo">`mvn-repo`</a> tag.
+This release has been sitting in limbo for far too long. 
+
+The Maven artifacts for this release are hosted in this repo, under the <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/tree/mvn-repo">`mvn-repo`</a> tag.
 
 Installing
 ----------
