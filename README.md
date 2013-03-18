@@ -21,4 +21,4 @@ Then add entries to your `<dependencies>` as follows:
 </dependency>
 ```
 
-For more details see the <a href="https://github.com/lfridael/example-dynamic-extension/blob/master/pom.xml">pom.xml</a> for the <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco">example Dynamic Extension</a>.
+For more details see the <a href="https://github.com/lfridael/example-dynamic-extension/blob/master/pom.xml">pom.xml</a> for the <a href="https://github.com/lfridael/example-dynamic-extension">example Dynamic Extension</a>.
