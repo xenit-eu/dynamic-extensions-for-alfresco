@@ -56,7 +56,7 @@ public class ModelRegistrar {
 				registerModelMetadata(modelName, model);
 			} catch (final DictionaryException e) {
 				if (logger.isWarnEnabled()) {
-					logger.warn("Could not register model '{}': ", model.getName(), e.getMessage());
+					logger.warn(String.format("Could not register model '%s'", model.getName()), e);
 				}
 			}
 		}
