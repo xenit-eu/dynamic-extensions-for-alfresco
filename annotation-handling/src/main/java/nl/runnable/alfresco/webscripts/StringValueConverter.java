@@ -24,6 +24,10 @@ public class StringValueConverter {
 		SUPPORTED_TYPES.add(int[].class);
 		SUPPORTED_TYPES.add(Integer.class);
 		SUPPORTED_TYPES.add(Integer[].class);
+		SUPPORTED_TYPES.add(Long.TYPE);
+		SUPPORTED_TYPES.add(long[].class);
+		SUPPORTED_TYPES.add(Long.class);
+		SUPPORTED_TYPES.add(Long[].class);
 		SUPPORTED_TYPES.add(Boolean.TYPE);
 		SUPPORTED_TYPES.add(boolean[].class);
 		SUPPORTED_TYPES.add(Boolean.class);
@@ -51,6 +55,10 @@ public class StringValueConverter {
 			value = Integer.parseInt(stringValue);
 		} else if (Integer.class.equals(type)) {
 			value = Integer.valueOf(stringValue);
+		} else if (Long.TYPE.equals(type)) {
+			value = Long.parseLong(stringValue);
+		} else if (Long.class.equals(type)) {
+			value = Long.valueOf(stringValue);
 		} else if (Boolean.TYPE.equals(type)) {
 			value = Boolean.parseBoolean(stringValue);
 		} else if (Boolean.class.equals(type)) {
