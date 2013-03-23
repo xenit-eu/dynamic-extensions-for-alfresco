@@ -5,3 +5,5 @@
 *.bat
 target
 tmp
+*.sublime-project
+*.sublime-workspace
