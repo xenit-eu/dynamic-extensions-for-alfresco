@@ -39,6 +39,7 @@
 		<module>annotation-handling</module>
 		<module>blueprint-integration</module>
 		<module>alfresco-integration</module>
+		<module>web-console</module>
 		<module>alfresco-module</module>
 	</modules>
 
