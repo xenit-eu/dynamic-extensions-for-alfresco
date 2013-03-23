@@ -130,9 +130,10 @@ public class AnnotationBasedWebScriptHandler {
 	protected void processHandlerMethodReturnValue(final AnnotationBasedWebScript webScript, final Object returnValue,
 			final WebScriptRequest request, final WebScriptResponse response) throws IOException {
 		if (returnValue instanceof Map) {
-			final Format format = Format.valueOf(request.getFormat().toUpperCase());
-			if (format == null) {
-				throw new IllegalStateException(String.format("Unknown format: %s", request.getFormat()));
+			if (StringUtils.hasText(request.getFormat()) == false) {
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.getWriter().write("No format specified.");
+				return;
 			}
 			final Map<String, Object> model = (Map<String, Object>) returnValue;
 			final Class<?> handlerClass = webScript.getHandler().getClass();
