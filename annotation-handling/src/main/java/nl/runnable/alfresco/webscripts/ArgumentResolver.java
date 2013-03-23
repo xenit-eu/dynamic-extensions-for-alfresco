@@ -46,10 +46,10 @@ public interface ArgumentResolver<ArgumentType extends Object, AnnotationType ex
 	 * Indicates whether this implementation support parameters of the given type in combination with an optional
 	 * {@link Annotation} type.
 	 * 
-	 * @param parameterType
+	 * @param argumentType
 	 * @return True if this implementation support the given type, false if not.
 	 */
-	boolean supports(Class<?> parameterType, Class<? extends Annotation> annotationType);
+	boolean supports(Class<?> argumentType, Class<? extends Annotation> annotationType);
 
 	/**
 	 * Resolves the argument value for the given type and optional annotation, using the {@link WebScriptRequest} and

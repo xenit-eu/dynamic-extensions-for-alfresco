@@ -72,6 +72,8 @@ public class DefaultHandlerMethodArgumentsResolver implements HandlerMethodArgum
 		argumentResolvers.add((ArgumentResolver) new HttpServletRequestArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new HttpServletResponseArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new AttributeArgumentResolver());
+		argumentResolvers.add((ArgumentResolver) new MapAttributesArgumentResolver());
+		argumentResolvers.add((ArgumentResolver) new TemplateProcessorRegistryArgumentResolver());
 	}
 
 	@Override
@@ -123,10 +125,10 @@ public class DefaultHandlerMethodArgumentsResolver implements HandlerMethodArgum
 		if (argumentResolversByHashCode.containsKey(hashCode)) {
 			return argumentResolversByHashCode.get(hashCode);
 		}
-		for (final ArgumentResolver<Object, Annotation> methodParameterMapper : argumentResolvers) {
-			if (methodParameterMapper.supports(parameterType, annotationType)) {
-				argumentResolversByHashCode.put(hashCode, methodParameterMapper);
-				return methodParameterMapper;
+		for (final ArgumentResolver<Object, Annotation> argumentResolver : argumentResolvers) {
+			if (argumentResolver.supports(parameterType, annotationType)) {
+				argumentResolversByHashCode.put(hashCode, argumentResolver);
+				return argumentResolver;
 			}
 		}
 		return null;

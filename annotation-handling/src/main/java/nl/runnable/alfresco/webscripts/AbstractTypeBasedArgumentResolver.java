@@ -39,29 +39,30 @@ import org.springframework.util.Assert;
  * 
  * @author Laurens Fridael
  * 
- * @param <ParameterType>
+ * @param <ArgumentType>
  */
-public abstract class AbstractTypeBasedArgumentResolver<ParameterType> implements
-		ArgumentResolver<ParameterType, Annotation> {
+public abstract class AbstractTypeBasedArgumentResolver<ArgumentType> implements
+		ArgumentResolver<ArgumentType, Annotation> {
 
 	@Override
 	public final boolean supports(final Class<?> parameterType, final Class<? extends Annotation> annotationType) {
+		/* Determine if using Class.isAssignableFrom() breaks backwards compatibility. */
 		return parameterType.equals(getExpectedArgumentType());
 	}
 
 	@Override
-	public final ParameterType resolveArgument(final Class<?> parameterType, final Annotation parameterAnnotation,
+	public final ArgumentType resolveArgument(final Class<?> argumentType, final Annotation parameterAnnotation,
 			final String name, final WebScriptRequest request, final WebScriptResponse response) {
 		Assert.isTrue(parameterAnnotation == null, "Did not expect a parameter annotation.");
 		final Class<?> expectedParameterType = getExpectedArgumentType();
-		if (parameterType.equals(expectedParameterType) == false) {
+		if (argumentType.equals(expectedParameterType) == false) {
 			throw new IllegalArgumentException(String.format("Incorrect parameter type %s, expected type %s",
-					parameterType, expectedParameterType));
+					argumentType, expectedParameterType));
 		}
 		return resolveArgument(request, response);
 	}
 
 	protected abstract Class<?> getExpectedArgumentType();
 
-	protected abstract ParameterType resolveArgument(WebScriptRequest request, WebScriptResponse response);
+	protected abstract ArgumentType resolveArgument(WebScriptRequest request, WebScriptResponse response);
 }

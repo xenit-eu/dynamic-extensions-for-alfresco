@@ -11,22 +11,6 @@ import org.springframework.util.StringUtils;
 
 public class AttributeArgumentResolver implements ArgumentResolver<Object, Attribute> {
 
-	/**
-	 * Currently we use thread-local storage for exchanging attributes between {@link AnnotationBasedWebScriptHandler}
-	 * and this class. It's an ugly solution; one that may be refactored later on.
-	 * 
-	 */
-	/* Rename to 'currentAttributes'. */
-	static ThreadLocal<Map<String, Object>> currentAttributes = new ThreadLocal<Map<String, Object>>();
-
-	static void setCurrentAttributes(final Map<String, Object> currentAttributesByName) {
-		currentAttributes.set(currentAttributesByName);
-	}
-
-	static void clearCurrentAttributes() {
-		currentAttributes.remove();
-	}
-
 	@Override
 	public boolean supports(final Class<?> parameterType, final Class<? extends Annotation> annotationType) {
 		return Attribute.class.equals(annotationType);
@@ -36,7 +20,7 @@ public class AttributeArgumentResolver implements ArgumentResolver<Object, Attri
 	public Object resolveArgument(final Class<?> argumentType, final Attribute attribute, String name,
 			final WebScriptRequest request, final WebScriptResponse response) {
 		Object value = null;
-		final Map<String, Object> attributesByName = currentAttributes.get();
+		final Map<String, Object> attributesByName = ((AttributesWebScriptRequest) request).getAttributes();
 		if (StringUtils.hasText(attribute.value())) {
 			name = attribute.value();
 		}

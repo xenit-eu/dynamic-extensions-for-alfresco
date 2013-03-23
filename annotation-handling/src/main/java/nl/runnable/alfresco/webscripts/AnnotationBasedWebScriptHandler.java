@@ -28,16 +28,23 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package nl.runnable.alfresco.webscripts;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 import nl.runnable.alfresco.webscripts.annotations.Attribute;
 
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.extensions.webscripts.Format;
+import org.springframework.extensions.webscripts.TemplateProcessor;
+import org.springframework.extensions.webscripts.TemplateProcessorRegistry;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.util.Assert;
+import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -64,21 +71,21 @@ public class AnnotationBasedWebScriptHandler {
 	 * @param handlerMethod
 	 * @throws IOException
 	 */
-	public void handleRequest(final AnnotationBasedWebScript webScript, final WebScriptRequest request,
+	public void handleRequest(final AnnotationBasedWebScript webScript, WebScriptRequest request,
 			final WebScriptResponse response) throws IOException {
 		Assert.notNull(webScript, "WebScript cannot be null.");
 		Assert.notNull(request, "Request cannot be null.");
 		Assert.notNull(response, "Response cannot be null.");
 
 		final Map<String, Object> attributesByName = invokeAttributeMethods(webScript, request, response);
-		invokeHandlerMethod(webScript, request, response, attributesByName);
+		request = new AttributesWebScriptRequest(request, attributesByName);
+		invokeHandlerMethod(webScript, request, response);
 	}
 
 	/* Utility operations */
 
 	protected Map<String, Object> invokeAttributeMethods(final AnnotationBasedWebScript webScript,
 			final WebScriptRequest request, final WebScriptResponse response) {
-
 		final Map<String, Object> attributesByName = new HashMap<String, Object>();
 		for (final Method method : webScript.getAttributeMethods()) {
 			method.setAccessible(true);
@@ -98,37 +105,54 @@ public class AnnotationBasedWebScriptHandler {
 				}
 				attributesByName.put(name, attribute);
 			}
-
 		}
 		return attributesByName;
 	}
 
 	protected void invokeHandlerMethod(final AnnotationBasedWebScript webScript, final WebScriptRequest request,
-			final WebScriptResponse response, final Map<String, Object> attributesByName) throws IOException {
-		AttributeArgumentResolver.setCurrentAttributes(attributesByName);
-		try {
-			final Object[] arguments = getHandlerMethodArgumentsResolver().resolveHandlerMethodArguments(
-					webScript.getHandlerMethod(), webScript.getHandler(), request, response);
-			final Object returnValue = ReflectionUtils.invokeMethod(webScript.getHandlerMethod(),
-					webScript.getHandler(), arguments);
-			processHandlerMethodReturnValue(returnValue, request, response);
-		} finally {
-			AttributeArgumentResolver.clearCurrentAttributes();
+			final WebScriptResponse response) throws IOException {
+		final Object[] arguments = getHandlerMethodArgumentsResolver().resolveHandlerMethodArguments(
+				webScript.getHandlerMethod(), webScript.getHandler(), request, response);
+		final Object returnValue = ReflectionUtils.invokeMethod(webScript.getHandlerMethod(), webScript.getHandler(),
+				arguments);
+		processHandlerMethodReturnValue(webScript, returnValue, request, response);
+	}
+
+	@SuppressWarnings("unchecked")
+	protected void processHandlerMethodReturnValue(final AnnotationBasedWebScript webScript, final Object returnValue,
+			final WebScriptRequest request, final WebScriptResponse response) throws IOException {
+		if (returnValue instanceof Map) {
+			final Format format = Format.valueOf(request.getFormat().toUpperCase());
+			if (format == null) {
+				throw new IllegalStateException(String.format("Unknown format: %s", request.getFormat()));
+			}
+			final Map<Object, Object> model = (Map<Object, Object>) returnValue;
+			final Class<?> handlerClass = webScript.getHandler().getClass();
+			final String methodName = webScript.getHandlerMethod().getName();
+			final String httpMethod = webScript.getDescription().getMethod().toLowerCase();
+			final String baseTemplateName = String.format("%s.%s.%s", ClassUtils.getQualifiedName(handlerClass)
+					.replace('.', '/'), methodName, httpMethod);
+			final String templateName = String.format("%s.%s.ftl", baseTemplateName, request.getFormat().toLowerCase());
+			generateResponseFromTemplate(request, response, model, templateName);
 		}
 	}
 
-	/**
-	 * Processes a given return value from a handler method of an annotation-based WebScript.
-	 * <p>
-	 * This implementation does nothing, but subclasses may override this.
-	 * 
-	 * @param returnValue
-	 * @param request
-	 * @param response
-	 * @throws IOException
-	 */
-	protected void processHandlerMethodReturnValue(final Object returnValue, final WebScriptRequest request,
-			final WebScriptResponse response) throws IOException {
+	private void generateResponseFromTemplate(final WebScriptRequest request, final WebScriptResponse response,
+			final Map<Object, Object> model, final String templateName) throws IOException {
+		final Writer out = response.getWriter();
+		final TemplateProcessorRegistry templateProcessorRegistry = request.getRuntime().getContainer()
+				.getTemplateProcessorRegistry();
+		final TemplateProcessor templateProcessor = templateProcessorRegistry.getTemplateProcessorByExtension("ftl");
+		if (templateProcessor.hasTemplate(templateName)) {
+			final Format format = Format.valueOf(request.getFormat().toUpperCase());
+			response.setContentType(format.mimetype());
+			response.setContentEncoding("utf-8");
+			templateProcessor.process(templateName, model, out);
+		} else {
+			// Friendly error message
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			out.write(String.format("Could not find template at path: %s", templateName));
+		}
 	}
 
 	/* Dependencies */
