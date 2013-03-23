@@ -38,9 +38,11 @@ import javax.servlet.http.HttpServletResponse;
 import nl.runnable.alfresco.webscripts.annotations.Attribute;
 
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.extensions.webscripts.DefaultURLModelFactory;
 import org.springframework.extensions.webscripts.Format;
 import org.springframework.extensions.webscripts.TemplateProcessor;
 import org.springframework.extensions.webscripts.TemplateProcessorRegistry;
+import org.springframework.extensions.webscripts.URLModelFactory;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.util.Assert;
@@ -56,9 +58,15 @@ import org.springframework.util.StringUtils;
  */
 public class AnnotationBasedWebScriptHandler {
 
+	private static final String URL_VARIABLE = "url";
+
+	private static final String WEBSCRIPT_VARIABLE = "webscript";
+
 	/* Dependencies */
 
 	private HandlerMethodArgumentsResolver handlerMethodArgumentsResolver = new DefaultHandlerMethodArgumentsResolver();
+
+	private URLModelFactory urlModelFactory = new DefaultURLModelFactory();;
 
 	/* Main Operations */
 
@@ -126,19 +134,32 @@ public class AnnotationBasedWebScriptHandler {
 			if (format == null) {
 				throw new IllegalStateException(String.format("Unknown format: %s", request.getFormat()));
 			}
-			final Map<Object, Object> model = (Map<Object, Object>) returnValue;
+			final Map<String, Object> model = (Map<String, Object>) returnValue;
 			final Class<?> handlerClass = webScript.getHandler().getClass();
 			final String methodName = webScript.getHandlerMethod().getName();
 			final String httpMethod = webScript.getDescription().getMethod().toLowerCase();
 			final String baseTemplateName = String.format("%s.%s.%s", ClassUtils.getQualifiedName(handlerClass)
 					.replace('.', '/'), methodName, httpMethod);
 			final String templateName = String.format("%s.%s.ftl", baseTemplateName, request.getFormat().toLowerCase());
+			populateTemplateModel(model, webScript, request);
 			generateResponseFromTemplate(request, response, model, templateName);
 		}
 	}
 
-	private void generateResponseFromTemplate(final WebScriptRequest request, final WebScriptResponse response,
-			final Map<Object, Object> model, final String templateName) throws IOException {
+	/**
+	 * Populates the model with utility objects for use in rendering templates.
+	 * 
+	 * @param model
+	 * @param request
+	 */
+	protected void populateTemplateModel(final Map<String, Object> model, final AnnotationBasedWebScript webScript,
+			final WebScriptRequest request) {
+		model.put(WEBSCRIPT_VARIABLE, webScript.getDescription());
+		model.put(URL_VARIABLE, getUrlModelFactory().createURLModel(request));
+	}
+
+	protected void generateResponseFromTemplate(final WebScriptRequest request, final WebScriptResponse response,
+			final Map<String, Object> model, final String templateName) throws IOException {
 		final Writer out = response.getWriter();
 		final TemplateProcessorRegistry templateProcessorRegistry = request.getRuntime().getContainer()
 				.getTemplateProcessorRegistry();
@@ -164,6 +185,15 @@ public class AnnotationBasedWebScriptHandler {
 
 	protected HandlerMethodArgumentsResolver getHandlerMethodArgumentsResolver() {
 		return handlerMethodArgumentsResolver;
+	}
+
+	public void setUrlModelFactory(final URLModelFactory urlModelFactory) {
+		Assert.notNull(urlModelFactory);
+		this.urlModelFactory = urlModelFactory;
+	}
+
+	protected URLModelFactory getUrlModelFactory() {
+		return urlModelFactory;
 	}
 
 }
