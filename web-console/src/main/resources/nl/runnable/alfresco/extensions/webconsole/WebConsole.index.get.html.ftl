@@ -68,7 +68,7 @@
   <p>    
     <a href="${url.service}/framework/restart" 
       data-method="post" 
-      data-wait="10000" 
+      data-wait="60000" 
       data-title="Restarting Framework" 
       data-message="Please wait while the Framework restarts. (You may have to refresh manually to see the latest status.)" 
       data-button="Update now"

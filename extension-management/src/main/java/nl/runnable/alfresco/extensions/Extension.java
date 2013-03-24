@@ -13,7 +13,9 @@ import org.alfresco.service.namespace.QName;
  * @author Laurens Fridael
  * 
  */
-public class Extension {
+public class Extension implements Comparable<Extension> {
+
+	private static final int FRAMEWORK_BUNDLE_ID = 0;
 
 	/* Dependencies */
 
@@ -143,6 +145,24 @@ public class Extension {
 			return false;
 		}
 		return true;
+	}
+
+	/* Comparison */
+
+	@Override
+	public int compareTo(final Extension other) {
+		// Framework bundle should be put at the start.
+		if (this.getBundleId() == FRAMEWORK_BUNDLE_ID) {
+			return Integer.MIN_VALUE;
+		} else if (other.getBundleId() == FRAMEWORK_BUNDLE_ID) {
+			return Integer.MAX_VALUE;
+
+		}
+		int compare = this.getName().compareToIgnoreCase(other.getName());
+		if (compare == 0) {
+			compare = this.getVersion().compareToIgnoreCase(other.getVersion());
+		}
+		return compare;
 	}
 
 }

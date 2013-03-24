@@ -3,7 +3,6 @@ package nl.runnable.alfresco.extensions.webconsole;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,31 +42,10 @@ public class WebConsole implements BundleContextAware {
 
 	private static final int FRAMEWORK_BUNDLE_ID = 0;
 
-	/**
-	 * Compares {@link Extension} by name and version.
-	 */
-	private static final Comparator<Extension> COMPARE_BY_NAME_AND_VERSION = new Comparator<Extension>() {
-		@Override
-		public int compare(final Extension a, final Extension b) {
-			// Framework bundle should be put at the start.
-			if (a.getBundleId() == FRAMEWORK_BUNDLE_ID) {
-				return Integer.MIN_VALUE;
-			} else if (b.getBundleId() == FRAMEWORK_BUNDLE_ID) {
-				return Integer.MAX_VALUE;
-
-			}
-			int compare = a.getName().compareToIgnoreCase(b.getName());
-			if (compare == 0) {
-				compare = a.getVersion().compareToIgnoreCase(b.getVersion());
-			}
-			return compare;
-		}
-	};
-
 	/* Dependencies */
 
 	@Inject
-	private ExtensionRegistry metadataRegistry;
+	private ExtensionRegistry extensionRegistry;
 
 	private BundleContext bundleContext;
 
@@ -82,7 +60,7 @@ public class WebConsole implements BundleContextAware {
 	public Map<String, Object> index() {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		populateWithExtensions(model);
-		model.put(TemplateVariables.FILE_INSTALL_PATHS, metadataRegistry.getContainer().getFileInstallPaths());
+		model.put(TemplateVariables.FILE_INSTALL_PATHS, extensionRegistry.getContainer().getFileInstallPaths());
 		return model;
 	}
 
@@ -157,7 +135,7 @@ public class WebConsole implements BundleContextAware {
 	protected void populateWithExtensions(final Map<String, Object> model) {
 		final List<Extension> extensions = new ArrayList<Extension>();
 		final List<Extension> coreBundles = new ArrayList<Extension>();
-		for (final Extension extension : metadataRegistry.getExtensions()) {
+		for (final Extension extension : extensionRegistry.getExtensions()) {
 			if (extension.isCoreBundle()) {
 				coreBundles.add(extension);
 			} else {
@@ -165,8 +143,8 @@ public class WebConsole implements BundleContextAware {
 			}
 
 		}
-		Collections.sort(extensions, COMPARE_BY_NAME_AND_VERSION);
-		Collections.sort(coreBundles, COMPARE_BY_NAME_AND_VERSION);
+		Collections.sort(extensions);
+		Collections.sort(coreBundles);
 		model.put(TemplateVariables.EXTENSIONS, extensions);
 		model.put(TemplateVariables.CORE_BUNDLES, coreBundles);
 	}

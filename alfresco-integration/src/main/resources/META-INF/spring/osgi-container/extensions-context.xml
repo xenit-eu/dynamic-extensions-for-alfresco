@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<description>Configures services for managing extensions.</description>
+
+	<bean id="osgi.container.ExtensionRegistry" class="nl.runnable.alfresco.extensions.impl.ExtensionRegistryImpl">
+		<description>Provides a means for registering and retrieving info on Dynamic Extensions.</description>
+	</bean>
+
+	<bean id="osgi.container.RepositoryFolderService" class="nl.runnable.alfresco.extensions.impl.RepositoryFolderServiceImpl">
+		<property name="namespacePrefixResolver" ref="namespaceService" />
+		<property name="nodeService" ref="nodeService" />
+		<property name="descriptions">
+			<bean class="nl.runnable.alfresco.extensions.impl.Descriptions">
+				<property name="baseFolder">
+					<value>
+						Dynamic Extensions for Alfresco. https://github.com/lfridael/dynamic-extensions-for-alfresco
+					</value>
+				</property>
+				<property name="bundleFolder">
+					<value>
+						Dynamic Extension OSGi bundle JARs.
+					</value>
+				</property>
+				<property name="configurationFolder">
+					<value>
+						Configuration files for Dynamic Extensions.
+					</value>
+				</property>
+				<property name="installationHistoryFolder">
+					<value>
+						Dynamic Extensions installation history.
+					</value>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="osgi.container.InstallationService" class="nl.runnable.alfresco.extensions.impl.InstallationServiceImpl">
+		<property name="contentService" ref="contentService" />
+		<property name="fileFolderService" ref="fileFolderService" />
+		<property name="nodeService" ref="nodeService" />
+		<property name="repositoryFolderService" ref="osgi.container.RepositoryFolderService" />
+	</bean>
+
+</beans>

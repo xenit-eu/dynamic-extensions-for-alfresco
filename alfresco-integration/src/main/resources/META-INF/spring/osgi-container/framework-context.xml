@@ -41,8 +41,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		</property>
 	</bean>
 
-	<bean id="osgi.container.FrameworkManager" class="nl.runnable.alfresco.osgi.FrameworkManager"
-		destroy-method="destroy">
+	<bean id="osgi.container.FrameworkManager" class="nl.runnable.alfresco.osgi.FrameworkManager" destroy-method="destroy">
 		<description>
 			Manages the lifecycle of the OSGi Framework and registers services and listeners.
 		</description>
@@ -67,10 +66,6 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 				<value>${osgi.container.bundle-directory:dynamic-extensions}</value>
 			</list>
 		</property>
-	</bean>
-
-	<bean id="osgi.container.ExtensionRegistry" class="nl.runnable.alfresco.extensions.impl.ExtensionRegistryImpl">
-		<description>Provides a means for registering and retrieving info on Dynamic Extensions.</description>
 	</bean>
 
 </beans>
