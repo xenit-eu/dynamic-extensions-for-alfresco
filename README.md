@@ -51,10 +51,12 @@ Support for Alfresco Enterprise
 
 Even though the Enterprise editions are not part of the development and testing environment, there is is no reason why Dynamic Extensions should not work on them.
 
-Coming soon: Milestone 4
-------------------------
+Next milestones
+---------------
 
-This milestone focuses on making Dynamic Extensions production-ready and making strides towards a 1.0 final release. See the <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/issues?milestone=1">issue list</a> for what's coming.
+Milestone 4 and 5 focus on making Dynamic Extensions production-ready. These will be the last milestones before the 1.0 phase.
+
+See the <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/issues?state=open">open issues</a> for what's coming.
 
 OSGi under the hood
 -------------------
