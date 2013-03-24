@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.metadata;
+package nl.runnable.alfresco.extensions;
 
 import java.util.List;
 

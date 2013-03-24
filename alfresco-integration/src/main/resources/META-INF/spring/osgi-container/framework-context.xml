@@ -69,7 +69,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		</property>
 	</bean>
 
-	<bean id="osgi.container.MetadataRegistry" class="nl.runnable.alfresco.metadata.impl.MetadataRegistryImpl">
+	<bean id="osgi.container.MetadataRegistry" class="nl.runnable.alfresco.extensions.impl.MetadataRegistryImpl">
 		<description>Provides a means for registering and retrieving metadata on Dynamic Extensions.</description>
 	</bean>
 

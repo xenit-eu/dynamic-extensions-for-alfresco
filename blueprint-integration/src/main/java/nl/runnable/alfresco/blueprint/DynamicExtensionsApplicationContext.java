@@ -31,7 +31,7 @@ import java.io.IOException;
 import java.util.Date;
 
 import nl.runnable.alfresco.actions.AnnotationBasedActionRegistrar;
-import nl.runnable.alfresco.metadata.ExtensionMetadata;
+import nl.runnable.alfresco.extensions.ExtensionMetadata;
 import nl.runnable.alfresco.policy.AnnotationBasedBehaviourRegistrar;
 import nl.runnable.alfresco.policy.DefaultBehaviourProxyFactory;
 import nl.runnable.alfresco.policy.ProxyPolicyComponentFactoryBean;

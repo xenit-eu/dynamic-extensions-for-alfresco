@@ -2,8 +2,8 @@ package nl.runnable.alfresco.repository.dictionary;
 
 import java.util.*;
 
-import nl.runnable.alfresco.metadata.ExtensionMetadata;
-import nl.runnable.alfresco.metadata.ModelMetadata;
+import nl.runnable.alfresco.extensions.ExtensionMetadata;
+import nl.runnable.alfresco.extensions.ModelMetadata;
 
 import org.alfresco.repo.dictionary.DictionaryDAO;
 import org.alfresco.repo.dictionary.M2Model;

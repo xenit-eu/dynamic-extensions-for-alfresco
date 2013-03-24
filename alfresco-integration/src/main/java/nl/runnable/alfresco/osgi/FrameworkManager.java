@@ -37,8 +37,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import nl.runnable.alfresco.metadata.ContainerMetadata;
-import nl.runnable.alfresco.metadata.MetadataRegistry;
+import nl.runnable.alfresco.extensions.ContainerMetadata;
+import nl.runnable.alfresco.extensions.MetadataRegistry;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;

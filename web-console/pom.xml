@@ -24,13 +24,13 @@
 		</dependency>
 		<dependency>
 			<groupId>nl.runnable.alfresco.dynamicextensions</groupId>
-			<artifactId>annotations</artifactId>
+			<artifactId>extension-management</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>nl.runnable.alfresco.dynamicextensions</groupId>
-			<artifactId>metadata</artifactId>
+			<artifactId>annotations</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>

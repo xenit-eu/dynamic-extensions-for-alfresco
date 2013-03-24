@@ -33,7 +33,7 @@
 	</properties>
 
 	<modules>
-		<module>metadata</module>
+		<module>extension-management</module>
 		<module>alfresco-api-util</module>
 		<module>annotations</module>
 		<module>annotation-handling</module>

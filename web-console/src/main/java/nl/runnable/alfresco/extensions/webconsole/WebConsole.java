@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.dynamicextensions;
+package nl.runnable.alfresco.extensions.webconsole;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,8 +12,8 @@ import javax.annotation.ManagedBean;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
-import nl.runnable.alfresco.metadata.ExtensionMetadata;
-import nl.runnable.alfresco.metadata.MetadataRegistry;
+import nl.runnable.alfresco.extensions.ExtensionMetadata;
+import nl.runnable.alfresco.extensions.MetadataRegistry;
 import nl.runnable.alfresco.webscripts.annotations.Attribute;
 import nl.runnable.alfresco.webscripts.annotations.Authentication;
 import nl.runnable.alfresco.webscripts.annotations.AuthenticationType;
@@ -82,8 +82,7 @@ public class WebConsole implements BundleContextAware {
 	public Map<String, Object> index() {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		populateWithExtensions(model);
-		model.put(TemplateVariables.FILE_INSTALL_PATHS, metadataRegistry.getContainerMetadata()
-				.getFileInstallPaths());
+		model.put(TemplateVariables.FILE_INSTALL_PATHS, metadataRegistry.getContainerMetadata().getFileInstallPaths());
 		return model;
 	}
 

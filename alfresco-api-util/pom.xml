@@ -16,7 +16,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>nl.runnable.alfresco.dynamicextensions</groupId>
-			<artifactId>metadata</artifactId>
+			<artifactId>extension-management</artifactId>
 			<version>${project.version}</version>
 		</dependency>
         <dependency>

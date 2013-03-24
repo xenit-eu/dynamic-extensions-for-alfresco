@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.dynamicextensions;
+package nl.runnable.alfresco.extensions.webconsole;
 
 import java.io.IOException;
 

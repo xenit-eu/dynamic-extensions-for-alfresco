@@ -1,13 +1,13 @@
-package nl.runnable.alfresco.metadata.impl;
+package nl.runnable.alfresco.extensions.impl;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import nl.runnable.alfresco.metadata.ContainerMetadata;
-import nl.runnable.alfresco.metadata.ExtensionMetadata;
-import nl.runnable.alfresco.metadata.MetadataRegistry;
+import nl.runnable.alfresco.extensions.ContainerMetadata;
+import nl.runnable.alfresco.extensions.ExtensionMetadata;
+import nl.runnable.alfresco.extensions.MetadataRegistry;
 
 public class MetadataRegistryImpl implements MetadataRegistry {
 

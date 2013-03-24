@@ -1,6 +1,6 @@
-package nl.runnable.alfresco.dynamicextensions;
+package nl.runnable.alfresco.extensions.webconsole;
 
-import nl.runnable.alfresco.metadata.ExtensionMetadata;
+import nl.runnable.alfresco.extensions.ExtensionMetadata;
 
 class TemplateVariables {
 
