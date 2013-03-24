@@ -5,7 +5,7 @@ package nl.runnable.alfresco.extensions;
  * 
  * @author Laurens Fridael
  */
-public class ModelMetadata {
+public class Model {
 
 	private String name;
 

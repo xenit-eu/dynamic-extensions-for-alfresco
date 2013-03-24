@@ -37,8 +37,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import nl.runnable.alfresco.extensions.ContainerMetadata;
-import nl.runnable.alfresco.extensions.MetadataRegistry;
+import nl.runnable.alfresco.extensions.Container;
+import nl.runnable.alfresco.extensions.ExtensionRegistry;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
@@ -83,7 +83,7 @@ public class FrameworkManager implements ResourceLoaderAware {
 
 	private FileInstallConfigurer fileInstallConfigurer;
 
-	private MetadataRegistry metadataRegistry;
+	private ExtensionRegistry extensionRegistry;
 
 	/* Configuration */
 
@@ -218,23 +218,23 @@ public class FrameworkManager implements ResourceLoaderAware {
 	}
 
 	/**
-	 * Registers the {@link Framework} with the {@link MetadataRegistry}.
+	 * Registers the {@link Framework} with the {@link ExtensionRegistry}.
 	 */
 	protected void registerFrameworkMetadata() {
-		getMetadataRegistry().registerCoreBundle(getFramework().getBundleId());
-		final ContainerMetadata containerMetadata = getMetadataRegistry().getContainerMetadata();
+		getExtensionRegistry().registerCoreBundle(getFramework().getBundleId());
+		final Container containerMetadata = getExtensionRegistry().getContainer();
 		containerMetadata.setFrameworkBundleId(getFramework().getBundleId());
 		containerMetadata.setFileInstallPaths(fileInstallConfigurer.getDirectoriesAsAbsolutePaths());
 	}
 
 	/**
-	 * Registers the given core Bundles with the {@link MetadataRegistry}.
+	 * Registers the given core Bundles with the {@link ExtensionRegistry}.
 	 * 
 	 * @param coreBundles
 	 */
 	protected void registerCoreBundleMetadata(final List<Bundle> coreBundles) {
 		for (final Bundle coreBundle : coreBundles) {
-			getMetadataRegistry().registerCoreBundle(coreBundle.getBundleId());
+			getExtensionRegistry().registerCoreBundle(coreBundle.getBundleId());
 		}
 	}
 
@@ -365,12 +365,12 @@ public class FrameworkManager implements ResourceLoaderAware {
 		return fileInstallConfigurer;
 	}
 
-	public void setMetadataRegistry(final MetadataRegistry metadataRegistry) {
-		this.metadataRegistry = metadataRegistry;
+	public void setExtensionRegistry(final ExtensionRegistry metadataRegistry) {
+		this.extensionRegistry = metadataRegistry;
 	}
 
-	protected MetadataRegistry getMetadataRegistry() {
-		return metadataRegistry;
+	protected ExtensionRegistry getExtensionRegistry() {
+		return extensionRegistry;
 	}
 
 	/* Configuration */

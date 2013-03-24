@@ -9,4 +9,4 @@ osgi.container.WebScriptSearchPathRegistry:nl.runnable.alfresco.webscripts.integ
 osgi.container.NamespaceHandlerResolver:org.springframework.beans.factory.xml.NamespaceHandlerResolver
 osgi.container.EntityResolver:org.xml.sax.EntityResolver
 osgi.container.ActionExecuterRegistry:nl.runnable.alfresco.actions.ActionExecuterRegistry
-osgi.container.MetadataRegistry:nl.runnable.alfresco.extensions.MetadataRegistry
+osgi.container.ExtensionRegistry:nl.runnable.alfresco.extensions.ExtensionRegistry

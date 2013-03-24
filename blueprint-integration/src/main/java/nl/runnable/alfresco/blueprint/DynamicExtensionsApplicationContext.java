@@ -28,10 +28,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package nl.runnable.alfresco.blueprint;
 
 import java.io.IOException;
-import java.util.Date;
 
 import nl.runnable.alfresco.actions.AnnotationBasedActionRegistrar;
-import nl.runnable.alfresco.extensions.ExtensionMetadata;
+import nl.runnable.alfresco.extensions.Extension;
 import nl.runnable.alfresco.policy.AnnotationBasedBehaviourRegistrar;
 import nl.runnable.alfresco.policy.DefaultBehaviourProxyFactory;
 import nl.runnable.alfresco.policy.ProxyPolicyComponentFactoryBean;
@@ -190,9 +189,9 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 	 * @param beanFactory
 	 */
 	protected void registerInfrastructureBeans(final DefaultListableBeanFactory beanFactory) {
-		registerMetadataBean(beanFactory);
+		registerExtensionBean(beanFactory);
 		if (StringUtils.hasText(getModelLocationPattern())) {
-			registerAutomaticModelDeploymentBeans(beanFactory);
+			registerModelDeploymentBeans(beanFactory);
 		}
 		registerAnnotationBasedBehaviourBeans(beanFactory);
 		registerAnnotationBasedActionBeans(beanFactory);
@@ -200,17 +199,17 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 	}
 
 	/**
-	 * Registers the {@link ExtensionMetadata} bean for recording information on the dynamic extensions.
+	 * Registers the {@link Extension} bean for recording information on the Dynamic Extension.
 	 * <p>
 	 * This implementation initializes the bean's properties with settings from the extension's {@link Bundle}.
 	 * 
 	 * @param beanFactory
 	 */
-	protected void registerMetadataBean(final DefaultListableBeanFactory beanFactory) {
-		if (beanFactory.containsBeanDefinition(BeanNames.METADATA) == false) {
+	protected void registerExtensionBean(final DefaultListableBeanFactory beanFactory) {
+		if (beanFactory.containsBeanDefinition(BeanNames.EXTENSION) == false) {
 			beanFactory.registerBeanDefinition(
-					BeanNames.METADATA,
-					BeanDefinitionBuilder.rootBeanDefinition(ExtensionMetadata.class)
+					BeanNames.EXTENSION,
+					BeanDefinitionBuilder.rootBeanDefinition(Extension.class)
 							.addPropertyValue("bundleId", getBundle().getBundleId())
 							.addPropertyValue("name", getBundle().getSymbolicName())
 							.addPropertyValue("version", getBundle().getVersion().toString())
@@ -224,7 +223,7 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 	 * 
 	 * @param beanFactory
 	 */
-	protected void registerAutomaticModelDeploymentBeans(final DefaultListableBeanFactory beanFactory) {
+	protected void registerModelDeploymentBeans(final DefaultListableBeanFactory beanFactory) {
 		if (beanFactory.containsBeanDefinition(BeanNames.M2_MODEL_LIST_FACTORY) == false) {
 			beanFactory.registerBeanDefinition(
 					BeanNames.M2_MODEL_LIST_FACTORY,
@@ -404,21 +403,6 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 		} catch (final InvalidSyntaxException e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	/**
-	 * Creates a {@link ExtensionMetadata} metadata object using this application context's {@link Bundle}.
-	 * 
-	 * @return
-	 */
-	protected ExtensionMetadata createMetadata() {
-		final Bundle bundle = getBundle();
-		final ExtensionMetadata metadata = new ExtensionMetadata();
-		metadata.setBundleId(bundle.getBundleId());
-		metadata.setName(bundle.getSymbolicName());
-		metadata.setVersion(bundle.getVersion().toString());
-		metadata.setCreatedAt(new Date());
-		return metadata;
 	}
 
 	/* Configuration */

@@ -12,8 +12,8 @@ import javax.annotation.ManagedBean;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
-import nl.runnable.alfresco.extensions.ExtensionMetadata;
-import nl.runnable.alfresco.extensions.MetadataRegistry;
+import nl.runnable.alfresco.extensions.Extension;
+import nl.runnable.alfresco.extensions.ExtensionRegistry;
 import nl.runnable.alfresco.webscripts.annotations.Attribute;
 import nl.runnable.alfresco.webscripts.annotations.Authentication;
 import nl.runnable.alfresco.webscripts.annotations.AuthenticationType;
@@ -44,11 +44,11 @@ public class WebConsole implements BundleContextAware {
 	private static final int FRAMEWORK_BUNDLE_ID = 0;
 
 	/**
-	 * Compares {@link ExtensionMetadata} by name and version.
+	 * Compares {@link Extension} by name and version.
 	 */
-	private static final Comparator<ExtensionMetadata> COMPARE_BY_NAME_AND_VERSION = new Comparator<ExtensionMetadata>() {
+	private static final Comparator<Extension> COMPARE_BY_NAME_AND_VERSION = new Comparator<Extension>() {
 		@Override
-		public int compare(final ExtensionMetadata a, final ExtensionMetadata b) {
+		public int compare(final Extension a, final Extension b) {
 			// Framework bundle should be put at the start.
 			if (a.getBundleId() == FRAMEWORK_BUNDLE_ID) {
 				return Integer.MIN_VALUE;
@@ -67,7 +67,7 @@ public class WebConsole implements BundleContextAware {
 	/* Dependencies */
 
 	@Inject
-	private MetadataRegistry metadataRegistry;
+	private ExtensionRegistry metadataRegistry;
 
 	private BundleContext bundleContext;
 
@@ -82,7 +82,7 @@ public class WebConsole implements BundleContextAware {
 	public Map<String, Object> index() {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		populateWithExtensions(model);
-		model.put(TemplateVariables.FILE_INSTALL_PATHS, metadataRegistry.getContainerMetadata().getFileInstallPaths());
+		model.put(TemplateVariables.FILE_INSTALL_PATHS, metadataRegistry.getContainer().getFileInstallPaths());
 		return model;
 	}
 
@@ -150,14 +150,14 @@ public class WebConsole implements BundleContextAware {
 	/* Utility operations */
 
 	/**
-	 * Populates the given model with {@link ExtensionMetadata}.
+	 * Populates the given model with {@link Extension}.
 	 * 
 	 * @param model
 	 */
 	protected void populateWithExtensions(final Map<String, Object> model) {
-		final List<ExtensionMetadata> extensions = new ArrayList<ExtensionMetadata>();
-		final List<ExtensionMetadata> coreBundles = new ArrayList<ExtensionMetadata>();
-		for (final ExtensionMetadata extension : metadataRegistry.getExtensionsMetadata()) {
+		final List<Extension> extensions = new ArrayList<Extension>();
+		final List<Extension> coreBundles = new ArrayList<Extension>();
+		for (final Extension extension : metadataRegistry.getExtensions()) {
 			if (extension.isCoreBundle()) {
 				coreBundles.add(extension);
 			} else {

@@ -1,16 +1,16 @@
 package nl.runnable.alfresco.extensions.webconsole;
 
-import nl.runnable.alfresco.extensions.ExtensionMetadata;
+import nl.runnable.alfresco.extensions.Extension;
 
 class TemplateVariables {
 
 	/**
-	 * Refers to {@link ExtensionMetadata} instances representing core bundles.
+	 * Refers to {@link Extension} instances representing core bundles.
 	 */
 	static final String CORE_BUNDLES = "coreBundles";
 
 	/**
-	 * Refers to {@link ExtensionMetadata} instances representing extensions.
+	 * Refers to {@link Extension} instances representing extensions.
 	 */
 	static final String EXTENSIONS = "extensions";
 

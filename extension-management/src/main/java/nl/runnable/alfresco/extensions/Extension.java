@@ -13,11 +13,11 @@ import org.alfresco.service.namespace.QName;
  * @author Laurens Fridael
  * 
  */
-public class ExtensionMetadata {
+public class Extension {
 
 	/* Dependencies */
 
-	private MetadataRegistry metadataRegistry;
+	private ExtensionRegistry extensionRegistry;
 
 	/* State */
 
@@ -29,16 +29,16 @@ public class ExtensionMetadata {
 
 	private Date createdAt;
 
-	private final Map<QName, ModelMetadata> modelsByQName = new LinkedHashMap<QName, ModelMetadata>();
+	private final Map<QName, Model> modelsByQName = new LinkedHashMap<QName, Model>();
 
 	/* Dependencies */
 
-	public void setMetadataRegistry(final MetadataRegistry metadataRegistry) {
-		this.metadataRegistry = metadataRegistry;
+	public void setExtensionRegistry(final ExtensionRegistry extensionRegistry) {
+		this.extensionRegistry = extensionRegistry;
 	}
 
-	protected MetadataRegistry getMetadataRegistry() {
-		return metadataRegistry;
+	protected ExtensionRegistry getExtensionRegistry() {
+		return extensionRegistry;
 	}
 
 	/* State */
@@ -53,8 +53,8 @@ public class ExtensionMetadata {
 
 	public boolean isCoreBundle() {
 		boolean coreBundle = false;
-		if (getMetadataRegistry() != null) {
-			coreBundle = getMetadataRegistry().isCoreBundle(getBundleId());
+		if (getExtensionRegistry() != null) {
+			coreBundle = getExtensionRegistry().isCoreBundle(getBundleId());
 		}
 		return coreBundle;
 	}
@@ -83,7 +83,7 @@ public class ExtensionMetadata {
 		return createdAt;
 	}
 
-	public void registerModel(final QName qName, final ModelMetadata model) {
+	public void registerModel(final QName qName, final Model model) {
 		modelsByQName.put(qName, model);
 	}
 
@@ -91,18 +91,18 @@ public class ExtensionMetadata {
 		modelsByQName.remove(qName);
 	}
 
-	public Collection<ModelMetadata> getModels() {
+	public Collection<Model> getModels() {
 		return modelsByQName.values();
 	}
 
 	/* Lifecycle */
 
 	public void register() {
-		getMetadataRegistry().registerExtension(this);
+		getExtensionRegistry().registerExtension(this);
 	}
 
 	public void unregister() {
-		getMetadataRegistry().unregisterExtension(this);
+		getExtensionRegistry().unregisterExtension(this);
 	}
 
 	/* Equality */
@@ -127,7 +127,7 @@ public class ExtensionMetadata {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		final ExtensionMetadata other = (ExtensionMetadata) obj;
+		final Extension other = (Extension) obj;
 		if (name == null) {
 			if (other.name != null) {
 				return false;

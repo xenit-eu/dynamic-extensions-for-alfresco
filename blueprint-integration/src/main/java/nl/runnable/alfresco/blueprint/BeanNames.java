@@ -26,7 +26,7 @@ class BeanNames {
 
 	static final String M2_MODEL_LIST_FACTORY = "m2ModelListFactoryBean";
 
-	static final String METADATA = "metadata";
+	static final String EXTENSION = "extension";
 
 	static final String MODEL_REGISTRAR = "modelRegistrar";
 

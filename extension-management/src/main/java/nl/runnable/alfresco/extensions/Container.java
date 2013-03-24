@@ -8,7 +8,7 @@ import java.util.List;
  * @author Laurens Fridael
  * 
  */
-public class ContainerMetadata {
+public class Container {
 
 	private long frameworkBundleId;
 

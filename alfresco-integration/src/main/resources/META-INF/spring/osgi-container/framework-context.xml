@@ -57,7 +57,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		<property name="standardBundlesLocation" value="classpath:/alfresco/module/%module.id%/standard-bundles/*.jar" />
 		<property name="fileInstallConfigurer" ref="osgi.container.FileInstallConfigurer" />
 		<property name="fileInstallEnabled" value="${osgi.container.bundle-update:true}" />
-		<property name="metadataRegistry" ref="osgi.container.MetadataRegistry" />
+		<property name="extensionRegistry" ref="osgi.container.ExtensionRegistry" />
 	</bean>
 
 	<bean id="osgi.container.FileInstallConfigurer" class="nl.runnable.alfresco.osgi.FileInstallConfigurer"
@@ -69,8 +69,8 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		</property>
 	</bean>
 
-	<bean id="osgi.container.MetadataRegistry" class="nl.runnable.alfresco.extensions.impl.MetadataRegistryImpl">
-		<description>Provides a means for registering and retrieving metadata on Dynamic Extensions.</description>
+	<bean id="osgi.container.ExtensionRegistry" class="nl.runnable.alfresco.extensions.impl.ExtensionRegistryImpl">
+		<description>Provides a means for registering and retrieving info on Dynamic Extensions.</description>
 	</bean>
 
 </beans>
