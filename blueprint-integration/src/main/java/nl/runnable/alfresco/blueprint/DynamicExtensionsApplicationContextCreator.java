@@ -60,8 +60,10 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 		 * this package is not exported by the extender Bundle. You should use
 		 * org.eclipse.gemini.blueprint.extender.support.ApplicationContextConfiguration instead.
 		 * 
-		 * TODO: this may have been fixed in Blueprint 1.0.1.RELEASE.
 		 * https://bugs.eclipse.org/bugs/show_bug.cgi?id=379384
+		 * 
+		 * UPDATE: This issue still seems to occur with Blueprint 1.0.2.RELEASE. Since Dynamic Extensions de-emphasizes
+		 * the direct use of OSGi anyway, Blueprint configuration will definitely not be supported.
 		 */
 		final ApplicationContextConfiguration config = new ApplicationContextConfiguration(bundle);
 		String[] configurationLocations = null;
