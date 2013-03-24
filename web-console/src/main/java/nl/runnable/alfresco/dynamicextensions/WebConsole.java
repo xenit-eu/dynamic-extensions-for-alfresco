@@ -82,6 +82,8 @@ public class WebConsole implements BundleContextAware {
 	public Map<String, Object> index() {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		populateWithExtensions(model);
+		model.put(TemplateVariables.FILE_INSTALL_PATHS, metadataRegistry.getContainerMetadata()
+				.getFileInstallPaths());
 		return model;
 	}
 
@@ -166,7 +168,7 @@ public class WebConsole implements BundleContextAware {
 		}
 		Collections.sort(extensions, COMPARE_BY_NAME_AND_VERSION);
 		Collections.sort(coreBundles, COMPARE_BY_NAME_AND_VERSION);
-		model.put(TemplateVariables.DYNAMIC_EXTENSIONS, extensions);
+		model.put(TemplateVariables.EXTENSIONS, extensions);
 		model.put(TemplateVariables.CORE_BUNDLES, coreBundles);
 	}
 

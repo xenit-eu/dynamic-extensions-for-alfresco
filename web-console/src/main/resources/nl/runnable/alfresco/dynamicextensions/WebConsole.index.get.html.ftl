@@ -33,6 +33,21 @@
       </#list>      
     </tbody>
   </table>
+  <h2>Installing Extensions</h2>
+  <#if (fileInstallPaths?size > 0) >
+    <p>Install new extensions by placing Bundle JARs in the following directories:</p>
+    <ul>
+      <#list fileInstallPaths as path>
+        <li>
+          <code>${path}</code>
+        </li>
+      </#list>
+    </ul>
+  <#else>
+    <p>
+      <em>Installing extensions through the filesystem is not available.</em>
+    </p>
+  </#if>
   <h2>Framework</h2>
   <table class="core-bundles table table-bordered table-striped">
     <thead>
@@ -65,10 +80,6 @@
   <form id="post" method="post">
     <input type="hidden" id="wait" name="wait" value="0" />
   </form>
-  <div id="overlay" style="display: none;">
-    <div class="message">
-    </div>
-  </div>
   <#-- 
   For now we include all scripts inline as there is no way of bundling CSS and JavaScript.
 

@@ -109,35 +109,7 @@ import org.xml.sax.EntityResolver;
  */
 class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContext {
 
-	private static final String SEARCH_PATH_REGISTRY_MANAGER_BEAN_NAME = "searchPathRegistryManager";
-
-	private static final String STRING_VALUE_CONVERTER_BEAN_NAME = "stringValueConverter";
-
-	private static final String HANDLER_METHOD_ARGUMENTS_RESOLVER_BEAN_NAME = "handlerMethodArgumentsResolver";
-
-	private static final String ANNOTATION_BASED_WEB_SCRIPT_HANDLER_BEAN_NAME = "annotationBasedWebScriptHandler";
-
-	private static final String ANNOTATION_BASED_WEB_SCRIPT_BUILDER_BEAN_NAME = "annotationBasedWebScriptBuilder";
-
-	private static final String ANNOTATION_BASED_WEB_SCRIPT_REGISTRY_BEAN_NAME = "annotationBasedWebScriptRegistry";
-
-	private static final String COMPOSITE_REGISTRY_MANAGER_BEAN_NAME = "compositeRegistryManager";
-
 	private final Logger logger = LoggerFactory.getLogger(getClass());
-
-	private static final String ANNOTATION_BASED_ACTION_REGISTRAR_BEAN_NAME = "annotationBasedActionRegistrar";
-
-	private static final String ANNOTATION_BASED_BEHAVIOUR_REGISTRAR_BEAN_NAME = "annotationBasedBehaviourRegistrar";
-
-	private static final String M2_MODEL_LIST_FACTORY_BEAN_NAME = "m2ModelListFactoryBean";
-
-	private static final String MODEL_REGISTRAR_BEAN_NAME = "modelRegistrar";
-
-	private static final String METADATA_BEAN_NAME = "metadata";
-
-	private static final String PROXY_POLICY_COMPONENT_BEAN_NAME = "proxyPolicyComponent";
-
-	private static final String BEHAVIOUR_PROXY_FACTORY_BEAN_NAME = "behaviourProxyFactory";
 
 	private static final String HOST_APPLICATION_ALFRESCO_FILTER = "(hostApplication=alfresco)";
 
@@ -235,9 +207,9 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 	 * @param beanFactory
 	 */
 	protected void registerMetadataBean(final DefaultListableBeanFactory beanFactory) {
-		if (beanFactory.containsBeanDefinition(METADATA_BEAN_NAME) == false) {
+		if (beanFactory.containsBeanDefinition(BeanNames.METADATA) == false) {
 			beanFactory.registerBeanDefinition(
-					METADATA_BEAN_NAME,
+					BeanNames.METADATA,
 					BeanDefinitionBuilder.rootBeanDefinition(ExtensionMetadata.class)
 							.addPropertyValue("bundleId", getBundle().getBundleId())
 							.addPropertyValue("name", getBundle().getSymbolicName())
@@ -253,17 +225,17 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 	 * @param beanFactory
 	 */
 	protected void registerAutomaticModelDeploymentBeans(final DefaultListableBeanFactory beanFactory) {
-		if (beanFactory.containsBeanDefinition(M2_MODEL_LIST_FACTORY_BEAN_NAME) == false) {
+		if (beanFactory.containsBeanDefinition(BeanNames.M2_MODEL_LIST_FACTORY) == false) {
 			beanFactory.registerBeanDefinition(
-					M2_MODEL_LIST_FACTORY_BEAN_NAME,
+					BeanNames.M2_MODEL_LIST_FACTORY,
 					BeanDefinitionBuilder.rootBeanDefinition(M2ModelListFactoryBean.class)
 							.addPropertyValue("locationPattern", getModelLocationPattern()).getBeanDefinition());
 		}
-		if (beanFactory.containsBeanDefinition(MODEL_REGISTRAR_BEAN_NAME) == false) {
+		if (beanFactory.containsBeanDefinition(BeanNames.MODEL_REGISTRAR) == false) {
 			beanFactory.registerBeanDefinition(
-					MODEL_REGISTRAR_BEAN_NAME,
+					BeanNames.MODEL_REGISTRAR,
 					BeanDefinitionBuilder.rootBeanDefinition(ModelRegistrar.class)
-							.addPropertyReference("models", M2_MODEL_LIST_FACTORY_BEAN_NAME)
+							.addPropertyReference("models", BeanNames.M2_MODEL_LIST_FACTORY)
 							.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE)
 							.setInitMethodName("registerModels").setDestroyMethodName("unregisterModels")
 							.getBeanDefinition());
@@ -276,23 +248,23 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 	 * @param beanFactory
 	 */
 	protected void registerAnnotationBasedBehaviourBeans(final DefaultListableBeanFactory beanFactory) {
-		if (beanFactory.containsBeanDefinition(BEHAVIOUR_PROXY_FACTORY_BEAN_NAME) == false) {
-			beanFactory.registerBeanDefinition(BEHAVIOUR_PROXY_FACTORY_BEAN_NAME, BeanDefinitionBuilder
+		if (beanFactory.containsBeanDefinition(BeanNames.BEHAVIOUR_PROXY_FACTORY) == false) {
+			beanFactory.registerBeanDefinition(BeanNames.BEHAVIOUR_PROXY_FACTORY, BeanDefinitionBuilder
 					.rootBeanDefinition(DefaultBehaviourProxyFactory.class).getBeanDefinition());
 		}
-		if (beanFactory.containsBeanDefinition(PROXY_POLICY_COMPONENT_BEAN_NAME) == false) {
+		if (beanFactory.containsBeanDefinition(BeanNames.PROXY_POLICY_COMPONENT) == false) {
 			beanFactory.registerBeanDefinition(
-					PROXY_POLICY_COMPONENT_BEAN_NAME,
+					BeanNames.PROXY_POLICY_COMPONENT,
 					BeanDefinitionBuilder.rootBeanDefinition(ProxyPolicyComponentFactoryBean.class)
 							.addPropertyValue("policyComponent", getService(PolicyComponent.class))
-							.addPropertyReference("behaviourProxyFactory", BEHAVIOUR_PROXY_FACTORY_BEAN_NAME)
+							.addPropertyReference("behaviourProxyFactory", BeanNames.BEHAVIOUR_PROXY_FACTORY)
 							.getBeanDefinition());
 		}
-		if (beanFactory.containsBeanDefinition(ANNOTATION_BASED_BEHAVIOUR_REGISTRAR_BEAN_NAME) == false) {
+		if (beanFactory.containsBeanDefinition(BeanNames.ANNOTATION_BASED_BEHAVIOUR_REGISTRAR) == false) {
 			beanFactory.registerBeanDefinition(
-					ANNOTATION_BASED_BEHAVIOUR_REGISTRAR_BEAN_NAME,
+					BeanNames.ANNOTATION_BASED_BEHAVIOUR_REGISTRAR,
 					BeanDefinitionBuilder.rootBeanDefinition(AnnotationBasedBehaviourRegistrar.class)
-							.addPropertyReference("policyComponent", PROXY_POLICY_COMPONENT_BEAN_NAME)
+							.addPropertyReference("policyComponent", BeanNames.PROXY_POLICY_COMPONENT)
 							.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE)
 							.setInitMethodName("bindBehaviours").getBeanDefinition());
 		}
@@ -304,9 +276,9 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 	 * @param beanFactory
 	 */
 	protected void registerAnnotationBasedActionBeans(final DefaultListableBeanFactory beanFactory) {
-		if (beanFactory.containsBeanDefinition(ANNOTATION_BASED_ACTION_REGISTRAR_BEAN_NAME) == false) {
+		if (beanFactory.containsBeanDefinition(BeanNames.ANNOTATION_BASED_ACTION_REGISTRAR) == false) {
 			beanFactory.registerBeanDefinition(
-					ANNOTATION_BASED_ACTION_REGISTRAR_BEAN_NAME,
+					BeanNames.ANNOTATION_BASED_ACTION_REGISTRAR,
 					BeanDefinitionBuilder.rootBeanDefinition(AnnotationBasedActionRegistrar.class)
 							.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE)
 							.setInitMethodName("registerAnnotationBasedActions")
@@ -323,64 +295,71 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 	 * @param beanFactory
 	 */
 	protected void registerAnnotationBasedWebScriptBeans(final DefaultListableBeanFactory beanFactory) {
-		if (beanFactory.containsBeanDefinition(STRING_VALUE_CONVERTER_BEAN_NAME) == false) {
+		if (beanFactory.containsBeanDefinition(BeanNames.STRING_VALUE_CONVERTER) == false) {
 			beanFactory.registerBeanDefinition(
-					STRING_VALUE_CONVERTER_BEAN_NAME,
+					BeanNames.STRING_VALUE_CONVERTER,
 					BeanDefinitionBuilder.rootBeanDefinition(StringValueConverter.class)
 							.addPropertyValue("namespacePrefixResolver", getService(NamespacePrefixResolver.class))
 							.getBeanDefinition());
 		}
-		if (beanFactory.containsBeanDefinition(HANDLER_METHOD_ARGUMENTS_RESOLVER_BEAN_NAME) == false) {
-			beanFactory.registerBeanDefinition(HANDLER_METHOD_ARGUMENTS_RESOLVER_BEAN_NAME,
+		if (beanFactory.containsBeanDefinition(BeanNames.HANDLER_METHOD_ARGUMENTS_RESOLVER) == false) {
+			beanFactory.registerBeanDefinition(BeanNames.HANDLER_METHOD_ARGUMENTS_RESOLVER,
 					BeanDefinitionBuilder.rootBeanDefinition(DefaultHandlerMethodArgumentsResolver.class)
-							.addPropertyReference("stringValueConverter", STRING_VALUE_CONVERTER_BEAN_NAME)
+							.addPropertyReference("stringValueConverter", BeanNames.STRING_VALUE_CONVERTER)
 							.setInitMethodName("initializeArgumentResolvers").getBeanDefinition());
 		}
-		if (beanFactory.containsBeanDefinition(ANNOTATION_BASED_WEB_SCRIPT_HANDLER_BEAN_NAME) == false) {
+		if (beanFactory.containsBeanDefinition(BeanNames.ANNOTATION_BASED_WEB_SCRIPT_HANDLER) == false) {
 			beanFactory.registerBeanDefinition(
-					ANNOTATION_BASED_WEB_SCRIPT_HANDLER_BEAN_NAME,
+					BeanNames.ANNOTATION_BASED_WEB_SCRIPT_HANDLER,
 					BeanDefinitionBuilder
 							.rootBeanDefinition(AnnotationBasedWebScriptHandler.class)
 							.addPropertyReference("handlerMethodArgumentsResolver",
-									HANDLER_METHOD_ARGUMENTS_RESOLVER_BEAN_NAME).getBeanDefinition());
+									BeanNames.HANDLER_METHOD_ARGUMENTS_RESOLVER).getBeanDefinition());
 		}
-		if (beanFactory.containsBeanDefinition(ANNOTATION_BASED_WEB_SCRIPT_BUILDER_BEAN_NAME) == false) {
+		if (beanFactory.containsBeanDefinition(BeanNames.ANNOTATION_BASED_WEB_SCRIPT_BUILDER) == false) {
 			beanFactory.registerBeanDefinition(
-					ANNOTATION_BASED_WEB_SCRIPT_BUILDER_BEAN_NAME,
+					BeanNames.ANNOTATION_BASED_WEB_SCRIPT_BUILDER,
 					BeanDefinitionBuilder
 							.rootBeanDefinition(AnnotationBasedWebScriptBuilder.class)
 							.addPropertyReference("annotationBasedWebScriptHandler",
-									ANNOTATION_BASED_WEB_SCRIPT_HANDLER_BEAN_NAME).getBeanDefinition());
+									BeanNames.ANNOTATION_BASED_WEB_SCRIPT_HANDLER).getBeanDefinition());
 		}
-		if (beanFactory.containsBeanDefinition(ANNOTATION_BASED_WEB_SCRIPT_REGISTRY_BEAN_NAME) == false) {
+		if (beanFactory.containsBeanDefinition(BeanNames.ANNOTATION_BASED_WEB_SCRIPT_REGISTRY) == false) {
 			beanFactory.registerBeanDefinition(
-					ANNOTATION_BASED_WEB_SCRIPT_REGISTRY_BEAN_NAME,
+					BeanNames.ANNOTATION_BASED_WEB_SCRIPT_REGISTRY,
 					BeanDefinitionBuilder
 							.rootBeanDefinition(AnnotationBasedWebScriptRegistry.class)
 							.addPropertyReference("annotationBasedWebScriptBuilder",
-									ANNOTATION_BASED_WEB_SCRIPT_BUILDER_BEAN_NAME).getBeanDefinition());
+									BeanNames.ANNOTATION_BASED_WEB_SCRIPT_BUILDER).getBeanDefinition());
 		}
-		if (beanFactory.containsBeanDefinition(COMPOSITE_REGISTRY_MANAGER_BEAN_NAME) == false) {
+		if (beanFactory.containsBeanDefinition(BeanNames.COMPOSITE_REGISTRY_MANAGER) == false) {
 			beanFactory.registerBeanDefinition(
-					COMPOSITE_REGISTRY_MANAGER_BEAN_NAME,
+					BeanNames.COMPOSITE_REGISTRY_MANAGER,
 					BeanDefinitionBuilder.rootBeanDefinition(CompositeRegistryManager.class)
 							.addPropertyValue("compositeRegistry", getService(CompositeRegistry.class))
-							.addPropertyReference("registries", ANNOTATION_BASED_WEB_SCRIPT_REGISTRY_BEAN_NAME)
+							.addPropertyReference("registries", BeanNames.ANNOTATION_BASED_WEB_SCRIPT_REGISTRY)
 							.setInitMethodName("registerRegistries").setDestroyMethodName("unregisterRegistries")
 							.getBeanDefinition());
 		}
-		if (beanFactory.containsBeanDefinition(SEARCH_PATH_REGISTRY_MANAGER_BEAN_NAME) == false) {
+		if (beanFactory.containsBeanDefinition(BeanNames.SEARCH_PATH_REGISTRY_MANAGER) == false) {
 			beanFactory.registerBeanDefinition(
-					SEARCH_PATH_REGISTRY_MANAGER_BEAN_NAME,
+					BeanNames.SEARCH_PATH_REGISTRY_MANAGER,
 					BeanDefinitionBuilder.rootBeanDefinition(SearchPathRegistryManager.class)
 							.addPropertyValue("searchPathRegistry", getService(SearchPathRegistry.class))
 							.addPropertyValue("stores", new BundleStore(getBundle()))
-                            .addPropertyValue("templateProcessor", getService(TemplateProcessor.class))
+							.addPropertyValue("templateProcessor", getService(TemplateProcessor.class))
 							.setInitMethodName("registerStores").setDestroyMethodName("unregisterStores")
 							.getBeanDefinition());
 		}
 	}
 
+	/**
+	 * Obtais the Java packages that exported by the Bundle.
+	 * <p>
+	 * This implementation parses the raw bundle header using the {@link ManifestHeaderParser}.
+	 * 
+	 * @return
+	 */
 	protected String[] getBundleExportPackages() {
 		String[] exportPackages = null;
 		final String exportPackageHeader = getBundle().getHeaders().get(Constants.EXPORT_PACKAGE);
