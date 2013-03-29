@@ -33,9 +33,9 @@
       </#list>      
     </tbody>
   </table>
-  <h2>Installing Extensions</h2>
+  <h2>Install Extensions</h2>
   <#if (fileInstallPaths?size > 0) >
-    <p>Install new extensions by placing Bundle JARs in the following directories:</p>
+    <p>Install Dynamic Extensions by placing their JARs in any of the following directories:</p>
     <ul>
       <#list fileInstallPaths as path>
         <li>
@@ -43,28 +43,13 @@
         </li>
       </#list>
     </ul>
+    <p>Uninstall extensions by deleting the JARs.</p>
   <#else>
     <p>
       <em>Installing extensions through the filesystem is not available.</em>
     </p>
   </#if>
   <h2>Framework</h2>
-  <table class="core-bundles table table-bordered table-striped">
-    <thead>
-      <tr>
-        <th class="name">Bundle</th>
-        <th class="version">Version</th>
-      </tr>      
-    </thead>
-    <tbody>
-      <#list coreBundles as bundle>
-        <tr>          
-          <td><a href="${url.service}/bundles/${bundle.bundleId}">${bundle.name}</td>
-          <td>${bundle.version}</td>
-        </tr>
-      </#list>      
-    </tbody>
-  </table>
   <p>    
     <a href="${url.service}/framework/restart" 
       data-method="post" 

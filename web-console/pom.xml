@@ -52,6 +52,11 @@
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
 				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Alfresco-Dynamic-Extension>true</Alfresco-Dynamic-Extension>
+					</instructions>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
