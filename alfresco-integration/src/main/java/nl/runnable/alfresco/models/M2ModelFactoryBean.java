@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.repository.dictionary;
+package nl.runnable.alfresco.models;
 
 import java.io.IOException;
 

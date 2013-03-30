@@ -10,17 +10,17 @@
 	<artifactId>alfresco-integration</artifactId>
 	<packaging>jar</packaging>
 	<name>Alfresco integration</name>
-	<description>Provides integration for running Dynamic Extensions in an Alfresco module.</description>
+	<description>Integration for running Dynamic Extensions in an Alfresco module.</description>
 	<dependencies>
 		<dependency>
 			<groupId>nl.runnable.alfresco.dynamicextensions</groupId>
-			<artifactId>alfresco-api-util</artifactId>
+			<artifactId>extension-management</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>nl.runnable.alfresco.dynamicextensions</groupId>
 			<artifactId>annotation-handling</artifactId>
-			<version>${project.version}</version>			
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.osgi</groupId>
@@ -37,6 +37,10 @@
 		<dependency>
 			<groupId>org.apache.felix</groupId>
 			<artifactId>org.apache.felix.framework</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jibx</groupId>
+			<artifactId>jibx-run</artifactId>
 		</dependency>
 	</dependencies>
 </project>

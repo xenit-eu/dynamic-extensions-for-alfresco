@@ -1,6 +1,0 @@
-# Configures the Alfresco Java packages that are exported as OSGI system packages.
-# The classes in these packages are made available to bundles in the OSGI container.
-
-nl.runnable.alfresco.repository.dictionary
-nl.runnable.alfresco.repository.node
-nl.runnable.alfresco.repository.query

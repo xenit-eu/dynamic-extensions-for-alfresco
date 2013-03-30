@@ -12,7 +12,6 @@ import java.util.List;
 import nl.runnable.alfresco.AbstractAnnotationBasedRegistrar;
 import nl.runnable.alfresco.actions.annotations.ActionMethod;
 import nl.runnable.alfresco.actions.annotations.ActionParam;
-import nl.runnable.alfresco.util.ApiCompatibilityUtil;
 
 import org.alfresco.repo.action.ActionDefinitionImpl;
 import org.alfresco.repo.action.ParameterDefinitionImpl;

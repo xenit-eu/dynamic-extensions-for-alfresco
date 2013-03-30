@@ -2,8 +2,6 @@ package nl.runnable.alfresco;
 
 import java.lang.annotation.Annotation;
 
-import nl.runnable.alfresco.util.QNamePropertyEditor;
-
 import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;

@@ -7,8 +7,6 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<description>Convenience context for including all context configuration.</description>
 
-	<import resource="classpath:/nl/runnable/alfresco/repository/all-services-context.xml" />
-	
 	<import resource="framework-context.xml" />
 
 	<import resource="web-scripts-context.xml" />

@@ -56,7 +56,6 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	<bean id="osgi.container.LibraryPackages" class="nl.runnable.alfresco.osgi.spring.SystemPackageConfigurationFactoryBean">
 		<property name="configurations">
 			<list>
-				<value>classpath:/META-INF/spring/osgi-container/packages/alfresco-api-util-packages.txt</value>
 				<value>classpath:/META-INF/spring/osgi-container/packages/library-packages.txt</value>
 				<value>classpath:/META-INF/spring/osgi-container/packages/webscripts-packages.txt</value>
 			</list>

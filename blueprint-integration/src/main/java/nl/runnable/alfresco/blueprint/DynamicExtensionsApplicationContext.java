@@ -31,11 +31,11 @@ import java.io.IOException;
 
 import nl.runnable.alfresco.actions.AnnotationBasedActionRegistrar;
 import nl.runnable.alfresco.extensions.Extension;
+import nl.runnable.alfresco.models.M2ModelListFactoryBean;
+import nl.runnable.alfresco.models.ModelRegistrar;
 import nl.runnable.alfresco.policy.AnnotationBasedBehaviourRegistrar;
 import nl.runnable.alfresco.policy.DefaultBehaviourProxyFactory;
 import nl.runnable.alfresco.policy.ProxyPolicyComponentFactoryBean;
-import nl.runnable.alfresco.repository.dictionary.M2ModelListFactoryBean;
-import nl.runnable.alfresco.repository.dictionary.ModelRegistrar;
 import nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptBuilder;
 import nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptHandler;
 import nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptRegistry;

@@ -1,18 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
 	<parent>
 		<groupId>nl.runnable.alfresco.dynamicextensions</groupId>
 		<artifactId>parent-pom</artifactId>
 		<version>1.0.0.M4-SNAPSHOT</version>
 	</parent>
-
 	<artifactId>extension-management</artifactId>
 	<packaging>bundle</packaging>
-	<name>Extension Management</name>
-	<description>Provides a library for managing Dynamic Extensions.</description>
-
+	<name>Extension management</name>
+	<description>Library for managing Dynamic Extensions.</description>
 	<build>
 		<plugins>
 			<plugin>
@@ -26,5 +23,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.util;
+package nl.runnable.alfresco.actions;
 
 import java.lang.reflect.Method;
 import java.util.HashSet;
@@ -16,7 +16,7 @@ import org.springframework.util.ReflectionUtils;
  * @author Laurens Fridael
  * 
  */
-public class ApiCompatibilityUtil {
+class ApiCompatibilityUtil {
 
 	/**
 	 * Provides a workaround breaking API change in {@link ActionDefinitionImpl#setApplicableTypes(List)}. The

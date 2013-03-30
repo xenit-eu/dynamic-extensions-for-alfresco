@@ -9,6 +9,7 @@
 	<name>Parent POM</name>
 
 	<properties>
+	  <!-- Dependency versions -->
 		<alfresco.version>4.0.e</alfresco.version>
 		<spring.version>3.0.0.RELEASE</spring.version>
 		<spring-surf.version>1.2.0-M3</spring-surf.version>
@@ -22,21 +23,25 @@
 		<osgi.version>4.3.1</osgi.version>
 		<!-- The asm-commons version should match the version of the core asm library used by Alfresco -->
 		<asm-commons.version>3.1</asm-commons.version>
-		<maven-bundle-plugin.version>2.3.5</maven-bundle-plugin.version>
 		<felix.version>4.0.3</felix.version>
+		<jibx-run.version>1.2.3</jibx-run.version>
+		<!-- Plugin versions and settings -->
+		<maven-bundle-plugin.version>2.3.7</maven-bundle-plugin.version>
+		<maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
+		<maven-source-plugin.version>2.1.2</maven-source-plugin.version>
 		<java.source.version>1.6</java.source.version>
 		<java.target.version>1.6</java.target.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- Github settings -->
 		<github.global.server>github</github.global.server>
 		<site-maven-plugin.version>0.7</site-maven-plugin.version>
 		<mvn-repo-branch>mvn-repo</mvn-repo-branch>
 	</properties>
 
 	<modules>
-		<module>extension-management</module>
-		<module>alfresco-api-util</module>
 		<module>annotations</module>
 		<module>annotation-handling</module>
+		<module>extension-management</module>
 		<module>blueprint-integration</module>
 		<module>alfresco-integration</module>
 		<module>web-console</module>
@@ -169,6 +174,12 @@
 				</exclusions>
 				<scope>runtime</scope>
 			</dependency>
+			<dependency>
+        <groupId>org.jibx</groupId>
+        <artifactId>jibx-run</artifactId>
+        <version>${jibx-run.version}</version>			 
+        <scope>test</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -184,7 +195,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
+				<version>${maven-compiler-plugin.version}</version>
 				<configuration>
 					<source>${java.source.version}</source>
 					<target>${java.target.version}</target>
@@ -193,7 +204,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>2.1.2</version>
+				<version>${maven-source-plugin.version}</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>

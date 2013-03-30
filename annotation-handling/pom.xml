@@ -1,20 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
 	<parent>
 		<groupId>nl.runnable.alfresco.dynamicextensions</groupId>
 		<artifactId>parent-pom</artifactId>
 		<version>1.0.0.M4-SNAPSHOT</version>
 	</parent>
-
 	<artifactId>annotation-handling</artifactId>
 	<packaging>bundle</packaging>
 	<name>Annotation handling</name>
 	<description>
 		Provides logic for handling annotation-based Actions, Behaviours and Web Scripts
 	</description>
-
 	<dependencies>
 		<dependency>
 			<groupId>nl.runnable.alfresco.dynamicextensions</groupId>
@@ -35,11 +32,5 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>nl.runnable.alfresco.dynamicextensions</groupId>
-			<artifactId>alfresco-api-util</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 	</dependencies>
-
 </project>

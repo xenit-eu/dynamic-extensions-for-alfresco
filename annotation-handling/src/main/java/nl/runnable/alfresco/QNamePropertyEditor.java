@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.util;
+package nl.runnable.alfresco;
 
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorSupport;
@@ -13,7 +13,7 @@ import org.springframework.util.StringUtils;
  * @author Laurens Fridael
  * 
  */
-public class QNamePropertyEditor extends PropertyEditorSupport {
+class QNamePropertyEditor extends PropertyEditorSupport {
 
 	private final String PREFIX_FORMAT_PATTERN = (".+?:.+?");
 
