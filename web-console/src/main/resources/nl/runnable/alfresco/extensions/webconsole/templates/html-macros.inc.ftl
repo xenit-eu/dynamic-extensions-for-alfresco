@@ -3,14 +3,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="${url.context}/css/dynamic-extensions/bootstrap/css/bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css" href="${url.context}/css/dynamic-extensions/bootstrap/css/bootstrap-responsive.min.css"/>
-    <script type="text/javascript" src="${url.context}/scripts/dynamic-extensions/jquery/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="${url.context}/scripts/dynamic-extensions/bootstrap/js/bootstrap.min.js"></script>
-    <style type="text/css">
-      <#include "../styles/sticky-footer.css" >
-      <#include "../styles/screen.css" >
-    </style>
+    <link rel="stylesheet" type="text/css" href="${url.service}/resources/stylesheets/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="${url.service}/resources/stylesheets/bootstrap/css/bootstrap-responsive.min.css"/>
+    <link rel="stylesheet" type="text/css" href="${url.service}/resources/stylesheets/sticky-footer.css"/>
+    <link rel="stylesheet" type="text/css" href="${url.service}/resources/stylesheets/screen.css"/>
     <title>${title}</title>
   </head>
   <body>
@@ -37,6 +33,11 @@
         <p class="last-updated">Last updated: <span id="last-updated">just now</span></p>
       </div>
     </div>
+    <script type="text/javascript" src="${url.service}/resources/scripts/jquery/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="${url.service}/resources/scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="${url.service}/resources/scripts/bootbox/bootbox.min.js"></script>
+    <script type="text/javascript" src="${url.service}/resources/scripts/moment/moment.min.js"></script>
+    <script type="text/javascript" src="${url.service}/resources/scripts/web-console.js"></script>
   </body>
 </html>
 </#macro>

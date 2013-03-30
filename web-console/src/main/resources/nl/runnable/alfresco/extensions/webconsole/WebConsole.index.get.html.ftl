@@ -13,7 +13,7 @@
       <#list extensions as extension>
         <tr>          
           <td>
-            <a href="${url.service}/bundles/${extension.bundleId}">${extension.name}</a>
+            <a href="${url.service}/extensions/${extension.name}">${extension.name}</a>
           </td>
           <td>
             ${extension.version}
@@ -65,15 +65,4 @@
   <form id="post" method="post">
     <input type="hidden" id="wait" name="wait" value="0" />
   </form>
-  <#-- 
-  For now we include all scripts inline as there is no way of bundling CSS and JavaScript.
-
-  One idea to resolve this is to add a helper that generates <script> and <link> tags by scanning
-  for resources in the Bundle JAR.
-  -->
-  <script type="text/javascript">
-    <#include "scripts/bootbox.min.js" />
-    <#include "scripts/moment.min.js" />
-    <#include "scripts/web-console.js" />
-  </script>
 </@html.document>

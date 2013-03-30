@@ -61,6 +61,9 @@ public class DefaultHandlerMethodArgumentsResolver implements HandlerMethodArgum
 		argumentResolvers = new ArrayList<ArgumentResolver<Object, Annotation>>();
 		argumentResolvers.add((ArgumentResolver) new RequestParamArgumentResolver(getStringValueConverter()));
 		argumentResolvers.add((ArgumentResolver) new UriVariableArgumentResolver(getStringValueConverter()));
+		argumentResolvers.add((ArgumentResolver) new AttributeArgumentResolver());
+		argumentResolvers.add((ArgumentResolver) new MapAttributesArgumentResolver());
+		argumentResolvers.add((ArgumentResolver) new HeaderArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new WebScriptRequestArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new WebScriptResponseArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new WebScriptSessionArgumentResolver());
@@ -71,8 +74,6 @@ public class DefaultHandlerMethodArgumentsResolver implements HandlerMethodArgum
 		argumentResolvers.add((ArgumentResolver) new CommandArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new HttpServletRequestArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new HttpServletResponseArgumentResolver());
-		argumentResolvers.add((ArgumentResolver) new AttributeArgumentResolver());
-		argumentResolvers.add((ArgumentResolver) new MapAttributesArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new TemplateProcessorRegistryArgumentResolver());
 	}
 
