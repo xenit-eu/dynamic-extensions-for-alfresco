@@ -1,8 +1,35 @@
 <#import "templates/html-macros.inc.ftl" as html>
 <@html.document title="Control Panel - Dynamic Extensions">
 
+  <#macro bundleTable bundles>
+    <table class="bundles table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th class="name">Bundle</th>
+          <th class="state">Status</th>        
+          <th class="description">Description</th>
+        </tr>      
+      </thead>
+      <tbody>
+        <#list bundles as bundle>
+          <tr>          
+            <td>
+              <a href="bundles/${bundle.id}">${bundle.name} ${bundle.version}</a>
+            </td>
+            <td>
+              ${bundle.state}
+            </td>
+            <td>
+              ${bundle.manifest.bundleDescription}
+            </td>
+          </tr>
+        </#list>      
+      </tbody>  
+    </table>
+  </#macro>
+
   <h2>Extensions</h2>
-  <@html.bundleTable bundles=extensionBundles />
+  <@bundleTable bundles=extensionBundles />
 
   <p>Install extensions by placing their OSGi bundle JARs in one of the following directories:</p>
   <ul>
@@ -14,7 +41,7 @@
   </ul>
 
   <h2>Framework</h2>
-  <@html.bundleTable bundles=frameworkBundles />  
+  <@bundleTable bundles=frameworkBundles />  
 
   <p>    
     <a href="${url.service}/framework/restart" 

@@ -15,6 +15,7 @@ import nl.runnable.alfresco.webscripts.annotations.AuthenticationType;
 import nl.runnable.alfresco.webscripts.annotations.HttpMethod;
 import nl.runnable.alfresco.webscripts.annotations.RequestParam;
 import nl.runnable.alfresco.webscripts.annotations.Uri;
+import nl.runnable.alfresco.webscripts.annotations.UriVariable;
 import nl.runnable.alfresco.webscripts.annotations.WebScript;
 
 import org.eclipse.gemini.blueprint.context.BundleContextAware;
@@ -55,7 +56,7 @@ public class ControlPanel implements BundleContextAware {
 	 * 
 	 * @return The model.
 	 */
-	@Uri(method = HttpMethod.GET, value = "/dynamic-extensions", defaultFormat = "html")
+	@Uri(method = HttpMethod.GET, value = "/dynamic-extensions/", defaultFormat = "html")
 	public Map<String, Object> index() {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		model.put(TemplateVariables.FRAMEWORK_BUNDLES, bundleHelper.getFrameworkBundles());
@@ -77,6 +78,20 @@ public class ControlPanel implements BundleContextAware {
 			@Attribute final ResponseHelper response) throws IOException, BundleException {
 		restartFramework((Framework) bundleContext.getBundle(FRAMEWORK_BUNDLE_ID));
 		response.status(HttpServletResponse.SC_OK, "Restarted framework.");
+	}
+
+	@Uri(method = HttpMethod.GET, value = "/dynamic-extensions/bundles/{id}", defaultFormat = "html")
+	public Map<String, Object> bundle(@UriVariable final long id, @Attribute final ResponseHelper responseHelper)
+			throws IOException {
+		final Map<String, Object> model = new HashMap<String, Object>();
+		final Bundle bundle = bundleContext.getBundle(id);
+		if (bundle != null) {
+			model.put(TemplateVariables.BUNDLE, new TemplateBundle(bundle));
+		} else {
+			model.put(TemplateVariables.ID, id);
+			responseHelper.status(HttpServletResponse.SC_NOT_FOUND);
+		}
+		return model;
 	}
 
 	/* Attributes */

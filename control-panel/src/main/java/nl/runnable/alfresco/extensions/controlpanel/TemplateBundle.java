@@ -59,7 +59,6 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 		default:
 			return null;
 		}
-
 	}
 
 	public BundleManifest getManifest() {

@@ -13,11 +13,6 @@
     refreshLastUpdated();
     window.setInterval(refreshLastUpdated, 60000);
 
-    $('table a').on('click', function(event) {
-      event.preventDefault();
-      bootbox.alert('<h2>Not yet implemented</h2><p>This action is not yet implemented.</p>');
-    });
-
     $('a[data-method="post"]').on('click', function(event) {
       event.preventDefault();
 
