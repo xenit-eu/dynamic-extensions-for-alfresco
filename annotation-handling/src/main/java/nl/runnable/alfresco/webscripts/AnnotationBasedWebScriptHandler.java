@@ -85,9 +85,10 @@ public class AnnotationBasedWebScriptHandler {
 		Assert.notNull(request, "Request cannot be null.");
 		Assert.notNull(response, "Response cannot be null.");
 
-		final Map<String, Object> attributesByName = invokeAttributeMethods(webScript, request, response);
+		final WebScriptResponseWrapper wrappedResponse = new WebScriptResponseWrapper(response);
+		final Map<String, Object> attributesByName = invokeAttributeMethods(webScript, request, wrappedResponse);
 		request = new AttributesWebScriptRequest(request, attributesByName);
-		invokeHandlerMethod(webScript, request, response);
+		invokeHandlerMethod(webScript, request, wrappedResponse);
 	}
 
 	/* Utility operations */
@@ -118,17 +119,19 @@ public class AnnotationBasedWebScriptHandler {
 	}
 
 	protected void invokeHandlerMethod(final AnnotationBasedWebScript webScript, final WebScriptRequest request,
-			final WebScriptResponse response) throws IOException {
+			final WebScriptResponseWrapper response) throws IOException {
 		final Object[] arguments = getHandlerMethodArgumentsResolver().resolveHandlerMethodArguments(
 				webScript.getHandlerMethod(), webScript.getHandler(), request, response);
 		final Object returnValue = ReflectionUtils.invokeMethod(webScript.getHandlerMethod(), webScript.getHandler(),
 				arguments);
-		processHandlerMethodReturnValue(webScript, returnValue, request, response);
+		if (returnValue != null) {
+			processHandlerMethodReturnValue(webScript, returnValue, request, response, response.getStatus());
+		}
 	}
 
 	@SuppressWarnings("unchecked")
 	protected void processHandlerMethodReturnValue(final AnnotationBasedWebScript webScript, final Object returnValue,
-			final WebScriptRequest request, final WebScriptResponse response) throws IOException {
+			final WebScriptRequest request, final WebScriptResponse response, Integer status) throws IOException {
 		if (returnValue instanceof Map) {
 			if (StringUtils.hasText(request.getFormat()) == false) {
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -136,14 +139,50 @@ public class AnnotationBasedWebScriptHandler {
 				return;
 			}
 			final Map<String, Object> model = (Map<String, Object>) returnValue;
-			final Class<?> handlerClass = webScript.getHandler().getClass();
-			final String methodName = webScript.getHandlerMethod().getName();
-			final String httpMethod = webScript.getDescription().getMethod().toLowerCase();
-			final String baseTemplateName = String.format("%s.%s.%s", ClassUtils.getQualifiedName(handlerClass)
-					.replace('.', '/'), methodName, httpMethod);
-			final String templateName = String.format("%s.%s.ftl", baseTemplateName, request.getFormat().toLowerCase());
 			populateTemplateModel(model, webScript, request);
-			generateResponseFromTemplate(request, response, model, templateName);
+			status = status != null ? status : 200;
+			processTemplate(webScript, request, status, model, response);
+		}
+	}
+
+	protected void processTemplate(final AnnotationBasedWebScript webScript, final WebScriptRequest request,
+			final int status, final Map<String, Object> model, final WebScriptResponse response) throws IOException {
+		final String format = request.getFormat();
+		final TemplateProcessorRegistry templateProcessorRegistry = request.getRuntime().getContainer()
+				.getTemplateProcessorRegistry();
+		final TemplateProcessor templateProcessor = templateProcessorRegistry.getTemplateProcessorByExtension("ftl");
+
+		final Class<?> handlerClass = webScript.getHandler().getClass();
+		final String methodName = webScript.getHandlerMethod().getName();
+		final String httpMethod = webScript.getDescription().getMethod().toLowerCase();
+
+		final String baseTemplateName = String.format("%s.%s.%s",
+				ClassUtils.getQualifiedName(handlerClass).replace('.', '/'), methodName, httpMethod);
+		/* <java class + method>.<http method>.<format>.ftl */
+		final String defaultTemplateName = String.format("%s.%s.ftl", baseTemplateName, format.toLowerCase());
+
+		/* <java class + method>.<http method>.<format>.<status>.ftl */
+		String templateName = String.format("%s.%s.%d.ftl", baseTemplateName, format.toLowerCase(), status);
+		if (templateProcessor.hasTemplate(templateName) == false) {
+			final String packageName = handlerClass.getPackage().getName().replace('.', '/');
+			/* <java package>.<format>.<status>.ftl */
+			templateName = String.format("%s/%s.%d.ftl", packageName, format.toLowerCase(), status);
+		}
+		if (templateProcessor.hasTemplate(templateName) == false) {
+			/* <format>.<status>.ftl */
+			templateName = String.format("%s.%d.ftl", format, status);
+		}
+		if (templateProcessor.hasTemplate(templateName) == false) {
+			templateName = defaultTemplateName;
+		}
+		if (templateProcessor.hasTemplate(templateName)) {
+			response.setContentType(Format.valueOf(format.toUpperCase()).mimetype());
+			response.setContentEncoding("utf-8");
+			templateProcessor.process(templateName, model, response.getWriter());
+		} else {
+			// Friendly error message
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.getWriter().write(String.format("Could not find template: %s", defaultTemplateName));
 		}
 	}
 
@@ -160,16 +199,10 @@ public class AnnotationBasedWebScriptHandler {
 	}
 
 	protected void generateResponseFromTemplate(final WebScriptRequest request, final WebScriptResponse response,
-			final Map<String, Object> model, final String templateName) throws IOException {
+			final Map<String, Object> model, final TemplateProcessor templateProcessor, final String templateName,
+			final String format) throws IOException {
 		final Writer out = response.getWriter();
-		final TemplateProcessorRegistry templateProcessorRegistry = request.getRuntime().getContainer()
-				.getTemplateProcessorRegistry();
-		final TemplateProcessor templateProcessor = templateProcessorRegistry.getTemplateProcessorByExtension("ftl");
 		if (templateProcessor.hasTemplate(templateName)) {
-			final Format format = Format.valueOf(request.getFormat().toUpperCase());
-			response.setContentType(format.mimetype());
-			response.setContentEncoding("utf-8");
-			templateProcessor.process(templateName, model, out);
 		} else {
 			// Friendly error message
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
