@@ -150,11 +150,13 @@ public class ActionApplicationContextProxy implements ApplicationContextAware, A
 		return applicationContext.getAutowireCapableBeanFactory();
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public String[] getBeanNamesForType(final Class type) {
 		return applicationContext.getBeanNamesForType(type);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public String[] getBeanNamesForType(final Class type, final boolean includeNonSingletons,
 			final boolean allowEagerInit) {
@@ -202,6 +204,7 @@ public class ActionApplicationContextProxy implements ApplicationContextAware, A
 		return applicationContext.isPrototype(name);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean isTypeMatch(final String name, final Class targetType) throws NoSuchBeanDefinitionException {
 		return applicationContext.isTypeMatch(name, targetType);

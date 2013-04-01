@@ -7,12 +7,10 @@
 		<artifactId>parent-pom</artifactId>
 		<version>1.0.0.M4-SNAPSHOT</version>
 	</parent>
-	<artifactId>web-console</artifactId>
-	<name>Web Console</name>
+	<artifactId>control-panel</artifactId>
+	<name>Control Panel</name>
+	<description>Web interface for managing Dynamic Extensions.</description>
 	<packaging>bundle</packaging>
-	<properties>
-		<gemini-blueprint.version>1.0.2.RELEASE</gemini-blueprint.version>
-	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>javax.inject</groupId>
@@ -35,15 +33,32 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.core</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.eclipse.gemini</groupId>
 			<artifactId>org.eclipse.gemini.blueprint.core</artifactId>
-			<version>${gemini-blueprint.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.extensions.surf</groupId>
 			<artifactId>spring-webscripts</artifactId>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.springsource.util</groupId>
+			<artifactId>com.springsource.util.osgi</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.springsource.util</groupId>
+			<artifactId>com.springsource.util.common</artifactId>
+			<version>${springsource-util-osgi.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.springsource.util</groupId>
+			<artifactId>com.springsource.util.parser.manifest</artifactId>
+			<version>${springsource-util-osgi.version}</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -55,6 +70,7 @@
 				<configuration>
 					<instructions>
 						<Alfresco-Dynamic-Extension>true</Alfresco-Dynamic-Extension>
+						<Embed-Dependency>*;scope=compile</Embed-Dependency>
 					</instructions>
 				</configuration>
 			</plugin>

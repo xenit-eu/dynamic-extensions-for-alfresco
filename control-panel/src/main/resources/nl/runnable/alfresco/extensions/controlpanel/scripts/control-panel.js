@@ -11,8 +11,7 @@
       $('#last-updated').text(moment(lastUpdated).fromNow());
     };
     refreshLastUpdated();
-
-    window.setInterval(refreshLastUpdated, 10000);
+    window.setInterval(refreshLastUpdated, 60000);
 
     $('table a').on('click', function(event) {
       event.preventDefault();
@@ -21,11 +20,10 @@
 
     $('a[data-method="post"]').on('click', function(event) {
       event.preventDefault();
-      var wait = $(this).data('wait');
-      if (wait) {
-        $('input#wait').val(wait);
-      }
+
       $('form#post').attr('action', $(this).attr('href')).submit();
+
+      // Show dialog
       var message = $(this).data('message');
       var title = $(this).data('title');
       if (message || title) {
@@ -39,7 +37,14 @@
         bootbox.alert(html, $(this).data('button'), function() {
           window.location.reload();
         });
+
       }
+      // Reload after wait.
+      var wait = $(this).data('wait') || 0;
+      window.setTimeout(function() {
+        window.location.reload();
+      }, wait);
+            
     });
   });
 

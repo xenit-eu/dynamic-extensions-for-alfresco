@@ -24,11 +24,6 @@ public class Installation {
 	 */
 	private String lastVersion;
 
-	/**
-	 * The number of times the extension was installed.
-	 */
-	private int installationCount;
-
 	public Date getFirstInstalled() {
 		return firstInstalled;
 	}
@@ -59,14 +54,6 @@ public class Installation {
 
 	public void setLastVersion(final String lastVersion) {
 		this.lastVersion = lastVersion;
-	}
-
-	public void setInstallationCount(final int installationCount) {
-		this.installationCount = installationCount;
-	}
-
-	public int getInstallationCount() {
-		return installationCount;
 	}
 
 }

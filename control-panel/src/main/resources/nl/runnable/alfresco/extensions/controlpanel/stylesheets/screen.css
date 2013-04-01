@@ -6,7 +6,11 @@
   margin: 20px 0;
 }
 
-table th.name {
+code {
+  color: #333;
+}
+
+table.extensions th.name {
   width: 50%;
 }
 
@@ -18,7 +22,15 @@ table.extensions th.actions {
   width: 20%;
 }
 
-table.core-bundles th.version {
+table.bundles th.name {
+  width: 35%;
+}
+
+table.bundles th.state {
+  width: 15%;
+}
+
+table.bundles th.description {
   width: 50%;
 }
 

@@ -9,7 +9,7 @@
 	<name>Parent POM</name>
 
 	<properties>
-	  <!-- Dependency versions -->
+		<!-- Dependency versions -->
 		<alfresco.version>4.0.e</alfresco.version>
 		<spring.version>3.0.0.RELEASE</spring.version>
 		<spring-surf.version>1.2.0-M3</spring-surf.version>
@@ -20,10 +20,12 @@
 		<slf4j.version>1.5.11</slf4j.version>
 		<junit.version>4.8.2</junit.version>
 		<mockito.version>1.8.5</mockito.version>
-		<osgi.version>4.3.1</osgi.version>
 		<!-- The asm-commons version should match the version of the core asm library used by Alfresco -->
 		<asm-commons.version>3.1</asm-commons.version>
 		<felix.version>4.0.3</felix.version>
+		<osgi.version>4.3.1</osgi.version>
+		<gemini-blueprint.version>1.0.2.RELEASE</gemini-blueprint.version>
+		<springsource-util-osgi.version>2.0.5.RELEASE</springsource-util-osgi.version>
 		<jibx-run.version>1.2.3</jibx-run.version>
 		<!-- Plugin versions and settings -->
 		<maven-bundle-plugin.version>2.3.7</maven-bundle-plugin.version>
@@ -44,7 +46,7 @@
 		<module>extension-management</module>
 		<module>blueprint-integration</module>
 		<module>alfresco-integration</module>
-		<module>web-console</module>
+		<module>control-panel</module>
 		<module>alfresco-module</module>
 	</modules>
 
@@ -68,12 +70,12 @@
 			<version>${alfresco.version}</version>
 			<scope>provided</scope>
 		</dependency>
-    <dependency>
-        <groupId>org.alfresco</groupId>
-        <artifactId>alfresco-remote-api</artifactId>
-        <version>${alfresco.version}</version>
-        <scope>provided</scope>
-    </dependency>
+		<dependency>
+			<groupId>org.alfresco</groupId>
+			<artifactId>alfresco-remote-api</artifactId>
+			<version>${alfresco.version}</version>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
@@ -157,6 +159,17 @@
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
+				<groupId>org.eclipse.gemini</groupId>
+				<artifactId>org.eclipse.gemini.blueprint.core</artifactId>
+				<version>${gemini-blueprint.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.springsource.util</groupId>
+				<artifactId>com.springsource.util.osgi</artifactId>
+				<version>${springsource-util-osgi.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>asm</groupId>
 				<artifactId>asm-commons</artifactId>
 				<version>${asm-commons.version}</version>
@@ -175,20 +188,20 @@
 				<scope>runtime</scope>
 			</dependency>
 			<dependency>
-        <groupId>org.jibx</groupId>
-        <artifactId>jibx-run</artifactId>
-        <version>${jibx-run.version}</version>			 
-        <scope>test</scope>
+				<groupId>org.jibx</groupId>
+				<artifactId>jibx-run</artifactId>
+				<version>${jibx-run.version}</version>
+				<scope>test</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
 	<distributionManagement>
-    <repository>
-      <id>internal.repo</id>
-      <url>file://${project.build.directory}/${mvn-repo-branch}</url>
-    </repository>
-  </distributionManagement>
+		<repository>
+			<id>internal.repo</id>
+			<url>file://${project.build.directory}/${mvn-repo-branch}</url>
+		</repository>
+	</distributionManagement>
 
 	<build>
 		<plugins>
@@ -222,31 +235,33 @@
 				<extensions>true</extensions>
 			</plugin>
 			<plugin>
-        <groupId>com.github.github</groupId>
-        <artifactId>site-maven-plugin</artifactId>
-        <version>${site-maven-plugin.version}</version>
-        <configuration>
-            <message>Maven artifacts for ${project.version}</message>
-            <noJekyll>true</noJekyll>
-            <merge>true</merge>
-            <outputDirectory>${project.build.directory}/${mvn-repo-branch}</outputDirectory>
-            <branch>refs/heads/${mvn-repo-branch}</branch>
-            <includes><include>**/*</include></includes>
-            <repositoryOwner>lfridael</repositoryOwner>
-            <repositoryName>dynamic-extensions-for-alfresco</repositoryName>     
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>site</goal>
-            </goals>
-            <phase>deploy</phase>
-          </execution>
-        </executions>
-      </plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+				<version>${site-maven-plugin.version}</version>
+				<configuration>
+					<message>Maven artifacts for ${project.version}</message>
+					<noJekyll>true</noJekyll>
+					<merge>true</merge>
+					<outputDirectory>${project.build.directory}/${mvn-repo-branch}</outputDirectory>
+					<branch>refs/heads/${mvn-repo-branch}</branch>
+					<includes>
+						<include>**/*</include>
+					</includes>
+					<repositoryOwner>lfridael</repositoryOwner>
+					<repositoryName>dynamic-extensions-for-alfresco</repositoryName>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>site</goal>
+						</goals>
+						<phase>deploy</phase>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
-	
+
 	<repositories>
 		<repository>
 			<id>alfresco-public</id>
@@ -256,14 +271,14 @@
 			<id>springsource-repo</id>
 			<url>http://repo.springsource.org/release</url>
 		</repository>
-    <repository>
-        <id>com.springsource.repository.bundles.external</id>
-        <url>http://repository.springsource.com/maven/bundles/external</url>
-    </repository>
-    <repository>
-        <id>com.springsource.repository.bundles.release</id>
-        <url>http://repository.springsource.com/maven/bundles/release</url>
-    </repository>
+		<repository>
+			<id>com.springsource.repository.bundles.external</id>
+			<url>http://repository.springsource.com/maven/bundles/external</url>
+		</repository>
+		<repository>
+			<id>com.springsource.repository.bundles.release</id>
+			<url>http://repository.springsource.com/maven/bundles/release</url>
+		</repository>
 	</repositories>
 
 </project>

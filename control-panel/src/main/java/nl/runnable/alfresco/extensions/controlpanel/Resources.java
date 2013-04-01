@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.extensions.webconsole;
+package nl.runnable.alfresco.extensions.controlpanel;
 
 import java.io.IOException;
 

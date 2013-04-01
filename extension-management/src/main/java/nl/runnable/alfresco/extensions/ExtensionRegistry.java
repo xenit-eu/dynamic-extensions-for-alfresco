@@ -1,6 +1,6 @@
 package nl.runnable.alfresco.extensions;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Provides a means for registering and looking up {@link Extension} across Dynamic Extensions.
@@ -32,26 +32,10 @@ public interface ExtensionRegistry {
 	public void unregisterExtension(Extension extension);
 
 	/**
-	 * Obtains all {@link Extension}.
+	 * Obtains all {@link Extension}s.
 	 * 
 	 * @return
 	 */
-	public Collection<Extension> getExtensions();
-
-	/**
-	 * Registers a bundle ID as being a core bundle. These ID's can then be used to distinguish between bundles
-	 * belonging to the framework itself.
-	 * 
-	 * @param bundleId
-	 */
-	public void registerCoreBundle(long bundleId);
-
-	/**
-	 * Tests if the given bundle ID represents a core bundle.
-	 * 
-	 * @param bundleId
-	 * @return
-	 */
-	public boolean isCoreBundle(long bundleId);
+	public List<Extension> getExtensions();
 
 }

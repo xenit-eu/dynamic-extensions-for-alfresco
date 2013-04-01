@@ -110,7 +110,6 @@ public class FrameworkManager implements ResourceLoaderAware {
 		final List<Bundle> coreBundles = installCoreBundles();
 		registerServices();
 		startBundles(coreBundles);
-		registerCoreBundles(coreBundles);
 		if (isFileInstallEnabled() == false) {
 			final List<Bundle> extensionBundles = installExtensionBundles();
 			startBundles(extensionBundles);
@@ -221,21 +220,9 @@ public class FrameworkManager implements ResourceLoaderAware {
 	 * Registers the {@link Framework} with the {@link ExtensionRegistry}.
 	 */
 	protected void registerFramework() {
-		getExtensionRegistry().registerCoreBundle(getFramework().getBundleId());
 		final Container container = getExtensionRegistry().getContainer();
 		container.setFrameworkBundleId(getFramework().getBundleId());
 		container.setFileInstallPaths(fileInstallConfigurer.getDirectoriesAsAbsolutePaths());
-	}
-
-	/**
-	 * Registers the given core Bundles with the {@link ExtensionRegistry}.
-	 * 
-	 * @param coreBundles
-	 */
-	protected void registerCoreBundles(final List<Bundle> coreBundles) {
-		for (final Bundle coreBundle : coreBundles) {
-			getExtensionRegistry().registerCoreBundle(coreBundle.getBundleId());
-		}
 	}
 
 	protected void startBundles(final List<Bundle> bundles) {

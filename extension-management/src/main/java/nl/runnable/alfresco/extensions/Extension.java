@@ -53,14 +53,6 @@ public class Extension implements Comparable<Extension> {
 		return bundleId;
 	}
 
-	public boolean isCoreBundle() {
-		boolean coreBundle = false;
-		if (getExtensionRegistry() != null) {
-			coreBundle = getExtensionRegistry().isCoreBundle(getBundleId());
-		}
-		return coreBundle;
-	}
-
 	public String getName() {
 		return name;
 	}

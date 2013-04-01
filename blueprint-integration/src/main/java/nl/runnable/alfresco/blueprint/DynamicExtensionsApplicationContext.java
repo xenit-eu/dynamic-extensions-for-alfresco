@@ -211,7 +211,7 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 					BeanNames.EXTENSION,
 					BeanDefinitionBuilder.rootBeanDefinition(Extension.class)
 							.addPropertyValue("bundleId", getBundle().getBundleId())
-							.addPropertyValue("name", getBundle().getSymbolicName())
+							.addPropertyValue("name", getBundle().getHeaders().get(Constants.BUNDLE_NAME))
 							.addPropertyValue("version", getBundle().getVersion().toString())
 							.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE).setInitMethodName("register")
 							.setDestroyMethodName("unregister").getBeanDefinition());

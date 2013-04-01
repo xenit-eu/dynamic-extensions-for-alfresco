@@ -37,7 +37,34 @@
     <script type="text/javascript" src="${url.service}/resources/scripts/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="${url.service}/resources/scripts/bootbox/bootbox.min.js"></script>
     <script type="text/javascript" src="${url.service}/resources/scripts/moment/moment.min.js"></script>
-    <script type="text/javascript" src="${url.service}/resources/scripts/web-console.js"></script>
+    <script type="text/javascript" src="${url.service}/resources/scripts/control-panel.js"></script>
   </body>
 </html>
+</#macro>
+
+<#macro bundleTable bundles>
+  <table class="bundles table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th class="name">Bundle</th>
+        <th class="state">State</th>        
+        <th class="description">Description</th>
+      </tr>      
+    </thead>
+    <tbody>
+      <#list bundles as bundle>
+        <tr>          
+          <td>
+            <a href="${url.service}/bundles/${bundle.id}">${bundle.name} ${bundle.version}</a>
+          </td>
+          <td>
+            ${bundle.state}
+          </td>
+          <td>
+            ${bundle.manifest.bundleDescription}
+          </td>
+        </tr>
+      </#list>      
+    </tbody>  
+  </table>
 </#macro>

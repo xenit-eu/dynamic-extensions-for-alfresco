@@ -46,8 +46,6 @@ public class InstallationServiceImpl implements InstallationService {
 
 	private static final String LAST_VERSION = "lastVersion";
 
-	private static final String INSTALLATION_COUNT = "installationCount";
-
 	private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
 
 	/* Dependencies */
@@ -81,7 +79,6 @@ public class InstallationServiceImpl implements InstallationService {
 				populateInstallation(installation, properties);
 			}
 		}
-		installation.setInstallationCount(installation.getInstallationCount() + 1);
 		installation.setLastInstalled(now);
 		installation.setLastVersion(extension.getVersion());
 		saveInstallation(file, installation, properties);
@@ -124,7 +121,6 @@ public class InstallationServiceImpl implements InstallationService {
 		if (installation.getLastVersion() != null) {
 			properties.setProperty(LAST_VERSION, installation.getLastVersion());
 		}
-		properties.setProperty(INSTALLATION_COUNT, Integer.toString(installation.getInstallationCount()));
 	}
 
 	protected void populateInstallation(final Installation installation, final Properties properties) {
@@ -138,11 +134,6 @@ public class InstallationServiceImpl implements InstallationService {
 			installation.setLastInstalled(new SimpleDateFormat(DATE_FORMAT).parse(properties
 					.getProperty(LAST_INSTALLED)));
 		} catch (final ParseException e) {
-			// Idem
-		}
-		try {
-			installation.setInstallationCount(Integer.parseInt(properties.getProperty(INSTALLATION_COUNT)));
-		} catch (final NumberFormatException e) {
 			// Idem
 		}
 		installation.setFirstVersion(properties.getProperty(FIRST_VERSION));
