@@ -8,7 +8,7 @@ import javax.annotation.ManagedBean;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
-import nl.runnable.alfresco.extensions.ExtensionRegistry;
+import nl.runnable.alfresco.osgi.Configuration;
 import nl.runnable.alfresco.webscripts.annotations.Attribute;
 import nl.runnable.alfresco.webscripts.annotations.Authentication;
 import nl.runnable.alfresco.webscripts.annotations.AuthenticationType;
@@ -42,7 +42,7 @@ public class ControlPanel implements BundleContextAware {
 	/* Dependencies */
 
 	@Inject
-	private ExtensionRegistry extensionRegistry;
+	private Configuration configuration;
 
 	private BundleContext bundleContext;
 
@@ -61,7 +61,7 @@ public class ControlPanel implements BundleContextAware {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		model.put(TemplateVariables.FRAMEWORK_BUNDLES, bundleHelper.getFrameworkBundles());
 		model.put(TemplateVariables.EXTENSION_BUNDLES, bundleHelper.getExtensionBundles());
-		model.put(TemplateVariables.FILE_INSTALL_PATHS, extensionRegistry.getContainer().getFileInstallPaths());
+		model.put(TemplateVariables.FILE_INSTALL_PATHS, configuration.getFileInstallPaths());
 		return model;
 	}
 

@@ -1,7 +1,6 @@
 package nl.runnable.alfresco.extensions.controlpanel;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.Constants;
 import org.springframework.util.Assert;
 
 import com.springsource.util.osgi.manifest.BundleManifest;
@@ -39,7 +38,7 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 	}
 
 	public String getName() {
-		return bundle.getHeaders().get(Constants.BUNDLE_NAME);
+		return getManifest().getBundleName();
 	}
 
 	public String getState() {

@@ -20,7 +20,7 @@
               ${bundle.state}
             </td>
             <td>
-              ${bundle.manifest.bundleDescription}
+              ${bundle.manifest.bundleDescription!''}
             </td>
           </tr>
         </#list>      

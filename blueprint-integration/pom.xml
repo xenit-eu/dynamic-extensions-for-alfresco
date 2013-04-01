@@ -24,6 +24,7 @@
 			<groupId>org.eclipse.gemini</groupId>
 			<artifactId>org.eclipse.gemini.blueprint.extender</artifactId>
 			<version>${gemini-blueprint.version}</version>
+			<scope>provided</scope>
 			<exclusions>
 				<!-- Excluding Spring dependencies here prevents newer versions from being imported into Eclipse project settings. For 
 					compatibility with Alfresco 3.4, we need to stick to 3.0.0.RELEASE. -->

@@ -1,9 +1,6 @@
-package nl.runnable.alfresco.extensions.impl;
+package nl.runnable.alfresco.osgi;
 
-import java.io.InputStream;
 import java.util.List;
-
-import nl.runnable.alfresco.extensions.RepositoryFolderService;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -16,7 +13,7 @@ import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.alfresco.service.namespace.QName;
 import org.springframework.util.StringUtils;
 
-public class RepositoryFolderServiceImpl implements RepositoryFolderService {
+public class RepositoryFolderService {
 
 	/* Dependencies */
 
@@ -26,57 +23,42 @@ public class RepositoryFolderServiceImpl implements RepositoryFolderService {
 
 	/* Configuration */
 
-	private Descriptions descriptions = new Descriptions();
+	private String baseFolderDescription;
+
+	private String bundleFolderDescription;
+
+	private String configurationFolderDescription;
 
 	/* Main operations */
 
-	@Override
 	public NodeRef getBaseFolder() {
 		final QName name = qName("cm", "dynamic_extensions");
 		final NodeRef dataDictionary = getDataDictionary();
 		NodeRef nodeRef = getChildOf(dataDictionary, name);
 		if (nodeRef == null) {
-			nodeRef = createFolder(dataDictionary, name, "Dynamic Extensions", getDescriptions().getBaseFolder());
+			nodeRef = createFolder(dataDictionary, name, "Dynamic Extensions", getBaseFolderDescription());
 		}
 		return nodeRef;
 	}
 
-	@Override
 	public NodeRef getBundleFolder() {
 		final QName name = qName("cm", "bundles");
 		final NodeRef baseFolder = getBaseFolder();
 		NodeRef nodeRef = getChildOf(baseFolder, name);
 		if (nodeRef == null) {
-			nodeRef = createFolder(baseFolder, name, "Bundles", getDescriptions().getBundleFolder());
+			nodeRef = createFolder(baseFolder, name, "Bundles", getBundleFolderDescription());
 		}
 		return nodeRef;
 	}
 
-	@Override
 	public NodeRef getConfigurationFolder() {
 		final QName name = qName("cm", "configuration");
 		final NodeRef baseFolder = getBaseFolder();
 		NodeRef nodeRef = getChildOf(baseFolder, name);
 		if (nodeRef == null) {
-			nodeRef = createFolder(baseFolder, name, "Configuration", getDescriptions().getConfigurationFolder());
+			nodeRef = createFolder(baseFolder, name, "Configuration", getConfigurationFolderDescription());
 		}
 		return nodeRef;
-	}
-
-	@Override
-	public NodeRef getInstallationHistoryFolder() {
-		final QName name = qName("cm", "installation_history");
-		final NodeRef baseFolder = getBaseFolder();
-		NodeRef nodeRef = getChildOf(baseFolder, name);
-		if (nodeRef == null) {
-			nodeRef = createFolder(baseFolder, name, "Installation History", getDescriptions()
-					.getInstallationHistoryFolder());
-		}
-		return nodeRef;
-	}
-
-	@Override
-	public void saveExtension(final InputStream data) {
 	}
 
 	/* Utility operations */
@@ -169,11 +151,28 @@ public class RepositoryFolderServiceImpl implements RepositoryFolderService {
 
 	/* Configuration */
 
-	public void setDescriptions(final Descriptions descriptions) {
-		this.descriptions = descriptions;
+	protected String getBaseFolderDescription() {
+		return baseFolderDescription;
 	}
 
-	public Descriptions getDescriptions() {
-		return descriptions;
+	public void setBaseFolderDescription(final String baseFolderDescription) {
+		this.baseFolderDescription = baseFolderDescription;
 	}
+
+	protected String getBundleFolderDescription() {
+		return bundleFolderDescription;
+	}
+
+	public void setBundleFolderDescription(final String bundleFolderDescription) {
+		this.bundleFolderDescription = bundleFolderDescription;
+	}
+
+	protected String getConfigurationFolderDescription() {
+		return configurationFolderDescription;
+	}
+
+	public void setConfigurationFolderDescription(final String configurationFolderDescription) {
+		this.configurationFolderDescription = configurationFolderDescription;
+	}
+
 }

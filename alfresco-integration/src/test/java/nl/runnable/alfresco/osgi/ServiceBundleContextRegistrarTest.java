@@ -116,7 +116,6 @@ public class ServiceBundleContextRegistrarTest {
 	@Before
 	public void setup() {
 		serviceBundleContextRegistrar = new ServiceBundleContextRegistrar();
-		serviceBundleContextRegistrar.setVerifyServicesImplementInterfaces(true);
 		serviceBundleContextRegistrar.setServicePropertiesProviders(Arrays
 				.<ServicePropertiesProvider> asList(new ExampleServicePropertiesProvider()));
 		serviceDefinition = new ServiceDefinition(EXAMPLE_SERVICE_BEAN_NAME, EXAMPLE_SERVICE_NAME);

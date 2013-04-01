@@ -37,9 +37,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import nl.runnable.alfresco.extensions.Container;
-import nl.runnable.alfresco.extensions.ExtensionRegistry;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.BundleListener;
@@ -83,7 +80,7 @@ public class FrameworkManager implements ResourceLoaderAware {
 
 	private FileInstallConfigurer fileInstallConfigurer;
 
-	private ExtensionRegistry extensionRegistry;
+	private Configuration configuration;
 
 	/* Configuration */
 
@@ -220,9 +217,7 @@ public class FrameworkManager implements ResourceLoaderAware {
 	 * Registers the {@link Framework} with the {@link ExtensionRegistry}.
 	 */
 	protected void registerFramework() {
-		final Container container = getExtensionRegistry().getContainer();
-		container.setFrameworkBundleId(getFramework().getBundleId());
-		container.setFileInstallPaths(fileInstallConfigurer.getDirectoriesAsAbsolutePaths());
+		getConfiguration().setFileInstallPaths(fileInstallConfigurer.getDirectoriesAsAbsolutePaths());
 	}
 
 	protected void startBundles(final List<Bundle> bundles) {
@@ -352,12 +347,13 @@ public class FrameworkManager implements ResourceLoaderAware {
 		return fileInstallConfigurer;
 	}
 
-	public void setExtensionRegistry(final ExtensionRegistry metadataRegistry) {
-		this.extensionRegistry = metadataRegistry;
+	public void setConfiguration(final Configuration configuration) {
+		Assert.notNull(configuration);
+		this.configuration = configuration;
 	}
 
-	protected ExtensionRegistry getExtensionRegistry() {
-		return extensionRegistry;
+	protected Configuration getConfiguration() {
+		return configuration;
 	}
 
 	/* Configuration */

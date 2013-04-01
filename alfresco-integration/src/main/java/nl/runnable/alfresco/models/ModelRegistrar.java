@@ -1,9 +1,13 @@
 package nl.runnable.alfresco.models;
 
-import java.util.*;
-
-import nl.runnable.alfresco.extensions.Extension;
-import nl.runnable.alfresco.extensions.Model;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.alfresco.repo.dictionary.DictionaryDAO;
 import org.alfresco.repo.dictionary.M2Model;
@@ -30,9 +34,6 @@ public class ModelRegistrar {
 
 	private DictionaryDAO dictionaryDao;
 
-	// Note: dependency is optional.
-	private Extension extension;
-
 	/* Configuration */
 
 	private List<M2Model> models = Collections.emptyList();
@@ -41,60 +42,25 @@ public class ModelRegistrar {
 
 	private final List<QName> registeredModelNames = new ArrayList<QName>();
 
-	/* Operations */
+	/* Main operations */
 
 	public void registerModels() {
-        final Map<String,M2Model> namespaceProviders = new HashMap<String, M2Model>();
-        final List<M2Model> modelsToRegister = getModels();
-        for (M2Model m2Model : modelsToRegister) {
-            for (M2Namespace m2Namespace : m2Model.getNamespaces()) {
-                logger.debug("{} will provide namespace '{}'", m2Model.getName(), m2Namespace.getUri());
-                namespaceProviders.put(m2Namespace.getUri(), m2Model);
-            }
-        }
-        final Set<M2Model> registeredModels = new HashSet<M2Model>(modelsToRegister.size());
-        for (final M2Model model : modelsToRegister) {
-            final Set<M2Model> visitedModels = new HashSet<M2Model>(modelsToRegister.size());
-            registerModel(model, namespaceProviders, registeredModels, visitedModels);
-        }
+		final Map<String, M2Model> namespaceProviders = new HashMap<String, M2Model>();
+		final List<M2Model> modelsToRegister = getModels();
+		for (final M2Model m2Model : modelsToRegister) {
+			for (final M2Namespace m2Namespace : m2Model.getNamespaces()) {
+				logger.debug("{} will provide namespace '{}'", m2Model.getName(), m2Namespace.getUri());
+				namespaceProviders.put(m2Namespace.getUri(), m2Model);
+			}
+		}
+		final Set<M2Model> registeredModels = new HashSet<M2Model>(modelsToRegister.size());
+		for (final M2Model model : modelsToRegister) {
+			final Set<M2Model> visitedModels = new HashSet<M2Model>(modelsToRegister.size());
+			registerModel(model, namespaceProviders, registeredModels, visitedModels);
+		}
 	}
 
-    private void registerModel(final M2Model model, Map<String, M2Model> namespaceProviders,
-                               final Set<M2Model> registeredModels, final Set<M2Model> visitedModels) {
-        visitedModels.add(model);
-        final List<M2Namespace> imports = model.getImports();
-        for (M2Namespace anImport : imports) {
-            final M2Model providingModel = namespaceProviders.get(anImport.getUri());
-            if (providingModel != null && !registeredModels.contains(providingModel)) {
-                Assert.isTrue(
-                        !visitedModels.contains(providingModel),
-                        String.format("Circular dependency detected between %s and %s", model.getName(), providingModel.getName())
-                );
-                logger.debug(
-                        "Discovered {} dependency on '{}', resolving {} first",
-                        new Object[]{model.getName(), anImport.getUri(), providingModel.getName()}
-                );
-                registerModel(providingModel, namespaceProviders, registeredModels, visitedModels);
-            }
-        }
-        if (!registeredModels.contains(model)) {
-            try {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Registering model '{}'", model.getName());
-                }
-                final QName modelName = getDictionaryDao().putModel(model);
-                registeredModelNames.add(modelName);
-                registerModelMetadata(modelName, model);
-                registeredModels.add(model);
-            } catch (final DictionaryException e) {
-                if (logger.isWarnEnabled()) {
-                    logger.warn(String.format("Could not register model '%s'", model.getName()), e);
-                }
-            }
-        }
-    }
-
-    public void unregisterModels() {
+	public void unregisterModels() {
 		for (final Iterator<QName> it = registeredModelNames.iterator(); it.hasNext();) {
 			final QName modelName = it.next();
 			try {
@@ -102,7 +68,6 @@ public class ModelRegistrar {
 					logger.debug("Unregistering model: '{}'", modelName);
 				}
 				getDictionaryDao().removeModel(modelName);
-				unregisterMetadata(modelName);
 			} finally {
 				it.remove();
 			}
@@ -111,22 +76,36 @@ public class ModelRegistrar {
 
 	/* Utility operations */
 
-	protected void registerModelMetadata(final QName qName, final M2Model m2Model) {
-		if (getExtension() == null) {
-			return;
+	private void registerModel(final M2Model model, final Map<String, M2Model> namespaceProviders,
+			final Set<M2Model> registeredModels, final Set<M2Model> visitedModels) {
+		visitedModels.add(model);
+		final List<M2Namespace> imports = model.getImports();
+		for (final M2Namespace anImport : imports) {
+			final M2Model providingModel = namespaceProviders.get(anImport.getUri());
+			if (providingModel != null && !registeredModels.contains(providingModel)) {
+				Assert.isTrue(
+						!visitedModels.contains(providingModel),
+						String.format("Circular dependency detected between %s and %s", model.getName(),
+								providingModel.getName()));
+				logger.debug("Discovered {} dependency on '{}', resolving {} first", new Object[] { model.getName(),
+						anImport.getUri(), providingModel.getName() });
+				registerModel(providingModel, namespaceProviders, registeredModels, visitedModels);
+			}
 		}
-		final Model model = new Model();
-		model.setName(m2Model.getName());
-		model.setVersion(m2Model.getVersion());
-		model.setDescription(m2Model.getDescription());
-		getExtension().registerModel(qName, model);
-	}
-
-	protected void unregisterMetadata(final QName modelName) {
-		if (getExtension() == null) {
-			return;
+		if (!registeredModels.contains(model)) {
+			try {
+				if (logger.isDebugEnabled()) {
+					logger.debug("Registering model '{}'", model.getName());
+				}
+				final QName modelName = getDictionaryDao().putModel(model);
+				registeredModelNames.add(modelName);
+				registeredModels.add(model);
+			} catch (final DictionaryException e) {
+				if (logger.isWarnEnabled()) {
+					logger.warn(String.format("Could not register model '%s'", model.getName()), e);
+				}
+			}
 		}
-		getExtension().unregisterModel(modelName);
 	}
 
 	/* Dependencies */
@@ -138,14 +117,6 @@ public class ModelRegistrar {
 
 	protected DictionaryDAO getDictionaryDao() {
 		return dictionaryDao;
-	}
-
-	public void setExtension(final Extension metadata) {
-		this.extension = metadata;
-	}
-
-	protected Extension getExtension() {
-		return extension;
 	}
 
 	/* Configuration */

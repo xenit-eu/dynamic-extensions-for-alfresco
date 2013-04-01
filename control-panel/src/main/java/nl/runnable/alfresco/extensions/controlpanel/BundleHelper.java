@@ -24,7 +24,7 @@ public class BundleHelper implements BundleContextAware {
 	public List<TemplateBundle> getFrameworkBundles() {
 		final List<TemplateBundle> templateBundles = new ArrayList<TemplateBundle>();
 		for (final Bundle bundle : bundleContext.getBundles()) {
-			if (Boolean.valueOf(bundle.getHeaders().get(ALFRESCO_DYNAMIC_EXTENSION_HEADER)) == false) {
+			if (isDynamicExtension(bundle) == false) {
 				templateBundles.add(new TemplateBundle(bundle));
 			}
 		}
@@ -35,12 +35,26 @@ public class BundleHelper implements BundleContextAware {
 	public List<TemplateBundle> getExtensionBundles() {
 		final List<TemplateBundle> templateBundles = new ArrayList<TemplateBundle>();
 		for (final Bundle bundle : bundleContext.getBundles()) {
-			if (Boolean.valueOf(bundle.getHeaders().get(ALFRESCO_DYNAMIC_EXTENSION_HEADER))) {
+			if (isDynamicExtension(bundle)) {
 				templateBundles.add(new TemplateBundle(bundle));
 			}
 		}
 		Collections.sort(templateBundles);
 		return templateBundles;
+	}
+
+	/* Utility operations */
+
+	/**
+	 * Tests if the given bundle contains a Dynamic Extension.
+	 * <p>
+	 * This implementation looks if the bundle header <code>Alfresco-Dynamic-Extension</code> equals the String "true".
+	 * 
+	 * @param bundle
+	 * @return
+	 */
+	private boolean isDynamicExtension(final Bundle bundle) {
+		return "true".equals(bundle.getHeaders().get(ALFRESCO_DYNAMIC_EXTENSION_HEADER));
 	}
 
 	/* Dependencies */

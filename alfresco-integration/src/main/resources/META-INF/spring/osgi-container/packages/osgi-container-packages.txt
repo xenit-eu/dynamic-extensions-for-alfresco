@@ -9,5 +9,5 @@ nl.runnable.alfresco.actions
 nl.runnable.alfresco.webscripts
 nl.runnable.alfresco.webscripts.annotations
 nl.runnable.alfresco.webscripts.integration
-nl.runnable.alfresco.extensions
 nl.runnable.alfresco.models
+nl.runnable.alfresco.osgi

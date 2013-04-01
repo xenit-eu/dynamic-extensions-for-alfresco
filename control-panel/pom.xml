@@ -22,7 +22,7 @@
 		</dependency>
 		<dependency>
 			<groupId>nl.runnable.alfresco.dynamicextensions</groupId>
-			<artifactId>extension-management</artifactId>
+			<artifactId>alfresco-integration</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>

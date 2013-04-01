@@ -14,11 +14,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>nl.runnable.alfresco.dynamicextensions</groupId>
-			<artifactId>extension-management</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>nl.runnable.alfresco.dynamicextensions</groupId>
 			<artifactId>annotation-handling</artifactId>
 			<version>${project.version}</version>
 		</dependency>

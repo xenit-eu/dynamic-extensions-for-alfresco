@@ -30,7 +30,6 @@ package nl.runnable.alfresco.blueprint;
 import java.io.IOException;
 
 import nl.runnable.alfresco.actions.AnnotationBasedActionRegistrar;
-import nl.runnable.alfresco.extensions.Extension;
 import nl.runnable.alfresco.models.M2ModelListFactoryBean;
 import nl.runnable.alfresco.models.ModelRegistrar;
 import nl.runnable.alfresco.policy.AnnotationBasedBehaviourRegistrar;
@@ -51,7 +50,6 @@ import org.alfresco.service.descriptor.Descriptor;
 import org.alfresco.service.descriptor.DescriptorService;
 import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationContext;
-import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -189,33 +187,12 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 	 * @param beanFactory
 	 */
 	protected void registerInfrastructureBeans(final DefaultListableBeanFactory beanFactory) {
-		registerExtensionBean(beanFactory);
 		if (StringUtils.hasText(getModelLocationPattern())) {
 			registerModelDeploymentBeans(beanFactory);
 		}
 		registerAnnotationBasedBehaviourBeans(beanFactory);
 		registerAnnotationBasedActionBeans(beanFactory);
 		registerAnnotationBasedWebScriptBeans(beanFactory);
-	}
-
-	/**
-	 * Registers the {@link Extension} bean for recording information on the Dynamic Extension.
-	 * <p>
-	 * This implementation initializes the bean's properties with settings from the extension's {@link Bundle}.
-	 * 
-	 * @param beanFactory
-	 */
-	protected void registerExtensionBean(final DefaultListableBeanFactory beanFactory) {
-		if (beanFactory.containsBeanDefinition(BeanNames.EXTENSION) == false) {
-			beanFactory.registerBeanDefinition(
-					BeanNames.EXTENSION,
-					BeanDefinitionBuilder.rootBeanDefinition(Extension.class)
-							.addPropertyValue("bundleId", getBundle().getBundleId())
-							.addPropertyValue("name", getBundle().getHeaders().get(Constants.BUNDLE_NAME))
-							.addPropertyValue("version", getBundle().getVersion().toString())
-							.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE).setInitMethodName("register")
-							.setDestroyMethodName("unregister").getBeanDefinition());
-		}
 	}
 
 	/**

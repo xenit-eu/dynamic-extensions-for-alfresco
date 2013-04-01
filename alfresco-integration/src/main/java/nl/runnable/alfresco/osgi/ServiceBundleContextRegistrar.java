@@ -81,8 +81,6 @@ public class ServiceBundleContextRegistrar implements BundleContextRegistrar, Ap
 
 	private final List<ServiceRegistration<?>> serviceRegistrations = new ArrayList<ServiceRegistration<?>>();
 
-	private boolean verifyServicesImplementInterfaces = false;
-
 	/* Operations */
 
 	@Override
@@ -134,10 +132,6 @@ public class ServiceBundleContextRegistrar implements BundleContextRegistrar, Ap
 					}
 					continue;
 				}
-				if (isVerifyServicesImplementInterfaces()
-						&& verifyServiceImplementsInterfaces(service, serviceNames) == false) {
-					continue;
-				}
 				try {
 					final ServiceRegistration<?> serviceRegistration = registerService(bundleContext, service,
 							serviceNames, beanName, serviceDefinition.getServiceType(), serviceRanking);
@@ -152,30 +146,6 @@ public class ServiceBundleContextRegistrar implements BundleContextRegistrar, Ap
 			logger.info("Registered {} OSGI services.", serviceRegistrations.size());
 		}
 		return Collections.unmodifiableList(serviceRegistrations);
-	}
-
-	protected boolean verifyServiceImplementsInterfaces(final Object service, final List<String> interfaceNames) {
-		Assert.notNull(service, "Service cannot be null.");
-		Assert.notEmpty(interfaceNames, "Interface names cannot be empty.");
-
-		for (final String serviceName : interfaceNames) {
-			try {
-				final Class<?> interfaceClass = Class.forName(serviceName);
-				if (interfaceClass.isInterface() == false) {
-					logger.warn("Service name is not an interface \"{}\". " + "Skipping registration of this service.",
-							serviceName);
-					return false;
-				}
-				if (interfaceClass.isInstance(service) == false) {
-					logger.warn("Service does not implement the interface \"{}\". "
-							+ "Skipping registration of this service.", serviceName);
-					return false;
-				}
-			} catch (final ClassNotFoundException e) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 	protected ServiceRegistration<?> registerService(final BundleContext bundleContext, final Object service,
@@ -258,14 +228,6 @@ public class ServiceBundleContextRegistrar implements BundleContextRegistrar, Ap
 
 	protected List<ServicePropertiesProvider> getServicePropertiesProviders() {
 		return servicePropertiesProviders;
-	}
-
-	public void setVerifyServicesImplementInterfaces(final boolean verifyServicesImplementInterfaces) {
-		this.verifyServicesImplementInterfaces = verifyServicesImplementInterfaces;
-	}
-
-	protected boolean isVerifyServicesImplementInterfaces() {
-		return verifyServicesImplementInterfaces;
 	}
 
 }

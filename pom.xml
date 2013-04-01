@@ -43,7 +43,6 @@
 	<modules>
 		<module>annotations</module>
 		<module>annotation-handling</module>
-		<module>extension-management</module>
 		<module>blueprint-integration</module>
 		<module>alfresco-integration</module>
 		<module>control-panel</module>
