@@ -30,7 +30,9 @@ package nl.runnable.alfresco.webscripts;
 import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
@@ -39,6 +41,7 @@ import nl.runnable.alfresco.webscripts.annotations.Attribute;
 
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.extensions.webscripts.DefaultURLModelFactory;
+import org.springframework.extensions.webscripts.Description.RequiredCache;
 import org.springframework.extensions.webscripts.Format;
 import org.springframework.extensions.webscripts.TemplateProcessor;
 import org.springframework.extensions.webscripts.TemplateProcessorRegistry;
@@ -178,11 +181,29 @@ public class AnnotationBasedWebScriptHandler {
 		if (templateProcessor.hasTemplate(templateName)) {
 			response.setContentType(Format.valueOf(format.toUpperCase()).mimetype());
 			response.setContentEncoding("utf-8");
+			addCacheControlHeaders(webScript, response);
 			templateProcessor.process(templateName, model, response.getWriter());
 		} else {
 			// Friendly error message
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.getWriter().write(String.format("Could not find template: %s", defaultTemplateName));
+		}
+	}
+
+	protected void addCacheControlHeaders(final AnnotationBasedWebScript webScript, final WebScriptResponse response) {
+		final List<String> cacheValues = new ArrayList<String>(3);
+		final RequiredCache requiredCache = webScript.getDescription().getRequiredCache();
+		if (requiredCache != null) {
+			if (requiredCache.getNeverCache()) {
+				cacheValues.add("no-cache");
+				cacheValues.add("no-store");
+			}
+			if (requiredCache.getMustRevalidate()) {
+				cacheValues.add("must-revalidate");
+			}
+		}
+		if (cacheValues.isEmpty() == false) {
+			response.setHeader("Cache-Control", StringUtils.collectionToDelimitedString(cacheValues, ", "));
 		}
 	}
 

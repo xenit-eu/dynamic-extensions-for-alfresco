@@ -237,7 +237,8 @@ public class AnnotationBasedWebScriptBuilder implements BeanFactoryAware {
 		if (cache == null) {
 			cache = getDefaultCacheAnnotation();
 		}
-		// Set remaining properties
+		handleCacheAnnotation(cache, beanName, description);
+
 		description.setDescPath("");
 	}
 
