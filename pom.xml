@@ -47,6 +47,7 @@
 		<module>alfresco-integration</module>
 		<module>control-panel</module>
 		<module>alfresco-module</module>
+		<module>dynamic-extension-archetype</module>
 	</modules>
 
 	<dependencies>
