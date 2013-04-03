@@ -8,10 +8,13 @@ import javax.annotation.ManagedBean;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
+import nl.runnable.alfresco.extensions.controlpanel.template.TemplateBundle;
+import nl.runnable.alfresco.extensions.controlpanel.template.Variables;
 import nl.runnable.alfresco.osgi.Configuration;
 import nl.runnable.alfresco.webscripts.annotations.Attribute;
 import nl.runnable.alfresco.webscripts.annotations.Authentication;
 import nl.runnable.alfresco.webscripts.annotations.AuthenticationType;
+import nl.runnable.alfresco.webscripts.annotations.Cache;
 import nl.runnable.alfresco.webscripts.annotations.HttpMethod;
 import nl.runnable.alfresco.webscripts.annotations.RequestParam;
 import nl.runnable.alfresco.webscripts.annotations.Uri;
@@ -35,6 +38,7 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 @ManagedBean
 @WebScript
 @Authentication(AuthenticationType.ADMIN)
+@Cache(neverCache = true)
 public class ControlPanel implements BundleContextAware {
 
 	private static final int FRAMEWORK_BUNDLE_ID = 0;
@@ -59,9 +63,9 @@ public class ControlPanel implements BundleContextAware {
 	@Uri(method = HttpMethod.GET, value = "/dynamic-extensions/", defaultFormat = "html")
 	public Map<String, Object> index() {
 		final Map<String, Object> model = new HashMap<String, Object>();
-		model.put(TemplateVariables.FRAMEWORK_BUNDLES, bundleHelper.getFrameworkBundles());
-		model.put(TemplateVariables.EXTENSION_BUNDLES, bundleHelper.getExtensionBundles());
-		model.put(TemplateVariables.FILE_INSTALL_PATHS, configuration.getFileInstallPaths());
+		model.put(Variables.FRAMEWORK_BUNDLES, bundleHelper.getFrameworkBundles());
+		model.put(Variables.EXTENSION_BUNDLES, bundleHelper.getExtensionBundles());
+		model.put(Variables.FILE_INSTALL_PATHS, configuration.getFileInstallPaths());
 		return model;
 	}
 
@@ -86,9 +90,9 @@ public class ControlPanel implements BundleContextAware {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		final Bundle bundle = bundleContext.getBundle(id);
 		if (bundle != null) {
-			model.put(TemplateVariables.BUNDLE, new TemplateBundle(bundle));
+			model.put(Variables.BUNDLE, new TemplateBundle(bundle));
 		} else {
-			model.put(TemplateVariables.ID, id);
+			model.put(Variables.ID, id);
 			responseHelper.status(HttpServletResponse.SC_NOT_FOUND);
 		}
 		return model;

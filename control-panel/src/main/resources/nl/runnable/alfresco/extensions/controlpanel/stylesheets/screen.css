@@ -51,3 +51,19 @@ table.bundle ul {
   list-style: none;
   margin: 0;
 }
+
+table.package th.name {
+  width: 60%;
+}
+
+table.package td.name {
+  font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
+}
+
+table.imported.package th.version {
+  width: 20%;
+}
+
+table.exported.package th.version {
+  width: 40%;
+}

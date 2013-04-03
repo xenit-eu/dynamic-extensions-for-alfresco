@@ -25,27 +25,35 @@ class ResponseHelper {
 		this.response = response;
 	}
 
-	public void redirectToService(String path) {
+	public ResponseHelper redirectToService(String path) {
 		Assert.hasText(path);
 		if (path.startsWith("/") == false) {
 			path = "/" + path;
 		}
 		response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY); // 302
 		response.setHeader("Location", request.getServiceContextPath() + path);
+		return this;
 	}
 
-	public void redirectToIndex() {
+	public ResponseHelper redirectToIndex() {
 		redirectToService("/dynamic-extensions");
+		return this;
 	}
 
-	public void status(final int status, final String message) throws IOException {
+	public ResponseHelper status(final int status, final String message) throws IOException {
 		response.setStatus(status);
 		if (StringUtils.hasText(message)) {
 			response.getWriter().write(message);
 		}
+		return this;
 	}
 
-	public void status(final int status) throws IOException {
-		status(status, null);
+	public ResponseHelper status(final int status) throws IOException {
+		return status(status, null);
+	}
+
+	public ResponseHelper noCache() {
+		response.setHeader("Cache-Control", "no-cache, nostore");
+		return this;
 	}
 }

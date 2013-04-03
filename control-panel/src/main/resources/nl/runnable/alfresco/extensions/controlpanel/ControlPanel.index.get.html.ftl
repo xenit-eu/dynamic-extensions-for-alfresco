@@ -12,7 +12,7 @@
       </thead>
       <tbody>
         <#list bundles as bundle>
-          <tr>          
+          <tr class="<#if bundle.state == 'installed'>error</#if>">
             <td>
               <a href="bundles/${bundle.id}">${bundle.name} ${bundle.version}</a>
             </td>

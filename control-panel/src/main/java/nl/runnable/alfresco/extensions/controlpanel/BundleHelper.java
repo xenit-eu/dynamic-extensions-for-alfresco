@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.annotation.ManagedBean;
 
+import nl.runnable.alfresco.extensions.controlpanel.template.TemplateBundle;
+
 import org.eclipse.gemini.blueprint.context.BundleContextAware;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;

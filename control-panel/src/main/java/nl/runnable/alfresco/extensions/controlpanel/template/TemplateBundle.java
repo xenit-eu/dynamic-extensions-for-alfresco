@@ -1,10 +1,16 @@
-package nl.runnable.alfresco.extensions.controlpanel;
+package nl.runnable.alfresco.extensions.controlpanel.template;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.Version;
 import org.springframework.util.Assert;
 
 import com.springsource.util.osgi.manifest.BundleManifest;
 import com.springsource.util.osgi.manifest.BundleManifestFactory;
+import com.springsource.util.osgi.manifest.ExportedPackage;
+import com.springsource.util.osgi.manifest.ImportedPackage;
 
 /**
  * Adapts an {@link Bundle} for display purposes in a Freemarker template.
@@ -20,7 +26,7 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 
 	private BundleManifest manifest;
 
-	TemplateBundle(final Bundle bundle) {
+	public TemplateBundle(final Bundle bundle) {
 		Assert.notNull(bundle);
 		this.bundle = bundle;
 	}
@@ -66,6 +72,30 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 		}
 		return manifest;
 	}
+
+	public List<TemplateImportedPackage> getImportedPackages() {
+		final List<TemplateImportedPackage> packages = new ArrayList<TemplateImportedPackage>();
+		for (final ImportedPackage importedPackage : getManifest().getImportPackage().getImportedPackages()) {
+			final TemplateImportedPackage bundlePackage = new TemplateImportedPackage();
+			bundlePackage.setName(importedPackage.getPackageName());
+			final Version ceiling = importedPackage.getVersion().getCeiling();
+			if (ceiling != null) {
+				bundlePackage.setMaxVersion(ceiling.toString());
+			}
+			final Version floor = importedPackage.getVersion().getFloor();
+			if (floor != null) {
+				bundlePackage.setMinVersion(floor.toString());
+			}
+			packages.add(bundlePackage);
+		}
+		return packages;
+	}
+
+	public List<ExportedPackage> getExportedPackages() {
+		return getManifest().getExportPackage().getExportedPackages();
+	}
+
+	/* Utility operations */
 
 	@Override
 	public int compareTo(final TemplateBundle other) {
