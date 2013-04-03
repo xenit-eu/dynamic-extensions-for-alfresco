@@ -6,12 +6,14 @@
     bootbox.animate(false);
 
     var lastUpdated = new Date();
-
-    var refreshLastUpdated = function() {
+    var refreshTimes = function() {
       $('#last-updated').text(moment(lastUpdated).fromNow());
+      $('span[data-time]').each(function() {
+        $(this).text(moment($(this).data('time')).fromNow());
+      });
     };
-    refreshLastUpdated();
-    window.setInterval(refreshLastUpdated, 60000);
+    refreshTimes();
+    window.setInterval(refreshTimes, 60000);
 
     $('a[data-method="post"]').on('click', function(event) {
       event.preventDefault();
@@ -39,8 +41,27 @@
       window.setTimeout(function() {
         window.location.reload();
       }, wait);
-            
     });
+
+    $('form[data-confirm]').on('submit', function(event) {
+      event.preventDefault();
+
+      var title = $(this).data('title') || 'Confirm';
+      var contents = "<h2>" + title + "</h2>";
+      contents += "<p>" + $(this).data('confirm') + "</p>";
+
+      var self = this;
+      bootbox.confirm(contents, function(confirmed) {
+        if (confirmed) {
+          self.submit();
+        }
+      });
+    });
+
+    $('form input[data-autosubmit="true"]').on('change', function() {
+      this.form.submit();
+    });
+
   });
 
 })($);

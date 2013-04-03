@@ -57,6 +57,8 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		<property name="fileInstallConfigurer" ref="osgi.container.FileInstallConfigurer" />
 		<property name="fileInstallEnabled" value="${osgi.container.bundle-update:true}" />
 		<property name="configuration" ref="osgi.container.Configuration" />
+		<property name="repositoryFolderService" ref="osgi.container.RepositoryFolderService" />
+		<property name="contentService" ref="contentService" />
 	</bean>
 
 	<bean id="osgi.container.FileInstallConfigurer" class="nl.runnable.alfresco.osgi.FileInstallConfigurer"
@@ -73,6 +75,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	<bean id="osgi.container.RepositoryFolderService" class="nl.runnable.alfresco.osgi.RepositoryFolderService">
 		<property name="namespacePrefixResolver" ref="namespaceService" />
 		<property name="nodeService" ref="nodeService" />
+		<property name="fileFolderService" ref="fileFolderService" />
 		<property name="baseFolderDescription">
 			<value>
 				Dynamic Extensions for Alfresco. https://github.com/lfridael/dynamic-extensions-for-alfresco

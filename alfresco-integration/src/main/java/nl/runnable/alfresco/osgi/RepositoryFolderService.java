@@ -1,16 +1,20 @@
 package nl.runnable.alfresco.osgi;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
+import org.alfresco.service.cmr.model.FileFolderService;
+import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.alfresco.service.namespace.QName;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 public class RepositoryFolderService {
@@ -20,6 +24,8 @@ public class RepositoryFolderService {
 	private NodeService nodeService;
 
 	private NamespacePrefixResolver namespacePrefixResolver;
+
+	private FileFolderService fileFolderService;
 
 	/* Configuration */
 
@@ -42,13 +48,7 @@ public class RepositoryFolderService {
 	}
 
 	public NodeRef getBundleFolder() {
-		final QName name = qName("cm", "bundles");
-		final NodeRef baseFolder = getBaseFolder();
-		NodeRef nodeRef = getChildOf(baseFolder, name);
-		if (nodeRef == null) {
-			nodeRef = createFolder(baseFolder, name, "Bundles", getBundleFolderDescription());
-		}
-		return nodeRef;
+		return getBundleFolder(true);
 	}
 
 	public NodeRef getConfigurationFolder() {
@@ -61,6 +61,24 @@ public class RepositoryFolderService {
 		return nodeRef;
 	}
 
+	/**
+	 * Obtains the JAR files in the Bundle folder.
+	 * 
+	 * @return
+	 */
+	public List<FileInfo> getJarFilesInBundleFolder() {
+		final List<FileInfo> jarFiles = new ArrayList<FileInfo>();
+		final NodeRef bundleFolder = getBundleFolder(false);
+		if (bundleFolder != null) {
+			for (final FileInfo file : getFileFolderService().listFiles(bundleFolder)) {
+				if (file.getName().endsWith(".jar")) {
+					jarFiles.add(file);
+				}
+			}
+		}
+		return jarFiles;
+	}
+
 	/* Utility operations */
 
 	protected NodeRef getDataDictionary() {
@@ -69,6 +87,16 @@ public class RepositoryFolderService {
 
 	protected NodeRef getCompanyHome() {
 		return getChildOfRootNode(qName("app", "company_home"));
+	}
+
+	protected NodeRef getBundleFolder(final boolean createIfNotExists) {
+		final QName name = qName("cm", "bundles");
+		final NodeRef baseFolder = getBaseFolder();
+		NodeRef nodeRef = getChildOf(baseFolder, name);
+		if (nodeRef == null && createIfNotExists) {
+			nodeRef = createFolder(baseFolder, name, "Bundles", getBundleFolderDescription());
+		}
+		return nodeRef;
 	}
 
 	protected NodeRef createFolder(final NodeRef parentFolder, final QName qName, final String name,
@@ -134,6 +162,7 @@ public class RepositoryFolderService {
 	/* Dependencies */
 
 	public void setNodeService(final NodeService nodeService) {
+		Assert.notNull(nodeService);
 		this.nodeService = nodeService;
 	}
 
@@ -142,11 +171,21 @@ public class RepositoryFolderService {
 	}
 
 	public void setNamespacePrefixResolver(final NamespacePrefixResolver namespacePrefixResolver) {
+		Assert.notNull(namespacePrefixResolver);
 		this.namespacePrefixResolver = namespacePrefixResolver;
 	}
 
 	protected NamespacePrefixResolver getNamespacePrefixResolver() {
 		return namespacePrefixResolver;
+	}
+
+	public void setFileFolderService(final FileFolderService fileFolderService) {
+		Assert.notNull(fileFolderService);
+		this.fileFolderService = fileFolderService;
+	}
+
+	protected FileFolderService getFileFolderService() {
+		return fileFolderService;
 	}
 
 	/* Configuration */

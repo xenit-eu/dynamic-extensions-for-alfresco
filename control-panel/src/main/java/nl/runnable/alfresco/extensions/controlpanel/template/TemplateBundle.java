@@ -47,6 +47,14 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 		return getManifest().getBundleName();
 	}
 
+	public String getLocation() {
+		return bundle.getLocation();
+	}
+
+	public long getLastModified() {
+		return bundle.getLastModified();
+	}
+
 	public String getState() {
 		switch (bundle.getState()) {
 		case Bundle.UNINSTALLED:
@@ -64,6 +72,10 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 		default:
 			return null;
 		}
+	}
+
+	public boolean isDeleteable() {
+		return getLocation().startsWith("/Repository/");
 	}
 
 	public BundleManifest getManifest() {

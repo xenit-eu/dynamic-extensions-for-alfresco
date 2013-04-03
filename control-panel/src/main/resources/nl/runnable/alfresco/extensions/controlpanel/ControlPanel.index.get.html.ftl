@@ -1,61 +1,62 @@
 <#import "templates/html-macros.inc.ftl" as html>
-<@html.document title="Control Panel - Dynamic Extensions">
+<@html.document title="Control Panel - Dynamic Extensions" active="extensions">
 
-  <#macro bundleTable bundles>
-    <table class="bundles table table-bordered table-striped">
-      <thead>
-        <tr>
-          <th class="name">Bundle</th>
-          <th class="state">Status</th>        
-          <th class="description">Description</th>
-        </tr>      
-      </thead>
-      <tbody>
-        <#list bundles as bundle>
-          <tr class="<#if bundle.state == 'installed'>error</#if>">
-            <td>
-              <a href="bundles/${bundle.id}">${bundle.name} ${bundle.version}</a>
-            </td>
-            <td>
-              ${bundle.state}
-            </td>
-            <td>
-              ${bundle.manifest.bundleDescription!''}
-            </td>
-          </tr>
-        </#list>      
-      </tbody>  
-    </table>
-  </#macro>
+  <#if installedBundle??>
+    <@html.alert type="success">
+      Installed Bundle <a href="bundles/${installedBundle.id}">${installedBundle.name} ${installedBundle.version}</a>.
+    </@html.alert>
+  </#if>
 
   <h2>Extensions</h2>
-  <@bundleTable bundles=extensionBundles />
 
-  <p>Install extensions by placing their OSGi bundle JARs in one of the following directories:</p>
-  <ul>
-    <#list fileInstallPaths as path>
-      <li>
-        <code>${path}</code>
-      </li>
-    </#list>
-  </ul>
+  <@html.bundleTable bundles = extensionBundles />
 
-  <h2>Framework</h2>
-  <@bundleTable bundles=frameworkBundles />  
+  <h2>Manage OSGi bundles</h2>
 
-  <p>    
-    <a href="${url.service}/framework/restart" 
-      data-method="post" 
-      data-wait="5000" 
-      data-title="Restarting Framework" 
-      data-message="Please wait while the Framework restarts. (You may have to refresh manually to see the latest status.)" 
-      data-button="Update now"
-      class="btn">
-      Restart Framework
-    </a>
-  </p>
+  <h3>Filesystem</h3>
 
-  <form id="post" method="post" target="postFrame"></form>
-  <iframe name="postFrame" style="display: none;"></iframe>
+  <#if (fileInstallPaths?size > 0)>
+    <p>Manage OSGi bundles from one of the following filesystem directories:</p>
+    <ul>
+      <#list fileInstallPaths as path>
+        <li>
+          <code>${path}</code>
+        </li>
+      </#list>
+    </ul>
+    <p>The bundles will be installed/uninstalled automatically.</p>
+  <#else>
+    <p>Managing OSGi bundles through the filesystem is currently disabled.</p>
+    <p>
+      <a href="configuration" class="btn">Configure</a>
+    </p>
+  </#if>
+
+  <h3>Repository</h3>
+
+  <form action="install-bundle" enctype="multipart/form-data" method="post">
+    <div class="control-group">
+      <div class="control-label">
+        <label>Alternatively, upload an OSGi bundle here:</label>
+      </div>
+      <div class="controls">
+        <div class="fileupload fileupload-new" data-provides="fileupload">
+          <div class="input-append">
+            <div class="uneditable-input span5">
+              <i class="icon-file fileupload-exists"></i> <span class="fileupload-preview"></span>
+            </div>
+            <span class="btn btn-file">
+              <span class="fileupload-new">Select JAR file</span>
+              <span class="fileupload-exists">Select JAR file</span>
+              <input type="file" name="file" data-autosubmit="true"/>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <p>The bundle will be stored in <code>/Company Home/Data Dictionary/Dynamic Extensions/Bundles</code>.</p>
+    </div>
+  </form>
 
 </@html.document>

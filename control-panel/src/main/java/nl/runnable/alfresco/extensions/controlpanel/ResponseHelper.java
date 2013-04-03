@@ -4,8 +4,11 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
+import nl.runnable.alfresco.extensions.controlpanel.template.Variables;
+
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
+import org.springframework.extensions.webscripts.WebScriptSession;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
@@ -35,8 +38,28 @@ class ResponseHelper {
 		return this;
 	}
 
+	public void setFlashVariable(final String name, final Object value) {
+		request.getRuntime().getSession().setValue(name, value);
+	}
+
+	public void flashErrorMessage(final String errorMessage) {
+		setFlashVariable(Variables.ERROR_MESSAGE, errorMessage);
+	}
+
+	public void flashSuccessMessage(final String successMessage) {
+		setFlashVariable(Variables.SUCCESS_MESSAGE, successMessage);
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T> T getFlashVariable(final String name) {
+		final WebScriptSession session = request.getRuntime().getSession();
+		final T value = (T) session.getValue(name);
+		session.removeValue(name);
+		return value;
+	}
+
 	public ResponseHelper redirectToIndex() {
-		redirectToService("/dynamic-extensions");
+		redirectToService("/dynamic-extensions/");
 		return this;
 	}
 

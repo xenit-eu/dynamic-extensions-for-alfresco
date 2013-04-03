@@ -37,6 +37,10 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.alfresco.model.ContentModel;
+import org.alfresco.service.cmr.model.FileInfo;
+import org.alfresco.service.cmr.repository.ContentReader;
+import org.alfresco.service.cmr.repository.ContentService;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.BundleListener;
@@ -82,6 +86,10 @@ public class FrameworkManager implements ResourceLoaderAware {
 
 	private Configuration configuration;
 
+	private RepositoryFolderService repositoryFolderService;
+
+	private ContentService contentService;
+
 	/* Configuration */
 
 	private List<BundleListener> bundleListeners = Collections.emptyList();
@@ -96,6 +104,8 @@ public class FrameworkManager implements ResourceLoaderAware {
 
 	private boolean fileInstallEnabled = true;
 
+	private boolean repositoryInstallEnabled = true;
+
 	/**
 	 * Starts the {@link Framework} and registers services and {@link BundleListener}s.
 	 * 
@@ -108,8 +118,12 @@ public class FrameworkManager implements ResourceLoaderAware {
 		registerServices();
 		startBundles(coreBundles);
 		if (isFileInstallEnabled() == false) {
-			final List<Bundle> extensionBundles = installExtensionBundles();
-			startBundles(extensionBundles);
+			// Start the bundles manually.
+			// TODO: Determine if this is the correct way to handle this.
+			startBundles(installFilesystemBundles());
+		}
+		if (isRepositoryInstallEnabled()) {
+			startBundles(installRepositoryBundles());
 		}
 		registerBundleListeners();
 		registerServiceListeners();
@@ -177,7 +191,14 @@ public class FrameworkManager implements ResourceLoaderAware {
 
 	}
 
-	protected List<Bundle> installExtensionBundles() {
+	/**
+	 * Installs the Bundles on the filesystem.
+	 * <p>
+	 * This implementation looks for JAR files in the directories configured for File Install.
+	 * 
+	 * @return
+	 */
+	protected List<Bundle> installFilesystemBundles() {
 		final List<Bundle> bundles = new ArrayList<Bundle>();
 		for (final String directory : getFileInstallConfigurer().getDirectoriesAsAbsolutePaths()) {
 			final File dir = new File(directory);
@@ -203,11 +224,34 @@ public class FrameworkManager implements ResourceLoaderAware {
 					final Bundle bundle = getFramework().getBundleContext().installBundle(location,
 							new FileInputStream(jarFile));
 					bundles.add(bundle);
-				} catch (final BundleException e) {
-					logger.warn("Error installing Bundle: {}", e);
-				} catch (final IOException e) {
-					throw new RuntimeException(e);
+				} catch (final Exception e) {
+					logger.warn("Error installing Bundle: {}", e.getMessage(), e);
 				}
+			}
+		}
+		return bundles;
+	}
+
+	/**
+	 * Installs the Bundles in the repository.
+	 * <p>
+	 * This implementation uses RepositoryFolderService.
+	 */
+	protected List<Bundle> installRepositoryBundles() {
+		final List<Bundle> bundles = new ArrayList<Bundle>();
+		for (final FileInfo jarFile : getRepositoryFolderService().getJarFilesInBundleFolder()) {
+			try {
+				final String location = String.format("/Repository/%s", jarFile.getName());
+				if (logger.isDebugEnabled()) {
+					logger.debug("Installing Bundle: {}", location);
+				}
+				final ContentReader reader = getContentService().getReader(jarFile.getNodeRef(),
+						ContentModel.PROP_CONTENT);
+				final Bundle bundle = getFramework().getBundleContext().installBundle(location,
+						reader.getContentInputStream());
+				bundles.add(bundle);
+			} catch (final Exception e) {
+				logger.warn("Error installing Bundle: {}", e.getMessage(), e);
 			}
 		}
 		return bundles;
@@ -356,6 +400,24 @@ public class FrameworkManager implements ResourceLoaderAware {
 		return configuration;
 	}
 
+	public void setRepositoryFolderService(final RepositoryFolderService repositoryFolderService) {
+		Assert.notNull(repositoryFolderService);
+		this.repositoryFolderService = repositoryFolderService;
+	}
+
+	protected RepositoryFolderService getRepositoryFolderService() {
+		return repositoryFolderService;
+	}
+
+	public void setContentService(final ContentService contentService) {
+		Assert.notNull(contentService);
+		this.contentService = contentService;
+	}
+
+	protected ContentService getContentService() {
+		return contentService;
+	}
+
 	/* Configuration */
 
 	protected BundleHelper getBundleHelper() {
@@ -412,6 +474,14 @@ public class FrameworkManager implements ResourceLoaderAware {
 
 	protected boolean isFileInstallEnabled() {
 		return fileInstallEnabled;
+	}
+
+	public void setRepositoryInstallEnabled(final boolean repositoryInstallEnabled) {
+		this.repositoryInstallEnabled = repositoryInstallEnabled;
+	}
+
+	public boolean isRepositoryInstallEnabled() {
+		return repositoryInstallEnabled;
 	}
 
 }

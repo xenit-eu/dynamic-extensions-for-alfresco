@@ -2,7 +2,7 @@
   padding-top: 50px;
 }
 
-#footer > .container .last-updated {
+#footer > .container p {
   margin: 20px 0;
 }
 
@@ -40,11 +40,11 @@ form#post {
 
 
 table.bundle th.name {
-  width: 34%;
+  width: 25%;
 }
 
 table.bundle td.value {
-  width: 66%;
+  width: 75%;
 }
 
 table.bundle ul {

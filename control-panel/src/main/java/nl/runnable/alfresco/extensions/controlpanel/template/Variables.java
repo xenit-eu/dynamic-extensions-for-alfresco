@@ -1,5 +1,7 @@
 package nl.runnable.alfresco.extensions.controlpanel.template;
 
+import org.osgi.framework.Bundle;
+
 public class Variables {
 
 	/**
@@ -26,6 +28,26 @@ public class Variables {
 	 * Refers to a resource ID.
 	 */
 	public static final String ID = "id";
+
+	/**
+	 * Refers to a {@link TemplateBundle} representing a newly-installed {@link Bundle}.
+	 */
+	public static final String INSTALLED_BUNDLE = "installedBundle";
+
+	/**
+	 * Refers to a {@link TemplateBundle} representing an uninstalled {@link Bundle}.
+	 */
+	public static final String DELETED_BUNDLE = "deletedBundle";
+
+	/**
+	 * Refers to a String specifying an error message.
+	 */
+	public static final String ERROR_MESSAGE = "errorMessage";
+
+	/**
+	 * Refers to a String specifying a success message.
+	 */
+	public static final String SUCCESS_MESSAGE = "successMessage";
 
 	private Variables() {
 	}

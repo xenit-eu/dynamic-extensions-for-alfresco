@@ -12,9 +12,6 @@
     </tr>
   </#macro>
 
-  <#macro listPackages packages>
-  </#macro>
-
   <h2>${bundle.name} ${bundle.version}</h2>
 
   <table class="bundle table table-striped table-bordered">
@@ -22,7 +19,25 @@
     <@header name="Version">${bundle.version}</@header>
     <@header name="Status">${bundle.state}</@header>
     <@header name="Description">${bundle.manifest.bundleDescription!""}</@header>
+    <@header name="Location">${bundle.location!""}</@header>
+    <@header name="Last Modified">
+      <span data-time="${bundle.lastModified?string.computer}"></span>
+    </@header>
   </table>
+
+  <#if bundle.deleteable>
+    <div class="uninstall">
+      <form action="delete-bundle" method="post" 
+        data-title="Delete Bundle"
+        data-confirm="Are you sure you want to delete this Bundle?">
+        <input type="hidden" name="id" value="${bundle.id?string.computer}" />
+        <p>
+          <button class="btn btn-danger">Delete Bundle</button>
+          This removes the Bundle from the repository.
+        </p>
+      </form>
+    </div>
+  </#if>
 
   <#if bundle.state == 'installed'>
     <div class="alert alert-error alert-block">
@@ -36,11 +51,19 @@
       </p>
       <ul>
         <li>
-          <a href="bundles/0">The OSGi Framework</a>: provides Java, OSGI, Alfresco API and Spring 
-          packages from the Alfresco repository application.
+          <a href="bundles/0">The System Bundle</a>
+          <br/>
+          Provides access to packages that comprise the Java platform and the Alfresco repository. 
         </li>
         <li>
-          <a href="">Other OSGi bundles</a>
+          <a href="framework">Framework bundles</a>
+          <br/>
+          These form the core Dynamic Extensions infrastructure.
+        </li>
+        <li>
+          <a href="">Other Dynamic Extensions</a>
+          <br/>
+          Extensions may export their packages and services for use by other extensions.
         </li>
       </ul>
       <p>
@@ -49,13 +72,12 @@
       </p>
       <p>
         <em>
-          The bundle may also have missing <code>Import-Bundle</code> or <code>Import-Library</code> dependencies.
-          These types of dependency should generally not be used with Dynamic Extensions.
+          The bundle may have missing <code>Import-Bundle</code> or <code>Import-Library</code> dependencies.
+          These types of dependency are generally not be used with Dynamic Extensions.
         </em>
       </p>
     </div>
   </#if>
-
 
   <h2>Imported packages</h2>  
   <#if (bundle.importedPackages?size > 0)>
