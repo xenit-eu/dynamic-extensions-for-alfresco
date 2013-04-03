@@ -18,6 +18,19 @@ import org.springframework.extensions.webscripts.servlet.WebScriptServletRespons
  */
 class WebScriptUtil {
 
+	static WebScriptServletRequest extractWebScriptServletRequest(final WebScriptRequest request) {
+		WebScriptServletRequest webScriptServletRequest = null;
+		if (request instanceof WrappingWebScriptRequest) {
+			final WebScriptRequest nextRequest = ((WrappingWebScriptRequest) request).getNext();
+			if (nextRequest instanceof WebScriptServletRequest) {
+				webScriptServletRequest = ((WebScriptServletRequest) nextRequest);
+			} else if (nextRequest != null) {
+				extractWebScriptServletRequest(nextRequest);
+			}
+		}
+		return webScriptServletRequest;
+	}
+
 	/**
 	 * Extracts the {@link HttpServletRequest} from the given {@link WebScriptRequest}.
 	 * 

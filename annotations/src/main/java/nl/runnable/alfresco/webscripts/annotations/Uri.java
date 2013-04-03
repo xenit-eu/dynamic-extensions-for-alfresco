@@ -44,4 +44,6 @@ public @interface Uri {
 
 	String defaultFormat() default "";
 
+	boolean multipartProcessing() default false;
+
 }

@@ -216,6 +216,7 @@ public class AnnotationBasedWebScriptBuilder implements BeanFactoryAware {
 		if (StringUtils.hasText(uri.defaultFormat())) {
 			description.setDefaultFormat(uri.defaultFormat());
 		}
+		description.setMultipartProcessing(uri.multipartProcessing());
 	}
 
 	protected void handleTypeAnnotations(final String beanName, final DescriptionImpl description) {

@@ -40,6 +40,10 @@ class AttributesWebScriptRequest implements WebScriptRequest {
 		return attributes;
 	}
 
+	public WebScriptRequest getWebScriptRequest() {
+		return webScriptRequest;
+	}
+
 	/* Delegate methods */
 
 	@Override

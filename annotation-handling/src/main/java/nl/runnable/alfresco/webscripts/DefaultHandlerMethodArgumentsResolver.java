@@ -75,6 +75,7 @@ public class DefaultHandlerMethodArgumentsResolver implements HandlerMethodArgum
 		argumentResolvers.add((ArgumentResolver) new HttpServletRequestArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new HttpServletResponseArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new TemplateProcessorRegistryArgumentResolver());
+		argumentResolvers.add((ArgumentResolver) new FileFieldArgumentResolver());
 	}
 
 	@Override
