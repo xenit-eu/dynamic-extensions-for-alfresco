@@ -5,15 +5,17 @@
   <@html.bundleTable bundles=frameworkBundles />  
 
   <p>    
-    <a href="${url.service}/framework/restart" 
+    <a href="framework/restart" 
       data-method="post" 
-      data-wait="5000" 
+      data-wait="15000" 
       data-title="Restarting Framework" 
-      data-message="Please wait while the Framework restarts. (You may have to refresh manually to see the latest status.)" 
+      data-message="<p>Please wait while the Framework restarts. The page will refresh automatically.</p>
+        <p>Getting a 404 Not Found? Wait a few seconds, then refresh the page.</p>" 
       data-button="Update now"
       class="btn">
       Restart Framework
     </a>
+    The Control Panel will be unavailable while the framework is restarting.
   </p>
 
 </@html.document>

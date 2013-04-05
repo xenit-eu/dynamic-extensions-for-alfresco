@@ -86,7 +86,7 @@ public class FrameworkManager implements ResourceLoaderAware {
 
 	private Configuration configuration;
 
-	private RepositoryFolderService repositoryFolderService;
+	private RepositoryStorageService repositoryStorageService;
 
 	private ContentService contentService;
 
@@ -235,11 +235,11 @@ public class FrameworkManager implements ResourceLoaderAware {
 	/**
 	 * Installs the Bundles in the repository.
 	 * <p>
-	 * This implementation uses RepositoryFolderService.
+	 * This implementation uses RepositoryStorageService.
 	 */
 	protected List<Bundle> installRepositoryBundles() {
 		final List<Bundle> bundles = new ArrayList<Bundle>();
-		for (final FileInfo jarFile : getRepositoryFolderService().getJarFilesInBundleFolder()) {
+		for (final FileInfo jarFile : getRepositoryStorageService().getJarFilesInBundleFolder()) {
 			try {
 				final String location = String.format("/Repository/%s", jarFile.getName());
 				if (logger.isDebugEnabled()) {
@@ -343,8 +343,10 @@ public class FrameworkManager implements ResourceLoaderAware {
 				logger.debug("Stopping Framework.");
 			}
 			getFramework().stop();
+			getFramework().waitForStop(0);
 		} catch (final BundleException e) {
 			logger.error("Could not stop Framework.", e);
+		} catch (final InterruptedException e) {
 		}
 	}
 
@@ -400,13 +402,13 @@ public class FrameworkManager implements ResourceLoaderAware {
 		return configuration;
 	}
 
-	public void setRepositoryFolderService(final RepositoryFolderService repositoryFolderService) {
+	public void setRepositoryStorageService(final RepositoryStorageService repositoryFolderService) {
 		Assert.notNull(repositoryFolderService);
-		this.repositoryFolderService = repositoryFolderService;
+		this.repositoryStorageService = repositoryFolderService;
 	}
 
-	protected RepositoryFolderService getRepositoryFolderService() {
-		return repositoryFolderService;
+	protected RepositoryStorageService getRepositoryStorageService() {
+		return repositoryStorageService;
 	}
 
 	public void setContentService(final ContentService contentService) {

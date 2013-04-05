@@ -10,4 +10,5 @@ osgi.container.NamespaceHandlerResolver:org.springframework.beans.factory.xml.Na
 osgi.container.EntityResolver:org.xml.sax.EntityResolver
 osgi.container.ActionExecuterRegistry:nl.runnable.alfresco.actions.ActionExecuterRegistry
 osgi.container.Configuration:nl.runnable.alfresco.osgi.Configuration
-osgi.container.RepositoryFolderService:nl.runnable.alfresco.osgi.RepositoryFolderService
+osgi.container.RepositoryStorageService:nl.runnable.alfresco.osgi.RepositoryStorageService
+osgi.container.FrameworkService:nl.runnable.alfresco.osgi.FrameworkService

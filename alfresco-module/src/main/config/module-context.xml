@@ -9,20 +9,22 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<import resource="classpath:/META-INF/spring/module/action-integration-context.xml" />
 
-	<bean id="osgi.applicationcontext.DynamicExtensions" class="nl.runnable.alfresco.osgi.spring.ChildApplicationContextFactoryBean"
+	<bean id="osgi.container.ModuleComponent" class="nl.runnable.alfresco.osgi.OsgiContainerModuleComponent" parent="module.baseComponent"
 		destroy-method="destroy">
-		<property name="configLocations" value="classpath:/alfresco/module/nl.runnable.alfresco.dynamicextensions/osgi-container-context.xml" />
-	</bean>
-
-	<bean id="osgi.container.ModuleComponent" class="nl.runnable.alfresco.osgi.OsgiContainerModuleComponent"
-		parent="module.baseComponent" destroy-method="destroy">
 		<description>Instantiates the child application context and initializes the FrameworkManager within it.</description>
 		<property name="moduleId" value="nl.runnable.alfresco.dynamicextensions" />
 		<property name="sinceVersion" value="0.0.1" />
 		<property name="appliesFromVersion" value="0.0.1" />
 		<property name="appliesToVersion" value="1.0.0" />
 		<property name="executeOnceOnly" value="false" />
-		<property name="osgiContainerApplicationContext" ref="osgi.applicationcontext.DynamicExtensions" />
+		<property name="applicationContextConfigLocations">
+			<list>
+				<value>classpath:/alfresco/module/nl.runnable.alfresco.dynamicextensions/osgi-container-context.xml</value>
+			</list>
+		</property>
+		<property name="webScriptsContainer" ref="webscripts.container" />
 	</bean>
+
+	<alias name="osgi.container.ModuleComponent" alias="osgi.container.FrameworkService" />
 
 </beans>

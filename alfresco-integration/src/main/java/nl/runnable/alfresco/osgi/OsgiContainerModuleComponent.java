@@ -27,11 +27,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package nl.runnable.alfresco.osgi;
 
+import java.util.Collection;
+import java.util.Collections;
+
+import nl.runnable.alfresco.webscripts.integration.RegistryProvider;
+
 import org.alfresco.repo.module.AbstractModuleComponent;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.extensions.webscripts.Container;
+import org.springframework.extensions.webscripts.Registry;
 import org.springframework.util.Assert;
 
 /**
@@ -41,61 +48,96 @@ import org.springframework.util.Assert;
  * @author Laurens Fridael
  * 
  */
-public class OsgiContainerModuleComponent extends AbstractModuleComponent implements ApplicationContextAware {
+public class OsgiContainerModuleComponent extends AbstractModuleComponent implements ApplicationContextAware,
+		FrameworkService, RegistryProvider {
 
 	/* Dependencies */
 
 	/**
-	 * The containing {@link ApplicationContext}. I.e. the context that this bean is defined in.
+	 * The containing {@link ApplicationContext}.
 	 */
 	private ApplicationContext applicationContext;
 
 	/**
-	 * The child {@link ApplicationContext} that contains the OSGi framework.
+	 * The {@link Container} must be reset manually after restarting the OSGi framework.
+	 */
+	private Container webScriptsContainer;
+
+	/* Configuration */
+
+	private String[] applicationContextConfigLocations;
+
+	/* State */
+
+	/**
+	 * The child {@link ApplicationContext} containing the OSGi framework.
+	 * <p>
+	 * This {@link ApplicationContext} can be destroyed and recreated, effectively enabling clients to restart the OSGi
+	 * container.
 	 */
 	private ConfigurableApplicationContext osgiContainerApplicationContext;
 
-	/* Main operations */
+	/* Main module operations */
 
 	/**
 	 * Initializes this module.
 	 */
 	@Override
 	protected void executeInternal() {
-		initializeFrameworkManager();
+		startFramework();
 	}
 
 	/**
 	 * Called on bean destroy.
 	 */
 	public void destroy() {
-		closeOsgiContainerApplicationContext();
+		stopFramework();
+	}
+
+	/* Main FrameworkService operations */
+
+	@Override
+	public void restartFramework() {
+		try {
+			stopFramework();
+		} finally {
+			startFramework();
+			getWebScriptsContainer().reset();
+		}
+	}
+
+	/* Main RegistryProvider operations */
+
+	@Override
+	public Collection<Registry> getRegistries() {
+		if (osgiContainerApplicationContext != null) {
+			return osgiContainerApplicationContext.getBeansOfType(Registry.class).values();
+		} else {
+			return Collections.emptySet();
+		}
 	}
 
 	/* Utility operations */
 
-	/**
-	 * Initializes the {@link FrameworkManager} in the child application context;
-	 */
-	protected void initializeFrameworkManager() {
-		getFrameworkManager().initialize();
+	protected void startFramework() {
+		if (osgiContainerApplicationContext == null) {
+			try {
+				osgiContainerApplicationContext = new ClassPathXmlApplicationContext(
+						getApplicationContextConfigLocations(), getApplicationContext());
+			} catch (final Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
 	}
 
-	/**
-	 * Closes the OSGi container {@link ApplicationContext}.
-	 */
-	protected void closeOsgiContainerApplicationContext() {
-		getOsgiContainerApplicationContext().close();
-	}
-
-	/* State */
-
-	/**
-	 * Obtains the {@link FrameworkManager} from the OSGi container{@link ApplicationContext}.
-	 */
-	protected FrameworkManager getFrameworkManager() {
-		return getOsgiContainerApplicationContext().getBean(BeanNames.CONTAINER_FRAMEWORK_MANAGER,
-				FrameworkManager.class);
+	protected void stopFramework() {
+		if (osgiContainerApplicationContext != null) {
+			try {
+				osgiContainerApplicationContext.close();
+			} finally {
+				osgiContainerApplicationContext = null;
+			}
+		}
 	}
 
 	/* Dependencies */
@@ -109,14 +151,32 @@ public class OsgiContainerModuleComponent extends AbstractModuleComponent implem
 		return applicationContext;
 	}
 
-	@Required
-	public void setOsgiContainerApplicationContext(final ConfigurableApplicationContext osgiContainerApplicationContext) {
-		Assert.notNull(osgiContainerApplicationContext);
-		this.osgiContainerApplicationContext = osgiContainerApplicationContext;
+	public void setWebScriptsContainer(final Container webScriptsContainer) {
+		this.webScriptsContainer = webScriptsContainer;
 	}
 
-	protected ConfigurableApplicationContext getOsgiContainerApplicationContext() {
-		return osgiContainerApplicationContext;
+	public Container getWebScriptsContainer() {
+		return webScriptsContainer;
+	}
+
+	/* Configuration */
+
+	public void setApplicationContextConfigLocations(final String[] applicationContextConfigLocations) {
+		this.applicationContextConfigLocations = applicationContextConfigLocations;
+	}
+
+	protected String[] getApplicationContextConfigLocations() {
+		return applicationContextConfigLocations;
+	}
+
+	/* State */
+
+	/**
+	 * Obtains the {@link FrameworkManager} from the OSGi container{@link ApplicationContext}.
+	 */
+	protected FrameworkManager getFrameworkManager() {
+		Assert.state(osgiContainerApplicationContext != null);
+		return osgiContainerApplicationContext.getBean(BeanNames.CONTAINER_FRAMEWORK_MANAGER, FrameworkManager.class);
 	}
 
 }

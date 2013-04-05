@@ -1,17 +1,23 @@
 package nl.runnable.alfresco.extensions.controlpanel;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
 
 import javax.annotation.ManagedBean;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.http.HttpServletResponse;
 
 import nl.runnable.alfresco.extensions.controlpanel.template.TemplateBundle;
 import nl.runnable.alfresco.extensions.controlpanel.template.Variables;
 import nl.runnable.alfresco.osgi.Configuration;
-import nl.runnable.alfresco.osgi.RepositoryFolderService;
+import nl.runnable.alfresco.osgi.FrameworkService;
 import nl.runnable.alfresco.webscripts.annotations.Attribute;
 import nl.runnable.alfresco.webscripts.annotations.Authentication;
 import nl.runnable.alfresco.webscripts.annotations.AuthenticationType;
@@ -23,6 +29,10 @@ import nl.runnable.alfresco.webscripts.annotations.Uri;
 import nl.runnable.alfresco.webscripts.annotations.UriVariable;
 import nl.runnable.alfresco.webscripts.annotations.WebScript;
 
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
@@ -52,7 +62,11 @@ public class ControlPanel {
 	private BundleHelper bundleHelper;
 
 	@Inject
-	private RepositoryFolderService repositoryFolderService;
+	private FrameworkService frameworkService;
+
+	@Inject
+	@Named("retryingTransactionHelper")
+	private RetryingTransactionHelper retryingTransactionHelper;
 
 	/* Main operations */
 
@@ -64,7 +78,7 @@ public class ControlPanel {
 	@Uri(method = HttpMethod.GET, value = "/dynamic-extensions/", defaultFormat = "html")
 	public Map<String, Object> index(@Attribute final ResponseHelper responseHelper) {
 		final Map<String, Object> model = new HashMap<String, Object>();
-		model.put(Variables.EXTENSION_BUNDLES, bundleHelper.getExtensionBundles());
+		model.put(Variables.EXTENSION_BUNDLES, toTemplateBundles(bundleHelper.getExtensionBundles()));
 		model.put(Variables.FILE_INSTALL_PATHS, configuration.getFileInstallPaths());
 		model.put(Variables.INSTALLED_BUNDLE, responseHelper.getFlashVariable(Variables.INSTALLED_BUNDLE));
 		model.put(Variables.ERROR_MESSAGE, responseHelper.getFlashVariable(Variables.ERROR_MESSAGE));
@@ -75,15 +89,7 @@ public class ControlPanel {
 	@Uri(method = HttpMethod.GET, value = "/dynamic-extensions/framework", defaultFormat = "html")
 	public Map<String, Object> framework() {
 		final Map<String, Object> model = new HashMap<String, Object>();
-		model.put(Variables.FRAMEWORK_BUNDLES, bundleHelper.getFrameworkBundles());
-		return model;
-	}
-
-	@Uri(method = HttpMethod.GET, value = "/dynamic-extensions/configuration", defaultFormat = "html")
-	public Map<String, Object> configuration() {
-		final Map<String, Object> model = new HashMap<String, Object>();
-		model.put(Variables.FILE_INSTALL_PATHS, configuration.getFileInstallPaths());
-		model.put("jarFiles", repositoryFolderService.getJarFilesInBundleFolder());
+		model.put(Variables.FRAMEWORK_BUNDLES, toTemplateBundles(bundleHelper.getFrameworkBundles()));
 		return model;
 	}
 
@@ -135,10 +141,18 @@ public class ControlPanel {
 	@Uri(method = HttpMethod.POST, value = "/dynamic-extensions/framework/restart")
 	public void restartFramework(@RequestParam(defaultValue = "0") final long wait,
 			@Attribute final ResponseHelper response) throws IOException, BundleException {
-		restartFramework(bundleHelper.getFramework());
-		response.status(HttpServletResponse.SC_OK, "Restarted framework.");
+		response.status(HttpServletResponse.SC_OK, "Restarting framework.");
+		restartFrameworkAsynchronously();
 	}
 
+	/**
+	 * Obtains information on a {@link Bundle} identified by a given ID.
+	 * 
+	 * @param id
+	 * @param responseHelper
+	 * @return
+	 * @throws IOException
+	 */
 	@Uri(method = HttpMethod.GET, value = "/dynamic-extensions/bundles/{id}", defaultFormat = "html")
 	public Map<String, Object> bundle(@UriVariable final long id, @Attribute final ResponseHelper responseHelper)
 			throws IOException {
@@ -151,6 +165,44 @@ public class ControlPanel {
 			responseHelper.status(HttpServletResponse.SC_NOT_FOUND);
 		}
 		return model;
+	}
+
+	/* Utility operations */
+
+	protected Collection<TemplateBundle> toTemplateBundles(final Collection<Bundle> bundles) {
+		final List<TemplateBundle> templateBundles = new ArrayList<TemplateBundle>();
+		for (final Bundle bundle : bundles) {
+			templateBundles.add(new TemplateBundle(bundle));
+		}
+		Collections.sort(templateBundles);
+		return templateBundles;
+	}
+
+	/**
+	 * Restarts the framework in a separate thread, running as the 'system' user and using a read-only transaction. This
+	 * boilerplate is necessary for accessing the repository during framework restart
+	 */
+	protected void restartFrameworkAsynchronously() {
+		Executors.newSingleThreadExecutor().execute(new Runnable() {
+
+			@Override
+			public void run() {
+				AuthenticationUtil.runAsSystem(new RunAsWork<Void>() {
+
+					@Override
+					public Void doWork() throws Exception {
+						return retryingTransactionHelper.doInTransaction(new RetryingTransactionCallback<Void>() {
+
+							@Override
+							public Void execute() {
+								frameworkService.restartFramework();
+								return null;
+							}
+						}, true);
+					}
+				});
+			}
+		});
 	}
 
 	/* Attributes */

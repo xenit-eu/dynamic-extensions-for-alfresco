@@ -5,8 +5,9 @@
 http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context
 http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<bean id="osgi.container.AugmentingRegistry" class="nl.runnable.alfresco.webscripts.integration.AugmentingRegistryBeanPostProcessor">
-		<description>Replaces the Web Scripts Registry with an AugmentingRegistry, enabling integration with OSGi bundles.
+	<bean class="nl.runnable.alfresco.webscripts.integration.AugmentingRegistryBeanPostProcessor">
+		<description>
+			Replaces the Web Scripts Registry with an AugmentingRegistry, enabling integration with OSGi bundles.
 		</description>
 		<property name="registryBeanName" value="webscripts.registry.prototype">
 			<description>
@@ -14,9 +15,8 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 				This Registry will be augmented with a proxy to the Web Script Registries in the OSGi container.
 
-				Note: we must refer to the prototype bean
-				"webscripts.registry.prototype" and NOT to the
-				singleton bean "webscripts.registry".
+				Note: we must refer to the prototype bean "webscripts.registry.prototype" and 
+				NOT to the singleton bean "webscripts.registry".
 			</description>
 		</property>
 	</bean>

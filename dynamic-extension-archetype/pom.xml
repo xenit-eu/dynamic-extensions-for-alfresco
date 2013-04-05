@@ -6,7 +6,6 @@
     <artifactId>parent-pom</artifactId>
     <version>1.0.0.M4-SNAPSHOT</version>
   </parent>
-  <groupId>nl.runnable.alfresco.dynamicextensions</groupId>
   <artifactId>dynamic-extension-archetype</artifactId>
   <packaging>maven-archetype</packaging>
   <name>Dynamic Extension archetype</name>

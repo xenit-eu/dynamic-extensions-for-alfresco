@@ -23,7 +23,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		framework context file is "felix-framework-context.xml" -->
 	<import resource="frameworks/${osgi.container.framework:felix}-framework-context.xml" />
 
-	<bean id="osgi.container.BundleContextRegistrar" class="nl.runnable.alfresco.osgi.ServiceBundleContextRegistrar">
+	<bean id="osgi.container.ServiceBundleContextRegistrar" class="nl.runnable.alfresco.osgi.ServiceBundleContextRegistrar">
 		<description>
 			Registers the host application services with the OSGi Framework.
 		</description>
@@ -41,14 +41,19 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		</property>
 	</bean>
 
-	<bean id="osgi.container.FrameworkManager" class="nl.runnable.alfresco.osgi.FrameworkManager" destroy-method="destroy">
+	<bean id="osgi.container.ApplicationContextBundleContextRegistrar" class="nl.runnable.alfresco.osgi.ApplicationContextBundleContextRegistrar">
+		<description>Registers this application context as an OSGi service.</description>
+	</bean>
+
+	<bean id="osgi.container.FrameworkManager" class="nl.runnable.alfresco.osgi.FrameworkManager" init-method="initialize" destroy-method="destroy">
 		<description>
 			Manages the lifecycle of the OSGi Framework and registers services and listeners.
 		</description>
 		<property name="framework" ref="osgi.container.Framework" />
 		<property name="bundleContextRegistrars">
 			<list>
-				<ref bean="osgi.container.BundleContextRegistrar" />
+				<ref bean="osgi.container.ServiceBundleContextRegistrar" />
+				<ref bean="osgi.container.ApplicationContextBundleContextRegistrar" />
 			</list>
 		</property>
 		<property name="blueprintBundlesLocation" value="classpath:/alfresco/module/%module.id%/blueprint-bundles/*.jar" />
@@ -57,7 +62,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		<property name="fileInstallConfigurer" ref="osgi.container.FileInstallConfigurer" />
 		<property name="fileInstallEnabled" value="${osgi.container.bundle-update:true}" />
 		<property name="configuration" ref="osgi.container.Configuration" />
-		<property name="repositoryFolderService" ref="osgi.container.RepositoryFolderService" />
+		<property name="repositoryStorageService" ref="osgi.container.RepositoryStorageService" />
 		<property name="contentService" ref="contentService" />
 	</bean>
 
@@ -72,7 +77,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<bean id="osgi.container.Configuration" class="nl.runnable.alfresco.osgi.Configuration" />
 
-	<bean id="osgi.container.RepositoryFolderService" class="nl.runnable.alfresco.osgi.RepositoryFolderService">
+	<bean id="osgi.container.RepositoryStorageService" class="nl.runnable.alfresco.osgi.RepositoryStorageService">
 		<property name="namespacePrefixResolver" ref="namespaceService" />
 		<property name="nodeService" ref="nodeService" />
 		<property name="fileFolderService" ref="fileFolderService" />

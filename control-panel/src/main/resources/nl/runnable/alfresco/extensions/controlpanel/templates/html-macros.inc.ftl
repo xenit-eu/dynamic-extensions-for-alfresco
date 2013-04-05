@@ -24,9 +24,6 @@
               <li class="<#if (active == 'framework')>active</#if>">
                 <a href="framework">Framework</a>
               </li>
-              <li class="<#if (active == 'configuration')>configuration</#if>">
-                <a href="configuration">Configuration</a>
-              </li>
             </ul>
             <ul class="nav pull-right">
               <li>

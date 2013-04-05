@@ -7,6 +7,7 @@ import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -59,11 +60,9 @@ public abstract class AbstractBundleResourceHandler implements BundleContextAwar
 		response.setContentType(contentType);
 		response.setContentEncoding(getContentEncoding(resource));
 		final URLConnection connection = resource.openConnection();
-		final long lastModified = connection.getLastModified();
-		if (lastModified > 0) {
-			response.setHeader("Last-Modified",
-					new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z").format(new Date(lastModified)));
-		}
+		final long lastModified = getBundleContext().getBundle().getLastModified();
+		response.setHeader("Last-Modified",
+				new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.ENGLISH).format(new Date(lastModified)));
 		final int contentLength = connection.getContentLength();
 		if (contentLength > -1) {
 			response.setHeader("Content-Length", String.valueOf(contentLength));

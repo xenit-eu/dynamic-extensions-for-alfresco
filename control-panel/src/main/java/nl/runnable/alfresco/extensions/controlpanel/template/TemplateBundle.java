@@ -3,6 +3,8 @@ package nl.runnable.alfresco.extensions.controlpanel.template;
 import java.util.ArrayList;
 import java.util.List;
 
+import nl.runnable.alfresco.extensions.controlpanel.BundleHelper;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
 import org.springframework.util.Assert;
@@ -53,6 +55,10 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 
 	public long getLastModified() {
 		return bundle.getLastModified();
+	}
+
+	public boolean isDynamicExtension() {
+		return BundleHelper.isDynamicExtension(bundle);
 	}
 
 	public String getState() {

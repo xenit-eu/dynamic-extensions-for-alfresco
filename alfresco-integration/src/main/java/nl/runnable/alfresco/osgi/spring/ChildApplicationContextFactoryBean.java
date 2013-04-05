@@ -35,6 +35,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * Spring {@link FactoryBean} for creating a child {@link ApplicationContext}.
+ * <p>
+ * This class can operate in createSingletons or prototype mode.
  * 
  * @author Laurens Fridael
  * 
@@ -42,19 +44,61 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class ChildApplicationContextFactoryBean implements FactoryBean<ClassPathXmlApplicationContext>,
 		ApplicationContextAware {
 
-	private String[] configLocations;
+	/* Dependencies */
 
 	private ApplicationContext parentApplicationContext;
 
+	/* Configuration */
+
+	private String[] configLocations;
+
+	private boolean createSingletons = true;
+
+	/* State */
+
 	private ClassPathXmlApplicationContext childApplicationContext;
 
-	public void setConfigLocations(final String[] configLocations) {
-		this.configLocations = configLocations;
+	/* Main operations */
+
+	@Override
+	public boolean isSingleton() {
+		return createSingletons;
 	}
 
-	protected String[] getConfigLocations() {
-		return configLocations;
+	@Override
+	public Class<? extends ClassPathXmlApplicationContext> getObjectType() {
+		return ClassPathXmlApplicationContext.class;
 	}
+
+	@Override
+	public ClassPathXmlApplicationContext getObject() {
+		if (isCreateSingletons()) {
+			if (childApplicationContext == null) {
+				childApplicationContext = createOsgiContainerApplicationContext();
+			}
+			return childApplicationContext;
+		} else {
+			return createOsgiContainerApplicationContext();
+		}
+	}
+
+	public void destroy() {
+		closeOsgiContainerApplicationContext();
+	}
+
+	/* Dependencies */
+
+	protected ClassPathXmlApplicationContext createOsgiContainerApplicationContext() {
+		return new ClassPathXmlApplicationContext(getConfigLocations(), getParentApplicationContext());
+	}
+
+	protected void closeOsgiContainerApplicationContext() {
+		if (childApplicationContext != null) {
+			childApplicationContext.close();
+		}
+	}
+
+	/* Dependencies */
 
 	@Override
 	public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
@@ -65,36 +109,22 @@ public class ChildApplicationContextFactoryBean implements FactoryBean<ClassPath
 		return parentApplicationContext;
 	}
 
-	@Override
-	public boolean isSingleton() {
-		return true;
+	/* Configuration */
+
+	public void setConfigLocations(final String[] configLocations) {
+		this.configLocations = configLocations;
 	}
 
-	@Override
-	public Class<? extends ClassPathXmlApplicationContext> getObjectType() {
-		return ClassPathXmlApplicationContext.class;
+	protected String[] getConfigLocations() {
+		return configLocations;
 	}
 
-	@Override
-	public ClassPathXmlApplicationContext getObject() {
-		if (childApplicationContext == null) {
-			childApplicationContext = createOsgiContainerApplicationContext();
-		}
-		return childApplicationContext;
+	public void setCreateSingletons(final boolean createSingletons) {
+		this.createSingletons = createSingletons;
 	}
 
-	protected ClassPathXmlApplicationContext createOsgiContainerApplicationContext() {
-		return new ClassPathXmlApplicationContext(getConfigLocations(), getParentApplicationContext());
-	}
-
-	public void destroy() {
-		closeOsgiContainerApplicationContext();
-	}
-
-	protected void closeOsgiContainerApplicationContext() {
-		if (childApplicationContext != null) {
-			childApplicationContext.close();
-		}
+	public boolean isCreateSingletons() {
+		return createSingletons;
 	}
 
 }

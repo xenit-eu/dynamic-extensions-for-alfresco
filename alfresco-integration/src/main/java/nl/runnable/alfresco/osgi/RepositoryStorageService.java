@@ -17,7 +17,13 @@ import org.alfresco.service.namespace.QName;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
-public class RepositoryFolderService {
+/**
+ * Provides operations for storing OSGi bundles and associated configuration in the repository.
+ * 
+ * @author Laurens Fridael
+ * 
+ */
+public class RepositoryStorageService {
 
 	/* Dependencies */
 
@@ -37,25 +43,31 @@ public class RepositoryFolderService {
 
 	/* Main operations */
 
-	public NodeRef getBaseFolder() {
+	public NodeRef getBaseFolder(final boolean createIfNotExists) {
 		final QName name = qName("cm", "dynamic_extensions");
 		final NodeRef dataDictionary = getDataDictionary();
 		NodeRef nodeRef = getChildOf(dataDictionary, name);
-		if (nodeRef == null) {
+		if (nodeRef == null && createIfNotExists) {
 			nodeRef = createFolder(dataDictionary, name, "Dynamic Extensions", getBaseFolderDescription());
 		}
 		return nodeRef;
 	}
 
-	public NodeRef getBundleFolder() {
-		return getBundleFolder(true);
+	public NodeRef getBundleFolder(final boolean createIfNotExists) {
+		final QName name = qName("cm", "bundles");
+		final NodeRef baseFolder = getBaseFolder(createIfNotExists);
+		NodeRef nodeRef = getChildOf(baseFolder, name);
+		if (nodeRef == null && createIfNotExists) {
+			nodeRef = createFolder(baseFolder, name, "Bundles", getBundleFolderDescription());
+		}
+		return nodeRef;
 	}
 
-	public NodeRef getConfigurationFolder() {
+	public NodeRef getConfigurationFolder(final boolean createIfNotExists) {
 		final QName name = qName("cm", "configuration");
-		final NodeRef baseFolder = getBaseFolder();
+		final NodeRef baseFolder = getBaseFolder(createIfNotExists);
 		NodeRef nodeRef = getChildOf(baseFolder, name);
-		if (nodeRef == null) {
+		if (nodeRef == null && createIfNotExists) {
 			nodeRef = createFolder(baseFolder, name, "Configuration", getConfigurationFolderDescription());
 		}
 		return nodeRef;
@@ -87,16 +99,6 @@ public class RepositoryFolderService {
 
 	protected NodeRef getCompanyHome() {
 		return getChildOfRootNode(qName("app", "company_home"));
-	}
-
-	protected NodeRef getBundleFolder(final boolean createIfNotExists) {
-		final QName name = qName("cm", "bundles");
-		final NodeRef baseFolder = getBaseFolder();
-		NodeRef nodeRef = getChildOf(baseFolder, name);
-		if (nodeRef == null && createIfNotExists) {
-			nodeRef = createFolder(baseFolder, name, "Bundles", getBundleFolderDescription());
-		}
-		return nodeRef;
 	}
 
 	protected NodeRef createFolder(final NodeRef parentFolder, final QName qName, final String name,

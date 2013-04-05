@@ -9,7 +9,14 @@
     var refreshTimes = function() {
       $('#last-updated').text(moment(lastUpdated).fromNow());
       $('span[data-time]').each(function() {
-        $(this).text(moment($(this).data('time')).fromNow());
+        var label;
+        var time = $(this).data('time');
+        if (time > 0) {
+          label = moment(time).fromNow();
+        } else {
+          label = 'unknown';
+        }
+        $(this).text(label);
       });
     };
     refreshTimes();

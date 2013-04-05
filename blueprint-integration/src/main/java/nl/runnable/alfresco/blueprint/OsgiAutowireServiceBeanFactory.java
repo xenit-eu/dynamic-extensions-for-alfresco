@@ -42,6 +42,7 @@ import org.osgi.framework.ServiceReference;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.DependencyDescriptor;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.context.ApplicationContext;
 
 /**
  * {@link BeanFactory} that resolves autowire candidates against OSGI services.
@@ -50,6 +51,8 @@ import org.springframework.beans.factory.support.DefaultListableBeanFactory;
  * 
  */
 class OsgiAutowireServiceBeanFactory extends DefaultListableBeanFactory {
+
+	private static final String HOST_APPLICATION_CONTEXT_BEAN_NAME = "HostApplicationContext";
 
 	private static final String OSGI_SERVICE_BLUEPRINT_COMPNAME = "osgi.service.blueprint.compname";
 
@@ -80,31 +83,65 @@ class OsgiAutowireServiceBeanFactory extends DefaultListableBeanFactory {
 	@SuppressWarnings("rawtypes")
 	protected Map<String, Object> findAutowireCandidates(final String beanName, final Class requiredType,
 			final DependencyDescriptor descriptor) {
-		final Map<String, Object> candidateBeansByServiceName = super.findAutowireCandidates(beanName, requiredType,
+		final Map<String, Object> candidateBeansByName = super.findAutowireCandidates(beanName, requiredType,
 				descriptor);
-		if (candidateBeansByServiceName.isEmpty()) {
-			final String serviceName = requiredType.getName();
-			final ServiceReference<?> serviceReference;
-			final AlfrescoService alfrescoService = getAnnotation(descriptor, AlfrescoService.class);
-			final Named named = getAnnotation(descriptor, Named.class);
-			if (alfrescoService != null || named != null) {
-				if (alfrescoService != null) {
-					serviceReference = getServiceReferenceForServiceType(serviceName, alfrescoService.value());
-				} else {
-					serviceReference = getServiceReferenceWithBeanName(serviceName, named.value());
-				}
+		if (candidateBeansByName.isEmpty()) {
+			final String typeName = requiredType.getName();
+			if (BundleContext.class.isAssignableFrom(requiredType)) {
+				candidateBeansByName.put(typeName, bundleContext);
 			} else {
-				serviceReference = getServiceReferenceByName(serviceName);
-			}
-
-			if (serviceReference != null) {
-				candidateBeansByServiceName.put(serviceName, bundleContext.getService(serviceReference));
+				final ServiceReference<?> serviceReference = findServiceReference(descriptor, typeName);
+				if (serviceReference != null) {
+					candidateBeansByName.put(typeName, bundleContext.getService(serviceReference));
+				} else {
+					final Named named = getAnnotation(descriptor, Named.class);
+					if (named != null) {
+						final Object bean = findBeanInAlfrescoApplicationContext(named.value());
+						if (bean != null) {
+							candidateBeansByName.put(named.value(), bean);
+						}
+					}
+				}
 			}
 		}
-		return candidateBeansByServiceName;
+		return candidateBeansByName;
+	}
+
+	/**
+	 * Attempts to find a named bean in the Alfresco {@link ApplicationContext}.
+	 * 
+	 * @param beanName
+	 * @return
+	 */
+	protected Object findBeanInAlfrescoApplicationContext(final String beanName) {
+		Object bean = null;
+		final ServiceReference<?> serviceReference = getServiceReferenceWithBeanName(
+				ApplicationContext.class.getName(), HOST_APPLICATION_CONTEXT_BEAN_NAME);
+		if (serviceReference != null) {
+			final ApplicationContext applicationContext = (ApplicationContext) bundleContext
+					.getService(serviceReference);
+			bean = applicationContext.getBean(beanName);
+		}
+		return bean;
 	}
 
 	/* Utility operations */
+
+	protected ServiceReference<?> findServiceReference(final DependencyDescriptor descriptor, final String serviceName) {
+		final ServiceReference<?> serviceReference;
+		final AlfrescoService alfrescoService = getAnnotation(descriptor, AlfrescoService.class);
+		final Named named = getAnnotation(descriptor, Named.class);
+		if (alfrescoService != null || named != null) {
+			if (alfrescoService != null) {
+				serviceReference = getServiceReferenceForServiceType(serviceName, alfrescoService.value());
+			} else {
+				serviceReference = getServiceReferenceWithBeanName(serviceName, named.value());
+			}
+		} else {
+			serviceReference = getServiceReferenceByName(serviceName);
+		}
+		return serviceReference;
+	}
 
 	@SuppressWarnings("unchecked")
 	private <T extends Annotation> T getAnnotation(final DependencyDescriptor descriptor, final Class<T> annotationType) {
@@ -114,7 +151,6 @@ class OsgiAutowireServiceBeanFactory extends DefaultListableBeanFactory {
 			}
 		}
 		return null;
-
 	}
 
 	private ServiceReference<?> getServiceReferenceForServiceType(final String serviceName,

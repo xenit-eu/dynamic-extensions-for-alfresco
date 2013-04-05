@@ -15,8 +15,7 @@ import java.util.regex.Pattern;
 import javax.annotation.ManagedBean;
 import javax.inject.Inject;
 
-import nl.runnable.alfresco.extensions.controlpanel.template.TemplateBundle;
-import nl.runnable.alfresco.osgi.RepositoryFolderService;
+import nl.runnable.alfresco.osgi.RepositoryStorageService;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;
@@ -26,7 +25,6 @@ import org.alfresco.service.cmr.repository.ContentWriter;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
-import org.eclipse.gemini.blueprint.context.BundleContextAware;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -37,17 +35,36 @@ import org.springframework.util.FileCopyUtils;
 import com.springsource.util.osgi.manifest.BundleManifest;
 import com.springsource.util.osgi.manifest.BundleManifestFactory;
 
+/**
+ * Helper for working with {@link Bundle}s.
+ * 
+ * @author Laurens Fridael
+ * 
+ */
 @ManagedBean
-public class BundleHelper implements BundleContextAware {
+public class BundleHelper {
 
 	private static final String ALFRESCO_DYNAMIC_EXTENSION_HEADER = "Alfresco-Dynamic-Extension";
 
+	/**
+	 * Tests if the given bundle contains a Dynamic Extension.
+	 * <p>
+	 * This implementation looks if the bundle header <code>Alfresco-Dynamic-Extension</code> equals the String "true".
+	 * 
+	 * @param bundle
+	 * @return
+	 */
+	public static boolean isDynamicExtension(final Bundle bundle) {
+		return "true".equals(bundle.getHeaders().get(ALFRESCO_DYNAMIC_EXTENSION_HEADER));
+	}
+
 	/* Dependencies */
 
+	@Inject
 	private BundleContext bundleContext;
 
 	@Inject
-	private RepositoryFolderService repositoryFolderService;
+	private RepositoryStorageService repositoryService;
 
 	@Inject
 	private FileFolderService fileFolderService;
@@ -60,42 +77,72 @@ public class BundleHelper implements BundleContextAware {
 
 	/* Main operations */
 
-	public List<TemplateBundle> getFrameworkBundles() {
-		final List<TemplateBundle> templateBundles = new ArrayList<TemplateBundle>();
+	/**
+	 * Obtains the {@link Bundle}s that comprise the core framework.
+	 * 
+	 * @return
+	 */
+	public List<Bundle> getFrameworkBundles() {
+		final List<Bundle> bundles = new ArrayList<Bundle>();
 		for (final Bundle bundle : bundleContext.getBundles()) {
 			if (isDynamicExtension(bundle) == false) {
-				templateBundles.add(new TemplateBundle(bundle));
+				bundles.add(bundle);
 			}
 		}
-		Collections.sort(templateBundles);
-		return templateBundles;
+		return bundles;
 	}
 
-	public List<TemplateBundle> getExtensionBundles() {
-		final List<TemplateBundle> templateBundles = new ArrayList<TemplateBundle>();
+	/**
+	 * Obtains the {@link Bundle}s that comprise the core framework.
+	 * 
+	 * @return
+	 */
+	public List<Bundle> getExtensionBundles() {
+		final List<Bundle> bundles = new ArrayList<Bundle>();
 		for (final Bundle bundle : bundleContext.getBundles()) {
 			if (isDynamicExtension(bundle)) {
-				templateBundles.add(new TemplateBundle(bundle));
+				bundles.add(bundle);
 			}
 		}
-		Collections.sort(templateBundles);
-		return templateBundles;
+		return bundles;
 	}
 
+	/**
+	 * Obtains the {@link Bundle} for the given id.
+	 * 
+	 * @param id
+	 * @return The matching {@link Bundle} or null if no match could be found.
+	 */
 	public Bundle getBundle(final long id) {
 		return bundleContext.getBundle(id);
 	}
 
+	/**
+	 * Obtains the {@link Framework} bundle.
+	 * 
+	 * @return
+	 */
 	public Framework getFramework() {
 		return (Framework) bundleContext.getBundle(0);
 	}
 
+	/**
+	 * Installs an uploaded file as a bundle in the repository.
+	 * <p>
+	 * This implementation first saves the upload to a temporary file. It then attempts to install the file as a bundle.
+	 * If this succeeds, it saves the bundle in the repository.
+	 * 
+	 * @param file
+	 * @return
+	 * @throws IOException
+	 * @throws BundleException
+	 */
 	public Bundle installBundleInRepository(final FormField file) throws IOException, BundleException {
 		final File tempFile = saveToTempFile(file);
 		try {
 			final String filename = file.getFilename();
-			final Bundle bundle = bundleContext
-					.installBundle(generateLocation(filename), new FileInputStream(tempFile));
+			final Bundle bundle = bundleContext.installBundle(generateRepositoryLocation(filename),
+					new FileInputStream(tempFile));
 			bundle.start();
 			final BundleManifest manifest = BundleManifestFactory.createBundleManifest(bundle.getHeaders());
 			saveBundleInRepository(tempFile, filename, manifest);
@@ -109,11 +156,14 @@ public class BundleHelper implements BundleContextAware {
 		final Matcher matcher = Pattern.compile("/Repository/(.+\\.jar)$").matcher(bundle.getLocation());
 		if (matcher.matches()) {
 			final String filename = matcher.group(1);
-			final NodeRef file = fileFolderService.searchSimple(repositoryFolderService.getBundleFolder(), filename);
-			if (file != null) {
-				final Map<QName, Serializable> properties = Collections.<QName, Serializable> emptyMap();
-				nodeService.addAspect(file, ContentModel.ASPECT_TEMPORARY, properties);
-				nodeService.deleteNode(file);
+			final NodeRef bundleFolder = repositoryService.getBundleFolder(false);
+			if (bundleFolder != null) {
+				final NodeRef file = fileFolderService.searchSimple(bundleFolder, filename);
+				if (file != null) {
+					final Map<QName, Serializable> properties = Collections.<QName, Serializable> emptyMap();
+					nodeService.addAspect(file, ContentModel.ASPECT_TEMPORARY, properties);
+					nodeService.deleteNode(file);
+				}
 			}
 		}
 		bundle.uninstall();
@@ -122,17 +172,12 @@ public class BundleHelper implements BundleContextAware {
 	/* Utility operations */
 
 	/**
-	 * Tests if the given bundle contains a Dynamic Extension.
-	 * <p>
-	 * This implementation looks if the bundle header <code>Alfresco-Dynamic-Extension</code> equals the String "true".
+	 * Saves an uploaded file represented by a given {@link FormField} to a temporary file.
 	 * 
-	 * @param bundle
+	 * @param file
 	 * @return
+	 * @throws IOException
 	 */
-	private boolean isDynamicExtension(final Bundle bundle) {
-		return "true".equals(bundle.getHeaders().get(ALFRESCO_DYNAMIC_EXTENSION_HEADER));
-	}
-
 	protected File saveToTempFile(final FormField file) throws IOException {
 		final File tempFile = File.createTempFile("dynamic-extensions-bundle", null);
 		tempFile.deleteOnExit();
@@ -140,9 +185,17 @@ public class BundleHelper implements BundleContextAware {
 		return tempFile;
 	}
 
-	private void saveBundleInRepository(final File tempFile, final String filename, final BundleManifest manifest)
+	/**
+	 * Saves a bundle in the repository.
+	 * 
+	 * @param file
+	 * @param filename
+	 * @param manifest
+	 * @throws IOException
+	 */
+	protected void saveBundleInRepository(final File file, final String filename, final BundleManifest manifest)
 			throws IOException {
-		final NodeRef bundleFolder = repositoryFolderService.getBundleFolder();
+		final NodeRef bundleFolder = repositoryService.getBundleFolder(true);
 		NodeRef nodeRef = fileFolderService.searchSimple(bundleFolder, filename);
 		if (nodeRef == null) {
 			nodeRef = fileFolderService.create(bundleFolder, filename, ContentModel.TYPE_CONTENT).getNodeRef();
@@ -152,19 +205,17 @@ public class BundleHelper implements BundleContextAware {
 		nodeService.setProperty(nodeRef, ContentModel.PROP_DESCRIPTION, manifest.getBundleDescription());
 		final ContentWriter writer = contentService.getWriter(nodeRef, ContentModel.PROP_CONTENT, true);
 		writer.setMimetype(MimetypeMap.MIMETYPE_ZIP);
-		writer.putContent(new FileInputStream(tempFile));
+		writer.putContent(new FileInputStream(file));
 	}
 
-	protected String generateLocation(final String filename) {
+	/**
+	 * Generates a repository location for the given filename. This location is used to identify the bundle.
+	 * 
+	 * @param filename
+	 * @return
+	 */
+	protected String generateRepositoryLocation(final String filename) {
 		return String.format("/Repository/%s", filename);
-	}
-
-	/* Dependencies */
-
-	@Override
-	public void setBundleContext(final BundleContext bundleContext) {
-		this.bundleContext = bundleContext;
-
 	}
 
 }

@@ -17,6 +17,7 @@
 		<fileInstall.outputDirectory>${amp.outputDirectory}/file-install-bundles</fileInstall.outputDirectory>
 		<gemini-blueprint.version>1.0.2.RELEASE</gemini-blueprint.version>
 		<fileinstall.version>3.2.4</fileinstall.version>
+		<acegi-security.version>1.0.0</acegi-security.version>
 	</properties>
 	<dependencies>
 		<dependency>

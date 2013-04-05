@@ -52,8 +52,6 @@ import org.springframework.util.Assert;
  */
 public class AugmentingRegistryBeanPostProcessor implements BeanPostProcessor, ApplicationContextAware {
 
-	private static final String APPLICATIONCONTEXT_PREFIX = "osgi.applicationcontext.";
-
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	/* Dependencies */
@@ -116,26 +114,16 @@ public class AugmentingRegistryBeanPostProcessor implements BeanPostProcessor, A
 	/* Dependencies */
 
 	@Override
-	public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
+	public void setApplicationContext(final ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
 	}
 
-	protected Collection<ApplicationContext> getOsgiContainerApplicationContexts() {
-		final List<ApplicationContext> applicationContexts = new ArrayList<ApplicationContext>();
-		for (final String beanName : applicationContext.getBeanNamesForType(ApplicationContext.class)) {
-			if (beanName.startsWith(APPLICATIONCONTEXT_PREFIX)) {
-				applicationContexts.add(applicationContext.getBean(beanName, ApplicationContext.class));
-			}
-		}
-		return applicationContexts;
-	}
+	/* State */
 
 	protected Collection<Registry> getAdditionalRegistries() {
-		final List<Registry> registries = new ArrayList<Registry>();
-		for (final ApplicationContext osgiApplicationContext : getOsgiContainerApplicationContexts()) {
-			registries.addAll(osgiApplicationContext.getBeansOfType(Registry.class).values());
-		}
-		return registries;
+		final RegistryProvider bean = applicationContext.getBean(RegistryProvider.class);
+		Assert.state(bean != null, "Cannot find Web Script RegistryProvider.");
+		return bean.getRegistries();
 	}
 
 	/* Configuration */

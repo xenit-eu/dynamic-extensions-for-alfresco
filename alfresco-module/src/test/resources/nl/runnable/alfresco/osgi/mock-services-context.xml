@@ -11,10 +11,6 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<bean id="module.baseComponent" abstract="true" />
 
-	<bean id="dictionaryModelBootstrap" class="nl.runnable.alfresco.osgi.MockDictionaryBootstrap" />
-
-	<bean id="dictionaryBootstrap" parent="dictionaryModelBootstrap" />
-	
 	<bean name="service" class="nl.runnable.alfresco.osgi.MockServiceFactoryBean" abstract="true">
 		<description>Acts as a template to make the mock service bean definitions shorter.</description>
 	</bean>
@@ -43,8 +39,13 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		<property name="class" value="org.alfresco.service.cmr.repository.MimetypeService" />
 	</bean>
 
-	<bean id="namespaceService" parent="service">
-		<property name="class" value="org.alfresco.service.namespace.NamespaceService" />
+	<bean id="namespaceService" class="nl.runnable.alfresco.osgi.MockNamespaceService">
+		<property name="namespacesByPrefix">
+			<map>
+				<entry key="cm" value="http://www.alfresco.org/model/content/1.0" />
+				<entry key="app" value="http://www.alfresco.org/model/application/1.0" />
+			</map>
+		</property>
 	</bean>
 
 	<bean id="nodeService" parent="service">
@@ -62,11 +63,15 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	<bean id="transactionService" parent="service">
 		<property name="class" value="org.alfresco.service.transaction.TransactionService" />
 	</bean>
-	
+
 	<bean id="DescriptorService" parent="service">
 		<property name="class" value="org.alfresco.service.descriptor.DescriptorService" />
 	</bean>
-	
+
 	<bean id="hiddenAspect" class="org.alfresco.repo.model.filefolder.HiddenAspect" />
 
+	<bean id="webscripts.container" parent="service">
+		<property name="class" value="org.springframework.extensions.webscripts.Container" />
+	</bean>
+	
 </beans>

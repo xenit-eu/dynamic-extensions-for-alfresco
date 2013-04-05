@@ -1,6 +1,10 @@
 <#import "templates/html-macros.inc.ftl" as html>
-<@html.document title="${bundle.name} ${bundle.version} - Dynamic Extensions">
-
+<#if bundle.dynamicExtension>
+  <#assign active="extensions" />
+<#else>
+  <#assign active="framework" />
+</#if>
+<@html.document title="${bundle.name} ${bundle.version} - Dynamic Extensions" active="${active}">
   <#macro header name value="">
     <tr>
       <th class="name">
