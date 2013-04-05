@@ -84,15 +84,15 @@
     </thead>
     <tbody>
       <#list bundles as bundle>
-        <tr class="<#if bundle.state == 'installed'>error</#if>">
+        <tr class="<#if bundle.status == 'installed'>error</#if>">
           <td>
-            <a href="bundles/${bundle.id}">${bundle.name} ${bundle.version}</a>
+            <a href="bundles/${bundle.bundleId?string.computer}">${bundle.name} ${bundle.version}</a>
           </td>
           <td>
-            ${bundle.state}
+            ${bundle.status}
           </td>
           <td>
-            ${bundle.manifest.bundleDescription!''}
+            ${bundle.description!''}
           </td>
         </tr>
       </#list>      

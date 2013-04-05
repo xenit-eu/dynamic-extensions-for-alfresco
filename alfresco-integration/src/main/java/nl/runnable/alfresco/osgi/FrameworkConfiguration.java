@@ -48,6 +48,8 @@ import org.springframework.util.CollectionUtils;
  */
 public class FrameworkConfiguration {
 
+	/* Configuration */
+
 	private File storageDirectory;
 
 	private boolean flushBundleCacheOnFirstInit = false;
@@ -56,39 +58,7 @@ public class FrameworkConfiguration {
 
 	private List<SystemPackage> additionalSystemPackages = Collections.emptyList();
 
-	public File getStorageDirectory() {
-		return storageDirectory;
-	}
-
-	public void setStorageDirectory(final File storageDirectory) {
-		this.storageDirectory = storageDirectory;
-	}
-
-	public boolean isFlushBundleCacheOnFirstInit() {
-		return flushBundleCacheOnFirstInit;
-	}
-
-	public void setFlushBundleCacheOnFirstInit(final boolean flushBundleCacheOnFirstInit) {
-		this.flushBundleCacheOnFirstInit = flushBundleCacheOnFirstInit;
-	}
-
-	public List<SystemPackage> getCoreSystemPackages() {
-		return coreSystemPackages;
-	}
-
-	public void setCoreSystemPackages(final List<SystemPackage> coreSystemPackages) {
-		Assert.notEmpty(coreSystemPackages);
-		this.coreSystemPackages = coreSystemPackages;
-	}
-
-	public List<SystemPackage> getAdditionalSystemPackages() {
-		return additionalSystemPackages;
-	}
-
-	public void setAdditionalSystemPackages(final List<SystemPackage> hostPackages) {
-		Assert.notEmpty(hostPackages);
-		this.additionalSystemPackages = hostPackages;
-	}
+	/* Main operations */
 
 	/**
 	 * Converts this configuration to a Map suitable for passing to <code>FrameworkFactory.newFramework(Map)</code>.
@@ -113,15 +83,54 @@ public class FrameworkConfiguration {
 		return configuration;
 	}
 
+	/* Utility operations */
+
 	protected String createSystemPackagesConfiguration(final List<SystemPackage> systemPackages) {
 		final StringBuilder sb = new StringBuilder();
 		for (final Iterator<SystemPackage> it = systemPackages.iterator(); it.hasNext();) {
 			final SystemPackage systemPackage = it.next();
-			sb.append(systemPackage.getName()).append("; version=").append(systemPackage.getVersion());
+			sb.append(systemPackage.getName()).append(";version=").append(systemPackage.getVersion());
 			if (it.hasNext()) {
 				sb.append(",");
 			}
 		}
 		return sb.toString();
 	}
+
+	/* Configuration */
+
+	public File getStorageDirectory() {
+		return storageDirectory;
+	}
+
+	public void setStorageDirectory(final File storageDirectory) {
+		this.storageDirectory = storageDirectory;
+	}
+
+	public boolean isFlushBundleCacheOnFirstInit() {
+		return flushBundleCacheOnFirstInit;
+	}
+
+	public void setFlushBundleCacheOnFirstInit(final boolean flushBundleCacheOnFirstInit) {
+		this.flushBundleCacheOnFirstInit = flushBundleCacheOnFirstInit;
+	}
+
+	public List<SystemPackage> getCoreSystemPackages() {
+		return coreSystemPackages;
+	}
+
+	public void setCoreSystemPackages(final List<SystemPackage> coreSystemPackages) {
+		Assert.notNull(coreSystemPackages);
+		this.coreSystemPackages = coreSystemPackages;
+	}
+
+	public List<SystemPackage> getAdditionalSystemPackages() {
+		return additionalSystemPackages;
+	}
+
+	public void setAdditionalSystemPackages(final List<SystemPackage> hostPackages) {
+		Assert.notNull(hostPackages);
+		this.additionalSystemPackages = hostPackages;
+	}
+
 }

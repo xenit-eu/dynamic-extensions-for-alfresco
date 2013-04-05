@@ -27,4 +27,12 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<alias name="osgi.container.ModuleComponent" alias="osgi.container.FrameworkService" />
 
+	<bean id="osgi.container.WebApplicationPackages" class="nl.runnable.alfresco.osgi.spring.WebApplicationSystemPackageFactoryBean">
+		<description>Scans for Java packages in JARs in /WEB-INF/lib</description>
+		<property name="reflectionService" ref="osgi.container.ReflectionService" />
+		<property name="descriptorService" ref="DescriptorService" />
+	</bean>
+
+	<bean id="osgi.container.ReflectionService" class="nl.runnable.alfresco.osgi.ReflectionService" />
+
 </beans>

@@ -3,7 +3,7 @@
 
   <#if installedBundle??>
     <@html.alert type="success">
-      Installed Bundle <a href="bundles/${installedBundle.id}">${installedBundle.name} ${installedBundle.version}</a>.
+      Installed Bundle <a href="bundles/${installedBundle.bundleId}">${installedBundle.name} ${installedBundle.version}</a>.
     </@html.alert>
   </#if>
 

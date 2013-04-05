@@ -21,8 +21,8 @@
   <table class="bundle table table-striped table-bordered">
     <@header name="Symbolic Name">${bundle.symbolicName}</@header>
     <@header name="Version">${bundle.version}</@header>
-    <@header name="Status">${bundle.state}</@header>
-    <@header name="Description">${bundle.manifest.bundleDescription!""}</@header>
+    <@header name="Status">${bundle.status}</@header>
+    <@header name="Description">${bundle.description!""}</@header>
     <@header name="Location">${bundle.location!""}</@header>
     <@header name="Last Modified">
       <span data-time="${bundle.lastModified?string.computer}"></span>
@@ -34,7 +34,7 @@
       <form action="delete-bundle" method="post" 
         data-title="Delete Bundle"
         data-confirm="Are you sure you want to delete this Bundle?">
-        <input type="hidden" name="id" value="${bundle.id?string.computer}" />
+        <input type="hidden" name="id" value="${bundle.bundleId?string.computer}" />
         <p>
           <button class="btn btn-danger">Delete Bundle</button>
           This removes the Bundle from the repository.
@@ -43,7 +43,7 @@
     </div>
   </#if>
 
-  <#if bundle.state == 'installed'>
+  <#if bundle.status == 'installed'>
     <div class="alert alert-error alert-block">
       <p>
         If this bundle remains in the <code>installed</code> state, the Java packages that 
@@ -83,54 +83,58 @@
     </div>
   </#if>
 
-  <h2>Imported packages</h2>  
-  <#if (bundle.importedPackages?size > 0)>
-    <table class="imported package table table-striped table-bordered">
-      <thead>
-        <tr>
-          <th class="name">Imported Java Package</th>
-          <th class="min version">Min Version</th>
-          <th class="max version">Max Version</th>
-        </tr>
-      </thead>
-      <tbody>
-        <#list bundle.importedPackages as package>
+  <#if (bundle.bundleId != 0)>
+    <h2>Imported packages</h2>  
+    <#if (bundle.importedPackages?size > 0)>
+      <table class="imported package table table-striped table-bordered">
+        <thead>
           <tr>
-            <td class="name">${package.name}</td>
-            <td class="min version">${package.minVersion!'unbounded'}</td>
-            <td class="max version">${package.maxVersion!'unbounded'}</td>
+            <th class="name">Imported Java Package</th>
+            <th class="min version">Min Version</th>
+            <th class="max version">Max Version</th>
           </tr>
-        </#list>
-      </tbody>
-    </table>
-  <#else>
-    <p>
-      This bundle does not import any packages.
-    </p>
-  </#if>
+        </thead>
+        <tbody>
+          <#list bundle.importedPackages as package>
+            <tr>
+              <td class="name">${package.name}</td>
+              <td class="min version">${package.minVersion!'unbounded'}</td>
+              <td class="max version">${package.maxVersion!'unbounded'}</td>
+            </tr>
+          </#list>
+        </tbody>
+      </table>
+    <#else>
+      <p>
+        This bundle does not import any packages.
+      </p>
+    </#if>
 
-  <h2>Exported packages</h2>
-  <#if (bundle.exportedPackages?size > 0)>
-    <table class="package table table-striped table-bordered">
-      <thead>
-        <tr>
-          <th class="name">Exported Java Package</th>
-          <th class="version">Version</th>
-        </tr>
-      </thead>
-      <tbody>
-        <#list bundle.exportedPackages as package>
+    <h2>Exported packages</h2>
+    <#if (bundle.exportedPackages?size > 0)>
+      <table class="package table table-striped table-bordered">
+        <thead>
           <tr>
-            <td class="name">${package.packageName}</td>
-            <td class="version">${package.version!''}</td>
+            <th class="name">Exported Java Package</th>
+            <th class="version">Version</th>
           </tr>
-        </#list>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <#list bundle.exportedPackages as package>
+            <tr>
+              <td class="name">${package.packageName}</td>
+              <td class="version">${package.version!''}</td>
+            </tr>
+          </#list>
+        </tbody>
+      </table>
+    <#else>
+    <p>
+      This bundle does not export any packages.
+    </p>
+    </#if>
   <#else>
-  <p>
-    This bundle does not export any packages.
-  </p>
+    <p><em>Displaying Java package information for the Framework bundle is currently not supported.</em></p>
   </#if>
 
 </@html.document>

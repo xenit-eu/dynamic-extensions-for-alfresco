@@ -63,8 +63,8 @@ public class FrameworkConfigurationTest {
 		final Map<String, String> map = frameworkConfiguration.toMap();
 		assertEquals(storageDirectory.getAbsolutePath(), map.get(Constants.FRAMEWORK_STORAGE));
 		assertEquals(Constants.FRAMEWORK_STORAGE_CLEAN_ONFIRSTINIT, map.get(Constants.FRAMEWORK_STORAGE_CLEAN));
-		assertEquals("core-package; version=1.0", map.get(Constants.FRAMEWORK_SYSTEMPACKAGES));
-		assertEquals("additional-package1; version=1.0,additional-package2; version=2.0",
+		assertEquals("core-package;version=1.0", map.get(Constants.FRAMEWORK_SYSTEMPACKAGES));
+		assertEquals("additional-package1;version=1.0,additional-package2;version=2.0",
 				map.get(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA));
 	}
 

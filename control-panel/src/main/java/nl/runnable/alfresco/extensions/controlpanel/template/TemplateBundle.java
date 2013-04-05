@@ -5,6 +5,7 @@ import java.util.List;
 
 import nl.runnable.alfresco.extensions.controlpanel.BundleHelper;
 
+import org.eclipse.osgi.framework.internal.core.Constants;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
 import org.springframework.util.Assert;
@@ -33,7 +34,7 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 		this.bundle = bundle;
 	}
 
-	public long getId() {
+	public long getBundleId() {
 		return bundle.getBundleId();
 	}
 
@@ -41,12 +42,16 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 		return bundle.getSymbolicName();
 	}
 
-	public String getVersion() {
-		return bundle.getVersion().toString();
+	public String getName() {
+		return bundle.getHeaders().get(Constants.BUNDLE_NAME);
 	}
 
-	public String getName() {
-		return getManifest().getBundleName();
+	public String getDescription() {
+		return bundle.getHeaders().get(Constants.BUNDLE_DESCRIPTION);
+	}
+
+	public boolean isDynamicExtension() {
+		return BundleHelper.isDynamicExtension(bundle);
 	}
 
 	public String getLocation() {
@@ -57,11 +62,11 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 		return bundle.getLastModified();
 	}
 
-	public boolean isDynamicExtension() {
-		return BundleHelper.isDynamicExtension(bundle);
+	public String getVersion() {
+		return bundle.getVersion().toString();
 	}
 
-	public String getState() {
+	public String getStatus() {
 		switch (bundle.getState()) {
 		case Bundle.UNINSTALLED:
 			return "uninstalled";
@@ -80,11 +85,15 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 		}
 	}
 
+	public String getExportPackage() {
+		return bundle.getHeaders().get(Constants.EXPORT_PACKAGE);
+	}
+
 	public boolean isDeleteable() {
 		return getLocation().startsWith("/Repository/");
 	}
 
-	public BundleManifest getManifest() {
+	protected BundleManifest getManifest() {
 		if (manifest == null) {
 			manifest = BundleManifestFactory.createBundleManifest(bundle.getHeaders());
 		}
@@ -117,17 +126,19 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 
 	@Override
 	public int compareTo(final TemplateBundle other) {
-		if (this.getId() == FRAMEWORK_BUNDLE_ID) {
+		if (this.getBundleId() == FRAMEWORK_BUNDLE_ID) {
 			return Integer.MIN_VALUE;
-		} else if (other.getId() == 0) {
+		} else if (other.getBundleId() == 0) {
 			return Integer.MAX_VALUE;
 		}
 		final int compare = this.getName().compareToIgnoreCase(other.getName());
 		if (compare == 0) {
-			return this.getVersion().compareToIgnoreCase(other.getVersion());
+			return this.getVersion().compareTo(other.getVersion());
 
 		}
 		return compare;
 	}
+
+	/* Delegate operations */
 
 }

@@ -1,6 +1,7 @@
-# Configures the Java packages that are exported as OSGI system packages.
-# The classes in these packages are made available to bundles in the OSGI container.
+# Packages specified here are loaded from the server classloader.  
 
+javax.servlet
+javax.servlet.http
 javax.inject;1
 javax.annotation;1.1
 
@@ -14,5 +15,5 @@ org.apache.commons.logging
 # Note: SLF4J version must be >= 1.5.0
 org.slf4j;1.5.6
 
-# For extender.
+# For Blueprint extender.
 org.xml.sax
