@@ -19,11 +19,19 @@
   <h2>${bundle.name} ${bundle.version}</h2>
 
   <table class="bundle table table-striped table-bordered">
-    <@header name="Symbolic Name">${bundle.symbolicName}</@header>
-    <@header name="Version">${bundle.version}</@header>
-    <@header name="Status">${bundle.status}</@header>
+    <@header name="Type">
+      <#if bundle.dynamicExtension>
+        Extension bundle: provides Alfresco repository functionality.
+      <#else>
+        Framework bundle: provides support for repository extensions or other framework bundles.
+      </#if>
+    </@header>
     <@header name="Description">${bundle.description!""}</@header>
-    <@header name="Location">${bundle.location!""}</@header>
+    <@header name="Symbolic Name">${bundle.symbolicName}</@header>
+    <@header name="Location">
+      ${bundle.location!""}
+    </@header>
+    <@header name="Status">${bundle.status}</@header>
     <@header name="Last Modified">
       <span data-time="${bundle.lastModified?string.computer}"></span>
     </@header>
@@ -33,12 +41,9 @@
     <div class="uninstall">
       <form action="delete-bundle" method="post" 
         data-title="Delete Bundle"
-        data-confirm="Are you sure you want to delete this Bundle?">
+        data-confirm="Are you sure you want to delete this bundle?<p>This removes the bundle from the repository.">
         <input type="hidden" name="id" value="${bundle.bundleId?string.computer}" />
-        <p>
-          <button class="btn btn-danger">Delete Bundle</button>
-          This removes the Bundle from the repository.
-        </p>
+        <button class="btn btn-danger">Delete Bundle</button>
       </form>
     </div>
   </#if>
