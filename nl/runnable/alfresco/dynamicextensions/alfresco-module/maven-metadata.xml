@@ -3,10 +3,9 @@
   <groupId>nl.runnable.alfresco.dynamicextensions</groupId>
   <artifactId>alfresco-module</artifactId>
   <versioning>
-    <release>1.0.0.M3</release>
     <versions>
-      <version>1.0.0.M3</version>
+      <version>1.0.0.M4-SNAPSHOT</version>
     </versions>
-    <lastUpdated>20130317113731</lastUpdated>
+    <lastUpdated>20130406140536</lastUpdated>
   </versioning>
 </metadata>
