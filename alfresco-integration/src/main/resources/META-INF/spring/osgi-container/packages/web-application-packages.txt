@@ -1,0 +1,9 @@
+# The base base packages to scan for in the Alfresco web application.
+
+freemarker
+org.alfresco
+org.apache
+org.dom4j
+org.springframework
+net.sf.cglib
+nl.runnable.alfresco

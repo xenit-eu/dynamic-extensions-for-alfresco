@@ -1,19 +1,6 @@
-# Packages specified here are loaded from the server classloader.  
-
-javax.servlet
-javax.servlet.http
+# These libraries come with Dynamic Extensions:
 javax.inject;1
 javax.annotation;1.1
 
-org.aopalliance.aop
-org.aopalliance.intercept
-org.aspectj.lang
-org.aspectj.lang.annotation
-
-org.apache.commons.logging
-
-# Note: SLF4J version must be >= 1.5.0
+# Note: SLF4J version MUST be >= 1.5.0
 org.slf4j;1.5.6
-
-# For Blueprint extender.
-org.xml.sax

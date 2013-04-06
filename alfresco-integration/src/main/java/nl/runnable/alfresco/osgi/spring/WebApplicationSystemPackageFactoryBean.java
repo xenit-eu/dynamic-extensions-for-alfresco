@@ -5,12 +5,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 
-import nl.runnable.alfresco.osgi.ReflectionService;
+import nl.runnable.alfresco.osgi.JavaPackageScanner;
 import nl.runnable.alfresco.osgi.SystemPackage;
 
 import org.alfresco.service.descriptor.DescriptorService;
@@ -29,19 +30,21 @@ import org.springframework.web.context.support.ServletContextResourcePatternReso
  */
 public class WebApplicationSystemPackageFactoryBean implements FactoryBean<List<SystemPackage>>, ServletContextAware {
 
-	private static final String FELIX_PACKAGE = "org.apache.felix";
-
 	private static final String OSGI_PACKAGE = "org.osgi";
 
-	private static final String DEFAULT_SPRING_VERSION = "3.0.0.RELEASE";
+	private static final String FELIX_PACKAGE = "org.apache.felix";
+
+	private static final Collection<String> frameworkPackages = Arrays.asList(OSGI_PACKAGE, FELIX_PACKAGE);
 
 	private static final String ALFRESCO_PACKAGE = "org.alfresco";
 
 	private static final String SPRING_PACKAGE = "org.springframework";
 
+	private static final String DEFAULT_SPRING_VERSION = "3.0.0.RELEASE";
+
 	/* Dependencies */
 
-	private ReflectionService reflectionService;
+	private JavaPackageScanner reflectionService;
 
 	private DescriptorService descriptorService;
 
@@ -49,9 +52,9 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<List<
 
 	/* Configuration */
 
-	private final String defaultSpringVersion = DEFAULT_SPRING_VERSION;
+	private Set<String> packagesToScan;
 
-	private final Collection<String> frameworkPackages = Arrays.asList(OSGI_PACKAGE, FELIX_PACKAGE);
+	private final String defaultSpringVersion = DEFAULT_SPRING_VERSION;
 
 	/* Main operations */
 
@@ -74,7 +77,7 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<List<
 	/* Utility operations */
 
 	protected List<SystemPackage> createSystemPackages() {
-		final List<String> packageNames = reflectionService.scanPackageNames();
+		final List<String> packageNames = reflectionService.scanWebApplicationPackages(getPackagesToScan());
 		final List<SystemPackage> systemPackages = new ArrayList<SystemPackage>(packageNames.size());
 		for (final String packageName : packageNames) {
 			if (isFrameworkPackage(packageName) == false) {
@@ -129,7 +132,7 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<List<
 
 	/* Dependencies */
 
-	public void setReflectionService(final ReflectionService reflectionService) {
+	public void setReflectionService(final JavaPackageScanner reflectionService) {
 		Assert.notNull(reflectionService);
 		this.reflectionService = reflectionService;
 	}
@@ -141,6 +144,16 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<List<
 	@Override
 	public void setServletContext(final ServletContext servletContext) {
 		this.servletContext = servletContext;
+	}
+
+	/* Configuration */
+
+	public void setPackagesToScan(final Set<String> packagesToScan) {
+		this.packagesToScan = packagesToScan;
+	}
+
+	protected Set<String> getPackagesToScan() {
+		return packagesToScan;
 	}
 
 }

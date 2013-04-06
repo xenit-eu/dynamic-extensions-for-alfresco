@@ -1,0 +1,20 @@
+# Classes from these Java packages are loaded by the web server classloader.
+# They must be specified explicitly, because the OSGi framework currently
+# only scans for Java packages in the web application.
+#
+# In a standard Tomcat directory layout these classes can typically be 
+# found in the 'endorsed', 'lib' and 'shared' folders.    
+
+# Part of the server infrastructure:
+javax.servlet
+javax.servlet.http
+org.apache.commons.logging
+
+# Used by Gemini Blueprint:
+org.xml.sax
+
+# Used by Spring:
+org.aopalliance.aop
+org.aopalliance.intercept
+org.aspectj.lang
+org.aspectj.lang.annotation

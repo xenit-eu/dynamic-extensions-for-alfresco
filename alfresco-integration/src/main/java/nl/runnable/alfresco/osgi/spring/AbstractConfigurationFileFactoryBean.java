@@ -65,8 +65,8 @@ public abstract class AbstractConfigurationFileFactoryBean<T> implements Factory
 		return configurations;
 	}
 
-	public void setConfigurationLocations(final List<String> additionalConfigurations) {
-		this.configurationLocations = additionalConfigurations;
+	public void setConfigurationLocations(final List<String> configurationLocations) {
+		this.configurationLocations = configurationLocations;
 	}
 
 	protected List<String> getConfigurationLocations() {

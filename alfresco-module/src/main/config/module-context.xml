@@ -27,12 +27,18 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<alias name="osgi.container.ModuleComponent" alias="osgi.container.FrameworkService" />
 
-	<bean id="osgi.container.WebApplicationPackages" class="nl.runnable.alfresco.osgi.spring.WebApplicationSystemPackageFactoryBean">
+	<bean id="osgi.container.WebApplicationJavaPackages" class="nl.runnable.alfresco.osgi.spring.WebApplicationSystemPackageFactoryBean">
 		<description>Scans for Java packages in JARs in /WEB-INF/lib</description>
-		<property name="reflectionService" ref="osgi.container.ReflectionService" />
+		<property name="reflectionService" ref="osgi.container.JavaPackageScanner" />
 		<property name="descriptorService" ref="DescriptorService" />
+		<property name="packagesToScan">
+			<bean class="nl.runnable.alfresco.osgi.spring.FileStringListFactoryBean">
+				<property name="configurations" value="classpath:/META-INF/spring/osgi-container/packages/web-application-packages.txt" />
+				<property name="configurationLocations" value="classpath*:/dynamic-extensions/configuration/packages/web-application-packages.txt" />
+			</bean>
+		</property>
 	</bean>
 
-	<bean id="osgi.container.ReflectionService" class="nl.runnable.alfresco.osgi.ReflectionService" />
+	<bean id="osgi.container.JavaPackageScanner" class="nl.runnable.alfresco.osgi.JavaPackageScanner" />
 
 </beans>

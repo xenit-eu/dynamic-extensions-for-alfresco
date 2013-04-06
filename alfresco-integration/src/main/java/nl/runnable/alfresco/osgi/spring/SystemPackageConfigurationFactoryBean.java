@@ -88,19 +88,29 @@ public class SystemPackageConfigurationFactoryBean extends AbstractConfiguration
 		final SystemPackageEditor systemPackageEditor = new SystemPackageEditor();
 		systemPackageEditor.setDefaultVersion(getDefaultVersion());
 		for (final Resource configuration : resolveConfigurations()) {
-			final LineNumberReader in = new LineNumberReader(new InputStreamReader(configuration.getInputStream()));
-			for (String line; (line = in.readLine()) != null;) {
-				line = line.trim();
-				if (line.isEmpty() || line.startsWith("#")) {
-					// Skip empty lines and comments.
-					continue;
+			LineNumberReader in = null;
+			try {
+				in = new LineNumberReader(new InputStreamReader(configuration.getInputStream()));
+				for (String line; (line = in.readLine()) != null;) {
+					line = line.trim();
+					if (line.isEmpty() || line.startsWith("#")) {
+						// Skip empty lines and comments.
+						continue;
+					}
+					try {
+						systemPackageEditor.setAsText(line);
+						final SystemPackage systemPackage = (SystemPackage) systemPackageEditor.getValue();
+						systemPackages.add(systemPackage);
+					} catch (final IllegalArgumentException e) {
+						logger.warn("Could not parse SystemPackage configuration line: {}", e.getMessage());
+					}
 				}
-				try {
-					systemPackageEditor.setAsText(line);
-					final SystemPackage systemPackage = (SystemPackage) systemPackageEditor.getValue();
-					systemPackages.add(systemPackage);
-				} catch (final IllegalArgumentException e) {
-					logger.warn("Could not parse SystemPackage configuration line: {}", e.getMessage());
+			} finally {
+				if (in != null) {
+					try {
+						in.close();
+					} catch (final IOException e) {
+					}
 				}
 			}
 		}

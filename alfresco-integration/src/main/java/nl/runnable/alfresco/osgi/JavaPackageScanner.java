@@ -2,6 +2,8 @@ package nl.runnable.alfresco.osgi;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -13,10 +15,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.core.type.classreading.MetadataReader;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.context.support.ServletContextResourcePatternResolver;
 
-public class ReflectionService implements ServletContextAware {
+/**
+ * Provides operations for discovering Java packages.
+ * 
+ * @author Laurens Fridael
+ * 
+ */
+public class JavaPackageScanner implements ServletContextAware {
+
+	private static final Pattern CLASS_FILENAME_PATTERN = Pattern.compile("!/(.+)\\.class");
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -28,32 +39,35 @@ public class ReflectionService implements ServletContextAware {
 
 	/**
 	 * 
-	 * Obtains the package names of all classes in /WEB-INF/lib.
+	 * Obtains the Java packages by scanning JARs in /WEB-INF/lib.
 	 * <p>
 	 * This implementation uses a {@link MetadataReader} to obtain class information, without actually loading the
 	 * classses into the VM.
 	 * 
+	 * @param basePackageNames
+	 *            The names of the base packages or null to scan every package.
 	 */
-	public List<String> scanPackageNames() {
+	public List<String> scanWebApplicationPackages(final Collection<String> basePackageNames) {
 		if (resourcePatternResolver == null) {
 			if (logger.isWarnEnabled()) {
-				logger.warn("ResourcePatternResolver was not configured. This is normal duromg a unit test.");
+				logger.warn("ResourcePatternResolver was not configured. This is normal during a unit test.");
 			}
 			return Collections.emptyList();
 		}
 
 		if (logger.isDebugEnabled()) {
-			logger.debug("Scanning for Java packages.");
+			if (CollectionUtils.isEmpty(basePackageNames)) {
+				logger.debug("Scanning for Java packages.");
+			} else {
+				logger.debug("Scanning for Java packages in the following base packages: {}", basePackageNames);
+			}
 		}
 		final long before = System.currentTimeMillis();
 		final List<String> packageNames = new ArrayList<String>();
 		try {
-			final String location = "/WEB-INF/lib/*.jar!/**/*.class";
-			final Pattern pattern = Pattern.compile("!/(.+)\\.class");
-			final Resource[] resources = resourcePatternResolver.getResources(location);
-			for (final Resource resource : resources) {
+			for (final Resource resource : getClassResources(basePackageNames)) {
 				if (resource.isReadable()) {
-					final Matcher matcher = pattern.matcher(resource.getURL().toString());
+					final Matcher matcher = CLASS_FILENAME_PATTERN.matcher(resource.getURL().toString());
 					if (matcher.find()) {
 						final String className = matcher.group(1);
 						if (className.lastIndexOf('/') > -1) {
@@ -77,6 +91,22 @@ public class ReflectionService implements ServletContextAware {
 			}
 		}
 		return packageNames;
+	}
+
+	private List<Resource> getClassResources(final Collection<String> packagesToScan) throws IOException {
+		final List<Resource> resources;
+		if (CollectionUtils.isEmpty(packagesToScan)) {
+			final String location = "/WEB-INF/lib/*.jar!/**/*.class";
+			resources = Arrays.asList(resourcePatternResolver.getResources(location));
+		} else {
+			resources = new ArrayList<Resource>();
+			for (final String packageName : packagesToScan) {
+				final String location = String.format("/WEB-INF/lib/*.jar!/%s/**/*.class",
+						packageName.replace('.', '/'));
+				resources.addAll(Arrays.asList(resourcePatternResolver.getResources(location)));
+			}
+		}
+		return resources;
 	}
 
 	/* Dependencies */
