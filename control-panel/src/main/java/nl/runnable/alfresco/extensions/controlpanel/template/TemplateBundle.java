@@ -16,7 +16,7 @@ import com.springsource.util.osgi.manifest.ExportedPackage;
 import com.springsource.util.osgi.manifest.ImportedPackage;
 
 /**
- * Adapts an {@link Bundle} for display purposes in a Freemarker template.
+ * Adapts an {@link Bundle} for display in a Freemarker template.
  * 
  * @author Laurens Fridael
  * 
@@ -43,11 +43,11 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 	}
 
 	public String getName() {
-		return bundle.getHeaders().get(Constants.BUNDLE_NAME);
+		return toString(bundle.getHeaders().get(Constants.BUNDLE_NAME));
 	}
 
 	public String getDescription() {
-		return bundle.getHeaders().get(Constants.BUNDLE_DESCRIPTION);
+		return toString(bundle.getHeaders().get(Constants.BUNDLE_DESCRIPTION));
 	}
 
 	public boolean isDynamicExtension() {
@@ -64,6 +64,16 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 
 	public String getVersion() {
 		return bundle.getVersion().toString();
+	}
+
+	public String getStore() {
+		if (bundle.getLocation().startsWith("file:")) {
+			return "filesystem";
+		} else if (bundle.getLocation().startsWith("/")) {
+			return "repository";
+		} else {
+			return "n/a";
+		}
 	}
 
 	public String getStatus() {
@@ -85,12 +95,12 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 		}
 	}
 
-	public String getExportPackage() {
+	public Object getExportPackage() {
 		return bundle.getHeaders().get(Constants.EXPORT_PACKAGE);
 	}
 
 	public boolean isDeleteable() {
-		return getLocation().startsWith("/Repository/");
+		return getLocation().startsWith("/Company Home");
 	}
 
 	protected BundleManifest getManifest() {
@@ -139,6 +149,16 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 		return compare;
 	}
 
-	/* Delegate operations */
+	/**
+	 * Utility function for working around problems when compiling against JDK 7. See <a
+	 * href="https://mail.osgi.org/pipermail/osgi-dev/2011-August/003223.html">this page</a> for an explanation on the
+	 * JDK 7 compile issue.
+	 * 
+	 * @param value
+	 * @return
+	 */
+	private static String toString(final Object value) {
+		return value != null ? value.toString() : null;
+	}
 
 }

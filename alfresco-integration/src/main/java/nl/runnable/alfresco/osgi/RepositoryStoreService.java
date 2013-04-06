@@ -18,12 +18,14 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 /**
- * Provides operations for storing OSGi bundles and associated configuration in the repository.
+ * Provides operations for storing OSGi bundles and framework configuration in the repository.
  * 
  * @author Laurens Fridael
  * 
  */
-public class RepositoryStorageService {
+public class RepositoryStoreService {
+
+	private static final String DEFAULT_BUNDLE_REPOSITORY_LOCATION = "/Company Home/Data Dictionary/Dynamic Extensions/Bundles";
 
 	/* Dependencies */
 
@@ -40,6 +42,8 @@ public class RepositoryStorageService {
 	private String bundleFolderDescription;
 
 	private String configurationFolderDescription;
+
+	private String bundleRepositoryLocation = DEFAULT_BUNDLE_REPOSITORY_LOCATION;
 
 	/* Main operations */
 
@@ -74,11 +78,11 @@ public class RepositoryStorageService {
 	}
 
 	/**
-	 * Obtains the JAR files in the Bundle folder.
+	 * Obtains information on the JAR files in the bundle folder.
 	 * 
 	 * @return
 	 */
-	public List<FileInfo> getJarFilesInBundleFolder() {
+	public List<FileInfo> getBundleJarFiles() {
 		final List<FileInfo> jarFiles = new ArrayList<FileInfo>();
 		final NodeRef bundleFolder = getBundleFolder(false);
 		if (bundleFolder != null) {
@@ -214,6 +218,15 @@ public class RepositoryStorageService {
 
 	public void setConfigurationFolderDescription(final String configurationFolderDescription) {
 		this.configurationFolderDescription = configurationFolderDescription;
+	}
+
+	public void setBundleRepositoryLocation(final String bundleRepositoryLocation) {
+		Assert.hasText(bundleRepositoryLocation);
+		this.bundleRepositoryLocation = bundleRepositoryLocation;
+	}
+
+	public String getBundleRepositoryLocation() {
+		return bundleRepositoryLocation;
 	}
 
 }

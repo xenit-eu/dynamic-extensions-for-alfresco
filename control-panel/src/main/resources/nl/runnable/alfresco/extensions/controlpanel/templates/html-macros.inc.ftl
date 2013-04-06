@@ -27,6 +27,9 @@
             </ul>
             <ul class="nav pull-right">
               <li>
+                <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco" target="_blank">
+                  Github project
+                </a>
               </li>
             </ul>
           </div>
@@ -49,16 +52,7 @@
     </div>
     <div id="footer">
       <div class="container">
-        <div class="row">
-          <div class="span8">
-            <p class="last-updated">Last updated: <span id="last-updated">just now</span></p>
-          </div>
-          <div class="span4">
-            <p>
-              <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco" target="_blank">Github project</a>
-            </p>
-          </div>
-        </div>
+        <p class="last-updated">Last updated: <span id="last-updated">just now</span></p>
       </div>
     </div>
     <form id="post" method="post" target="postFrame" style="display: none;"></form>
@@ -78,21 +72,30 @@
     <thead>
       <tr>
         <th class="name">Bundle</th>
-        <th class="state">Status</th>        
-        <th class="description">Description</th>
+        <th class="status">Status</th>        
+        <th class="modified">Modified</th>
+        <th class="store">Store</th>
       </tr>      
     </thead>
     <tbody>
       <#list bundles as bundle>
         <tr class="<#if bundle.status == 'installed'>error</#if>">
           <td>
-            <a href="bundles/${bundle.bundleId?string.computer}">${bundle.name} ${bundle.version}</a>
+            <a href="bundles/${bundle.bundleId?string.computer}"
+              data-trigger="hover"
+              data-content="${bundle.description}"
+              data-delay="1000">
+              ${bundle.name} ${bundle.version}
+            </a>
           </td>
           <td>
             ${bundle.status}
           </td>
           <td>
-            ${bundle.description!''}
+            <span data-time="${bundle.lastModified?string.computer}"></span>
+          </td>
+          <td>
+            ${bundle.store}
           </td>
         </tr>
       </#list>      

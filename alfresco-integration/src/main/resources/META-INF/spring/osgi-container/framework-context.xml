@@ -62,7 +62,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		<property name="fileInstallConfigurer" ref="osgi.container.FileInstallConfigurer" />
 		<property name="fileInstallEnabled" value="${osgi.container.bundle-update:true}" />
 		<property name="configuration" ref="osgi.container.Configuration" />
-		<property name="repositoryStorageService" ref="osgi.container.RepositoryStorageService" />
+		<property name="repositoryStoreService" ref="osgi.container.RepositoryStoreService" />
 		<property name="contentService" ref="contentService" />
 	</bean>
 
@@ -77,7 +77,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<bean id="osgi.container.Configuration" class="nl.runnable.alfresco.osgi.Configuration" />
 
-	<bean id="osgi.container.RepositoryStorageService" class="nl.runnable.alfresco.osgi.RepositoryStorageService">
+	<bean id="osgi.container.RepositoryStoreService" class="nl.runnable.alfresco.osgi.RepositoryStoreService">
 		<property name="namespacePrefixResolver" ref="namespaceService" />
 		<property name="nodeService" ref="nodeService" />
 		<property name="fileFolderService" ref="fileFolderService" />

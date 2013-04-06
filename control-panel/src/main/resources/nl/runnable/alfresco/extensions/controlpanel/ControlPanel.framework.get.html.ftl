@@ -10,7 +10,7 @@
       data-wait="15000" 
       data-title="Restarting Framework" 
       data-message="<p>Please wait while the Framework restarts. The page will refresh automatically.</p>
-        <p>Getting a 404 Not Found? Wait a few seconds, then refresh the page.</p>" 
+        <p>Getting a 404 Not Found? Wait a few seconds, then reload the page.</p>" 
       data-button="Update now"
       class="btn">
       Restart Framework

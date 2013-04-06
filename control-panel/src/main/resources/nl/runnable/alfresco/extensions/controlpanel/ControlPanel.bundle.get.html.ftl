@@ -21,9 +21,9 @@
   <table class="bundle table table-striped table-bordered">
     <@header name="Type">
       <#if bundle.dynamicExtension>
-        Extension bundle: provides Alfresco repository functionality.
+        Extension bundle
       <#else>
-        Framework bundle: provides support for repository extensions or other framework bundles.
+        Framework bundle
       </#if>
     </@header>
     <@header name="Description">${bundle.description!""}</@header>
@@ -32,7 +32,7 @@
       ${bundle.location!""}
     </@header>
     <@header name="Status">${bundle.status}</@header>
-    <@header name="Last Modified">
+    <@header name="Modified">
       <span data-time="${bundle.lastModified?string.computer}"></span>
     </@header>
   </table>

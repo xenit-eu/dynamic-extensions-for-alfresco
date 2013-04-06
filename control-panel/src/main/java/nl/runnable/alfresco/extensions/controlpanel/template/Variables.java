@@ -49,6 +49,11 @@ public class Variables {
 	 */
 	public static final String SUCCESS_MESSAGE = "successMessage";
 
+	/**
+	 * Refers to a String specifying the repository location where bundles are stored.
+	 */
+	public static final String REPOSITORY_STORE_LOCATION = "repositoryStoreLocation";
+
 	private Variables() {
 	}
 }

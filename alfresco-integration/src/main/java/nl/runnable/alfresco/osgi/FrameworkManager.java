@@ -86,7 +86,7 @@ public class FrameworkManager implements ResourceLoaderAware {
 
 	private Configuration configuration;
 
-	private RepositoryStorageService repositoryStorageService;
+	private RepositoryStoreService repositoryStoreService;
 
 	private ContentService contentService;
 
@@ -235,13 +235,14 @@ public class FrameworkManager implements ResourceLoaderAware {
 	/**
 	 * Installs the Bundles in the repository.
 	 * <p>
-	 * This implementation uses RepositoryStorageService.
+	 * This implementation uses RepositoryStoreService.
 	 */
 	protected List<Bundle> installRepositoryBundles() {
 		final List<Bundle> bundles = new ArrayList<Bundle>();
-		for (final FileInfo jarFile : getRepositoryStorageService().getJarFilesInBundleFolder()) {
+		for (final FileInfo jarFile : getRepositoryStoreService().getBundleJarFiles()) {
 			try {
-				final String location = String.format("/Repository/%s", jarFile.getName());
+				final String location = String.format("%s/%s", getRepositoryStoreService()
+						.getBundleRepositoryLocation(), jarFile.getName());
 				if (logger.isDebugEnabled()) {
 					logger.debug("Installing Bundle: {}", location);
 				}
@@ -402,13 +403,13 @@ public class FrameworkManager implements ResourceLoaderAware {
 		return configuration;
 	}
 
-	public void setRepositoryStorageService(final RepositoryStorageService repositoryFolderService) {
+	public void setRepositoryStoreService(final RepositoryStoreService repositoryFolderService) {
 		Assert.notNull(repositoryFolderService);
-		this.repositoryStorageService = repositoryFolderService;
+		this.repositoryStoreService = repositoryFolderService;
 	}
 
-	protected RepositoryStorageService getRepositoryStorageService() {
-		return repositoryStorageService;
+	protected RepositoryStoreService getRepositoryStoreService() {
+		return repositoryStoreService;
 	}
 
 	public void setContentService(final ContentService contentService) {

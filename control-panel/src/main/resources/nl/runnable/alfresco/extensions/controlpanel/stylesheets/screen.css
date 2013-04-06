@@ -10,37 +10,24 @@ code {
   color: #333;
 }
 
-table.extensions th.name {
-  width: 50%;
-}
-
-table.extensions th.version {
-  width: 30%;
-}
-
-table.extensions th.actions {
-  width: 20%;
-}
-
 table.bundles th.name {
-  width: 35%;
+  width: 45%;
 }
 
-table.bundles th.state {
+table.bundles th.status {
   width: 15%;
 }
 
-table.bundles th.description {
-  width: 50%;
+table.bundles th.modified {
+  width: 20%;
 }
 
-form#post {
-  display: none;
+table.bundles th.store {
+  width: 20%;
 }
-
 
 table.bundle th.name {
-  width: 25%;
+  width: 20%;
 }
 
 table.bundle td.value {
@@ -66,4 +53,8 @@ table.imported.package th.version {
 
 table.exported.package th.version {
   width: 40%;
+}
+
+form#post {
+  display: none;
 }

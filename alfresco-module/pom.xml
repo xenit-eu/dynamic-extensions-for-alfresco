@@ -15,6 +15,7 @@
 		<amp.outputDirectory>${project.build.outputDirectory}/alfresco/module/${project.groupId}</amp.outputDirectory>
 		<blueprint.outputDirectory>${amp.outputDirectory}/blueprint-bundles</blueprint.outputDirectory>
 		<fileInstall.outputDirectory>${amp.outputDirectory}/file-install-bundles</fileInstall.outputDirectory>
+		<standardBundles.outputDirectory>${amp.outputDirectory}/standard-bundles</standardBundles.outputDirectory>
 		<gemini-blueprint.version>1.0.2.RELEASE</gemini-blueprint.version>
 		<fileinstall.version>3.2.4</fileinstall.version>
 		<acegi-security.version>1.0.0</acegi-security.version>
@@ -59,19 +60,6 @@
 			<artifactId>org.apache.felix.framework</artifactId>
 		</dependency>
 	</dependencies>
-	<profiles>
-		<profile>
-			<id>osgi.container.framework.felix</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-				<property>
-					<name>osgi.container.framework</name>
-					<value>felix</value>
-				</property>
-			</activation>
-			<!-- We override the dependency scope. -->
-		</profile>
-	</profiles>
 	<build>
 		<finalName>${project.groupId}-${project.version}</finalName>
 		<plugins>
@@ -93,7 +81,7 @@
 				<!--$NO-MVN-MAN-VER$ -->
 				<executions>
 					<execution>
-						<id>copy-blueprint-artifacts</id>
+						<id>copy-blueprint-bundles</id>
 						<phase>generate-resources</phase>
 						<goals>
 							<goal>copy</goal>
@@ -125,7 +113,7 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>copy-file-install-artifacts</id>
+						<id>copy-file-install-bundles</id>
 						<phase>generate-resources</phase>
 						<goals>
 							<goal>copy</goal>
@@ -183,6 +171,48 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+	<profiles>
+		<profile>
+			<!-- By default we include the Control Panel bundle. -->
+			<id>default</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<version>2.2</version>
+						<!--$NO-MVN-MAN-VER$ -->
+						<executions>
+							<execution>
+								<id>copy-standard-bundles</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>copy</goal>
+								</goals>
+								<configuration>
+									<artifactItems>
+										<artifactItem>
+											<groupId>nl.runnable.alfresco.dynamicextensions</groupId>
+											<artifactId>control-panel</artifactId>
+											<version>${project.version}</version>
+										</artifactItem>
+									</artifactItems>
+									<outputDirectory>${standardBundles.outputDirectory}</outputDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<!--  Use this profile to exclude the Control Panel bundle. -->
+			<id>development</id>
+		</profile>
+	</profiles>
 	<pluginRepositories>
 		<pluginRepository>
 			<id>alfresco-public</id>

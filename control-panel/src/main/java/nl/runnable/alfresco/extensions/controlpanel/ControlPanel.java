@@ -83,6 +83,7 @@ public class ControlPanel {
 		model.put(Variables.INSTALLED_BUNDLE, responseHelper.getFlashVariable(Variables.INSTALLED_BUNDLE));
 		model.put(Variables.ERROR_MESSAGE, responseHelper.getFlashVariable(Variables.ERROR_MESSAGE));
 		model.put(Variables.SUCCESS_MESSAGE, responseHelper.getFlashVariable(Variables.SUCCESS_MESSAGE));
+		model.put(Variables.REPOSITORY_STORE_LOCATION, bundleHelper.getBundleRepositoryLocation());
 		return model;
 	}
 

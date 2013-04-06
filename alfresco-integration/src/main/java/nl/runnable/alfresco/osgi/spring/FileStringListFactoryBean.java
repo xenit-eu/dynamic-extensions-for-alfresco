@@ -20,7 +20,7 @@ public class FileStringListFactoryBean extends AbstractTextConfigurationFileFact
 	@Override
 	@SuppressWarnings("unchecked")
 	public Class<? extends List<String>> getObjectType() {
-		return (Class<? extends List<String>>) List.class;
+		return (Class<? extends List<String>>) (Class<?>) List.class;
 	}
 
 	@Override

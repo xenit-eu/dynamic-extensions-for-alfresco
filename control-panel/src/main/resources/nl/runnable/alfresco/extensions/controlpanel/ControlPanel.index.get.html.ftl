@@ -11,12 +11,12 @@
 
   <@html.bundleTable bundles = extensionBundles />
 
-  <h2>Manage OSGi bundles</h2>
+  <h2>Manage bundles</h2>
 
   <h3>Filesystem</h3>
 
   <#if (fileInstallPaths?size > 0)>
-    <p>Manage OSGi bundles from one of the following filesystem directories:</p>
+    <p>Manage bundles from one of the following filesystem directories:</p>
     <ul>
       <#list fileInstallPaths as path>
         <li>
@@ -26,7 +26,7 @@
     </ul>
     <p>The bundles will be installed/uninstalled automatically.</p>
   <#else>
-    <p>Managing OSGi bundles through the filesystem is currently disabled.</p>
+    <p>Managing bundles through the filesystem is currently disabled.</p>
     <p>
       <a href="configuration" class="btn">Configure</a>
     </p>
@@ -37,7 +37,7 @@
   <form action="install-bundle" enctype="multipart/form-data" method="post">
     <div class="control-group">
       <div class="control-label">
-        <label>Alternatively, upload an OSGi bundle here:</label>
+        <label>Alternatively, upload bundles here:</label>
       </div>
       <div class="controls">
         <div class="fileupload fileupload-new" data-provides="fileupload">
@@ -55,7 +55,7 @@
       </div>
     </div>
     <div>
-      <p>The bundle will be stored in <code>/Company Home/Data Dictionary/Dynamic Extensions/Bundles</code>.</p>
+      <p>The bundle will be stored in <code>${repositoryStoreLocation}</code>.</p>
     </div>
   </form>
 

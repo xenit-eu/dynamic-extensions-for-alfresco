@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 import javax.annotation.ManagedBean;
 import javax.inject.Inject;
 
-import nl.runnable.alfresco.osgi.RepositoryStorageService;
+import nl.runnable.alfresco.osgi.RepositoryStoreService;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;
@@ -64,7 +64,7 @@ public class BundleHelper {
 	private BundleContext bundleContext;
 
 	@Inject
-	private RepositoryStorageService repositoryService;
+	private RepositoryStoreService repositoryStoreService;
 
 	@Inject
 	private FileFolderService fileFolderService;
@@ -74,6 +74,8 @@ public class BundleHelper {
 
 	@Inject
 	private NodeService nodeService;
+
+	/* Configuration */
 
 	/* Main operations */
 
@@ -141,8 +143,14 @@ public class BundleHelper {
 		final File tempFile = saveToTempFile(file);
 		try {
 			final String filename = file.getFilename();
-			final Bundle bundle = bundleContext.installBundle(generateRepositoryLocation(filename),
-					new FileInputStream(tempFile));
+			final String location = generateRepositoryLocation(filename);
+			Bundle bundle = bundleContext.getBundle(location);
+			final FileInputStream in = new FileInputStream(tempFile);
+			if (bundle != null) {
+				bundle.update(in);
+			} else {
+				bundle = bundleContext.installBundle(location, in);
+			}
 			bundle.start();
 			final BundleManifest manifest = BundleManifestFactory.createBundleManifest(bundle.getHeaders());
 			saveBundleInRepository(tempFile, filename, manifest);
@@ -156,7 +164,7 @@ public class BundleHelper {
 		final Matcher matcher = Pattern.compile("/Repository/(.+\\.jar)$").matcher(bundle.getLocation());
 		if (matcher.matches()) {
 			final String filename = matcher.group(1);
-			final NodeRef bundleFolder = repositoryService.getBundleFolder(false);
+			final NodeRef bundleFolder = repositoryStoreService.getBundleFolder(false);
 			if (bundleFolder != null) {
 				final NodeRef file = fileFolderService.searchSimple(bundleFolder, filename);
 				if (file != null) {
@@ -195,7 +203,7 @@ public class BundleHelper {
 	 */
 	protected void saveBundleInRepository(final File file, final String filename, final BundleManifest manifest)
 			throws IOException {
-		final NodeRef bundleFolder = repositoryService.getBundleFolder(true);
+		final NodeRef bundleFolder = repositoryStoreService.getBundleFolder(true);
 		NodeRef nodeRef = fileFolderService.searchSimple(bundleFolder, filename);
 		if (nodeRef == null) {
 			nodeRef = fileFolderService.create(bundleFolder, filename, ContentModel.TYPE_CONTENT).getNodeRef();
@@ -215,7 +223,13 @@ public class BundleHelper {
 	 * @return
 	 */
 	protected String generateRepositoryLocation(final String filename) {
-		return String.format("/Repository/%s", filename);
+		return String.format("%s/%s", getBundleRepositoryLocation(), filename);
+	}
+
+	/* Configuration */
+
+	public String getBundleRepositoryLocation() {
+		return repositoryStoreService.getBundleRepositoryLocation();
 	}
 
 }

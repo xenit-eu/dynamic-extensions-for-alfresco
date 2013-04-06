@@ -2,9 +2,18 @@
 
   'use strict';
 
+  /**
+   * Page setup.
+   */
   $(function() {
     bootbox.animate(false);
+    $('table.bundles a').popover();
+  });
 
+  /**
+   * Sets up the display of relative times.
+   */
+  $(function() {
     var lastUpdated = new Date();
     var refreshTimes = function() {
       $('#last-updated').text(moment(lastUpdated).fromNow());
@@ -20,8 +29,13 @@
       });
     };
     refreshTimes();
-    window.setInterval(refreshTimes, 60000);
+    window.setInterval(refreshTimes, 30000);
+  });
 
+  /**
+   * Handles asynchronous POST requests.
+   */
+  $(function() {
     $('a[data-method="post"]').on('click', function(event) {
       event.preventDefault();
 
@@ -49,7 +63,12 @@
         window.location.reload();
       }, wait);
     });
+  });
 
+  /**
+   * Handles confirmation of form submits.
+   */
+  $(function() {
     $('form[data-confirm]').on('submit', function(event) {
       event.preventDefault();
 
@@ -64,11 +83,15 @@
         }
       });
     });
+  });
 
+  /**
+   * Handles automatic form submit on input changes.
+   */
+  $(function() {
     $('form input[data-autosubmit="true"]').on('change', function() {
       this.form.submit();
     });
-
   });
 
 })($);
