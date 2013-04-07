@@ -83,7 +83,7 @@
           <td>
             <a href="bundles/${bundle.bundleId?string.computer}"
               data-trigger="hover"
-              data-content="${bundle.description}"
+              data-content="${bundle.description!}"
               data-delay="1000">
               ${bundle.name} ${bundle.version}
             </a>
