@@ -63,6 +63,11 @@ class ResponseHelper {
 		return this;
 	}
 
+	public ResponseHelper redirectToBundle(long bundleId) {
+		redirectToService("/dynamic-extensions/bundles/" + bundleId);
+		return this;
+	}
+
 	public ResponseHelper status(final int status, final String message) throws IOException {
 		response.setStatus(status);
 		if (StringUtils.hasText(message)) {

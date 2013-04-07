@@ -48,6 +48,16 @@
     </div>
   </#if>
 
+  <#if bundle.status == 'installed' || bundle.status == 'resolved'>
+    <div class="start">
+      <form action="start-bundle" method="post"
+          data-title="Start Bundle">
+        <input type="hidden" name="id" value="${bundle.bundleId?string.computer}" />
+        <button class="btn">Start Bundle</button>
+      </form>
+    </div>
+	</#if>
+
   <#if bundle.status == 'installed'>
     <div class="alert alert-error alert-block">
       <p>
@@ -84,6 +94,9 @@
           The bundle may have missing <code>Import-Bundle</code> or <code>Import-Library</code> dependencies.
           These types of dependency are generally not be used with Dynamic Extensions.
         </em>
+      </p>
+      <p>
+          Try to start the bundle to obtain more specific information on why it is not resolved.
       </p>
     </div>
   </#if>
