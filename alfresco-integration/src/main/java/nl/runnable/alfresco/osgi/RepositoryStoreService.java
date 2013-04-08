@@ -60,6 +60,7 @@ public class RepositoryStoreService {
 	public NodeRef getBundleFolder(final boolean createIfNotExists) {
 		final QName name = qName("cm", "bundles");
 		final NodeRef baseFolder = getBaseFolder(createIfNotExists);
+    if (baseFolder == null) return null;
 		NodeRef nodeRef = getChildOf(baseFolder, name);
 		if (nodeRef == null && createIfNotExists) {
 			nodeRef = createFolder(baseFolder, name, "Bundles", getBundleFolderDescription());
