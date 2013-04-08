@@ -131,6 +131,27 @@ public class ControlPanel {
 		responseHelper.redirectToIndex();
 	}
 
+	@Uri(method = HttpMethod.POST, value = "/dynamic-extensions/start-bundle")
+	public void startBundle(@RequestParam final long id, @Attribute final ResponseHelper responseHelper) {
+		final Bundle bundle = bundleHelper.getBundle(id);
+		if (bundle != null) {
+			try {
+				bundle.start();
+				final String message = String.format("Started bundle %s %s",
+						bundle.getHeaders().get(Constants.BUNDLE_NAME), bundle.getVersion());
+				responseHelper.flashSuccessMessage(message);
+                responseHelper.redirectToIndex();
+			} catch (final BundleException e) {
+                e.printStackTrace();
+				responseHelper.flashErrorMessage(String.format("Error starting Bundle: %s", e.getMessage()));
+                responseHelper.redirectToBundle(id);
+			}
+		} else {
+			responseHelper.flashErrorMessage(String.format("Cannot start bundle. Bundle with ID %d not found.", id));
+            responseHelper.redirectToBundle(id);
+		}
+	}
+
 	/**
 	 * Restarts the {@link Bundle} with the given ID.
 	 * 
@@ -145,6 +166,8 @@ public class ControlPanel {
 		response.status(HttpServletResponse.SC_OK, "Restarting framework.");
 		restartFrameworkAsynchronously();
 	}
+
+
 
 	/**
 	 * Obtains information on a {@link Bundle} identified by a given ID.
@@ -165,6 +188,7 @@ public class ControlPanel {
 			model.put(Variables.ID, id);
 			responseHelper.status(HttpServletResponse.SC_NOT_FOUND);
 		}
+        model.put(Variables.ERROR_MESSAGE, responseHelper.getFlashVariable(Variables.ERROR_MESSAGE));
 		return model;
 	}
 
