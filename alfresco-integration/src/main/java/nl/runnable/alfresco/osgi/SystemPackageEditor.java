@@ -31,8 +31,6 @@ import java.beans.PropertyEditorSupport;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.springframework.util.Assert;
-
 public class SystemPackageEditor extends PropertyEditorSupport {
 
 	// TODO: Fine-tune regular expressions.
@@ -42,10 +40,9 @@ public class SystemPackageEditor extends PropertyEditorSupport {
 
 	private static final Pattern PACKAGE_ONLY_PATTERN = Pattern.compile("[a-z0-9\\._]+", Pattern.CASE_INSENSITIVE);
 
-	private String defaultVersion = "1.0";
+	private String defaultVersion;
 
 	public void setDefaultVersion(final String defaultVersion) {
-		Assert.hasText(defaultVersion);
 		this.defaultVersion = defaultVersion;
 	}
 

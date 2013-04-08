@@ -27,6 +27,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package nl.runnable.alfresco.osgi;
 
+import java.util.Comparator;
+
 import org.osgi.framework.launch.Framework;
 import org.springframework.util.Assert;
 
@@ -45,9 +47,26 @@ public class SystemPackage {
 
 	private final String version;
 
+	public static Comparator<SystemPackage> MOST_SPECIFIC_FIRST = new Comparator<SystemPackage>() {
+
+		@Override
+		public int compare(final SystemPackage a, final SystemPackage b) {
+			if (a.getName().equals(b.getName()) == false) {
+				if (a.getName().startsWith(b.getName())) {
+					return -1;
+				} else if (b.getName().startsWith(a.getName())) {
+					return 1;
+				} else {
+					return 0;
+				}
+			} else {
+				return 0;
+			}
+		}
+	};
+
 	public SystemPackage(final String name, final String version) {
 		Assert.hasText(name, "Name cannot be empty.");
-		Assert.hasText(version, "Version cannot be empty.");
 		this.name = name;
 		this.version = version;
 	}
@@ -58,6 +77,15 @@ public class SystemPackage {
 
 	public String getVersion() {
 		return version;
+	}
+
+	@Override
+	public String toString() {
+		if (version != null) {
+			return String.format("%s;%s", name, version);
+		} else {
+			return name;
+		}
 	}
 
 }

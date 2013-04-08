@@ -54,7 +54,7 @@ public class SystemPackageConfigurationFactoryBean extends AbstractConfiguration
 
 	/* Configuration */
 
-	private String defaultVersion = "1.0";
+	private String defaultVersion;
 
 	/* State */
 

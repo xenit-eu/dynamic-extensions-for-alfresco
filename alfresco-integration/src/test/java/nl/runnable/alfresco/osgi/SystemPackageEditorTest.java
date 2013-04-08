@@ -60,6 +60,6 @@ public class SystemPackageEditorTest {
 		systemPackageEditor.setAsText("org.alfresco.service.cmr.repository");
 		final SystemPackage systemPackage = (SystemPackage) systemPackageEditor.getValue();
 		assertEquals("org.alfresco.service.cmr.repository", systemPackage.getName());
-		assertEquals("1.0", systemPackage.getVersion());
+		assertNull(systemPackage.getVersion());
 	}
 }

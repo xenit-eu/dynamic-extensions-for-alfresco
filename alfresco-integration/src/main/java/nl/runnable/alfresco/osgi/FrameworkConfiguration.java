@@ -89,7 +89,12 @@ public class FrameworkConfiguration {
 		final StringBuilder sb = new StringBuilder();
 		for (final Iterator<SystemPackage> it = systemPackages.iterator(); it.hasNext();) {
 			final SystemPackage systemPackage = it.next();
-			sb.append(systemPackage.getName()).append(";version=").append(systemPackage.getVersion());
+			String version = systemPackage.getVersion();
+			if (version == null) {
+				// TODO: find out if specifying a version for a system package is mandatory.
+				version = SystemPackage.DEFAULT_VERSION;
+			}
+			sb.append(systemPackage.getName()).append(";version=").append(version);
 			if (it.hasNext()) {
 				sb.append(",");
 			}

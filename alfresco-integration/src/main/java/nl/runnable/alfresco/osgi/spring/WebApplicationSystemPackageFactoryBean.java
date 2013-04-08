@@ -1,26 +1,16 @@
 package nl.runnable.alfresco.osgi.spring;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.servlet.ServletContext;
 
 import nl.runnable.alfresco.osgi.JavaPackageScanner;
 import nl.runnable.alfresco.osgi.SystemPackage;
 
-import org.alfresco.service.descriptor.DescriptorService;
 import org.springframework.beans.factory.FactoryBean;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.util.Assert;
-import org.springframework.web.context.ServletContextAware;
-import org.springframework.web.context.support.ServletContextResourcePatternResolver;
 
 /**
  * Provides {@link SystemPackage}s by scanning the web application for Java packages.
@@ -28,7 +18,7 @@ import org.springframework.web.context.support.ServletContextResourcePatternReso
  * @author Laurens Fridael
  * 
  */
-public class WebApplicationSystemPackageFactoryBean implements FactoryBean<List<SystemPackage>>, ServletContextAware {
+public class WebApplicationSystemPackageFactoryBean implements FactoryBean<List<SystemPackage>> {
 
 	private static final String OSGI_PACKAGE = "org.osgi";
 
@@ -36,25 +26,15 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<List<
 
 	private static final Collection<String> frameworkPackages = Arrays.asList(OSGI_PACKAGE, FELIX_PACKAGE);
 
-	private static final String ALFRESCO_PACKAGE = "org.alfresco";
-
-	private static final String SPRING_PACKAGE = "org.springframework";
-
-	private static final String DEFAULT_SPRING_VERSION = "3.0.0.RELEASE";
-
 	/* Dependencies */
 
-	private JavaPackageScanner reflectionService;
+	private JavaPackageScanner javaPackageScanner;
 
-	private DescriptorService descriptorService;
-
-	private ServletContext servletContext;
+	private List<LibraryVersionDetector> libraryVersionDetectors = Collections.emptyList();
 
 	/* Configuration */
 
-	private Set<String> packagesToScan;
-
-	private final String defaultSpringVersion = DEFAULT_SPRING_VERSION;
+	private List<SystemPackage> basePackages;
 
 	/* Main operations */
 
@@ -77,7 +57,11 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<List<
 	/* Utility operations */
 
 	protected List<SystemPackage> createSystemPackages() {
-		final List<String> packageNames = reflectionService.scanWebApplicationPackages(getPackagesToScan());
+		final List<String> basePackageNames = new ArrayList<String>();
+		for (final SystemPackage basePackage : getBasePackages()) {
+			basePackageNames.add(basePackage.getName());
+		}
+		final List<String> packageNames = javaPackageScanner.scanWebApplicationPackages(basePackageNames);
 		final List<SystemPackage> systemPackages = new ArrayList<SystemPackage>(packageNames.size());
 		for (final String packageName : packageNames) {
 			if (isFrameworkPackage(packageName) == false) {
@@ -85,7 +69,7 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<List<
 				systemPackages.add(new SystemPackage(packageName, version));
 			}
 		}
-		return systemPackages;
+		return new ArrayList<SystemPackage>(systemPackages);
 	}
 
 	protected boolean isFrameworkPackage(final String packageName) {
@@ -98,62 +82,51 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<List<
 	}
 
 	protected String getVersion(final String packageName) {
-		String version = SystemPackage.DEFAULT_VERSION;
-		if (packageName.startsWith(SPRING_PACKAGE)) {
-			version = getSpringVersion();
-		} else if (packageName.startsWith(ALFRESCO_PACKAGE)) {
-			version = getAlfrescoVersion();
+		String version = null;
+		for (final SystemPackage basePackage : getBasePackages()) {
+			if (packageName.startsWith(basePackage.getName()) && basePackage.getVersion() != null) {
+				version = basePackage.getVersion();
+				break;
+			}
 		}
-		return version;
-	}
-
-	private String getSpringVersion() {
-		final ResourcePatternResolver resourcePatternResolver = new ServletContextResourcePatternResolver(
-				servletContext);
-		String version = defaultSpringVersion;
-		try {
-			final Resource[] resources = resourcePatternResolver
-					.getResources("/WEB-INF/lib/org.springframework.core-*.jar");
-			if (resources.length == 1) {
-				final String filename = resources[0].getFilename();
-				final Matcher matcher = Pattern.compile("core-(.+?)\\.jar$").matcher(filename);
-				if (matcher.find()) {
-					version = matcher.group(1);
+		if (version == null) {
+			for (final LibraryVersionDetector libraryVersionDetector : getLibraryVersionDetectors()) {
+				version = libraryVersionDetector.detectLibraryVersion(packageName);
+				if (version != null) {
+					break;
 				}
 			}
-		} catch (final IOException e) {
 		}
 		return version;
-	}
-
-	private String getAlfrescoVersion() {
-		return descriptorService.getServerDescriptor().getVersionNumber().toString();
 	}
 
 	/* Dependencies */
 
-	public void setReflectionService(final JavaPackageScanner reflectionService) {
-		Assert.notNull(reflectionService);
-		this.reflectionService = reflectionService;
+	public void setJavaPackageScanner(final JavaPackageScanner javaPackageScanner) {
+		Assert.notNull(javaPackageScanner);
+		this.javaPackageScanner = javaPackageScanner;
 	}
 
-	public void setDescriptorService(final DescriptorService descriptorService) {
-		this.descriptorService = descriptorService;
+	public void setLibraryVersionDetectors(final List<LibraryVersionDetector> libraryVersionDetectors) {
+		Assert.notNull(libraryVersionDetectors);
+		this.libraryVersionDetectors = libraryVersionDetectors;
 	}
 
-	@Override
-	public void setServletContext(final ServletContext servletContext) {
-		this.servletContext = servletContext;
+	protected List<LibraryVersionDetector> getLibraryVersionDetectors() {
+		return libraryVersionDetectors;
 	}
 
 	/* Configuration */
 
-	public void setPackagesToScan(final Set<String> packagesToScan) {
-		this.packagesToScan = packagesToScan;
+	public void setBasePackages(List<SystemPackage> basePackages) {
+		Assert.notNull(basePackages);
+		basePackages = new ArrayList<SystemPackage>(basePackages);
+		Collections.sort(basePackages, SystemPackage.MOST_SPECIFIC_FIRST);
+		this.basePackages = basePackages;
 	}
 
-	protected Set<String> getPackagesToScan() {
-		return packagesToScan;
+	protected List<SystemPackage> getBasePackages() {
+		return basePackages;
 	}
 
 }
