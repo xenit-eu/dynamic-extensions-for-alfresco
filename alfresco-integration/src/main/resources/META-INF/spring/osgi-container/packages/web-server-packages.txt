@@ -5,8 +5,8 @@
 # In a standard Tomcat directory layout these classes can typically be 
 # found in the 'endorsed', 'lib' and 'shared' folders.
 #
-# To expand on this list, place your package configuration in this classpath
-# folder: /dynamic-extensions/configuration/web-server-packages.txt
+# To expand on this list, place custom package configuration at this classpath
+# location: /dynamic-extensions/configuration/web-server-packages.txt
 #
 # For a standard Alfresco directly layout this corresponds to:
 # <alfresco>/tomcat/shared/classes/dynamic-extensions/configuration/web-server-packages.txt

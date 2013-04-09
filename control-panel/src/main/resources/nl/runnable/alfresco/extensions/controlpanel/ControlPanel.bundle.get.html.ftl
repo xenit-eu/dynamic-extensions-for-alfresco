@@ -124,7 +124,7 @@
       </table>
     <#else>
       <p>
-        This bundle does not export any packages.
+        This bundle does not import any packages.
       </p>
     </#if>
   </#if>
@@ -132,7 +132,7 @@
   <#if (bundle.bundleId == 0)>
     <h2>System Packages</h2>
     <p>
-      These packages are imported from the Alfresco repository application.
+      These packages are exported by the Alfresco repository application.
     </p>
     <table class="package table table-striped table-bordered">
       <thead>
