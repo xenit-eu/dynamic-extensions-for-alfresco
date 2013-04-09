@@ -18,6 +18,7 @@ import nl.runnable.alfresco.extensions.controlpanel.template.TemplateBundle;
 import nl.runnable.alfresco.extensions.controlpanel.template.Variables;
 import nl.runnable.alfresco.osgi.Configuration;
 import nl.runnable.alfresco.osgi.FrameworkService;
+import nl.runnable.alfresco.osgi.SystemPackage;
 import nl.runnable.alfresco.webscripts.annotations.Attribute;
 import nl.runnable.alfresco.webscripts.annotations.Authentication;
 import nl.runnable.alfresco.webscripts.annotations.AuthenticationType;
@@ -67,6 +68,10 @@ public class ControlPanel {
 	@Inject
 	@Named("retryingTransactionHelper")
 	private RetryingTransactionHelper retryingTransactionHelper;
+
+	@Inject
+	@Named("osgi.container.HostPackages")
+	private List<SystemPackage> systemPackages;
 
 	/* Main operations */
 
@@ -140,15 +145,15 @@ public class ControlPanel {
 				final String message = String.format("Started bundle %s %s",
 						bundle.getHeaders().get(Constants.BUNDLE_NAME), bundle.getVersion());
 				responseHelper.flashSuccessMessage(message);
-                responseHelper.redirectToIndex();
+				responseHelper.redirectToIndex();
 			} catch (final BundleException e) {
-                e.printStackTrace();
+				e.printStackTrace();
 				responseHelper.flashErrorMessage(String.format("Error starting Bundle: %s", e.getMessage()));
-                responseHelper.redirectToBundle(id);
+				responseHelper.redirectToBundle(id);
 			}
 		} else {
 			responseHelper.flashErrorMessage(String.format("Cannot start bundle. Bundle with ID %d not found.", id));
-            responseHelper.redirectToBundle(id);
+			responseHelper.redirectToBundle(id);
 		}
 	}
 
@@ -167,8 +172,6 @@ public class ControlPanel {
 		restartFrameworkAsynchronously();
 	}
 
-
-
 	/**
 	 * Obtains information on a {@link Bundle} identified by a given ID.
 	 * 
@@ -183,12 +186,18 @@ public class ControlPanel {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		final Bundle bundle = bundleHelper.getBundle(id);
 		if (bundle != null) {
+			if (id == 0) {
+				/*
+				 * TODO: systemPackages seems to point to a List of Lists. This should be fixed.
+				 */
+				model.put(Variables.SYSTEM_PACKAGES, systemPackages.get(0));
+			}
 			model.put(Variables.BUNDLE, new TemplateBundle(bundle));
 		} else {
 			model.put(Variables.ID, id);
 			responseHelper.status(HttpServletResponse.SC_NOT_FOUND);
 		}
-        model.put(Variables.ERROR_MESSAGE, responseHelper.getFlashVariable(Variables.ERROR_MESSAGE));
+		model.put(Variables.ERROR_MESSAGE, responseHelper.getFlashVariable(Variables.ERROR_MESSAGE));
 		return model;
 	}
 

@@ -1,9 +1,0 @@
-# These libraries come with Dynamic Extensions:
-javax.inject;1
-javax.annotation;1.1
-
-# Note: SLF4J version MUST be >= 1.5.0
-org.slf4j;1.5.6
-
-# version shipped with Alfresco <= 4.1
-org.apache.commons.io;1.4

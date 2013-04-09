@@ -124,10 +124,33 @@
       </table>
     <#else>
       <p>
-        This bundle does not import any packages.
+        This bundle does not export any packages.
       </p>
     </#if>
+  </#if>
 
+  <#if (bundle.bundleId == 0)>
+    <h2>System Packages</h2>
+    <p>
+      These packages are imported from the Alfresco repository application.
+    </p>
+    <table class="package table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th class="name">System Package</th>
+          <th class="version">Version</th>
+        </tr>
+      </thead>
+      <tbody>
+        <#list systemPackages as package>
+          <tr>
+            <td class="name">${package.name}</td>
+            <td class="version">${package.version!'1.0'}</td>
+          </tr>
+        </#list>
+      </tbody>
+    </table>
+  <#else>
     <h2>Exported packages</h2>
     <#if (bundle.exportedPackages?size > 0)>
       <table class="package table table-striped table-bordered">
@@ -147,12 +170,10 @@
         </tbody>
       </table>
     <#else>
-    <p>
-      This bundle does not export any packages.
-    </p>
+      <p>
+        This bundle does not export any packages.
+      </p>
     </#if>
-  <#else>
-    <p><em>Displaying Java package information for the Framework bundle is currently not supported.</em></p>
   </#if>
 
 </@html.document>

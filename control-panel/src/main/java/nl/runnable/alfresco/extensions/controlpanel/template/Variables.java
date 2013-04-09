@@ -1,5 +1,9 @@
 package nl.runnable.alfresco.extensions.controlpanel.template;
 
+import java.util.List;
+
+import nl.runnable.alfresco.osgi.SystemPackage;
+
 import org.osgi.framework.Bundle;
 
 public class Variables {
@@ -53,6 +57,11 @@ public class Variables {
 	 * Refers to a String specifying the repository location where bundles are stored.
 	 */
 	public static final String REPOSITORY_STORE_LOCATION = "repositoryStoreLocation";
+
+	/**
+	 * Refers to a {@link List} of {@link SystemPackage}s.
+	 */
+	public static final String SYSTEM_PACKAGES = "systemPackages";
 
 	private Variables() {
 	}

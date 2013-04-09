@@ -14,7 +14,6 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		<property name="lists">
 			<list>
 				<ref bean="osgi.container.WebServerJavaPackages" />
-				<ref bean="osgi.container.LibraryJavaPackages" />
 				<!-- This bean is defined in the parent application context, due to the need for accessing the ServletContext: -->
 				<ref bean="osgi.container.WebApplicationJavaPackages" />
 			</list>
@@ -24,11 +23,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	<bean id="osgi.container.WebServerJavaPackages" class="nl.runnable.alfresco.osgi.spring.SystemPackageConfigurationFactoryBean">
 		<description>Classes loaded by the web server</description>
 		<property name="configurations" value="classpath:/META-INF/spring/osgi-container/packages/web-server-packages.txt" />
-	</bean>
-
-	<bean id="osgi.container.LibraryJavaPackages" class="nl.runnable.alfresco.osgi.spring.SystemPackageConfigurationFactoryBean">
-		<description>Classes loaded by the web server</description>
-		<property name="configurations" value="classpath:/META-INF/spring/osgi-container/packages/library-packages.txt" />
+		<property name="configurationLocations" value="classpath*:/dynamic-extensions/configuration/packages/web-server-packages.txt" />
 	</bean>
 
 </beans>
