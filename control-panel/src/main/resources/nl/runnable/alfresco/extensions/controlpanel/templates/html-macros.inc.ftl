@@ -92,7 +92,7 @@
             ${bundle.status}
           </td>
           <td>
-            <span data-time="${bundle.lastModified?string.computer}"></span>
+            <span data-time="${bundle.lastModified!}"></span>
           </td>
           <td>
             ${bundle.store}

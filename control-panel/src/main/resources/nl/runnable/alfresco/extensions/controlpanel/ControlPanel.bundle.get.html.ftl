@@ -33,7 +33,7 @@
     </@header>
     <@header name="Status">${bundle.status}</@header>
     <@header name="Modified">
-      <span data-time="${bundle.lastModified?string.computer}"></span>
+      <span data-time="${bundle.lastModified!}"></span>
     </@header>
   </table>
 

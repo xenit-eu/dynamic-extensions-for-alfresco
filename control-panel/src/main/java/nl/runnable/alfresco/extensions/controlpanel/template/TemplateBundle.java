@@ -1,6 +1,8 @@
 package nl.runnable.alfresco.extensions.controlpanel.template;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import nl.runnable.alfresco.extensions.controlpanel.BundleHelper;
@@ -58,8 +60,13 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 		return bundle.getLocation();
 	}
 
-	public long getLastModified() {
-		return bundle.getLastModified();
+	public String getLastModified() {
+		final long lastModified = bundle.getLastModified();
+		if (lastModified > 0) {
+			return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z").format(new Date(lastModified));
+		} else {
+			return null;
+		}
 	}
 
 	public String getVersion() {
