@@ -37,8 +37,11 @@ import org.eclipse.gemini.blueprint.extender.support.ApplicationContextConfigura
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 
 /**
@@ -62,6 +65,10 @@ import org.springframework.util.StringUtils;
 public class DynamicExtensionsApplicationContextCreator implements OsgiApplicationContextCreator {
 
 	private static final String EXTENSION_BUNDLE_HEADER = "Alfresco-Dynamic-Extension";
+
+	private static final String HOST_APPLICATION_CONTEXT_BEAN_NAME = "HostApplicationContext";
+
+	private static final String OSGI_SERVICE_BLUEPRINT_COMPNAME = "osgi.service.blueprint.compname";
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -103,8 +110,9 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 				logger.debug("Initializing Dynamic Extension '{}'.", bundle.getSymbolicName());
 			}
 		}
+		final ApplicationContext parent = getHostApplicationContext(bundleContext);
 		final DynamicExtensionsApplicationContext applicationContext = new DynamicExtensionsApplicationContext(
-				configurationLocations);
+				configurationLocations, parent);
 		applicationContext.setBundleContext(bundleContext);
 		applicationContext.setPublishContextAsService(config.isPublishContextAsService());
 		if (StringUtils.hasText(getModelLocationPattern())) {
@@ -143,6 +151,31 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 			} catch (final BundleException e) {
 				logger.error("Error uninstalling Bundle: {}", e.getMessage(), e);
 			}
+		}
+	}
+
+	protected ApplicationContext getHostApplicationContext(final BundleContext bundleContext) {
+		final ServiceReference<?> serviceReference = getServiceReferenceWithBeanName(bundleContext,
+				ApplicationContext.class.getName(), HOST_APPLICATION_CONTEXT_BEAN_NAME);
+		if (serviceReference != null) {
+			return (ApplicationContext) bundleContext.getService(serviceReference);
+		} else {
+			return null;
+		}
+	}
+
+	private ServiceReference<?> getServiceReferenceWithBeanName(final BundleContext bundleContext,
+			final String serviceName, final String beanName) {
+		try {
+			final String filter = String.format("(%s=%s)", OSGI_SERVICE_BLUEPRINT_COMPNAME, beanName);
+			final ServiceReference<?>[] serviceReferences = bundleContext.getServiceReferences(serviceName, filter);
+			if (serviceReferences != null && serviceReferences.length > 0) {
+				return serviceReferences[0];
+			} else {
+				return null;
+			}
+		} catch (final InvalidSyntaxException e) {
+			throw new RuntimeException(e);
 		}
 	}
 

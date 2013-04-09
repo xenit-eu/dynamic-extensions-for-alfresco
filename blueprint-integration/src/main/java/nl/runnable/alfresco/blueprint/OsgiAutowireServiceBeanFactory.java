@@ -28,6 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package nl.runnable.alfresco.blueprint;
 
 import java.lang.annotation.Annotation;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Named;
@@ -83,26 +84,26 @@ class OsgiAutowireServiceBeanFactory extends DefaultListableBeanFactory {
 	@SuppressWarnings("rawtypes")
 	protected Map<String, Object> findAutowireCandidates(final String beanName, final Class requiredType,
 			final DependencyDescriptor descriptor) {
-		final Map<String, Object> candidateBeansByName = super.findAutowireCandidates(beanName, requiredType,
-				descriptor);
-		if (candidateBeansByName.isEmpty()) {
-			final String typeName = requiredType.getName();
-			if (BundleContext.class.isAssignableFrom(requiredType)) {
-				candidateBeansByName.put(typeName, bundleContext);
+		Map<String, Object> candidateBeansByName = new HashMap<String, Object>();
+		final String typeName = requiredType.getName();
+		if (BundleContext.class.isAssignableFrom(requiredType)) {
+			candidateBeansByName.put(typeName, bundleContext);
+		} else {
+			final ServiceReference<?> serviceReference = findServiceReference(descriptor, typeName);
+			if (serviceReference != null) {
+				candidateBeansByName.put(typeName, bundleContext.getService(serviceReference));
 			} else {
-				final ServiceReference<?> serviceReference = findServiceReference(descriptor, typeName);
-				if (serviceReference != null) {
-					candidateBeansByName.put(typeName, bundleContext.getService(serviceReference));
-				} else {
-					final Named named = getAnnotation(descriptor, Named.class);
-					if (named != null) {
-						final Object bean = findBeanInAlfrescoApplicationContext(named.value());
-						if (bean != null) {
-							candidateBeansByName.put(named.value(), bean);
-						}
+				final Named named = getAnnotation(descriptor, Named.class);
+				if (named != null) {
+					final Object bean = findBeanInAlfrescoApplicationContext(named.value());
+					if (bean != null) {
+						candidateBeansByName.put(named.value(), bean);
 					}
 				}
 			}
+		}
+		if (candidateBeansByName.isEmpty()) {
+			candidateBeansByName = super.findAutowireCandidates(beanName, requiredType, descriptor);
 		}
 		return candidateBeansByName;
 	}

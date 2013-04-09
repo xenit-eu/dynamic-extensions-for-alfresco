@@ -118,8 +118,8 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 
 	/* Operations */
 
-	DynamicExtensionsApplicationContext(final String[] configurationLocations) {
-		super(configurationLocations);
+	DynamicExtensionsApplicationContext(final String[] configurationLocations, final ApplicationContext parent) {
+		super(configurationLocations, parent);
 		hasXmlConfiguration = (configurationLocations != null && configurationLocations.length > 0);
 	}
 
