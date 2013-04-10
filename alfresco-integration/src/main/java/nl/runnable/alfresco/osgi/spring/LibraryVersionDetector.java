@@ -1,5 +1,7 @@
 package nl.runnable.alfresco.osgi.spring;
 
+import org.springframework.core.io.Resource;
+
 /**
  * Strategy for detecting the version of a Java library.
  * 
@@ -15,5 +17,5 @@ public interface LibraryVersionDetector {
 	 *            The Java package name.
 	 * @return The library version or null if none could be determined.
 	 */
-	String detectLibraryVersion(String packageName);
+	String detectLibraryVersion(String packageName, Resource classResource);
 }
