@@ -1,5 +1,7 @@
 package nl.runnable.alfresco.osgi.spring;
 
+import org.springframework.core.io.Resource;
+
 /**
  * Abstract base class for {@link LibraryVersionDetector} implementations.
  * 
@@ -14,8 +16,8 @@ public abstract class AbstractLibraryVersionDetector implements LibraryVersionDe
 
 	/* Main operations */
 
-	@Override
-	public final String detectLibraryVersion(final String packageName) {
+    @Override
+    public final String detectLibraryVersion(final String packageName, final Resource classResource) {
 		String version = null;
 		if (packageName.startsWith(getBasePackageName())) {
 			if (detectedVersion == null) {

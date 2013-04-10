@@ -34,7 +34,7 @@ import org.springframework.util.Assert;
 
 /**
  * Represents a {@link Framework} system package.
- * 
+ *
  * @author Laurens Fridael
  * @see FrameworkConfiguration#setCoreSystemPackages(java.util.List)
  * @see FrameworkConfiguration#setAdditionalSystemPackages(java.util.List)
@@ -48,7 +48,6 @@ public class SystemPackage {
 	private final String version;
 
 	public static Comparator<SystemPackage> MOST_SPECIFIC_FIRST = new Comparator<SystemPackage>() {
-
 		@Override
 		public int compare(final SystemPackage a, final SystemPackage b) {
 			if (a.getName().equals(b.getName()) == false) {
@@ -88,4 +87,27 @@ public class SystemPackage {
 		}
 	}
 
+  public static SystemPackage from(String line) {
+    final String[] tokens = line.split(";");
+    if (tokens.length > 1) {
+      return new SystemPackage(tokens[0], tokens[1]);
+    } else {
+      return new SystemPackage(tokens[0], null);
+    }
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    SystemPackage that = (SystemPackage) o;
+
+    return name.equals(that.name);
+  }
+
+  @Override
+  public int hashCode() {
+    return name.hashCode();
+  }
 }

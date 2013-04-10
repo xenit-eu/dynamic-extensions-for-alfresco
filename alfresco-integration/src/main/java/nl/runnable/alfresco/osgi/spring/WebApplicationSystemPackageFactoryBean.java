@@ -1,5 +1,6 @@
 package nl.runnable.alfresco.osgi.spring;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -7,10 +8,21 @@ import java.util.Collections;
 import java.util.List;
 
 import nl.runnable.alfresco.osgi.JavaPackageScanner;
+import nl.runnable.alfresco.osgi.RepositoryStoreService;
 import nl.runnable.alfresco.osgi.SystemPackage;
 
+import org.alfresco.model.ContentModel;
+import org.alfresco.service.cmr.model.FileFolderService;
+import org.alfresco.service.cmr.model.FileInfo;
+import org.alfresco.service.cmr.repository.ContentWriter;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.FactoryBean;
+import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
+
+import static java.util.Arrays.asList;
 
 /**
  * Provides {@link SystemPackage}s by scanning the web application for Java packages.
@@ -20,17 +32,17 @@ import org.springframework.util.Assert;
  */
 public class WebApplicationSystemPackageFactoryBean implements FactoryBean<List<SystemPackage>> {
 
-	private static final String OSGI_PACKAGE = "org.osgi";
-
-	private static final String FELIX_PACKAGE = "org.apache.felix";
-
-	private static final Collection<String> frameworkPackages = Arrays.asList(OSGI_PACKAGE, FELIX_PACKAGE);
+  private static final String SYSTEM_PACKAGES = "system-packages.txt";
 
 	/* Dependencies */
 
 	private JavaPackageScanner javaPackageScanner;
 
 	private List<LibraryVersionDetector> libraryVersionDetectors = Collections.emptyList();
+
+  private RepositoryStoreService repositoryStoreService;
+
+  private FileFolderService fileFolderService;
 
 	/* Configuration */
 
@@ -56,49 +68,53 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<List<
 
 	/* Utility operations */
 
-	protected List<SystemPackage> createSystemPackages() {
-		final List<String> basePackageNames = new ArrayList<String>();
-		for (final SystemPackage basePackage : getBasePackages()) {
-			basePackageNames.add(basePackage.getName());
-		}
-		final List<String> packageNames = javaPackageScanner.scanWebApplicationPackages(basePackageNames);
-		final List<SystemPackage> systemPackages = new ArrayList<SystemPackage>(packageNames.size());
-		for (final String packageName : packageNames) {
-			if (isFrameworkPackage(packageName) == false) {
-				final String version = getVersion(packageName);
-				systemPackages.add(new SystemPackage(packageName, version));
-			}
-		}
-		return new ArrayList<SystemPackage>(systemPackages);
-	}
+  protected List<SystemPackage> createSystemPackages() {
+    final List<String> basePackageNames = new ArrayList<String>();
+    for (final SystemPackage basePackage : getBasePackages()) {
+      basePackageNames.add(basePackage.getName());
+    }
+    List<SystemPackage> packages = getCachedPackages();
+    if (packages == null) {
+      packages = javaPackageScanner.scanWebApplicationPackages();
+      final FileInfo systemPackagesCacheInfo = fileFolderService.create(
+          getConfigurationFolder(), SYSTEM_PACKAGES, ContentModel.TYPE_CONTENT
+      );
+      writeCachedPackages(systemPackagesCacheInfo, packages);
+    }
+    return packages;
+  }
 
-	protected boolean isFrameworkPackage(final String packageName) {
-		for (final String osgiPackage : frameworkPackages) {
-			if (packageName.startsWith(osgiPackage)) {
-				return true;
-			}
-		}
-		return false;
-	}
+  private void writeCachedPackages(FileInfo systemPackagesCacheInfo, List<SystemPackage> packages) {
+    if (systemPackagesCacheInfo != null) {
+      final ContentWriter cw = fileFolderService.getWriter(systemPackagesCacheInfo.getNodeRef());
+      PrintWriter writer = new PrintWriter(cw.getContentOutputStream());
+      try {
+        for (SystemPackage systemPackage : packages) {
+          writer.println(systemPackage.toString());
+        }
+      } finally {
+        IOUtils.closeQuietly(writer);
+      }
+    }
+  }
 
-	protected String getVersion(final String packageName) {
-		String version = null;
-		for (final SystemPackage basePackage : getBasePackages()) {
-			if (packageName.startsWith(basePackage.getName()) && basePackage.getVersion() != null) {
-				version = basePackage.getVersion();
-				break;
-			}
-		}
-		if (version == null) {
-			for (final LibraryVersionDetector libraryVersionDetector : getLibraryVersionDetectors()) {
-				version = libraryVersionDetector.detectLibraryVersion(packageName);
-				if (version != null) {
-					break;
-				}
-			}
-		}
-		return version;
-	}
+  private List<SystemPackage> getCachedPackages() {
+    final NodeRef configurationFolder = getConfigurationFolder();
+    final NodeRef systemPackagesCached = fileFolderService.searchSimple(configurationFolder, SYSTEM_PACKAGES);
+    if (systemPackagesCached != null) {
+      final String[] lines = fileFolderService.getReader(systemPackagesCached).getContentString().split("\n");
+      List<SystemPackage> systemPackages = new ArrayList<SystemPackage>(lines.length);
+      for (String line : lines) {
+        systemPackages.add(SystemPackage.from(line));
+      }
+      return systemPackages;
+    }
+    return null;
+  }
+
+  private NodeRef getConfigurationFolder() {
+    return repositoryStoreService.getConfigurationFolder(true);
+  }
 
 	/* Dependencies */
 
@@ -129,4 +145,12 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<List<
 		return basePackages;
 	}
 
+    public void setRepositoryStoreService(RepositoryStoreService repositoryStoreService) {
+        this.repositoryStoreService = repositoryStoreService;
+    }
+
+
+    public void setFileFolderService(FileFolderService fileFolderService) {
+        this.fileFolderService = fileFolderService;
+    }
 }
