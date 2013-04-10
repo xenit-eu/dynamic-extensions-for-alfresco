@@ -110,21 +110,25 @@ public class RepositoryStoreService {
 			final String description) {
 		return AuthenticationUtil.runAsSystem(new RunAsWork<NodeRef>() {
 
-			@Override
-			public NodeRef doWork() throws Exception {
-				final ChildAssociationRef childAssoc = nodeService.createNode(parentFolder,
-						ContentModel.ASSOC_CONTAINS, qName, ContentModel.TYPE_FOLDER);
-				final NodeRef nodeRef = childAssoc.getChildRef();
-				getNodeService().setProperty(nodeRef, ContentModel.PROP_NAME, name);
-				if (StringUtils.hasText(description)) {
-					getNodeService().setProperty(nodeRef, ContentModel.PROP_DESCRIPTION, description.trim());
-				}
-				return nodeRef;
-			}
-		});
-	}
+      @Override
+      public NodeRef doWork() throws Exception {
+        final ChildAssociationRef childAssoc = nodeService.createNode(parentFolder,
+            ContentModel.ASSOC_CONTAINS, qName, ContentModel.TYPE_FOLDER);
+        if (childAssoc != null) {
+          final NodeRef nodeRef = childAssoc.getChildRef();
+          getNodeService().setProperty(nodeRef, ContentModel.PROP_NAME, name);
+          if (StringUtils.hasText(description)) {
+            getNodeService().setProperty(nodeRef, ContentModel.PROP_DESCRIPTION, description.trim());
+          }
+          return nodeRef;
+        } else {
+          return null;
+        }
+      }
+    });
+  }
 
-	/**
+  /**
 	 * Obtains the child with the given association type, {@link QName} of the given node.
 	 * 
 	 * @param nodeRef

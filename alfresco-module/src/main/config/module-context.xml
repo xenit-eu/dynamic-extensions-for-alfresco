@@ -27,25 +27,55 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<alias name="osgi.container.ModuleComponent" alias="osgi.container.FrameworkService" />
 
-	<bean id="osgi.container.WebApplicationJavaPackages" class="nl.runnable.alfresco.osgi.spring.WebApplicationSystemPackageFactoryBean">
+  <bean id="osgi.container.RepositoryStoreService" class="nl.runnable.alfresco.osgi.RepositoryStoreService">
+    <property name="namespacePrefixResolver" ref="namespaceService" />
+    <property name="nodeService" ref="nodeService" />
+    <property name="fileFolderService" ref="fileFolderService" />
+    <property name="baseFolderDescription">
+      <value>
+        Dynamic Extensions for Alfresco. https://github.com/lfridael/dynamic-extensions-for-alfresco
+      </value>
+    </property>
+    <property name="bundleFolderDescription">
+      <value>
+        Dynamic Extension OSGi bundle JARs.
+      </value>
+    </property>
+    <property name="configurationFolderDescription">
+      <value>
+        Configuration files for Dynamic Extensions.
+      </value>
+    </property>
+  </bean>
+
+  <bean id="osgi.container.BundleVersionDetector" class="nl.runnable.alfresco.osgi.spring.BundleVersionDetector"/>
+
+  <bean id="osgi.spring.SystemPackageConfiguration" class="nl.runnable.alfresco.osgi.spring.SystemPackageConfigurationFactoryBean">
+    <property name="configurations" value="classpath:/META-INF/spring/osgi-container/packages/web-application-packages.txt" />
+    <property name="configurationLocations" value="classpath*:/dynamic-extensions/configuration/packages/web-application-packages.txt" />
+  </bean>
+
+  <bean id="osgi.container.WebApplicationJavaPackages" class="nl.runnable.alfresco.osgi.spring.WebApplicationSystemPackageFactoryBean">
 		<description>Scans for Java packages in JARs in /WEB-INF/lib</description>
 		<property name="javaPackageScanner" ref="osgi.container.JavaPackageScanner" />
-		<property name="libraryVersionDetectors">
-			<list>
-				<bean class="nl.runnable.alfresco.osgi.spring.AlfrescoLibraryVersionDetector">
-					<property name="descriptorService" ref="DescriptorService" />
-				</bean>
-				<bean class="nl.runnable.alfresco.osgi.spring.SpringLibraryVersionDetector" />
-			</list>
-		</property>
-		<property name="basePackages">
-			<bean class="nl.runnable.alfresco.osgi.spring.SystemPackageConfigurationFactoryBean">
-				<property name="configurations" value="classpath:/META-INF/spring/osgi-container/packages/web-application-packages.txt" />
-				<property name="configurationLocations" value="classpath*:/dynamic-extensions/configuration/packages/web-application-packages.txt" />
-			</bean>
-		</property>
-	</bean>
+		<property name="basePackages" ref="osgi.spring.SystemPackageConfiguration"/>
+    <property name="repositoryStoreService" ref="osgi.container.RepositoryStoreService"/>
+    <property name="fileFolderService" ref="fileFolderService"/>
+  </bean>
 
-	<bean id="osgi.container.JavaPackageScanner" class="nl.runnable.alfresco.osgi.JavaPackageScanner" />
+	<bean id="osgi.container.JavaPackageScanner" class="nl.runnable.alfresco.osgi.JavaPackageScanner">
+    <property name="libraryVersionDetectors">
+      <list>
+        <bean class="nl.runnable.alfresco.osgi.spring.BasePackageVersionDetector">
+          <property name="basePackages" ref="osgi.spring.SystemPackageConfiguration"/>
+        </bean>
+        <bean class="nl.runnable.alfresco.osgi.spring.BundleVersionDetector"/>
+        <bean class="nl.runnable.alfresco.osgi.spring.AlfrescoLibraryVersionDetector">
+          <property name="descriptorService" ref="DescriptorService" />
+        </bean>
+        <bean class="nl.runnable.alfresco.osgi.spring.SpringLibraryVersionDetector" />
+      </list>
+    </property>
+  </bean>
 
 </beans>

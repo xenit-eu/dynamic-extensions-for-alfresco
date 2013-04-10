@@ -18,7 +18,7 @@
 		<standardBundles.outputDirectory>${amp.outputDirectory}/standard-bundles</standardBundles.outputDirectory>
 		<gemini-blueprint.version>1.0.2.RELEASE</gemini-blueprint.version>
 		<fileinstall.version>3.2.4</fileinstall.version>
-		<acegi-security.version>1.0.0</acegi-security.version>
+		<acegi-security.version>0.8.2</acegi-security.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -55,7 +55,19 @@
 			<artifactId>spring-webscripts</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
+    <dependency>
+      <groupId>acegisecurity</groupId>
+      <artifactId>acegi-security</artifactId>
+      <version>${acegi-security.version}</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
 			<groupId>org.apache.felix</groupId>
 			<artifactId>org.apache.felix.framework</artifactId>
 		</dependency>
