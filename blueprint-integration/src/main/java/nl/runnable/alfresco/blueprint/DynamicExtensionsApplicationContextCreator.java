@@ -110,9 +110,8 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 				logger.debug("Initializing Dynamic Extension '{}'.", bundle.getSymbolicName());
 			}
 		}
-		final ApplicationContext parent = getHostApplicationContext(bundleContext);
 		final DynamicExtensionsApplicationContext applicationContext = new DynamicExtensionsApplicationContext(
-				configurationLocations, parent);
+				configurationLocations);
 		applicationContext.setBundleContext(bundleContext);
 		applicationContext.setPublishContextAsService(config.isPublishContextAsService());
 		if (StringUtils.hasText(getModelLocationPattern())) {
@@ -151,16 +150,6 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 			} catch (final BundleException e) {
 				logger.error("Error uninstalling Bundle: {}", e.getMessage(), e);
 			}
-		}
-	}
-
-	protected ApplicationContext getHostApplicationContext(final BundleContext bundleContext) {
-		final ServiceReference<?> serviceReference = getServiceReferenceWithBeanName(bundleContext,
-				ApplicationContext.class.getName(), HOST_APPLICATION_CONTEXT_BEAN_NAME);
-		if (serviceReference != null) {
-			return (ApplicationContext) bundleContext.getService(serviceReference);
-		} else {
-			return null;
 		}
 	}
 
