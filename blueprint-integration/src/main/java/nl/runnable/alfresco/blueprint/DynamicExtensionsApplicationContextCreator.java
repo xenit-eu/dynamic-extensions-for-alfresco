@@ -158,7 +158,7 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 		final ServiceReference<?> serviceReference = getServiceReferenceWithBeanName(bundleContext,
 				ApplicationContext.class.getName(), HOST_APPLICATION_CONTEXT_BEAN_NAME);
 		if (serviceReference != null) {
-			return (ApplicationContext) bundleContext.getService(serviceReference);
+			return new HostApplicationContext((ApplicationContext) bundleContext.getService(serviceReference));
 		} else {
 			return null;
 		}
