@@ -64,7 +64,11 @@ import org.springframework.util.StringUtils;
  */
 public class DynamicExtensionsApplicationContextCreator implements OsgiApplicationContextCreator {
 
-	private static final String EXTENSION_BUNDLE_HEADER = "Alfresco-Dynamic-Extension";
+	private static final String ALFRESCO_DYNAMIC_EXTENSION_HEADER = "Alfresco-Dynamic-Extension";
+
+	private static final String PARENT_APPLICATION_CONTEXT_HEADER = "Parent-Application-Context";
+
+	private static final String HOST_PARENT_APPLICATION_CONTEXT = "host";
 
 	private static final String HOST_APPLICATION_CONTEXT_BEAN_NAME = "HostApplicationContext";
 
@@ -82,7 +86,7 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 	public DelegatedExecutionOsgiBundleApplicationContext createApplicationContext(final BundleContext bundleContext)
 			throws Exception {
 		final Bundle bundle = bundleContext.getBundle();
-		if (Boolean.valueOf(bundle.getHeaders().get(EXTENSION_BUNDLE_HEADER)) == false) {
+		if (isAlfrescoDynamicExtension(bundle) == false) {
 			return null;
 		}
 		uninstallBundlesWithDuplicateSymbolicName(bundleContext);
@@ -110,9 +114,12 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 				logger.debug("Initializing Dynamic Extension '{}'.", bundle.getSymbolicName());
 			}
 		}
-		final ApplicationContext parent = getHostApplicationContext(bundleContext);
+		ApplicationContext parentApplicationContext = null;
+		if (isUseParentApplicationContext(bundle)) {
+			parentApplicationContext = getHostApplicationContext(bundleContext);
+		}
 		final DynamicExtensionsApplicationContext applicationContext = new DynamicExtensionsApplicationContext(
-				configurationLocations, parent);
+				configurationLocations, parentApplicationContext);
 		applicationContext.setBundleContext(bundleContext);
 		applicationContext.setPublishContextAsService(config.isPublishContextAsService());
 		if (StringUtils.hasText(getModelLocationPattern())) {
@@ -123,6 +130,10 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 	}
 
 	/* Utility operations */
+
+	protected boolean isAlfrescoDynamicExtension(final Bundle bundle) {
+		return Boolean.valueOf(bundle.getHeaders().get(ALFRESCO_DYNAMIC_EXTENSION_HEADER));
+	}
 
 	/**
 	 * Uninstalls {@link Bundle}s with symbolic names equal to that of the {@link Bundle} represented by the given the
@@ -154,6 +165,11 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 		}
 	}
 
+	protected boolean isUseParentApplicationContext(final Bundle bundle) {
+		final String header = bundle.getHeaders().get(PARENT_APPLICATION_CONTEXT_HEADER);
+		return (header == null || header.equals(HOST_PARENT_APPLICATION_CONTEXT));
+	}
+
 	protected ApplicationContext getHostApplicationContext(final BundleContext bundleContext) {
 		final ServiceReference<?> serviceReference = getServiceReferenceWithBeanName(bundleContext,
 				ApplicationContext.class.getName(), HOST_APPLICATION_CONTEXT_BEAN_NAME);
@@ -164,7 +180,7 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 		}
 	}
 
-	private ServiceReference<?> getServiceReferenceWithBeanName(final BundleContext bundleContext,
+	protected ServiceReference<?> getServiceReferenceWithBeanName(final BundleContext bundleContext,
 			final String serviceName, final String beanName) {
 		try {
 			final String filter = String.format("(%s=%s)", OSGI_SERVICE_BLUEPRINT_COMPNAME, beanName);

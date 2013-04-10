@@ -21,7 +21,7 @@ import org.springframework.util.Assert;
  * {@link ApplicationContext} wrapper that contains no-op implementation of {@link #publishEvent(ApplicationEvent)}.
  * This, in turn, prevents the propagation of {@link ApplicationEvent}s to the main Alfresco {@link ApplicationContext}.
  * <p>
- * Publishing {@link ApplicationEvent}s, such as {@link ContextRefreshedEvent}m has unwanted side-effects on
+ * Publishing {@link ApplicationEvent}s, such as {@link ContextRefreshedEvent}, has unwanted side-effects on
  * {@link ApplicationContext}s that are expected to remain static during the lifetime of an application.
  * 
  * @author Laurens Fridael
