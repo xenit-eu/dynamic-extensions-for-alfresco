@@ -30,11 +30,7 @@ package nl.runnable.alfresco.osgi;
 import static org.osgi.framework.Constants.*;
 
 import java.io.File;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.osgi.framework.launch.Framework;
 import org.springframework.util.Assert;
@@ -54,9 +50,9 @@ public class FrameworkConfiguration {
 
 	private boolean flushBundleCacheOnFirstInit = false;
 
-	private List<SystemPackage> coreSystemPackages = Collections.emptyList();
+	private Set<SystemPackage> coreSystemPackages = Collections.emptySet();
 
-	private List<SystemPackage> additionalSystemPackages = Collections.emptyList();
+	private Set<SystemPackage> additionalSystemPackages = Collections.emptySet();
 
 	/* Main operations */
 
@@ -85,7 +81,7 @@ public class FrameworkConfiguration {
 
 	/* Utility operations */
 
-	protected String createSystemPackagesConfiguration(final List<SystemPackage> systemPackages) {
+	protected String createSystemPackagesConfiguration(final Set<SystemPackage> systemPackages) {
 		final StringBuilder sb = new StringBuilder();
 		for (final Iterator<SystemPackage> it = systemPackages.iterator(); it.hasNext();) {
 			final SystemPackage systemPackage = it.next();
@@ -120,20 +116,20 @@ public class FrameworkConfiguration {
 		this.flushBundleCacheOnFirstInit = flushBundleCacheOnFirstInit;
 	}
 
-	public List<SystemPackage> getCoreSystemPackages() {
+	public Set<SystemPackage> getCoreSystemPackages() {
 		return coreSystemPackages;
 	}
 
-	public void setCoreSystemPackages(final List<SystemPackage> coreSystemPackages) {
+	public void setCoreSystemPackages(final Set<SystemPackage> coreSystemPackages) {
 		Assert.notNull(coreSystemPackages);
 		this.coreSystemPackages = coreSystemPackages;
 	}
 
-	public List<SystemPackage> getAdditionalSystemPackages() {
+	public Set<SystemPackage> getAdditionalSystemPackages() {
 		return additionalSystemPackages;
 	}
 
-	public void setAdditionalSystemPackages(final List<SystemPackage> hostPackages) {
+	public void setAdditionalSystemPackages(final Set<SystemPackage> hostPackages) {
 		Assert.notNull(hostPackages);
 		this.additionalSystemPackages = hostPackages;
 	}

@@ -30,8 +30,7 @@ package nl.runnable.alfresco.osgi.spring;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import nl.runnable.alfresco.osgi.SystemPackage;
 import nl.runnable.alfresco.osgi.SystemPackageEditor;
@@ -48,7 +47,7 @@ import org.springframework.util.Assert;
  * @author Laurens Fridael
  * 
  */
-public class SystemPackageConfigurationFactoryBean extends AbstractConfigurationFileFactoryBean<List<SystemPackage>> {
+public class SystemPackageConfigurationFactoryBean extends AbstractConfigurationFileFactoryBean<Set<SystemPackage>> {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -58,14 +57,14 @@ public class SystemPackageConfigurationFactoryBean extends AbstractConfiguration
 
 	/* State */
 
-	private List<SystemPackage> systemPackages;
+	private Set<SystemPackage> systemPackages;
 
 	/* Operations */
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Class<? extends List<SystemPackage>> getObjectType() {
-		return (Class<? extends List<SystemPackage>>) (Class<?>) List.class;
+	public Class<? extends Set<SystemPackage>> getObjectType() {
+		return (Class<? extends Set<SystemPackage>>) (Class<?>) Set.class;
 	}
 
 	@Override
@@ -74,7 +73,7 @@ public class SystemPackageConfigurationFactoryBean extends AbstractConfiguration
 	}
 
 	@Override
-	public List<SystemPackage> getObject() throws IOException {
+	public Set<SystemPackage> getObject() throws IOException {
 		if (systemPackages == null) {
 			systemPackages = createSystemPackages();
 		}
@@ -83,8 +82,8 @@ public class SystemPackageConfigurationFactoryBean extends AbstractConfiguration
 
 	/* Utility operations */
 
-	protected List<SystemPackage> createSystemPackages() throws IOException {
-		final List<SystemPackage> systemPackages = new ArrayList<SystemPackage>();
+	protected Set<SystemPackage> createSystemPackages() throws IOException {
+		final Set<SystemPackage> systemPackages = new LinkedHashSet<SystemPackage>();
 		final SystemPackageEditor systemPackageEditor = new SystemPackageEditor();
 		systemPackageEditor.setDefaultVersion(getDefaultVersion());
 		for (final Resource configuration : resolveConfigurations()) {
