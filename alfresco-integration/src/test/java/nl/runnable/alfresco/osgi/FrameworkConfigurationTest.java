@@ -27,11 +27,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package nl.runnable.alfresco.osgi;
 
+import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Map;
+import java.util.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -52,10 +52,11 @@ public class FrameworkConfigurationTest {
 
 		frameworkConfiguration.setFlushBundleCacheOnFirstInit(true);
 
-		frameworkConfiguration.setCoreSystemPackages(Arrays.asList(new SystemPackage("core-package", "1.0")));
+		frameworkConfiguration.setCoreSystemPackages(new HashSet<SystemPackage>(asList(new SystemPackage("core-package", "1.0"))));
 
-		frameworkConfiguration.setAdditionalSystemPackages(Arrays.asList(
-				new SystemPackage("additional-package1", "1.0"), new SystemPackage("additional-package2", "2.0")));
+		frameworkConfiguration.setAdditionalSystemPackages(new LinkedHashSet<SystemPackage>(asList(
+        new SystemPackage("additional-package1", "1.0"), new SystemPackage("additional-package2", "2.0")))
+    );
 	}
 
 	@Test
