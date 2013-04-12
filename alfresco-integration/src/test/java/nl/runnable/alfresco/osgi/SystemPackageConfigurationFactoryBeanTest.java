@@ -32,6 +32,7 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import nl.runnable.alfresco.osgi.spring.SystemPackageConfigurationFactoryBean;
 
@@ -65,7 +66,7 @@ public class SystemPackageConfigurationFactoryBeanTest {
 
 	@Test
 	public void testGetObjectType() {
-		assertTrue(List.class.isAssignableFrom(factoryBean.getObjectType()));
+		assertTrue(Set.class.isAssignableFrom(factoryBean.getObjectType()));
 	}
 
 	@Test
@@ -75,13 +76,10 @@ public class SystemPackageConfigurationFactoryBeanTest {
 
 	@Test
 	public void testGetObject() throws IOException {
-		final List<SystemPackage> systemPackages = factoryBean.getObject();
+		final Set<SystemPackage> systemPackages = factoryBean.getObject();
 		assertEquals(3, systemPackages.size());
-		assertEquals(systemPackages.get(0).getName(), "org.alfresco.service.cmr.repository");
-		assertEquals(systemPackages.get(0).getVersion(), "3.2");
-		assertEquals(systemPackages.get(1).getName(), "org.alfresco.service.cmr.search");
-		assertEquals(systemPackages.get(1).getVersion(), "3.4");
-		assertEquals(systemPackages.get(2).getName(), "org.alfresco.service.transaction");
-		assertEquals(systemPackages.get(2).getVersion(), "3.4");
+    assertTrue(systemPackages.contains(new SystemPackage("org.alfresco.service.cmr.repository", "3.2")));
+    assertTrue(systemPackages.contains(new SystemPackage("org.alfresco.service.cmr.search", "3.4")));
+    assertTrue(systemPackages.contains(new SystemPackage("org.alfresco.service.transaction", "3.4")));
 	}
 }

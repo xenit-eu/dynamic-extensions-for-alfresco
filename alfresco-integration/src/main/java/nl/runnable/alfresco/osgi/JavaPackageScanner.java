@@ -49,18 +49,18 @@ public class JavaPackageScanner implements ServletContextAware {
 	 * This implementation uses a {@link MetadataReader} to obtain class information, without actually loading the
 	 * classses into the VM.
 	 */
-	public List<SystemPackage> scanWebApplicationPackages() {
+	public Set<SystemPackage> scanWebApplicationPackages() {
 		if (resourcePatternResolver == null) {
 			if (logger.isWarnEnabled()) {
 				logger.warn("ResourcePatternResolver was not configured. This is normal during a unit test.");
 			}
-			return Collections.emptyList();
+			return Collections.emptySet();
 		}
 
     logger.debug("Scanning for Java packages.");
 
     final long before = System.currentTimeMillis();
-		final List<SystemPackage> packages = new ArrayList<SystemPackage>();
+		final Set<SystemPackage> packages = new LinkedHashSet<SystemPackage>(4500, 0.1f);
     try {
       for (final Resource resource : getClassResources()) {
         if (resource.isReadable()) {
@@ -73,9 +73,7 @@ public class JavaPackageScanner implements ServletContextAware {
               if (!isFrameworkPackage(packageName)) {
                 final String version = getVersion(packageName, resource);
                 final SystemPackage systemPackage = new SystemPackage(packageName, version);
-                if (packages.contains(systemPackage) == false) {
-                  packages.add(systemPackage);
-                }
+                packages.add(systemPackage);
               }
             }
           }
