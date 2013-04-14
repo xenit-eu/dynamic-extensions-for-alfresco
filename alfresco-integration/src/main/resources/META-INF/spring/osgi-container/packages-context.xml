@@ -10,11 +10,10 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		these packages are then available to Bundles managed by the OSGi Framework.
 	</description>
 
-	<bean id="osgi.container.HostPackages" class="nl.runnable.alfresco.osgi.spring.ListMergingFactoryBean">
-		<property name="lists">
+	<bean id="osgi.container.HostPackages" class="nl.runnable.alfresco.osgi.spring.SetCombinationFactoryBean">
+		<property name="sets">
 			<list>
 				<ref bean="osgi.container.WebServerJavaPackages" />
-				<!-- This bean is defined in the parent application context, due to the need for accessing the ServletContext: -->
 				<ref bean="osgi.container.WebApplicationJavaPackages" />
 			</list>
 		</property>
@@ -24,6 +23,39 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		<description>Classes loaded by the web server</description>
 		<property name="configurations" value="classpath:/META-INF/spring/osgi-container/packages/web-server-packages.txt" />
 		<property name="configurationLocations" value="classpath*:/dynamic-extensions/configuration/packages/web-server-packages.txt" />
+	</bean>
+
+	<bean id="osgi.container.WebApplicationJavaPackages" class="nl.runnable.alfresco.osgi.spring.WebApplicationSystemPackageFactoryBean">
+		<description>Scans for Java packages in JARs in /WEB-INF/lib</description>
+		<property name="javaPackageScanner" ref="osgi.container.JavaPackageScannerFactory" />
+		<property name="basePackages" ref="osgi.container.WebApplicationPackageConfiguration" />
+		<property name="repositoryStoreService" ref="osgi.container.RepositoryStoreService" />
+		<property name="fileFolderService" ref="fileFolderService" />
+	</bean>
+
+	<!-- JavaPackageScanner dependencies keep some internal caches, so make it disposable -->
+	<bean id="osgi.container.JavaPackageScannerFactory" class="org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean">
+		<property name="targetBeanName" value="osgi.container.JavaPackageScanner" />
+	</bean>
+
+	<bean id="osgi.container.JavaPackageScanner" class="nl.runnable.alfresco.osgi.JavaPackageScanner" scope="prototype">
+		<property name="libraryVersionDetectors">
+			<list>
+				<bean class="nl.runnable.alfresco.osgi.spring.BasePackageVersionDetector" scope="prototype">
+					<property name="basePackages" ref="osgi.container.WebApplicationPackageConfiguration" />
+				</bean>
+				<bean class="nl.runnable.alfresco.osgi.spring.BundleVersionDetector" scope="prototype" />
+				<bean class="nl.runnable.alfresco.osgi.spring.AlfrescoLibraryVersionDetector" scope="prototype">
+					<property name="descriptorService" ref="DescriptorService" />
+				</bean>
+				<bean class="nl.runnable.alfresco.osgi.spring.SpringLibraryVersionDetector" scope="prototype" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="osgi.container.WebApplicationPackageConfiguration" class="nl.runnable.alfresco.osgi.spring.SystemPackageConfigurationFactoryBean">
+		<property name="configurations" value="classpath:/META-INF/spring/osgi-container/packages/web-application-packages.txt" />
+		<property name="configurationLocations" value="classpath*:/dynamic-extensions/configuration/packages/web-application-packages.txt" />
 	</bean>
 
 </beans>

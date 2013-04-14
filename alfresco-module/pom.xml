@@ -55,19 +55,7 @@
 			<artifactId>spring-webscripts</artifactId>
 			<scope>test</scope>
 		</dependency>
-    <dependency>
-      <groupId>acegisecurity</groupId>
-      <artifactId>acegi-security</artifactId>
-      <version>${acegi-security.version}</version>
-      <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
+		<dependency>
 			<groupId>org.apache.felix</groupId>
 			<artifactId>org.apache.felix.framework</artifactId>
 		</dependency>
@@ -221,7 +209,7 @@
 			</build>
 		</profile>
 		<profile>
-			<!--  Use this profile to exclude the Control Panel bundle. -->
+			<!-- Use this profile to exclude the Control Panel bundle. -->
 			<id>development</id>
 		</profile>
 	</profiles>

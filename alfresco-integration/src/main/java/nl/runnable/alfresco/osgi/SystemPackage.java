@@ -34,7 +34,7 @@ import org.springframework.util.Assert;
 
 /**
  * Represents a {@link Framework} system package.
- *
+ * 
  * @author Laurens Fridael
  * @see FrameworkConfiguration#setCoreSystemPackages(java.util.Set)
  * @see FrameworkConfiguration#setAdditionalSystemPackages(java.util.Set)
@@ -43,9 +43,14 @@ public class SystemPackage {
 
 	public static final String DEFAULT_VERSION = "1.0";
 
-	private final String name;
-
-	private final String version;
+	public static SystemPackage fromString(final String line) {
+		final String[] tokens = line.split(";");
+		if (tokens.length > 1) {
+			return new SystemPackage(tokens[0], tokens[1]);
+		} else {
+			return new SystemPackage(tokens[0], null);
+		}
+	}
 
 	public static Comparator<SystemPackage> MOST_SPECIFIC_FIRST = new Comparator<SystemPackage>() {
 		@Override
@@ -63,6 +68,10 @@ public class SystemPackage {
 			}
 		}
 	};
+
+	private final String name;
+
+	private final String version;
 
 	public SystemPackage(final String name, final String version) {
 		Assert.hasText(name, "Name cannot be empty.");
@@ -87,27 +96,22 @@ public class SystemPackage {
 		}
 	}
 
-  public static SystemPackage from(String line) {
-    final String[] tokens = line.split(";");
-    if (tokens.length > 1) {
-      return new SystemPackage(tokens[0], tokens[1]);
-    } else {
-      return new SystemPackage(tokens[0], null);
-    }
-  }
+	@Override
+	public boolean equals(final Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+		final SystemPackage that = (SystemPackage) o;
 
-    SystemPackage that = (SystemPackage) o;
+		return name.equals(that.name);
+	}
 
-    return name.equals(that.name);
-  }
-
-  @Override
-  public int hashCode() {
-    return name.hashCode();
-  }
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
 }

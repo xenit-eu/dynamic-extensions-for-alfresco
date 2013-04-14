@@ -49,16 +49,7 @@
 		<dependency>
 			<groupId>com.springsource.util</groupId>
 			<artifactId>com.springsource.util.osgi</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.springsource.util</groupId>
-			<artifactId>com.springsource.util.common</artifactId>
-			<version>${springsource-util-osgi.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.springsource.util</groupId>
-			<artifactId>com.springsource.util.parser.manifest</artifactId>
-			<version>${springsource-util-osgi.version}</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 	<build>

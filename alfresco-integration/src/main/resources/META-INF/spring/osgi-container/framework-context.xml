@@ -45,7 +45,8 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		<description>Registers this application context as an OSGi service.</description>
 	</bean>
 
-	<bean id="osgi.container.FrameworkManager" class="nl.runnable.alfresco.osgi.FrameworkManager" init-method="initialize" destroy-method="destroy">
+	<bean id="osgi.container.FrameworkManager" class="nl.runnable.alfresco.osgi.FrameworkManager" init-method="initialize"
+		destroy-method="destroy">
 		<description>
 			Manages the lifecycle of the OSGi Framework and registers services and listeners.
 		</description>
@@ -76,5 +77,27 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	</bean>
 
 	<bean id="osgi.container.Configuration" class="nl.runnable.alfresco.osgi.Configuration" />
+
+	<bean id="osgi.container.RepositoryStoreService" class="nl.runnable.alfresco.osgi.RepositoryStoreService">
+		<property name="namespacePrefixResolver" ref="namespaceService" />
+		<property name="nodeService" ref="nodeService" />
+		<property name="fileFolderService" ref="fileFolderService" />
+		<property name="baseFolderDescription">
+			<value>
+				Dynamic Extensions for Alfresco. https://github.com/lfridael/dynamic-extensions-for-alfresco
+			</value>
+		</property>
+		<property name="bundleFolderDescription">
+			<value>
+				Dynamic Extension OSGi bundle JARs.
+			</value>
+		</property>
+		<property name="configurationFolderDescription">
+			<value>
+				Configuration files for Dynamic Extensions.
+			</value>
+		</property>
+	</bean>
+
 
 </beans>
