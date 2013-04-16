@@ -35,12 +35,12 @@
           </form>
         <#else>
           <p>
-            <em>The System Package cache does not exist.</em>
+            <em>The System Package cache has been deleted.</em>
           </p>
         </#if>
         <p>
           NOTE: if you delete the System Package cache you will not be able to restart the 
-          <a href="framework">Framework</a>. You will need to restart the repository instead.
+          <a href="framework">Framework</a>. In this case you will need to restart the repository.
         </p>
       </div>
     </div>

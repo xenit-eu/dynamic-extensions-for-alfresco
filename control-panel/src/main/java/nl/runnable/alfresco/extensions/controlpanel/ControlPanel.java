@@ -106,6 +106,9 @@ public class ControlPanel {
 	public Map<String, Object> framework() {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		model.put(Variables.FRAMEWORK_BUNDLES, toTemplateBundles(bundleHelper.getFrameworkBundles()));
+		NodeRef systemPackageCache = getSystemPackageCache();
+		model.put(Variables.CAN_RESTART_FRAMEWORK, systemPackageCache != null);
+		model.put(Variables.SYSTEM_PACKAGE_CACHE_EXISTS, systemPackageCache != null);
 		return model;
 	}
 

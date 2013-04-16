@@ -80,6 +80,11 @@ public class Variables {
 	 */
 	public static final String SYSTEM_PACKAGE_CACHE_EXISTS = "systemPackageCacheExists";
 
+	/**
+	 * Refers to a Boolean that indicates if the Framework can be restarted.
+	 */
+	public static final String CAN_RESTART_FRAMEWORK = "canRestartFramework";
+
 	private Variables() {
 	}
 }
