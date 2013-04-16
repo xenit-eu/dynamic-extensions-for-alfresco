@@ -63,7 +63,12 @@ class ResponseHelper {
 		return this;
 	}
 
-	public ResponseHelper redirectToBundle(long bundleId) {
+	public ResponseHelper redirectToConfiguration() {
+		redirectToService("/dynamic-extensions/configuration");
+		return this;
+	}
+
+	public ResponseHelper redirectToBundle(final long bundleId) {
 		redirectToService("/dynamic-extensions/bundles/" + bundleId);
 		return this;
 	}

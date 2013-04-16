@@ -18,6 +18,7 @@ import nl.runnable.alfresco.extensions.controlpanel.template.TemplateBundle;
 import nl.runnable.alfresco.extensions.controlpanel.template.Variables;
 import nl.runnable.alfresco.osgi.Configuration;
 import nl.runnable.alfresco.osgi.FrameworkService;
+import nl.runnable.alfresco.osgi.RepositoryStoreService;
 import nl.runnable.alfresco.osgi.SystemPackage;
 import nl.runnable.alfresco.webscripts.annotations.Attribute;
 import nl.runnable.alfresco.webscripts.annotations.Authentication;
@@ -34,6 +35,8 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
+import org.alfresco.service.cmr.model.FileFolderService;
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
@@ -54,6 +57,8 @@ import org.springframework.extensions.webscripts.servlet.FormData.FormField;
 @Cache(neverCache = true)
 public class ControlPanel {
 
+	private static final String DEFAULT_SYSTEM_PACKAGE_CACHE_PATH = "/Company Home/Data Dictionary/Dynamic Extensions/Configuration/system-packages.txt";
+
 	/* Dependencies */
 
 	@Inject
@@ -64,6 +69,12 @@ public class ControlPanel {
 
 	@Inject
 	private FrameworkService frameworkService;
+
+	@Inject
+	private FileFolderService fileFolderService;
+
+	@Inject
+	private RepositoryStoreService repositoryStoreService;
 
 	@Inject
 	@Named("retryingTransactionHelper")
@@ -86,8 +97,7 @@ public class ControlPanel {
 		model.put(Variables.EXTENSION_BUNDLES, toTemplateBundles(bundleHelper.getExtensionBundles()));
 		model.put(Variables.FILE_INSTALL_PATHS, configuration.getFileInstallPaths());
 		model.put(Variables.INSTALLED_BUNDLE, responseHelper.getFlashVariable(Variables.INSTALLED_BUNDLE));
-		model.put(Variables.ERROR_MESSAGE, responseHelper.getFlashVariable(Variables.ERROR_MESSAGE));
-		model.put(Variables.SUCCESS_MESSAGE, responseHelper.getFlashVariable(Variables.SUCCESS_MESSAGE));
+		populateFlashMessages(responseHelper, model);
 		model.put(Variables.REPOSITORY_STORE_LOCATION, bundleHelper.getBundleRepositoryLocation());
 		return model;
 	}
@@ -96,6 +106,49 @@ public class ControlPanel {
 	public Map<String, Object> framework() {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		model.put(Variables.FRAMEWORK_BUNDLES, toTemplateBundles(bundleHelper.getFrameworkBundles()));
+		return model;
+	}
+
+	/**
+	 * Obtains information on a {@link Bundle} identified by a given ID.
+	 * 
+	 * @param id
+	 * @param responseHelper
+	 * @return
+	 * @throws IOException
+	 */
+	@Uri(method = HttpMethod.GET, value = "/dynamic-extensions/bundles/{id}", defaultFormat = "html")
+	public Map<String, Object> bundle(@UriVariable final long id, @Attribute final ResponseHelper responseHelper)
+			throws IOException {
+		final Map<String, Object> model = new HashMap<String, Object>();
+		final Bundle bundle = bundleHelper.getBundle(id);
+		if (bundle != null) {
+			if (id == 0) {
+				model.put(Variables.SYSTEM_PACKAGE_COUNT, getSystemPackages().size());
+			}
+			model.put(Variables.BUNDLE, new TemplateBundle(bundle));
+		} else {
+			model.put(Variables.ID, id);
+			responseHelper.status(HttpServletResponse.SC_NOT_FOUND);
+		}
+		model.put(Variables.ERROR_MESSAGE, responseHelper.getFlashVariable(Variables.ERROR_MESSAGE));
+		return model;
+	}
+
+	@Uri(method = HttpMethod.GET, value = "/dynamic-extensions/configuration", defaultFormat = "html")
+	public Map<String, Object> configuration(@Attribute final ResponseHelper responseHelper) {
+		final Map<String, Object> model = new HashMap<String, Object>();
+		model.put(Variables.SYSTEM_PACKAGE_COUNT, getSystemPackages().size());
+		model.put(Variables.SYSTEM_PACKAGE_CACHE_PATH, DEFAULT_SYSTEM_PACKAGE_CACHE_PATH);
+		model.put(Variables.SYSTEM_PACKAGE_CACHE_EXISTS, getSystemPackageCache() != null);
+		populateFlashMessages(responseHelper, model);
+		return model;
+	}
+
+	@Uri(method = HttpMethod.GET, value = "/dynamic-extensions/system-packages", defaultFormat = "html")
+	public Map<String, Object> systemPackages() {
+		final Map<String, Object> model = new HashMap<String, Object>();
+		model.put(Variables.SYSTEM_PACKAGES, getSystemPackages());
 		return model;
 	}
 
@@ -172,36 +225,24 @@ public class ControlPanel {
 		restartFrameworkAsynchronously();
 	}
 
-	/**
-	 * Obtains information on a {@link Bundle} identified by a given ID.
-	 * 
-	 * @param id
-	 * @param responseHelper
-	 * @return
-	 * @throws IOException
-	 */
-	@Uri(method = HttpMethod.GET, value = "/dynamic-extensions/bundles/{id}", defaultFormat = "html")
-	public Map<String, Object> bundle(@UriVariable final long id, @Attribute final ResponseHelper responseHelper)
-			throws IOException {
-		final Map<String, Object> model = new HashMap<String, Object>();
-		final Bundle bundle = bundleHelper.getBundle(id);
-		if (bundle != null) {
-			if (id == 0) {
-				/*
-				 * TODO: systemPackages seems to point to a List of Lists. This should be fixed.
-				 */
-				model.put(Variables.SYSTEM_PACKAGES, systemPackages.get(0));
-			}
-			model.put(Variables.BUNDLE, new TemplateBundle(bundle));
+	@Uri(method = HttpMethod.POST, value = "/dynamic-extensions/delete-system-package-cache")
+	public void deleteSystemPackageCache(@Attribute final ResponseHelper responseHelper) {
+		final NodeRef systemPackageCache = getSystemPackageCache();
+		if (systemPackageCache != null) {
+			fileFolderService.delete(systemPackageCache);
+			responseHelper.flashSuccessMessage("Deleted System Package cache.");
 		} else {
-			model.put(Variables.ID, id);
-			responseHelper.status(HttpServletResponse.SC_NOT_FOUND);
+			responseHelper.flashErrorMessage("System Package cache was not found, It may have been deleted already.");
 		}
-		model.put(Variables.ERROR_MESSAGE, responseHelper.getFlashVariable(Variables.ERROR_MESSAGE));
-		return model;
+		responseHelper.redirectToConfiguration();
 	}
 
 	/* Utility operations */
+
+	protected void populateFlashMessages(final ResponseHelper responseHelper, final Map<String, Object> model) {
+		model.put(Variables.ERROR_MESSAGE, responseHelper.getFlashVariable(Variables.ERROR_MESSAGE));
+		model.put(Variables.SUCCESS_MESSAGE, responseHelper.getFlashVariable(Variables.SUCCESS_MESSAGE));
+	}
 
 	protected Collection<TemplateBundle> toTemplateBundles(final Collection<Bundle> bundles) {
 		final List<TemplateBundle> templateBundles = new ArrayList<TemplateBundle>();
@@ -210,6 +251,15 @@ public class ControlPanel {
 		}
 		Collections.sort(templateBundles);
 		return templateBundles;
+	}
+
+	protected NodeRef getSystemPackageCache() {
+		final NodeRef configurationFolder = repositoryStoreService.getConfigurationFolder(false);
+		NodeRef systemPackageCache = null;
+		if (fileFolderService.exists(configurationFolder)) {
+			systemPackageCache = fileFolderService.searchSimple(configurationFolder, "system-packages.txt");
+		}
+		return systemPackageCache;
 	}
 
 	/**
@@ -237,6 +287,11 @@ public class ControlPanel {
 				});
 			}
 		});
+	}
+
+	@SuppressWarnings("unchecked")
+	protected Collection<SystemPackage> getSystemPackages() {
+		return (Collection<SystemPackage>) systemPackages.get(0);
 	}
 
 	/* Attributes */

@@ -7,7 +7,6 @@
     <base href="${url.serviceContext}/dynamic-extensions/"/>
     <link rel="stylesheet" type="text/css" href="resources/stylesheets/bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="resources/stylesheets/jasny-bootstrap/bootstrap-fileupload.css"/>
-    <#-- <link rel="stylesheet" type="text/css" href="resources/stylesheets/bootstrap/css/bootstrap-responsive.min.css"/> -->
     <link rel="stylesheet" type="text/css" href="resources/stylesheets/sticky-footer.css"/>
     <link rel="stylesheet" type="text/css" href="resources/stylesheets/screen.css"/>
   </head>
@@ -23,6 +22,9 @@
               </li>
               <li class="<#if (active == 'framework')>active</#if>">
                 <a href="framework">Framework</a>
+              </li>
+              <li class="<#if (active == 'configuration')>active</#if>">
+                <a href="configuration">Configuration</a>
               </li>
             </ul>
             <ul class="nav pull-right">

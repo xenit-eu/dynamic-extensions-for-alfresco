@@ -63,6 +63,23 @@ public class Variables {
 	 */
 	public static final String SYSTEM_PACKAGES = "systemPackages";
 
+	/**
+	 * Refers to an int specifying the number of {@link SystemPackage}s.
+	 * <p>
+	 * Specifying the number of system packages in a separate variable allows us to lazily obtain the actual collection.
+	 */
+	public static final String SYSTEM_PACKAGE_COUNT = "systemPackageCount";
+
+	/**
+	 * Refers to a String with the repository path to the {@link SystemPackage} cache file.
+	 */
+	public static final String SYSTEM_PACKAGE_CACHE_PATH = "systemPackageCachePath";
+
+	/**
+	 * Refers to a Boolean indicating if the {@link SystemPackage} cache exists.
+	 */
+	public static final String SYSTEM_PACKAGE_CACHE_EXISTS = "systemPackageCacheExists";
+
 	private Variables() {
 	}
 }

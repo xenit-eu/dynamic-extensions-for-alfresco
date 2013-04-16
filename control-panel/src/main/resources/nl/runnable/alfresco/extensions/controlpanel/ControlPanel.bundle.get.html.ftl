@@ -70,9 +70,9 @@
       </p>
       <ul>
         <li>
-          <a href="bundles/0">The System Bundle</a>
+          <a href="system-packages">System Packages</a>
           <br/>
-          Provides access to packages that comprise the Java platform and the Alfresco repository. 
+          System packages are the Java libraries from the Alfresco repository.
         </li>
         <li>
           <a href="framework">Framework bundles</a>
@@ -129,29 +129,8 @@
     </#if>
   </#if>
 
-  <#if (bundle.bundleId == 0)>
-    <h2>System Packages</h2>
-    <p>
-      These packages are exported by the Alfresco repository application.
-    </p>
-    <table class="package table table-striped table-bordered">
-      <thead>
-        <tr>
-          <th class="name">System Package</th>
-          <th class="version">Version</th>
-        </tr>
-      </thead>
-      <tbody>
-        <#list systemPackages as package>
-          <tr>
-            <td class="name">${package.name}</td>
-            <td class="version">${package.version!'1.0'}</td>
-          </tr>
-        </#list>
-      </tbody>
-    </table>
-  <#else>
-    <h2>Exported packages</h2>
+  <h2>Exported packages</h2>
+  <#if (bundle.bundleId != 0)>
     <#if (bundle.exportedPackages?size > 0)>
       <table class="package table table-striped table-bordered">
         <thead>
@@ -174,6 +153,10 @@
         This bundle does not export any packages.
       </p>
     </#if>
+  <#else>
+    <p>
+      The System Bundle exports <a href="system-packages">${systemPackageCount?string.computer} System Packages</a>.
+    </p>
   </#if>
 
 </@html.document>
