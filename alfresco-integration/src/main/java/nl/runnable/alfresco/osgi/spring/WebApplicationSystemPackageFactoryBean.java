@@ -14,11 +14,10 @@ import nl.runnable.alfresco.osgi.JavaPackageScanner;
 import nl.runnable.alfresco.osgi.RepositoryStoreService;
 import nl.runnable.alfresco.osgi.SystemPackage;
 
-import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.model.FileFolderService;
+import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.service.cmr.repository.ContentWriter;
-import org.alfresco.service.cmr.repository.NodeRef;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,8 +34,6 @@ import org.springframework.util.Assert;
 public class WebApplicationSystemPackageFactoryBean implements FactoryBean<Set<SystemPackage>> {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
-
-	private static final String SYSTEM_PACKAGES_FILE_NAME = "system-packages.txt";
 
 	/* Dependencies */
 
@@ -84,11 +81,9 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<Set<S
 	}
 
 	private Set<SystemPackage> getCachedPackages() {
-		final NodeRef configurationFolder = getConfigurationFolder();
-		final NodeRef systemPackagesCached = fileFolderService.searchSimple(configurationFolder,
-				SYSTEM_PACKAGES_FILE_NAME);
+		final FileInfo systemPackagesCached = repositoryStoreService.getSystemPackageCache();
 		if (systemPackagesCached != null) {
-			final ContentReader contentReader = fileFolderService.getReader(systemPackagesCached);
+			final ContentReader contentReader = fileFolderService.getReader(systemPackagesCached.getNodeRef());
 			final LineNumberReader in = new LineNumberReader(new InputStreamReader(
 					contentReader.getContentInputStream()));
 			try {
@@ -113,13 +108,8 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<Set<S
 	}
 
 	private void writeCachedPackages(final Set<SystemPackage> packages) {
-		NodeRef systemPackagesCached = fileFolderService.searchSimple(getConfigurationFolder(),
-				SYSTEM_PACKAGES_FILE_NAME);
-		if (systemPackagesCached == null) {
-			systemPackagesCached = fileFolderService.create(getConfigurationFolder(), SYSTEM_PACKAGES_FILE_NAME,
-					ContentModel.TYPE_CONTENT).getNodeRef();
-		}
-		final ContentWriter cw = fileFolderService.getWriter(systemPackagesCached);
+		final FileInfo systemPackagesCached = repositoryStoreService.createSystemPackageCache();
+		final ContentWriter cw = fileFolderService.getWriter(systemPackagesCached.getNodeRef());
 		final PrintWriter writer = new PrintWriter(cw.getContentOutputStream());
 		try {
 			for (final SystemPackage systemPackage : packages) {
@@ -128,10 +118,6 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<Set<S
 		} finally {
 			IOUtils.closeQuietly(writer);
 		}
-	}
-
-	private NodeRef getConfigurationFolder() {
-		return repositoryStoreService.getConfigurationFolder(true);
 	}
 
 	/* Dependencies */

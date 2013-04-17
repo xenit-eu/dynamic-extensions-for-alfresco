@@ -18,16 +18,16 @@
           Dynamic Extensions scans the System Packages when it starts up for the first time and 
           caches them to speed up subsequent repository startups.
         </p>
-        <p>
-          If you change any of the Java libraries in the repository application, you should delete 
-          <#assign url = "${url.serviceContext}/api/path/content/workspace/SpacesStore${systemPackageCachePath?replace(' ', '%20')}" />
-          the <a href="${url}" target="_blank">System Package cache</a>.
-        </p>
-        <p>
-          With the cache deleted, the System Packages will be rescanned on the next repository 
-          startup.
-        </p>
         <#if systemPackageCacheExists>
+          <p>
+            If you change any of the Java libraries in the repository application, you should delete 
+            <#assign url = "${url.serviceContext}/api/node/content/${systemPackageCacheNodeRef?replace('://', '/')}" />
+            the <a href="${url}" target="_blank">System Package cache</a>.
+          </p>
+          <p>
+            With the cache deleted, the System Packages will be rescanned on the next repository 
+            startup.
+          </p>
           <form action="delete-system-package-cache" method="post" 
             data-title="Delete System Package cache"
             data-confirm="Are you sure you want to delete the System Package cache?">
@@ -35,19 +35,20 @@
           </form>
         <#else>
           <p>
-            <em>The System Package cache has been deleted.</em>
+            <em>The System Package cache cannot be found.</em>
           </p>
         </#if>
         <p>
-          NOTE: if you delete the System Package cache you will not be able to restart the 
-          <a href="framework">Framework</a>. In this case you will need to restart the repository.
+          Note: When the System Package cache is not available the <a href="framework">Framework</a>
+          cannot be restarted. In this case you should restart the repository to have the cache
+          rebuilt on startup.
         </p>
       </div>
     </div>
     <div class="span6">
       <h3>OSGi Services</h3>
       <p>
-        <em>TODO: this will show OSGi services</em>
+        <em>TODO: show OSGi services</em>
       </p>
     </div>
   </div>

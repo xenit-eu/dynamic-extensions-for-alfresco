@@ -73,7 +73,7 @@ public class Variables {
 	/**
 	 * Refers to a String with the repository path to the {@link SystemPackage} cache file.
 	 */
-	public static final String SYSTEM_PACKAGE_CACHE_PATH = "systemPackageCachePath";
+	public static final String SYSTEM_PACKAGE_CACHE_NODEREF = "systemPackageCacheNodeRef";
 
 	/**
 	 * Refers to a Boolean indicating if the {@link SystemPackage} cache exists.

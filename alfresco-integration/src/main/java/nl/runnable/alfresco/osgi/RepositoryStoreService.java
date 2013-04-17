@@ -25,6 +25,8 @@ import org.springframework.util.StringUtils;
  */
 public class RepositoryStoreService {
 
+	private static final String SYSTEM_PACKAGE_CACHE_FILENAME = "system-packages.txt";
+
 	private static final String DEFAULT_BUNDLE_REPOSITORY_LOCATION = "/Company Home/Data Dictionary/Dynamic Extensions/Bundles";
 
 	/* Dependencies */
@@ -60,7 +62,9 @@ public class RepositoryStoreService {
 	public NodeRef getBundleFolder(final boolean createIfNotExists) {
 		final QName name = qName("cm", "bundles");
 		final NodeRef baseFolder = getBaseFolder(createIfNotExists);
-    if (baseFolder == null) return null;
+		if (baseFolder == null) {
+			return null;
+		}
 		NodeRef nodeRef = getChildOf(baseFolder, name);
 		if (nodeRef == null && createIfNotExists) {
 			nodeRef = createFolder(baseFolder, name, "Bundles", getBundleFolderDescription());
@@ -96,6 +100,36 @@ public class RepositoryStoreService {
 		return jarFiles;
 	}
 
+	/**
+	 * Obtains information on the System Package cache file.
+	 * 
+	 * @return The matching {@link FileInfo} or null if the cache could not be found.
+	 */
+	public FileInfo getSystemPackageCache() {
+		FileInfo systemPackageCache = null;
+		final NodeRef configurationFolder = getConfigurationFolder(false);
+		if (getFileFolderService().exists(configurationFolder)) {
+			final NodeRef nodeRef = getFileFolderService().searchSimple(configurationFolder,
+					SYSTEM_PACKAGE_CACHE_FILENAME);
+			if (nodeRef != null) {
+				systemPackageCache = getFileFolderService().getFileInfo(nodeRef);
+			}
+		}
+		return systemPackageCache;
+	}
+
+	/**
+	 * Creates the System Package cache file or obtains the handle to the existing cache file.
+	 */
+	public FileInfo createSystemPackageCache() {
+		FileInfo systemPackageCache = getSystemPackageCache();
+		if (systemPackageCache == null) {
+			systemPackageCache = getFileFolderService().create(getConfigurationFolder(true),
+					SYSTEM_PACKAGE_CACHE_FILENAME, ContentModel.TYPE_CONTENT);
+		}
+		return systemPackageCache;
+	}
+
 	/* Utility operations */
 
 	protected NodeRef getDataDictionary() {
@@ -110,25 +144,25 @@ public class RepositoryStoreService {
 			final String description) {
 		return AuthenticationUtil.runAsSystem(new RunAsWork<NodeRef>() {
 
-      @Override
-      public NodeRef doWork() throws Exception {
-        final ChildAssociationRef childAssoc = nodeService.createNode(parentFolder,
-            ContentModel.ASSOC_CONTAINS, qName, ContentModel.TYPE_FOLDER);
-        if (childAssoc != null) {
-          final NodeRef nodeRef = childAssoc.getChildRef();
-          getNodeService().setProperty(nodeRef, ContentModel.PROP_NAME, name);
-          if (StringUtils.hasText(description)) {
-            getNodeService().setProperty(nodeRef, ContentModel.PROP_DESCRIPTION, description.trim());
-          }
-          return nodeRef;
-        } else {
-          return null;
-        }
-      }
-    });
-  }
+			@Override
+			public NodeRef doWork() throws Exception {
+				final ChildAssociationRef childAssoc = nodeService.createNode(parentFolder,
+						ContentModel.ASSOC_CONTAINS, qName, ContentModel.TYPE_FOLDER);
+				if (childAssoc != null) {
+					final NodeRef nodeRef = childAssoc.getChildRef();
+					getNodeService().setProperty(nodeRef, ContentModel.PROP_NAME, name);
+					if (StringUtils.hasText(description)) {
+						getNodeService().setProperty(nodeRef, ContentModel.PROP_DESCRIPTION, description.trim());
+					}
+					return nodeRef;
+				} else {
+					return null;
+				}
+			}
+		});
+	}
 
-  /**
+	/**
 	 * Obtains the child with the given association type, {@link QName} of the given node.
 	 * 
 	 * @param nodeRef

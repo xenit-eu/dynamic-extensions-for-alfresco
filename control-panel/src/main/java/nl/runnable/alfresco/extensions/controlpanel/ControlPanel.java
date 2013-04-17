@@ -36,7 +36,7 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
 import org.alfresco.service.cmr.model.FileFolderService;
-import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.model.FileInfo;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
@@ -62,7 +62,7 @@ public class ControlPanel {
 	/* Dependencies */
 
 	@Inject
-	private Configuration configuration;
+	private Configuration frameworkConfiguration;
 
 	@Inject
 	private BundleHelper bundleHelper;
@@ -95,7 +95,7 @@ public class ControlPanel {
 	public Map<String, Object> index(@Attribute final ResponseHelper responseHelper) {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		model.put(Variables.EXTENSION_BUNDLES, toTemplateBundles(bundleHelper.getExtensionBundles()));
-		model.put(Variables.FILE_INSTALL_PATHS, configuration.getFileInstallPaths());
+		model.put(Variables.FILE_INSTALL_PATHS, frameworkConfiguration.getFileInstallPaths());
 		model.put(Variables.INSTALLED_BUNDLE, responseHelper.getFlashVariable(Variables.INSTALLED_BUNDLE));
 		populateFlashMessages(responseHelper, model);
 		model.put(Variables.REPOSITORY_STORE_LOCATION, bundleHelper.getBundleRepositoryLocation());
@@ -106,7 +106,7 @@ public class ControlPanel {
 	public Map<String, Object> framework() {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		model.put(Variables.FRAMEWORK_BUNDLES, toTemplateBundles(bundleHelper.getFrameworkBundles()));
-		NodeRef systemPackageCache = getSystemPackageCache();
+		final FileInfo systemPackageCache = repositoryStoreService.getSystemPackageCache();
 		model.put(Variables.CAN_RESTART_FRAMEWORK, systemPackageCache != null);
 		model.put(Variables.SYSTEM_PACKAGE_CACHE_EXISTS, systemPackageCache != null);
 		return model;
@@ -142,8 +142,11 @@ public class ControlPanel {
 	public Map<String, Object> configuration(@Attribute final ResponseHelper responseHelper) {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		model.put(Variables.SYSTEM_PACKAGE_COUNT, getSystemPackages().size());
-		model.put(Variables.SYSTEM_PACKAGE_CACHE_PATH, DEFAULT_SYSTEM_PACKAGE_CACHE_PATH);
-		model.put(Variables.SYSTEM_PACKAGE_CACHE_EXISTS, getSystemPackageCache() != null);
+		final FileInfo systemPackageCache = repositoryStoreService.getSystemPackageCache();
+		model.put(Variables.SYSTEM_PACKAGE_CACHE_EXISTS, systemPackageCache != null);
+		if (systemPackageCache != null) {
+			model.put(Variables.SYSTEM_PACKAGE_CACHE_NODEREF, systemPackageCache.getNodeRef().toString());
+		}
 		populateFlashMessages(responseHelper, model);
 		return model;
 	}
@@ -230,9 +233,9 @@ public class ControlPanel {
 
 	@Uri(method = HttpMethod.POST, value = "/dynamic-extensions/delete-system-package-cache")
 	public void deleteSystemPackageCache(@Attribute final ResponseHelper responseHelper) {
-		final NodeRef systemPackageCache = getSystemPackageCache();
+		final FileInfo systemPackageCache = repositoryStoreService.getSystemPackageCache();
 		if (systemPackageCache != null) {
-			fileFolderService.delete(systemPackageCache);
+			fileFolderService.delete(systemPackageCache.getNodeRef());
 			responseHelper.flashSuccessMessage("Deleted System Package cache.");
 		} else {
 			responseHelper.flashErrorMessage("System Package cache was not found, It may have been deleted already.");
@@ -254,15 +257,6 @@ public class ControlPanel {
 		}
 		Collections.sort(templateBundles);
 		return templateBundles;
-	}
-
-	protected NodeRef getSystemPackageCache() {
-		final NodeRef configurationFolder = repositoryStoreService.getConfigurationFolder(false);
-		NodeRef systemPackageCache = null;
-		if (fileFolderService.exists(configurationFolder)) {
-			systemPackageCache = fileFolderService.searchSimple(configurationFolder, "system-packages.txt");
-		}
-		return systemPackageCache;
 	}
 
 	/**

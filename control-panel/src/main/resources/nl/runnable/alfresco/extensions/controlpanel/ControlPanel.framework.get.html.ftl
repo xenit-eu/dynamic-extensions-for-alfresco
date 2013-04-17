@@ -21,10 +21,10 @@
   <#else>
     <#if !systemPackageCacheExists>
       <p>
-        The Framework cannot be restarted because the System Package cache has been deleted.
+        The Framework cannot be restarted because the System Package cache cannot be found.
       </p>
       <p>
-        Restart the repository to rebuild the System Package cache.
+        Restart the repository to have the System Package cache rebuilt on startup.
       </p>
     </#if>
   </#if>
