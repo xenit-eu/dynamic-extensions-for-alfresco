@@ -4,16 +4,27 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-	<bean id="annotationBasedActionRegistrar" class="nl.runnable.alfresco.actions.AnnotationBasedActionRegistrar" init-method="registerAnnotationBasedActions">
+  <bean id="annotationBasedActionRegistrar" class="nl.runnable.alfresco.actions.AnnotationBasedActionRegistrar"
+        init-method="registerAnnotationBasedActions">
     <property name="dictionaryService">
       <bean class="nl.runnable.alfresco.actions.DummyDictionaryService"/>
     </property>
     <property name="actionExecuterRegistry" ref="actionExecuterRegistry"/>
+    <property name="runtimeActionService">
+      <bean id="dao" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="target">
+          <bean class="org.mockito.Mockito" factory-method="mock">
+            <constructor-arg value="org.alfresco.repo.action.RuntimeActionService"/>
+          </bean>
+        </property>
+        <property name="proxyInterfaces">
+          <value>org.alfresco.repo.action.RuntimeActionService</value>
+        </property>
+      </bean>
+    </property>
   </bean>
 
-  <bean id="actionExecuterRegistry" class="nl.runnable.alfresco.actions.DefaultActionExecuterRegistry">
+  <bean id="actionExecuterRegistry" class="nl.runnable.alfresco.actions.DefaultActionExecuterRegistry"/>
 
-  </bean>
-
-	<bean class="nl.runnable.alfresco.actions.ExampleAction" />
+  <bean class="nl.runnable.alfresco.actions.ExampleAction"/>
 </beans>
