@@ -1,18 +1,8 @@
 package nl.runnable.alfresco.actions;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
 import nl.runnable.alfresco.AbstractAnnotationBasedRegistrar;
 import nl.runnable.alfresco.actions.annotations.ActionMethod;
 import nl.runnable.alfresco.actions.annotations.ActionParam;
-
 import org.alfresco.repo.action.ActionDefinitionImpl;
 import org.alfresco.repo.action.ParameterDefinitionImpl;
 import org.alfresco.repo.action.executer.ActionExecuter;
@@ -22,6 +12,7 @@ import org.alfresco.service.cmr.action.ParameterDefinition;
 import org.alfresco.service.cmr.dictionary.DataTypeDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
@@ -30,7 +21,15 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.ReflectionUtils.MethodCallback;
-import org.springframework.util.StringUtils;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Manages annotation-based Actions in a {@link BeanFactory}.
@@ -104,7 +103,7 @@ public class AnnotationBasedActionRegistrar extends AbstractAnnotationBasedRegis
 	protected ActionDefinition createActionDefinition(final Method method, final ActionMethod actionMethod,
 			final List<ParameterDefinition> parameterDefinitions) {
 		String name = actionMethod.value();
-		if (StringUtils.hasText(name) == false) {
+		if (StringUtils.isEmpty(name)) {
 			name = String.format("%s.%s", ClassUtils.getShortName(method.getDeclaringClass()), method.getName());
 		}
 		final ActionDefinitionImpl actionDefinition = new ActionDefinitionImpl(name);
@@ -173,10 +172,10 @@ public class AnnotationBasedActionRegistrar extends AbstractAnnotationBasedRegis
 				if (parameterAnnotation instanceof ActionParam) {
 					final ActionParam actionParameter = (ActionParam) parameterAnnotation;
 					String name = actionParameter.value();
-					if (StringUtils.hasText(name) == false) {
+					if (StringUtils.isEmpty(name)) {
 						name = methodParameterNames[index];
 					}
-					if (StringUtils.hasText(name) == false) {
+					if (StringUtils.isEmpty(name)) {
 						throw new RuntimeException(
 								String.format(
 										"Cannot determine name of parameter at index {} of method {}."
@@ -191,7 +190,7 @@ public class AnnotationBasedActionRegistrar extends AbstractAnnotationBasedRegis
 					}
 					final boolean mandatory = actionParameter.mandatory();
 					final String displayLabel = actionParameter.displayLabel();
-					final String constraintName = actionParameter.constraintName();
+					final String constraintName = StringUtils.stripToNull(actionParameter.constraintName());
 					final ParameterDefinition parameterDefinition = new ParameterDefinitionImpl(name,
 							dataType.getName(), mandatory, displayLabel, multivalued, constraintName);
 					parameterDefinitions.add(parameterDefinition);
@@ -210,8 +209,8 @@ public class AnnotationBasedActionRegistrar extends AbstractAnnotationBasedRegis
 	}
 
 	private DataTypeDefinition getDataType(final Class<?> clazz, final ActionParam actionParameter) {
-		DataTypeDefinition dataType = null;
-		if (StringUtils.hasText(actionParameter.type())) {
+		final DataTypeDefinition dataType;
+		if (StringUtils.isNotEmpty(actionParameter.type())) {
 			dataType = getDictionaryService().getDataType(parseQName(actionParameter.type(), actionParameter));
 			if (dataType == null) {
 				throw new RuntimeException(String.format("Invalid or unknown DataType: %s", actionParameter.type()));
