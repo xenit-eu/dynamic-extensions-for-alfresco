@@ -32,5 +32,11 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 		</dependency>
-	</dependencies>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>org.springframework.aop</artifactId>
+      <version>${spring.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 </project>
