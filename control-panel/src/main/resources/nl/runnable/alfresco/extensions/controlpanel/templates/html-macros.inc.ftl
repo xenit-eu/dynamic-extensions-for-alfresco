@@ -6,6 +6,7 @@
     <title>${title}</title>
     <base href="${url.serviceContext}/dynamic-extensions/"/>
     <link rel="stylesheet" type="text/css" href="resources/stylesheets/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="resources/stylesheets/bootstrap/css/bootstrap-responsive.min.css"/>
     <link rel="stylesheet" type="text/css" href="resources/stylesheets/jasny-bootstrap/bootstrap-fileupload.css"/>
     <link rel="stylesheet" type="text/css" href="resources/stylesheets/sticky-footer.css"/>
     <link rel="stylesheet" type="text/css" href="resources/stylesheets/screen.css"/>
@@ -83,12 +84,7 @@
       <#list bundles as bundle>
         <tr class="<#if bundle.status == 'installed'>error</#if>">
           <td>
-            <a href="bundles/${bundle.bundleId?string.computer}"
-              data-trigger="hover"
-              data-content="${bundle.description!}"
-              data-delay="1000">
-              ${bundle.name} ${bundle.version}
-            </a>
+            <@bundleLink bundle=bundle/>
           </td>
           <td>
             ${bundle.status}
@@ -110,4 +106,14 @@
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <#nested/>
   </div>
+</#macro>
+
+<#macro bundleLink bundle>
+  <a class="bundle"
+    href="bundles/${bundle.bundleId?string.computer}"
+    data-trigger="hover"
+    data-content="${bundle.description!}"
+    data-delay="1000">
+    ${bundle.name} ${bundle.version}
+  </a>
 </#macro>

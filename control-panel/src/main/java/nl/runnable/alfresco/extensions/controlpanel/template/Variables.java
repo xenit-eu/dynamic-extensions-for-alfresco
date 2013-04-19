@@ -85,6 +85,11 @@ public class Variables {
 	 */
 	public static final String CAN_RESTART_FRAMEWORK = "canRestartFramework";
 
+	/**
+	 * Refers to a {@link List} of {@link SystemPackage}s.
+	 */
+	public static final String SERVICES_BY_BUNDLE = "servicesByBundle";
+
 	private Variables() {
 	}
 }

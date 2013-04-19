@@ -2,13 +2,15 @@ package nl.runnable.alfresco.extensions.controlpanel.template;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import nl.runnable.alfresco.extensions.controlpanel.BundleHelper;
 
-import org.eclipse.osgi.framework.internal.core.Constants;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
 import org.springframework.util.Assert;
 
@@ -31,9 +33,31 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 
 	private BundleManifest manifest;
 
-	public TemplateBundle(final Bundle bundle) {
+	private List<TemplateServiceReference> services;
+
+	@SuppressWarnings("rawtypes")
+	private static List<TemplateServiceReference> createTemplateServices(final List<ServiceReference> services) {
+		final List<TemplateServiceReference> templateServices = new ArrayList<TemplateServiceReference>(services.size());
+		for (final ServiceReference serviceReference : services) {
+			templateServices.add(new TemplateServiceReference(serviceReference));
+		}
+		Collections.sort(templateServices);
+		return templateServices;
+	}
+
+	@SuppressWarnings("rawtypes")
+	public TemplateBundle(final Bundle bundle, final List<ServiceReference> services) {
 		Assert.notNull(bundle);
 		this.bundle = bundle;
+		if (services != null) {
+			this.services = createTemplateServices(services);
+		} else {
+			this.services = Collections.emptyList();
+		}
+	}
+
+	public TemplateBundle(final Bundle bundle) {
+		this(bundle, null);
 	}
 
 	public long getBundleId() {
@@ -137,6 +161,10 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 
 	public List<ExportedPackage> getExportedPackages() {
 		return getManifest().getExportPackage().getExportedPackages();
+	}
+
+	public List<TemplateServiceReference> getServices() {
+		return services;
 	}
 
 	/* Utility operations */
