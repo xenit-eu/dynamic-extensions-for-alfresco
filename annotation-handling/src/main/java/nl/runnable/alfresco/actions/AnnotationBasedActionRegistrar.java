@@ -1,4 +1,53 @@
+/*
+Copyright (c) 2012, Runnable
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+ * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+ * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+ * Neither the name of Runnable nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package nl.runnable.alfresco.actions;
+
+import nl.runnable.alfresco.AbstractAnnotationBasedRegistrar;
+import nl.runnable.alfresco.actions.annotations.ActionMethod;
+import nl.runnable.alfresco.actions.annotations.ActionParam;
+import org.alfresco.repo.action.ActionDefinitionImpl;
+import org.alfresco.repo.action.ParameterDefinitionImpl;
+import org.alfresco.repo.action.RuntimeActionService;
+import org.alfresco.repo.action.executer.ActionExecuter;
+import org.alfresco.service.cmr.action.Action;
+import org.alfresco.service.cmr.action.ActionDefinition;
+import org.alfresco.service.cmr.action.ParameterDefinition;
+import org.alfresco.service.cmr.dictionary.DataTypeDefinition;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
+import org.springframework.core.ParameterNameDiscoverer;
+import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.util.ClassUtils;
+import org.springframework.util.ReflectionUtils;
+import org.springframework.util.ReflectionUtils.MethodCallback;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -8,29 +57,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-
-import nl.runnable.alfresco.AbstractAnnotationBasedRegistrar;
-import nl.runnable.alfresco.actions.annotations.ActionMethod;
-import nl.runnable.alfresco.actions.annotations.ActionParam;
-
-import org.alfresco.repo.action.ActionDefinitionImpl;
-import org.alfresco.repo.action.ParameterDefinitionImpl;
-import org.alfresco.repo.action.executer.ActionExecuter;
-import org.alfresco.service.cmr.action.Action;
-import org.alfresco.service.cmr.action.ActionDefinition;
-import org.alfresco.service.cmr.action.ParameterDefinition;
-import org.alfresco.service.cmr.dictionary.DataTypeDefinition;
-import org.alfresco.service.cmr.dictionary.DictionaryService;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
-import org.springframework.core.ParameterNameDiscoverer;
-import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.util.ClassUtils;
-import org.springframework.util.ReflectionUtils;
-import org.springframework.util.ReflectionUtils.MethodCallback;
-import org.springframework.util.StringUtils;
 
 /**
  * Manages annotation-based Actions in a {@link BeanFactory}.
@@ -48,6 +74,8 @@ public class AnnotationBasedActionRegistrar extends AbstractAnnotationBasedRegis
 	private DictionaryService dictionaryService;
 
 	private ActionExecuterRegistry actionExecuterRegistry;
+
+	private RuntimeActionService runtimeActionService;
 
 	private final ParameterNameDiscoverer parameterNameDiscoverer = new LocalVariableTableParameterNameDiscoverer();
 
@@ -68,13 +96,15 @@ public class AnnotationBasedActionRegistrar extends AbstractAnnotationBasedRegis
 					if (actionMethod != null) {
 						final ActionExecuter actionExecuter = createActionExecuter(beanFactory.getBean(beanName),
 								method, actionMethod);
-						final String name = actionExecuter.getActionDefinition().getName();
+						final ActionDefinition actionDefinition = actionExecuter.getActionDefinition();
+						final String name = actionDefinition.getName();
 						if (getActionExecuterRegistry().hasActionExecuter(name) == false) {
 							if (logger.isDebugEnabled()) {
 								logger.debug("Registering ActionExecuter {}.", name);
 							}
 							getActionExecuterRegistry().registerActionExecuter(actionExecuter);
 							registeredActionExecutors.add(actionExecuter);
+							registerActionToken(actionDefinition);
 						} else {
 							if (logger.isWarnEnabled()) {
 								logger.warn("ActionExecuter name has already been registered.");
@@ -84,6 +114,14 @@ public class AnnotationBasedActionRegistrar extends AbstractAnnotationBasedRegis
 				}
 			});
 		}
+	}
+
+	/**
+	 * Registry a dummy action so that the action list is extended.
+	 * It will not be executed unless the AnnotatedExecutor is uninstalled.
+	 */
+	private synchronized void registerActionToken(ActionDefinition actionDefinition) {
+		runtimeActionService.registerActionExecuter(new DummyActionExecutor(actionDefinition));
 	}
 
 	public void unregisterAnnotationBasedActions() {
@@ -104,7 +142,7 @@ public class AnnotationBasedActionRegistrar extends AbstractAnnotationBasedRegis
 	protected ActionDefinition createActionDefinition(final Method method, final ActionMethod actionMethod,
 			final List<ParameterDefinition> parameterDefinitions) {
 		String name = actionMethod.value();
-		if (StringUtils.hasText(name) == false) {
+		if (StringUtils.isEmpty(name)) {
 			name = String.format("%s.%s", ClassUtils.getShortName(method.getDeclaringClass()), method.getName());
 		}
 		final ActionDefinitionImpl actionDefinition = new ActionDefinitionImpl(name);
@@ -173,10 +211,10 @@ public class AnnotationBasedActionRegistrar extends AbstractAnnotationBasedRegis
 				if (parameterAnnotation instanceof ActionParam) {
 					final ActionParam actionParameter = (ActionParam) parameterAnnotation;
 					String name = actionParameter.value();
-					if (StringUtils.hasText(name) == false) {
+					if (StringUtils.isEmpty(name)) {
 						name = methodParameterNames[index];
 					}
-					if (StringUtils.hasText(name) == false) {
+					if (StringUtils.isEmpty(name)) {
 						throw new RuntimeException(
 								String.format(
 										"Cannot determine name of parameter at index {} of method {}."
@@ -191,7 +229,7 @@ public class AnnotationBasedActionRegistrar extends AbstractAnnotationBasedRegis
 					}
 					final boolean mandatory = actionParameter.mandatory();
 					final String displayLabel = actionParameter.displayLabel();
-					final String constraintName = actionParameter.constraintName();
+					final String constraintName = StringUtils.stripToNull(actionParameter.constraintName());
 					final ParameterDefinition parameterDefinition = new ParameterDefinitionImpl(name,
 							dataType.getName(), mandatory, displayLabel, multivalued, constraintName);
 					parameterDefinitions.add(parameterDefinition);
@@ -210,8 +248,8 @@ public class AnnotationBasedActionRegistrar extends AbstractAnnotationBasedRegis
 	}
 
 	private DataTypeDefinition getDataType(final Class<?> clazz, final ActionParam actionParameter) {
-		DataTypeDefinition dataType = null;
-		if (StringUtils.hasText(actionParameter.type())) {
+		final DataTypeDefinition dataType;
+		if (StringUtils.isNotEmpty(actionParameter.type())) {
 			dataType = getDictionaryService().getDataType(parseQName(actionParameter.type(), actionParameter));
 			if (dataType == null) {
 				throw new RuntimeException(String.format("Invalid or unknown DataType: %s", actionParameter.type()));
@@ -261,4 +299,7 @@ public class AnnotationBasedActionRegistrar extends AbstractAnnotationBasedRegis
 		return actionExecuterRegistry;
 	}
 
+	public void setRuntimeActionService(RuntimeActionService runtimeActionService) {
+		this.runtimeActionService = runtimeActionService;
+	}
 }
