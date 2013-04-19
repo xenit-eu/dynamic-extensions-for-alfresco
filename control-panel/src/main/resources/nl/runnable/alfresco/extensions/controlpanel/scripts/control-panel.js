@@ -7,7 +7,7 @@
    */
   $(function() {
     bootbox.animate(false);
-    $('table.bundles a').popover();
+    $('a.bundle').popover();
   });
 
   /**

@@ -6,8 +6,21 @@
   margin: 20px 0;
 }
 
-code {
+code, pre {
   color: #333;
+}
+
+.well pre.fragment {
+  background: white;
+}
+
+pre.fragment .comment {
+  color: green;
+}
+
+table ul {
+  list-style: none;
+  margin: 0;
 }
 
 table.bundles th.name {
@@ -34,17 +47,8 @@ table.bundle td.value {
   width: 75%;
 }
 
-table.bundle ul {
-  list-style: none;
-  margin: 0;
-}
-
 table.package th.name {
   width: 60%;
-}
-
-table.package td.name {
-  font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
 }
 
 table.imported.package th.version {
@@ -53,6 +57,18 @@ table.imported.package th.version {
 
 table.exported.package th.version {
   width: 40%;
+}
+
+table.service th.name {
+  width: 60%;
+}
+
+table.service th.type {
+  width: 10%;
+}
+
+table.service th.bean {
+  width: 30%;
 }
 
 form#post {

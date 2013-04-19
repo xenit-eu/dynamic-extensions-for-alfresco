@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,8 @@ import org.alfresco.service.namespace.QName;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 import org.osgi.framework.launch.Framework;
 import org.springframework.extensions.webscripts.servlet.FormData.FormField;
 import org.springframework.util.FileCopyUtils;
@@ -175,6 +178,15 @@ public class BundleHelper {
 			}
 		}
 		bundle.uninstall();
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public List<ServiceReference> getAllServices() {
+		try {
+			return (List) Arrays.asList(bundleContext.getAllServiceReferences(null, null));
+		} catch (final InvalidSyntaxException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/* Utility operations */

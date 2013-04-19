@@ -13,9 +13,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.gemini.blueprint.context.BundleContextAware;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.springframework.extensions.webscripts.WebScriptResponse;
@@ -29,10 +29,11 @@ import org.springframework.util.FileCopyUtils;
  * @author Laurens Fridael
  * 
  */
-public abstract class AbstractBundleResourceHandler implements BundleContextAware {
+public abstract class AbstractBundleResourceHandler {
 
 	/* Dependencies */
 
+	@Inject
 	private BundleContext bundleContext;
 
 	/* Configuration */
@@ -111,11 +112,6 @@ public abstract class AbstractBundleResourceHandler implements BundleContextAwar
 	}
 
 	/* Dependencies */
-
-	@Override
-	public void setBundleContext(final BundleContext bundleContext) {
-		this.bundleContext = bundleContext;
-	}
 
 	protected BundleContext getBundleContext() {
 		return bundleContext;

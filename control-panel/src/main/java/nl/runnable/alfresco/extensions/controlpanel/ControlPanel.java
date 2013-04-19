@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.Executors;
 
 import javax.annotation.ManagedBean;
@@ -40,6 +42,7 @@ import org.alfresco.service.cmr.model.FileInfo;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceReference;
 import org.osgi.framework.launch.Framework;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
@@ -56,8 +59,6 @@ import org.springframework.extensions.webscripts.servlet.FormData.FormField;
 @Authentication(AuthenticationType.ADMIN)
 @Cache(neverCache = true)
 public class ControlPanel {
-
-	private static final String DEFAULT_SYSTEM_PACKAGE_CACHE_PATH = "/Company Home/Data Dictionary/Dynamic Extensions/Configuration/system-packages.txt";
 
 	/* Dependencies */
 
@@ -141,7 +142,6 @@ public class ControlPanel {
 	@Uri(method = HttpMethod.GET, value = "/dynamic-extensions/configuration", defaultFormat = "html")
 	public Map<String, Object> configuration(@Attribute final ResponseHelper responseHelper) {
 		final Map<String, Object> model = new HashMap<String, Object>();
-		model.put(Variables.SYSTEM_PACKAGE_COUNT, getSystemPackages().size());
 		final FileInfo systemPackageCache = repositoryStoreService.getSystemPackageCache();
 		model.put(Variables.SYSTEM_PACKAGE_CACHE_EXISTS, systemPackageCache != null);
 		if (systemPackageCache != null) {
@@ -155,6 +155,13 @@ public class ControlPanel {
 	public Map<String, Object> systemPackages() {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		model.put(Variables.SYSTEM_PACKAGES, getSystemPackages());
+		return model;
+	}
+
+	@Uri(method = HttpMethod.GET, value = "/dynamic-extensions/services", defaultFormat = "html")
+	public Map<String, Object> services() {
+		final Map<String, Object> model = new HashMap<String, Object>();
+		model.put(Variables.SERVICES_BY_BUNDLE, getServicesByBundle());
 		return model;
 	}
 
@@ -289,6 +296,26 @@ public class ControlPanel {
 	@SuppressWarnings("unchecked")
 	protected Collection<SystemPackage> getSystemPackages() {
 		return (Collection<SystemPackage>) systemPackages.get(0);
+	}
+
+	@SuppressWarnings("rawtypes")
+	protected List<TemplateBundle> getServicesByBundle() {
+		final Map<Long, List<ServiceReference>> servicesByBundleId = new LinkedHashMap<Long, List<ServiceReference>>();
+		final List<ServiceReference> allServices = bundleHelper.getAllServices();
+		for (final ServiceReference serviceReference : allServices) {
+			final long bundleId = serviceReference.getBundle().getBundleId();
+			if (servicesByBundleId.containsKey(bundleId) == false) {
+				servicesByBundleId.put(bundleId, new ArrayList<ServiceReference>());
+			}
+			servicesByBundleId.get(bundleId).add(serviceReference);
+		}
+		final List<TemplateBundle> templateBundles = new ArrayList<TemplateBundle>(servicesByBundleId.keySet().size());
+		for (final Entry<Long, List<ServiceReference>> entry : servicesByBundleId.entrySet()) {
+			final Bundle bundle = bundleHelper.getBundle(entry.getKey());
+			final List<ServiceReference> services = servicesByBundleId.get(entry.getKey());
+			templateBundles.add(new TemplateBundle(bundle, services));
+		}
+		return templateBundles;
 	}
 
 	/* Attributes */
