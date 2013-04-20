@@ -62,9 +62,9 @@ public class AnnotationBasedWebScriptHandler {
 		Assert.notNull(response, "Response cannot be null.");
 
 		final WebScriptResponseWrapper wrappedResponse = new WebScriptResponseWrapper(response);
-		final Map<String, Object> attributesByName = invokeAttributeMethods(webScript, request, wrappedResponse);
-		request = new AttributesWebScriptRequest(request, attributesByName);
-		invokeHandlerMethod(webScript, request, wrappedResponse);
+		final Map<String, Object> model = invokeAttributeMethods(webScript, request, wrappedResponse);
+		request = new AttributesWebScriptRequest(request, model);
+		invokeHandlerMethod(webScript, request, wrappedResponse, model);
 	}
 
 	/* Utility operations */
@@ -94,35 +94,46 @@ public class AnnotationBasedWebScriptHandler {
 		return attributesByName;
 	}
 
+	@SuppressWarnings("unchecked")
 	protected void invokeHandlerMethod(final AnnotationBasedWebScript webScript, final WebScriptRequest request,
-			final WebScriptResponseWrapper response) throws IOException {
+			final WebScriptResponseWrapper response, final Map<String, Object> model) throws IOException {
 		final Object[] arguments = getHandlerMethodArgumentsResolver().resolveHandlerMethodArguments(
 				webScript.getHandlerMethod(), webScript.getHandler(), request, response);
 		final Object returnValue = ReflectionUtils.invokeMethod(webScript.getHandlerMethod(), webScript.getHandler(),
 				arguments);
-		if (returnValue != null) {
-			processHandlerMethodReturnValue(webScript, returnValue, request, response, response.getStatus());
+		if (returnValue instanceof Map) {
+			model.putAll((Map<String, Object>) returnValue);
+			processHandlerMethodTemplate(webScript, request, model, response, response.getStatus());
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	protected void processHandlerMethodReturnValue(final AnnotationBasedWebScript webScript, final Object returnValue,
-			final WebScriptRequest request, final WebScriptResponse response, Integer status) throws IOException {
-		if (returnValue instanceof Map) {
-			if (StringUtils.hasText(request.getFormat()) == false) {
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-				response.getWriter().write("No format specified.");
-				return;
-			}
-			final Map<String, Object> model = (Map<String, Object>) returnValue;
-			populateTemplateModel(model, webScript, request);
-			status = status != null ? status : 200;
-			processTemplate(webScript, request, status, model, response);
+	protected void processHandlerMethodTemplate(final AnnotationBasedWebScript webScript,
+			final WebScriptRequest request, final Map<String, Object> model, final WebScriptResponse response,
+			Integer status) throws IOException {
+		if (StringUtils.hasText(request.getFormat()) == false) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().write("No format specified.");
+			return;
 		}
+		populateTemplateModel(model, webScript, request);
+		status = status != null ? status : 200;
+		processTemplate(webScript, request, model, status, response);
+	}
+
+	/**
+	 * Populates the model with utility objects for use in rendering templates.
+	 * 
+	 * @param model
+	 * @param request
+	 */
+	protected void populateTemplateModel(final Map<String, Object> model, final AnnotationBasedWebScript webScript,
+			final WebScriptRequest request) {
+		model.put(WEBSCRIPT_VARIABLE, webScript.getDescription());
+		model.put(URL_VARIABLE, getUrlModelFactory().createURLModel(request));
 	}
 
 	protected void processTemplate(final AnnotationBasedWebScript webScript, final WebScriptRequest request,
-			final int status, final Map<String, Object> model, final WebScriptResponse response) throws IOException {
+			final Map<String, Object> model, final int status, final WebScriptResponse response) throws IOException {
 		final String format = request.getFormat();
 		final TemplateProcessorRegistry templateProcessorRegistry = request.getRuntime().getContainer()
 				.getTemplateProcessorRegistry();
@@ -178,18 +189,6 @@ public class AnnotationBasedWebScriptHandler {
 		if (cacheValues.isEmpty() == false) {
 			response.setHeader("Cache-Control", StringUtils.collectionToDelimitedString(cacheValues, ", "));
 		}
-	}
-
-	/**
-	 * Populates the model with utility objects for use in rendering templates.
-	 * 
-	 * @param model
-	 * @param request
-	 */
-	protected void populateTemplateModel(final Map<String, Object> model, final AnnotationBasedWebScript webScript,
-			final WebScriptRequest request) {
-		model.put(WEBSCRIPT_VARIABLE, webScript.getDescription());
-		model.put(URL_VARIABLE, getUrlModelFactory().createURLModel(request));
 	}
 
 	protected void generateResponseFromTemplate(final WebScriptRequest request, final WebScriptResponse response,
