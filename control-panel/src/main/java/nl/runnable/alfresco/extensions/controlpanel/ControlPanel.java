@@ -63,7 +63,7 @@ public class ControlPanel {
 	/* Dependencies */
 
 	@Inject
-	private Configuration frameworkConfiguration;
+	private Configuration configuration;
 
 	@Inject
 	private BundleHelper bundleHelper;
@@ -82,7 +82,7 @@ public class ControlPanel {
 	private RetryingTransactionHelper retryingTransactionHelper;
 
 	@Inject
-	@Named("osgi.container.HostPackages")
+	@Named("osgi.container.SystemPackages")
 	private List<SystemPackage> systemPackages;
 
 	/* Main operations */
@@ -96,10 +96,9 @@ public class ControlPanel {
 	public Map<String, Object> index(@Attribute final ResponseHelper responseHelper) {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		model.put(Variables.EXTENSION_BUNDLES, toTemplateBundles(bundleHelper.getExtensionBundles()));
-		model.put(Variables.FILE_INSTALL_PATHS, frameworkConfiguration.getFileInstallPaths());
 		model.put(Variables.INSTALLED_BUNDLE, responseHelper.getFlashVariable(Variables.INSTALLED_BUNDLE));
 		populateFlashMessages(responseHelper, model);
-		model.put(Variables.REPOSITORY_STORE_LOCATION, bundleHelper.getBundleRepositoryLocation());
+
 		return model;
 	}
 
@@ -107,20 +106,9 @@ public class ControlPanel {
 	public Map<String, Object> framework() {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		model.put(Variables.FRAMEWORK_BUNDLES, toTemplateBundles(bundleHelper.getFrameworkBundles()));
-		final FileInfo systemPackageCache = repositoryStoreService.getSystemPackageCache();
-		model.put(Variables.CAN_RESTART_FRAMEWORK, systemPackageCache != null);
-		model.put(Variables.SYSTEM_PACKAGE_CACHE_EXISTS, systemPackageCache != null);
 		return model;
 	}
 
-	/**
-	 * Obtains information on a {@link Bundle} identified by a given ID.
-	 * 
-	 * @param id
-	 * @param responseHelper
-	 * @return
-	 * @throws IOException
-	 */
 	@Uri(method = HttpMethod.GET, value = "/dynamic-extensions/bundles/{id}", defaultFormat = "html")
 	public Map<String, Object> bundle(@UriVariable final long id, @Attribute final ResponseHelper responseHelper)
 			throws IOException {
@@ -142,11 +130,6 @@ public class ControlPanel {
 	@Uri(method = HttpMethod.GET, value = "/dynamic-extensions/configuration", defaultFormat = "html")
 	public Map<String, Object> configuration(@Attribute final ResponseHelper responseHelper) {
 		final Map<String, Object> model = new HashMap<String, Object>();
-		final FileInfo systemPackageCache = repositoryStoreService.getSystemPackageCache();
-		model.put(Variables.SYSTEM_PACKAGE_CACHE_EXISTS, systemPackageCache != null);
-		if (systemPackageCache != null) {
-			model.put(Variables.SYSTEM_PACKAGE_CACHE_NODEREF, systemPackageCache.getNodeRef().toString());
-		}
 		populateFlashMessages(responseHelper, model);
 		return model;
 	}
@@ -234,6 +217,10 @@ public class ControlPanel {
 	@Uri(method = HttpMethod.POST, value = "/dynamic-extensions/framework/restart")
 	public void restartFramework(@RequestParam(defaultValue = "0") final long wait,
 			@Attribute final ResponseHelper response) throws IOException, BundleException {
+		if (configuration.getMode().isFrameworkRestartEnabled() == false) {
+			response.status(HttpServletResponse.SC_FORBIDDEN, "Framework restart is currently not allowed.");
+			return;
+		}
 		response.status(HttpServletResponse.SC_OK, "Restarting framework.");
 		restartFrameworkAsynchronously();
 	}
@@ -253,7 +240,6 @@ public class ControlPanel {
 	/* Utility operations */
 
 	protected void populateFlashMessages(final ResponseHelper responseHelper, final Map<String, Object> model) {
-		model.put(Variables.ERROR_MESSAGE, responseHelper.getFlashVariable(Variables.ERROR_MESSAGE));
 		model.put(Variables.SUCCESS_MESSAGE, responseHelper.getFlashVariable(Variables.SUCCESS_MESSAGE));
 	}
 
@@ -323,6 +309,38 @@ public class ControlPanel {
 	@Attribute
 	protected ResponseHelper getResponseHelper(final WebScriptRequest request, final WebScriptResponse response) {
 		return new ResponseHelper(request, response);
+	}
+
+	/* Reference data */
+
+	@Attribute(Variables.CONFIGURATION)
+	protected Configuration getConfiguration() {
+		return configuration;
+	}
+
+	@Attribute(Variables.CAN_RESTART_FRAMEWORK)
+	protected boolean canRestartFramework() {
+		return configuration.getMode().isFrameworkRestartEnabled();
+	}
+
+	@Attribute(Variables.SYSTEM_PACKAGE_CACHE_EXISTS)
+	protected boolean systemPackageCacheExists() {
+		return (repositoryStoreService.getSystemPackageCache() != null);
+	}
+
+	@Attribute(Variables.SYSTEM_PACKAGE_CACHE_NODEREF)
+	protected String getSystemPackageCacheNodeRef() {
+		final FileInfo systemPackageCache = repositoryStoreService.getSystemPackageCache();
+		if (systemPackageCache != null) {
+			return systemPackageCache.getNodeRef().toString();
+		} else {
+			return null;
+		}
+	}
+
+	@Attribute(Variables.REPOSITORY_STORE_LOCATION)
+	protected String getRepositoryStoreLocation() {
+		return bundleHelper.getBundleRepositoryLocation();
 	}
 
 	/* Utility operations */

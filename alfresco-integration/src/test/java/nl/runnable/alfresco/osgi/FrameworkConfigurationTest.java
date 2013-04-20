@@ -21,9 +21,12 @@ public class FrameworkConfigurationTest {
 	@Before
 	public void setup() {
 		frameworkConfiguration = new FrameworkConfiguration();
-
 		storageDirectory = new File("tmp");
-		frameworkConfiguration.setStorageDirectory(storageDirectory);
+
+		final Configuration configuration = new Configuration();
+		configuration.setStorageDirectory(storageDirectory);
+
+		frameworkConfiguration.setConfiguration(configuration);
 
 		frameworkConfiguration.setFlushBundleCacheOnFirstInit(true);
 

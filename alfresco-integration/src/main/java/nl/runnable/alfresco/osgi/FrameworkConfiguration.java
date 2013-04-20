@@ -23,9 +23,9 @@ public class FrameworkConfiguration {
 
 	/* Configuration */
 
-	private File storageDirectory;
+	private Configuration configuration;
 
-	private boolean flushBundleCacheOnFirstInit = false;
+	private boolean flushBundleCacheOnFirstInit = true;
 
 	private Set<SystemPackage> coreSystemPackages = Collections.emptySet();
 
@@ -77,12 +77,17 @@ public class FrameworkConfiguration {
 
 	/* Configuration */
 
-	public File getStorageDirectory() {
-		return storageDirectory;
+	public void setConfiguration(final Configuration configuration) {
+		Assert.notNull(configuration);
+		this.configuration = configuration;
 	}
 
-	public void setStorageDirectory(final File storageDirectory) {
-		this.storageDirectory = storageDirectory;
+	public Configuration getConfiguration() {
+		return configuration;
+	}
+
+	public File getStorageDirectory() {
+		return getConfiguration().getStorageDirectory();
 	}
 
 	public boolean isFlushBundleCacheOnFirstInit() {
@@ -106,9 +111,9 @@ public class FrameworkConfiguration {
 		return additionalSystemPackages;
 	}
 
-	public void setAdditionalSystemPackages(final Set<SystemPackage> hostPackages) {
-		Assert.notNull(hostPackages);
-		this.additionalSystemPackages = hostPackages;
+	public void setAdditionalSystemPackages(final Set<SystemPackage> systemPackages) {
+		Assert.notNull(systemPackages);
+		this.additionalSystemPackages = systemPackages;
 	}
 
 }

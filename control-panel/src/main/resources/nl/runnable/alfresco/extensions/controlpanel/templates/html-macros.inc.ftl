@@ -55,7 +55,14 @@
     </div>
     <div id="footer">
       <div class="container">
-        <p class="last-updated">Last updated: <span id="last-updated">just now</span></p>
+        <div class="row">
+          <div class="span8">
+            <p class="last-updated">Last refreshed: <span id="last-updated">just now</span></p>
+          </div>
+          <div class="span4 pull-right">
+            <p class="mode">Mode: ${configuration.mode}</p>
+          </div>
+        </div>
       </div>
     </div>
     <form id="post" method="post" target="postFrame" style="display: none;"></form>

@@ -57,13 +57,13 @@ public class FrameworkManager implements ResourceLoaderAware {
 
 	private FileInstallConfigurer fileInstallConfigurer;
 
-	private Configuration configuration;
-
 	private RepositoryStoreService repositoryStoreService;
 
 	private ContentService contentService;
 
 	/* Configuration */
+
+	private Configuration configuration;
 
 	private List<BundleListener> bundleListeners = Collections.emptyList();
 
@@ -75,10 +75,6 @@ public class FrameworkManager implements ResourceLoaderAware {
 
 	private String standardBundlesLocation;
 
-	private boolean fileInstallEnabled = true;
-
-	private boolean repositoryInstallEnabled = true;
-
 	/**
 	 * Starts the {@link Framework} and registers services and {@link BundleListener}s.
 	 * 
@@ -86,13 +82,11 @@ public class FrameworkManager implements ResourceLoaderAware {
 	 */
 	public void initialize() {
 		startFramework();
-		registerFramework();
 		final List<Bundle> coreBundles = installCoreBundles();
 		registerServices();
 		startBundles(coreBundles);
 		if (isFileInstallEnabled() == false) {
 			// Start the bundles manually.
-			// TODO: Determine if this is the correct way to handle this.
 			startBundles(installFilesystemBundles());
 		}
 		if (isRepositoryInstallEnabled()) {
@@ -231,13 +225,6 @@ public class FrameworkManager implements ResourceLoaderAware {
 		return bundles;
 	}
 
-	/**
-	 * Registers the {@link Framework} with the {@link ExtensionRegistry}.
-	 */
-	protected void registerFramework() {
-		getConfiguration().setFileInstallPaths(fileInstallConfigurer.getDirectoriesAsAbsolutePaths());
-	}
-
 	protected void startBundles(final List<Bundle> bundles) {
 		for (final Bundle bundle : bundles) {
 			if (getBundleHelper().isFragmentBundle(bundle) == false) {
@@ -367,15 +354,6 @@ public class FrameworkManager implements ResourceLoaderAware {
 		return fileInstallConfigurer;
 	}
 
-	public void setConfiguration(final Configuration configuration) {
-		Assert.notNull(configuration);
-		this.configuration = configuration;
-	}
-
-	protected Configuration getConfiguration() {
-		return configuration;
-	}
-
 	public void setRepositoryStoreService(final RepositoryStoreService repositoryFolderService) {
 		Assert.notNull(repositoryFolderService);
 		this.repositoryStoreService = repositoryFolderService;
@@ -394,10 +372,19 @@ public class FrameworkManager implements ResourceLoaderAware {
 		return contentService;
 	}
 
-	/* Configuration */
-
 	protected BundleHelper getBundleHelper() {
 		return bundleHelper;
+	}
+
+	/* Configuration */
+
+	public void setConfiguration(final Configuration configuration) {
+		Assert.notNull(configuration);
+		this.configuration = configuration;
+	}
+
+	protected Configuration getConfiguration() {
+		return configuration;
 	}
 
 	public void setBundleListeners(final List<BundleListener> bundleListeners) {
@@ -444,20 +431,12 @@ public class FrameworkManager implements ResourceLoaderAware {
 		return standardBundlesLocation;
 	}
 
-	public void setFileInstallEnabled(final boolean installFileInstallBundles) {
-		this.fileInstallEnabled = installFileInstallBundles;
-	}
-
 	protected boolean isFileInstallEnabled() {
-		return fileInstallEnabled;
-	}
-
-	public void setRepositoryInstallEnabled(final boolean repositoryInstallEnabled) {
-		this.repositoryInstallEnabled = repositoryInstallEnabled;
+		return getConfiguration().getMode().isBundleInstallEnabled();
 	}
 
 	public boolean isRepositoryInstallEnabled() {
-		return repositoryInstallEnabled;
+		return getConfiguration().getMode().isBundleInstallEnabled();
 	}
 
 }

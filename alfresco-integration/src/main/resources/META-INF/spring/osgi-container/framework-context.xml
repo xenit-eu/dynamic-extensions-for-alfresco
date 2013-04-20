@@ -7,21 +7,23 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<description>Configures OSGi framework and related services.</description>
 
-	<bean id="osgi.container.FrameworkConfiguration" class="nl.runnable.alfresco.osgi.FrameworkConfiguration">
-		<description>
-			Provides the OSGi Framework configuration.
-		</description>
-		<property name="flushBundleCacheOnFirstInit" value="${osgi.container.flush-bundle-cache-on-startup:true}" />
+	<bean id="osgi.container.Configuration" class="nl.runnable.alfresco.osgi.Configuration">
+		<description>Specifies the global OSGI container configuration.</description>
+		<property name="mode" value="${osgi.container.mode:DEVELOPMENT}" />
+		<property name="bundleDirectory" value="${osgi.container.bundle-directory:dynamic-extensions}" />
 		<property name="storageDirectory" value="${osgi.container.storage-directory:tmp}" />
-		<property name="additionalSystemPackages" ref="osgi.container.HostPackages">
+	</bean>
+
+	<bean id="osgi.container.FrameworkConfiguration" class="nl.runnable.alfresco.osgi.FrameworkConfiguration">
+		<property name="configuration" ref="osgi.container.Configuration" />
+		<property name="additionalSystemPackages" ref="osgi.container.SystemPackages">
 			<description>Refers to the system package configuration.</description>
 		</property>
 	</bean>
 
-	<!-- Imports the OSGI framework configuration. Framework-specific configuration is kept separate to allow the possibility 
-		of switching OSGi implementations. The context configuration must provide a bean named "osgi.container.Framework". The default 
-		framework context file is "felix-framework-context.xml" -->
-	<import resource="frameworks/${osgi.container.framework:felix}-framework-context.xml" />
+	<bean id="osgi.container.Framework" class="nl.runnable.alfresco.osgi.felix.FelixFrameworkFactoryBean">
+		<property name="frameworkConfiguration" ref="osgi.container.FrameworkConfiguration" />
+	</bean>
 
 	<bean id="osgi.container.ServiceBundleContextRegistrar" class="nl.runnable.alfresco.osgi.ServiceBundleContextRegistrar">
 		<description>
@@ -61,7 +63,6 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		<property name="fileInstallBundlesLocation" value="classpath:/alfresco/module/%module.id%/file-install-bundles/*.jar" />
 		<property name="standardBundlesLocation" value="classpath:/alfresco/module/%module.id%/standard-bundles/*.jar" />
 		<property name="fileInstallConfigurer" ref="osgi.container.FileInstallConfigurer" />
-		<property name="fileInstallEnabled" value="${osgi.container.bundle-update:true}" />
 		<property name="configuration" ref="osgi.container.Configuration" />
 		<property name="repositoryStoreService" ref="osgi.container.RepositoryStoreService" />
 		<property name="contentService" ref="contentService" />
@@ -69,14 +70,8 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<bean id="osgi.container.FileInstallConfigurer" class="nl.runnable.alfresco.osgi.FileInstallConfigurer"
 		init-method="configureSettings">
-		<property name="directories">
-			<list>
-				<value>${osgi.container.bundle-directory:dynamic-extensions}</value>
-			</list>
-		</property>
+		<property name="configuration" ref="osgi.container.Configuration" />
 	</bean>
-
-	<bean id="osgi.container.Configuration" class="nl.runnable.alfresco.osgi.Configuration" />
 
 	<bean id="osgi.container.RepositoryStoreService" class="nl.runnable.alfresco.osgi.RepositoryStoreService">
 		<property name="namespacePrefixResolver" ref="namespaceService" />

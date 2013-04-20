@@ -2,12 +2,14 @@ package nl.runnable.alfresco.osgi;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 /**
@@ -25,9 +27,11 @@ public class FileInstallConfigurer {
 
 	/* Configuration */
 
+	private Configuration configuration;
+
 	private Integer poll;
 
-	private List<String> directories = Collections.emptyList();
+	private final List<String> directories = Collections.emptyList();
 
 	private String filter;
 
@@ -81,6 +85,15 @@ public class FileInstallConfigurer {
 
 	/* Configuration */
 
+	public void setConfiguration(final Configuration configuration) {
+		Assert.notNull(configuration);
+		this.configuration = configuration;
+	}
+
+	public Configuration getConfiguration() {
+		return configuration;
+	}
+
 	public Integer getPoll() {
 		return poll;
 	}
@@ -90,11 +103,7 @@ public class FileInstallConfigurer {
 	}
 
 	public List<String> getDirectories() {
-		return directories;
-	}
-
-	public void setDirectories(final List<String> directories) {
-		this.directories = directories;
+		return Arrays.asList(getConfiguration().getBundleDirectory().getAbsolutePath());
 	}
 
 	public String getFilter() {

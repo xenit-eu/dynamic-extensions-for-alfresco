@@ -6,6 +6,7 @@
   <div class="row">
 
     <div class="span6">
+      
       <h3>System Packages</h3>
       <p>
         <a href="system-packages">View all System Packages</a>
@@ -41,6 +42,11 @@
           rebuilt on startup.
         </p>
       </div>
+
+      <h3>OSGi container</h3>
+      <p>The storage directory for the OSGi container is located here:</p>
+      <p><code>${configuration.storageDirectory.absolutePath}</code></p>
+
     </div> <#-- .span6 -->
 
     <div class="span6">

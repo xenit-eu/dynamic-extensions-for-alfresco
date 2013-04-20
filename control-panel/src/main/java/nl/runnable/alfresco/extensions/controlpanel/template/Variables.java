@@ -2,6 +2,7 @@ package nl.runnable.alfresco.extensions.controlpanel.template;
 
 import java.util.List;
 
+import nl.runnable.alfresco.osgi.Configuration;
 import nl.runnable.alfresco.osgi.SystemPackage;
 
 import org.osgi.framework.Bundle;
@@ -19,9 +20,9 @@ public class Variables {
 	public static final String EXTENSION_BUNDLES = "extensionBundles";
 
 	/**
-	 * Refers to Strings that specify the full paths to directories for installing OSGi bundle JARs.
+	 * Refers to a {@link Configuration}.
 	 */
-	public static final String FILE_INSTALL_PATHS = "fileInstallPaths";
+	public static final String CONFIGURATION = "configuration";
 
 	/**
 	 * Refers to a {@link TemplateBundle}.

@@ -11,26 +11,22 @@
 
   <@html.bundleTable bundles = extensionBundles />
 
-  <h2>Manage bundles</h2>
+  <h2>Manage OSGi bundles</h2>
 
   <div class="row">
     <div class="span6">
       <h3>Filesystem</h3>
-      <#if (fileInstallPaths?size > 0)>
-        <p>Manage bundles from one of the following filesystem directories:</p>
-        <ul>
-          <#list fileInstallPaths as path>
-            <li>
-              <code>${path}</code>
-            </li>
-          </#list>
-        </ul>
+      <#if (1==1)>
+        <p>Manage OSGi bundles from this filesystem directory:</p>
+        <p>
+           <code>${configuration.bundleDirectory.absolutePath}</code>
+        </p>
         <p>
           Add or update bundle JAR files to install them in the framework. Delete them to 
           uninstall.
         </p>
       <#else>
-        <p>Managing bundles through the filesystem is currently disabled.</p>
+        <p>Managing OSGi bundles through the filesystem is disabled.</p>
         <p>
           <a href="configuration" class="btn">Configure</a>
         </p>

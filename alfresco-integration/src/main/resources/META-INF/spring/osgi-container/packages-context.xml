@@ -10,7 +10,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		these packages are then available to Bundles managed by the OSGi Framework.
 	</description>
 
-	<bean id="osgi.container.HostPackages" class="nl.runnable.alfresco.osgi.spring.SetCombinationFactoryBean">
+	<bean id="osgi.container.SystemPackages" class="nl.runnable.alfresco.osgi.spring.SetCombinationFactoryBean">
 		<property name="sets">
 			<list>
 				<ref bean="osgi.container.WebServerJavaPackages" />

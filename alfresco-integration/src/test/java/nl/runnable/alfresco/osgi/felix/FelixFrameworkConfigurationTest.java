@@ -6,6 +6,8 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Map;
 
+import nl.runnable.alfresco.osgi.Configuration;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.osgi.framework.BundleActivator;
@@ -31,27 +33,28 @@ public class FelixFrameworkConfigurationTest {
 
 	}
 
-	private FelixFrameworkConfiguration configuration;
+	private FelixFrameworkConfiguration frameworkConfiguration;
 
 	@Before
 	public void setup() {
-		configuration = new FelixFrameworkConfiguration();
+		frameworkConfiguration = new FelixFrameworkConfiguration();
 	}
 
 	@Test
 	public void testConversionToMap() {
 		// Configuration should be blank initially.
 		// HACK: Disabled this
-		// assertTrue(configuration.toMap().isEmpty());
+		// assertTrue(frameworkConfiguration.toMap().isEmpty());
 
 		final File storageDirectory = new File("tmp");
-		final BundleActivator simpleBundleActivator = new SimpleBundleActivator();
-
+		final Configuration configuration = new Configuration();
 		configuration.setStorageDirectory(storageDirectory);
-		configuration.setFlushBundleCacheOnFirstInit(true);
-		configuration.setSystemBundleActivators(Arrays.<BundleActivator> asList(simpleBundleActivator));
+		frameworkConfiguration.setConfiguration(configuration);
+		frameworkConfiguration.setFlushBundleCacheOnFirstInit(true);
+		final BundleActivator simpleBundleActivator = new SimpleBundleActivator();
+		frameworkConfiguration.setSystemBundleActivators(Arrays.<BundleActivator> asList(simpleBundleActivator));
 
-		final Map<String, String> map = configuration.toMap();
+		final Map<String, String> map = frameworkConfiguration.toMap();
 		assertEquals(storageDirectory.getAbsolutePath(), map.get(Constants.FRAMEWORK_STORAGE));
 		assertEquals(Constants.FRAMEWORK_STORAGE_CLEAN_ONFIRSTINIT, map.get(Constants.FRAMEWORK_STORAGE_CLEAN));
 	}
