@@ -17,7 +17,7 @@ Dynamic Extensions is distributed as an Alfresco Module Package (AMP). For more 
 
 * Download the <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/raw/mvn-repo/nl/runnable/alfresco/dynamicextensions/alfresco-module/1.0.0.M4/alfresco-module-1.0.0.M4.amp">Dynamic Extensions Milestone 4 AMP</a>.
 * Install the AMP in your local Alfresco development environment using the Module Management Tool.
-* Open the <a href=" <a href="http://localhost:8080/alfresco/service/dynamic-extensions/">Control Panel</a>.
+* Open the <a href="http://localhost:8080/alfresco/service/dynamic-extensions/">Control Panel</a>.
 
 Creating your own Alfresco extensions
 -------------------------------------

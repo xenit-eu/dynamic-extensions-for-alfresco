@@ -9,7 +9,7 @@
 	<description>${description}</description>
 	<packaging>bundle</packaging>
 	<properties>
-		<dynamicextensions.version>1.0.0.M3</dynamicextensions.version>
+		<dynamicextensions.version>1.0.0.M4</dynamicextensions.version>
 		<alfresco-api.version>4.0.e</alfresco-api.version>
 		<spring-webscripts.version>1.2.0-M3</spring-webscripts.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
