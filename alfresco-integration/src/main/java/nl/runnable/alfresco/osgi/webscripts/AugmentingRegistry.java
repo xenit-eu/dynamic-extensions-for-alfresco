@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.webscripts.integration;
+package nl.runnable.alfresco.osgi.webscripts;
 
 import java.util.ArrayList;
 import java.util.Collection;

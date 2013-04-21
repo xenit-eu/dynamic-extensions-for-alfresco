@@ -3,7 +3,7 @@ package nl.runnable.alfresco.osgi;
 import java.util.Collection;
 import java.util.Collections;
 
-import nl.runnable.alfresco.webscripts.integration.RegistryProvider;
+import nl.runnable.alfresco.osgi.webscripts.RegistryProvider;
 
 import org.alfresco.repo.module.AbstractModuleComponent;
 import org.springframework.context.ApplicationContext;

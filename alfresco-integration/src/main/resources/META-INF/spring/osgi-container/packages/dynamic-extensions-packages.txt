@@ -1,0 +1,28 @@
+# This file configures the system packages that make up the core of the Dynamic 
+# Extensions framework. 
+#
+# Configuring the system packages explicitly ensures that Dynamic Extensions 
+# itself continues to work, even if the system package cache lists 
+# deprecated/obsolete Java packages. The user will still be able to delete the 
+# system package cache using the Dynamic Extensions Control Panel in this case.
+
+# OSGi integration
+nl.runnable.alfresco.osgi
+nl.runnable.alfresco.osgi.felix
+nl.runnable.alfresco.osgi.spring
+nl.runnable.alfresco.osgi.webscripts
+
+# Annotations
+nl.runnable.alfresco.actions.annotations
+nl.runnable.alfresco.annotations
+nl.runnable.alfresco.behaviours.annotations
+nl.runnable.alfresco.webscripts.annotations
+
+# Annotation handling
+nl.runnable.alfresco
+nl.runnable.alfresco.actions
+nl.runnable.alfresco.policy
+nl.runnable.alfresco.webscripts
+
+# Models
+nl.runnable.alfresco.models

@@ -1,5 +1,5 @@
 <#import "templates/html-macros.inc.ftl" as html>
-<@html.document title="Control Panel - Dynamic Extensions" active="framework">
+<@html.document title="Framework - Dynamic Extensions" active="framework">
 
   <h2>Framework</h2>
   <@html.bundleTable bundles=frameworkBundles />  

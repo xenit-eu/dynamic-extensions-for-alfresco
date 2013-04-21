@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.webscripts.integration;
+package nl.runnable.alfresco.osgi.webscripts;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
