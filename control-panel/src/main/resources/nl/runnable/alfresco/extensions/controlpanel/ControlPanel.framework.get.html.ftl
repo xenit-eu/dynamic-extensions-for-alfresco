@@ -18,15 +18,6 @@
       </a>
       The Control Panel will be unavailable while the framework is restarting.
     </p>
-  <#else>
-    <#if !systemPackageCacheExists>
-      <p>
-        The Framework cannot be restarted because the System Package cache cannot be found.
-      </p>
-      <p>
-        Restart the repository to have the System Package cache rebuilt on startup.
-      </p>
-    </#if>
   </#if>
-
+  
 </@html.document>

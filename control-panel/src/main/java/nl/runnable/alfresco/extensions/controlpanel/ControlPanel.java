@@ -320,7 +320,7 @@ public class ControlPanel {
 
 	@Attribute(Variables.CAN_RESTART_FRAMEWORK)
 	protected boolean canRestartFramework() {
-		return configuration.getMode().isFrameworkRestartEnabled();
+		return configuration.getMode().isFrameworkRestartEnabled() && systemPackageCacheExists();
 	}
 
 	@Attribute(Variables.SYSTEM_PACKAGE_CACHE_EXISTS)

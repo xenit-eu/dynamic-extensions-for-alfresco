@@ -79,7 +79,7 @@
 				<configuration>
 					<instructions>
 						<Fragment-Host>org.eclipse.gemini.blueprint.extender</Fragment-Host>
-						<Import-Package>nl.runnable.alfresco.webscripts.integration,nl.runnable.alfresco.annotations,*</Import-Package>
+						<Import-Package>nl.runnable.alfresco.osgi.webscripts,nl.runnable.alfresco.annotations,*</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>
