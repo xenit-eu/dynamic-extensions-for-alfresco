@@ -14,7 +14,7 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.util.Assert;
 
-class AnnotationBasedWebScript implements WebScript {
+public class AnnotationBasedWebScript implements WebScript {
 
 	private final Description description;
 
