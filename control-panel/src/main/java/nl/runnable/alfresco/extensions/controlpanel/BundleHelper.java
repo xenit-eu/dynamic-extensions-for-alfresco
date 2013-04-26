@@ -164,9 +164,9 @@ public class BundleHelper {
 	}
 
 	public void uninstallAndDeleteBundle(final Bundle bundle) throws BundleException {
-		final Matcher matcher = Pattern.compile("/Repository/(.+\\.jar)$").matcher(bundle.getLocation());
+		final Matcher matcher = Pattern.compile("/Company Home(/.+)+/(.+\\.jar)$").matcher(bundle.getLocation());
 		if (matcher.matches()) {
-			final String filename = matcher.group(1);
+			final String filename = matcher.group(2);
 			final NodeRef bundleFolder = repositoryStoreService.getBundleFolder(false);
 			if (bundleFolder != null) {
 				final NodeRef file = fileFolderService.searchSimple(bundleFolder, filename);
