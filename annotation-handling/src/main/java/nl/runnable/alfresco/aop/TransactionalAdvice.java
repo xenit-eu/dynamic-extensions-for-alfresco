@@ -1,13 +1,12 @@
-package nl.runnable.alfresco.transactions;
+package nl.runnable.alfresco.aop;
 
 import java.lang.reflect.Method;
 import java.util.Set;
 
-import nl.runnable.alfresco.transactions.annotations.Transactional;
+import nl.runnable.alfresco.aop.annotations.Transactional;
 
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
-import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.Assert;
@@ -20,15 +19,11 @@ import org.springframework.util.Assert;
  * @author Laurens Fridael
  * 
  */
-public class TransactionalAdvice implements MethodInterceptor {
+public class TransactionalAdvice extends AbstractMethodAdvice {
 
 	/* Dependencies */
 
 	private final RetryingTransactionHelper retryingTransactionHelper;
-
-	/* Configuration */
-
-	private final Set<Method> transactionalMethods;
 
 	/* Main operations */
 
@@ -41,32 +36,20 @@ public class TransactionalAdvice implements MethodInterceptor {
 	 */
 	TransactionalAdvice(final RetryingTransactionHelper retryingTransactionHelper,
 			final Set<Method> transactionalMethods) {
+		super(transactionalMethods);
 		Assert.notNull(retryingTransactionHelper);
-		Assert.notEmpty(transactionalMethods);
 		this.retryingTransactionHelper = retryingTransactionHelper;
-		this.transactionalMethods = transactionalMethods;
 	}
 
 	@Override
-	public Object invoke(final MethodInvocation invocation) throws Throwable {
-		final Method method = invocation.getMethod();
-		if (transactionalMethods.contains(method)) {
-			return invokeTransactionalMethod(method, invocation.getThis(), invocation.getArguments());
-		} else {
-			return method.invoke(invocation.getThis(), invocation.getArguments());
-		}
-	}
-
-	/* Utility operations */
-
-	protected Object invokeTransactionalMethod(final Method method, final Object target, final Object[] arguments) {
+	protected Object proceedWithAdvice(final MethodInvocation invocation) {
 		/* TODO: Determine if the performance impact of finding an annotation is significant enough to warrant caching. */
-		final Transactional transactional = AnnotationUtils.findAnnotation(method, Transactional.class);
+		final Transactional transactional = AnnotationUtils.findAnnotation(invocation.getMethod(), Transactional.class);
 		return retryingTransactionHelper.doInTransaction(new RetryingTransactionCallback<Object>() {
 
 			@Override
 			public Object execute() throws Throwable {
-				return method.invoke(target, arguments);
+				return proceed(invocation);
 			}
 		}, transactional.readOnly(), transactional.requiresNew());
 	}

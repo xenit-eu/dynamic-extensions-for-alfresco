@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletResponse;
 import nl.runnable.alfresco.extensions.controlpanel.template.TemplateBundle;
 import nl.runnable.alfresco.extensions.controlpanel.template.Variables;
 import nl.runnable.alfresco.osgi.Configuration;
-import nl.runnable.alfresco.osgi.FrameworkService;
 import nl.runnable.alfresco.osgi.RepositoryStoreService;
 import nl.runnable.alfresco.osgi.SystemPackage;
 import nl.runnable.alfresco.webscripts.annotations.Attribute;
@@ -33,10 +32,6 @@ import nl.runnable.alfresco.webscripts.annotations.Uri;
 import nl.runnable.alfresco.webscripts.annotations.UriVariable;
 import nl.runnable.alfresco.webscripts.annotations.WebScript;
 
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
-import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.osgi.framework.Bundle;
@@ -69,17 +64,13 @@ public class ControlPanel {
 	private BundleHelper bundleHelper;
 
 	@Inject
-	private FrameworkService frameworkService;
+	private FrameworkHelper frameworkHelper;
 
 	@Inject
 	private FileFolderService fileFolderService;
 
 	@Inject
 	private RepositoryStoreService repositoryStoreService;
-
-	@Inject
-	@Named("retryingTransactionHelper")
-	private RetryingTransactionHelper retryingTransactionHelper;
 
 	@Inject
 	@Named("osgi.container.SystemPackages")
@@ -261,20 +252,7 @@ public class ControlPanel {
 
 			@Override
 			public void run() {
-				AuthenticationUtil.runAsSystem(new RunAsWork<Void>() {
-
-					@Override
-					public Void doWork() throws Exception {
-						return retryingTransactionHelper.doInTransaction(new RetryingTransactionCallback<Void>() {
-
-							@Override
-							public Void execute() {
-								frameworkService.restartFramework();
-								return null;
-							}
-						}, true);
-					}
-				});
+				frameworkHelper.restartFramework();
 			}
 		});
 	}

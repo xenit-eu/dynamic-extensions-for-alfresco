@@ -57,6 +57,10 @@
 					<instructions>
 						<Alfresco-Dynamic-Extension>true</Alfresco-Dynamic-Extension>
 						<Embed-Dependency>*;scope=compile</Embed-Dependency>
+						<!-- 
+							For AOP proxies to work, the bundle must import Spring AOP and CGLIB packages.
+						-->
+						<Import-Package>*,net.sf.cglib.core,net.sf.cglib.proxy,org.springframework.aop</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>

@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.transactions.annotations;
+package nl.runnable.alfresco.aop.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -8,8 +8,8 @@ import java.lang.annotation.Target;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 
 /**
- * Indicates public methods that must be run within a transaction with the given settings. This annotation removes the
- * boilerplate for invoking {@link RetryingTransactionHelper}.
+ * Indicates methods that are run within a transaction using the given settings. This annotation removes the boilerplate
+ * for invoking {@link RetryingTransactionHelper}. <h2>Spring AOP limitations</h2>
  * <p>
  * The underlying implementation relies on Spring AOP and thus the transactional advice is subject to the following
  * limitations:

@@ -5,16 +5,14 @@
 http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context
 http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<description>Convenience context for including all context configuration.</description>
+	<description>Configures AOP advice.</description>
+	
+	<bean class="nl.runnable.alfresco.aop.RunAsAdviceResolver"/>
+	
+	<bean class="nl.runnable.alfresco.aop.RunAsSystemAdviceResolver"/>
 
-	<import resource="framework-context.xml" />
-
-	<import resource="web-scripts-context.xml" />
-
-	<import resource="packages-context.xml" />
-
-	<import resource="services-context.xml" />
-
-	<import resource="aop-advice-context.xml" />
-
+	<bean class="nl.runnable.alfresco.aop.TransactionalAdviceResolver">
+		<property name="retryingTransactionHelper" ref="retryingTransactionHelper"/>
+	</bean>
+	
 </beans>

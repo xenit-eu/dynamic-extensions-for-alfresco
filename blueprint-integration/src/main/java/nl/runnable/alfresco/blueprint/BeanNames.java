@@ -36,9 +36,9 @@ class BeanNames {
 
 	static final String STRING_VALUE_CONVERTER = "stringValueConverter";
 
-	static final String TRANSACTIONAL_PROXY_FACTORY = "transactionalProxyFactory";
+	static final String ADVISED_PROXY_FACTORY = "advisedProxyFactory";
 
-	static final String TRANSACTIONAL_BEAN_POST_PROCESSOR = "transactionalBeanPostProcessor";
+	static final String ADVISED_PROXY_BEAN_POST_PROCESSOR = "advisedProxyBeanPostProcessor";
 
 	private BeanNames() {
 	}
