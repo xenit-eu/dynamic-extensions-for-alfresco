@@ -16,12 +16,14 @@ nl.runnable.alfresco.osgi.webscripts
 nl.runnable.alfresco.actions.annotations
 nl.runnable.alfresco.annotations
 nl.runnable.alfresco.behaviours.annotations
+nl.runnable.alfresco.transactions.annotations
 nl.runnable.alfresco.webscripts.annotations
 
 # Annotation handling
 nl.runnable.alfresco
 nl.runnable.alfresco.actions
 nl.runnable.alfresco.policy
+nl.runnable.alfresco.transactions
 nl.runnable.alfresco.webscripts
 
 # Models

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.springframework.aop.support.AopUtils;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.extensions.webscripts.WebScriptRequest;
@@ -52,14 +53,17 @@ public class DefaultHandlerMethodArgumentsResolver implements HandlerMethodArgum
 	}
 
 	@Override
-	public Object[] resolveHandlerMethodArguments(final Method method, final Object handler,
-			final WebScriptRequest request, final WebScriptResponse response) {
+	public Object[] resolveHandlerMethodArguments(Method method, final Object handler, final WebScriptRequest request,
+			final WebScriptResponse response) {
 		Assert.notNull(method, "Method cannot be null.");
 		Assert.notNull(request, "Request cannot be null.");
 		Assert.notNull(response, "Response cannot be null.");
 
 		final Class<?>[] parameterTypes = method.getParameterTypes();
 		final Object[] arguments = new Object[parameterTypes.length];
+		if (AopUtils.isAopProxy(handler)) {
+			method = AopUtils.getMostSpecificMethod(method, AopUtils.getTargetClass(handler));
+		}
 		final Annotation[][] parameterAnnotations = method.getParameterAnnotations();
 		final String[] methodParameterNames = parameterNameDiscoverer.getParameterNames(method);
 		for (int index = 0; index < parameterTypes.length; index++) {

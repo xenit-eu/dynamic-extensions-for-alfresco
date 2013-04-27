@@ -12,6 +12,8 @@ import nl.runnable.alfresco.osgi.webscripts.SearchPathRegistryManager;
 import nl.runnable.alfresco.policy.AnnotationBasedBehaviourRegistrar;
 import nl.runnable.alfresco.policy.DefaultBehaviourProxyFactory;
 import nl.runnable.alfresco.policy.ProxyPolicyComponentFactoryBean;
+import nl.runnable.alfresco.transactions.TransactionalBeanPostProcessor;
+import nl.runnable.alfresco.transactions.TransactionalProxyFactory;
 import nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptBuilder;
 import nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptHandler;
 import nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptRegistry;
@@ -19,9 +21,11 @@ import nl.runnable.alfresco.webscripts.DefaultHandlerMethodArgumentsResolver;
 import nl.runnable.alfresco.webscripts.StringValueConverter;
 
 import org.alfresco.repo.policy.PolicyComponent;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.descriptor.Descriptor;
 import org.alfresco.service.descriptor.DescriptorService;
 import org.alfresco.service.namespace.NamespacePrefixResolver;
+import org.alfresco.service.transaction.TransactionService;
 import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
@@ -166,6 +170,7 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 		registerAnnotationBasedBehaviourBeans(beanFactory);
 		registerAnnotationBasedActionBeans(beanFactory);
 		registerAnnotationBasedWebScriptBeans(beanFactory);
+		registerAnnotationBasedTransactionBeans(beanFactory);
 	}
 
 	/**
@@ -297,6 +302,25 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 							.setInitMethodName("registerStores").setDestroyMethodName("unregisterStores")
 							.getBeanDefinition());
 		}
+	}
+
+	protected void registerAnnotationBasedTransactionBeans(final DefaultListableBeanFactory beanFactory) {
+		if (beanFactory.containsBeanDefinition(BeanNames.TRANSACTIONAL_PROXY_FACTORY) == false) {
+			final RetryingTransactionHelper retryingTransactionHelper = getService(TransactionService.class)
+					.getRetryingTransactionHelper();
+			beanFactory.registerBeanDefinition(
+					BeanNames.TRANSACTIONAL_PROXY_FACTORY,
+					BeanDefinitionBuilder.rootBeanDefinition(TransactionalProxyFactory.class)
+							.addPropertyValue("retryingTransactionHelper", retryingTransactionHelper)
+							.getBeanDefinition());
+		}
+		if (beanFactory.containsBeanDefinition(BeanNames.TRANSACTIONAL_BEAN_POST_PROCESSOR) == false) {
+			beanFactory.registerBeanDefinition(BeanNames.TRANSACTIONAL_BEAN_POST_PROCESSOR,
+					BeanDefinitionBuilder.rootBeanDefinition(TransactionalBeanPostProcessor.class)
+							.addPropertyReference("transactionalProxyFactory", BeanNames.TRANSACTIONAL_PROXY_FACTORY)
+							.getBeanDefinition());
+		}
+
 	}
 
 	/**

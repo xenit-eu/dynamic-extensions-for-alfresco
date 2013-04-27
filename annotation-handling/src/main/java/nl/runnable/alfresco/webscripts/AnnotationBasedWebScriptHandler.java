@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import nl.runnable.alfresco.webscripts.annotations.Attribute;
 
+import org.springframework.aop.support.AopUtils;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.extensions.webscripts.DefaultURLModelFactory;
 import org.springframework.extensions.webscripts.Description.RequiredCache;
@@ -139,7 +140,7 @@ public class AnnotationBasedWebScriptHandler {
 				.getTemplateProcessorRegistry();
 		final TemplateProcessor templateProcessor = templateProcessorRegistry.getTemplateProcessorByExtension("ftl");
 
-		final Class<?> handlerClass = webScript.getHandler().getClass();
+		final Class<?> handlerClass = AopUtils.getTargetClass(webScript.getHandler());
 		final String methodName = webScript.getHandlerMethod().getName();
 		final String httpMethod = webScript.getDescription().getMethod().toLowerCase();
 

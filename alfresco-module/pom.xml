@@ -44,20 +44,18 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<!-- Necessary when mocking org.alfresco.service.transaction.TransactionService -->
+			<groupId>org.apache.felix</groupId>
+			<artifactId>org.apache.felix.framework</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>javax.transaction</groupId>
 			<artifactId>transaction-api</artifactId>
-			<version>1.1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.extensions.surf</groupId>
 			<artifactId>spring-webscripts</artifactId>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.felix</groupId>
-			<artifactId>org.apache.felix.framework</artifactId>
 		</dependency>
 	</dependencies>
 	<build>
