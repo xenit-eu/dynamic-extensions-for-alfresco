@@ -17,6 +17,7 @@ import org.alfresco.service.cmr.repository.ContentService;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.BundleListener;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.launch.Framework;
@@ -52,8 +53,6 @@ public class FrameworkManager implements ResourceLoaderAware {
 	private final List<ServiceRegistration<?>> serviceRegistrations = new ArrayList<ServiceRegistration<?>>();
 
 	private ResourcePatternResolver resourcePatternResolver;
-
-	private final BundleHelper bundleHelper = new BundleHelper();
 
 	private FileInstallConfigurer fileInstallConfigurer;
 
@@ -227,13 +226,23 @@ public class FrameworkManager implements ResourceLoaderAware {
 
 	protected void startBundles(final List<Bundle> bundles) {
 		for (final Bundle bundle : bundles) {
-			if (getBundleHelper().isFragmentBundle(bundle) == false) {
-				if (logger.isDebugEnabled()) {
-					logger.debug("Starting Bundle {}", bundle.getBundleId());
+			if (isFragmentBundle(bundle) == false) {
+				try {
+					if (logger.isDebugEnabled()) {
+						logger.debug("Starting Bundle {}.", bundle.getBundleId());
+					}
+					bundle.start();
+				} catch (final BundleException e) {
+					if (logger.isWarnEnabled()) {
+						logger.warn("Error starting Bundle {}.", bundle.getBundleId(), e);
+					}
 				}
-				getBundleHelper().startBundle(bundle);
 			}
 		}
+	}
+
+	protected boolean isFragmentBundle(final Bundle bundle) {
+		return bundle.getHeaders().get(Constants.FRAGMENT_HOST) != null;
 	}
 
 	protected void registerServices() {
@@ -370,10 +379,6 @@ public class FrameworkManager implements ResourceLoaderAware {
 
 	protected ContentService getContentService() {
 		return contentService;
-	}
-
-	protected BundleHelper getBundleHelper() {
-		return bundleHelper;
 	}
 
 	/* Configuration */

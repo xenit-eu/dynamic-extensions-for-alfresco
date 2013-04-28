@@ -4,11 +4,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import nl.runnable.alfresco.osgi.JavaPackageScanner;
 import nl.runnable.alfresco.osgi.RepositoryStoreService;
@@ -43,10 +40,6 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<Set<S
 
 	private FileFolderService fileFolderService;
 
-	/* Configuration */
-
-	private Set<SystemPackage> basePackages;
-
 	/* Main operations */
 
 	@Override
@@ -68,10 +61,6 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<Set<S
 	/* Utility operations */
 
 	protected Set<SystemPackage> createSystemPackages() {
-		final List<String> basePackageNames = new ArrayList<String>();
-		for (final SystemPackage basePackage : getBasePackages()) {
-			basePackageNames.add(basePackage.getName());
-		}
 		Set<SystemPackage> packages = getCachedPackages();
 		if (packages == null || packages.isEmpty()) {
 			packages = javaPackageScanner.getObject().scanWebApplicationPackages();
@@ -128,17 +117,6 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<Set<S
 	}
 
 	/* Configuration */
-
-	public void setBasePackages(Set<SystemPackage> basePackages) {
-		Assert.notNull(basePackages);
-		basePackages = new TreeSet<SystemPackage>(SystemPackage.MOST_SPECIFIC_FIRST);
-		basePackages.addAll(basePackages);
-		this.basePackages = basePackages;
-	}
-
-	protected Set<SystemPackage> getBasePackages() {
-		return basePackages;
-	}
 
 	public void setRepositoryStoreService(final RepositoryStoreService repositoryStoreService) {
 		this.repositoryStoreService = repositoryStoreService;
