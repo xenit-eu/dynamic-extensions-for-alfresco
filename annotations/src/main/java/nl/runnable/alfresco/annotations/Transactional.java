@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.aop.annotations;
+package nl.runnable.alfresco.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

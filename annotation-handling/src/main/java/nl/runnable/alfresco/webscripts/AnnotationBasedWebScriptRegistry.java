@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.annotation.Required;
@@ -90,7 +91,8 @@ public class AnnotationBasedWebScriptRegistry implements BeanFactoryAware, Regis
 		for (final AnnotationBasedWebScript webScript : webScripts) {
 			final DescriptionImpl description = (DescriptionImpl) webScript.getDescription();
 			webScriptsById.put(description.getId(), webScript);
-			final String packageName = webScript.getHandler().getClass().getPackage().getName();
+			final Class<?> targetClass = AopUtils.getTargetClass(webScript.getHandler());
+			final String packageName = targetClass.getPackage().getName();
 			final PathImpl packagePath = registerPathWithIndex(packageName.split("\\."), packagesByPath);
 			packagePath.addScript(webScript);
 			description.setPackage(packagePath);

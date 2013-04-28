@@ -7,12 +7,6 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<description>Configures AOP advice.</description>
 	
-	<bean class="nl.runnable.alfresco.aop.RunAsAdviceResolver"/>
-	
-	<bean class="nl.runnable.alfresco.aop.RunAsSystemAdviceResolver"/>
-
-	<bean class="nl.runnable.alfresco.aop.TransactionalAdviceResolver">
-		<property name="retryingTransactionHelper" ref="retryingTransactionHelper"/>
-	</bean>
+	<import resource="classpath:/META-INF/spring/dynamic-extensions/aop-advice-context.xml" />
 	
 </beans>

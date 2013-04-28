@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<bean id="retryingTransactionHelper" class="nl.runnable.alfresco.aop.MockFactoryBean">
+		<property name="class" value="org.alfresco.repo.transaction.RetryingTransactionHelper" />
+	</bean>
+
+	<bean id="exampleBean" class="nl.runnable.alfresco.aop.ExampleBean" />
+
+	<bean class="nl.runnable.alfresco.aop.DynamicExtensionsAdvisorAutoProxyCreator" />
+
+	<import resource="classpath:/META-INF/spring/dynamic-extensions/aop-advice-context.xml" />
+
+</beans>

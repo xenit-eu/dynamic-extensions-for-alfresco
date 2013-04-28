@@ -16,7 +16,6 @@ nl.runnable.alfresco.osgi.webscripts
 nl.runnable.alfresco.actions.annotations
 nl.runnable.alfresco.annotations
 nl.runnable.alfresco.behaviours.annotations
-nl.runnable.alfresco.aop.annotations
 nl.runnable.alfresco.webscripts.annotations
 
 # Annotation handling

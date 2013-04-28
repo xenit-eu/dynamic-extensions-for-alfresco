@@ -69,6 +69,16 @@
 					<instructions>
 						<Alfresco-Dynamic-Extension>true</Alfresco-Dynamic-Extension>
 						<Embed-Dependency>*;scope=compile</Embed-Dependency>
+						<Import-Package>
+							*,
+							net.sf.cglib.core,
+							net.sf.cglib.proxy,
+							net.sf.cglib.reflect,
+							org.aopalliance.aop,
+							org.aopalliance.intercept,
+							org.springframework.aop,
+							org.springframework.aop.framework
+						</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>

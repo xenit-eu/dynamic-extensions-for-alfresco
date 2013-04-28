@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<description>Configures Spring AOP advisors</description>
+	
+	<bean id="dynamic-extensions.TransactionalAdvisor" class="nl.runnable.alfresco.aop.TransactionalPointcutAdvisor">
+		<property name="advice">
+			<bean class="nl.runnable.alfresco.aop.TransactionalAdvice">
+				<property name="retryingTransactionHelper" ref="retryingTransactionHelper" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="dynamic-extensions.RunAsAdvisor" class="nl.runnable.alfresco.aop.RunAsPointcutAdvisor">
+		<property name="advice">
+			<bean class="nl.runnable.alfresco.aop.RunAsAdvice" />
+		</property>
+	</bean>
+
+	<bean id="dynamic-extensions.RunAsSystemAdvisor" class="nl.runnable.alfresco.aop.RunAsSystemPointcutAdvisor">
+		<property name="advice">
+			<bean class="nl.runnable.alfresco.aop.RunAsSystemAdvice" />
+		</property>
+	</bean>
+
+</beans>

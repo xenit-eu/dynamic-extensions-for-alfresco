@@ -9,7 +9,6 @@ import org.osgi.framework.Constants;
  * Contains utility functions for parsing OSGi manifest headers.
  * 
  * @author Laurens Fridael
- * 
  */
 class ManifestHeaderParser {
 

@@ -91,8 +91,8 @@
       </p>
       <p>
         <em>
-          The bundle may have missing <code>Import-Bundle</code> or <code>Import-Library</code> dependencies.
-          These types of dependency are generally not be used with Dynamic Extensions.
+          The bundle may have missing <code>Import-Bundle</code> or <code>Import-Library</code> 
+          dependencies. These types of dependency are generally not used with Dynamic Extensions.
         </em>
       </p>
       <p>

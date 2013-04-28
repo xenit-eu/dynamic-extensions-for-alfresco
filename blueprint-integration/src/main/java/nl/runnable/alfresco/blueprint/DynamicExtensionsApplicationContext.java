@@ -1,13 +1,9 @@
 package nl.runnable.alfresco.blueprint;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
 import nl.runnable.alfresco.actions.AnnotationBasedActionRegistrar;
-import nl.runnable.alfresco.aop.AdviceResolver;
-import nl.runnable.alfresco.aop.AdvisedProxyBeanPostProcessor;
-import nl.runnable.alfresco.aop.AdvisedProxyFactory;
+import nl.runnable.alfresco.aop.DynamicExtensionsAdvisorAutoProxyCreator;
 import nl.runnable.alfresco.models.M2ModelListFactoryBean;
 import nl.runnable.alfresco.models.ModelRegistrar;
 import nl.runnable.alfresco.osgi.webscripts.CompositeRegistry;
@@ -306,20 +302,11 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 	}
 
 	protected void registerAopProxyBeans(final DefaultListableBeanFactory beanFactory) {
-		if (beanFactory.containsBeanDefinition(BeanNames.ADVISED_PROXY_FACTORY) == false) {
-			beanFactory.registerBeanDefinition(
-					BeanNames.ADVISED_PROXY_FACTORY,
-					BeanDefinitionBuilder.rootBeanDefinition(AdvisedProxyFactory.class)
-							.addPropertyValue("adviceResolvers", getAdviceResolvers()).getBeanDefinition());
-		}
-		if (beanFactory.containsBeanDefinition(BeanNames.ADVISED_PROXY_BEAN_POST_PROCESSOR) == false) {
-			beanFactory.registerBeanDefinition(
-					BeanNames.ADVISED_PROXY_BEAN_POST_PROCESSOR,
-					BeanDefinitionBuilder.rootBeanDefinition(AdvisedProxyBeanPostProcessor.class)
-							.addPropertyReference("advisedProxyFactory", BeanNames.ADVISED_PROXY_FACTORY)
+		if (beanFactory.containsBeanDefinition(BeanNames.AUTO_PROXY_CREATOR) == false) {
+			beanFactory.registerBeanDefinition(BeanNames.AUTO_PROXY_CREATOR,
+					BeanDefinitionBuilder.rootBeanDefinition(DynamicExtensionsAdvisorAutoProxyCreator.class)
 							.getBeanDefinition());
 		}
-
 	}
 
 	/**
@@ -370,17 +357,6 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 			return (EntityResolver) getBundleContext().getService(
 					getBundleContext().getServiceReferences(EntityResolver.class.getName(),
 							HOST_APPLICATION_ALFRESCO_FILTER)[0]);
-		} catch (final InvalidSyntaxException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	protected Set<AdviceResolver> getAdviceResolvers() {
-		try {
-			final ApplicationContext applicationContext = (ApplicationContext) getBundleContext().getService(
-					getBundleContext().getServiceReferences(ApplicationContext.class.getName(),
-							HOST_APPLICATION_ALFRESCO_FILTER)[0]);
-			return new HashSet<AdviceResolver>(applicationContext.getBeansOfType(AdviceResolver.class).values());
 		} catch (final InvalidSyntaxException e) {
 			throw new RuntimeException(e);
 		}
