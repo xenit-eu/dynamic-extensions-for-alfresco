@@ -80,6 +80,10 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 		return BundleHelper.isDynamicExtension(bundle);
 	}
 
+	public boolean isFragmentBundle() {
+		return bundle.getHeaders().get(Constants.FRAGMENT_HOST) != null;
+	}
+
 	public String getLocation() {
 		return bundle.getLocation();
 	}

@@ -48,7 +48,7 @@
     </div>
   </#if>
 
-  <#if bundle.status == 'installed' || bundle.status == 'resolved'>
+  <#if !bundle.fragmentBundle && (bundle.status == 'installed' || bundle.status == 'resolved') >
     <div class="start">
       <form action="start-bundle" method="post"
           data-title="Start Bundle">
@@ -90,10 +90,8 @@
         <code>resolved</code> or <code>active</code>.
       </p>
       <p>
-        <em>
-          The bundle may have missing <code>Import-Bundle</code> or <code>Import-Library</code> 
-          dependencies. These types of dependency are generally not used with Dynamic Extensions.
-        </em>
+        The bundle may have missing <code>Import-Bundle</code> or <code>Import-Library</code> 
+        dependencies. These types of dependency are generally not used with Dynamic Extensions.
       </p>
       <p>
           Try to start the bundle to obtain more specific information on why it is not resolved.
