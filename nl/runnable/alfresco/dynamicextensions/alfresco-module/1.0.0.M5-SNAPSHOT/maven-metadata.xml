@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata modelVersion="1.1.0">
+  <groupId>nl.runnable.alfresco.dynamicextensions</groupId>
+  <artifactId>alfresco-module</artifactId>
+  <version>1.0.0.M5-SNAPSHOT</version>
+  <versioning>
+    <snapshot>
+      <timestamp>20130429.153536</timestamp>
+      <buildNumber>1</buildNumber>
+    </snapshot>
+    <lastUpdated>20130429153536</lastUpdated>
+    <snapshotVersions>
+      <snapshotVersion>
+        <extension>amp</extension>
+        <value>1.0.0.M5-20130429.153536-1</value>
+        <updated>20130429153536</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <extension>pom</extension>
+        <value>1.0.0.M5-20130429.153536-1</value>
+        <updated>20130429153536</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <classifier>sources</classifier>
+        <extension>jar</extension>
+        <value>1.0.0.M5-20130429.153536-1</value>
+        <updated>20130429153536</updated>
+      </snapshotVersion>
+    </snapshotVersions>
+  </versioning>
+</metadata>
