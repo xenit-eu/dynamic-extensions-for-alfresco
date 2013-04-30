@@ -75,6 +75,11 @@ form#post {
   display: none;
 }
 
-.row .actions form {
+.row .actions {
   margin-top: 10px;
+}
+
+.row .actions form {
+  display: inline-block;
+  margin: 0;
 }

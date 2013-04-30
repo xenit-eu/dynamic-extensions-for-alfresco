@@ -25,7 +25,14 @@
             <button class="btn btn-danger">Delete Bundle</button>
           </form>
         </#if>
-        </div>
+        <#if !bundle.fragmentBundle && (bundle.status == 'installed' || bundle.status == 'resolved') >
+          <form action="start-bundle" method="post"
+              data-title="Start Bundle">
+            <input type="hidden" name="id" value="${bundle.bundleId?string.computer}" />
+            <button class="btn btn-primary">Start Bundle</button>
+          </form>
+        </#if>
+      </div>
     </div>
   </div>
 
@@ -47,16 +54,6 @@
       <span data-time="${bundle.lastModified!}"></span>
     </@header>
   </table>
-
-  <#if !bundle.fragmentBundle && (bundle.status == 'installed' || bundle.status == 'resolved') >
-    <div class="start">
-      <form action="start-bundle" method="post"
-          data-title="Start Bundle">
-        <input type="hidden" name="id" value="${bundle.bundleId?string.computer}" />
-        <button class="btn">Start Bundle</button>
-      </form>
-    </div>
-	</#if>
 
   <#if bundle.status == 'installed'>
     <div class="alert alert-error alert-block">
