@@ -2,6 +2,7 @@ package nl.runnable.alfresco.gradle
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.tooling.BuildException
 
 
 /**
@@ -15,7 +16,8 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 	@Override
 	void apply(Project project) {
 		configurePlugins(project)
-		project.convention.plugins['alfresco-dynamic-extension'] = new DynamicExtensionPluginConvention(project)
+		configureExtensions(project)
+		configureInstallBundleTask(project)
 		project.afterEvaluate {
 			configureDependencies(project)
 			configureRepositories(project)
@@ -26,6 +28,34 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 	void configurePlugins(Project project) {
 		project.apply plugin: 'java'
 		project.apply plugin: 'osgi'
+	}
+
+	void configureExtensions(Project project) {
+		project.convention.plugins[ProjectConvention.class.name] = new ProjectConvention(project)
+		project.extensions.create('bundle', BundleExtension)
+	}
+
+	void configureInstallBundleTask(Project project) {
+		def task = project.tasks.add('installBundle')
+		task.dependsOn('build')
+		task.doFirst {
+			if (!installDirectory) {
+				throw new BuildException("Bundle install directory not specified.", null)
+			}
+			File dir = new java.io.File(installDirectory)
+			if (!dir.exists()) {
+				throw new BuildException("Directory '$directory' does not exist.", null)
+				logger.error()
+			} else if (!dir.isDirectory()) {
+				throw new BuildException("'$directory' is not a directory", null)
+			}			
+		}
+		task << {
+			project.copy {
+				from project.jar.archivePath
+				into installDirectory
+			}
+		}
 	}
 
 	void configureDependencies(Project project) {
@@ -80,6 +110,9 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 		]
 		project.jar {
 			manifest {
+				instructionReplace 'Bundle-SymbolicName', (project.bundle.symbolicName ?: project.name)
+				instructionReplace 'Bundle-Name', (project.bundle.name ?: project.name)
+				instructionReplace 'Bundle-Description', (project.bundle.description ?: project.description)
 				instruction 'Alfresco-Dynamic-Extension', 'true'
 				instruction 'Import-Package', '*,' + additionalPackages.join(',')
 			}
@@ -94,21 +127,18 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 			maven { url 'https://raw.github.com/lfridael/dynamic-extensions-for-alfresco/mvn-repo/' }
 		}
 	}
+	
 }
 
-class DynamicExtensionPluginConvention {
+class ProjectConvention {
 
 	Project project
-
 	def alfresco = [:]
-
 	def surf = [:]
-
 	def dynamicExtensions = [:]
-
 	boolean useJavaxAnnotations = true
 
-	DynamicExtensionPluginConvention(Project project) {
+	ProjectConvention(Project project) {
 		this.project = project
 	}
 
@@ -125,7 +155,19 @@ class DynamicExtensionPluginConvention {
 	}
 
 	void useJavaxAnnotations(boolean useJavaxAnnotations = true) {
-		project.useJavaxAnnotations = useJavaxAnnotations ;
+		project.useJavaxAnnotations = useJavaxAnnotations
 	}
-	
+
+	void toDirectory(String directory) {
+		project.tasks['installBundle'].ext.installDirectory = directory;
+	}
+
+}
+
+class BundleExtension {
+
+	String symbolicName
+	String name
+	String description
+
 }
