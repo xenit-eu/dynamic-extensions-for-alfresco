@@ -1,13 +1,11 @@
 <#import "templates/html-macros.inc.ftl" as html>
 <@html.document title="Configuration - Dynamic Extensions" active="configuration">
 
-  <h2>Configuration</h2>
-
   <div class="row">
 
     <div class="span6">
       
-      <h3>System Packages</h3>
+      <h2>System Packages</h2>
       <p>
         <a href="system-packages">View all System Packages</a>
       </p>
@@ -37,20 +35,41 @@
           </p>
         </#if>
         <p>
-          Note: When the System Package cache is not available the <a href="framework">Framework</a>
-          cannot be restarted. In this case you should restart the repository to have the cache
-          rebuilt on startup.
+          Note: When the System Package cache is not available the OSGI container cannot be 
+          restarted. You should then restart the repository to have the cache rebuilt on startup.
         </p>
       </div>
 
-      <h3>OSGi container</h3>
-      <p>The storage directory for the OSGi container is located here:</p>
-      <p><code>${configuration.storageDirectory.absolutePath}</code></p>
+      <#if canRestartFramework>
+        <h2>Restart OSGi container</h2>
+        <p>
+          Restart the OSGi container to reinitialize Dynamic Extensions:
+        </p>
+        <div class="well">
+          <p>
+            <a href="framework/restart" 
+              data-method="post" 
+              data-wait="15000" 
+              data-title="Restarting OSGi container" 
+              data-message="<p>Please wait while the OSGi container is restarting. The page will refresh automatically.</p>" 
+              data-button="Refresh page now"
+              class="btn btn-primary">
+              Restart OSGi container
+            </a>
+          </p>
+          <p>            
+            The Control Panel will be available while the OSGI container is restarting.
+          </p>
+          <p>
+            If you get a 404 Not Found, wait a few seconds, then refresh the page.
+          </p>
+        </div>
+      </#if>
 
     </div> <#-- .span6 -->
 
     <div class="span6">
-      <h3>Services</h3>
+      <h2>Services</h2>
       <p>
         <a href="services">View all Services</a>
       </p>

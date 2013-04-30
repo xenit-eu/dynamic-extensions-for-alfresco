@@ -19,16 +19,16 @@
     <div class="span6">
       <h2>Filesystem bundles</h2>
       <#if configuration.mode.bundleInstallEnabled>
-        <p>Manage OSGi bundles from this filesystem directory:</p>
+        <p>Manage OSGi bundles from the filesystem:</p>
         <p>
            <code>${configuration.bundleDirectory.absolutePath}</code>
         </p>
         <p>
-          Add bundle files to this directory to install them in the OSGi framework.
+          Add bundle files to this directory to install them in the OSGi container.
           Installation may take several seconds, refresh this page to see the latest status.
         </p>
         <p>
-          Remove the bundle to uninstall it from the framework.
+          Remove bundles from this directory to uninstall them from the OSGi container.
         </p>
       <#else>
         <p>Managing OSGi bundles through the filesystem is disabled.</p>
@@ -61,11 +61,12 @@
           <code>/Company Home/Data Dictionary/Dynamic Extensions/Bundles</code>
         </p>
         <p>
-          Bundles stored in the repository can be deleted from the bundle detail pages.
+          Bundles stored in the repository can be deleted from the bundle detail pages. (Deleting
+          the bundle files using Alfresco Share or Alfresco Explorer will not uninstall them from 
+          the OSGi container.)
         </p>
       </form>
     </div>
   </div>
-
 
 </@html.document>
