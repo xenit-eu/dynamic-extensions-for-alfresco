@@ -1,5 +1,5 @@
 <#import "templates/html-macros.inc.ftl" as html>
-<@html.document title="Control Panel - Dynamic Extensions" active="extensions">
+<@html.document title="Bundles - Dynamic Extensions" active="bundles">
 
   <#if installedBundle??>
     <@html.alert type="success">
@@ -7,37 +7,39 @@
     </@html.alert>
   </#if>
 
-  <h2>Extensions</h2>
+  <h2>Extension Bundles</h2>
 
   <@html.bundleTable bundles = extensionBundles />
 
-  <h2>Manage OSGi bundles</h2>
+  <h2>Framework Bundles</h2>
+
+  <@html.bundleTable bundles = frameworkBundles />  
 
   <div class="row">
     <div class="span6">
-      <h3>Filesystem</h3>
-      <#if (1==1)>
+      <h2>Filesystem Bundles</h2>
+      <#if configuration.mode.bundleInstallEnabled>
         <p>Manage OSGi bundles from this filesystem directory:</p>
         <p>
            <code>${configuration.bundleDirectory.absolutePath}</code>
         </p>
         <p>
-          Add or update bundle JAR files to install them in the framework. Delete them to 
-          uninstall.
+          Add bundle JAR files to have them installed in the OSGi framework. Bundle installation
+          may take several seconds. Refresh this page to see the latest status.
+        </p>
+        <p>
+          Delete the bundle JAR to uninstall it from the framework.
         </p>
       <#else>
         <p>Managing OSGi bundles through the filesystem is disabled.</p>
-        <p>
-          <a href="configuration" class="btn">Configure</a>
-        </p>
       </#if>
     </div>
     <div class="span6">
-      <h3>Repository</h3>
+      <h2>Repository Bundles</h2>
       <form action="install-bundle" enctype="multipart/form-data" method="post">
         <div class="control-group">
           <div class="control-label">
-            <label>Alternatively, upload a bundle JAR file here:</label>
+            <label>Alternatively, upload an OSGi bundle here:</label>
           </div>
           <div class="controls">
             <div class="fileupload fileupload-new" data-provides="fileupload">
@@ -57,6 +59,9 @@
         <p>
           The bundle JAR file will be stored in:<br/>
           <code>/Company Home/Data Dictionary/Dynamic Extensions/Bundles</code>
+        </p>
+        <p>
+          Bundles stored in the repository can be deleted from the bundle detail pages.
         </p>
       </form>
     </div>

@@ -1,10 +1,5 @@
 <#import "templates/html-macros.inc.ftl" as html>
-<#if bundle.dynamicExtension>
-  <#assign active="extensions" />
-<#else>
-  <#assign active="framework" />
-</#if>
-<@html.document title="${bundle.name} ${bundle.version} - Dynamic Extensions" active="${active}">
+<@html.document title="${bundle.name} ${bundle.version} - Dynamic Extensions" active="bundles">
   <#macro header name value="">
     <tr>
       <th class="name">
@@ -16,7 +11,23 @@
     </tr>
   </#macro>
 
-  <h2>${bundle.name} ${bundle.version}</h2>
+  <div class="row">
+    <div class="span9">
+      <h2>${bundle.name} ${bundle.version}</h2>
+    </div>
+    <div class="span3">
+      <div class="actions pull-right">
+        <#if bundle.deleteable>
+          <form action="delete-bundle" method="post" 
+            data-title="Delete Bundle"
+            data-confirm="Are you sure you want to delete this bundle?<p>This removes the bundle from the repository.">
+            <input type="hidden" name="id" value="${bundle.bundleId?string.computer}" />
+            <button class="btn btn-danger">Delete Bundle</button>
+          </form>
+        </#if>
+        </div>
+    </div>
+  </div>
 
   <table class="bundle table table-striped table-bordered">
     <@header name="Type">
@@ -36,17 +47,6 @@
       <span data-time="${bundle.lastModified!}"></span>
     </@header>
   </table>
-
-  <#if bundle.deleteable>
-    <div class="uninstall">
-      <form action="delete-bundle" method="post" 
-        data-title="Delete Bundle"
-        data-confirm="Are you sure you want to delete this bundle?<p>This removes the bundle from the repository.">
-        <input type="hidden" name="id" value="${bundle.bundleId?string.computer}" />
-        <button class="btn btn-danger">Delete Bundle</button>
-      </form>
-    </div>
-  </#if>
 
   <#if !bundle.fragmentBundle && (bundle.status == 'installed' || bundle.status == 'resolved') >
     <div class="start">

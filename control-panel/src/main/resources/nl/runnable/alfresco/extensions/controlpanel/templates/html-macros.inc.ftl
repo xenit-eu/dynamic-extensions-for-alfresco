@@ -18,11 +18,8 @@
           <div class="container">
             <a class="brand" href="" title="Click to refresh">Dynamic Extensions for Alfresco</a>
             <ul class="nav">
-              <li class="<#if (active == 'extensions')>active</#if>">
-                <a href="">Extensions</a>
-              </li>
-              <li class="<#if (active == 'framework')>active</#if>">
-                <a href="framework">Framework</a>
+              <li class="<#if (active == 'bundles')>active</#if>">
+                <a href="">Bundles</a>
               </li>
               <li class="<#if (active == 'configuration')>active</#if>">
                 <a href="configuration">Configuration</a>

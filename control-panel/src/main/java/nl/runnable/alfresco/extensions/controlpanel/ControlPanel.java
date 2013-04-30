@@ -87,16 +87,9 @@ public class ControlPanel {
 	public Map<String, Object> index(@Attribute final ResponseHelper responseHelper) {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		model.put(Variables.EXTENSION_BUNDLES, toTemplateBundles(bundleHelper.getExtensionBundles()));
+		model.put(Variables.FRAMEWORK_BUNDLES, toTemplateBundles(bundleHelper.getFrameworkBundles()));
 		model.put(Variables.INSTALLED_BUNDLE, responseHelper.getFlashVariable(Variables.INSTALLED_BUNDLE));
 		populateFlashMessages(responseHelper, model);
-
-		return model;
-	}
-
-	@Uri(method = HttpMethod.GET, value = "/dynamic-extensions/framework", defaultFormat = "html")
-	public Map<String, Object> framework() {
-		final Map<String, Object> model = new HashMap<String, Object>();
-		model.put(Variables.FRAMEWORK_BUNDLES, toTemplateBundles(bundleHelper.getFrameworkBundles()));
 		return model;
 	}
 
