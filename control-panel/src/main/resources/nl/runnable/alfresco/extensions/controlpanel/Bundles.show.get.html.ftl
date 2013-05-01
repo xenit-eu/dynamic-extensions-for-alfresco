@@ -50,6 +50,7 @@
       ${bundle.location!""}
     </@header>
     <@header name="Status">${bundle.status}</@header>
+    <@header name="Bundle ID">${bundle.bundleId}</@header>
     <@header name="Modified">
       <span data-time="${bundle.lastModified!}"></span>
     </@header>
