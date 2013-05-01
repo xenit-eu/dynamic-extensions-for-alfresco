@@ -1,9 +1,9 @@
 Dynamic Extensions for Alfresco
 ===============================
 
-Rapid development of Alfresco repository extensions in Java. Deploy your code in seconds, not minutes. Less overhead, more convenience, Life is too short for endless server restarts.
+Rapid development of Alfresco repository extensions in Java. Deploy your code in seconds, not minutes. Less overhead, more convenience. Life is too short for endless server restarts.
 
-Dynamic Extensions adds an OSGi container to the Alfresco repository, enabling live deployment of Java code packages as OSGi bundles. Alfresco itself is not "OSGi-fied" in any way. The OSGi container runs completely separate from the core Alfresco platform.
+Dynamic Extensions adds an OSGi container to the Alfresco repository, enabling live deployment of Java code packaged as OSGi bundles. Alfresco itself is not "OSGi-fied" in any way. The OSGi container runs completely separate from the core Alfresco platform.
 
 Latest release: Milestone 4
 ---------------------------
@@ -86,11 +86,10 @@ And here's the fragment from the Freemarker template:
 </table>
 ```
 
-Essentially, this is all the code that is required. There's no need for Spring XML config or Web Script XML descriptors. While reducing XML config overhead through annotations is not a particularly novel concept in the Java world at large, Alfresco is still hampered by its legacy approach. In short: Dynamic Extensions brings the development of Alfresco repository extensions more in line with a modern Java approach. Life is too short.
 
-This may be a trivial example, but the point is that, behind the scenes, services are still wired together through Spring and handled by the Web Script framework. Conceptually there is no difference between a Dynamic Extension and a regular Alfresco extension. There's just less overhead and more convenience.
+This is all the code that is required. There's no need for Spring XML config or Web Script XML descriptors. Hot-reloading and reducing configuration overhead are not particularly novel concepts in the Java development world at large. Essentially, Dynamic Extensions modernizes the development of Alfresco repository extensions.
 
-Aside from annotation-based Web Scripts, Dynamic Extensions also offers annotations for Actions and Behaviours.
+The example above may be trivial, but the point is that, behind the scenes, services are still wired together through Spring and handled by the Web Script framework. Conceptually there is no real difference between a Dynamic Extension and a regular Alfresco extension. There's just less overhead and more convenience.
 
 Creating your own Alfresco extensions
 -------------------------------------
