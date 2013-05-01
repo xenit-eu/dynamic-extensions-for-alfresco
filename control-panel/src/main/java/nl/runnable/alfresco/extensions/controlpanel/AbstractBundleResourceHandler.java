@@ -36,7 +36,7 @@ public abstract class AbstractBundleResourceHandler {
 	@Inject
 	private BundleContext bundleContext;
 
-	/* Configuration */
+	/* Container */
 
 	private Map<String, String> contentTypesByExtension;
 
@@ -117,7 +117,7 @@ public abstract class AbstractBundleResourceHandler {
 		return bundleContext;
 	}
 
-	/* Configuration */
+	/* Container */
 
 	public void setContentTypesByExtension(final Map<String, String> contentTypesByExtension) {
 		Assert.notEmpty(contentTypesByExtension);

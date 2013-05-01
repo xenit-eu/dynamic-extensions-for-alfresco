@@ -36,7 +36,7 @@
     </div>
     <div class="span6">
       <h2>Repository bundles</h2>
-      <form action="install-bundle" enctype="multipart/form-data" method="post">
+      <form action="bundles/install" enctype="multipart/form-data" method="post">
         <div class="control-group">
           <div class="control-label">
             <label>Or upload an OSGi bundle here:</label>

@@ -1,5 +1,5 @@
 <#import "templates/html-macros.inc.ftl" as html>
-<@html.document title="System Packages - Dynamic Extensions" active="configuration">
+<@html.document title="System Packages - Dynamic Extensions" active="container">
 
   <h2>System Packages</h2>
   

@@ -18,7 +18,7 @@
     <div class="span3">
       <div class="actions pull-right">
         <#if bundle.deleteable>
-          <form action="delete-bundle" method="post" 
+          <form action="bundles/delete" method="post" 
             data-title="Delete Bundle"
             data-confirm="Are you sure you want to delete this bundle?<p>This removes the bundle from the repository.">
             <input type="hidden" name="id" value="${bundle.bundleId?string.computer}" />
@@ -26,7 +26,7 @@
           </form>
         </#if>
         <#if !bundle.fragmentBundle && (bundle.status == 'installed' || bundle.status == 'resolved') >
-          <form action="start-bundle" method="post"
+          <form action="bundles/start" method="post"
               data-title="Start Bundle">
             <input type="hidden" name="id" value="${bundle.bundleId?string.computer}" />
             <button class="btn btn-primary">Start Bundle</button>
@@ -67,19 +67,14 @@
       </p>
       <ul>
         <li>
-          <a href="system-packages">System Packages</a>
+          <a href="container/system-packages">System Packages</a>
           <br/>
           System packages are the Java libraries from the Alfresco repository.
         </li>
         <li>
-          <a href="framework">Framework bundles</a>
+          <a href="bundles">Extension or Framework bundles</a>
           <br/>
-          These form the core Dynamic Extensions infrastructure.
-        </li>
-        <li>
-          <a href="">Other Dynamic Extensions</a>
-          <br/>
-          Extensions may export their packages and services for use by other extensions.
+          Bundles may export packages for use by other bundles.
         </li>
       </ul>
       <p>
@@ -150,7 +145,7 @@
     </#if>
   <#else>
     <p>
-      The System Bundle exports <a href="system-packages">${systemPackageCount?string.computer} System Packages</a>.
+      The System Bundle exports <a href="container/system-packages">${systemPackageCount?string.computer} System Packages</a>.
     </p>
   </#if>
 

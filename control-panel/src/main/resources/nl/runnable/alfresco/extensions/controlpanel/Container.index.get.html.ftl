@@ -1,5 +1,5 @@
 <#import "templates/html-macros.inc.ftl" as html>
-<@html.document title="Configuration - Dynamic Extensions" active="configuration">
+<@html.document title="Configuration - Dynamic Extensions" active="container">
 
   <div class="row">
 
@@ -7,7 +7,7 @@
       
       <h2>System Packages</h2>
       <p>
-        <a href="system-packages">View all System Packages</a>
+        <a href="container/system-packages">View all System Packages</a>
       </p>
         <p>
           System Packages are Java libraries from the Alfresco repository. Classes from these packages
@@ -24,7 +24,7 @@
             With the cache deleted, the System Packages will be rescanned on the next repository 
             startup.
           </p>
-          <form action="delete-system-package-cache" method="post" 
+          <form action="container/system-package-cache/delete" method="post" 
             data-title="Delete System Package cache"
             data-confirm="Are you sure you want to delete the System Package cache?">
             <button class="btn btn-danger">Delete System Package cache</button>
@@ -35,19 +35,19 @@
           </p>
         </#if>
         <p>
-          Note: When the System Package cache is not available the OSGI container cannot be 
-          restarted. You should then restart the repository to have the cache rebuilt on startup.
+          Note: the OSGI container cannot be restarted without the System Package cache.
+          Restart the repository to have the cache rebuilt on startup.
         </p>
       </div>
 
-      <#if canRestartFramework>
-        <h2>Restart OSGi container</h2>
-        <p>
-          Restart the OSGi container to reinitialize Dynamic Extensions:
-        </p>
-        <div class="well">
+      <h2>Restart OSGi container</h2>
+      <p>
+        Restart the OSGi container to reinitialize Dynamic Extensions:
+      </p>
+      <div class="well">
+        <#if canRestartFramework>
           <p>
-            <a href="framework/restart" 
+            <a href="container/restart" 
               data-method="post" 
               data-wait="15000" 
               data-title="Restarting OSGi container" 
@@ -63,15 +63,25 @@
           <p>
             If you get a 404 Not Found, wait a few seconds, then refresh the page.
           </p>
-        </div>
-      </#if>
-
+        <#else>
+          <#if systemPackageCacheExists>
+            <p>
+              <em>The OSGi container cannot be restarted.</em>
+            </p>
+          <#else>
+            <p>
+              <em>The OSGi container cannot be restarted because the System Package cache is not 
+                available.</em>
+            </p>
+          </#if>
+        </#if>
+      </div>
     </div> <#-- .span6 -->
 
     <div class="span6">
       <h2>Services</h2>
       <p>
-        <a href="services">View all Services</a>
+        <a href="container/services">View all Services</a>
       </p>
       <p>
         Services are available for use by Dynamic Extensions. Most services are part of the

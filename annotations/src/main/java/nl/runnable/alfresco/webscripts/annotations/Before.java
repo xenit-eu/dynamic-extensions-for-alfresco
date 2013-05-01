@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * boolean to indicate control flow in the overall request handling cycle.
  * 
  * <pre>
- * &#064;BeforeHandle
+ * &#064;Before
  * public boolean checkIfNodeExists(@RequestParam NodeRef nodeRef, WebScriptResponse response) {
  * 	if (nodeService.exists(nodeRef)) {
  * 		return true; // Proceed.

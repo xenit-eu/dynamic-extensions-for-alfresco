@@ -2,6 +2,9 @@
 
   'use strict';
 
+  var TIME_REFRESH_INTERVAL = 30000;
+  var ALERT_TIMEOUT = 3000;
+
   /**
    * Page setup.
    */
@@ -29,7 +32,18 @@
       });
     };
     refreshTimes();
-    window.setInterval(refreshTimes, 30000);
+    window.setInterval(refreshTimes, TIME_REFRESH_INTERVAL);
+  });
+
+  /**
+   * Sets up fadeout of alert success messages.
+   * 
+   * Error messages have to be dismissed manually.
+   */
+  $(function() {
+    window.setTimeout(function() {
+      $('.alert-success').fadeOut();
+    }, ALERT_TIMEOUT);
   });
 
   /**

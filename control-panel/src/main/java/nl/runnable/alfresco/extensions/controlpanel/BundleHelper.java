@@ -78,7 +78,7 @@ public class BundleHelper {
 	@Inject
 	private NodeService nodeService;
 
-	/* Configuration */
+	/* Container */
 
 	/* Main operations */
 
@@ -238,7 +238,7 @@ public class BundleHelper {
 		return String.format("%s/%s", getBundleRepositoryLocation(), filename);
 	}
 
-	/* Configuration */
+	/* Container */
 
 	public String getBundleRepositoryLocation() {
 		return repositoryStoreService.getBundleRepositoryLocation();

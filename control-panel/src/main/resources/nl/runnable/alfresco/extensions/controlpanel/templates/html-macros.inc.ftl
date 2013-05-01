@@ -19,10 +19,10 @@
             <a class="brand" href="" title="Click to refresh">Dynamic Extensions for Alfresco</a>
             <ul class="nav">
               <li class="<#if (active == 'bundles')>active</#if>">
-                <a href="">Bundles</a>
+                <a href="bundles">Bundles</a>
               </li>
-              <li class="<#if (active == 'configuration')>active</#if>">
-                <a href="configuration">Configuration</a>
+              <li class="<#if (active == 'container')>active</#if>">
+                <a href="container">Container</a>
               </li>
             </ul>
             <ul class="nav pull-right">
@@ -35,7 +35,7 @@
           </div>
         </div>
       </div>
-      <div class="container">
+      <div class="message container">
         <#if errorMessage??>
           <@alert type="error">
             ${errorMessage}
@@ -53,11 +53,14 @@
     <div id="footer">
       <div class="container">
         <div class="row">
-          <div class="span8">
+          <div class="span6">
             <p class="last-updated">Last refreshed: <span id="last-updated">just now</span></p>
           </div>
-          <div class="span4 pull-right">
-            <p class="mode">Mode: ${configuration.mode}</p>
+          <div class="span3">
+            <p class="login">Logged in as: ${currentUser}</p>
+          </div>
+          <div class="span3">
+            <p class="mode pull-right">Mode: ${configuration.mode}</p>
           </div>
         </div>
       </div>

@@ -58,18 +58,18 @@ class ResponseHelper {
 		return value;
 	}
 
-	public ResponseHelper redirectToIndex() {
-		redirectToService("/dynamic-extensions/");
+	public ResponseHelper redirectToBundles() {
+		redirectToService("/dynamic-extensions/bundles");
 		return this;
 	}
 
-	public ResponseHelper redirectToConfiguration() {
-		redirectToService("/dynamic-extensions/configuration");
+	public ResponseHelper redirectToContainer() {
+		redirectToService("/dynamic-extensions/container");
 		return this;
 	}
 
 	public ResponseHelper redirectToBundle(final long bundleId) {
-		redirectToService("/dynamic-extensions/bundles/" + bundleId);
+		redirectToService(String.format("/dynamic-extensions/bundles/%d", bundleId));
 		return this;
 	}
 
