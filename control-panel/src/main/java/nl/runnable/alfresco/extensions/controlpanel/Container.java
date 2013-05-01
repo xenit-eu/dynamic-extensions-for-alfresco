@@ -43,7 +43,7 @@ import org.osgi.framework.launch.Framework;
  * 
  */
 @ManagedBean
-@WebScript
+@WebScript(baseUri = "/dynamic-extensions/container")
 @Authentication(AuthenticationType.ADMIN)
 @Cache(neverCache = true)
 public class Container extends AbstractControlPanelHandler {
@@ -67,41 +67,22 @@ public class Container extends AbstractControlPanelHandler {
 
 	/* Main operations */
 
-	@Uri(method = HttpMethod.GET, value = "/dynamic-extensions/container", defaultFormat = "html")
+	@Uri(method = HttpMethod.GET, defaultFormat = "html")
 	public Map<String, Object> index() {
 		return Collections.emptyMap();
 	}
 
-	@Uri(method = HttpMethod.GET, value = "/dynamic-extensions/container/system-packages", defaultFormat = "html")
+	@Uri(method = HttpMethod.GET, value = "/system-packages", defaultFormat = "html")
 	public Map<String, Object> systemPackages() {
 		return model(Variables.SYSTEM_PACKAGES, getSystemPackages());
 	}
 
-	@Uri(method = HttpMethod.GET, value = "/dynamic-extensions/container/services", defaultFormat = "html")
+	@Uri(method = HttpMethod.GET, value = "/services", defaultFormat = "html")
 	public Map<String, Object> services() {
 		return model(Variables.SERVICES_BY_BUNDLE, getServicesByBundle());
 	}
 
-	/**
-	 * Restarts the {@link Bundle} with the given ID.
-	 * 
-	 * @param wait
-	 * @param response
-	 * @throws IOException
-	 * @throws BundleException
-	 */
-	@Uri(method = HttpMethod.POST, value = "/dynamic-extensions/container/restart")
-	public void restartFramework(@RequestParam(defaultValue = "0") final long wait,
-			@Attribute final ResponseHelper response) throws IOException, BundleException {
-		if (osgiConfiguration.getMode().isFrameworkRestartEnabled() == false) {
-			response.status(HttpServletResponse.SC_FORBIDDEN, "Framework restart is currently not allowed.");
-			return;
-		}
-		response.status(HttpServletResponse.SC_OK, "Restarting framework.");
-		restartFrameworkAsynchronously();
-	}
-
-	@Uri(method = HttpMethod.POST, value = "/dynamic-extensions/container/system-package-cache/delete")
+	@Uri(method = HttpMethod.POST, value = "/system-package-cache/delete")
 	public void deleteSystemPackageCache(@Attribute final ResponseHelper responseHelper) {
 		final FileInfo systemPackageCache = repositoryStoreService.getSystemPackageCache();
 		if (systemPackageCache != null) {
@@ -113,6 +94,17 @@ public class Container extends AbstractControlPanelHandler {
 			responseHelper.flashErrorMessage("System Package cache was not found, It may have been deleted already.");
 		}
 		responseHelper.redirectToContainer();
+	}
+
+	@Uri(method = HttpMethod.POST, value = "/restart")
+	public void restartFramework(@RequestParam(defaultValue = "0") final long wait,
+			@Attribute final ResponseHelper response) throws IOException, BundleException {
+		if (osgiConfiguration.getMode().isFrameworkRestartEnabled() == false) {
+			response.status(HttpServletResponse.SC_FORBIDDEN, "Framework restart is currently not allowed.");
+			return;
+		}
+		response.status(HttpServletResponse.SC_OK, "Restarting framework.");
+		restartFrameworkAsynchronously();
 	}
 
 	/* Utility operations */

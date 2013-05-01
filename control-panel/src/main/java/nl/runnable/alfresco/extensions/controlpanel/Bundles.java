@@ -31,7 +31,7 @@ import org.osgi.framework.Constants;
 import org.springframework.extensions.webscripts.servlet.FormData.FormField;
 
 @ManagedBean
-@WebScript
+@WebScript(baseUri = "/dynamic-extensions/bundles")
 @Authentication(AuthenticationType.ADMIN)
 @Cache(neverCache = true)
 public class Bundles extends AbstractControlPanelHandler {
@@ -43,7 +43,7 @@ public class Bundles extends AbstractControlPanelHandler {
 
 	/* Main operations */
 
-	@Uri(method = HttpMethod.GET, value = "/dynamic-extensions/bundles", defaultFormat = "html")
+	@Uri(method = HttpMethod.GET, defaultFormat = "html")
 	public Map<String, Object> index(@Attribute final ResponseHelper responseHelper) {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		model.put(Variables.EXTENSION_BUNDLES, toTemplateBundles(bundleHelper.getExtensionBundles()));
@@ -51,7 +51,7 @@ public class Bundles extends AbstractControlPanelHandler {
 		return model;
 	}
 
-	@Uri(method = HttpMethod.GET, value = "/dynamic-extensions/bundles/{id}", defaultFormat = "html")
+	@Uri(method = HttpMethod.GET, value = "/{id}", defaultFormat = "html")
 	public Map<String, Object> show(@UriVariable final long id, @Attribute final ResponseHelper responseHelper)
 			throws IOException {
 		final Map<String, Object> model = new HashMap<String, Object>();
@@ -68,7 +68,7 @@ public class Bundles extends AbstractControlPanelHandler {
 		return model;
 	}
 
-	@Uri(method = HttpMethod.POST, value = "/dynamic-extensions/bundles/install", defaultFormat = "html", multipartProcessing = true)
+	@Uri(method = HttpMethod.POST, value = "/install", defaultFormat = "html", multipartProcessing = true)
 	public void install(@FileField final FormField file, @Attribute final ResponseHelper responseHelper) {
 		if (file != null) {
 			if (file.getFilename().endsWith(".jar")) {
@@ -87,7 +87,7 @@ public class Bundles extends AbstractControlPanelHandler {
 		responseHelper.redirectToBundles();
 	}
 
-	@Uri(method = HttpMethod.POST, value = "/dynamic-extensions/bundles/delete")
+	@Uri(method = HttpMethod.POST, value = "/delete")
 	public void delete(@RequestParam final long id, @Attribute final ResponseHelper responseHelper) {
 		final Bundle bundle = bundleHelper.getBundle(id);
 		if (bundle != null) {
@@ -105,7 +105,7 @@ public class Bundles extends AbstractControlPanelHandler {
 		responseHelper.redirectToBundles();
 	}
 
-	@Uri(method = HttpMethod.POST, value = "/dynamic-extensions/bundles/start")
+	@Uri(method = HttpMethod.POST, value = "/start")
 	public void start(@RequestParam final long id, @Attribute final ResponseHelper responseHelper) {
 		final Bundle bundle = bundleHelper.getBundle(id);
 		if (bundle != null) {

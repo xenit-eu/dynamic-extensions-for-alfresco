@@ -71,6 +71,11 @@ public class AnnotationBasedWebScriptBuilder implements BeanFactoryAware {
 		if (webScriptAnnotation == null) {
 			return null;
 		}
+		final String baseUri = webScriptAnnotation.baseUri();
+		if (StringUtils.hasText(baseUri) && baseUri.startsWith("/") == false) {
+			throw new RuntimeException(String.format(
+					"@WebScript baseUri for class '%s' does not start with a slash: '%s'", beanType, baseUri));
+		}
 
 		final HandlerMethods handlerMethods = new HandlerMethods();
 		ReflectionUtils.doWithMethods(beanType, new ReflectionUtils.MethodCallback() {
@@ -113,9 +118,9 @@ public class AnnotationBasedWebScriptBuilder implements BeanFactoryAware {
 
 			@Override
 			public void doWith(final Method method) throws IllegalArgumentException, IllegalAccessException {
-				final Uri uriAnnotation = AnnotationUtils.findAnnotation(method, Uri.class);
-				if (uriAnnotation != null) {
-					final AnnotationBasedWebScript webScript = createWebScript(beanName, uriAnnotation,
+				final Uri uri = AnnotationUtils.findAnnotation(method, Uri.class);
+				if (uri != null) {
+					final AnnotationBasedWebScript webScript = createWebScript(beanName, uri,
 							handlerMethods.createForUriMethod(method));
 					if (webScript != null) {
 						webScripts.add(webScript);
@@ -140,29 +145,38 @@ public class AnnotationBasedWebScriptBuilder implements BeanFactoryAware {
 	protected AnnotationBasedWebScript createWebScript(final String beanName, final Uri uri,
 			final HandlerMethods handlerMethods) {
 		Assert.hasText(beanName, "Bean name cannot be empty.");
-		try {
-			final DescriptionImpl description = new DescriptionImpl();
-			handleHandlerMethodAnnotation(uri, handlerMethods.getUriMethod(), description);
-			handleTypeAnnotations(beanName, description);
-			final String id = String.format("%s.%s.%s", generateId(beanName), handlerMethods.getUriMethod().getName(),
-					description.getMethod().toLowerCase());
-			description.setId(id);
-			final Object handler = getBeanFactory().getBean(beanName);
-			description.setStore(new AnnotationWebScriptStore());
-			return new AnnotationBasedWebScript(getAnnotationBasedWebScriptHandler(), description, handler,
-					handlerMethods);
-		} catch (final Exception e) {
-			logger.warn("Error creating annotation-based Web Script for bean '{}'.", beanName, e);
-			return null;
-		}
+		final DescriptionImpl description = new DescriptionImpl();
+		final String baseUri = beanFactory.findAnnotationOnBean(beanName, WebScript.class).baseUri();
+		handleHandlerMethodAnnotation(uri, handlerMethods.getUriMethod(), description, baseUri);
+		handleTypeAnnotations(beanName, description);
+		final String id = String.format("%s.%s.%s", generateId(beanName), handlerMethods.getUriMethod().getName(),
+				description.getMethod().toLowerCase());
+		description.setId(id);
+		final Object handler = getBeanFactory().getBean(beanName);
+		description.setStore(new AnnotationWebScriptStore());
+		return new AnnotationBasedWebScript(getAnnotationBasedWebScriptHandler(), description, handler, handlerMethods);
 	}
 
-	protected void handleHandlerMethodAnnotation(final Uri uri, final Method method, final DescriptionImpl description) {
+	protected void handleHandlerMethodAnnotation(final Uri uri, final Method method, final DescriptionImpl description,
+			final String baseUri) {
 		Assert.notNull(uri, "Uri cannot be null.");
 		Assert.notNull(method, "HttpMethod cannot be null.");
 		Assert.notNull(description, "Description cannot be null.");
 
-		description.setUris(uri.value());
+		final String[] uris;
+		if (uri.value().length > 0) {
+			uris = new String[uri.value().length];
+			for (int i = 0; i < uris.length; i++) {
+				uris[i] = String.format("%s/%s", baseUri.replaceAll("\\/$", ""), uri.value()[i].replaceAll("^\\/", ""));
+			}
+		} else if (StringUtils.hasText(baseUri)) {
+			uris = new String[] { baseUri.replaceAll("\\/$", "") };
+		} else {
+			throw new RuntimeException(String.format(
+					"No value specified for @Uri on method '%s' and no base URI found for @WebScript on class.",
+					ClassUtils.getQualifiedMethodName(method)));
+		}
+		description.setUris(uris);
 		/*
 		 * For the sake of consistency we translate the HTTP method from the HttpMethod enum. This also shields us from
 		 * changes in the HttpMethod enum names.

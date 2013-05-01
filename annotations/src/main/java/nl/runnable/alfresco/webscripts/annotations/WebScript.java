@@ -37,4 +37,6 @@ public @interface WebScript {
 	 * API lifecycle status
 	 */
 	Lifecycle lifecycle() default Lifecycle.NONE;
+
+	String baseUri() default "";
 }
