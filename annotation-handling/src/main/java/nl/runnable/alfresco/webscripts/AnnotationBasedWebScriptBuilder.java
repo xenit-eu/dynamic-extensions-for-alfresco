@@ -10,6 +10,7 @@ import java.util.Set;
 
 import nl.runnable.alfresco.webscripts.annotations.Attribute;
 import nl.runnable.alfresco.webscripts.annotations.Authentication;
+import nl.runnable.alfresco.webscripts.annotations.Before;
 import nl.runnable.alfresco.webscripts.annotations.Cache;
 import nl.runnable.alfresco.webscripts.annotations.Transaction;
 import nl.runnable.alfresco.webscripts.annotations.Uri;
@@ -71,21 +72,20 @@ public class AnnotationBasedWebScriptBuilder implements BeanFactoryAware {
 			return null;
 		}
 
-		final List<AnnotationBasedWebScript> webScripts = new ArrayList<AnnotationBasedWebScript>();
-		final List<Method> referenceDataMethods = new ArrayList<Method>();
+		final HandlerMethods handlerMethods = new HandlerMethods();
 		ReflectionUtils.doWithMethods(beanType, new ReflectionUtils.MethodCallback() {
 
 			@Override
 			public void doWith(final Method method) throws IllegalArgumentException, IllegalAccessException {
-				final Attribute referenceDataAnnotation = AnnotationUtils.findAnnotation(method, Attribute.class);
-				if (referenceDataAnnotation != null) {
-					if (AnnotationUtils.findAnnotation(method, Uri.class) != null) {
-						throw new RuntimeException("Cannot mark a method with both @Attribute and @Uri.");
+				final Before before = AnnotationUtils.findAnnotation(method, Before.class);
+				if (before != null) {
+					if (AnnotationUtils.findAnnotation(method, Attribute.class) != null
+							|| AnnotationUtils.findAnnotation(method, Uri.class) != null) {
+						throw new RuntimeException(String.format(
+								"Cannot combine @Before, @Attribute and @Uri on a single method. Method: %s",
+								ClassUtils.getQualifiedMethodName(method)));
 					}
-					if (method.getReturnType().equals(Void.TYPE)) {
-						throw new RuntimeException("@Attribute methods cannot have a void return type.");
-					}
-					referenceDataMethods.add(method);
+					handlerMethods.getBeforeMethods().add(method);
 				}
 			}
 		});
@@ -93,10 +93,30 @@ public class AnnotationBasedWebScriptBuilder implements BeanFactoryAware {
 
 			@Override
 			public void doWith(final Method method) throws IllegalArgumentException, IllegalAccessException {
+				final Attribute attribute = AnnotationUtils.findAnnotation(method, Attribute.class);
+				if (attribute != null) {
+					if (AnnotationUtils.findAnnotation(method, Before.class) != null
+							|| AnnotationUtils.findAnnotation(method, Uri.class) != null) {
+						throw new RuntimeException(String.format(
+								"Cannot combine @Before, @Attribute and @Uri on a single method. Method: %s",
+								ClassUtils.getQualifiedMethodName(method)));
+					}
+					if (method.getReturnType().equals(Void.TYPE)) {
+						throw new RuntimeException("@Attribute methods cannot have a void return type.");
+					}
+					handlerMethods.getAttributeMethods().add(method);
+				}
+			}
+		});
+		final List<AnnotationBasedWebScript> webScripts = new ArrayList<AnnotationBasedWebScript>();
+		ReflectionUtils.doWithMethods(beanType, new ReflectionUtils.MethodCallback() {
+
+			@Override
+			public void doWith(final Method method) throws IllegalArgumentException, IllegalAccessException {
 				final Uri uriAnnotation = AnnotationUtils.findAnnotation(method, Uri.class);
 				if (uriAnnotation != null) {
-					final AnnotationBasedWebScript webScript = createWebScript(beanName, uriAnnotation, method,
-							referenceDataMethods);
+					final AnnotationBasedWebScript webScript = createWebScript(beanName, uriAnnotation,
+							handlerMethods.createForUriMethod(method));
 					if (webScript != null) {
 						webScripts.add(webScript);
 					}
@@ -118,19 +138,19 @@ public class AnnotationBasedWebScriptBuilder implements BeanFactoryAware {
 	/* Utility operations */
 
 	protected AnnotationBasedWebScript createWebScript(final String beanName, final Uri uri,
-			final Method handlerMethod, final List<Method> helperMethods) {
+			final HandlerMethods handlerMethods) {
 		Assert.hasText(beanName, "Bean name cannot be empty.");
 		try {
 			final DescriptionImpl description = new DescriptionImpl();
-			handleHandlerMethodAnnotation(uri, handlerMethod, description);
+			handleHandlerMethodAnnotation(uri, handlerMethods.getUriMethod(), description);
 			handleTypeAnnotations(beanName, description);
-			final String id = String.format("%s.%s.%s", generateId(beanName), handlerMethod.getName(), description
-					.getMethod().toLowerCase());
+			final String id = String.format("%s.%s.%s", generateId(beanName), handlerMethods.getUriMethod().getName(),
+					description.getMethod().toLowerCase());
 			description.setId(id);
 			final Object handler = getBeanFactory().getBean(beanName);
 			description.setStore(new AnnotationWebScriptStore());
-			return new AnnotationBasedWebScript(description, handler, handlerMethod, helperMethods,
-					getAnnotationBasedWebScriptHandler());
+			return new AnnotationBasedWebScript(getAnnotationBasedWebScriptHandler(), description, handler,
+					handlerMethods);
 		} catch (final Exception e) {
 			logger.warn("Error creating annotation-based Web Script for bean '{}'.", beanName, e);
 			return null;

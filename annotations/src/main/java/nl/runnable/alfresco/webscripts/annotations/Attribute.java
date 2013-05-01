@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Marks a method as providing an attribute, and a parameter as using this attribute.
+ * Marks a method as providing an attribute and parameters for {@link Uri}-annotated methods as using this attribute.
  * 
  * Similar to Spring MVC's <code>@ModelAttribute</code>.
  * 

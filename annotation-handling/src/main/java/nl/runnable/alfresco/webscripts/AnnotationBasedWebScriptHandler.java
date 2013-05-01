@@ -63,17 +63,33 @@ public class AnnotationBasedWebScriptHandler {
 		Assert.notNull(response, "Response cannot be null.");
 
 		final WebScriptResponseWrapper wrappedResponse = new WebScriptResponseWrapper(response);
-		final Map<String, Object> model = invokeAttributeMethods(webScript, request, wrappedResponse);
+		final Map<String, Object> model = new HashMap<String, Object>();
 		request = new AttributesWebScriptRequest(request, model);
-		invokeHandlerMethod(webScript, request, wrappedResponse, model);
+		invokeAttributeHandlerMethods(webScript, request, wrappedResponse, model);
+		invokeBeforeHandlerMethods(webScript, request, wrappedResponse, model);
+		invokeUriHandlerMethod(webScript, request, wrappedResponse, model);
 	}
 
 	/* Utility operations */
 
-	protected Map<String, Object> invokeAttributeMethods(final AnnotationBasedWebScript webScript,
-			final WebScriptRequest request, final WebScriptResponse response) {
-		final Map<String, Object> attributesByName = new HashMap<String, Object>();
-		for (final Method method : webScript.getAttributeMethods()) {
+	protected boolean invokeBeforeHandlerMethods(final AnnotationBasedWebScript webScript,
+			final WebScriptRequest request, final WebScriptResponse response, final Map<String, Object> model) {
+		for (final Method method : webScript.getHandlerMethods().getBeforeMethods()) {
+			method.setAccessible(true);
+			final Object[] arguments = getHandlerMethodArgumentsResolver().resolveHandlerMethodArguments(method,
+					webScript.getHandler(), request, response);
+			final Object returnValue = ReflectionUtils.invokeMethod(method, webScript.getHandler(), arguments);
+			if (Boolean.FALSE.equals(returnValue)) {
+				return false;
+			}
+		}
+		return true;
+
+	}
+
+	protected void invokeAttributeHandlerMethods(final AnnotationBasedWebScript webScript,
+			final WebScriptRequest request, final WebScriptResponse response, final Map<String, Object> model) {
+		for (final Method method : webScript.getHandlerMethods().getAttributeMethods()) {
 			method.setAccessible(true);
 			final Object[] arguments = getHandlerMethodArgumentsResolver().resolveHandlerMethodArguments(method,
 					webScript.getHandler(), request, response);
@@ -83,25 +99,24 @@ public class AnnotationBasedWebScriptHandler {
 			}
 			final Attribute annotation = AnnotationUtils.findAnnotation(method, Attribute.class);
 			if (StringUtils.hasText(annotation.value())) {
-				attributesByName.put(annotation.value(), attribute);
+				model.put(annotation.value(), attribute);
 			} else {
 				String name = method.getName();
 				if (name.startsWith("get") && name.length() > 3) {
 					name = name.substring(3, 4).toLowerCase() + name.substring(4);
 				}
-				attributesByName.put(name, attribute);
+				model.put(name, attribute);
 			}
 		}
-		return attributesByName;
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void invokeHandlerMethod(final AnnotationBasedWebScript webScript, final WebScriptRequest request,
+	protected void invokeUriHandlerMethod(final AnnotationBasedWebScript webScript, final WebScriptRequest request,
 			final WebScriptResponseWrapper response, final Map<String, Object> model) throws IOException {
-		final Object[] arguments = getHandlerMethodArgumentsResolver().resolveHandlerMethodArguments(
-				webScript.getHandlerMethod(), webScript.getHandler(), request, response);
-		final Object returnValue = ReflectionUtils.invokeMethod(webScript.getHandlerMethod(), webScript.getHandler(),
-				arguments);
+		final Method uriMethod = webScript.getHandlerMethods().getUriMethod();
+		final Object[] arguments = getHandlerMethodArgumentsResolver().resolveHandlerMethodArguments(uriMethod,
+				webScript.getHandler(), request, response);
+		final Object returnValue = ReflectionUtils.invokeMethod(uriMethod, webScript.getHandler(), arguments);
 		if (returnValue instanceof Map) {
 			model.putAll((Map<String, Object>) returnValue);
 			processHandlerMethodTemplate(webScript, request, model, response, response.getStatus());
@@ -141,7 +156,7 @@ public class AnnotationBasedWebScriptHandler {
 		final TemplateProcessor templateProcessor = templateProcessorRegistry.getTemplateProcessorByExtension("ftl");
 
 		final Class<?> handlerClass = AopUtils.getTargetClass(webScript.getHandler());
-		final String methodName = webScript.getHandlerMethod().getName();
+		final String methodName = webScript.getHandlerMethods().getUriMethod().getName();
 		final String httpMethod = webScript.getDescription().getMethod().toLowerCase();
 
 		final String baseTemplateName = String.format("%s.%s.%s",

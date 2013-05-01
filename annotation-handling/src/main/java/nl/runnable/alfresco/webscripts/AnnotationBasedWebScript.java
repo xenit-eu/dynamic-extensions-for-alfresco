@@ -1,8 +1,6 @@
 package nl.runnable.alfresco.webscripts;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import org.springframework.extensions.webscripts.Container;
@@ -22,45 +20,36 @@ public class AnnotationBasedWebScript implements WebScript {
 
 	private final Object handler;
 
-	private final Method handlerMethod;
+	private final HandlerMethods handlerMethods;
 
-	private final List<Method> attributeMethods;
+	private final AnnotationBasedWebScriptHandler webScriptHandler;
 
-	private final AnnotationBasedWebScriptHandler annotationMethodHandler;
-
-	public AnnotationBasedWebScript(final DescriptionImpl description, final Object handler,
-			final Method handlerMethod, final List<Method> attributeMethods,
-			final AnnotationBasedWebScriptHandler annotationMethodHandler) {
+	public AnnotationBasedWebScript(final AnnotationBasedWebScriptHandler webScriptHandler,
+			final DescriptionImpl description, final Object handler, final HandlerMethods handlerMethods) {
 		Assert.notNull(description, "Description cannot be null.");
 		Assert.hasText(description.getId(), "No ID provided in Description.");
 		Assert.notNull(handler, "Handler cannot be null.");
-		Assert.notNull(handlerMethod, "Method cannot be null.");
-		Assert.notNull(attributeMethods);
-		Assert.notNull(annotationMethodHandler);
+		Assert.notNull(handlerMethods, "Methods cannot be null.");
+		Assert.notNull(webScriptHandler);
 
 		this.description = description;
 		this.handler = handler;
-		this.handlerMethod = handlerMethod;
-		this.attributeMethods = attributeMethods;
-		this.annotationMethodHandler = annotationMethodHandler;
+		this.handlerMethods = handlerMethods;
 		this.id = description.getId();
+		this.webScriptHandler = webScriptHandler;
 	}
 
 	public Object getHandler() {
 		return handler;
 	}
 
-	public Method getHandlerMethod() {
-		return handlerMethod;
-	}
-
-	public List<Method> getAttributeMethods() {
-		return attributeMethods;
+	public HandlerMethods getHandlerMethods() {
+		return handlerMethods;
 	}
 
 	@Override
 	public final void execute(final WebScriptRequest request, final WebScriptResponse response) throws IOException {
-		annotationMethodHandler.handleRequest(this, request, response);
+		webScriptHandler.handleRequest(this, request, response);
 	}
 
 	/*
