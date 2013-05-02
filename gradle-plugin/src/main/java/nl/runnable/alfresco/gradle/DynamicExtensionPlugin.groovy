@@ -26,63 +26,80 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 	}
 
 	void configurePlugins(Project project) {
-		project.apply plugin: 'java'
-		project.apply plugin: 'osgi'
+		project.apply plugin: "java"
+		project.apply plugin: "osgi"
 	}
 
 	void configureExtensions(Project project) {
 		project.convention.plugins[ProjectConvention.class.name] = new ProjectConvention(project)
-		project.extensions.create('bundle', BundleExtension)
+		project.extensions.create("bundle", BundleExtension)
 	}
 
 	void configureInstallBundleTask(Project project) {
-		def task = project.tasks.add('installBundle')
-		task.dependsOn('build')
+		def task = project.tasks.add("installBundle")
+		task.dependsOn("build")
+		task.ext.installInDirectory = false
+		task.ext.installInRepository = false
+		task.ext.repository = [:] << Endpoint.DEFAULTS
 		task.doFirst {
-			if (!installDirectory) {
-				throw new BuildException("Bundle install directory not specified.", null)
+			if (installInDirectory) {
+				File dir = new java.io.File(directory)
+				if (!dir.exists()) {
+					throw new BuildException("Directory '$directory' does not exist.", null)
+					logger.error()
+				} else if (!dir.isDirectory()) {
+					throw new BuildException("'$directory' is not a directory", null)
+				}
 			}
-			File dir = new java.io.File(installDirectory)
-			if (!dir.exists()) {
-				throw new BuildException("Directory '$directory' does not exist.", null)
-				logger.error()
-			} else if (!dir.isDirectory()) {
-				throw new BuildException("'$directory' is not a directory", null)
-			}			
 		}
 		task << {
-			project.copy {
-				from project.jar.archivePath
-				into installDirectory
+			if (installInDirectory) {
+				project.copy {
+					from project.jar.archivePath
+					into directory
+				}
+			}
+			if (installInRepository) {
+				BundleService bundleService = new BundleService()
+				bundleService.client.with {
+					endpoint.host = repository.host
+					endpoint.port = repository.port
+					endpoint.servicePath = repository.servicePath
+					authentication.username = repository.username
+					authentication.password = repository.password
+				}
+				def response = bundleService.installBundle project.jar.archivePath
+				project.logger.info response.message
+				project.logger.info "Bundle ID: ${response.bundleId}"
 			}
 		}
 	}
 
 	void configureDependencies(Project project) {
 		def alfresco = [
-			group: project.alfresco.group ?: 'org.alfresco',
+			group: project.alfresco.group ?: "org.alfresco",
 			version: project.alfresco.version ?: Versions.ALFRESCO
 		]
 		def surf = [
-			group: project.surf.group ?: 'org.springframework.extensions.surf',
+			group: project.surf.group ?: "org.springframework.extensions.surf",
 			version: project.surf.version ?: Versions.SURF
 		]
 		def dynamicExtensions = [
-			group: project.dynamicExtensions.group ?: 'nl.runnable.alfresco.dynamicextensions',
+			group: project.dynamicExtensions.group ?: "nl.runnable.alfresco.dynamicextensions",
 			version: project.dynamicExtensions.version ?: Versions.DYNAMIC_EXTENSIONS
 		]
 		project.dependencies {
-			compile group: alfresco.group, name: 'alfresco-core', version: alfresco.version
-			compile group: alfresco.group, name: 'alfresco-repository', version: alfresco.version
-			compile group: alfresco.group, name: 'alfresco-data-model', version: alfresco.version
-			compile group: surf.group, name: 'spring-webscripts', version: surf.version
-			compile group: dynamicExtensions.group, name: 'annotations', version: dynamicExtensions.version
+			compile group: alfresco.group, name: "alfresco-core", version: alfresco.version
+			compile group: alfresco.group, name: "alfresco-repository", version: alfresco.version
+			compile group: alfresco.group, name: "alfresco-data-model", version: alfresco.version
+			compile group: surf.group, name: "spring-webscripts", version: surf.version
+			compile group: dynamicExtensions.group, name: "annotations", version: dynamicExtensions.version
 		}
 
 		if (project.useJavaxAnnotations) {
 			project.dependencies {
-				compile group:'javax.inject', name: 'javax.inject', version: '1'
-				compile group: 'org.apache.geronimo.specs', name: 'geronimo-annotation_1.1_spec', version: '1.0.1'
+				compile group:"javax.inject", name: "javax.inject", version: "1"
+				compile group: "org.apache.geronimo.specs", name: "geronimo-annotation_1.1_spec", version: "1.0.1"
 			}
 		}
 	}
@@ -100,21 +117,21 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 		 * must be specified manually.
 		 */
 		def additionalPackages = [
-			'net.sf.cglib.core',
-			'net.sf.cglib.proxy',
-			'net.sf.cglib.reflect',
-			'org.aopalliance.aop',
-			'org.aopalliance.intercept',
-			'org.springframework.aop',
-			'org.springframework.aop.framework'
+			"net.sf.cglib.core",
+			"net.sf.cglib.proxy",
+			"net.sf.cglib.reflect",
+			"org.aopalliance.aop",
+			"org.aopalliance.intercept",
+			"org.springframework.aop",
+			"org.springframework.aop.framework"
 		]
 		project.jar {
 			manifest {
-				instructionReplace 'Bundle-SymbolicName', (project.bundle.symbolicName ?: project.name)
-				instructionReplace 'Bundle-Name', (project.bundle.name ?: project.name)
-				instructionReplace 'Bundle-Description', (project.bundle.description ?: project.description)
-				instruction 'Alfresco-Dynamic-Extension', 'true'
-				instruction 'Import-Package', '*,' + additionalPackages.join(',')
+				instructionReplace "Bundle-SymbolicName", (project.bundle.symbolicName ?: project.name)
+				instructionReplace "Bundle-Name", (project.bundle.name ?: project.name)
+				instructionReplace "Bundle-Description", (project.bundle.description ?: project.description)
+				instruction "Alfresco-Dynamic-Extension", "true"
+				instruction "Import-Package", "*," + additionalPackages.join(",")
 			}
 		}
 	}
@@ -122,12 +139,11 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 	void configureRepositories(Project project) {
 		project.repositories {
 			mavenCentral()
-			maven { url 'https://artifacts.alfresco.com/nexus/content/groups/public' }
-			maven { url 'http://repo.springsource.org/release' }
-			maven { url 'https://raw.github.com/lfridael/dynamic-extensions-for-alfresco/mvn-repo/' }
+			maven { url "https://artifacts.alfresco.com/nexus/content/groups/public" }
+			maven { url "http://repo.springsource.org/release" }
+			maven { url "https://raw.github.com/lfridael/dynamic-extensions-for-alfresco/mvn-repo/" }
 		}
 	}
-	
 }
 
 class ProjectConvention {
@@ -159,9 +175,15 @@ class ProjectConvention {
 	}
 
 	void toDirectory(String directory) {
-		project.tasks['installBundle'].ext.installDirectory = directory;
+		project.tasks["installBundle"].ext.directory = directory
+		task.ext.installInDirectory = true
 	}
 
+	void toRepository(Map options) {
+		def task = project.tasks["installBundle"]
+		task.ext.repository << options
+		task.ext.installInRepository = true
+	}
 }
 
 class BundleExtension {
@@ -169,5 +191,4 @@ class BundleExtension {
 	String symbolicName
 	String name
 	String description
-
 }
