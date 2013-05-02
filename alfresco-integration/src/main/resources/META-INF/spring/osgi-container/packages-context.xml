@@ -36,6 +36,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		<property name="javaPackageScanner" ref="osgi.container.JavaPackageScannerFactory" />
 		<property name="repositoryStoreService" ref="osgi.container.RepositoryStoreService" />
 		<property name="fileFolderService" ref="fileFolderService" />
+    <property name="packageCacheMode" value="${osgi.container.system-package-cache:ENABLE}"/>
 	</bean>
 
 	<!-- JavaPackageScanner dependencies keep some internal caches, so make it disposable -->

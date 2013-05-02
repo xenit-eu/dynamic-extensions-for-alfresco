@@ -8,6 +8,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import nl.runnable.alfresco.osgi.JavaPackageScanner;
+import nl.runnable.alfresco.osgi.PackageCacheMode;
 import nl.runnable.alfresco.osgi.RepositoryStoreService;
 import nl.runnable.alfresco.osgi.SystemPackage;
 
@@ -40,6 +41,8 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<Set<S
 
 	private FileFolderService fileFolderService;
 
+	private PackageCacheMode packageCacheMode;
+
 	/* Main operations */
 
 	@Override
@@ -62,10 +65,23 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<Set<S
 
 	protected Set<SystemPackage> createSystemPackages() {
 		Set<SystemPackage> packages = getCachedPackages();
-		if (packages == null || packages.isEmpty()) {
+		final boolean cacheDoesNotExist = packages == null;
+
+		if (packageCacheMode.isReadFromCache() == false || cacheDoesNotExist) {
 			packages = javaPackageScanner.getObject().scanWebApplicationPackages();
+		}
+
+		if (packageCacheMode.isForceWriteToCache() || (cacheDoesNotExist && packageCacheMode.isWriteToCache())) {
 			writeCachedPackages(packages);
 		}
+
+		if (packageCacheMode.isWriteToCache() == false) {
+			final FileInfo currentCache = repositoryStoreService.getSystemPackageCache();
+			if (currentCache != null) {
+				fileFolderService.delete(currentCache.getNodeRef());
+			}
+		}
+
 		return packages;
 	}
 
@@ -124,5 +140,9 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<Set<S
 
 	public void setFileFolderService(final FileFolderService fileFolderService) {
 		this.fileFolderService = fileFolderService;
+	}
+
+	public void setPackageCacheMode(PackageCacheMode packageCacheMode) {
+		this.packageCacheMode = packageCacheMode;
 	}
 }
