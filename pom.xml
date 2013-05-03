@@ -39,11 +39,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- Github settings -->
 		<github.global.server>github</github.global.server>
-		<!-- 
-		  Using 0.8-SNAPSHOT, as Github API now requires a User Agent header.
-		  Sending a User Agent header does not seem to be supported by 0.7.
-	   -->
-		<site-maven-plugin.version>0.8-SNAPSHOT</site-maven-plugin.version>
+		<site-maven-plugin.version>0.8</site-maven-plugin.version>
 		<mvn-repo-branch>mvn-repo</mvn-repo-branch>
 	</properties>
 
