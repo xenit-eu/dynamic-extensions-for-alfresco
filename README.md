@@ -14,14 +14,21 @@ Latest release: Milestone 4
 In progress: Milestone 5
 ------------------------
 
-* Gradle plugin for building your own repository extensions. Your projects can be built both as an OSGi bundle and a standalone AMP.
+* <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/wiki/Building-Alfresco-repository-extensions-for-Dynamic-Extensions-using-Gradle">Gradle plugin for building your own repository extensions</a>
 * Spring AOP support. (The Gradle plugin configures the OSGi bundle to avoid classpath issues.)
 * `@RunAs` and `@RunAsSystem` annotations for running code as a particular user.
 * `@Transactional` annotation for running code within a transaction.
 * Improvements for building custom user interfaces on top of annotation-based Web Scripts.
 * Code review of annotation-based Actions and Behaviours.
 
-Milestone 6 wraps up all the work that went into Dynamic Extensions over the past two years, improving documentation and test coverage.
+Next up: Milestone 6
+--------------------
+
+Here we wrap up all the work that went into Dynamic Extensions over the past two years, improving documentation and test coverage.
+
+While the project has seen a great amount of commits over the past 2 months, there will be a break in activity during the summer.
+
+Milestone 6 is scheduled for September.
 
 Installing Dynamic Extensions in an Alfresco repository
 -------------------------------------------------------
