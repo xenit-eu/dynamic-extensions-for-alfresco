@@ -14,7 +14,7 @@ class RestClient {
 	Authentication authentication = new Authentication()
 
 	def postFile(Map options) {
-		URLConnection conn = new URL("${endpoint.url}/${options.path.replaceAll(/^\//, "")}").openConnection()
+		HttpURLConnection conn = new URL("${endpoint.url}/${options.path.replaceAll(/^\//, "")}").openConnection()
 		conn.method = "POST"
 		Authentication authentication = options.authentication ?: authentication
 		if (authentication) {
@@ -25,8 +25,12 @@ class RestClient {
 		conn.doOutput = true
 		options.file.withInputStream { data -> conn.outputStream << data }
 		conn.outputStream.flush()
-		String json = conn.content.text
-		return new JsonSlurper().parseText(json)
+		try {
+			String json = conn.content.text
+			return new JsonSlurper().parseText(json)
+		} catch (e) {
+			throw new RestClientException([status: [code: conn.responseCode, message: conn.responseMessage ], message: e.message]) 
+		}
 	}
 }
 
@@ -56,4 +60,11 @@ class Endpoint {
 	URL getUrl() {
 		new URL("http://$host:$port/${servicePath.replaceAll(/^\//, "")}")
 	}
+}
+
+class RestClientException extends RuntimeException {
+	
+	Map status = [:] 
+	String message
+	
 }
