@@ -30,6 +30,8 @@
 		<transaction-api.version>1.1</transaction-api.version>
 		<hibernate.version>3.2.6.ga</hibernate.version>
 		<mybatis.version>3.0.4</mybatis.version>
+		<springockito.version>1.0.5</springockito.version>
+		<springockito-annotations.version>1.0.8</springockito-annotations.version>
 		<!-- Plugin versions and settings -->
 		<maven-bundle-plugin.version>2.3.7</maven-bundle-plugin.version>
 		<maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
@@ -230,6 +232,18 @@
 				<groupId>org.mybatis</groupId>
 				<artifactId>mybatis</artifactId>
 				<version>${mybatis.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.kubek2k</groupId>
+				<artifactId>springockito</artifactId>
+				<version>${springockito.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.kubek2k</groupId>
+				<artifactId>springockito-annotations</artifactId>
+				<version>${springockito-annotations.version}</version>
 				<scope>test</scope>
 			</dependency>
 		</dependencies>

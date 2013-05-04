@@ -116,9 +116,12 @@ public class AnnotationBasedWebScriptHandler {
 		final Method uriMethod = webScript.getHandlerMethods().getUriMethod();
 		final Object[] arguments = getHandlerMethodArgumentsResolver().resolveHandlerMethodArguments(uriMethod,
 				webScript.getHandler(), request, response);
+		uriMethod.setAccessible(true);
 		final Object returnValue = ReflectionUtils.invokeMethod(uriMethod, webScript.getHandler(), arguments);
 		if (returnValue instanceof Map) {
-			model.putAll((Map<String, Object>) returnValue);
+			if (model != returnValue) {
+				model.putAll((Map<String, Object>) returnValue);
+			}
 			processHandlerMethodTemplate(webScript, request, model, response, response.getStatus());
 		}
 	}

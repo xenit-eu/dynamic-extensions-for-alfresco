@@ -9,12 +9,15 @@ import nl.runnable.alfresco.webscripts.annotations.Uri;
 import nl.runnable.alfresco.webscripts.annotations.UriVariable;
 import nl.runnable.alfresco.webscripts.annotations.WebScript;
 
+import org.springframework.stereotype.Component;
+
 /**
  * Example annotation-based Web Script for integration tests.
  * 
  * @author Laurens Fridael
  * 
  */
+@Component
 @WebScript(description = "Example web script used for test cases.")
 @Authentication(value = AuthenticationType.USER, runAs = "admin")
 @Transaction(value = TransactionType.REQUIRES_NEW, readOnly = true)

@@ -68,11 +68,11 @@ public class RequestParamArgumentResolver implements ArgumentResolver<Object, Re
 		Object value = null;
 		if (parameterValue != null) {
 			value = getStringValueConverter().convertStringValue(parameterType, parameterValue);
-		} else if (requestParam.required()) {
+		} else {
 			if (StringUtils.hasText(requestParam.defaultValue())) {
 				value = requestParam.defaultValue();
 			}
-			if (value == null) {
+			if (requestParam.required() && value == null) {
 				throw new IllegalStateException(String.format("Request parameter not available: %s", parameterName));
 			}
 		}

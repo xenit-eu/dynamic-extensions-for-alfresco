@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:mockito="http://www.mockito.org/spring/mockito"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd http://www.springframework.org/schema/util
+http://www.springframework.org/schema/util/spring-util-3.0.xsd
+http://www.mockito.org/spring/mockito classpath:spring/mockito.xsd">
+
+	<bean id="webscripts.registry" class="nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptRegistry"
+		init-method="reset">
+		<property name="annotationBasedWebScriptBuilder" ref="webscripts.builder" />
+	</bean>
+
+	<bean id="webscripts.builder" class="nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptBuilder">
+		<property name="annotationBasedWebScriptHandler" ref="webscripts.handler" />
+	</bean>
+
+	<bean id="webscripts.handler" class="nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptHandler">
+		<property name="handlerMethodArgumentsResolver" ref="webscripts.argumentsResolver" />
+	</bean>
+
+	<bean id="webscripts.argumentsResolver" class="nl.runnable.alfresco.webscripts.DefaultHandlerMethodArgumentsResolver"
+		init-method="initializeArgumentResolvers">
+		<property name="stringValueConverter">
+			<bean class="nl.runnable.alfresco.webscripts.StringValueConverter">
+				<property name="namespacePrefixResolver" ref="namespacePrefixResolver" />
+			</bean>
+		</property>
+	</bean>
+
+	<mockito:mock id="namespacePrefixResolver" class="org.alfresco.service.namespace.NamespacePrefixResolver" />
+
+</beans>
