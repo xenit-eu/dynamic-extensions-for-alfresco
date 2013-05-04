@@ -39,10 +39,14 @@ public class UriVariableArgumentResolver implements ArgumentResolver<Object, Uri
 					"Cannot determine name of URI variable. Specify the name using the @UriVariable annotation.");
 		}
 		final String variable = request.getServiceMatch().getTemplateVars().get(variableName);
-		if (variable == null && uriVariable.required()) {
+		Object value = null;
+		if (variable != null) {
+			value = getStringValueConverter().convertStringValue(parameterType, variable);
+		} else if (uriVariable.required()) {
 			throw new IllegalStateException(String.format("URI variable not available: %s", variableName));
 		}
-		return getStringValueConverter().convertStringValue(parameterType, variable);
+		return value;
+
 	}
 
 	/* Dependencies */

@@ -30,7 +30,7 @@ public class AttributeArgumentResolver implements ArgumentResolver<Object, Attri
 			value = resolveByType(argumentType, attributesByName);
 		}
 		if (value == null && attribute.required()) {
-			throw new RuntimeException("Cannot find reference data for method argument '" + name + "'.");
+			throw new RuntimeException(String.format("Cannot find attribute for argument '%s'", name));
 		}
 		return value;
 	}

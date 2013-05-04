@@ -64,15 +64,19 @@ public class RequestParamArgumentResolver implements ArgumentResolver<Object, Re
 
 	private Object handleSingleParameter(final Class<?> parameterType, final RequestParam requestParam,
 			final WebScriptRequest request, final String parameterName) {
-		String parameterValue = request.getParameter(parameterName);
-		if (parameterValue == null) {
+		final String parameterValue = request.getParameter(parameterName);
+		Object value = null;
+		if (parameterValue != null) {
+			value = getStringValueConverter().convertStringValue(parameterType, parameterValue);
+		} else if (requestParam.required()) {
 			if (StringUtils.hasText(requestParam.defaultValue())) {
-				parameterValue = requestParam.defaultValue();
-			} else if (requestParam.required()) {
+				value = requestParam.defaultValue();
+			}
+			if (value == null) {
 				throw new IllegalStateException(String.format("Request parameter not available: %s", parameterName));
 			}
 		}
-		return getStringValueConverter().convertStringValue(parameterType, parameterValue);
+		return value;
 	}
 
 	private Object handleDelimitedParameter(final Class<?> parameterType, final RequestParam requestParam,
