@@ -52,17 +52,14 @@ public class Bundles extends AbstractControlPanelHandler {
 	}
 
 	@Uri(method = HttpMethod.GET, value = "/{id}", defaultFormat = "html")
-	public Map<String, Object> show(@UriVariable final long id, @Attribute final ResponseHelper responseHelper)
-			throws IOException {
-		final Map<String, Object> model = new HashMap<String, Object>();
-		final Bundle bundle = bundleHelper.getBundle(id);
+	public Map<String, Object> show(final @Attribute Bundle bundle, @Attribute final ResponseHelper responseHelper,
+			final Map<String, Object> model) throws IOException {
 		if (bundle != null) {
-			if (id == 0) {
+			if (bundle.getBundleId() == 0) {
 				model.put(Variables.SYSTEM_PACKAGE_COUNT, getSystemPackages().size());
 			}
 			model.put(Variables.BUNDLE, new TemplateBundle(bundle));
 		} else {
-			model.put(Variables.ID, id);
 			responseHelper.status(HttpServletResponse.SC_NOT_FOUND);
 		}
 		return model;
@@ -88,8 +85,8 @@ public class Bundles extends AbstractControlPanelHandler {
 	}
 
 	@Uri(method = HttpMethod.POST, value = "/delete")
-	public void delete(@RequestParam final long id, @Attribute final ResponseHelper responseHelper) {
-		final Bundle bundle = bundleHelper.getBundle(id);
+	public void delete(final @Attribute Bundle bundle, @Attribute final String id,
+			@Attribute final ResponseHelper responseHelper) {
 		if (bundle != null) {
 			try {
 				bundleHelper.uninstallAndDeleteBundle(bundle);
@@ -106,8 +103,8 @@ public class Bundles extends AbstractControlPanelHandler {
 	}
 
 	@Uri(method = HttpMethod.POST, value = "/start")
-	public void start(@RequestParam final long id, @Attribute final ResponseHelper responseHelper) {
-		final Bundle bundle = bundleHelper.getBundle(id);
+	public void start(final @Attribute Bundle bundle, @Attribute final String id,
+			@Attribute final ResponseHelper responseHelper) {
 		if (bundle != null) {
 			try {
 				bundle.start();
@@ -117,11 +114,11 @@ public class Bundles extends AbstractControlPanelHandler {
 				responseHelper.redirectToBundles();
 			} catch (final BundleException e) {
 				responseHelper.flashErrorMessage(String.format("Error starting Bundle: %s", e.getMessage()));
-				responseHelper.redirectToBundle(id);
+				responseHelper.redirectToBundle(bundle.getBundleId());
 			}
 		} else {
 			responseHelper.flashErrorMessage(String.format("Cannot start bundle. Bundle with ID %d not found.", id));
-			responseHelper.redirectToBundle(id);
+			responseHelper.redirectToBundles();
 		}
 	}
 
@@ -139,6 +136,22 @@ public class Bundles extends AbstractControlPanelHandler {
 	@Attribute(Variables.REPOSITORY_STORE_LOCATION)
 	protected String getRepositoryStoreLocation() {
 		return bundleHelper.getBundleRepositoryLocation();
+	}
+
+	@Attribute(Variables.ID)
+	public Long getId(@UriVariable(required = false) final Long pathId) {
+		return pathId;
+	}
+
+	@Attribute(Variables.BUNDLE)
+	public Bundle getBundle(@UriVariable(value = "id", required = false) final Long pathId,
+			@RequestParam(value = "id", required = false) final Long paramId) {
+		final Long id = pathId != null ? pathId : paramId;
+		if (id != null) {
+			return bundleHelper.getBundle(id);
+		} else {
+			return null;
+		}
 	}
 
 }
