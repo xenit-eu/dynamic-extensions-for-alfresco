@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import nl.runnable.alfresco.webscripts.annotations.HttpMethod;
 
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.extensions.webscripts.Registry;
 import org.springframework.extensions.webscripts.WebScriptRequest;
@@ -21,14 +22,25 @@ public abstract class AbstractWebScriptAnnotationsTest {
 
 	/* Utility operations */
 
-	protected void handleRequest(final HttpMethod httpMethod, final Object handler, final String methodName,
+	protected void handleRequest(final HttpMethod httpMethod, final Object mockedHandler, final String methodName,
 			final WebScriptRequest request, final WebScriptResponse response) {
 		try {
-			final AnnotationBasedWebScript webScript = webScriptFor(httpMethod, RequestParamHandler.class, methodName);
+			// Mockito extends the original object's class.
+			final Class<?> actualClass = mockedHandler.getClass().getSuperclass();
+			final AnnotationBasedWebScript webScript = webScriptFor(httpMethod, actualClass, methodName);
 			webScript.execute(request, response);
 		} catch (final IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	protected void handleGetRequest(final Object mockedHandler, final String methodName, final WebScriptRequest request,
+			final WebScriptResponse response) {
+		handleRequest(HttpMethod.GET, mockedHandler, methodName, request, response);
+	}
+
+	protected void handleGetRequest(final Object mockedHandler, final String methodName, final WebScriptRequest request) {
+		handleRequest(HttpMethod.GET, mockedHandler, methodName, request, Mockito.mock(WebScriptResponse.class));
 	}
 
 	static String webScriptIdFor(final HttpMethod httpMethod, final Class<?> clazz, final String method) {

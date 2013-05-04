@@ -14,6 +14,8 @@ class MockWebScriptRequestBuilder {
 
 	private final Map<String, Object> parametersByName = new HashMap<String, Object>();
 
+	private final Map<String, Object> headersByName = new HashMap<String, Object>();
+
 	public MockWebScriptRequestBuilder param(final String name, final String value) {
 		parametersByName.put(name, value);
 		return this;
@@ -30,18 +32,28 @@ class MockWebScriptRequestBuilder {
 
 			@Override
 			public String answer(final InvocationOnMock invocation) throws Throwable {
-				final String name = (String) invocation.getArguments()[0];
-				return (String) parametersByName.get(name);
+				return (String) parametersByName.get(invocation.getArguments()[0]);
 			}
 		});
 		when(request.getParameterValues(anyString())).then(new Answer<String[]>() {
 
 			@Override
 			public String[] answer(final InvocationOnMock invocation) throws Throwable {
-				final String name = (String) invocation.getArguments()[0];
-				return (String[]) parametersByName.get(name);
+				return (String[]) parametersByName.get(invocation.getArguments()[0]);
+			}
+		});
+		when(request.getHeader(anyString())).thenAnswer(new Answer<String>() {
+
+			@Override
+			public String answer(final InvocationOnMock invocation) throws Throwable {
+				return (String) headersByName.get(invocation.getArguments()[0]);
 			}
 		});
 		return request;
+	}
+
+	public MockWebScriptRequestBuilder header(final String name, final String value) {
+		headersByName.put(name, value);
+		return this;
 	}
 }
