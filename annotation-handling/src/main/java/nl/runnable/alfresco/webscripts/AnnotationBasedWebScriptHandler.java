@@ -64,8 +64,8 @@ public class AnnotationBasedWebScriptHandler {
 
 		final WebScriptResponseWrapper wrappedResponse = new WebScriptResponseWrapper(response);
 		final Map<String, Object> model = new HashMap<String, Object>();
-		request = new AttributesWebScriptRequest(request, model);
 		invokeAttributeHandlerMethods(webScript, request, wrappedResponse, model);
+		request = new AttributesWebScriptRequest(request, model);
 		invokeBeforeHandlerMethods(webScript, request, wrappedResponse, model);
 		invokeUriHandlerMethod(webScript, request, wrappedResponse, model);
 	}

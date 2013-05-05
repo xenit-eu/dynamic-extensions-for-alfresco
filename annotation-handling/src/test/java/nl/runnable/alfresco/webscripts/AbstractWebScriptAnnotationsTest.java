@@ -6,14 +6,24 @@ import java.io.IOException;
 
 import nl.runnable.alfresco.webscripts.annotations.HttpMethod;
 
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.extensions.webscripts.Match;
 import org.springframework.extensions.webscripts.Registry;
+import org.springframework.extensions.webscripts.WebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.ClassUtils;
 
+@RunWith(SpringJUnit4ClassRunner.class)
 public abstract class AbstractWebScriptAnnotationsTest {
+
+	static String webScriptIdFor(final HttpMethod httpMethod, final Class<?> clazz, final String method) {
+		return String.format("%s.%s.%s", ClassUtils.getQualifiedName(clazz), method, httpMethod.toString()
+				.toLowerCase());
+	}
 
 	/* Dependencies */
 
@@ -34,8 +44,8 @@ public abstract class AbstractWebScriptAnnotationsTest {
 		}
 	}
 
-	protected void handleGetRequest(final Object mockedHandler, final String methodName, final WebScriptRequest request,
-			final WebScriptResponse response) {
+	protected void handleGetRequest(final Object mockedHandler, final String methodName,
+			final WebScriptRequest request, final WebScriptResponse response) {
 		handleRequest(HttpMethod.GET, mockedHandler, methodName, request, response);
 	}
 
@@ -43,9 +53,17 @@ public abstract class AbstractWebScriptAnnotationsTest {
 		handleRequest(HttpMethod.GET, mockedHandler, methodName, request, Mockito.mock(WebScriptResponse.class));
 	}
 
-	static String webScriptIdFor(final HttpMethod httpMethod, final Class<?> clazz, final String method) {
-		return String.format("%s.%s.%s", ClassUtils.getQualifiedName(clazz), method, httpMethod.toString()
-				.toLowerCase());
+	protected void handleGetRequest(final HttpMethod httpMethod, final String uri) {
+		try {
+			final Match match = registry.findWebScript(httpMethod.name(), uri);
+			assertNotNull(String.format("Could not find annotation-based WebScript for method '%s' and URI '%s'.",
+					httpMethod, uri), match);
+			final WebScript webScript = match.getWebScript();
+			assertTrue("Not an annotation-based Web Script", webScript instanceof AnnotationBasedWebScript);
+			webScript.execute(new MockWebScriptRequest().setServiceMatch(match), Mockito.mock(WebScriptResponse.class));
+		} catch (final IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	protected AnnotationBasedWebScript webScriptFor(final HttpMethod httpMethod, final Class<?> clazz,
@@ -55,4 +73,5 @@ public abstract class AbstractWebScriptAnnotationsTest {
 		assertNotNull(String.format("Could not find annotation-based WebScript for '%s'", webScriptId), webScript);
 		return webScript;
 	}
+
 }

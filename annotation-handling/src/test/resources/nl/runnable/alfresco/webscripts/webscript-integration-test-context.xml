@@ -32,4 +32,6 @@ http://www.mockito.org/spring/mockito classpath:spring/mockito.xsd">
 
 	<mockito:mock id="namespacePrefixResolver" class="org.alfresco.service.namespace.NamespacePrefixResolver" />
 
+	<context:component-scan base-package="nl.runnable.alfresco.webscripts" />
+
 </beans>
