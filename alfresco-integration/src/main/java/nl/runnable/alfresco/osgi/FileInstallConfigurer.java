@@ -3,7 +3,6 @@ package nl.runnable.alfresco.osgi;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -30,8 +29,6 @@ public class FileInstallConfigurer {
 	private Configuration configuration;
 
 	private Integer poll;
-
-	private final List<String> directories = Collections.emptyList();
 
 	private String filter;
 

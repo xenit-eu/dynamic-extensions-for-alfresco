@@ -18,9 +18,9 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.BundleListener;
 import org.osgi.framework.Constants;
-import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.launch.Framework;
+import org.osgi.framework.wiring.FrameworkWiring;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -64,10 +64,6 @@ public class FrameworkManager implements ResourceLoaderAware {
 
 	private Configuration configuration;
 
-	private List<BundleListener> bundleListeners = Collections.emptyList();
-
-	private List<ServiceListener> serviceListeners = Collections.emptyList();
-
 	private String blueprintBundlesLocation;
 
 	private String fileInstallBundlesLocation;
@@ -81,18 +77,16 @@ public class FrameworkManager implements ResourceLoaderAware {
 	 */
 	public void initialize() {
 		startFramework();
-		final List<Bundle> coreBundles = installCoreBundles();
 		registerServices();
-		startBundles(coreBundles);
+		final List<Bundle> bundles = new ArrayList<Bundle>();
+		bundles.addAll(installCoreBundles());
 		if (isFileInstallEnabled() == false) {
-			// Start the bundles manually.
-			startBundles(installFilesystemBundles());
+			bundles.addAll(installFilesystemBundles());
 		}
 		if (isRepositoryInstallEnabled()) {
-			startBundles(installRepositoryBundles());
+			bundles.addAll(installRepositoryBundles());
 		}
-		registerBundleListeners();
-		registerServiceListeners();
+		startBundles(bundles);
 	}
 
 	protected void startFramework() {
@@ -113,9 +107,8 @@ public class FrameworkManager implements ResourceLoaderAware {
 	 * The core bundles consist of:
 	 * <ul>
 	 * <li>Gemini Blueprint
-	 * <li>File Install
-	 * <li>Any additional standard bundles configured through {@link #setStandardBundlesLocation(String)}. (Currently
-	 * contains the Jackson JSON library.)
+	 * <li>File Install (optional, can be disabled)
+	 * <li>Any additional standard bundles configured through {@link #setStandardBundlesLocation(String)}.
 	 * </ul>
 	 * 
 	 * @return
@@ -224,27 +217,6 @@ public class FrameworkManager implements ResourceLoaderAware {
 		return bundles;
 	}
 
-	protected void startBundles(final List<Bundle> bundles) {
-		for (final Bundle bundle : bundles) {
-			if (isFragmentBundle(bundle) == false) {
-				try {
-					if (logger.isDebugEnabled()) {
-						logger.debug("Starting Bundle {}.", bundle.getBundleId());
-					}
-					bundle.start();
-				} catch (final BundleException e) {
-					if (logger.isWarnEnabled()) {
-						logger.warn("Error starting Bundle {}.", bundle.getBundleId(), e);
-					}
-				}
-			}
-		}
-	}
-
-	protected boolean isFragmentBundle(final Bundle bundle) {
-		return bundle.getHeaders().get(Constants.FRAGMENT_HOST) != null;
-	}
-
 	protected void registerServices() {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Registering services.");
@@ -256,16 +228,42 @@ public class FrameworkManager implements ResourceLoaderAware {
 		}
 	}
 
-	protected void registerBundleListeners() {
-		for (final BundleListener bundleListener : getBundleListeners()) {
-			getFramework().getBundleContext().addBundleListener(bundleListener);
+	protected void startBundles(final List<Bundle> bundles) {
+		final FrameworkWiring frameworkWiring = getFramework().adapt(FrameworkWiring.class);
+		if (frameworkWiring.resolveBundles(bundles) == false) {
+			if (logger.isWarnEnabled()) {
+				logger.warn("Could not resolve all {} bundles.", bundles.size());
+			}
+		}
+		for (final Bundle bundle : bundles) {
+			if (isFragmentBundle(bundle) == false) {
+				if (bundle.getState() == Bundle.RESOLVED) {
+					startBundle(bundle);
+				} else {
+					if (logger.isWarnEnabled()) {
+						logger.warn("Bundle '{}' ({}) is not resolved. Cannot start bundle.", bundle.getSymbolicName(),
+								bundle.getBundleId());
+					}
+				}
+			}
 		}
 	}
 
-	protected void registerServiceListeners() {
-		for (final ServiceListener serviceListener : getServiceListeners()) {
-			getFramework().getBundleContext().addServiceListener(serviceListener);
+	protected void startBundle(final Bundle bundle) {
+		try {
+			if (logger.isDebugEnabled()) {
+				logger.debug("Starting Bundle {}.", bundle.getBundleId());
+			}
+			bundle.start();
+		} catch (final BundleException e) {
+			if (logger.isErrorEnabled()) {
+				logger.error("Error starting Bundle {}.", bundle.getBundleId(), e);
+			}
 		}
+	}
+
+	protected boolean isFragmentBundle(final Bundle bundle) {
+		return bundle.getHeaders().get(Constants.FRAGMENT_HOST) != null;
 	}
 
 	/**
@@ -273,22 +271,8 @@ public class FrameworkManager implements ResourceLoaderAware {
 	 * Unregisters services and {@link BundleListener}s and stops the {@link Framework}.
 	 */
 	public void destroy() {
-		unregisterServiceListeners();
-		unregisterBundleListeners();
 		unregisterServices();
 		stopFramework();
-	}
-
-	protected void unregisterServiceListeners() {
-		for (final ServiceListener serviceListener : getServiceListeners()) {
-			getFramework().getBundleContext().removeServiceListener(serviceListener);
-		}
-	}
-
-	protected void unregisterBundleListeners() {
-		for (final BundleListener bundleListener : getBundleListeners()) {
-			getFramework().getBundleContext().removeBundleListener(bundleListener);
-		}
 	}
 
 	protected void unregisterServices() {
@@ -390,24 +374,6 @@ public class FrameworkManager implements ResourceLoaderAware {
 
 	protected Configuration getConfiguration() {
 		return configuration;
-	}
-
-	public void setBundleListeners(final List<BundleListener> bundleListeners) {
-		Assert.notNull(bundleListeners);
-		this.bundleListeners = bundleListeners;
-	}
-
-	protected List<BundleListener> getBundleListeners() {
-		return bundleListeners;
-	}
-
-	public void setServiceListeners(final List<ServiceListener> serviceListeners) {
-		Assert.notNull(serviceListeners);
-		this.serviceListeners = serviceListeners;
-	}
-
-	protected List<ServiceListener> getServiceListeners() {
-		return serviceListeners;
 	}
 
 	@Required
