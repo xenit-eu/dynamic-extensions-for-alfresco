@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mockito="http://www.mockito.org/spring/mockito" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context.xsd
+http://www.mockito.org/spring/mockito classpath:spring/mockito.xsd">
+
+
+	<!-- Multiple NodeService beans, resolved using naming convention. -->
+	
+	<!-- Default, high-level service. -->
+	<mockito:mock id="NodeService" class="org.alfresco.service.cmr.repository.NodeService" />
+
+	<!-- Low-level service -->
+	<mockito:mock id="nodeService" class="org.alfresco.service.cmr.repository.NodeService" />
+	
+	<!-- Single Namespace bean, resolved by type. -->
+	
+	<mockito:mock id="NamespaceService" class="org.alfresco.service.namespace.NamespaceService" />
+
+	<!-- Multiple CategoryService beans, for testing lookup to beans that use low-level naming. -->
+
+	<!-- Low-level service only -->
+	<mockito:mock id="categoryService" class="org.alfresco.service.cmr.search.CategoryService" />
+
+	<!-- Define an second Category bean for bypassing resolving by type -->
+	<mockito:mock id="not.used.categoryService" class="org.alfresco.service.cmr.search.CategoryService" />
+
+</beans>

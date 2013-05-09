@@ -39,10 +39,6 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 
 	private static final String ALFRESCO_DYNAMIC_EXTENSION_HEADER = "Alfresco-Dynamic-Extension";
 
-	private static final String PARENT_APPLICATION_CONTEXT_HEADER = "Parent-Application-Context";
-
-	private static final String HOST_PARENT_APPLICATION_CONTEXT = "host";
-
 	private static final String HOST_APPLICATION_CONTEXT_BEAN_NAME = "HostApplicationContext";
 
 	private static final String OSGI_SERVICE_BLUEPRINT_COMPNAME = "osgi.service.blueprint.compname";
@@ -87,12 +83,8 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 				logger.debug("Initializing Dynamic Extension '{}'.", bundle.getSymbolicName());
 			}
 		}
-		ApplicationContext parentApplicationContext = null;
-		if (isUseParentApplicationContext(bundle)) {
-			parentApplicationContext = getHostApplicationContext(bundleContext);
-		}
 		final DynamicExtensionsApplicationContext applicationContext = new DynamicExtensionsApplicationContext(
-				configurationLocations, parentApplicationContext);
+				configurationLocations, getHostApplicationContext(bundleContext));
 		applicationContext.setBundleContext(bundleContext);
 		applicationContext.setPublishContextAsService(config.isPublishContextAsService());
 		if (StringUtils.hasText(getModelLocationPattern())) {
@@ -136,11 +128,6 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 				logger.error("Error uninstalling Bundle: {}", e.getMessage(), e);
 			}
 		}
-	}
-
-	protected boolean isUseParentApplicationContext(final Bundle bundle) {
-		final String header = bundle.getHeaders().get(PARENT_APPLICATION_CONTEXT_HEADER);
-		return (header == null || header.equals(HOST_PARENT_APPLICATION_CONTEXT));
 	}
 
 	protected ApplicationContext getHostApplicationContext(final BundleContext bundleContext) {

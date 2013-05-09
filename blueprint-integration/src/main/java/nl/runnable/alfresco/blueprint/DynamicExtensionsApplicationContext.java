@@ -99,7 +99,7 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 
 	@Override
 	protected DefaultListableBeanFactory createBeanFactory() {
-		return new OsgiAutowireServiceBeanFactory(getInternalParentBeanFactory(), getBundleContext());
+		return new OsgiAutowireBeanFactory(getInternalParentBeanFactory(), getBundleContext());
 	}
 
 	@Override

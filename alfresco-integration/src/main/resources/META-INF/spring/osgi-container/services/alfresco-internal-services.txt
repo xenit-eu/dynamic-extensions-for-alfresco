@@ -1,4 +1,0 @@
-# Contains references to internal Alfresco services.
-
-webscripts.repo.templateprocessor:org.springframework.extensions.webscripts.TemplateProcessor
-dataSource:javax.sql.DataSource
