@@ -142,8 +142,8 @@ public class AnnotationBasedWebScriptHandler {
 		try {
 			request.setThrownException(exception);
 			for (final Method exceptionHandler : exceptionHandlerMethods) {
-				final Object[] arguments = getHandlerMethodArgumentsResolver().resolveHandlerMethodArguments(exceptionHandler,
-						webScript.getHandler(), request, response);
+				final Object[] arguments = getHandlerMethodArgumentsResolver().resolveHandlerMethodArguments(
+						exceptionHandler, webScript.getHandler(), request, response);
 				exceptionHandler.setAccessible(true);
 				ReflectionUtils.invokeMethod(exceptionHandler, webScript.getHandler(), arguments);
 			}

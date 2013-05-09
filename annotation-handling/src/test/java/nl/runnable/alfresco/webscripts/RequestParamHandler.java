@@ -24,7 +24,6 @@ public class RequestParamHandler {
 
 	@Uri("/handleArray")
 	public void handleArray(@RequestParam final String[] params) {
-		System.out.println(params);
 	}
 
 	@Uri("/handleDelimited")

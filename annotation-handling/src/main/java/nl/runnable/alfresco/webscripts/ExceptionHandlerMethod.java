@@ -14,12 +14,16 @@ class ExceptionHandlerMethod {
 	}
 
 	public boolean canHandle(final Throwable exception) {
-		for (final Class<? extends Throwable> type : exceptionTypes) {
-			if (type.isInstance(exception)) {
-				return true;
+		if (exceptionTypes.length == 0) {
+			return true;
+		} else {
+			for (final Class<? extends Throwable> type : exceptionTypes) {
+				if (type.isInstance(exception)) {
+					return true;
+				}
 			}
+			return false;
 		}
-		return false;
 	}
 
 	public Method getMethod() {
