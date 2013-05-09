@@ -39,7 +39,18 @@
           Restart the repository to have the cache rebuilt on startup.
         </p>
       </div>
+      
+      <h2>Services</h2>
+      <p>
+        <a href="container/services">View all Services</a>
+      </p>
+      <p>
+        The use of OSGi services is currently internal to Dynamic Extensions.
+      </p>      
 
+    </div> <#-- .span6 -->
+
+    <div class="span6">
       <h2>Restart OSGi container</h2>
       <p>
         Restart the OSGi container to reinitialize Dynamic Extensions:
@@ -76,45 +87,7 @@
           </#if>
         </#if>
       </div>
-    </div> <#-- .span6 -->
 
-    <div class="span6">
-      <h2>Services</h2>
-      <p>
-        <a href="container/services">View all Services</a>
-      </p>
-      <p>
-        Services are available for use by Dynamic Extensions. Most services are part of the
-        Alfresco repository API.
-      </p>
-      <div class="well">
-<p>
-  To obtain a reference to a service using dependency injection:
-</p>
-<pre class="java fragment">
-<em class="comment">// Obtain a dependency by interface</em>
-<em class="comment">// This is the recommended approach</em>
-<strong class="annotation">@Inject</strong>
-private NodeService nodeService;
-</pre>
-
-<p>Alternative: inject by name</p>
-<pre class="java fragment">
-<em class="comment">// Directly reference a named bean</em>
-<em class="comment">// This approach can be useful in some cases</em>
-<strong class="annotation">@Inject</strong>
-<strong class="annotation">@Named("nodeService")</strong>
-private NodeService nodeService;
-</pre>
-
-<p>Using Spring XML configuration:</p>
-<pre class="xml fragment">
-&lt;bean class="..."&gt;
-  &lt;property name="nodeService" ref="NodeService" /&gt;
-&lt;/bean&gt;
-</pre>
-
-      </div>
     </div> <#-- .span6 -->
 
   </div> <#-- .row -->

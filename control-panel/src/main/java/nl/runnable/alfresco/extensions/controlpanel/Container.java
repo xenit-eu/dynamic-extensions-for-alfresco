@@ -22,7 +22,6 @@ import nl.runnable.alfresco.webscripts.annotations.Authentication;
 import nl.runnable.alfresco.webscripts.annotations.AuthenticationType;
 import nl.runnable.alfresco.webscripts.annotations.Cache;
 import nl.runnable.alfresco.webscripts.annotations.HttpMethod;
-import nl.runnable.alfresco.webscripts.annotations.RequestParam;
 import nl.runnable.alfresco.webscripts.annotations.Uri;
 import nl.runnable.alfresco.webscripts.annotations.WebScript;
 
@@ -97,8 +96,7 @@ public class Container extends AbstractControlPanelHandler {
 	}
 
 	@Uri(method = HttpMethod.POST, value = "/restart")
-	public void restartFramework(@RequestParam(defaultValue = "0") final long wait,
-			@Attribute final ResponseHelper response) throws IOException, BundleException {
+	public void restartFramework(@Attribute final ResponseHelper response) throws IOException, BundleException {
 		if (osgiConfiguration.getMode().isFrameworkRestartEnabled() == false) {
 			response.status(HttpServletResponse.SC_FORBIDDEN, "Framework restart is currently not allowed.");
 			return;

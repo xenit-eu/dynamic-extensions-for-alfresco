@@ -63,12 +63,8 @@ table.service th.name {
   width: 60%;
 }
 
-table.service th.type {
-  width: 10%;
-}
-
 table.service th.bean {
-  width: 30%;
+  width: 40%;
 }
 
 form#post {

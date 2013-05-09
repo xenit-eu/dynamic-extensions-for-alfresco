@@ -14,7 +14,6 @@
       <thead>
         <tr>
           <th class="name">Service classes</th>
-          <th class="type">Type</th>
           <th class="bean">Repository bean</th>
         </tr>
       </thead>
@@ -27,9 +26,6 @@
                   <li>${objectClass}</li>
                 </#list>
               </ul>
-            </td>
-            <td class="type">
-              ${service.type!'n/a'}
             </td>
             <td class="bean">
               ${service.beanName!'n/a'}
