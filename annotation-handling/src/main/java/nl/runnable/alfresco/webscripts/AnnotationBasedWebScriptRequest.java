@@ -1,8 +1,7 @@
 package nl.runnable.alfresco.webscripts;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
-
-import nl.runnable.alfresco.webscripts.annotations.Attribute;
 
 import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.webscripts.Description.FormatStyle;
@@ -11,37 +10,37 @@ import org.springframework.extensions.webscripts.Runtime;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.util.Assert;
 
-/**
- * {@link WebScriptRequest} wrapper for supporting {@link Attribute} annotation infrastructure.
- * <p>
- * This class adds a {@link #getAttributes()} method for obtaining the attributes for the current request.
- * 
- * @author Laurens Fridael
- * 
- */
-class AttributesWebScriptRequest implements WebScriptRequest {
+class AnnotationBasedWebScriptRequest implements WebScriptRequest {
 
 	/* State */
 
 	private final WebScriptRequest webScriptRequest;
 
-	private final Map<String, Object> attributes;
+	private final Map<String, Object> model = new LinkedHashMap<String, Object>();
 
-	AttributesWebScriptRequest(final WebScriptRequest webScriptRequest, final Map<String, Object> attributes) {
+	private Throwable thrownException;
+
+	AnnotationBasedWebScriptRequest(final WebScriptRequest webScriptRequest) {
 		Assert.notNull(webScriptRequest);
-		Assert.notNull(attributes);
 		this.webScriptRequest = webScriptRequest;
-		this.attributes = attributes;
 	}
 
 	/* State */
 
-	Map<String, Object> getAttributes() {
-		return attributes;
-	}
-
 	public WebScriptRequest getWebScriptRequest() {
 		return webScriptRequest;
+	}
+
+	Map<String, Object> getModel() {
+		return model;
+	}
+
+	void setThrownException(final Throwable thrownException) {
+		this.thrownException = thrownException;
+	}
+
+	Throwable getThrownException() {
+		return thrownException;
 	}
 
 	/* Delegate methods */

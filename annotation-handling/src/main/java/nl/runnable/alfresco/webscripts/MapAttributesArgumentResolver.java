@@ -24,7 +24,7 @@ public class MapAttributesArgumentResolver implements ArgumentResolver<Map<Strin
 	@Override
 	public Map<String, Object> resolveArgument(final Class<?> argumentType, final Annotation parameterAnnotation,
 			final String name, final WebScriptRequest request, final WebScriptResponse response) {
-		return ((AttributesWebScriptRequest) request).getAttributes();
+		return ((AnnotationBasedWebScriptRequest) request).getModel();
 	}
 
 }

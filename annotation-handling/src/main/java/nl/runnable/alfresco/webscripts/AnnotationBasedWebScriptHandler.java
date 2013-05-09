@@ -56,24 +56,28 @@ public class AnnotationBasedWebScriptHandler {
 	 * @param handlerMethod
 	 * @throws IOException
 	 */
-	public void handleRequest(final AnnotationBasedWebScript webScript, WebScriptRequest request,
+	public void handleRequest(final AnnotationBasedWebScript webScript, final WebScriptRequest request,
 			final WebScriptResponse response) throws IOException {
 		Assert.notNull(webScript, "WebScript cannot be null.");
 		Assert.notNull(request, "Request cannot be null.");
 		Assert.notNull(response, "Response cannot be null.");
 
+		final AnnotationBasedWebScriptRequest annotationRequest = new AnnotationBasedWebScriptRequest(request);
 		final WebScriptResponseWrapper wrappedResponse = new WebScriptResponseWrapper(response);
 		final Map<String, Object> model = new HashMap<String, Object>();
-		invokeAttributeHandlerMethods(webScript, request, wrappedResponse, model);
-		request = new AttributesWebScriptRequest(request, model);
-		invokeBeforeHandlerMethods(webScript, request, wrappedResponse, model);
-		invokeUriHandlerMethod(webScript, request, wrappedResponse, model);
+		try {
+			invokeAttributeHandlerMethods(webScript, annotationRequest, wrappedResponse);
+			invokeBeforeHandlerMethods(webScript, annotationRequest, wrappedResponse);
+			invokeUriHandlerMethod(webScript, annotationRequest, wrappedResponse);
+		} catch (final Throwable e) {
+			invokeExceptionHandlerMethods(e, webScript, annotationRequest, wrappedResponse, model);
+		}
 	}
 
 	/* Utility operations */
 
 	protected boolean invokeBeforeHandlerMethods(final AnnotationBasedWebScript webScript,
-			final WebScriptRequest request, final WebScriptResponse response, final Map<String, Object> model) {
+			final AnnotationBasedWebScriptRequest request, final WebScriptResponse response) {
 		for (final Method method : webScript.getHandlerMethods().getBeforeMethods()) {
 			method.setAccessible(true);
 			final Object[] arguments = getHandlerMethodArgumentsResolver().resolveHandlerMethodArguments(method,
@@ -88,7 +92,7 @@ public class AnnotationBasedWebScriptHandler {
 	}
 
 	protected void invokeAttributeHandlerMethods(final AnnotationBasedWebScript webScript,
-			final WebScriptRequest request, final WebScriptResponse response, final Map<String, Object> model) {
+			final AnnotationBasedWebScriptRequest request, final WebScriptResponse response) {
 		for (final Method method : webScript.getHandlerMethods().getAttributeMethods()) {
 			method.setAccessible(true);
 			final Object[] arguments = getHandlerMethodArgumentsResolver().resolveHandlerMethodArguments(method,
@@ -98,6 +102,7 @@ public class AnnotationBasedWebScriptHandler {
 				continue;
 			}
 			final Attribute annotation = AnnotationUtils.findAnnotation(method, Attribute.class);
+			final Map<String, Object> model = request.getModel();
 			if (StringUtils.hasText(annotation.value())) {
 				model.put(annotation.value(), attribute);
 			} else {
@@ -111,18 +116,52 @@ public class AnnotationBasedWebScriptHandler {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void invokeUriHandlerMethod(final AnnotationBasedWebScript webScript, final WebScriptRequest request,
-			final WebScriptResponseWrapper response, final Map<String, Object> model) throws IOException {
+	protected void invokeUriHandlerMethod(final AnnotationBasedWebScript webScript,
+			final AnnotationBasedWebScriptRequest request, final WebScriptResponseWrapper response) throws IOException {
 		final Method uriMethod = webScript.getHandlerMethods().getUriMethod();
 		final Object[] arguments = getHandlerMethodArgumentsResolver().resolveHandlerMethodArguments(uriMethod,
 				webScript.getHandler(), request, response);
 		uriMethod.setAccessible(true);
 		final Object returnValue = ReflectionUtils.invokeMethod(uriMethod, webScript.getHandler(), arguments);
 		if (returnValue instanceof Map) {
+			final Map<String, Object> model = request.getModel();
 			if (model != returnValue) {
 				model.putAll((Map<String, Object>) returnValue);
 			}
 			processHandlerMethodTemplate(webScript, request, model, response, response.getStatus());
+		}
+	}
+
+	protected void invokeExceptionHandlerMethods(final Throwable exception, final AnnotationBasedWebScript webScript,
+			final AnnotationBasedWebScriptRequest request, final WebScriptResponse response,
+			final Map<String, Object> model) throws IOException {
+		final List<Method> exceptionHandlerMethods = webScript.getHandlerMethods().findExceptionHandlers(exception);
+		if (exceptionHandlerMethods.isEmpty()) {
+			translateException(exception);
+		}
+		try {
+			request.setThrownException(exception);
+			for (final Method exceptionHandler : exceptionHandlerMethods) {
+				final Object[] arguments = getHandlerMethodArgumentsResolver().resolveHandlerMethodArguments(exceptionHandler,
+						webScript.getHandler(), request, response);
+				exceptionHandler.setAccessible(true);
+				ReflectionUtils.invokeMethod(exceptionHandler, webScript.getHandler(), arguments);
+			}
+		} catch (final Throwable e) {
+			translateException(e);
+		} finally {
+			request.setThrownException(null);
+		}
+
+	}
+
+	protected void translateException(final Throwable e) throws IOException {
+		if (e instanceof IOException) {
+			throw (IOException) e;
+		} else if (e instanceof RuntimeException) {
+			throw (RuntimeException) e;
+		} else {
+			throw new RuntimeException(e);
 		}
 	}
 

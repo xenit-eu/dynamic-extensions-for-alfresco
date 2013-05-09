@@ -23,6 +23,8 @@ public class HandlerMethods {
 
 	private Method uriMethod;
 
+	private final List<ExceptionHandlerMethod> exceptionHandlerMethods = new ArrayList<ExceptionHandlerMethod>();
+
 	public List<Method> getBeforeMethods() {
 		return beforeMethods;
 	}
@@ -35,6 +37,20 @@ public class HandlerMethods {
 		return uriMethod;
 	}
 
+	public List<ExceptionHandlerMethod> getExceptionHandlerMethods() {
+		return exceptionHandlerMethods;
+	}
+
+	public List<Method> findExceptionHandlers(final Throwable exception) {
+		final List<Method> handlerMethods = new ArrayList<Method>(1);
+		for (final ExceptionHandlerMethod exceptionHandlerMethod : getExceptionHandlerMethods()) {
+			if (exceptionHandlerMethod.canHandle(exception)) {
+				handlerMethods.add(exceptionHandlerMethod.getMethod());
+			}
+		}
+		return handlerMethods;
+	}
+
 	/**
 	 * Creates a new instance for the specified {@link Uri}-annotated method.
 	 * 
@@ -45,6 +61,7 @@ public class HandlerMethods {
 		handlerMethods.beforeMethods.addAll(getBeforeMethods());
 		handlerMethods.attributeMethods.addAll(getAttributeMethods());
 		handlerMethods.uriMethod = uriMethod;
+		handlerMethods.exceptionHandlerMethods.addAll(getExceptionHandlerMethods());
 		return handlerMethods;
 	}
 

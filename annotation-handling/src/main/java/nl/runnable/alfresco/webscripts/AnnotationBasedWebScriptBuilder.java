@@ -12,6 +12,7 @@ import nl.runnable.alfresco.webscripts.annotations.Attribute;
 import nl.runnable.alfresco.webscripts.annotations.Authentication;
 import nl.runnable.alfresco.webscripts.annotations.Before;
 import nl.runnable.alfresco.webscripts.annotations.Cache;
+import nl.runnable.alfresco.webscripts.annotations.ExceptionHandler;
 import nl.runnable.alfresco.webscripts.annotations.Transaction;
 import nl.runnable.alfresco.webscripts.annotations.Uri;
 import nl.runnable.alfresco.webscripts.annotations.WebScript;
@@ -110,6 +111,26 @@ public class AnnotationBasedWebScriptBuilder implements BeanFactoryAware {
 						throw new RuntimeException("@Attribute methods cannot have a void return type.");
 					}
 					handlerMethods.getAttributeMethods().add(method);
+				}
+			}
+		});
+		ReflectionUtils.doWithMethods(beanType, new ReflectionUtils.MethodCallback() {
+
+			@Override
+			public void doWith(final Method method) throws IllegalArgumentException, IllegalAccessException {
+				final ExceptionHandler exceptionHandler = AnnotationUtils
+						.findAnnotation(method, ExceptionHandler.class);
+				if (exceptionHandler != null) {
+					if (AnnotationUtils.findAnnotation(method, Attribute.class) != null
+							|| AnnotationUtils.findAnnotation(method, Before.class) != null
+							|| AnnotationUtils.findAnnotation(method, Uri.class) != null) {
+						throw new RuntimeException(
+								String.format(
+										"Cannot combine @Before, @Attribute @ExceptionHandler or @Uri on a single method. Method: %s",
+										ClassUtils.getQualifiedMethodName(method)));
+					}
+					handlerMethods.getExceptionHandlerMethods().add(
+							new ExceptionHandlerMethod(exceptionHandler.value(), method));
 				}
 			}
 		});

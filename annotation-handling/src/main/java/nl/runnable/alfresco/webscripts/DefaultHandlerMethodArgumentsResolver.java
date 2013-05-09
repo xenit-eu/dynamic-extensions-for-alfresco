@@ -37,6 +37,7 @@ public class DefaultHandlerMethodArgumentsResolver implements HandlerMethodArgum
 		argumentResolvers.add((ArgumentResolver) new UriVariableArgumentResolver(getStringValueConverter()));
 		argumentResolvers.add((ArgumentResolver) new AttributeArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new MapAttributesArgumentResolver());
+		argumentResolvers.add((ArgumentResolver) new ExceptionArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new HeaderArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new WebScriptRequestArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new WebScriptResponseArgumentResolver());
