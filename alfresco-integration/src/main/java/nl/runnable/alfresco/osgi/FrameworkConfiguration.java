@@ -3,15 +3,12 @@ package nl.runnable.alfresco.osgi;
 import static org.osgi.framework.Constants.*;
 
 import java.io.File;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 import org.osgi.framework.launch.Framework;
 import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
 
 /**
  * Value object representing {@link Framework} configuration.
@@ -27,9 +24,9 @@ public class FrameworkConfiguration {
 
 	private boolean flushBundleCacheOnFirstInit = true;
 
-	private Set<SystemPackage> coreSystemPackages = Collections.emptySet();
+	private ConfigurationValues<SystemPackage> coreSystemPackages = null;
 
-	private Set<SystemPackage> additionalSystemPackages = Collections.emptySet();
+	private ConfigurationValues<SystemPackage> additionalSystemPackages = null;
 
 	/* Main operations */
 
@@ -46,10 +43,10 @@ public class FrameworkConfiguration {
 		if (isFlushBundleCacheOnFirstInit()) {
 			configuration.put(FRAMEWORK_STORAGE_CLEAN, FRAMEWORK_STORAGE_CLEAN_ONFIRSTINIT);
 		}
-		if (CollectionUtils.isEmpty(getCoreSystemPackages()) == false) {
+		if (getCoreSystemPackages() != null) {
 			configuration.put(FRAMEWORK_SYSTEMPACKAGES, createSystemPackagesConfiguration(getCoreSystemPackages()));
 		}
-		if (CollectionUtils.isEmpty(getAdditionalSystemPackages()) == false) {
+		if (getAdditionalSystemPackages() != null) {
 			configuration.put(FRAMEWORK_SYSTEMPACKAGES_EXTRA,
 					createSystemPackagesConfiguration(getAdditionalSystemPackages()));
 		}
@@ -58,7 +55,7 @@ public class FrameworkConfiguration {
 
 	/* Utility operations */
 
-	protected String createSystemPackagesConfiguration(final Set<SystemPackage> systemPackages) {
+	protected String createSystemPackagesConfiguration(final ConfigurationValues<SystemPackage> systemPackages) {
 		final StringBuilder sb = new StringBuilder();
 		for (final Iterator<SystemPackage> it = systemPackages.iterator(); it.hasNext();) {
 			final SystemPackage systemPackage = it.next();
@@ -98,22 +95,22 @@ public class FrameworkConfiguration {
 		this.flushBundleCacheOnFirstInit = flushBundleCacheOnFirstInit;
 	}
 
-	public Set<SystemPackage> getCoreSystemPackages() {
-		return coreSystemPackages;
-	}
-
-	public void setCoreSystemPackages(final Set<SystemPackage> coreSystemPackages) {
+	public void setCoreSystemPackages(final ConfigurationValues<SystemPackage> coreSystemPackages) {
 		Assert.notNull(coreSystemPackages);
 		this.coreSystemPackages = coreSystemPackages;
 	}
 
-	public Set<SystemPackage> getAdditionalSystemPackages() {
-		return additionalSystemPackages;
+	public ConfigurationValues<SystemPackage> getCoreSystemPackages() {
+		return coreSystemPackages;
 	}
 
-	public void setAdditionalSystemPackages(final Set<SystemPackage> systemPackages) {
-		Assert.notNull(systemPackages);
-		this.additionalSystemPackages = systemPackages;
+	public void setAdditionalSystemPackages(final ConfigurationValues<SystemPackage> additionalSystemPackages) {
+		Assert.notNull(additionalSystemPackages);
+		this.additionalSystemPackages = additionalSystemPackages;
+	}
+
+	public ConfigurationValues<SystemPackage> getAdditionalSystemPackages() {
+		return additionalSystemPackages;
 	}
 
 }

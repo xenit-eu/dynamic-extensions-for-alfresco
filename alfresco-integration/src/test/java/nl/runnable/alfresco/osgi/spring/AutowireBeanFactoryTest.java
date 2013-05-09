@@ -49,6 +49,6 @@ public class AutowireBeanFactoryTest {
 
 	@Test
 	public void testLowLevelServiceAutowiringFallback() {
-		assertNotNull(example.lowLevelNodeService);
+		assertNotNull(example.categoryService);
 	}
 }

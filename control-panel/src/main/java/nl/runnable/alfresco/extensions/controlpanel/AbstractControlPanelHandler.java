@@ -2,13 +2,13 @@ package nl.runnable.alfresco.extensions.controlpanel;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import nl.runnable.alfresco.extensions.controlpanel.template.Variables;
+import nl.runnable.alfresco.osgi.ConfigurationValues;
 import nl.runnable.alfresco.osgi.SystemPackage;
 import nl.runnable.alfresco.webscripts.annotations.Attribute;
 import nl.runnable.alfresco.webscripts.annotations.Before;
@@ -35,7 +35,7 @@ abstract class AbstractControlPanelHandler {
 
 	@Inject
 	@Named("osgi.container.SystemPackages")
-	private List<SystemPackage> systemPackages;
+	private ConfigurationValues<SystemPackage> systemPackages;
 
 	/* Attributes */
 
@@ -66,9 +66,8 @@ abstract class AbstractControlPanelHandler {
 
 	/* Utility operations */
 
-	@SuppressWarnings("unchecked")
 	protected Collection<SystemPackage> getSystemPackages() {
-		return (Collection<SystemPackage>) systemPackages.get(0);
+		return systemPackages.getValues();
 	}
 
 	/**

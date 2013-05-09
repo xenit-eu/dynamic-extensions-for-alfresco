@@ -4,6 +4,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import nl.runnable.alfresco.osgi.ConfigurationValues;
+
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.util.Assert;
 
@@ -16,11 +18,13 @@ import org.springframework.util.Assert;
  * 
  * @param <T>
  */
-public class SetCombinationFactoryBean<T> implements FactoryBean<Set<T>> {
+public class ConfigurationValuesFactoryBean<T> implements FactoryBean<ConfigurationValues<T>> {
 
 	/* Configuration */
 
 	private List<Set<T>> sets;
+
+	private ConfigurationValues<T> instance;
 
 	/* Main operations */
 
@@ -30,21 +34,28 @@ public class SetCombinationFactoryBean<T> implements FactoryBean<Set<T>> {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
-	public Class<? extends Set<T>> getObjectType() {
-		return (Class<? extends Set<T>>) (Class<?>) Set.class;
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Class getObjectType() {
+		return ConfigurationValues.class;
 	}
 
 	@Override
-	public Set<T> getObject() throws Exception {
-		final Set<T> allItems = new LinkedHashSet<T>(getTotalSize());
-		for (final Set<T> set : getSets()) {
-			allItems.addAll(set);
+	public ConfigurationValues<T> getObject() throws Exception {
+		if (instance == null) {
+			instance = createContainerConfiguration();
 		}
-		return allItems;
+		return instance;
 	}
 
 	/* Utility operations */
+
+	protected ConfigurationValues<T> createContainerConfiguration() {
+		final Set<T> items = new LinkedHashSet<T>(getTotalSize());
+		for (final Set<T> set : getSets()) {
+			items.addAll(set);
+		}
+		return new ConfigurationValues<T>(items);
+	}
 
 	protected int getTotalSize() {
 		int totalSize = 0;
