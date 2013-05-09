@@ -79,7 +79,7 @@ public class RequestParamTest extends AbstractWebScriptAnnotationsTest {
 	@Test
 	public void testHandleLong() {
 		handleGetRequest(handler, "handleLong", new MockWebScriptRequest().param("param1", "1").param("param2", "2"));
-		verify(handler).handleLong(1l, 2l);
+		verify(handler).handleLong(1l, 2l, 3l);
 	}
 
 	@Test

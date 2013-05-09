@@ -40,7 +40,8 @@ public class RequestParamHandler {
 	}
 
 	@Uri("/handleLong")
-	public void handleLong(@RequestParam final long param1, @RequestParam final Long param2) {
+	public void handleLong(@RequestParam final long param1, @RequestParam final Long param2,
+			@RequestParam(defaultValue = "3") final long param3) {
 	}
 
 	@Uri("/handleBoolean")
