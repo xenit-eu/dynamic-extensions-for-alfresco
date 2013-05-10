@@ -13,14 +13,28 @@ public class MockWebScriptResponse implements WrappingWebScriptResponse {
 
 	private WebScriptResponse next;
 
+	private Writer writer;
+
 	public MockWebScriptResponse next(final WebScriptResponse next) {
 		this.next = next;
 		return this;
 	}
 
+	public MockWebScriptResponse writer(final Writer writer) {
+		this.writer = writer;
+		return this;
+	}
+
+	/* Simulated operations */
+
 	@Override
 	public WebScriptResponse getNext() {
 		return next;
+	}
+
+	@Override
+	public Writer getWriter() throws IOException {
+		return writer;
 	}
 
 	/* Unimplemented */
@@ -59,12 +73,6 @@ public class MockWebScriptResponse implements WrappingWebScriptResponse {
 	public void setCache(final Cache cache) {
 		// TODO Auto-generated method stub
 
-	}
-
-	@Override
-	public Writer getWriter() throws IOException {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

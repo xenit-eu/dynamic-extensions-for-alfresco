@@ -6,7 +6,10 @@ import java.util.List;
 
 import nl.runnable.alfresco.webscripts.annotations.Attribute;
 import nl.runnable.alfresco.webscripts.annotations.Before;
+import nl.runnable.alfresco.webscripts.annotations.ResponseTemplate;
 import nl.runnable.alfresco.webscripts.annotations.Uri;
+
+import org.springframework.core.annotation.AnnotationUtils;
 
 /**
  * Parameter object for specifying {@link Uri}, {@link Before} and {@link Attribute}-annotated Web Script handler
@@ -49,6 +52,15 @@ public class HandlerMethods {
 			}
 		}
 		return handlerMethods;
+	}
+
+	public boolean useResponseTemplate() {
+		return (AnnotationUtils.findAnnotation(uriMethod, ResponseTemplate.class) != null);
+	}
+
+	public String getResponseTemplateName() {
+		final ResponseTemplate responseTemplate = AnnotationUtils.findAnnotation(uriMethod, ResponseTemplate.class);
+		return (responseTemplate != null ? responseTemplate.value() : null);
 	}
 
 	/**

@@ -139,9 +139,7 @@ public class AnnotationBasedWebScriptBuilder implements BeanFactoryAware {
 				if (uri != null) {
 					final AnnotationBasedWebScript webScript = createWebScript(beanName, uri,
 							handlerMethods.createForUriMethod(method));
-					if (webScript != null) {
-						webScripts.add(webScript);
-					}
+					webScripts.add(webScript);
 				}
 			}
 
@@ -161,9 +159,12 @@ public class AnnotationBasedWebScriptBuilder implements BeanFactoryAware {
 
 	protected AnnotationBasedWebScript createWebScript(final String beanName, final Uri uri,
 			final HandlerMethods handlerMethods) {
-		Assert.hasText(beanName, "Bean name cannot be empty.");
 		final DescriptionImpl description = new DescriptionImpl();
-		final String baseUri = beanFactory.findAnnotationOnBean(beanName, WebScript.class).baseUri();
+		final WebScript webScript = getBeanFactory().findAnnotationOnBean(beanName, WebScript.class);
+		if (StringUtils.hasText(webScript.defaultFormat())) {
+			description.setDefaultFormat(webScript.defaultFormat());
+		}
+		final String baseUri = webScript.baseUri();
 		handleHandlerMethodAnnotation(uri, handlerMethods.getUriMethod(), description, baseUri);
 		handleTypeAnnotations(beanName, description);
 		final String id = String.format("%s.%s.%s", generateId(beanName), handlerMethods.getUriMethod().getName(),

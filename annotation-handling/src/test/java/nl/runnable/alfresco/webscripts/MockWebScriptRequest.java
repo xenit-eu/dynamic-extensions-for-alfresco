@@ -24,6 +24,8 @@ class MockWebScriptRequest implements WrappingWebScriptRequest {
 
 	private Runtime runtime;
 
+	private String format;
+
 	/* Main operations */
 
 	public MockWebScriptRequest param(final String name, final String value) {
@@ -58,6 +60,11 @@ class MockWebScriptRequest implements WrappingWebScriptRequest {
 
 	public MockWebScriptRequest runtime(final Runtime runtime) {
 		this.runtime = runtime;
+		return this;
+	}
+
+	public MockWebScriptRequest format(final String format) {
+		this.format = format;
 		return this;
 	}
 
@@ -126,6 +133,11 @@ class MockWebScriptRequest implements WrappingWebScriptRequest {
 		return runtime;
 	}
 
+	@Override
+	public String getFormat() {
+		return format;
+	}
+
 	/* Remaining operations */
 
 	@Override
@@ -192,12 +204,6 @@ class MockWebScriptRequest implements WrappingWebScriptRequest {
 	public boolean isGuest() {
 		// TODO Auto-generated method stub
 		return false;
-	}
-
-	@Override
-	public String getFormat() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

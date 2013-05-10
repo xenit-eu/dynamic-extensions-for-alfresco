@@ -1,7 +1,6 @@
 package nl.runnable.alfresco.webscripts;
 
 import java.io.IOException;
-import java.io.Writer;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,13 +67,14 @@ public class AnnotationBasedWebScriptHandler {
 		try {
 			invokeAttributeHandlerMethods(webScript, annotationRequest, wrappedResponse);
 			invokeBeforeHandlerMethods(webScript, annotationRequest, wrappedResponse);
-			invokeUriHandlerMethod(webScript, annotationRequest, wrappedResponse);
+			final Object returnValue = invokeUriHandlerMethod(webScript, annotationRequest, wrappedResponse);
+			handleUriMethodReturnValue(webScript, annotationRequest, wrappedResponse, returnValue);
 		} catch (final Throwable e) {
 			invokeExceptionHandlerMethods(e, webScript, annotationRequest, wrappedResponse, model);
 		}
 	}
 
-	/* Utility operations */
+	/* Handler operations */
 
 	protected boolean invokeBeforeHandlerMethods(final AnnotationBasedWebScript webScript,
 			final AnnotationBasedWebScriptRequest request, final WebScriptResponse response) {
@@ -115,17 +115,22 @@ public class AnnotationBasedWebScriptHandler {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	protected void invokeUriHandlerMethod(final AnnotationBasedWebScript webScript,
+	protected Object invokeUriHandlerMethod(final AnnotationBasedWebScript webScript,
 			final AnnotationBasedWebScriptRequest request, final WebScriptResponseWrapper response) throws IOException {
 		final Method uriMethod = webScript.getHandlerMethods().getUriMethod();
 		final Object[] arguments = getHandlerMethodArgumentsResolver().resolveHandlerMethodArguments(uriMethod,
 				webScript.getHandler(), request, response);
 		uriMethod.setAccessible(true);
-		final Object returnValue = ReflectionUtils.invokeMethod(uriMethod, webScript.getHandler(), arguments);
-		if (returnValue instanceof Map) {
+		return ReflectionUtils.invokeMethod(uriMethod, webScript.getHandler(), arguments);
+	}
+
+	@SuppressWarnings("unchecked")
+	protected void handleUriMethodReturnValue(final AnnotationBasedWebScript webScript,
+			final AnnotationBasedWebScriptRequest request, final WebScriptResponseWrapper response,
+			final Object returnValue) throws IOException {
+		if (returnValue instanceof Map || webScript.getHandlerMethods().useResponseTemplate()) {
 			final Map<String, Object> model = request.getModel();
-			if (model != returnValue) {
+			if (returnValue instanceof Map && returnValue != model) {
 				model.putAll((Map<String, Object>) returnValue);
 			}
 			processHandlerMethodTemplate(webScript, request, model, response, response.getStatus());
@@ -154,6 +159,8 @@ public class AnnotationBasedWebScriptHandler {
 		}
 
 	}
+
+	/* Utility operations */
 
 	protected void translateException(final Throwable e) throws IOException {
 		if (e instanceof IOException) {
@@ -192,11 +199,27 @@ public class AnnotationBasedWebScriptHandler {
 
 	protected void processTemplate(final AnnotationBasedWebScript webScript, final WebScriptRequest request,
 			final Map<String, Object> model, final int status, final WebScriptResponse response) throws IOException {
-		final String format = request.getFormat();
 		final TemplateProcessorRegistry templateProcessorRegistry = request.getRuntime().getContainer()
 				.getTemplateProcessorRegistry();
 		final TemplateProcessor templateProcessor = templateProcessorRegistry.getTemplateProcessorByExtension("ftl");
+		final String format = request.getFormat();
+		String templateName = webScript.getHandlerMethods().getResponseTemplateName();
+		if (StringUtils.hasText(templateName) == false) {
+			templateName = generateTemplateName(templateProcessor, webScript, format, status);
+		}
+		if (templateProcessor.hasTemplate(templateName)) {
+			response.setContentType(Format.valueOf(format.toUpperCase()).mimetype());
+			response.setContentEncoding("utf-8");
+			addCacheControlHeaders(webScript, response);
+			templateProcessor.process(templateName, model, response.getWriter());
+		} else {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.getWriter().write(String.format("Could not find template: %s", templateName));
+		}
+	}
 
+	protected String generateTemplateName(final TemplateProcessor templateProcessor,
+			final AnnotationBasedWebScript webScript, final String format, final int status) {
 		final Class<?> handlerClass = AopUtils.getTargetClass(webScript.getHandler());
 		final String methodName = webScript.getHandlerMethods().getUriMethod().getName();
 		final String httpMethod = webScript.getDescription().getMethod().toLowerCase();
@@ -220,16 +243,7 @@ public class AnnotationBasedWebScriptHandler {
 		if (templateProcessor.hasTemplate(templateName) == false) {
 			templateName = defaultTemplateName;
 		}
-		if (templateProcessor.hasTemplate(templateName)) {
-			response.setContentType(Format.valueOf(format.toUpperCase()).mimetype());
-			response.setContentEncoding("utf-8");
-			addCacheControlHeaders(webScript, response);
-			templateProcessor.process(templateName, model, response.getWriter());
-		} else {
-			// Friendly error message
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			response.getWriter().write(String.format("Could not find template: %s", defaultTemplateName));
-		}
+		return templateName;
 	}
 
 	protected void addCacheControlHeaders(final AnnotationBasedWebScript webScript, final WebScriptResponse response) {
@@ -246,18 +260,6 @@ public class AnnotationBasedWebScriptHandler {
 		}
 		if (cacheValues.isEmpty() == false) {
 			response.setHeader("Cache-Control", StringUtils.collectionToDelimitedString(cacheValues, ", "));
-		}
-	}
-
-	protected void generateResponseFromTemplate(final WebScriptRequest request, final WebScriptResponse response,
-			final Map<String, Object> model, final TemplateProcessor templateProcessor, final String templateName,
-			final String format) throws IOException {
-		final Writer out = response.getWriter();
-		if (templateProcessor.hasTemplate(templateName)) {
-		} else {
-			// Friendly error message
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			out.write(String.format("Could not find template at path: %s", templateName));
 		}
 	}
 

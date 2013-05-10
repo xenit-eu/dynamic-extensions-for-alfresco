@@ -2,15 +2,13 @@ package nl.runnable.alfresco.spring;
 
 import java.lang.annotation.Annotation;
 
-import nl.runnable.alfresco.webscripts.annotations.WebScript;
-
 import org.mockito.Mockito;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.annotation.AnnotationUtils;
 
 /**
- * Creates a Mockito spy for every {@link WebScript}-annotated bean.
+ * Creates {@link Mockito} spies for beans of a given type or with a given annotation.
  * 
  * @author Laurens Fridael
  * 
