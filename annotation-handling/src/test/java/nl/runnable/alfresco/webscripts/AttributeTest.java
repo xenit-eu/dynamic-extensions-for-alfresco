@@ -1,5 +1,6 @@
 package nl.runnable.alfresco.webscripts;
 
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 import nl.runnable.alfresco.webscripts.annotations.Attribute;
 
@@ -18,8 +19,14 @@ public class AttributeTest extends AbstractWebScriptAnnotationsTest {
 	private AttributeHandler handler;
 
 	@Test
-	public void testHandleAttribute() {
-		handleGet("/handleAttribute");
-		verify(handler).handleAttribute("attribute1", "attribute2");
+	public void testHandleAttributeByName() {
+		handleGet("/handleAttributeByName");
+		verify(handler).handleAttributeByName("attribute1", "attribute2");
+	}
+
+	@Test
+	public void testHandleAttributeByType() {
+		handleGet("/handleAttributeByType");
+		verify(handler).handleAttributeByType(any(Person.class));
 	}
 }

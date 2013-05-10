@@ -8,9 +8,10 @@ import org.springframework.extensions.webscripts.Description.FormatStyle;
 import org.springframework.extensions.webscripts.Match;
 import org.springframework.extensions.webscripts.Runtime;
 import org.springframework.extensions.webscripts.WebScriptRequest;
+import org.springframework.extensions.webscripts.WrappingWebScriptRequest;
 import org.springframework.util.Assert;
 
-class AnnotationBasedWebScriptRequest implements WebScriptRequest {
+class AnnotationBasedWebScriptRequest implements WrappingWebScriptRequest {
 
 	/* State */
 
@@ -41,6 +42,15 @@ class AnnotationBasedWebScriptRequest implements WebScriptRequest {
 
 	Throwable getThrownException() {
 		return thrownException;
+	}
+
+	@Override
+	public WebScriptRequest getNext() {
+		if (webScriptRequest instanceof WrappingWebScriptRequest) {
+			return ((WrappingWebScriptRequest) webScriptRequest).getNext();
+		} else {
+			return null;
+		}
 	}
 
 	/* Delegate methods */

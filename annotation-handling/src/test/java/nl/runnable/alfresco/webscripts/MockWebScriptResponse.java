@@ -9,114 +9,104 @@ import org.springframework.extensions.webscripts.Runtime;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.extensions.webscripts.WrappingWebScriptResponse;
 
-/**
- * For internal use by {@link AnnotationBasedWebScriptHandler}. This class wraps a {@link WebScriptResponse} and
- * captures the status.
- * 
- * @author Laurens Fridael
- * 
- */
-class WebScriptResponseWrapper implements WrappingWebScriptResponse {
+public class MockWebScriptResponse implements WrappingWebScriptResponse {
 
-	private final WebScriptResponse response;
+	private WebScriptResponse next;
 
-	private Integer status;
-
-	/* Main operations */
-
-	WebScriptResponseWrapper(final WebScriptResponse response) {
-		this.response = response;
-	}
-
-	/**
-	 * Obtains the status code.
-	 * 
-	 * @return The status code or null if none has been set.
-	 */
-	Integer getStatus() {
-		return status;
+	public MockWebScriptResponse next(final WebScriptResponse next) {
+		this.next = next;
+		return this;
 	}
 
 	@Override
 	public WebScriptResponse getNext() {
-		if (response instanceof WrappingWebScriptResponse) {
-			return ((WrappingWebScriptResponse) response).getNext();
-		} else {
-			return null;
-		}
+		return next;
 	}
 
-	/* Delegated operations */
+	/* Unimplemented */
 
 	@Override
 	public void setStatus(final int status) {
-		this.status = status;
-		response.setStatus(status);
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public void setHeader(final String name, final String value) {
-		response.setHeader(name, value);
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public void addHeader(final String name, final String value) {
-		response.addHeader(name, value);
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public void setContentType(final String contentType) {
-		response.setContentType(contentType);
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public void setContentEncoding(final String contentEncoding) {
-		response.setContentEncoding(contentEncoding);
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public void setCache(final Cache cache) {
-		response.setCache(cache);
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public Writer getWriter() throws IOException {
-		return response.getWriter();
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	public OutputStream getOutputStream() throws IOException {
-		return response.getOutputStream();
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	public void reset() {
-		response.reset();
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public String encodeScriptUrl(final String url) {
-		return response.encodeScriptUrl(url);
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	public String encodeResourceUrl(final String url) {
-		return response.encodeResourceUrl(url);
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	public String getEncodeScriptUrlFunction(final String name) {
-		return response.getEncodeScriptUrlFunction(name);
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	public String getEncodeResourceUrlFunction(final String name) {
-		return response.getEncodeResourceUrlFunction(name);
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	public Runtime getRuntime() {
-		return response.getRuntime();
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

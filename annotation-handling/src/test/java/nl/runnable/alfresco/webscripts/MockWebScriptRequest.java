@@ -8,14 +8,21 @@ import org.springframework.extensions.webscripts.Description.FormatStyle;
 import org.springframework.extensions.webscripts.Match;
 import org.springframework.extensions.webscripts.Runtime;
 import org.springframework.extensions.webscripts.WebScriptRequest;
+import org.springframework.extensions.webscripts.WrappingWebScriptRequest;
 
-class MockWebScriptRequest implements WebScriptRequest {
+class MockWebScriptRequest implements WrappingWebScriptRequest {
 
 	private final Map<String, String[]> parametersByName = new HashMap<String, String[]>();
 
 	private final Map<String, String[]> headersByName = new HashMap<String, String[]>();
 
 	private Match serviceMatch;
+
+	private Content content;
+
+	private WebScriptRequest next;
+
+	private Runtime runtime;
 
 	/* Main operations */
 
@@ -36,6 +43,21 @@ class MockWebScriptRequest implements WebScriptRequest {
 
 	public MockWebScriptRequest headers(final String name, final String... values) {
 		headersByName.put(name, values);
+		return this;
+	}
+
+	public MockWebScriptRequest content(final Content content) {
+		this.content = content;
+		return this;
+	}
+
+	public MockWebScriptRequest next(final WebScriptRequest request) {
+		this.next = request;
+		return this;
+	}
+
+	public MockWebScriptRequest runtime(final Runtime runtime) {
+		this.runtime = runtime;
 		return this;
 	}
 
@@ -87,6 +109,21 @@ class MockWebScriptRequest implements WebScriptRequest {
 	@Override
 	public Match getServiceMatch() {
 		return serviceMatch;
+	}
+
+	@Override
+	public Content getContent() {
+		return content;
+	}
+
+	@Override
+	public WebScriptRequest getNext() {
+		return next;
+	}
+
+	@Override
+	public Runtime getRuntime() {
+		return runtime;
 	}
 
 	/* Remaining operations */
@@ -146,12 +183,6 @@ class MockWebScriptRequest implements WebScriptRequest {
 	}
 
 	@Override
-	public Content getContent() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Object parseContent() {
 		// TODO Auto-generated method stub
 		return null;
@@ -191,12 +222,6 @@ class MockWebScriptRequest implements WebScriptRequest {
 	public boolean forceSuccessStatus() {
 		// TODO Auto-generated method stub
 		return false;
-	}
-
-	@Override
-	public Runtime getRuntime() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

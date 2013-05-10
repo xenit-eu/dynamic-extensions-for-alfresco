@@ -17,8 +17,6 @@ import nl.runnable.alfresco.webscripts.annotations.Transaction;
 import nl.runnable.alfresco.webscripts.annotations.Uri;
 import nl.runnable.alfresco.webscripts.annotations.WebScript;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
@@ -42,8 +40,6 @@ import org.springframework.util.StringUtils;
  * 
  */
 public class AnnotationBasedWebScriptBuilder implements BeanFactoryAware {
-
-	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	/* Dependencies */
 

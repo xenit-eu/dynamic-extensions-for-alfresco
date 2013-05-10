@@ -3,18 +3,16 @@ package nl.runnable.alfresco.webscripts;
 import java.lang.annotation.Annotation;
 import java.util.Map;
 
-import nl.runnable.alfresco.webscripts.annotations.Attribute;
-
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 /**
- * Resolves {@link Map} handler method arguments to the attributes provided by {@link Attribute} methods.
+ * Resolves {@link Map} handler method arguments to the model.
  * 
  * @author Laurens Fridael
  * 
  */
-public class MapAttributesArgumentResolver implements ArgumentResolver<Map<String, Object>, Annotation> {
+public class ModelArgumentResolver implements ArgumentResolver<Map<String, Object>, Annotation> {
 
 	@Override
 	public boolean supports(final Class<?> parameterType, final Class<? extends Annotation> annotationType) {

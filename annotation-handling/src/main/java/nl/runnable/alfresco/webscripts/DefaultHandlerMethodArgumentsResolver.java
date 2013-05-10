@@ -36,21 +36,17 @@ public class DefaultHandlerMethodArgumentsResolver implements HandlerMethodArgum
 		argumentResolvers.add((ArgumentResolver) new RequestParamArgumentResolver(getStringValueConverter()));
 		argumentResolvers.add((ArgumentResolver) new UriVariableArgumentResolver(getStringValueConverter()));
 		argumentResolvers.add((ArgumentResolver) new AttributeArgumentResolver());
-		argumentResolvers.add((ArgumentResolver) new MapAttributesArgumentResolver());
+		argumentResolvers.add((ArgumentResolver) new ModelArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new ExceptionArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new HeaderArgumentResolver());
+		argumentResolvers.add((ArgumentResolver) new ContentArgumentResolver());
+		argumentResolvers.add((ArgumentResolver) new CommandArgumentResolver());
+		argumentResolvers.add((ArgumentResolver) new FileFieldArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new WebScriptRequestArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new WebScriptResponseArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new WebScriptSessionArgumentResolver());
-		argumentResolvers.add((ArgumentResolver) new WebScriptArgumentResolver());
-		argumentResolvers.add((ArgumentResolver) new MatchArgumentResolver());
-		argumentResolvers.add((ArgumentResolver) new RuntimeArgumentResolver());
-		argumentResolvers.add((ArgumentResolver) new ContentArgumentResolver());
-		argumentResolvers.add((ArgumentResolver) new CommandArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new HttpServletRequestArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new HttpServletResponseArgumentResolver());
-		argumentResolvers.add((ArgumentResolver) new TemplateProcessorRegistryArgumentResolver());
-		argumentResolvers.add((ArgumentResolver) new FileFieldArgumentResolver());
 	}
 
 	@Override
