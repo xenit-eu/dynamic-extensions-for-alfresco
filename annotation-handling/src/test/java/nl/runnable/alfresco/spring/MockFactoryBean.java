@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.aop;
+package nl.runnable.alfresco.spring;
 
 import org.mockito.Mockito;
 import org.springframework.beans.factory.FactoryBean;

@@ -234,18 +234,6 @@
 				<version>${mybatis.version}</version>
 				<scope>test</scope>
 			</dependency>
-			<dependency>
-				<groupId>org.kubek2k</groupId>
-				<artifactId>springockito</artifactId>
-				<version>${springockito.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.kubek2k</groupId>
-				<artifactId>springockito-annotations</artifactId>
-				<version>${springockito-annotations.version}</version>
-				<scope>test</scope>
-			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

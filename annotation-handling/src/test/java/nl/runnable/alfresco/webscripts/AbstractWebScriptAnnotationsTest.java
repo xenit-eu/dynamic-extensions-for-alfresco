@@ -12,12 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.extensions.webscripts.Match;
 import org.springframework.extensions.webscripts.Registry;
 import org.springframework.extensions.webscripts.WebScript;
-import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.ClassUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "webscript-integration-test-context.xml")
 public abstract class AbstractWebScriptAnnotationsTest {
 
 	static String webScriptIdFor(final HttpMethod httpMethod, final Class<?> clazz, final String method) {
@@ -32,38 +33,26 @@ public abstract class AbstractWebScriptAnnotationsTest {
 
 	/* Utility operations */
 
-	protected void handleRequest(final HttpMethod httpMethod, final Object mockedHandler, final String methodName,
-			final WebScriptRequest request, final WebScriptResponse response) {
-		try {
-			// Mockito extends the original object's class.
-			final Class<?> actualClass = mockedHandler.getClass().getSuperclass();
-			final AnnotationBasedWebScript webScript = webScriptFor(httpMethod, actualClass, methodName);
-			webScript.execute(request, response);
-		} catch (final IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	protected void handleGetRequest(final Object mockedHandler, final String methodName,
-			final WebScriptRequest request, final WebScriptResponse response) {
-		handleRequest(HttpMethod.GET, mockedHandler, methodName, request, response);
-	}
-
-	protected void handleGetRequest(final Object mockedHandler, final String methodName, final WebScriptRequest request) {
-		handleRequest(HttpMethod.GET, mockedHandler, methodName, request, Mockito.mock(WebScriptResponse.class));
-	}
-
-	protected void handleGetRequest(final HttpMethod httpMethod, final String uri) {
+	protected void handleRequest(final HttpMethod httpMethod, final String uri, final MockWebScriptRequest request,
+			final WebScriptResponse response) {
 		try {
 			final Match match = registry.findWebScript(httpMethod.name(), uri);
 			assertNotNull(String.format("Could not find annotation-based WebScript for method '%s' and URI '%s'.",
 					httpMethod, uri), match);
 			final WebScript webScript = match.getWebScript();
 			assertTrue("Not an annotation-based Web Script", webScript instanceof AnnotationBasedWebScript);
-			webScript.execute(new MockWebScriptRequest().setServiceMatch(match), Mockito.mock(WebScriptResponse.class));
+			webScript.execute(request.setServiceMatch(match), response);
 		} catch (final IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	protected void handleGet(final String uri, final MockWebScriptRequest request) {
+		handleRequest(HttpMethod.GET, uri, request, Mockito.mock(WebScriptResponse.class));
+	}
+
+	protected void handleGet(final String uri) {
+		handleGet(uri, new MockWebScriptRequest());
 	}
 
 	protected AnnotationBasedWebScript webScriptFor(final HttpMethod httpMethod, final Class<?> clazz,
