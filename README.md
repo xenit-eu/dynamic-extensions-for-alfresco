@@ -15,7 +15,7 @@ In progress: Milestone 5
 ------------------------
 
 * <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/wiki/Building-Alfresco-repository-extensions-for-Dynamic-Extensions-using-Gradle">Gradle plugin for building your own repository extensions</a>
-* Spring AOP support. (The Gradle plugin configures the OSGi bundle to avoid classpath issues.)
+* Spring AOP support. (The Gradle plugin configures the OSGi bundle so as to avoid classpath issues.)
 * `@RunAs` and `@RunAsSystem` annotations for running code as a particular user.
 * `@Transactional` annotation for running code within a transaction.
 * Improvements for building custom user interfaces on top of annotation-based Web Scripts.
@@ -61,7 +61,7 @@ The Enterprise editions are not part of the development and testing environment,
 Example extension code
 ----------------------
 
-This example Web Scripts examines a node and passed information to a Freemarker template:
+This example Web Script examines a node and passed information to a Freemarker template:
 ```java
 @ManagedBean
 @WebScript
@@ -80,7 +80,9 @@ public ExampleWebScript {
 }
 ```
 
-And here's the fragment from the Freemarker template:
+Note that this is an _annotation-based Web Script_. These types of Web Scripts are configured through Java annotations instead of `*.desc.xml` descriptors.
+
+Here's the accompanying Freemarker template fragment:
 
 ```html
 <table>
@@ -93,8 +95,7 @@ And here's the fragment from the Freemarker template:
 </table>
 ```
 
-
-This is all the code that is required. There's no need for Spring XML config or Web Script XML descriptors. Hot-reloading and reducing configuration overhead are not particularly novel concepts in the Java development world at large. Essentially, Dynamic Extensions modernizes the development of Alfresco repository extensions.
+This is all the code that is required; there's no need for Spring XML config or Web Script XML descriptors. Hot-reloading and reducing configuration overhead are not particularly novel concepts in the Java development world at large. Essentially, Dynamic Extensions modernizes the development of Alfresco repository extensions.
 
 The example above may be trivial, but the point is that, behind the scenes, services are still wired together through Spring and handled by the Web Script framework. Conceptually there is no real difference between a Dynamic Extension and a regular Alfresco extension. There's just less overhead and more convenience.
 
@@ -105,10 +106,12 @@ The <a href="https://github.com/lfridael/example-dynamic-extension">example Dyna
 
 Clone the example repo and explore it. Here are some pointers to get you going:
 
-* The <a href="https://github.com/lfridael/example-dynamic-extension/blob/master/pom.xml">pom.xml</a> serves as a template for your own Maven-based projects.
 * Annotation-based Web Scripts: <a href="https://github.com/lfridael/example-dynamic-extension/blob/master/src/main/java/nl/runnable/alfresco/examples/CategoriesWebScript.java">First example</a> and <a href="https://github.com/lfridael/example-dynamic-extension/blob/master/src/main/java/nl/runnable/alfresco/examples/HelloWebScript.java">another example</a>.
 * <a href="https://github.com/lfridael/example-dynamic-extension/blob/master/src/main/java/nl/runnable/alfresco/examples/ExampleActions.java">Annotation-based Action example</a >  and a <a href="https://github.com/lfridael/example-dynamic-extension/blob/master/src/main/java/nl/runnable/alfresco/examples/SetDescriptionWebScript.java">Web Script</a> that invokes the action.
 * <a href="https://github.com/lfridael/example-dynamic-extension/blob/master/src/main/java/nl/runnable/alfresco/examples/ExampleBehaviour.java">Annotation-based Behaviour example</a>.
 * <a href="https://github.com/lfridael/example-dynamic-extension/tree/master/src/main/java/nl/runnable/alfresco/examples">All examples</a>.
 
-More documentation on creating your own extensions will follow
+See also: <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/wiki/Building-Alfresco-repository-extensions-for-Dynamic-Extensions-using-Gradle">Gradle plugin for building your own repository extensions</a>
+
+More documentation on creating your own extensions will follow.
+
