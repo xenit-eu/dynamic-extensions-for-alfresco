@@ -10,7 +10,7 @@
 	<packaging>jar</packaging>
 	<name>Gradle plugin</name>
 	<properties>
-		<gradle.version>1.5</gradle.version>
+		<gradle.version>1.6</gradle.version>
 		<groovy.version>2.1.3</groovy.version>
 	</properties>
 	<description>
