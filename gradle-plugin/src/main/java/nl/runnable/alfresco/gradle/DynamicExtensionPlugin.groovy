@@ -37,7 +37,7 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 	}
 
 	void configureInstallBundleTask(Project project) {
-		def task = project.tasks.add("installBundle")
+		def task = project.tasks.create("installBundle")
 		task.dependsOn("build")
 		task.ext.installInDirectory = false
 		task.ext.installInRepository = false
