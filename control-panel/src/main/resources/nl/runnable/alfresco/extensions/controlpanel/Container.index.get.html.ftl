@@ -12,6 +12,8 @@
         <p>
           System Packages are Java libraries from the Alfresco repository. Classes from these packages
           are available to OSGi bundles.
+        </p>
+        <p>
           Dynamic Extensions scans the System Packages when it starts up for the first time and 
           caches them to speed up subsequent repository startups.
         </p>
@@ -21,23 +23,20 @@
             If you change any of the Java libraries in the repository application, you should delete 
             <#assign url = "${url.serviceContext}/api/node/content/${systemPackageCacheNodeRef?replace('://', '/')}" />
             the <a href="${url}" target="_blank">System Package cache</a>.
-            With the cache deleted, the System Packages will be rescanned on the next repository 
-            startup.
           </p>
           <form action="container/system-package-cache/delete" method="post" 
             data-title="Delete System Package cache"
             data-confirm="Are you sure you want to delete the System Package cache?">
             <button class="btn btn-danger">Delete System Package cache</button>
           </form>
+          <p>
+            The cache will be recreated the next time your restart the framework or the repository.
+          </p>
         <#else>
           <p>
             <em>The System Package cache cannot be found.</em>
           </p>
         </#if>
-        <p>
-          Note: the OSGI container cannot be restarted without the System Package cache.
-          Restart the repository to have the cache rebuilt on startup.
-        </p>
       </div>
       
       <h2>Services</h2>
@@ -57,6 +56,9 @@
       </p>
       <div class="well">
         <#if canRestartFramework>
+          <p>            
+            The Control Panel will be available while the OSGI container is restarting.
+          </p>
           <p>
             <a href="container/restart" 
               data-method="post" 
@@ -68,23 +70,14 @@
               Restart OSGi container
             </a>
           </p>
-          <p>            
-            The Control Panel will be available while the OSGI container is restarting.
-          </p>
           <p>
-            If you get a 404 Not Found, wait a few seconds, then refresh the page.
+            If you get a "Not Found" or "Service Unavailable" response, wait a few seconds, then 
+            refresh the page.
           </p>
         <#else>
-          <#if systemPackageCacheExists>
-            <p>
-              <em>The OSGi container cannot be restarted.</em>
-            </p>
-          <#else>
-            <p>
-              <em>The OSGi container cannot be restarted because the System Package cache is not 
-                available.</em>
-            </p>
-          </#if>
+          <p>
+            <em>The OSGi container cannot be restarted.</em>
+          </p>
         </#if>
       </div>
 

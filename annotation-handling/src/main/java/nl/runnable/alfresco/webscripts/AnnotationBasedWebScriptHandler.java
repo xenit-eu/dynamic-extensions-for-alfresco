@@ -13,12 +13,10 @@ import nl.runnable.alfresco.webscripts.annotations.Attribute;
 
 import org.springframework.aop.support.AopUtils;
 import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.extensions.webscripts.DefaultURLModelFactory;
 import org.springframework.extensions.webscripts.Description.RequiredCache;
 import org.springframework.extensions.webscripts.Format;
 import org.springframework.extensions.webscripts.TemplateProcessor;
 import org.springframework.extensions.webscripts.TemplateProcessorRegistry;
-import org.springframework.extensions.webscripts.URLModelFactory;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.util.Assert;
@@ -41,8 +39,6 @@ public class AnnotationBasedWebScriptHandler {
 	/* Dependencies */
 
 	private HandlerMethodArgumentsResolver handlerMethodArgumentsResolver = new DefaultHandlerMethodArgumentsResolver();
-
-	private URLModelFactory urlModelFactory = new DefaultURLModelFactory();;
 
 	/* Main Operations */
 
@@ -194,7 +190,7 @@ public class AnnotationBasedWebScriptHandler {
 	protected void populateTemplateModel(final Map<String, Object> model, final AnnotationBasedWebScript webScript,
 			final WebScriptRequest request) {
 		model.put(WEBSCRIPT_VARIABLE, webScript.getDescription());
-		model.put(URL_VARIABLE, getUrlModelFactory().createURLModel(request));
+		model.put(URL_VARIABLE, new UrlModel(request));
 	}
 
 	protected void processTemplate(final AnnotationBasedWebScript webScript, final WebScriptRequest request,
@@ -272,15 +268,6 @@ public class AnnotationBasedWebScriptHandler {
 
 	protected HandlerMethodArgumentsResolver getHandlerMethodArgumentsResolver() {
 		return handlerMethodArgumentsResolver;
-	}
-
-	public void setUrlModelFactory(final URLModelFactory urlModelFactory) {
-		Assert.notNull(urlModelFactory);
-		this.urlModelFactory = urlModelFactory;
-	}
-
-	protected URLModelFactory getUrlModelFactory() {
-		return urlModelFactory;
 	}
 
 }

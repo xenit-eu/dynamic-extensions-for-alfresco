@@ -145,7 +145,7 @@ public class Container extends AbstractControlPanelHandler {
 
 	@Attribute(Variables.CAN_RESTART_FRAMEWORK)
 	protected boolean canRestartFramework() {
-		return osgiConfiguration.getMode().isFrameworkRestartEnabled() && systemPackageCacheExists();
+		return osgiConfiguration.getMode().isFrameworkRestartEnabled();
 	}
 
 	@Attribute(Variables.SYSTEM_PACKAGE_CACHE_EXISTS)

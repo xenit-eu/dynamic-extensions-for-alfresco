@@ -18,7 +18,7 @@ public class RunAsSystemAdvice implements MethodInterceptor {
 
 	@Override
 	public Object invoke(final MethodInvocation invocation) throws Throwable {
-		return AuthenticationUtil.runAsSystem(new RunAsWork<Object>() {
+		return AuthenticationUtil.runAs(new RunAsWork<Object>() {
 
 			@Override
 			public Object doWork() throws Exception {
@@ -28,6 +28,6 @@ public class RunAsSystemAdvice implements MethodInterceptor {
 					throw new InvocationTargetException(e);
 				}
 			}
-		});
+		}, AuthenticationUtil.getSystemUserName());
 	}
 }

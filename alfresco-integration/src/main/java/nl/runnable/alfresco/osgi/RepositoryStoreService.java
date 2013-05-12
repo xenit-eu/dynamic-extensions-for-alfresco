@@ -1,5 +1,8 @@
 package nl.runnable.alfresco.osgi;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
@@ -13,9 +16,6 @@ import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.alfresco.service.namespace.QName;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Provides operations for storing OSGi bundles and framework configuration in the repository.
@@ -139,7 +139,7 @@ public class RepositoryStoreService {
 
 	protected NodeRef createFolder(final NodeRef parentFolder, final QName qName, final String name,
 			final String description) {
-		return AuthenticationUtil.runAsSystem(new RunAsWork<NodeRef>() {
+		return AuthenticationUtil.runAs(new RunAsWork<NodeRef>() {
 
 			@Override
 			public NodeRef doWork() throws Exception {
@@ -156,12 +156,12 @@ public class RepositoryStoreService {
 					return null;
 				}
 			}
-		});
+		}, AuthenticationUtil.getSystemUserName());
 	}
 
 	/**
 	 * Obtains the child with the given association type, {@link QName} of the given node.
-	 *
+	 * 
 	 * @param nodeRef
 	 * @param assocName
 	 * @return the child with the given name or null if nodeRef is null
