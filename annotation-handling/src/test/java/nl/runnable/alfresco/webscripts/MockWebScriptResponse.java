@@ -15,6 +15,8 @@ public class MockWebScriptResponse implements WrappingWebScriptResponse {
 
 	private Writer writer;
 
+	private int status;
+
 	public MockWebScriptResponse next(final WebScriptResponse next) {
 		this.next = next;
 		return this;
@@ -37,13 +39,16 @@ public class MockWebScriptResponse implements WrappingWebScriptResponse {
 		return writer;
 	}
 
-	/* Unimplemented */
-
 	@Override
 	public void setStatus(final int status) {
-		// TODO Auto-generated method stub
-
+		this.status = status;
 	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	/* Unimplemented */
 
 	@Override
 	public void setHeader(final String name, final String value) {

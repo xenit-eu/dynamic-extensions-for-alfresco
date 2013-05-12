@@ -6,11 +6,12 @@ import java.io.IOException;
 
 import nl.runnable.alfresco.webscripts.annotations.HttpMethod;
 
+import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.extensions.webscripts.Match;
-import org.springframework.extensions.webscripts.Registry;
+import org.springframework.extensions.webscripts.UriIndex;
 import org.springframework.extensions.webscripts.WebScript;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.test.context.ContextConfiguration;
@@ -29,18 +30,22 @@ public abstract class AbstractWebScriptAnnotationsTest {
 	/* Dependencies */
 
 	@Autowired
-	private Registry registry;
+	private UriIndex uriIndex;
+
+	@Before
+	public void setup() {
+		uriIndex.clear();
+	}
 
 	/* Utility operations */
 
 	protected void handleRequest(final HttpMethod httpMethod, final String uri, final MockWebScriptRequest request,
 			final WebScriptResponse response) {
 		try {
-			final Match match = registry.findWebScript(httpMethod.name(), uri);
+			final Match match = uriIndex.findWebScript(httpMethod.name(), uri);
 			assertNotNull(String.format("Could not find annotation-based WebScript for method '%s' and URI '%s'.",
 					httpMethod, uri), match);
 			final WebScript webScript = match.getWebScript();
-			assertTrue("Not an annotation-based Web Script", webScript instanceof AnnotationBasedWebScript);
 			webScript.execute(request.setServiceMatch(match), response);
 		} catch (final IOException e) {
 			throw new RuntimeException(e);
@@ -57,14 +62,6 @@ public abstract class AbstractWebScriptAnnotationsTest {
 
 	protected void handleGet(final String uri) {
 		handleGet(uri, new MockWebScriptRequest());
-	}
-
-	protected AnnotationBasedWebScript webScriptFor(final HttpMethod httpMethod, final Class<?> clazz,
-			final String method) {
-		final String webScriptId = webScriptIdFor(httpMethod, clazz, method);
-		final AnnotationBasedWebScript webScript = (AnnotationBasedWebScript) registry.getWebScript(webScriptId);
-		assertNotNull(String.format("Could not find annotation-based WebScript for '%s'", webScriptId), webScript);
-		return webScript;
 	}
 
 }

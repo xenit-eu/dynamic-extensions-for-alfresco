@@ -42,7 +42,7 @@ import org.osgi.framework.launch.Framework;
  * 
  */
 @ManagedBean
-@WebScript(baseUri = "/dynamic-extensions/container")
+@WebScript(baseUri = "/dynamic-extensions/container", defaultFormat = "html")
 @Authentication(AuthenticationType.ADMIN)
 @Cache(neverCache = true)
 public class Container extends AbstractControlPanelHandler {
@@ -66,17 +66,17 @@ public class Container extends AbstractControlPanelHandler {
 
 	/* Main operations */
 
-	@Uri(method = HttpMethod.GET, defaultFormat = "html")
+	@Uri(method = HttpMethod.GET)
 	public Map<String, Object> index() {
 		return Collections.emptyMap();
 	}
 
-	@Uri(method = HttpMethod.GET, value = "/system-packages", defaultFormat = "html")
+	@Uri(method = HttpMethod.GET, value = "/system-packages")
 	public Map<String, Object> systemPackages() {
 		return model(Variables.SYSTEM_PACKAGES, getSystemPackages());
 	}
 
-	@Uri(method = HttpMethod.GET, value = "/services", defaultFormat = "html")
+	@Uri(method = HttpMethod.GET, value = "/services")
 	public Map<String, Object> services() {
 		return model(Variables.SERVICES_BY_BUNDLE, getServicesByBundle());
 	}

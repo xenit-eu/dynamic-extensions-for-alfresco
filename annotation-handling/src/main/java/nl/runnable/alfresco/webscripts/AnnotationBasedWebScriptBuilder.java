@@ -3,6 +3,7 @@ package nl.runnable.alfresco.webscripts;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -62,7 +63,7 @@ public class AnnotationBasedWebScriptBuilder implements BeanFactoryAware {
 		final ConfigurableListableBeanFactory beanFactory = getBeanFactory();
 		final Class<?> beanType = beanFactory.getType(beanName);
 		if (beanType == null) {
-			return null;
+			return Collections.emptyList();
 		}
 		final WebScript webScriptAnnotation = beanFactory.findAnnotationOnBean(beanName, WebScript.class);
 		if (webScriptAnnotation == null) {

@@ -18,6 +18,8 @@ class BeanNames {
 
 	static final String ANNOTATION_BASED_WEB_SCRIPT_REGISTRY = "annotationBasedWebScriptRegistry";
 
+	static final String ANNOTATION_BASED_WEB_SCRIPT_REGISTRAR = "annotationBasedWebScriptRegistrar";
+
 	static final String BEHAVIOUR_PROXY_FACTORY = "behaviourProxyFactory";
 
 	static final String COMPOSITE_REGISTRY_MANAGER = "compositeRegistryManager";
