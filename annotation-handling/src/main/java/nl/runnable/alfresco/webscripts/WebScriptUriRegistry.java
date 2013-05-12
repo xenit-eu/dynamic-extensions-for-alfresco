@@ -46,7 +46,7 @@ public class WebScriptUriRegistry implements UriIndex, BeanPostProcessor, Initia
 
 	private final List<WebScript> webScripts = new ArrayList<WebScript>();
 
-	private final Map<String, WebScriptProxy> webScriptProxiesByUri = new HashMap<String, WebScriptProxy>();
+	private final Map<UriMethod, WebScriptProxy> webScriptProxiesByUriMethod = new HashMap<UriMethod, WebScriptProxy>();
 
 	private final Lock lock = new ReentrantLock();
 
@@ -100,7 +100,7 @@ public class WebScriptUriRegistry implements UriIndex, BeanPostProcessor, Initia
 		lock.lock();
 		try {
 			uriIndex.clear();
-			webScriptProxiesByUri.clear();
+			webScriptProxiesByUriMethod.clear();
 			registerPendingWebScripts();
 		} finally {
 			lock.unlock();
@@ -155,11 +155,12 @@ public class WebScriptUriRegistry implements UriIndex, BeanPostProcessor, Initia
 				logger.debug("Registering Web Script '{}' for URI '{}'", webScript.getDescription().getId(), uri);
 			}
 			final WebScriptProxy webScriptProxy;
-			if (webScriptProxiesByUri.containsKey(uri) == false) {
+			final UriMethod key = UriMethod.forUriAndMethod(uri, webScript.getDescription().getMethod());
+			if (webScriptProxiesByUriMethod.containsKey(key) == false) {
 				webScriptProxy = new WebScriptProxy(webScript);
-				webScriptProxiesByUri.put(uri, webScriptProxy);
+				webScriptProxiesByUriMethod.put(key, webScriptProxy);
 			} else {
-				webScriptProxy = webScriptProxiesByUri.get(uri);
+				webScriptProxy = webScriptProxiesByUriMethod.get(key);
 				webScriptProxy.setWebScript(webScript);
 			}
 			uriIndex.registerUri(webScriptProxy, uri);
@@ -169,8 +170,9 @@ public class WebScriptUriRegistry implements UriIndex, BeanPostProcessor, Initia
 	private void doUnregisterWebScript(final WebScript webScript) {
 		webScripts.remove(webScript);
 		for (final String uri : webScript.getDescription().getURIs()) {
-			if (webScriptProxiesByUri.containsKey(uri)) {
-				final WebScriptProxy webScriptProxy = webScriptProxiesByUri.get(uri);
+			final UriMethod key = UriMethod.forUriAndMethod(uri, webScript.getDescription().getMethod());
+			if (webScriptProxiesByUriMethod.containsKey(key)) {
+				final WebScriptProxy webScriptProxy = webScriptProxiesByUriMethod.get(key);
 				webScriptProxy.setWebScript(unavailableWebScript);
 			}
 		}

@@ -16,9 +16,7 @@ import org.springframework.util.Assert;
 /**
  * {@link WebScript} proxy for internal use by {@link WebScriptUriRegistry}.
  * <p>
- * This implementation wraps an existing {@link WebScript}. It attempts to follow the {@link WebScript} contract as
- * closely as possible, even though the {@link #init(Container, Description)} and
- * {@link #setURLModelFactory(URLModelFactory)} will most likely not be called.
+ * This implementation wraps an existing {@link WebScript}.
  */
 class WebScriptProxy implements WebScript {
 
