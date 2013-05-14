@@ -6,7 +6,7 @@ package nl.runnable.alfresco.blueprint;
  * @author Laurens Fridael
  * 
  */
-class BeanNames {
+public class BeanNames {
 
 	static final String ANNOTATION_BASED_ACTION_REGISTRAR = "annotationBasedActionRegistrar";
 
