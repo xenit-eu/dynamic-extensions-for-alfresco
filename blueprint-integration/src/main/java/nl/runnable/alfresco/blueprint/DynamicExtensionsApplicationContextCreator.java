@@ -4,8 +4,13 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import org.alfresco.service.transaction.TransactionService;
 import org.eclipse.gemini.blueprint.context.DelegatedExecutionOsgiBundleApplicationContext;
+import org.eclipse.gemini.blueprint.context.OsgiBundleApplicationContextExecutor;
+import org.eclipse.gemini.blueprint.context.support.ContextClassLoaderProvider;
+import org.eclipse.gemini.blueprint.context.support.DefaultContextClassLoaderProvider;
 import org.eclipse.gemini.blueprint.extender.OsgiApplicationContextCreator;
+import org.eclipse.gemini.blueprint.extender.internal.dependencies.startup.DependencyWaiterApplicationContextExecutor;
 import org.eclipse.gemini.blueprint.extender.support.ApplicationContextConfiguration;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -14,6 +19,7 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 
@@ -94,6 +100,11 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 		final DynamicExtensionsApplicationContext applicationContext = new DynamicExtensionsApplicationContext(
 				configurationLocations, parentApplicationContext);
 		applicationContext.setBundleContext(bundleContext);
+
+		final DefaultContextClassLoaderProvider contextClassLoaderProvider = new DefaultContextClassLoaderProvider();
+		contextClassLoaderProvider.setBeanClassLoader(ApplicationContext.class.getClassLoader());
+		applicationContext.setContextClassLoaderProvider(contextClassLoaderProvider);
+
 		applicationContext.setPublishContextAsService(config.isPublishContextAsService());
 		if (StringUtils.hasText(getModelLocationPattern())) {
 			applicationContext.setModelLocationPattern(getModelLocationPattern());
@@ -177,5 +188,4 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 	protected String getModelLocationPattern() {
 		return modelLocationPattern;
 	}
-
 }
