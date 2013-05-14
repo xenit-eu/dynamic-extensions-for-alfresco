@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
 /**
  * Provides {@link SystemPackage}s by scanning the web application for Java packages.
@@ -65,7 +66,7 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<Set<S
 
 	protected Set<SystemPackage> createSystemPackages() {
 		Set<SystemPackage> packages = getCachedPackages();
-		final boolean cacheDoesNotExist = packages == null;
+		final boolean cacheDoesNotExist = CollectionUtils.isEmpty(packages);
 
 		if (packageCacheMode.isReadFromCache() == false || cacheDoesNotExist) {
 			packages = javaPackageScanner.getObject().scanWebApplicationPackages();
@@ -142,7 +143,7 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<Set<S
 		this.fileFolderService = fileFolderService;
 	}
 
-	public void setPackageCacheMode(PackageCacheMode packageCacheMode) {
+	public void setPackageCacheMode(final PackageCacheMode packageCacheMode) {
 		this.packageCacheMode = packageCacheMode;
 	}
 }

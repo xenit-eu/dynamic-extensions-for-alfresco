@@ -17,7 +17,7 @@ public class FrameworkHelper {
 	 * Restarts the Framework.
 	 */
 	@RunAsSystem
-	@Transactional(readOnly = true)
+	@Transactional
 	public void restartFramework() {
 		frameworkService.restartFramework();
 	}

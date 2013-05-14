@@ -6,8 +6,6 @@ import nl.runnable.alfresco.actions.AnnotationBasedActionRegistrar;
 import nl.runnable.alfresco.aop.DynamicExtensionsAdvisorAutoProxyCreator;
 import nl.runnable.alfresco.models.M2ModelListFactoryBean;
 import nl.runnable.alfresco.models.ModelRegistrar;
-import nl.runnable.alfresco.osgi.webscripts.CompositeRegistry;
-import nl.runnable.alfresco.osgi.webscripts.CompositeRegistryManager;
 import nl.runnable.alfresco.osgi.webscripts.SearchPathRegistry;
 import nl.runnable.alfresco.osgi.webscripts.SearchPathRegistryManager;
 import nl.runnable.alfresco.policy.AnnotationBasedBehaviourRegistrar;
@@ -15,9 +13,10 @@ import nl.runnable.alfresco.policy.DefaultBehaviourProxyFactory;
 import nl.runnable.alfresco.policy.ProxyPolicyComponentFactoryBean;
 import nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptBuilder;
 import nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptHandler;
-import nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptRegistry;
+import nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptRegistrar;
 import nl.runnable.alfresco.webscripts.DefaultHandlerMethodArgumentsResolver;
 import nl.runnable.alfresco.webscripts.StringValueConverter;
+import nl.runnable.alfresco.webscripts.WebScriptUriRegistry;
 
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.descriptor.Descriptor;
@@ -99,7 +98,7 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 
 	@Override
 	protected DefaultListableBeanFactory createBeanFactory() {
-		return new OsgiAutowireServiceBeanFactory(getInternalParentBeanFactory(), getBundleContext());
+		return new OsgiAutowireBeanFactory(getInternalParentBeanFactory(), getBundleContext());
 	}
 
 	@Override
@@ -272,21 +271,15 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 							.addPropertyReference("annotationBasedWebScriptHandler",
 									BeanNames.ANNOTATION_BASED_WEB_SCRIPT_HANDLER).getBeanDefinition());
 		}
-		if (beanFactory.containsBeanDefinition(BeanNames.ANNOTATION_BASED_WEB_SCRIPT_REGISTRY) == false) {
+		if (beanFactory.containsBeanDefinition(BeanNames.ANNOTATION_BASED_WEB_SCRIPT_REGISTRAR) == false) {
 			beanFactory.registerBeanDefinition(
-					BeanNames.ANNOTATION_BASED_WEB_SCRIPT_REGISTRY,
+					BeanNames.ANNOTATION_BASED_WEB_SCRIPT_REGISTRAR,
 					BeanDefinitionBuilder
-							.rootBeanDefinition(AnnotationBasedWebScriptRegistry.class)
+							.rootBeanDefinition(AnnotationBasedWebScriptRegistrar.class)
 							.addPropertyReference("annotationBasedWebScriptBuilder",
-									BeanNames.ANNOTATION_BASED_WEB_SCRIPT_BUILDER).getBeanDefinition());
-		}
-		if (beanFactory.containsBeanDefinition(BeanNames.COMPOSITE_REGISTRY_MANAGER) == false) {
-			beanFactory.registerBeanDefinition(
-					BeanNames.COMPOSITE_REGISTRY_MANAGER,
-					BeanDefinitionBuilder.rootBeanDefinition(CompositeRegistryManager.class)
-							.addPropertyValue("compositeRegistry", getService(CompositeRegistry.class))
-							.addPropertyReference("registries", BeanNames.ANNOTATION_BASED_WEB_SCRIPT_REGISTRY)
-							.setInitMethodName("registerRegistries").setDestroyMethodName("unregisterRegistries")
+									BeanNames.ANNOTATION_BASED_WEB_SCRIPT_BUILDER)
+							.addPropertyValue("webScriptUriRegistry", getService(WebScriptUriRegistry.class))
+							.setInitMethodName("registerWebScripts").setDestroyMethodName("unregisterWebScripts")
 							.getBeanDefinition());
 		}
 		if (beanFactory.containsBeanDefinition(BeanNames.SEARCH_PATH_REGISTRY_MANAGER) == false) {

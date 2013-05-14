@@ -10,29 +10,11 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		See the configuration files for more information.
 	</description>
 
-	<bean id="osgi.container.HostServices" class="nl.runnable.alfresco.osgi.spring.ListMergingFactoryBean">
-		<property name="lists">
-			<list>
-				<ref bean="osgi.container.CoreServices" />
-				<ref bean="osgi.container.UserServices" />
-			</list>
-		</property>
-	</bean>
-
-	<bean id="osgi.container.CoreServices" class="nl.runnable.alfresco.osgi.spring.ServiceDefinitionConfigurationFactoryBean">
+	<bean id="osgi.container.HostServices" class="nl.runnable.alfresco.osgi.spring.ServiceDefinitionConfigurationFactoryBean">
 		<property name="configurations">
 			<list>
-				<value>classpath:/META-INF/spring/osgi-container/services/alfresco-public-services.txt</value>
-				<value>classpath:/META-INF/spring/osgi-container/services/alfresco-internal-services.txt</value>
+				<value>classpath:/META-INF/spring/osgi-container/services/alfresco-services.txt</value>
 				<value>classpath:/META-INF/spring/osgi-container/services/osgi-container-services.txt</value>
-			</list>
-		</property>
-	</bean>
-
-	<bean id="osgi.container.UserServices" class="nl.runnable.alfresco.osgi.spring.ServiceDefinitionConfigurationFactoryBean">
-		<property name="configurationLocations">
-			<list>
-				<value>classpath*:/dynamic-extensions/configuration/services/*.txt</value>
 			</list>
 		</property>
 	</bean>

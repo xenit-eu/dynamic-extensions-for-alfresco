@@ -6,7 +6,10 @@ import java.util.List;
 
 import nl.runnable.alfresco.webscripts.annotations.Attribute;
 import nl.runnable.alfresco.webscripts.annotations.Before;
+import nl.runnable.alfresco.webscripts.annotations.ResponseTemplate;
 import nl.runnable.alfresco.webscripts.annotations.Uri;
+
+import org.springframework.core.annotation.AnnotationUtils;
 
 /**
  * Parameter object for specifying {@link Uri}, {@link Before} and {@link Attribute}-annotated Web Script handler
@@ -23,6 +26,8 @@ public class HandlerMethods {
 
 	private Method uriMethod;
 
+	private final List<ExceptionHandlerMethod> exceptionHandlerMethods = new ArrayList<ExceptionHandlerMethod>();
+
 	public List<Method> getBeforeMethods() {
 		return beforeMethods;
 	}
@@ -35,6 +40,29 @@ public class HandlerMethods {
 		return uriMethod;
 	}
 
+	public List<ExceptionHandlerMethod> getExceptionHandlerMethods() {
+		return exceptionHandlerMethods;
+	}
+
+	public List<Method> findExceptionHandlers(final Throwable exception) {
+		final List<Method> handlerMethods = new ArrayList<Method>(1);
+		for (final ExceptionHandlerMethod exceptionHandlerMethod : getExceptionHandlerMethods()) {
+			if (exceptionHandlerMethod.canHandle(exception)) {
+				handlerMethods.add(exceptionHandlerMethod.getMethod());
+			}
+		}
+		return handlerMethods;
+	}
+
+	public boolean useResponseTemplate() {
+		return (AnnotationUtils.findAnnotation(uriMethod, ResponseTemplate.class) != null);
+	}
+
+	public String getResponseTemplateName() {
+		final ResponseTemplate responseTemplate = AnnotationUtils.findAnnotation(uriMethod, ResponseTemplate.class);
+		return (responseTemplate != null ? responseTemplate.value() : null);
+	}
+
 	/**
 	 * Creates a new instance for the specified {@link Uri}-annotated method.
 	 * 
@@ -45,6 +73,7 @@ public class HandlerMethods {
 		handlerMethods.beforeMethods.addAll(getBeforeMethods());
 		handlerMethods.attributeMethods.addAll(getAttributeMethods());
 		handlerMethods.uriMethod = uriMethod;
+		handlerMethods.exceptionHandlerMethods.addAll(getExceptionHandlerMethods());
 		return handlerMethods;
 	}
 

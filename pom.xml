@@ -12,8 +12,8 @@
 		<!-- Dependency versions -->
 		<alfresco.version>4.0.e</alfresco.version>
 		<spring.version>3.0.0.RELEASE</spring.version>
-		<spring-surf.version>1.2.0-M3</spring-surf.version>
-		<spring-webscripts.version>1.2.0-M3</spring-webscripts.version>
+		<spring-surf.version>1.2.0-M4</spring-surf.version>
+		<spring-webscripts.version>1.2.0-M4</spring-webscripts.version>
 		<servlet-api.version>2.5</servlet-api.version>
 		<javax-inject.version>1</javax-inject.version>
 		<geronimo-annotation.version>1.0.1</geronimo-annotation.version>
@@ -232,18 +232,6 @@
 				<groupId>org.mybatis</groupId>
 				<artifactId>mybatis</artifactId>
 				<version>${mybatis.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.kubek2k</groupId>
-				<artifactId>springockito</artifactId>
-				<version>${springockito.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.kubek2k</groupId>
-				<artifactId>springockito-annotations</artifactId>
-				<version>${springockito-annotations.version}</version>
 				<scope>test</scope>
 			</dependency>
 		</dependencies>

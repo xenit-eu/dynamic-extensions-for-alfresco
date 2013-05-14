@@ -7,11 +7,8 @@ import java.lang.annotation.Target;
 import java.util.Map;
 
 /**
- * Indicates that {@link Uri}-annotated handler methods use a response template.
- * <p>
- * This annotation provides an alternative to having the handler method return a {@link Map}. Furthermore, it allows for
- * specifying a custom template path. By default, the implementation determines the template path using Web Script
- * conventions.
+ * Indicates that {@link Uri}-annotated handler methods use a response template. This annotation provides an alternative
+ * to having the handler method return a {@link Map}. It also allows for specifying a custom template path.
  * 
  * @author Laurens Fridael
  * 
@@ -21,12 +18,11 @@ import java.util.Map;
 public @interface ResponseTemplate {
 
 	/**
-	 * The base template path. The implementation interprets the template path as relative to the handler class.
+	 * The path to the template. If not specified, the implementation will generate a template path based on Web Script
+	 * conventions.
 	 * 
 	 * @return
 	 */
 	String value() default "";
-
-	String nameSuffix() default "";
 
 }

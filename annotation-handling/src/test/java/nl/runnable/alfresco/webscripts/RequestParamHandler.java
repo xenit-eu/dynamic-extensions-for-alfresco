@@ -13,7 +13,7 @@ import org.alfresco.service.namespace.QName;
 @WebScript
 public class RequestParamHandler {
 
-	@Uri("/handleNamedParameters")
+	@Uri("/handleNaming")
 	public void handleNaming(@RequestParam("explicitlyNamed") final String param,
 			@RequestParam final String implicitlyNamed) {
 	}
@@ -24,14 +24,13 @@ public class RequestParamHandler {
 
 	@Uri("/handleArray")
 	public void handleArray(@RequestParam final String[] params) {
-		System.out.println(params);
 	}
 
-	@Uri("/handleDelimited")
+	@Uri("/handleDelimitedValues")
 	public void handleDelimitedValues(@RequestParam(delimiter = ",") final String[] params) {
 	}
 
-	@Uri("/handleStrings")
+	@Uri("/handleString")
 	public void handleString(@RequestParam final String param1, @RequestParam(required = false) final String param2) {
 	}
 
@@ -40,7 +39,8 @@ public class RequestParamHandler {
 	}
 
 	@Uri("/handleLong")
-	public void handleLong(@RequestParam final long param1, @RequestParam final Long param2) {
+	public void handleLong(@RequestParam final long param1, @RequestParam final Long param2,
+			@RequestParam(defaultValue = "3") final long param3) {
 	}
 
 	@Uri("/handleBoolean")

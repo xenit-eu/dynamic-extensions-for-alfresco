@@ -7,6 +7,7 @@ import java.io.Writer;
 import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.Runtime;
 import org.springframework.extensions.webscripts.WebScriptResponse;
+import org.springframework.extensions.webscripts.WrappingWebScriptResponse;
 
 /**
  * For internal use by {@link AnnotationBasedWebScriptHandler}. This class wraps a {@link WebScriptResponse} and
@@ -15,7 +16,7 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
  * @author Laurens Fridael
  * 
  */
-class WebScriptResponseWrapper implements WebScriptResponse {
+class WebScriptResponseWrapper implements WrappingWebScriptResponse {
 
 	private final WebScriptResponse response;
 
@@ -34,6 +35,15 @@ class WebScriptResponseWrapper implements WebScriptResponse {
 	 */
 	Integer getStatus() {
 		return status;
+	}
+
+	@Override
+	public WebScriptResponse getNext() {
+		if (response instanceof WrappingWebScriptResponse) {
+			return ((WrappingWebScriptResponse) response).getNext();
+		} else {
+			return null;
+		}
 	}
 
 	/* Delegated operations */

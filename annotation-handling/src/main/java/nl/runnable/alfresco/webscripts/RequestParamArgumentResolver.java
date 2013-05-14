@@ -70,7 +70,7 @@ public class RequestParamArgumentResolver implements ArgumentResolver<Object, Re
 			value = getStringValueConverter().convertStringValue(parameterType, parameterValue);
 		} else {
 			if (StringUtils.hasText(requestParam.defaultValue())) {
-				value = requestParam.defaultValue();
+				value = getStringValueConverter().convertStringValue(parameterType, requestParam.defaultValue());
 			}
 			if (requestParam.required() && value == null) {
 				throw new IllegalStateException(String.format("Request parameter not available: %s", parameterName));

@@ -10,7 +10,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		these packages are then available to Bundles managed by the OSGi Framework.
 	</description>
 
-	<bean id="osgi.container.SystemPackages" class="nl.runnable.alfresco.osgi.spring.SetCombinationFactoryBean">
+	<bean id="osgi.container.SystemPackages" class="nl.runnable.alfresco.osgi.spring.ConfigurationValuesFactoryBean">
 		<property name="sets">
 			<list>
 				<ref bean="osgi.container.WebServerJavaPackages" />
@@ -45,15 +45,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	</bean>
 
 	<bean id="osgi.container.JavaPackageScanner" class="nl.runnable.alfresco.osgi.JavaPackageScanner" scope="prototype">
-		<property name="libraryVersionDetectors">
-			<list>
-				<bean class="nl.runnable.alfresco.osgi.spring.BundleVersionDetector" scope="prototype" />
-				<bean class="nl.runnable.alfresco.osgi.spring.AlfrescoLibraryVersionDetector" scope="prototype">
-					<property name="descriptorService" ref="DescriptorService" />
-				</bean>
-				<bean class="nl.runnable.alfresco.osgi.spring.SpringLibraryVersionDetector" scope="prototype" />
-			</list>
-		</property>
+		<property name="descriptorService" ref="DescriptorService" />
 	</bean>
 
 </beans>

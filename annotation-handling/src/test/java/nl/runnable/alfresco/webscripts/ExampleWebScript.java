@@ -1,33 +1,57 @@
 package nl.runnable.alfresco.webscripts;
 
-import nl.runnable.alfresco.webscripts.annotations.Authentication;
-import nl.runnable.alfresco.webscripts.annotations.AuthenticationType;
-import nl.runnable.alfresco.webscripts.annotations.HttpMethod;
-import nl.runnable.alfresco.webscripts.annotations.Transaction;
-import nl.runnable.alfresco.webscripts.annotations.TransactionType;
-import nl.runnable.alfresco.webscripts.annotations.Uri;
-import nl.runnable.alfresco.webscripts.annotations.UriVariable;
-import nl.runnable.alfresco.webscripts.annotations.WebScript;
+import java.io.IOException;
+import java.util.ResourceBundle;
 
-import org.springframework.stereotype.Component;
+import org.springframework.extensions.webscripts.Container;
+import org.springframework.extensions.webscripts.Description;
+import org.springframework.extensions.webscripts.DescriptionImpl;
+import org.springframework.extensions.webscripts.URLModelFactory;
+import org.springframework.extensions.webscripts.WebScript;
+import org.springframework.extensions.webscripts.WebScriptRequest;
+import org.springframework.extensions.webscripts.WebScriptResponse;
 
-/**
- * Example annotation-based Web Script for integration tests.
- * 
- * @author Laurens Fridael
- * 
- */
-@Component
-@WebScript(description = "Example web script used for test cases.")
-@Authentication(value = AuthenticationType.USER, runAs = "admin")
-@Transaction(value = TransactionType.REQUIRES_NEW, readOnly = true)
-public class ExampleWebScript {
+class ExampleWebScript implements WebScript {
 
-	@Uri(value = "/path/to/resource/{id}", method = HttpMethod.GET)
-	public void handleGetRequest(@UriVariable("id") final String id) {
+	/* State */
+
+	private final int status;
+
+	private final DescriptionImpl description;
+
+	ExampleWebScript(final int status, final String... uris) {
+		this.status = status;
+		description = new DescriptionImpl();
+		description.setMethod("GET");
+		description.setUris(uris);
+		description.setId(getClass().getName());
 	}
 
-	@Uri(value = "/path/to/post", method = HttpMethod.POST)
-	public void handlePostRequest() {
+	/* Main operations */
+
+	@Override
+	public void execute(final WebScriptRequest request, final WebScriptResponse response) throws IOException {
+		response.setStatus(status);
 	}
+
+	@Override
+	public Description getDescription() {
+		return description;
+	}
+
+	/* Remaining operations */
+
+	@Override
+	public void init(final Container container, final Description description) {
+	}
+
+	@Override
+	public ResourceBundle getResources() {
+		return null;
+	}
+
+	@Override
+	public void setURLModelFactory(final URLModelFactory urlModelFactory) {
+	}
+
 }

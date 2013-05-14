@@ -13,12 +13,13 @@ import nl.runnable.alfresco.webscripts.annotations.WebScript;
 @WebScript
 public class BeforeHandler {
 
-	@Uri("/handleBefore")
-	public void handleBefore(@Attribute final String name) {
-	}
-
 	@Before
 	protected void populateModel(final Map<String, Object> model) {
 		model.put("name", "attribute");
 	}
+
+	@Uri("/handleBefore")
+	public void handleBefore(@Attribute final String name) {
+	}
+
 }

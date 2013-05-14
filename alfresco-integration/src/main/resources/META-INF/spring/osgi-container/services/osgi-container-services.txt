@@ -3,7 +3,8 @@
 #
 # Format: <bean name>:<service name>[,<servicename>...]
 
-osgi.container.WebScriptRegistry:nl.runnable.alfresco.osgi.webscripts.CompositeRegistry
+#osgi.container.WebScriptRegistry:nl.runnable.alfresco.osgi.webscripts.CompositeRegistry
+osgi.container.WebScriptUriRegistry:nl.runnable.alfresco.webscripts.WebScriptUriRegistry
 osgi.container.WebScriptContainer:org.springframework.extensions.webscripts.Container
 osgi.container.WebScriptSearchPathRegistry:nl.runnable.alfresco.osgi.webscripts.SearchPathRegistry
 osgi.container.NamespaceHandlerResolver:org.springframework.beans.factory.xml.NamespaceHandlerResolver

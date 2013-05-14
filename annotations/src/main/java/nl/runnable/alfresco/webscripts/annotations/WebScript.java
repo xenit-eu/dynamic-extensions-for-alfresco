@@ -39,4 +39,13 @@ public @interface WebScript {
 	Lifecycle lifecycle() default Lifecycle.NONE;
 
 	String baseUri() default "";
+
+	/**
+	 * Indicates the default format to use for {@link Uri} handlers. A Web Script typically uses the same default
+	 * format.
+	 * 
+	 * @return
+	 * @see Uri#defaultFormat()
+	 */
+	String defaultFormat() default "";
 }

@@ -63,14 +63,6 @@
 			<artifactId>mybatis</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.kubek2k</groupId>
-			<artifactId>springockito</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.kubek2k</groupId>
-			<artifactId>springockito-annotations</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
 			<scope>test</scope>

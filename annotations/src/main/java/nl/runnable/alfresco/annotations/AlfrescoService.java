@@ -5,8 +5,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import javax.inject.Qualifier;
-
 /**
  * Qualifier for distinguishing between different types of Alfresco services when autowiring dependencies by type.
  * <p>
@@ -27,7 +25,6 @@ import javax.inject.Qualifier;
  */
 @Target({ ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-@Qualifier
 public @interface AlfrescoService {
 
 	ServiceType value() default ServiceType.DEFAULT;

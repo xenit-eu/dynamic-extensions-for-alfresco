@@ -3,6 +3,7 @@ package nl.runnable.alfresco.webscripts;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -12,12 +13,11 @@ import nl.runnable.alfresco.webscripts.annotations.Attribute;
 import nl.runnable.alfresco.webscripts.annotations.Authentication;
 import nl.runnable.alfresco.webscripts.annotations.Before;
 import nl.runnable.alfresco.webscripts.annotations.Cache;
+import nl.runnable.alfresco.webscripts.annotations.ExceptionHandler;
 import nl.runnable.alfresco.webscripts.annotations.Transaction;
 import nl.runnable.alfresco.webscripts.annotations.Uri;
 import nl.runnable.alfresco.webscripts.annotations.WebScript;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
@@ -42,8 +42,6 @@ import org.springframework.util.StringUtils;
  */
 public class AnnotationBasedWebScriptBuilder implements BeanFactoryAware {
 
-	private final Logger logger = LoggerFactory.getLogger(getClass());
-
 	/* Dependencies */
 
 	private ConfigurableListableBeanFactory beanFactory;
@@ -65,7 +63,7 @@ public class AnnotationBasedWebScriptBuilder implements BeanFactoryAware {
 		final ConfigurableListableBeanFactory beanFactory = getBeanFactory();
 		final Class<?> beanType = beanFactory.getType(beanName);
 		if (beanType == null) {
-			return null;
+			return Collections.emptyList();
 		}
 		final WebScript webScriptAnnotation = beanFactory.findAnnotationOnBean(beanName, WebScript.class);
 		if (webScriptAnnotation == null) {
@@ -113,6 +111,26 @@ public class AnnotationBasedWebScriptBuilder implements BeanFactoryAware {
 				}
 			}
 		});
+		ReflectionUtils.doWithMethods(beanType, new ReflectionUtils.MethodCallback() {
+
+			@Override
+			public void doWith(final Method method) throws IllegalArgumentException, IllegalAccessException {
+				final ExceptionHandler exceptionHandler = AnnotationUtils
+						.findAnnotation(method, ExceptionHandler.class);
+				if (exceptionHandler != null) {
+					if (AnnotationUtils.findAnnotation(method, Attribute.class) != null
+							|| AnnotationUtils.findAnnotation(method, Before.class) != null
+							|| AnnotationUtils.findAnnotation(method, Uri.class) != null) {
+						throw new RuntimeException(
+								String.format(
+										"Cannot combine @Before, @Attribute @ExceptionHandler or @Uri on a single method. Method: %s",
+										ClassUtils.getQualifiedMethodName(method)));
+					}
+					handlerMethods.getExceptionHandlerMethods().add(
+							new ExceptionHandlerMethod(exceptionHandler.value(), method));
+				}
+			}
+		});
 		final List<AnnotationBasedWebScript> webScripts = new ArrayList<AnnotationBasedWebScript>();
 		ReflectionUtils.doWithMethods(beanType, new ReflectionUtils.MethodCallback() {
 
@@ -122,9 +140,7 @@ public class AnnotationBasedWebScriptBuilder implements BeanFactoryAware {
 				if (uri != null) {
 					final AnnotationBasedWebScript webScript = createWebScript(beanName, uri,
 							handlerMethods.createForUriMethod(method));
-					if (webScript != null) {
-						webScripts.add(webScript);
-					}
+					webScripts.add(webScript);
 				}
 			}
 
@@ -144,9 +160,12 @@ public class AnnotationBasedWebScriptBuilder implements BeanFactoryAware {
 
 	protected AnnotationBasedWebScript createWebScript(final String beanName, final Uri uri,
 			final HandlerMethods handlerMethods) {
-		Assert.hasText(beanName, "Bean name cannot be empty.");
 		final DescriptionImpl description = new DescriptionImpl();
-		final String baseUri = beanFactory.findAnnotationOnBean(beanName, WebScript.class).baseUri();
+		final WebScript webScript = getBeanFactory().findAnnotationOnBean(beanName, WebScript.class);
+		if (StringUtils.hasText(webScript.defaultFormat())) {
+			description.setDefaultFormat(webScript.defaultFormat());
+		}
+		final String baseUri = webScript.baseUri();
 		handleHandlerMethodAnnotation(uri, handlerMethods.getUriMethod(), description, baseUri);
 		handleTypeAnnotations(beanName, description);
 		final String id = String.format("%s.%s.%s", generateId(beanName), handlerMethods.getUriMethod().getName(),

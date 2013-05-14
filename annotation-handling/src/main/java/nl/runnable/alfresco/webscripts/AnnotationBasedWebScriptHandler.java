@@ -1,7 +1,6 @@
 package nl.runnable.alfresco.webscripts;
 
 import java.io.IOException;
-import java.io.Writer;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,12 +13,10 @@ import nl.runnable.alfresco.webscripts.annotations.Attribute;
 
 import org.springframework.aop.support.AopUtils;
 import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.extensions.webscripts.DefaultURLModelFactory;
 import org.springframework.extensions.webscripts.Description.RequiredCache;
 import org.springframework.extensions.webscripts.Format;
 import org.springframework.extensions.webscripts.TemplateProcessor;
 import org.springframework.extensions.webscripts.TemplateProcessorRegistry;
-import org.springframework.extensions.webscripts.URLModelFactory;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.util.Assert;
@@ -43,8 +40,6 @@ public class AnnotationBasedWebScriptHandler {
 
 	private HandlerMethodArgumentsResolver handlerMethodArgumentsResolver = new DefaultHandlerMethodArgumentsResolver();
 
-	private URLModelFactory urlModelFactory = new DefaultURLModelFactory();;
-
 	/* Main Operations */
 
 	/**
@@ -56,24 +51,29 @@ public class AnnotationBasedWebScriptHandler {
 	 * @param handlerMethod
 	 * @throws IOException
 	 */
-	public void handleRequest(final AnnotationBasedWebScript webScript, WebScriptRequest request,
+	public void handleRequest(final AnnotationBasedWebScript webScript, final WebScriptRequest request,
 			final WebScriptResponse response) throws IOException {
 		Assert.notNull(webScript, "WebScript cannot be null.");
 		Assert.notNull(request, "Request cannot be null.");
 		Assert.notNull(response, "Response cannot be null.");
 
+		final AnnotationBasedWebScriptRequest annotationRequest = new AnnotationBasedWebScriptRequest(request);
 		final WebScriptResponseWrapper wrappedResponse = new WebScriptResponseWrapper(response);
 		final Map<String, Object> model = new HashMap<String, Object>();
-		invokeAttributeHandlerMethods(webScript, request, wrappedResponse, model);
-		request = new AttributesWebScriptRequest(request, model);
-		invokeBeforeHandlerMethods(webScript, request, wrappedResponse, model);
-		invokeUriHandlerMethod(webScript, request, wrappedResponse, model);
+		try {
+			invokeAttributeHandlerMethods(webScript, annotationRequest, wrappedResponse);
+			invokeBeforeHandlerMethods(webScript, annotationRequest, wrappedResponse);
+			final Object returnValue = invokeUriHandlerMethod(webScript, annotationRequest, wrappedResponse);
+			handleUriMethodReturnValue(webScript, annotationRequest, wrappedResponse, returnValue);
+		} catch (final Throwable e) {
+			invokeExceptionHandlerMethods(e, webScript, annotationRequest, wrappedResponse, model);
+		}
 	}
 
-	/* Utility operations */
+	/* Handler operations */
 
 	protected boolean invokeBeforeHandlerMethods(final AnnotationBasedWebScript webScript,
-			final WebScriptRequest request, final WebScriptResponse response, final Map<String, Object> model) {
+			final AnnotationBasedWebScriptRequest request, final WebScriptResponse response) {
 		for (final Method method : webScript.getHandlerMethods().getBeforeMethods()) {
 			method.setAccessible(true);
 			final Object[] arguments = getHandlerMethodArgumentsResolver().resolveHandlerMethodArguments(method,
@@ -88,7 +88,7 @@ public class AnnotationBasedWebScriptHandler {
 	}
 
 	protected void invokeAttributeHandlerMethods(final AnnotationBasedWebScript webScript,
-			final WebScriptRequest request, final WebScriptResponse response, final Map<String, Object> model) {
+			final AnnotationBasedWebScriptRequest request, final WebScriptResponse response) {
 		for (final Method method : webScript.getHandlerMethods().getAttributeMethods()) {
 			method.setAccessible(true);
 			final Object[] arguments = getHandlerMethodArgumentsResolver().resolveHandlerMethodArguments(method,
@@ -98,6 +98,7 @@ public class AnnotationBasedWebScriptHandler {
 				continue;
 			}
 			final Attribute annotation = AnnotationUtils.findAnnotation(method, Attribute.class);
+			final Map<String, Object> model = request.getModel();
 			if (StringUtils.hasText(annotation.value())) {
 				model.put(annotation.value(), attribute);
 			} else {
@@ -110,19 +111,60 @@ public class AnnotationBasedWebScriptHandler {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	protected void invokeUriHandlerMethod(final AnnotationBasedWebScript webScript, final WebScriptRequest request,
-			final WebScriptResponseWrapper response, final Map<String, Object> model) throws IOException {
+	protected Object invokeUriHandlerMethod(final AnnotationBasedWebScript webScript,
+			final AnnotationBasedWebScriptRequest request, final WebScriptResponseWrapper response) throws IOException {
 		final Method uriMethod = webScript.getHandlerMethods().getUriMethod();
 		final Object[] arguments = getHandlerMethodArgumentsResolver().resolveHandlerMethodArguments(uriMethod,
 				webScript.getHandler(), request, response);
 		uriMethod.setAccessible(true);
-		final Object returnValue = ReflectionUtils.invokeMethod(uriMethod, webScript.getHandler(), arguments);
-		if (returnValue instanceof Map) {
-			if (model != returnValue) {
+		return ReflectionUtils.invokeMethod(uriMethod, webScript.getHandler(), arguments);
+	}
+
+	@SuppressWarnings("unchecked")
+	protected void handleUriMethodReturnValue(final AnnotationBasedWebScript webScript,
+			final AnnotationBasedWebScriptRequest request, final WebScriptResponseWrapper response,
+			final Object returnValue) throws IOException {
+		if (returnValue instanceof Map || webScript.getHandlerMethods().useResponseTemplate()) {
+			final Map<String, Object> model = request.getModel();
+			if (returnValue instanceof Map && returnValue != model) {
 				model.putAll((Map<String, Object>) returnValue);
 			}
 			processHandlerMethodTemplate(webScript, request, model, response, response.getStatus());
+		}
+	}
+
+	protected void invokeExceptionHandlerMethods(final Throwable exception, final AnnotationBasedWebScript webScript,
+			final AnnotationBasedWebScriptRequest request, final WebScriptResponse response,
+			final Map<String, Object> model) throws IOException {
+		final List<Method> exceptionHandlerMethods = webScript.getHandlerMethods().findExceptionHandlers(exception);
+		if (exceptionHandlerMethods.isEmpty()) {
+			translateException(exception);
+		}
+		try {
+			request.setThrownException(exception);
+			for (final Method exceptionHandler : exceptionHandlerMethods) {
+				final Object[] arguments = getHandlerMethodArgumentsResolver().resolveHandlerMethodArguments(
+						exceptionHandler, webScript.getHandler(), request, response);
+				exceptionHandler.setAccessible(true);
+				ReflectionUtils.invokeMethod(exceptionHandler, webScript.getHandler(), arguments);
+			}
+		} catch (final Throwable e) {
+			translateException(e);
+		} finally {
+			request.setThrownException(null);
+		}
+
+	}
+
+	/* Utility operations */
+
+	protected void translateException(final Throwable e) throws IOException {
+		if (e instanceof IOException) {
+			throw (IOException) e;
+		} else if (e instanceof RuntimeException) {
+			throw (RuntimeException) e;
+		} else {
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -148,16 +190,32 @@ public class AnnotationBasedWebScriptHandler {
 	protected void populateTemplateModel(final Map<String, Object> model, final AnnotationBasedWebScript webScript,
 			final WebScriptRequest request) {
 		model.put(WEBSCRIPT_VARIABLE, webScript.getDescription());
-		model.put(URL_VARIABLE, getUrlModelFactory().createURLModel(request));
+		model.put(URL_VARIABLE, new UrlModel(request));
 	}
 
 	protected void processTemplate(final AnnotationBasedWebScript webScript, final WebScriptRequest request,
 			final Map<String, Object> model, final int status, final WebScriptResponse response) throws IOException {
-		final String format = request.getFormat();
 		final TemplateProcessorRegistry templateProcessorRegistry = request.getRuntime().getContainer()
 				.getTemplateProcessorRegistry();
 		final TemplateProcessor templateProcessor = templateProcessorRegistry.getTemplateProcessorByExtension("ftl");
+		final String format = request.getFormat();
+		String templateName = webScript.getHandlerMethods().getResponseTemplateName();
+		if (StringUtils.hasText(templateName) == false) {
+			templateName = generateTemplateName(templateProcessor, webScript, format, status);
+		}
+		if (templateProcessor.hasTemplate(templateName)) {
+			response.setContentType(Format.valueOf(format.toUpperCase()).mimetype());
+			response.setContentEncoding("utf-8");
+			addCacheControlHeaders(webScript, response);
+			templateProcessor.process(templateName, model, response.getWriter());
+		} else {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.getWriter().write(String.format("Could not find template: %s", templateName));
+		}
+	}
 
+	protected String generateTemplateName(final TemplateProcessor templateProcessor,
+			final AnnotationBasedWebScript webScript, final String format, final int status) {
 		final Class<?> handlerClass = AopUtils.getTargetClass(webScript.getHandler());
 		final String methodName = webScript.getHandlerMethods().getUriMethod().getName();
 		final String httpMethod = webScript.getDescription().getMethod().toLowerCase();
@@ -181,16 +239,7 @@ public class AnnotationBasedWebScriptHandler {
 		if (templateProcessor.hasTemplate(templateName) == false) {
 			templateName = defaultTemplateName;
 		}
-		if (templateProcessor.hasTemplate(templateName)) {
-			response.setContentType(Format.valueOf(format.toUpperCase()).mimetype());
-			response.setContentEncoding("utf-8");
-			addCacheControlHeaders(webScript, response);
-			templateProcessor.process(templateName, model, response.getWriter());
-		} else {
-			// Friendly error message
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			response.getWriter().write(String.format("Could not find template: %s", defaultTemplateName));
-		}
+		return templateName;
 	}
 
 	protected void addCacheControlHeaders(final AnnotationBasedWebScript webScript, final WebScriptResponse response) {
@@ -210,18 +259,6 @@ public class AnnotationBasedWebScriptHandler {
 		}
 	}
 
-	protected void generateResponseFromTemplate(final WebScriptRequest request, final WebScriptResponse response,
-			final Map<String, Object> model, final TemplateProcessor templateProcessor, final String templateName,
-			final String format) throws IOException {
-		final Writer out = response.getWriter();
-		if (templateProcessor.hasTemplate(templateName)) {
-		} else {
-			// Friendly error message
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			out.write(String.format("Could not find template at path: %s", templateName));
-		}
-	}
-
 	/* Dependencies */
 
 	public void setHandlerMethodArgumentsResolver(final HandlerMethodArgumentsResolver handlerMethodArgumentsResolver) {
@@ -231,15 +268,6 @@ public class AnnotationBasedWebScriptHandler {
 
 	protected HandlerMethodArgumentsResolver getHandlerMethodArgumentsResolver() {
 		return handlerMethodArgumentsResolver;
-	}
-
-	public void setUrlModelFactory(final URLModelFactory urlModelFactory) {
-		Assert.notNull(urlModelFactory);
-		this.urlModelFactory = urlModelFactory;
-	}
-
-	protected URLModelFactory getUrlModelFactory() {
-		return urlModelFactory;
 	}
 
 }

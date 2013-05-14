@@ -1,15 +1,9 @@
 package nl.runnable.alfresco.osgi;
 
-import java.util.Collection;
-import java.util.Collections;
-
-import nl.runnable.alfresco.osgi.webscripts.RegistryProvider;
-
 import org.alfresco.repo.module.AbstractModuleComponent;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.extensions.webscripts.Container;
-import org.springframework.extensions.webscripts.Registry;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
@@ -23,7 +17,7 @@ import org.springframework.web.context.support.XmlWebApplicationContext;
  * 
  */
 public class OsgiContainerModuleComponent extends AbstractModuleComponent implements ApplicationContextAware,
-		FrameworkService, RegistryProvider {
+		FrameworkService {
 
 	/* Dependencies */
 
@@ -77,17 +71,6 @@ public class OsgiContainerModuleComponent extends AbstractModuleComponent implem
 		} finally {
 			startFramework();
 			getWebScriptsContainer().reset();
-		}
-	}
-
-	/* Main RegistryProvider operations */
-
-	@Override
-	public Collection<Registry> getRegistries() {
-		if (childApplicationContext != null) {
-			return childApplicationContext.getBeansOfType(Registry.class).values();
-		} else {
-			return Collections.emptySet();
 		}
 	}
 

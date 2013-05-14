@@ -22,7 +22,6 @@ import nl.runnable.alfresco.webscripts.annotations.Authentication;
 import nl.runnable.alfresco.webscripts.annotations.AuthenticationType;
 import nl.runnable.alfresco.webscripts.annotations.Cache;
 import nl.runnable.alfresco.webscripts.annotations.HttpMethod;
-import nl.runnable.alfresco.webscripts.annotations.RequestParam;
 import nl.runnable.alfresco.webscripts.annotations.Uri;
 import nl.runnable.alfresco.webscripts.annotations.WebScript;
 
@@ -43,7 +42,7 @@ import org.osgi.framework.launch.Framework;
  * 
  */
 @ManagedBean
-@WebScript(baseUri = "/dynamic-extensions/container")
+@WebScript(baseUri = "/dynamic-extensions/container", defaultFormat = "html")
 @Authentication(AuthenticationType.ADMIN)
 @Cache(neverCache = true)
 public class Container extends AbstractControlPanelHandler {
@@ -67,17 +66,17 @@ public class Container extends AbstractControlPanelHandler {
 
 	/* Main operations */
 
-	@Uri(method = HttpMethod.GET, defaultFormat = "html")
+	@Uri(method = HttpMethod.GET)
 	public Map<String, Object> index() {
 		return Collections.emptyMap();
 	}
 
-	@Uri(method = HttpMethod.GET, value = "/system-packages", defaultFormat = "html")
+	@Uri(method = HttpMethod.GET, value = "/system-packages")
 	public Map<String, Object> systemPackages() {
 		return model(Variables.SYSTEM_PACKAGES, getSystemPackages());
 	}
 
-	@Uri(method = HttpMethod.GET, value = "/services", defaultFormat = "html")
+	@Uri(method = HttpMethod.GET, value = "/services")
 	public Map<String, Object> services() {
 		return model(Variables.SERVICES_BY_BUNDLE, getServicesByBundle());
 	}
@@ -97,8 +96,7 @@ public class Container extends AbstractControlPanelHandler {
 	}
 
 	@Uri(method = HttpMethod.POST, value = "/restart")
-	public void restartFramework(@RequestParam(defaultValue = "0") final long wait,
-			@Attribute final ResponseHelper response) throws IOException, BundleException {
+	public void restartFramework(@Attribute final ResponseHelper response) throws IOException, BundleException {
 		if (osgiConfiguration.getMode().isFrameworkRestartEnabled() == false) {
 			response.status(HttpServletResponse.SC_FORBIDDEN, "Framework restart is currently not allowed.");
 			return;
@@ -147,7 +145,7 @@ public class Container extends AbstractControlPanelHandler {
 
 	@Attribute(Variables.CAN_RESTART_FRAMEWORK)
 	protected boolean canRestartFramework() {
-		return osgiConfiguration.getMode().isFrameworkRestartEnabled() && systemPackageCacheExists();
+		return osgiConfiguration.getMode().isFrameworkRestartEnabled();
 	}
 
 	@Attribute(Variables.SYSTEM_PACKAGE_CACHE_EXISTS)
