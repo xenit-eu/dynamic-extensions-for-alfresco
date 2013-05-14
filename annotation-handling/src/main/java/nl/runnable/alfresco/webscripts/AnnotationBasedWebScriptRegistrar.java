@@ -46,6 +46,12 @@ public class AnnotationBasedWebScriptRegistrar implements ApplicationContextAwar
 
 	}
 
+	/* State */
+
+	public List<WebScript> getWebScripts() {
+		return webScripts;
+	}
+
 	/* Dependencies */
 
 	@Override
