@@ -18,8 +18,7 @@ In progress: Milestone 5
 * Spring AOP support. (The Gradle plugin configures the OSGi bundle so as to avoid classpath issues.)
 * `@RunAs` and `@RunAsSystem` annotations for running code as a particular user.
 * `@Transactional` annotation for running code within a transaction.
-* Improvements for building custom user interfaces on top of annotation-based Web Scripts.
-* Code review of annotation-based Actions and Behaviours.
+* Refactoring of annotation-based Web Scripts implementation.
 
 Next up: Milestone 6
 --------------------
