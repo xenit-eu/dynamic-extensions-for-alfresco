@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import nl.runnable.alfresco.actions.AnnotationBasedActionRegistrar;
 import nl.runnable.alfresco.aop.DynamicExtensionsAdvisorAutoProxyCreator;
+import nl.runnable.alfresco.models.DAOModelRegistrar;
 import nl.runnable.alfresco.models.M2ModelListFactoryBean;
-import nl.runnable.alfresco.models.ModelRegistrar;
 import nl.runnable.alfresco.osgi.webscripts.SearchPathRegistry;
 import nl.runnable.alfresco.osgi.webscripts.SearchPathRegistryManager;
 import nl.runnable.alfresco.policy.AnnotationBasedBehaviourRegistrar;
@@ -184,7 +184,7 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 		if (beanFactory.containsBeanDefinition(BeanNames.MODEL_REGISTRAR) == false) {
 			beanFactory.registerBeanDefinition(
 					BeanNames.MODEL_REGISTRAR,
-					BeanDefinitionBuilder.rootBeanDefinition(ModelRegistrar.class)
+					BeanDefinitionBuilder.rootBeanDefinition(DAOModelRegistrar.class)
 							.addPropertyReference("models", BeanNames.M2_MODEL_LIST_FACTORY)
 							.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE)
 							.setInitMethodName("registerModels").setDestroyMethodName("unregisterModels")
