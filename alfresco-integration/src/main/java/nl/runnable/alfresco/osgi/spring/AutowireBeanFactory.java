@@ -1,16 +1,20 @@
 package nl.runnable.alfresco.osgi.spring;
 
 import java.lang.annotation.Annotation;
+import java.util.HashMap;
 import java.util.Map;
 
 import nl.runnable.alfresco.annotations.AlfrescoService;
 import nl.runnable.alfresco.annotations.ServiceType;
 
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.DependencyDescriptor;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
+
+import javax.inject.Named;
 
 /**
  * {@link BeanFactory} that augments default autowiring logic by attempting to resolve dependencies using Alfresco
@@ -51,7 +55,36 @@ public class AutowireBeanFactory extends DefaultListableBeanFactory {
 		return super.determinePrimaryCandidate(candidateBeans, descriptor);
 	}
 
+	@Override
+	protected Map<String, Object> findAutowireCandidates(String beanName, Class requiredType, DependencyDescriptor descriptor) {
+		Map<String,Object> candidateBeansByName = null;
+		final Named named = getAnnotation(descriptor, Named.class);
+		if (named != null) {
+			candidateBeansByName = putAnyNamedBean(named.value());
+		} else {
+			final Qualifier qualifier = getAnnotation(descriptor, Qualifier.class);
+			if (qualifier != null) {
+				candidateBeansByName = putAnyNamedBean(qualifier.value());
+			}
+		}
+
+		if (candidateBeansByName != null) {
+			return candidateBeansByName;
+		} else {
+			return super.findAutowireCandidates(beanName, requiredType, descriptor);
+		}
+	}
+
 	/* Utility operations */
+
+	private Map<String,Object> putAnyNamedBean(String name) {
+		if (super.containsBean(name)) {
+			final Map<String,Object> candidateBeansByName = new HashMap<String, Object>(1);
+			candidateBeansByName.put(name, super.getBean(name));
+			return candidateBeansByName;
+		}
+		return null;
+	}
 
 	@SuppressWarnings("unchecked")
 	private <T extends Annotation> T getAnnotation(final DependencyDescriptor descriptor, final Class<T> annotationType) {

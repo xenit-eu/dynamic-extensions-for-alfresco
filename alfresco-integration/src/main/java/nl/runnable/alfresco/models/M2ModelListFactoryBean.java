@@ -21,7 +21,7 @@ import org.springframework.util.StringUtils;
  * @author Laurens Fridael
  * 
  */
-public class M2ModelListFactoryBean implements FactoryBean<List<M2Model>>, ResourceLoaderAware {
+public class M2ModelListFactoryBean implements FactoryBean<List<M2ModelResource>>, ResourceLoaderAware {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -35,7 +35,7 @@ public class M2ModelListFactoryBean implements FactoryBean<List<M2Model>>, Resou
 
 	/* State */
 
-	private List<M2Model> models;
+	private List<M2ModelResource> models;
 
 	/* Construction */
 
@@ -50,8 +50,8 @@ public class M2ModelListFactoryBean implements FactoryBean<List<M2Model>>, Resou
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Class<? extends List<M2Model>> getObjectType() {
-		return (Class<? extends List<M2Model>>) ((Class<?>)List.class);
+	public Class<? extends List<M2ModelResource>> getObjectType() {
+		return (Class<? extends List<M2ModelResource>>) ((Class<?>)List.class);
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class M2ModelListFactoryBean implements FactoryBean<List<M2Model>>, Resou
 	}
 
 	@Override
-	public List<M2Model> getObject() throws IOException {
+	public List<M2ModelResource> getObject() throws IOException {
 		Assert.state(StringUtils.hasText(locationPattern), "Location pattern has not been configured.");
 
 		if (models == null) {
@@ -69,12 +69,12 @@ public class M2ModelListFactoryBean implements FactoryBean<List<M2Model>>, Resou
 		return models;
 	}
 
-	protected List<M2Model> createModels() throws IOException {
-		final List<M2Model> models = new ArrayList<M2Model>();
+	protected List<M2ModelResource> createModels() throws IOException {
+		final List<M2ModelResource> models = new ArrayList<M2ModelResource>();
 		for (final Resource resource : getResourcePatternResolver().getResources(locationPattern)) {
 			try {
 				final M2Model model = createM2Model(resource);
-				models.add(model);
+				models.add(new M2ModelResource(resource, model));
 			} catch (final Exception e) {
 				if (logger.isWarnEnabled()) {
 					logger.warn("Could not create model from {}: {}", resource, e.getMessage());
