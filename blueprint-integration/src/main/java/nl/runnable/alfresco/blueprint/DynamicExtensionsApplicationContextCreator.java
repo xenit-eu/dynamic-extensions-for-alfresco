@@ -4,14 +4,11 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.alfresco.service.transaction.TransactionService;
 import org.eclipse.gemini.blueprint.context.DelegatedExecutionOsgiBundleApplicationContext;
-import org.eclipse.gemini.blueprint.context.OsgiBundleApplicationContextExecutor;
-import org.eclipse.gemini.blueprint.context.support.ContextClassLoaderProvider;
 import org.eclipse.gemini.blueprint.context.support.DefaultContextClassLoaderProvider;
 import org.eclipse.gemini.blueprint.extender.OsgiApplicationContextCreator;
-import org.eclipse.gemini.blueprint.extender.internal.dependencies.startup.DependencyWaiterApplicationContextExecutor;
 import org.eclipse.gemini.blueprint.extender.support.ApplicationContextConfiguration;
+import org.eclipse.gemini.blueprint.extender.support.DefaultOsgiApplicationContextCreator;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -19,17 +16,13 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 
 /**
- * {@link OsgiApplicationContextCreator} that creates a {@link DynamicExtensionsApplicationContext} for each
- * {@link Bundle}.
- * <p>
- * <strong>New in milestone 4</strong>: the OSGI bundle MUST contain the header
- * <code>Alfresco-Dynamic-Extension: true</code> for it to be considered a Dynamic Extension. Versions prior to
- * milestone 4 did not have this requirement.
+ * {@link OsgiApplicationContextCreator} that creates a {@link DynamicExtensionsApplicationContext} if a bundle has been
+ * marked as an Alfresco Dynamic Extension. Otherwise the implementation delegates to
+ * {@link DefaultOsgiApplicationContextCreator} to support the creation of regular Spring DM bundles.
  * <p>
  * This implementation automatically uninstalls Dynamic Extension bundles with a duplicate symbolic name, even if they
  * are of a different version. While OSGi allows running parallel versions of a given bundle, this additional constraint
@@ -51,6 +44,10 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
+	/* Dependencies */
+
+	private final DefaultOsgiApplicationContextCreator defaultOsgiApplicationContextCreator = new DefaultOsgiApplicationContextCreator();
+
 	/* Configuration */
 
 	private String modelLocationPattern;
@@ -60,10 +57,19 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 	@Override
 	public DelegatedExecutionOsgiBundleApplicationContext createApplicationContext(final BundleContext bundleContext)
 			throws Exception {
-		final Bundle bundle = bundleContext.getBundle();
-		if (isAlfrescoDynamicExtension(bundle) == false) {
-			return null;
+		if (isAlfrescoDynamicExtension(bundleContext.getBundle())) {
+			return createDynamicExtensionsApplicationContext(bundleContext);
+		} else {
+			return defaultOsgiApplicationContextCreator.createApplicationContext(bundleContext);
 		}
+
+	}
+
+	/* Utility operations */
+
+	protected DynamicExtensionsApplicationContext createDynamicExtensionsApplicationContext(
+			final BundleContext bundleContext) throws BundleException {
+		final Bundle bundle = bundleContext.getBundle();
 		uninstallBundlesWithDuplicateSymbolicName(bundleContext);
 		/*
 		 * WARNING: Avoid creating an instance of
@@ -102,10 +108,7 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 			applicationContext.setModelLocationPattern(getModelLocationPattern());
 		}
 		return applicationContext;
-
 	}
-
-	/* Utility operations */
 
 	protected boolean isAlfrescoDynamicExtension(final Bundle bundle) {
 		return Boolean.valueOf(bundle.getHeaders().get(ALFRESCO_DYNAMIC_EXTENSION_HEADER));
