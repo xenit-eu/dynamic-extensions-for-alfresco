@@ -6,7 +6,7 @@ import org.springframework.beans.factory.FactoryBean;
 /**
  * {@link FactoryBean} for creating {@link Mockito} mocks.
  * <p>
- * Note: 'annotation-handling' project also contains a version of this class. Most likely 'annotation-handling' code
+ * Note: 'annotations-runtime' project also contains a version of this class. Most likely 'annotations-runtime' code
  * will be migrated to this project.
  * 
  * @author Laurens Fridael

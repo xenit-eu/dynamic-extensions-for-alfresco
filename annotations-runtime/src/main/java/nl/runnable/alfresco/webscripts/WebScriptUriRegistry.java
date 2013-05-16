@@ -129,6 +129,10 @@ public class WebScriptUriRegistry implements UriIndex, BeanPostProcessor, Initia
 		}
 	}
 
+	public List<WebScript> getWebScripts() {
+		return webScripts;
+	}
+
 	/* Remaining delegated operations */
 
 	@Override

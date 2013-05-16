@@ -52,7 +52,7 @@
 		</dependency>
 		<dependency>
 			<groupId>nl.runnable.alfresco.dynamicextensions</groupId>
-			<artifactId>annotation-handling</artifactId>
+			<artifactId>annotations-runtime</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
