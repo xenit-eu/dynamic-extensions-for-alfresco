@@ -67,6 +67,18 @@ table.service th.bean {
   width: 40%;
 }
 
+table.web-script th.method {
+  width: 5%;
+}
+
+table.web-script th.uri {
+  width: 45%;
+}
+
+table.web-script th.handler {
+  width: 50%;
+}
+
 form#post {
   display: none;
 }

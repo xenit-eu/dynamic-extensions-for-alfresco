@@ -36,16 +36,6 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 	private List<TemplateServiceReference> services;
 
 	@SuppressWarnings("rawtypes")
-	private static List<TemplateServiceReference> createTemplateServices(final List<ServiceReference> services) {
-		final List<TemplateServiceReference> templateServices = new ArrayList<TemplateServiceReference>(services.size());
-		for (final ServiceReference serviceReference : services) {
-			templateServices.add(new TemplateServiceReference(serviceReference));
-		}
-		Collections.sort(templateServices);
-		return templateServices;
-	}
-
-	@SuppressWarnings("rawtypes")
 	public TemplateBundle(final Bundle bundle, final List<ServiceReference> services) {
 		Assert.notNull(bundle);
 		this.bundle = bundle;
@@ -138,13 +128,6 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 		return getLocation().startsWith("/Company Home");
 	}
 
-	protected BundleManifest getManifest() {
-		if (manifest == null) {
-			manifest = BundleManifestFactory.createBundleManifest(bundle.getHeaders());
-		}
-		return manifest;
-	}
-
 	public List<TemplateImportedPackage> getImportedPackages() {
 		final List<TemplateImportedPackage> packages = new ArrayList<TemplateImportedPackage>();
 		for (final ImportedPackage importedPackage : getManifest().getImportPackage().getImportedPackages()) {
@@ -172,6 +155,23 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 	}
 
 	/* Utility operations */
+
+	protected BundleManifest getManifest() {
+		if (manifest == null) {
+			manifest = BundleManifestFactory.createBundleManifest(bundle.getHeaders());
+		}
+		return manifest;
+	}
+
+	@SuppressWarnings("rawtypes")
+	private static List<TemplateServiceReference> createTemplateServices(final List<ServiceReference> services) {
+		final List<TemplateServiceReference> templateServices = new ArrayList<TemplateServiceReference>(services.size());
+		for (final ServiceReference serviceReference : services) {
+			templateServices.add(new TemplateServiceReference(serviceReference));
+		}
+		Collections.sort(templateServices);
+		return templateServices;
+	}
 
 	@Override
 	public int compareTo(final TemplateBundle other) {

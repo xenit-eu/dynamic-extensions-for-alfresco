@@ -196,6 +196,15 @@ public class BundleHelper {
 		}
 	}
 
+	protected <T> T getService(final Class<T> service) {
+		final ServiceReference<T> serviceReference = bundleContext.getServiceReference(service);
+		if (serviceReference != null) {
+			return bundleContext.getService(serviceReference);
+		} else {
+			return null;
+		}
+	}
+
 	/* Utility operations */
 
 	protected Bundle doInstallBundleInRepository(final File tempFile, String filename) throws FileNotFoundException,

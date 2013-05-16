@@ -2,6 +2,7 @@ package nl.runnable.alfresco.extensions.controlpanel.template;
 
 import java.util.List;
 
+import nl.runnable.alfresco.extensions.controlpanel.Container;
 import nl.runnable.alfresco.osgi.SystemPackage;
 
 import org.osgi.framework.Bundle;
@@ -94,6 +95,11 @@ public class Variables {
 	 * Refers to the name of the fully-authenticated user.
 	 */
 	public static final String CURRENT_USER = "currentUser";
+
+	/**
+	 * Refers to a collection of {@link TemplateWebScript}s.
+	 */
+	public static final String WEB_SCRIPTS = "webScripts";
 
 	private Variables() {
 	}

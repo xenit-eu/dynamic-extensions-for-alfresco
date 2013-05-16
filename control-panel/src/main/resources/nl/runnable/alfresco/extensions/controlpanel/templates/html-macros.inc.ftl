@@ -21,6 +21,9 @@
               <li class="<#if (active == 'bundles')>active</#if>">
                 <a href="bundles">Bundles</a>
               </li>
+              <li class="<#if (active == 'web-scripts')>active</#if>">
+                <a href="web-scripts">Web Scripts</a>
+              </li>
               <li class="<#if (active == 'container')>active</#if>">
                 <a href="container">Container</a>
               </li>
