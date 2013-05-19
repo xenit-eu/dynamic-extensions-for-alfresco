@@ -1,9 +1,9 @@
 Dynamic Extensions for Alfresco
 ===============================
 
-Rapid development of Alfresco repository extensions in Java. Deploy your code in seconds, not minutes. Less overhead, more convenience. Life is too short for endless server restarts.
+Rapid development of Alfresco repository extensions in Java. Deploy your code in seconds, not minutes. Life is too short for endless server restarts.
 
-Dynamic Extensions adds an OSGi container to the Alfresco repository, enabling live deployment of Java code packaged as OSGi bundles. Alfresco itself is not "OSGi-fied" in any way. The OSGi container runs completely separate from the core Alfresco platform.
+Dynamic Extensions adds an OSGi container to the Alfresco repository, enabling live deployment of Java code packaged as OSGi bundles. Alfresco itself is not "OSGi-fied" in any way; the OSGi container runs completely separate from the core Alfresco platform.
 
 Latest release: Milestone 4
 ---------------------------
@@ -11,33 +11,17 @@ Latest release: Milestone 4
 * **New**: Control Panel web interface for managing Dynamic Extensions.
 * **New**: Annotation-based Web Scripts now support Freemarker templates.
 
-In progress: Milestone 5
-------------------------
-
-* <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/wiki/Building-Alfresco-repository-extensions-for-Dynamic-Extensions-using-Gradle">Gradle plugin for building your own repository extensions</a>
-* Spring AOP support. (The Gradle plugin configures the OSGi bundle so as to avoid classpath issues.)
-* `@RunAs` and `@RunAsSystem` annotations for running code as a particular user.
-* `@Transactional` annotation for running code within a transaction.
-* Refactoring of annotation-based Web Scripts implementation.
-
-Next up: Milestone 6
---------------------
-
-Here we wrap up all the work that went into Dynamic Extensions over the past two years, improving documentation and test coverage.
-
-While the project has seen a great amount of commits over the past 2 months, there will be a break in activity during the summer.
-
-Milestone 6 is scheduled for September.
-
-Installing Dynamic Extensions in an Alfresco repository
--------------------------------------------------------
+Installing Dynamic Extensions
+-----------------------------
 
 Dynamic Extensions is distributed as an Alfresco Module Package (AMP).
 
 * Download the <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/raw/mvn-repo/nl/runnable/alfresco/dynamicextensions/alfresco-module/1.0.0.M4/alfresco-module-1.0.0.M4.amp">Dynamic Extensions Milestone 4 AMP</a>.
-* Use the <a href="http://docs.alfresco.com/4.0/index.jsp?topic=%2Fcom.alfresco.enterprise.doc%2Ftasks%2Famp-install.html">Module Management Tool</a> to install the AMP in the Alfresco repository.
+* Use the <a href="http://docs.alfresco.com/4.0/index.jsp?topic=%2Fcom.alfresco.enterprise.doc%2Ftasks%2Famp-install.html">Module Management Tool</a> to install the AMP in the Alfresco repository of your choosing.
 * After restarting Alfresco, open the Control Panel: <a href="http://localhost:8080/alfresco/service/dynamic-extensions/">http://localhost:8080/alfresco/service/dynamic-extensions/</a>.
 * Accessing the Control Panel requires an admin account.
+
+<img src="https://raw.github.com/wiki/lfridael/dynamic-extensions-for-alfresco/dynamic-extensions-control-panel.png" alt="Dynamic Extensions Control Panel" width="986" height="914"></img>
 
 Support for Alfresco Community
 ------------------------------
@@ -56,11 +40,10 @@ Support for Alfresco Enterprise
 
 The Enterprise editions are not part of the development and testing environment, but Dynamic Extensions is known to work on them.
 
-
 Example extension code
 ----------------------
 
-This example Web Script examines a node and passed information to a Freemarker template:
+This example Web Script examines a node and passes information to a Freemarker template:
 ```java
 @ManagedBean
 @WebScript
@@ -79,7 +62,7 @@ public ExampleWebScript {
 }
 ```
 
-Note that this is an _annotation-based Web Script_. These types of Web Scripts are configured through Java annotations instead of `*.desc.xml` descriptors.
+Note that this is an _annotation Web Script_. These types of Web Script are configured through Java annotations instead of `*.desc.xml` descriptors. Annotation Web Scripts are similar to Spring MVC's annotation-based controllers.
 
 Here's the accompanying Freemarker template fragment:
 
@@ -114,3 +97,16 @@ See also: <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/w
 
 More documentation on creating your own extensions will follow.
 
+In progress: Milestone 5 (May 2013)
+-----------------------------------
+
+* <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/wiki/Building-Alfresco-repository-extensions-for-Dynamic-Extensions-using-Gradle">Gradle plugin for building your own repository extensions</a>
+* Spring AOP support. Includes new `@RunAs`, `@RunAsSystem` and `@Transactional`  annotations for running methods as a particular Alfresco user or within a repository transaction.
+* Refactoring of annotation Web Scripts implementation. Includes new Web Script index in Control Panel.
+
+Milestone 5 will be the last release before the summer break.
+
+Next: Milestone 6 (September 2013)
+----------------------------------
+
+This milestone wraps up all the work that went into Dynamic Extensions over the past two years. It is focused on improving documentation and expanding test coverage.

@@ -57,7 +57,7 @@
       <div class="well">
         <#if canRestartFramework>
           <p>            
-            The Control Panel will be available while the OSGI container is restarting.
+            The Control Panel will be unavailable while the OSGI container is restarting.
           </p>
           <p>
             <a href="container/restart" 
