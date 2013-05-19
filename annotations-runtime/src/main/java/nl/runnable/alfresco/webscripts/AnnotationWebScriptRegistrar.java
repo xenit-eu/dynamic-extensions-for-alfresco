@@ -8,13 +8,13 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.extensions.webscripts.WebScript;
 
-public class AnnotationBasedWebScriptRegistrar implements ApplicationContextAware {
+public class AnnotationWebScriptRegistrar implements ApplicationContextAware {
 
 	/* Dependencies */
 
 	private ApplicationContext applicationContext;
 
-	private AnnotationBasedWebScriptBuilder annotationBasedWebScriptBuilder;
+	private AnnotationWebScriptBuilder annotationBasedWebScriptBuilder;
 
 	private WebScriptUriRegistry webScriptUriRegistry;
 
@@ -28,7 +28,7 @@ public class AnnotationBasedWebScriptRegistrar implements ApplicationContextAwar
 		for (final String beanName : applicationContext.getBeanDefinitionNames()) {
 			if (applicationContext.findAnnotationOnBean(beanName,
 					nl.runnable.alfresco.webscripts.annotations.WebScript.class) != null) {
-				for (final AnnotationBasedWebScript webScript : annotationBasedWebScriptBuilder
+				for (final AnnotationWebScript webScript : annotationBasedWebScriptBuilder
 						.createAnnotationBasedWebScripts(beanName)) {
 					webScriptUriRegistry.registerWebScript(webScript);
 					webScripts.add(webScript);
@@ -59,7 +59,7 @@ public class AnnotationBasedWebScriptRegistrar implements ApplicationContextAwar
 		this.applicationContext = applicationContext;
 	}
 
-	public void setAnnotationBasedWebScriptBuilder(final AnnotationBasedWebScriptBuilder annotationBasedWebScriptBuilder) {
+	public void setAnnotationBasedWebScriptBuilder(final AnnotationWebScriptBuilder annotationBasedWebScriptBuilder) {
 		this.annotationBasedWebScriptBuilder = annotationBasedWebScriptBuilder;
 	}
 

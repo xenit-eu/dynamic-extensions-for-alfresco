@@ -14,7 +14,7 @@ import org.springframework.util.Assert;
  * Since Dynamic Extensions strives to support older Alfresco releases, we simply use take ownership of this problem
  * using this class.
  * <p>
- * {@link AnnotationBasedWebScriptHandler} uses this class for the 'url' helper in the template model.
+ * {@link AnnotationWebScriptHandler} uses this class for the 'url' helper in the template model.
  * <p>
  * This class has public visibility in order to satisfy JavaBeans conventions. (Freemarker requires models to follow
  * JavaBeans conventions.)

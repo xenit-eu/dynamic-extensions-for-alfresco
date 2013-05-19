@@ -14,7 +14,7 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 
 /**
  * {@link WebScript} that generates a "503 Service Unavailable" response when request is issued to an
- * {@link AnnotationBasedWebScript} that is currently unavailable.
+ * {@link AnnotationWebScript} that is currently unavailable.
  * 
  * @author Laurens Fridael
  * 

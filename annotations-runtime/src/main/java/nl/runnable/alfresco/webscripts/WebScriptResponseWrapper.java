@@ -10,7 +10,7 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.extensions.webscripts.WrappingWebScriptResponse;
 
 /**
- * For internal use by {@link AnnotationBasedWebScriptHandler}. This class wraps a {@link WebScriptResponse} and
+ * For internal use by {@link AnnotationWebScriptHandler}. This class wraps a {@link WebScriptResponse} and
  * captures the status.
  * 
  * @author Laurens Fridael

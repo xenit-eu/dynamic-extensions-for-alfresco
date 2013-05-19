@@ -6,7 +6,7 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 /**
- * Strategy for resolving method arguments for handler methods managed by an {@link AnnotationBasedWebScript}.
+ * Strategy for resolving method arguments for handler methods managed by an {@link AnnotationWebScript}.
  * 
  * @author Laurens Fridael
  * 

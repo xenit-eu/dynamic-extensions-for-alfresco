@@ -15,7 +15,7 @@ public class ExceptionArgumentResolver implements ArgumentResolver<Throwable, An
 	@Override
 	public Throwable resolveArgument(final Class<?> argumentType, final Annotation annotation, final String name,
 			final WebScriptRequest request, final WebScriptResponse response) {
-		return ((AnnotationBasedWebScriptRequest) request).getThrownException();
+		return ((AnnotationWebScriptRequest) request).getThrownException();
 	}
 
 }

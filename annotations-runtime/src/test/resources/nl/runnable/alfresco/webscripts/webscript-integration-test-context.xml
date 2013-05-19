@@ -12,20 +12,16 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 		<property name="uriIndexBeanName" value="webscripts.index.prototype" />
 	</bean>
 
-	<bean class="nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptRegistrar" init-method="registerWebScripts">
+	<bean class="nl.runnable.alfresco.webscripts.AnnotationWebScriptRegistrar" init-method="registerWebScripts">
 		<property name="annotationBasedWebScriptBuilder" ref="webscripts.builder" />
 		<property name="webScriptUriRegistry" ref="webscript.uriRegistry" />
 	</bean>
 
-	<bean id="webscripts.builder" class="nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptBuilder">
-		<property name="annotationBasedWebScriptHandler" ref="webscripts.handler" />
-	</bean>
-
-	<bean id="webscripts.handler" class="nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptHandler">
+	<bean id="webscripts.builder" class="nl.runnable.alfresco.webscripts.AnnotationWebScriptBuilder">
 		<property name="handlerMethodArgumentsResolver" ref="webscripts.argumentsResolver" />
 	</bean>
 
-	<bean id="webscripts.argumentsResolver" class="nl.runnable.alfresco.webscripts.DefaultHandlerMethodArgumentsResolver"
+	<bean id="webscripts.argumentsResolver" class="nl.runnable.alfresco.webscripts.HandlerMethodArgumentsResolver"
 		init-method="initializeArgumentResolvers">
 		<property name="stringValueConverter">
 			<bean class="nl.runnable.alfresco.webscripts.StringValueConverter">

@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
-import nl.runnable.alfresco.webscripts.AnnotationBasedWebScript;
+import nl.runnable.alfresco.webscripts.AnnotationWebScript;
 
 import org.springframework.extensions.webscripts.WebScript;
 import org.springframework.util.Assert;
@@ -28,8 +28,8 @@ public class TemplateWebScript {
 	}
 
 	public String getHandler() {
-		if (webScript instanceof AnnotationBasedWebScript) {
-			final Method uriMethod = ((AnnotationBasedWebScript) webScript).getHandlerMethods().getUriMethod();
+		if (webScript instanceof AnnotationWebScript) {
+			final Method uriMethod = ((AnnotationWebScript) webScript).getHandlerMethods().getUriMethod();
 			return ClassUtils.getQualifiedMethodName(uriMethod);
 		} else {
 			return null;

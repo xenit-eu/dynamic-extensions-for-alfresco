@@ -13,7 +13,7 @@ import org.springframework.extensions.webscripts.WebScript;
 import freemarker.cache.TemplateLoader;
 
 /**
- * Dummy store implementation used by {@link AnnotationBasedWebScriptBuilder}.
+ * Dummy store implementation used by {@link AnnotationWebScriptBuilder}.
  * 
  * @author Laurens Fridael
  * 

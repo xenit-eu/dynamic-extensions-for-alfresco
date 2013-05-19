@@ -22,7 +22,7 @@ public class ModelArgumentResolver implements ArgumentResolver<Map<String, Objec
 	@Override
 	public Map<String, Object> resolveArgument(final Class<?> argumentType, final Annotation parameterAnnotation,
 			final String name, final WebScriptRequest request, final WebScriptResponse response) {
-		return ((AnnotationBasedWebScriptRequest) request).getModel();
+		return ((AnnotationWebScriptRequest) request).getModel();
 	}
 
 }

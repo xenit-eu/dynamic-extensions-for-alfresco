@@ -27,8 +27,8 @@ public class FileFieldArgumentResolver implements ArgumentResolver<FormField, Fi
 	@Override
 	public FormField resolveArgument(final Class<?> argumentType, final FileField fileField, final String name,
 			WebScriptRequest request, final WebScriptResponse response) {
-		if (request instanceof AnnotationBasedWebScriptRequest) {
-			request = ((AnnotationBasedWebScriptRequest) request).getWebScriptRequest();
+		if (request instanceof AnnotationWebScriptRequest) {
+			request = ((AnnotationWebScriptRequest) request).getWebScriptRequest();
 		}
 		FormField formField = null;
 		final WebScriptServletRequest req = WebScriptUtil.extractWebScriptServletRequest(request);

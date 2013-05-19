@@ -14,8 +14,6 @@ public class BeanNames {
 
 	static final String ANNOTATION_BASED_WEB_SCRIPT_BUILDER = "annotationBasedWebScriptBuilder";
 
-	static final String ANNOTATION_BASED_WEB_SCRIPT_HANDLER = "annotationBasedWebScriptHandler";
-
 	static final String ANNOTATION_BASED_WEB_SCRIPT_REGISTRAR = "annotationBasedWebScriptRegistrar";
 
 	static final String AUTO_PROXY_CREATOR = "autoProxyCreator";

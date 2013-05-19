@@ -10,9 +10,9 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	
 	<bean id="webscripts.registry" class="nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptRegistry">
 		<property name="annotationBasedWebScriptBuilder">
-			<bean class="nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptBuilder">
+			<bean class="nl.runnable.alfresco.webscripts.AnnotationWebScriptBuilder">
 				<property name="annotationBasedWebScriptHandler">
-					<bean class="nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptHandler"/>
+					<bean class="nl.runnable.alfresco.webscripts.AnnotationWebScriptHandler"/>
 				</property>
 			</bean>
 		</property>

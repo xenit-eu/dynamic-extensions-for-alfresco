@@ -6,9 +6,9 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.spri
 http://www.springframework.org/schema/context/spring-context-3.0.xsd http://www.springframework.org/schema/util
 http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
-	<bean id="annotationBasedWebScriptHandler" class="nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptHandler" />
+	<bean id="annotationBasedWebScriptHandler" class="nl.runnable.alfresco.webscripts.AnnotationWebScriptHandler" />
 
-	<bean id="webScriptBuilder" class="nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptBuilder">
+	<bean id="webScriptBuilder" class="nl.runnable.alfresco.webscripts.AnnotationWebScriptBuilder">
 		<property name="annotationBasedWebScriptHandler" ref="annotationBasedWebScriptHandler" />
 	</bean>
 

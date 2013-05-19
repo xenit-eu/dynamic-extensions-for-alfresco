@@ -35,29 +35,29 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * Creates {@link AnnotationBasedWebScript} instances from beans defined in a {@link BeanFactory}.
+ * Creates {@link AnnotationWebScript} instances from beans defined in a {@link BeanFactory}.
  * 
  * @author Laurens Fridael
  * 
  */
-public class AnnotationBasedWebScriptBuilder implements BeanFactoryAware {
+public class AnnotationWebScriptBuilder implements BeanFactoryAware {
 
 	/* Dependencies */
 
 	private ConfigurableListableBeanFactory beanFactory;
 
-	private AnnotationBasedWebScriptHandler annotationBasedWebScriptHandler = new AnnotationBasedWebScriptHandler();
+	private HandlerMethodArgumentsResolver handlerMethodArgumentsResolver;
 
 	/* Main operations */
 
 	/**
-	 * Creates {@link AnnotationBasedWebScript}s from a given named bean by scanning methods annotated with {@link Uri}.
+	 * Creates {@link AnnotationWebScript}s from a given named bean by scanning methods annotated with {@link Uri}.
 	 * 
 	 * @param beanName
-	 * @return The {@link AnnotationBasedWebScript} or null if the implementation does not consider the bean to be an
-	 *         {@link AnnotationBasedWebScript}.
+	 * @return The {@link AnnotationWebScript} or null if the implementation does not consider the bean to be an
+	 *         {@link AnnotationWebScript}.
 	 */
-	public List<AnnotationBasedWebScript> createAnnotationBasedWebScripts(final String beanName) {
+	public List<AnnotationWebScript> createAnnotationBasedWebScripts(final String beanName) {
 		Assert.hasText(beanName, "Bean name cannot be empty.");
 
 		final ConfigurableListableBeanFactory beanFactory = getBeanFactory();
@@ -131,14 +131,14 @@ public class AnnotationBasedWebScriptBuilder implements BeanFactoryAware {
 				}
 			}
 		});
-		final List<AnnotationBasedWebScript> webScripts = new ArrayList<AnnotationBasedWebScript>();
+		final List<AnnotationWebScript> webScripts = new ArrayList<AnnotationWebScript>();
 		ReflectionUtils.doWithMethods(beanType, new ReflectionUtils.MethodCallback() {
 
 			@Override
 			public void doWith(final Method method) throws IllegalArgumentException, IllegalAccessException {
 				final Uri uri = AnnotationUtils.findAnnotation(method, Uri.class);
 				if (uri != null) {
-					final AnnotationBasedWebScript webScript = createWebScript(beanName, uri,
+					final AnnotationWebScript webScript = createWebScript(beanName, uri,
 							handlerMethods.createForUriMethod(method));
 					webScripts.add(webScript);
 				}
@@ -146,7 +146,7 @@ public class AnnotationBasedWebScriptBuilder implements BeanFactoryAware {
 
 		});
 		final Set<String> ids = new HashSet<String>();
-		for (final AnnotationBasedWebScript webScript : webScripts) {
+		for (final AnnotationWebScript webScript : webScripts) {
 			if (ids.contains(webScript.getDescription().getId())) {
 				throw new IllegalStateException("Duplicate Web Script ID \"" + webScript.getDescription().getId()
 						+ "\" Make sure handler methods of annotation-based Web Scripts have unique names.");
@@ -158,7 +158,7 @@ public class AnnotationBasedWebScriptBuilder implements BeanFactoryAware {
 
 	/* Utility operations */
 
-	protected AnnotationBasedWebScript createWebScript(final String beanName, final Uri uri,
+	protected AnnotationWebScript createWebScript(final String beanName, final Uri uri,
 			final HandlerMethods handlerMethods) {
 		final DescriptionImpl description = new DescriptionImpl();
 		final WebScript webScript = getBeanFactory().findAnnotationOnBean(beanName, WebScript.class);
@@ -173,7 +173,7 @@ public class AnnotationBasedWebScriptBuilder implements BeanFactoryAware {
 		description.setId(id);
 		final Object handler = getBeanFactory().getBean(beanName);
 		description.setStore(new AnnotationWebScriptStore());
-		return new AnnotationBasedWebScript(getAnnotationBasedWebScriptHandler(), description, handler, handlerMethods);
+		return new AnnotationWebScript(description, handler, handlerMethods, getHandlerMethodArgumentsResolver());
 	}
 
 	protected void handleHandlerMethodAnnotation(final Uri uri, final Method method, final DescriptionImpl description,
@@ -441,13 +441,13 @@ public class AnnotationBasedWebScriptBuilder implements BeanFactoryAware {
 		return beanFactory;
 	}
 
-	public void setAnnotationBasedWebScriptHandler(final AnnotationBasedWebScriptHandler annotationMethodHandler) {
-		Assert.notNull(annotationMethodHandler);
-		this.annotationBasedWebScriptHandler = annotationMethodHandler;
+	public void setHandlerMethodArgumentsResolver(final HandlerMethodArgumentsResolver handlerMethodArgumentsResolver) {
+		Assert.notNull(handlerMethodArgumentsResolver);
+		this.handlerMethodArgumentsResolver = handlerMethodArgumentsResolver;
 	}
 
-	protected AnnotationBasedWebScriptHandler getAnnotationBasedWebScriptHandler() {
-		return annotationBasedWebScriptHandler;
+	protected HandlerMethodArgumentsResolver getHandlerMethodArgumentsResolver() {
+		return handlerMethodArgumentsResolver;
 	}
 
 }

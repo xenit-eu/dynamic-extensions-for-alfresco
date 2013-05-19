@@ -11,10 +11,9 @@ import nl.runnable.alfresco.osgi.webscripts.SearchPathRegistryManager;
 import nl.runnable.alfresco.policy.AnnotationBasedBehaviourRegistrar;
 import nl.runnable.alfresco.policy.DefaultBehaviourProxyFactory;
 import nl.runnable.alfresco.policy.ProxyPolicyComponentFactoryBean;
-import nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptBuilder;
-import nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptHandler;
-import nl.runnable.alfresco.webscripts.AnnotationBasedWebScriptRegistrar;
-import nl.runnable.alfresco.webscripts.DefaultHandlerMethodArgumentsResolver;
+import nl.runnable.alfresco.webscripts.AnnotationWebScriptBuilder;
+import nl.runnable.alfresco.webscripts.AnnotationWebScriptRegistrar;
+import nl.runnable.alfresco.webscripts.HandlerMethodArgumentsResolver;
 import nl.runnable.alfresco.webscripts.StringValueConverter;
 import nl.runnable.alfresco.webscripts.WebScriptUriRegistry;
 
@@ -251,31 +250,23 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 		}
 		if (beanFactory.containsBeanDefinition(BeanNames.HANDLER_METHOD_ARGUMENTS_RESOLVER) == false) {
 			beanFactory.registerBeanDefinition(BeanNames.HANDLER_METHOD_ARGUMENTS_RESOLVER,
-					BeanDefinitionBuilder.rootBeanDefinition(DefaultHandlerMethodArgumentsResolver.class)
+					BeanDefinitionBuilder.rootBeanDefinition(HandlerMethodArgumentsResolver.class)
 							.addPropertyReference("stringValueConverter", BeanNames.STRING_VALUE_CONVERTER)
 							.setInitMethodName("initializeArgumentResolvers").getBeanDefinition());
-		}
-		if (beanFactory.containsBeanDefinition(BeanNames.ANNOTATION_BASED_WEB_SCRIPT_HANDLER) == false) {
-			beanFactory.registerBeanDefinition(
-					BeanNames.ANNOTATION_BASED_WEB_SCRIPT_HANDLER,
-					BeanDefinitionBuilder
-							.rootBeanDefinition(AnnotationBasedWebScriptHandler.class)
-							.addPropertyReference("handlerMethodArgumentsResolver",
-									BeanNames.HANDLER_METHOD_ARGUMENTS_RESOLVER).getBeanDefinition());
 		}
 		if (beanFactory.containsBeanDefinition(BeanNames.ANNOTATION_BASED_WEB_SCRIPT_BUILDER) == false) {
 			beanFactory.registerBeanDefinition(
 					BeanNames.ANNOTATION_BASED_WEB_SCRIPT_BUILDER,
 					BeanDefinitionBuilder
-							.rootBeanDefinition(AnnotationBasedWebScriptBuilder.class)
-							.addPropertyReference("annotationBasedWebScriptHandler",
-									BeanNames.ANNOTATION_BASED_WEB_SCRIPT_HANDLER).getBeanDefinition());
+							.rootBeanDefinition(AnnotationWebScriptBuilder.class)
+							.addPropertyReference("handlerMethodArgumentsResolver",
+									BeanNames.HANDLER_METHOD_ARGUMENTS_RESOLVER).getBeanDefinition());
 		}
 		if (beanFactory.containsBeanDefinition(BeanNames.ANNOTATION_BASED_WEB_SCRIPT_REGISTRAR) == false) {
 			beanFactory.registerBeanDefinition(
 					BeanNames.ANNOTATION_BASED_WEB_SCRIPT_REGISTRAR,
 					BeanDefinitionBuilder
-							.rootBeanDefinition(AnnotationBasedWebScriptRegistrar.class)
+							.rootBeanDefinition(AnnotationWebScriptRegistrar.class)
 							.addPropertyReference("annotationBasedWebScriptBuilder",
 									BeanNames.ANNOTATION_BASED_WEB_SCRIPT_BUILDER)
 							.addPropertyValue("webScriptUriRegistry", getService(WebScriptUriRegistry.class))

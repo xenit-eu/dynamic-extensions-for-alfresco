@@ -11,7 +11,7 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WrappingWebScriptRequest;
 import org.springframework.util.Assert;
 
-class AnnotationBasedWebScriptRequest implements WrappingWebScriptRequest {
+class AnnotationWebScriptRequest implements WrappingWebScriptRequest {
 
 	/* State */
 
@@ -21,7 +21,7 @@ class AnnotationBasedWebScriptRequest implements WrappingWebScriptRequest {
 
 	private Throwable thrownException;
 
-	AnnotationBasedWebScriptRequest(final WebScriptRequest webScriptRequest) {
+	AnnotationWebScriptRequest(final WebScriptRequest webScriptRequest) {
 		Assert.notNull(webScriptRequest);
 		this.webScriptRequest = webScriptRequest;
 	}
