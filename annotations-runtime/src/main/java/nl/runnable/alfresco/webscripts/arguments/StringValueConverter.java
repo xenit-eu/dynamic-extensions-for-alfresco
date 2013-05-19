@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.webscripts;
+package nl.runnable.alfresco.webscripts.arguments;
 
 import java.util.HashSet;
 import java.util.Set;

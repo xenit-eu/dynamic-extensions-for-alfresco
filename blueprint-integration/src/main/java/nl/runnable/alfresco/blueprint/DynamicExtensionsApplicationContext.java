@@ -13,9 +13,9 @@ import nl.runnable.alfresco.policy.DefaultBehaviourProxyFactory;
 import nl.runnable.alfresco.policy.ProxyPolicyComponentFactoryBean;
 import nl.runnable.alfresco.webscripts.AnnotationWebScriptBuilder;
 import nl.runnable.alfresco.webscripts.AnnotationWebScriptRegistrar;
-import nl.runnable.alfresco.webscripts.HandlerMethodArgumentsResolver;
-import nl.runnable.alfresco.webscripts.StringValueConverter;
 import nl.runnable.alfresco.webscripts.WebScriptUriRegistry;
+import nl.runnable.alfresco.webscripts.arguments.HandlerMethodArgumentsResolver;
+import nl.runnable.alfresco.webscripts.arguments.StringValueConverter;
 
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.descriptor.Descriptor;

@@ -24,6 +24,7 @@ nl.runnable.alfresco.actions
 nl.runnable.alfresco.policy
 nl.runnable.alfresco.aop
 nl.runnable.alfresco.webscripts
+nl.runnable.alfresco.webscripts.arguments
 
 # Models
 nl.runnable.alfresco.models

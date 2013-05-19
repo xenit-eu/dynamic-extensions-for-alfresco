@@ -1,4 +1,5 @@
-package nl.runnable.alfresco.webscripts;
+package nl.runnable.alfresco.webscripts.arguments;
+
 
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;

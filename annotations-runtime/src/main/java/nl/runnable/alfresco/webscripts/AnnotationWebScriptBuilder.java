@@ -17,6 +17,7 @@ import nl.runnable.alfresco.webscripts.annotations.ExceptionHandler;
 import nl.runnable.alfresco.webscripts.annotations.Transaction;
 import nl.runnable.alfresco.webscripts.annotations.Uri;
 import nl.runnable.alfresco.webscripts.annotations.WebScript;
+import nl.runnable.alfresco.webscripts.arguments.HandlerMethodArgumentsResolver;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
@@ -54,10 +55,10 @@ public class AnnotationWebScriptBuilder implements BeanFactoryAware {
 	 * Creates {@link AnnotationWebScript}s from a given named bean by scanning methods annotated with {@link Uri}.
 	 * 
 	 * @param beanName
-	 * @return The {@link AnnotationWebScript} or null if the implementation does not consider the bean to be an
-	 *         {@link AnnotationWebScript}.
+	 * @return The {@link AnnotationWebScript} or null if the implementation does not consider the bean to be a handler
+	 *         for an {@link AnnotationWebScript}.
 	 */
-	public List<AnnotationWebScript> createAnnotationBasedWebScripts(final String beanName) {
+	public List<AnnotationWebScript> createAnnotationWebScripts(final String beanName) {
 		Assert.hasText(beanName, "Bean name cannot be empty.");
 
 		final ConfigurableListableBeanFactory beanFactory = getBeanFactory();

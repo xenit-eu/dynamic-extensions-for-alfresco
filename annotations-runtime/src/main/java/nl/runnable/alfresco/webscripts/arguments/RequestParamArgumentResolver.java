@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.webscripts;
+package nl.runnable.alfresco.webscripts.arguments;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;

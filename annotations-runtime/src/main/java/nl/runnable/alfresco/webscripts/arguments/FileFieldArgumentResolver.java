@@ -1,7 +1,9 @@
-package nl.runnable.alfresco.webscripts;
+package nl.runnable.alfresco.webscripts.arguments;
 
 import java.lang.annotation.Annotation;
 
+import nl.runnable.alfresco.webscripts.AnnotationWebScriptRequest;
+import nl.runnable.alfresco.webscripts.WebScriptUtil;
 import nl.runnable.alfresco.webscripts.annotations.FileField;
 import nl.runnable.alfresco.webscripts.annotations.Header;
 

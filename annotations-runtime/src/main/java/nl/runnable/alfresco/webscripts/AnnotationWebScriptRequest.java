@@ -11,7 +11,7 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WrappingWebScriptRequest;
 import org.springframework.util.Assert;
 
-class AnnotationWebScriptRequest implements WrappingWebScriptRequest {
+public class AnnotationWebScriptRequest implements WrappingWebScriptRequest {
 
 	/* State */
 
@@ -32,7 +32,7 @@ class AnnotationWebScriptRequest implements WrappingWebScriptRequest {
 		return webScriptRequest;
 	}
 
-	Map<String, Object> getModel() {
+	public Map<String, Object> getModel() {
 		return model;
 	}
 
@@ -40,7 +40,7 @@ class AnnotationWebScriptRequest implements WrappingWebScriptRequest {
 		this.thrownException = thrownException;
 	}
 
-	Throwable getThrownException() {
+	public Throwable getThrownException() {
 		return thrownException;
 	}
 

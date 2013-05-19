@@ -16,9 +16,9 @@ import org.springframework.extensions.webscripts.servlet.WebScriptServletRespons
  * @author Laurens Fridael
  * 
  */
-class WebScriptUtil {
+public class WebScriptUtil {
 
-	static WebScriptServletRequest extractWebScriptServletRequest(final WebScriptRequest request) {
+	public static WebScriptServletRequest extractWebScriptServletRequest(final WebScriptRequest request) {
 		WebScriptServletRequest webScriptServletRequest = null;
 		if (request instanceof WrappingWebScriptRequest) {
 			final WebScriptRequest nextRequest = ((WrappingWebScriptRequest) request).getNext();
@@ -37,7 +37,7 @@ class WebScriptUtil {
 	 * @param request
 	 * @return
 	 */
-	static HttpServletRequest extractHttpServletRequest(final WebScriptRequest request) {
+	public static HttpServletRequest extractHttpServletRequest(final WebScriptRequest request) {
 		HttpServletRequest servletRequest = null;
 		if (request instanceof WrappingWebScriptRequest) {
 			final WebScriptRequest nextRequest = ((WrappingWebScriptRequest) request).getNext();
@@ -56,7 +56,7 @@ class WebScriptUtil {
 	 * @param request
 	 * @return
 	 */
-	static HttpServletResponse extractHttpServletResponse(final WebScriptResponse request) {
+	public static HttpServletResponse extractHttpServletResponse(final WebScriptResponse request) {
 		HttpServletResponse servletResponse = null;
 		if (request instanceof WrappingWebScriptResponse) {
 			final WebScriptResponse nextResponse = ((WrappingWebScriptResponse) request).getNext();

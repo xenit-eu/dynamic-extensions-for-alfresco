@@ -21,10 +21,10 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 		<property name="handlerMethodArgumentsResolver" ref="webscripts.argumentsResolver" />
 	</bean>
 
-	<bean id="webscripts.argumentsResolver" class="nl.runnable.alfresco.webscripts.HandlerMethodArgumentsResolver"
+	<bean id="webscripts.argumentsResolver" class="nl.runnable.alfresco.webscripts.arguments.HandlerMethodArgumentsResolver"
 		init-method="initializeArgumentResolvers">
 		<property name="stringValueConverter">
-			<bean class="nl.runnable.alfresco.webscripts.StringValueConverter">
+			<bean class="nl.runnable.alfresco.webscripts.arguments.StringValueConverter">
 				<property name="namespacePrefixResolver" ref="namespacePrefixResolver" />
 			</bean>
 		</property>

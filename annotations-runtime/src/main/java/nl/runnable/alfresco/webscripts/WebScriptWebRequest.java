@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
+import nl.runnable.alfresco.webscripts.arguments.CommandArgumentResolver;
+
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.web.context.request.WebRequest;
 
@@ -16,12 +18,12 @@ import org.springframework.web.context.request.WebRequest;
  * @author Laurens Fridael
  * 
  */
-class WebScriptWebRequest implements WebRequest {
+public class WebScriptWebRequest implements WebRequest {
 
 	private final WebScriptRequest request;
 	private Map<String, String[]> parameterMap;
 
-	WebScriptWebRequest(final WebScriptRequest request) {
+	public WebScriptWebRequest(final WebScriptRequest request) {
 		this.request = request;
 	}
 

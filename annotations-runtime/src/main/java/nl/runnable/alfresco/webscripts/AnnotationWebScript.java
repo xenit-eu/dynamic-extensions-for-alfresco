@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 import javax.servlet.http.HttpServletResponse;
 
 import nl.runnable.alfresco.webscripts.annotations.Attribute;
+import nl.runnable.alfresco.webscripts.arguments.HandlerMethodArgumentsResolver;
 
 import org.springframework.aop.support.AopUtils;
 import org.springframework.core.annotation.AnnotationUtils;
