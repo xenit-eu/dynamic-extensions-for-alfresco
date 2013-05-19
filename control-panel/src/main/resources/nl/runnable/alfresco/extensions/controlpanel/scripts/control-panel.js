@@ -53,29 +53,47 @@
     $('a[data-method="post"]').on('click', function(event) {
       event.preventDefault();
 
-      $('form#post').attr('action', $(this).attr('href')).submit();
+      function performPost() {
+        $('form#post').attr('action', $(self).attr('href')).submit();
 
-      // Show dialog
-      var message = $(this).data('message');
-      var title = $(this).data('title');
-      if (message || title) {
-        var html = "";
-        if (title) {
-          html += "<h2>" + title + "</h2>";
+        // Show dialog
+        var message = $(self).data('pendingMessage');
+        var title = $(self).data('pendingTitle');
+        if (message || title) {
+          var html = "";
+          if (title) {
+            html += "<h2>" + title + "</h2>";
+          }
+          if (message) {
+            html += "<p>" + message + "</p>";
+          }
+          bootbox.alert(html, $(self).data('pendingButton'), function() {
+            window.location.reload();
+          });
+
         }
-        if (message) {
-          html += "<p>" + message + "</p>";
-        }
-        bootbox.alert(html, $(this).data('button'), function() {
+        // Reload after wait.
+        var wait = $(self).data('wait') || 0;
+        window.setTimeout(function() {
           window.location.reload();
-        });
-
+        }, wait);
       }
-      // Reload after wait.
-      var wait = $(this).data('wait') || 0;
-      window.setTimeout(function() {
-        window.location.reload();
-      }, wait);
+
+      if ($(this).data('confirm')) {
+        var title = $(this).data('title') || 'Confirm';
+        var contents = "<h2>" + title + "</h2>";
+        contents += "<p>" + $(this).data('confirm') + "</p>";
+
+        var self = this;
+        bootbox.confirm(contents, function(confirmed) {
+          if (confirmed) {
+            performPost();
+          }
+        });
+      } else {
+        performPost();
+      }
+
     });
   });
 

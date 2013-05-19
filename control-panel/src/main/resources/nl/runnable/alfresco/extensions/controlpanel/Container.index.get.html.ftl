@@ -61,18 +61,20 @@
           </p>
           <p>
             <a href="container/restart" 
+              data-title="Restart OSGi container" 
+              data-confirm="Are you sure you want to restart the OSGi container?"
               data-method="post" 
               data-wait="15000" 
-              data-title="Restarting OSGi container" 
-              data-message="<p>Please wait while the OSGi container is restarting. The page will refresh automatically.</p>" 
-              data-button="Refresh page now"
+              data-pending-title="Restarting OSGi container"
+              data-pending-message="<p>Please wait while the OSGi container is restarting. The page will refresh automatically.</p>" 
+              data-pending-button="Refresh page now"
               class="btn btn-primary">
               Restart OSGi container
             </a>
           </p>
           <p>
-            If you get a "Not Found" or "Service Unavailable" response, wait a few seconds, then 
-            refresh the page.
+            If you get a "Not Found" or "Service Unavailable" response afterwards, wait a few 
+            seconds, then refresh the page.
           </p>
         <#else>
           <p>
