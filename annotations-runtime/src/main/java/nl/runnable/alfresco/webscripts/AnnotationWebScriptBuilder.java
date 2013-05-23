@@ -58,7 +58,7 @@ public class AnnotationWebScriptBuilder implements BeanFactoryAware {
 	 * @return The {@link AnnotationWebScript} or null if the implementation does not consider the bean to be a handler
 	 *         for an {@link AnnotationWebScript}.
 	 */
-	public List<AnnotationWebScript> createAnnotationWebScripts(final String beanName) {
+	public List<org.springframework.extensions.webscripts.WebScript> createWebScripts(final String beanName) {
 		Assert.hasText(beanName, "Bean name cannot be empty.");
 
 		final ConfigurableListableBeanFactory beanFactory = getBeanFactory();
@@ -132,7 +132,7 @@ public class AnnotationWebScriptBuilder implements BeanFactoryAware {
 				}
 			}
 		});
-		final List<AnnotationWebScript> webScripts = new ArrayList<AnnotationWebScript>();
+		final List<org.springframework.extensions.webscripts.WebScript> webScripts = new ArrayList<org.springframework.extensions.webscripts.WebScript>();
 		ReflectionUtils.doWithMethods(beanType, new ReflectionUtils.MethodCallback() {
 
 			@Override
@@ -147,7 +147,7 @@ public class AnnotationWebScriptBuilder implements BeanFactoryAware {
 
 		});
 		final Set<String> ids = new HashSet<String>();
-		for (final AnnotationWebScript webScript : webScripts) {
+		for (final org.springframework.extensions.webscripts.WebScript webScript : webScripts) {
 			if (ids.contains(webScript.getDescription().getId())) {
 				throw new IllegalStateException("Duplicate Web Script ID \"" + webScript.getDescription().getId()
 						+ "\" Make sure handler methods of annotation-based Web Scripts have unique names.");
@@ -174,6 +174,11 @@ public class AnnotationWebScriptBuilder implements BeanFactoryAware {
 		description.setId(id);
 		final Object handler = getBeanFactory().getBean(beanName);
 		description.setStore(new AnnotationWebScriptStore());
+		return createWebScript(description, handler, handlerMethods);
+	}
+
+	protected AnnotationWebScript createWebScript(final Description description, final Object handler,
+			final HandlerMethods handlerMethods) {
 		return new AnnotationWebScript(description, handler, handlerMethods, getHandlerMethodArgumentsResolver());
 	}
 

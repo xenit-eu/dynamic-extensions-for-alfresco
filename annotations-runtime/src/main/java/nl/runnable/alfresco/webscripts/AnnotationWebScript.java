@@ -18,7 +18,6 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.extensions.webscripts.Container;
 import org.springframework.extensions.webscripts.Description;
 import org.springframework.extensions.webscripts.Description.RequiredCache;
-import org.springframework.extensions.webscripts.DescriptionImpl;
 import org.springframework.extensions.webscripts.Format;
 import org.springframework.extensions.webscripts.TemplateProcessor;
 import org.springframework.extensions.webscripts.TemplateProcessorRegistry;
@@ -51,7 +50,9 @@ public class AnnotationWebScript implements WebScript {
 
 	private final String id;
 
-	public AnnotationWebScript(final DescriptionImpl description, final Object handler,
+	/* Main operations */
+
+	public AnnotationWebScript(final Description description, final Object handler,
 			final HandlerMethods handlerMethods, final HandlerMethodArgumentsResolver argumentsResolver) {
 		Assert.notNull(description, "Description cannot be null.");
 		Assert.hasText(description.getId(), "No ID provided in Description.");
@@ -111,8 +112,6 @@ public class AnnotationWebScript implements WebScript {
 	public void setURLModelFactory(final URLModelFactory arg0) {
 		/* Not yet implemented. */
 	}
-
-	/* Main Operations */
 
 	/* Handler operations */
 

@@ -28,8 +28,7 @@ public class AnnotationWebScriptRegistrar implements ApplicationContextAware {
 		for (final String beanName : applicationContext.getBeanDefinitionNames()) {
 			if (applicationContext.findAnnotationOnBean(beanName,
 					nl.runnable.alfresco.webscripts.annotations.WebScript.class) != null) {
-				for (final AnnotationWebScript webScript : annotationBasedWebScriptBuilder
-						.createAnnotationWebScripts(beanName)) {
+				for (final WebScript webScript : annotationBasedWebScriptBuilder.createWebScripts(beanName)) {
 					webScriptUriRegistry.registerWebScript(webScript);
 					webScripts.add(webScript);
 				}
