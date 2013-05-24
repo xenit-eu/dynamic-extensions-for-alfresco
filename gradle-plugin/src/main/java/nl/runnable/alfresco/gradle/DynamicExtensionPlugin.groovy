@@ -31,7 +31,6 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 
 	void configureExtensions(Project project) {
 		project.convention.plugins[ProjectConvention.class.name] = new ProjectConvention(project)
-		project.extensions.create("bundle", BundleExtension)
 		project.ext.username = project.has('username') ? project.username : null
 		project.ext.password = project.has('password') ? project.password : null
 	}
@@ -136,9 +135,6 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 		]
 		project.jar {
 			manifest {
-				instructionReplace "Bundle-SymbolicName", (project.bundle.symbolicName ?: project.name)
-				instructionReplace "Bundle-Name", (project.bundle.name ?: project.name)
-				instructionReplace "Bundle-Description", (project.bundle.description ?: project.description)
 				instruction "Alfresco-Dynamic-Extension", "true"
 				instruction "Import-Package", "*," + additionalPackages.join(",")
 			}
@@ -207,12 +203,4 @@ class ProjectConvention {
 		}
 	}
 
-}
-
-class BundleExtension {
-
-	String symbolicName
-	String name
-	String description
-	
 }
