@@ -215,10 +215,6 @@ public class BundleHelper {
 				throw new BundleException(
 						"Could not generate Bundle filename. Make sure the content is an OSGi bundle.");
 			}
-			final Bundle installedBundle = findInstalledBundle(identifier);
-			if (installedBundle != null) {
-				installedBundle.uninstall();
-			}
 			if (filename == null) {
 				filename = identifier.toJarFilename();
 			}
