@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>nl.runnable.alfresco.dynamicextensions</groupId>
+  <artifactId>annotations-runtime</artifactId>
+  <versioning>
+    <versions>
+      <version>1.0.0.M5-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20130524155206</lastUpdated>
+  </versioning>
+</metadata>
