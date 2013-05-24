@@ -77,8 +77,8 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 					if (e.status.code == 401) {
 						throw new BuildException("User not authorized to install bundles in repository. " + 
 							"Make sure you specify the correct username and password for an admin-level account.", e)
-					} else {
-						throw e 
+					} else if (e.status.code == 500) {
+						throw new BuildException("Error installing bundle in repository: ${e.message}", e)
 					}
 				}
 			}

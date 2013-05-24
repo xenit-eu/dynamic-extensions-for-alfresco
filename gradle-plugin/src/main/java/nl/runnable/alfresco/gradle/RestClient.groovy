@@ -26,10 +26,14 @@ class RestClient {
 		options.file.withInputStream { data -> conn.outputStream << data }
 		conn.outputStream.flush()
 		try {
-			String json = conn.content.text
-			return new JsonSlurper().parseText(json)
+			return new JsonSlurper().parseText(conn.content.text)
 		} catch (e) {
-			throw new RestClientException([status: [code: conn.responseCode, message: conn.responseMessage ], message: e.message]) 
+			String message = e.message;
+			if (conn.getHeaderField('Content-Type') == 'application/json') {			
+				def json = new JsonSlurper().parseText(conn.errorStream.text)
+				message = json.message
+			}
+			throw new RestClientException([status: [code: conn.responseCode, message: conn.responseMessage ], message: message]) 
 		}
 	}
 }

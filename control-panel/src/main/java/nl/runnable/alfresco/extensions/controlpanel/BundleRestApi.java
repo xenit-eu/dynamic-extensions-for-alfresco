@@ -52,8 +52,7 @@ public class BundleRestApi {
 			final Bundle bundle = bundleHelper.installBundleInRepository(content);
 			response.sendBundleInstalledMessage(bundle);
 		} catch (final BundleException e) {
-			response.sendMessage(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-					String.format("Error installing bundle: %s", e.getMessage()));
+			response.sendMessage(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 
 	}
