@@ -78,9 +78,11 @@ import org.xml.sax.EntityResolver;
  */
 class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContext {
 
-	private final Logger logger = LoggerFactory.getLogger(getClass());
+	private static final String SPRING_CONFIGURATION_HEADER = "Alfresco-Spring-Configuration";
 
 	private static final String HOST_APPLICATION_ALFRESCO_FILTER = "(hostApplication=alfresco)";
+
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	/* Configuration */
 
@@ -104,9 +106,15 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 	protected void loadBeanDefinitions(final DefaultListableBeanFactory beanFactory) throws IOException {
 		if (hasXmlConfiguration()) {
 			loadBeanDefinitionsFromXmlConfiguration(beanFactory);
+		} else if (hasSpringConfigurationHeader()) {
+			scanBeanDefinitionsFromSpringConfigurationPackages(beanFactory);
 		} else {
 			scanBeanDefinitionsFromExportedPackages(beanFactory);
 		}
+	}
+
+	protected boolean hasSpringConfigurationHeader() {
+		return getBundle().getHeaders().get(SPRING_CONFIGURATION_HEADER) != null;
 	}
 
 	/**
@@ -125,6 +133,18 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 		registerInfrastructureBeans(beanFactory);
 	}
 
+	protected void scanBeanDefinitionsFromSpringConfigurationPackages(final DefaultListableBeanFactory beanFactory) {
+		final String[] configurationPackages = getSpringConfigurationPackages();
+		if (configurationPackages != null) {
+			final Descriptor serverDescriptor = getService(DescriptorService.class).getServerDescriptor();
+			final ClassPathBeanDefinitionScanner scanner = new AlfrescoPlatformBeanDefinitionScanner(beanFactory,
+					serverDescriptor);
+			scanner.setResourceLoader(this);
+			scanner.scan(configurationPackages);
+			registerInfrastructureBeans(beanFactory);
+		}
+	}
+
 	/**
 	 * Populates the {@link BeanFactory} by scanning for classes listed in packages obtained from the Bundle's
 	 * {@link Constants#EXPORT_PACKAGE} header.
@@ -132,7 +152,9 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 	 * This allows for bundles that rely on annotation-based configuration only.
 	 * 
 	 * @param beanFactory
+	 * @deprecated Use {@link #scanBeanDefinitionsFromSpringConfigurationPackages(DefaultListableBeanFactory)} instead.
 	 */
+	@Deprecated
 	protected void scanBeanDefinitionsFromExportedPackages(final DefaultListableBeanFactory beanFactory) {
 		final String[] bundleExportPackages = getBundleExportPackages();
 		if (bundleExportPackages != null) {
@@ -294,12 +316,9 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 	}
 
 	/**
-	 * Obtais the Java packages that exported by the Bundle.
-	 * <p>
-	 * This implementation parses the raw bundle header using the {@link ManifestHeaderParser}.
-	 * 
-	 * @return
+	 * @deprecated Use {@link #getSpringConfigurationPackages()} instead
 	 */
+	@Deprecated
 	protected String[] getBundleExportPackages() {
 		String[] exportPackages = null;
 		final String exportPackageHeader = getBundle().getHeaders().get(Constants.EXPORT_PACKAGE);
@@ -307,6 +326,15 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 			exportPackages = ManifestHeaderParser.parseExportedPackages(exportPackageHeader);
 		}
 		return exportPackages;
+	}
+
+	protected String[] getSpringConfigurationPackages() {
+		final String header = getBundle().getHeaders().get(SPRING_CONFIGURATION_HEADER);
+		if (StringUtils.hasText(header)) {
+			return header.split(",");
+		} else {
+			return null;
+		}
 	}
 
 	/* Dependencies */

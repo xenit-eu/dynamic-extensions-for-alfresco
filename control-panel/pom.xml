@@ -68,6 +68,7 @@
 							org.springframework.aop,
 							org.springframework.aop.framework
 						</Import-Package>
+						<Bundle-DocURL>https://github.com/lfridael/dynamic-extensions-for-alfresco</Bundle-DocURL>
 					</instructions>
 				</configuration>
 			</plugin>

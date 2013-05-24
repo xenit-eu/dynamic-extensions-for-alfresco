@@ -54,6 +54,13 @@
     <@header name="Modified">
       <span data-time="${bundle.lastModified!}"></span>
     </@header>
+    <@header name="Documentation">
+      <#if bundle.documentationUrl??>
+        <a href="${bundle.documentationUrl}">${bundle.documentationUrl}</a>
+      <#else>
+        No documentation specified.
+      </#if>
+    </@header>
   </table>
 
   <#if bundle.status == 'installed'>

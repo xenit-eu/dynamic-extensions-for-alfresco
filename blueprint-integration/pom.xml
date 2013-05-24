@@ -80,6 +80,7 @@
 					<instructions>
 						<Fragment-Host>org.eclipse.gemini.blueprint.extender</Fragment-Host>
 						<Import-Package>nl.runnable.alfresco.osgi.webscripts,nl.runnable.alfresco.annotations,*</Import-Package>
+						<Bundle-DocURL>https://github.com/lfridael/dynamic-extensions-for-alfresco</Bundle-DocURL>
 					</instructions>
 				</configuration>
 			</plugin>

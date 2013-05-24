@@ -120,8 +120,12 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 		}
 	}
 
-	public Object getExportPackage() {
+	public String getExportPackage() {
 		return bundle.getHeaders().get(Constants.EXPORT_PACKAGE);
+	}
+
+	public String getDocumentationUrl() {
+		return bundle.getHeaders().get(Constants.BUNDLE_DOCURL);
 	}
 
 	public boolean isDeleteable() {
