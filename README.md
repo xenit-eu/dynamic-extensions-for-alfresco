@@ -21,8 +21,6 @@ Dynamic Extensions is distributed as an Alfresco Module Package (AMP).
 * After restarting Alfresco, open the Control Panel: <a href="http://localhost:8080/alfresco/service/dynamic-extensions/">http://localhost:8080/alfresco/service/dynamic-extensions/</a>.
 * Accessing the Control Panel requires an admin account.
 
-<img src="https://raw.github.com/wiki/lfridael/dynamic-extensions-for-alfresco/dynamic-extensions-control-panel.png" alt="Dynamic Extensions Control Panel" width="986" height="914"></img>
-
 Support for Alfresco Community
 ------------------------------
 
