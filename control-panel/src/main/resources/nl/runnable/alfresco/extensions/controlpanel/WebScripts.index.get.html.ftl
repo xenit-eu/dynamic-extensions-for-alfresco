@@ -1,7 +1,7 @@
 <#import "templates/html-macros.inc.ftl" as html>
 <@html.document title="Web Scripts - Dynamic Extensions" active="web-scripts">
 
-  <h2>Annotation-based Web Scripts</h2>
+  <h2>Annotation Web Scripts</h2>
 
   <#if (webScripts?size > 0) >
     <table class="web-script table table-striped table-bordered">
@@ -27,7 +27,9 @@
             <td class="uri">
               <ul>
                 <#list webScript.uris as uri>
-                  <li>${uri}</li>
+                  <li>
+                    <a href="${url.serviceContext}${uri}">${uri}</a>
+                  </li>
                 </#list>
               </ul>
             </td>
