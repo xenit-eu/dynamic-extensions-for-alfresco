@@ -62,6 +62,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		<property name="blueprintBundlesLocation" value="classpath:/alfresco/module/%module.id%/blueprint-bundles/*.jar" />
 		<property name="fileInstallBundlesLocation" value="classpath:/alfresco/module/%module.id%/file-install-bundles/*.jar" />
 		<property name="standardBundlesLocation" value="classpath:/alfresco/module/%module.id%/standard-bundles/*.jar" />
+		<property name="customBundlesLocation" value="classpath:/dynamic-extensions/bundles/*.jar" />
 		<property name="fileInstallConfigurer" ref="osgi.container.FileInstallConfigurer" />
 		<property name="configuration" ref="osgi.container.Configuration" />
 		<property name="repositoryStoreService" ref="osgi.container.RepositoryStoreService" />

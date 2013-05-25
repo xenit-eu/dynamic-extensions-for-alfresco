@@ -70,6 +70,8 @@ public class FrameworkManager implements ResourceLoaderAware {
 
 	private String standardBundlesLocation;
 
+	private String customBundlesLocation;
+
 	/**
 	 * Starts the {@link Framework} and registers services and {@link BundleListener}s.
 	 * 
@@ -123,6 +125,9 @@ public class FrameworkManager implements ResourceLoaderAware {
 			}
 			if (StringUtils.hasText(getStandardBundlesLocation())) {
 				locationPatterns.add(getStandardBundlesLocation());
+			}
+			if (StringUtils.hasText(getCustomBundlesLocation())) {
+				locationPatterns.add(getCustomBundlesLocation());
 			}
 			for (final String locationPattern : locationPatterns) {
 				try {
@@ -400,6 +405,14 @@ public class FrameworkManager implements ResourceLoaderAware {
 
 	protected String getStandardBundlesLocation() {
 		return standardBundlesLocation;
+	}
+
+	public void setCustomBundlesLocation(final String customBundlesLocation) {
+		this.customBundlesLocation = customBundlesLocation;
+	}
+
+	protected String getCustomBundlesLocation() {
+		return customBundlesLocation;
 	}
 
 	protected boolean isFileInstallEnabled() {
