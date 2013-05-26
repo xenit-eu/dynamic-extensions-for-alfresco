@@ -98,11 +98,11 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 			version: project.dynamicExtensions.version ?: Versions.DYNAMIC_EXTENSIONS
 		]
 		project.dependencies {
-			compile group: alfresco.group, name: "alfresco-core", version: alfresco.version
-			compile group: alfresco.group, name: "alfresco-repository", version: alfresco.version
-			compile group: alfresco.group, name: "alfresco-data-model", version: alfresco.version
-			compile group: surf.group, name: "spring-webscripts", version: surf.version
-			compile group: dynamicExtensions.group, name: "annotations", version: dynamicExtensions.version
+			compile ("${alfresco.group}:alfresco-core:${alfresco.version}") { transitive = false }
+			compile ("${alfresco.group}:alfresco-repository:${alfresco.version}") { transitive = false }
+			compile ("${alfresco.group}:alfresco-data-model:${alfresco.version}") { transitive = false }
+			compile ("${surf.group}:spring-webscripts:${surf.version}") { transitive = false }
+			compile ("${dynamicExtensions.group}:annotations:${dynamicExtensions.version}") { transitive = false }
 		}
 
 		if (project.useJavaxAnnotations) {
