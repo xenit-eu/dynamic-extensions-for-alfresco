@@ -63,7 +63,7 @@
     </@header>
   </table>
 
-  <#if bundle.status == 'installed'>
+  <#if bundle.status == 'installed' && !bundle.fragmentBundle>
     <div class="alert alert-error alert-block">
       <p>
         If this bundle remains in the <code>installed</code> state, the Java packages that 
