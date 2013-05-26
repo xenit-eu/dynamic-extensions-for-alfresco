@@ -92,7 +92,7 @@
     </thead>
     <tbody>
       <#list bundles as bundle>
-        <tr class="<#if bundle.status == 'installed'>error</#if>">
+        <tr class="<#if bundle.status == 'installed' && !bundle.fragmentBundle>error</#if>">
           <td>
             <@bundleLink bundle=bundle/>
           </td>
