@@ -226,7 +226,9 @@ public class BundleHelper {
 			} else {
 				bundle = bundleContext.installBundle(location, in);
 			}
-			bundle.start();
+			if (isFragmentBundle(bundle) == false) {
+				bundle.start();
+			}
 			final BundleManifest manifest = BundleManifestFactory.createBundleManifest(bundle.getHeaders());
 			saveBundleInRepository(tempFile, filename, manifest);
 			return bundle;
@@ -286,6 +288,10 @@ public class BundleHelper {
 
 	protected String generateRepositoryLocation(final String filename) {
 		return String.format("%s/%s", getBundleRepositoryLocation(), filename);
+	}
+
+	protected boolean isFragmentBundle(final Bundle bundle) {
+		return bundle.getHeaders().get(Constants.FRAGMENT_HOST) != null;
 	}
 
 	/* Container */
