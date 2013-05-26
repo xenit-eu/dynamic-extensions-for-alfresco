@@ -102,6 +102,7 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 			compile ("${alfresco.group}:alfresco-repository:${alfresco.version}") { transitive = false }
 			compile ("${alfresco.group}:alfresco-data-model:${alfresco.version}") { transitive = false }
 			compile ("${surf.group}:spring-webscripts:${surf.version}") { transitive = false }
+			compile ("${surf.group}:spring-surf-core:${surf.version}") { transitive = false }
 			compile ("${dynamicExtensions.group}:annotations:${dynamicExtensions.version}") { transitive = false }
 		}
 
