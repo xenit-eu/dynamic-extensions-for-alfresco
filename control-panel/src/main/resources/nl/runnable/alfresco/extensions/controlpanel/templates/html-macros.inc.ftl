@@ -30,7 +30,7 @@
             </ul>
             <ul class="nav pull-right">
               <li>
-                <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco" target="_blank">
+                <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco">
                   Github project
                 </a>
               </li>
