@@ -157,7 +157,7 @@ class ProjectConvention {
 	def alfresco = [:]
 	def surf = [:]
 	def dynamicExtensions = [:]
-	boolean useJavaxAnnotations = true
+	boolean useJavaxAnnotations = false
 
 	ProjectConvention(Project project) {
 		this.project = project
