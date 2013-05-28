@@ -119,14 +119,18 @@ public class AnnotationBasedBehaviourRegistrar extends AbstractAnnotationBasedRe
 		final AssociationPolicy associationPolicy = AnnotationUtils.findAnnotation(method, AssociationPolicy.class);
 		QName assocationName = null;
 		if (associationPolicy != null) {
-			classNames = parseQNames(associationPolicy.value(), associationPolicy);
+      final String[] associationPolicyValues = associationPolicy.value();
+      if (associationPolicyValues.length > 0) {
+        // fall back to @Behaviour classnames if none provided on @AssociationPolicy
+        classNames = parseQNames(associationPolicyValues, associationPolicy);
+      }
 			assocationName = parseQName(associationPolicy.association(), associationPolicy);
 			if (associationPolicy.event().equals(Event.INHERITED_OR_ALL) == false) {
 				notificationFrequency = associationPolicy.event().toNotificationFrequency();
 			}
 		}
 		final JavaBehaviour behaviour = new JavaBehaviour(bean, method.getName(), notificationFrequency);
-		if (classNames.length > 1) {
+		if (classNames.length > 0) {
 			for (final QName className : classNames) {
 				if (assocationName != null) {
 					if (logger.isDebugEnabled()) {
