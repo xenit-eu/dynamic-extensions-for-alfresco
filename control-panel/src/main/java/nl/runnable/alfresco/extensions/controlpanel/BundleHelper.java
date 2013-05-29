@@ -18,9 +18,6 @@ import java.util.jar.Manifest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.annotation.ManagedBean;
-import javax.inject.Inject;
-
 import nl.runnable.alfresco.osgi.RepositoryStoreService;
 
 import org.alfresco.model.ContentModel;
@@ -38,8 +35,10 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.launch.Framework;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.webscripts.servlet.FormData.FormField;
+import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
 
@@ -52,7 +51,7 @@ import com.springsource.util.osgi.manifest.BundleManifestFactory;
  * @author Laurens Fridael
  * 
  */
-@ManagedBean
+@Component
 public class BundleHelper {
 
 	private static final String ALFRESCO_DYNAMIC_EXTENSION_HEADER = "Alfresco-Dynamic-Extension";
@@ -71,19 +70,19 @@ public class BundleHelper {
 
 	/* Dependencies */
 
-	@Inject
+	@Autowired
 	private BundleContext bundleContext;
 
-	@Inject
+	@Autowired
 	private RepositoryStoreService repositoryStoreService;
 
-	@Inject
+	@Autowired
 	private FileFolderService fileFolderService;
 
-	@Inject
+	@Autowired
 	private ContentService contentService;
 
-	@Inject
+	@Autowired
 	private NodeService nodeService;
 
 	/* Container */

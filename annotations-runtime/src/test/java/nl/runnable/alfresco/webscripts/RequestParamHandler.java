@@ -1,15 +1,14 @@
 package nl.runnable.alfresco.webscripts;
 
-import javax.annotation.ManagedBean;
-
 import nl.runnable.alfresco.webscripts.annotations.RequestParam;
 import nl.runnable.alfresco.webscripts.annotations.Uri;
 import nl.runnable.alfresco.webscripts.annotations.WebScript;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+import org.springframework.stereotype.Component;
 
-@ManagedBean
+@Component
 @WebScript
 public class RequestParamHandler {
 

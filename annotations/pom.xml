@@ -9,12 +9,5 @@
 	<artifactId>annotations</artifactId>
 	<packaging>bundle</packaging>
 	<name>Annotations</name>
-	<description>Provides annotations for use in Dynamic Extensions.</description>
-	<dependencies>
-		<!-- Determine if this dependency is necessary. -->
-		<dependency>
-			<groupId>javax.inject</groupId>
-			<artifactId>javax.inject</artifactId>
-		</dependency>
-	</dependencies>
+	<description>Annotations for use in Dynamic Extensions.</description>
 </project>

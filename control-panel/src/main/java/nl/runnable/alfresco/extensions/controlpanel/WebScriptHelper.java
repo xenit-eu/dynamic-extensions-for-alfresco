@@ -4,19 +4,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.ManagedBean;
-import javax.inject.Inject;
-
 import nl.runnable.alfresco.extensions.controlpanel.template.TemplateWebScript;
 import nl.runnable.alfresco.webscripts.WebScriptUriRegistry;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.extensions.webscripts.WebScript;
+import org.springframework.stereotype.Component;
 
-@ManagedBean
+@Component
 public class WebScriptHelper {
 
-	@Inject
+	@Autowired
 	private BundleHelper bundleHelper;
 
 	/* Main operations */

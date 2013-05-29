@@ -1,10 +1,10 @@
 package nl.runnable.alfresco.extensions.controlpanel;
 
-import javax.annotation.ManagedBean;
-
 import nl.runnable.alfresco.webscripts.annotations.Attribute;
 import nl.runnable.alfresco.webscripts.annotations.Uri;
 import nl.runnable.alfresco.webscripts.annotations.WebScript;
+
+import org.springframework.stereotype.Component;
 
 /**
  * Handles requests for the index page.
@@ -13,7 +13,7 @@ import nl.runnable.alfresco.webscripts.annotations.WebScript;
  * 
  * @author Laurens Fridael
  */
-@ManagedBean
+@Component
 @WebScript
 public class IndexHandler extends AbstractControlPanelHandler {
 

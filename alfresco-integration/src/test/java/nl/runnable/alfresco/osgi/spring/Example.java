@@ -1,30 +1,29 @@
 package nl.runnable.alfresco.osgi.spring;
 
-import javax.inject.Inject;
-
 import nl.runnable.alfresco.annotations.AlfrescoService;
 import nl.runnable.alfresco.annotations.ServiceType;
 
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.search.CategoryService;
 import org.alfresco.service.namespace.NamespaceService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class Example {
 
-	@Inject
+	@Autowired
 	NodeService nodeService;
 
-	@Inject
+	@Autowired
 	NodeService namedNodeService;
 
-	@Inject
+	@Autowired
 	@AlfrescoService(ServiceType.LOW_LEVEL)
 	NodeService lowLevelNodeService;
 
-	@Inject
+	@Autowired
 	NamespaceService namespaceService;
 
-	@Inject
+	@Autowired
 	CategoryService categoryService;
 
 }

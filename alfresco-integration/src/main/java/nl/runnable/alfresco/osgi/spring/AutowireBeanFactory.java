@@ -1,10 +1,7 @@
 package nl.runnable.alfresco.osgi.spring;
 
 import java.lang.annotation.Annotation;
-import java.util.HashMap;
 import java.util.Map;
-
-import javax.inject.Named;
 
 import nl.runnable.alfresco.annotations.AlfrescoService;
 import nl.runnable.alfresco.annotations.ServiceType;
@@ -28,22 +25,6 @@ public class AutowireBeanFactory extends DefaultListableBeanFactory {
 
 	public AutowireBeanFactory(final BeanFactory parentBeanFactory) {
 		super(parentBeanFactory);
-	}
-
-	@Override
-	@SuppressWarnings("rawtypes")
-	protected Map<String, Object> findAutowireCandidates(final String beanName, final Class requiredType,
-			final DependencyDescriptor descriptor) {
-		Map<String, Object> candidateBeansByName = null;
-		final Named named = getAnnotation(descriptor, Named.class);
-		if (named != null) {
-			candidateBeansByName = putAnyNamedBean(named.value());
-		}
-		if (candidateBeansByName != null) {
-			return candidateBeansByName;
-		} else {
-			return super.findAutowireCandidates(beanName, requiredType, descriptor);
-		}
 	}
 
 	@Override
@@ -71,15 +52,6 @@ public class AutowireBeanFactory extends DefaultListableBeanFactory {
 	}
 
 	/* Utility operations */
-
-	private Map<String, Object> putAnyNamedBean(final String name) {
-		if (containsBean(name)) {
-			final Map<String, Object> candidateBeansByName = new HashMap<String, Object>(1);
-			candidateBeansByName.put(name, super.getBean(name));
-			return candidateBeansByName;
-		}
-		return null;
-	}
 
 	@SuppressWarnings("unchecked")
 	private <T extends Annotation> T getAnnotation(final DependencyDescriptor descriptor, final Class<T> annotationType) {

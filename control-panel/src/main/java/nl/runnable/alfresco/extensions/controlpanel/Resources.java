@@ -2,14 +2,13 @@ package nl.runnable.alfresco.extensions.controlpanel;
 
 import java.io.IOException;
 
-import javax.annotation.ManagedBean;
-
 import nl.runnable.alfresco.webscripts.annotations.FormatStyle;
 import nl.runnable.alfresco.webscripts.annotations.Uri;
 import nl.runnable.alfresco.webscripts.annotations.UriVariable;
 import nl.runnable.alfresco.webscripts.annotations.WebScript;
 
 import org.springframework.extensions.webscripts.WebScriptResponse;
+import org.springframework.stereotype.Component;
 
 /**
  * Web Script for handling requests for static resources for the Web Console.
@@ -19,7 +18,7 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
  * @author Laurens Fridael
  * 
  */
-@ManagedBean
+@Component
 @WebScript
 public class Resources extends AbstractBundleResourceHandler {
 

@@ -1,12 +1,12 @@
 package nl.runnable.alfresco.webscripts;
 
-import javax.annotation.ManagedBean;
-
 import nl.runnable.alfresco.webscripts.annotations.ExceptionHandler;
 import nl.runnable.alfresco.webscripts.annotations.Uri;
 import nl.runnable.alfresco.webscripts.annotations.WebScript;
 
-@ManagedBean
+import org.springframework.stereotype.Component;
+
+@Component
 @WebScript
 public class ExceptionHandlerExample {
 

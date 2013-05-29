@@ -30,17 +30,6 @@
 			<artifactId>alfresco-integration</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- Runtime dependencies will be added to AMP. -->
-		<dependency>
-			<groupId>javax.inject</groupId>
-			<artifactId>javax.inject</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.geronimo.specs</groupId>
-			<artifactId>geronimo-annotation_1.1_spec</artifactId>
-			<scope>runtime</scope>
-		</dependency>
 		<dependency>
 			<!-- The core asm library is already included in Alfresco distributions, so we just add asm-commons. -->
 			<groupId>asm</groupId>

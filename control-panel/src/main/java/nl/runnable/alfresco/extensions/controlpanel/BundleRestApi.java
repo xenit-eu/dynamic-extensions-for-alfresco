@@ -2,8 +2,6 @@ package nl.runnable.alfresco.extensions.controlpanel;
 
 import java.io.IOException;
 
-import javax.annotation.ManagedBean;
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
 import nl.runnable.alfresco.webscripts.annotations.Attribute;
@@ -16,8 +14,10 @@ import nl.runnable.alfresco.webscripts.annotations.WebScript;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.webscripts.WebScriptResponse;
+import org.springframework.stereotype.Component;
 
 /**
  * Handles requests for the Bundle REST API.
@@ -27,7 +27,7 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
  * @author Laurens Fridael
  * 
  */
-@ManagedBean
+@Component
 @WebScript(baseUri = "/dynamic-extensions/api/bundles")
 @Authentication(value = AuthenticationType.ADMIN)
 public class BundleRestApi {
@@ -36,7 +36,7 @@ public class BundleRestApi {
 
 	/* Dependencies */
 
-	@Inject
+	@Autowired
 	private BundleHelper bundleHelper;
 
 	/* Main operations */

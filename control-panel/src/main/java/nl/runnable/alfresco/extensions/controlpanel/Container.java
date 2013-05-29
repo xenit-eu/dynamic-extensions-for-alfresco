@@ -10,8 +10,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.Executors;
 
-import javax.annotation.ManagedBean;
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
 import nl.runnable.alfresco.extensions.controlpanel.template.TemplateBundle;
@@ -34,6 +32,8 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.launch.Framework;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * Handles requests for the configuration page.
@@ -41,7 +41,7 @@ import org.osgi.framework.launch.Framework;
  * @author Laurens Fridael
  * 
  */
-@ManagedBean
+@Component
 @WebScript(baseUri = "/dynamic-extensions/container", defaultFormat = "html")
 @Authentication(AuthenticationType.ADMIN)
 @Cache(neverCache = true)
@@ -49,19 +49,19 @@ public class Container extends AbstractControlPanelHandler {
 
 	/* Dependencies */
 
-	@Inject
+	@Autowired
 	private BundleHelper bundleHelper;
 
-	@Inject
+	@Autowired
 	private FrameworkHelper frameworkHelper;
 
-	@Inject
+	@Autowired
 	private FileFolderService fileFolderService;
 
-	@Inject
+	@Autowired
 	private NodeService nodeService;
 
-	@Inject
+	@Autowired
 	private RepositoryStoreService repositoryStoreService;
 
 	/* Main operations */

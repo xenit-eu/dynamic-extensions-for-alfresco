@@ -13,11 +13,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.util.Assert;
 import org.springframework.util.FileCopyUtils;
@@ -33,7 +33,7 @@ public abstract class AbstractBundleResourceHandler {
 
 	/* Dependencies */
 
-	@Inject
+	@Autowired
 	private BundleContext bundleContext;
 
 	/* Container */

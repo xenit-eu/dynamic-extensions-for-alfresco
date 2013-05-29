@@ -13,14 +13,6 @@
 	<packaging>bundle</packaging>
 	<dependencies>
 		<dependency>
-			<groupId>javax.inject</groupId>
-			<artifactId>javax.inject</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.geronimo.specs</groupId>
-			<artifactId>geronimo-annotation_1.1_spec</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>nl.runnable.alfresco.dynamicextensions</groupId>
 			<artifactId>alfresco-integration</artifactId>
 			<version>${project.version}</version>
@@ -44,6 +36,12 @@
 		<dependency>
 			<groupId>com.springsource.util</groupId>
 			<artifactId>com.springsource.util.osgi</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.annotation</groupId>
+			<artifactId>jsr250-api</artifactId>
+			<version>1.0</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

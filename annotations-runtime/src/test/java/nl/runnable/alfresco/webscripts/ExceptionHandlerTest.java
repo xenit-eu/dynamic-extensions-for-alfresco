@@ -2,16 +2,15 @@ package nl.runnable.alfresco.webscripts;
 
 import static org.junit.Assert.*;
 
-import javax.inject.Inject;
-
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class ExceptionHandlerTest extends AbstractWebScriptAnnotationsTest {
 
-	@Inject
+	@Autowired
 	private ExceptionHandlerExample handler;
 
 	@Test

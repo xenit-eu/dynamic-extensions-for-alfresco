@@ -2,7 +2,6 @@ package nl.runnable.alfresco.webscripts;
 
 import java.util.Map;
 
-import javax.annotation.ManagedBean;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,8 +12,9 @@ import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.extensions.webscripts.WebScriptSession;
+import org.springframework.stereotype.Component;
 
-@ManagedBean
+@Component
 @WebScript
 public class ArgumentResolverHandler {
 

@@ -8,8 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.ManagedBean;
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
 import nl.runnable.alfresco.extensions.controlpanel.template.TemplateBundle;
@@ -28,9 +26,11 @@ import nl.runnable.alfresco.webscripts.annotations.WebScript;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.extensions.webscripts.servlet.FormData.FormField;
+import org.springframework.stereotype.Component;
 
-@ManagedBean
+@Component
 @WebScript(baseUri = "/dynamic-extensions/bundles", defaultFormat = "html")
 @Authentication(AuthenticationType.ADMIN)
 @Cache(neverCache = true)
@@ -38,7 +38,7 @@ public class Bundles extends AbstractControlPanelHandler {
 
 	/* Dependencies */
 
-	@Inject
+	@Autowired
 	private BundleHelper bundleHelper;
 
 	/* Main operations */

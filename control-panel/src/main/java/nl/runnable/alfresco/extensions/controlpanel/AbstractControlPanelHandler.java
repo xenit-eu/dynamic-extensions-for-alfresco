@@ -4,8 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import javax.annotation.Resource;
 
 import nl.runnable.alfresco.extensions.controlpanel.template.Variables;
 import nl.runnable.alfresco.osgi.ConfigurationValues;
@@ -15,6 +14,7 @@ import nl.runnable.alfresco.webscripts.annotations.Before;
 import nl.runnable.alfresco.webscripts.annotations.Uri;
 
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
@@ -30,11 +30,10 @@ abstract class AbstractControlPanelHandler {
 	private static final String[] FLASH_VARIABLES = new String[] { Variables.INSTALLED_BUNDLE,
 			Variables.SUCCESS_MESSAGE, Variables.ERROR_MESSAGE };
 
-	@Inject
+	@Autowired
 	protected nl.runnable.alfresco.osgi.Configuration osgiConfiguration;
 
-	@Inject
-	@Named("osgi.container.SystemPackages")
+	@Resource(name = "osgi.container.SystemPackages")
 	private ConfigurationValues<SystemPackage> systemPackages;
 
 	/* Attributes */
