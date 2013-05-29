@@ -66,10 +66,8 @@ public class AnnotationWebScriptBuilder implements BeanFactoryAware {
 		if (beanType == null) {
 			return Collections.emptyList();
 		}
-		final WebScript webScriptAnnotation = beanFactory.findAnnotationOnBean(beanName, WebScript.class);
-		if (webScriptAnnotation == null) {
-			return null;
-		}
+		final WebScript webScriptAnnotation = beanFactory.findAnnotationOnBean(beanName, WebScript.class) != null ? beanFactory
+				.findAnnotationOnBean(beanName, WebScript.class) : getDefaultWebScriptAnnotation();
 		final String baseUri = webScriptAnnotation.baseUri();
 		if (StringUtils.hasText(baseUri) && baseUri.startsWith("/") == false) {
 			throw new RuntimeException(String.format(
@@ -139,7 +137,7 @@ public class AnnotationWebScriptBuilder implements BeanFactoryAware {
 			public void doWith(final Method method) throws IllegalArgumentException, IllegalAccessException {
 				final Uri uri = AnnotationUtils.findAnnotation(method, Uri.class);
 				if (uri != null) {
-					final AnnotationWebScript webScript = createWebScript(beanName, uri,
+					final AnnotationWebScript webScript = createWebScript(beanName, webScriptAnnotation, uri,
 							handlerMethods.createForUriMethod(method));
 					webScripts.add(webScript);
 				}
@@ -159,16 +157,15 @@ public class AnnotationWebScriptBuilder implements BeanFactoryAware {
 
 	/* Utility operations */
 
-	protected AnnotationWebScript createWebScript(final String beanName, final Uri uri,
+	protected AnnotationWebScript createWebScript(final String beanName, final WebScript webScript, final Uri uri,
 			final HandlerMethods handlerMethods) {
 		final DescriptionImpl description = new DescriptionImpl();
-		final WebScript webScript = getBeanFactory().findAnnotationOnBean(beanName, WebScript.class);
 		if (StringUtils.hasText(webScript.defaultFormat())) {
 			description.setDefaultFormat(webScript.defaultFormat());
 		}
 		final String baseUri = webScript.baseUri();
 		handleHandlerMethodAnnotation(uri, handlerMethods.getUriMethod(), description, baseUri);
-		handleTypeAnnotations(beanName, description);
+		handleTypeAnnotations(beanName, webScript, description);
 		final String id = String.format("%s.%s.%s", generateId(beanName), handlerMethods.getUriMethod().getName(),
 				description.getMethod().toLowerCase());
 		description.setId(id);
@@ -251,10 +248,9 @@ public class AnnotationWebScriptBuilder implements BeanFactoryAware {
 		description.setMultipartProcessing(uri.multipartProcessing());
 	}
 
-	protected void handleTypeAnnotations(final String beanName, final DescriptionImpl description) {
+	protected void handleTypeAnnotations(final String beanName, final WebScript webScript,
+			final DescriptionImpl description) {
 		final ConfigurableListableBeanFactory beanFactory = getBeanFactory();
-		final WebScript webScript = beanFactory.findAnnotationOnBean(beanName, WebScript.class);
-		assert (webScript != null);
 		handleWebScriptAnnotation(webScript, beanName, description);
 		Authentication authentication = beanFactory.findAnnotationOnBean(beanName, Authentication.class);
 		if (authentication == null) {
@@ -432,6 +428,13 @@ public class AnnotationWebScriptBuilder implements BeanFactoryAware {
 		class Default {
 		}
 		return Default.class.getAnnotation(Cache.class);
+	}
+
+	private static WebScript getDefaultWebScriptAnnotation() {
+		@WebScript
+		class Default {
+		}
+		return Default.class.getAnnotation(WebScript.class);
 	}
 
 	/* Dependencies */

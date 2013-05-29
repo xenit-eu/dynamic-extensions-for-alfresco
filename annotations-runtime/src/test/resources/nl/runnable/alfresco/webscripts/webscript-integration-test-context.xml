@@ -34,9 +34,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 		<property name="class" value="org.alfresco.service.namespace.NamespacePrefixResolver" />
 	</bean>
 
-	<bean class="nl.runnable.alfresco.spring.SpyBeanPostProcessor">
-		<property name="annotation" value="nl.runnable.alfresco.webscripts.annotations.WebScript" />
-	</bean>
+	<bean class="nl.runnable.alfresco.spring.SpyBeanPostProcessor"/>
 
 	<context:component-scan base-package="nl.runnable.alfresco.webscripts" />
 

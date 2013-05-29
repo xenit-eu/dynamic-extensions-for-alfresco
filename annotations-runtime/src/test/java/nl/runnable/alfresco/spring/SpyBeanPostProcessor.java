@@ -17,9 +17,9 @@ public class SpyBeanPostProcessor implements BeanPostProcessor {
 
 	/* Configuration */
 
-	private Class<? extends Annotation> annotation;
+	private Class<? extends Annotation> annotation = Spied.class;
 
-	private Class<? extends Annotation> clazz;
+	private Class<?> clazz;
 
 	/* Main operations */
 

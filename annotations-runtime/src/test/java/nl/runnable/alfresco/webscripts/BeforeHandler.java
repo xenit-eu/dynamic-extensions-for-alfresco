@@ -2,15 +2,15 @@ package nl.runnable.alfresco.webscripts;
 
 import java.util.Map;
 
+import nl.runnable.alfresco.spring.Spied;
 import nl.runnable.alfresco.webscripts.annotations.Attribute;
 import nl.runnable.alfresco.webscripts.annotations.Before;
 import nl.runnable.alfresco.webscripts.annotations.Uri;
-import nl.runnable.alfresco.webscripts.annotations.WebScript;
 
 import org.springframework.stereotype.Component;
 
 @Component
-@WebScript
+@Spied
 public class BeforeHandler {
 
 	@Before

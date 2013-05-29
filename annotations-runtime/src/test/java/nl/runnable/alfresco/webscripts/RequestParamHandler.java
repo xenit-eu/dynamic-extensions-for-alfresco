@@ -1,15 +1,15 @@
 package nl.runnable.alfresco.webscripts;
 
+import nl.runnable.alfresco.spring.Spied;
 import nl.runnable.alfresco.webscripts.annotations.RequestParam;
 import nl.runnable.alfresco.webscripts.annotations.Uri;
-import nl.runnable.alfresco.webscripts.annotations.WebScript;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.springframework.stereotype.Component;
 
 @Component
-@WebScript
+@Spied
 public class RequestParamHandler {
 
 	@Uri("/handleNaming")

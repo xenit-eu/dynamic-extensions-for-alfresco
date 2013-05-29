@@ -3,6 +3,7 @@ package nl.runnable.alfresco.webscripts;
 import java.util.HashMap;
 import java.util.Map;
 
+import nl.runnable.alfresco.spring.Spied;
 import nl.runnable.alfresco.webscripts.annotations.Cache;
 import nl.runnable.alfresco.webscripts.annotations.ResponseTemplate;
 import nl.runnable.alfresco.webscripts.annotations.Uri;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @WebScript(defaultFormat = "html")
+@Spied
 @Cache(neverCache = true)
 public class ResponseTemplateHandler {
 
