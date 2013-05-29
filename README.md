@@ -3,7 +3,7 @@ Dynamic Extensions for Alfresco
 
 Rapid development of Alfresco repository extensions in Java. Deploy your code in seconds, not minutes. Life is too short for endless server restarts.
 
-Dynamic Extensions adds an OSGi container to the Alfresco repository, enabling live deployment of Java code packaged as OSGi bundles. Alfresco itself is not "OSGi-fied" in any way; the OSGi container runs completely separate from the core Alfresco platform.
+Dynamic Extensions adds an OSGi container to the Alfresco repository, enabling live deployment of Java code, with no need to restart the server. Alfresco itself is not "OSGi-fied" in any way; the OSGi container runs completely separate from the core Alfresco platform.
 
 Latest release: Milestone 5
 ---------------------------
@@ -15,7 +15,7 @@ Latest release: Milestone 5
 * `@ExceptionHandler` annotation for generalizing exception handling in Web Scripts.
 * Bug fixes and fine-tunings throughout.
 
-Many thanks to @laurentvdl for his contributions.
+Many thanks to laurentvdl for his contributions.
 
 Installing Dynamic Extensions
 -----------------------------
@@ -49,11 +49,11 @@ Example extension code
 
 This example Web Script examines a node and passes information to a Freemarker template:
 ```java
-@ManagedBean
+@Component
 @WebScript
 public ExampleWebScript {
 
-  @Inject
+  @Autowired
   private NodeService nodeService;
   
   @Uri("/show-node")
@@ -106,4 +106,4 @@ Milestone 6 (September 2013)
 
 This milestone fine-tunes and wraps up all the work that went into Dynamic Extensions over the past two years.
 
-<a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/issues?milestone=4&state=open">issue list for milestone 6</a>.
+<a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/issues?milestone=4&state=open">Issue list for milestone 6</a>.
