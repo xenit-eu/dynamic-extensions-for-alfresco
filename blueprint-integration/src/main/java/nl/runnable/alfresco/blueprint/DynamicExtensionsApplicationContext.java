@@ -22,7 +22,6 @@ import org.alfresco.service.descriptor.Descriptor;
 import org.alfresco.service.descriptor.DescriptorService;
 import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationContext;
-import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
@@ -45,8 +44,7 @@ import org.xml.sax.EntityResolver;
  * {@link ApplicationContext} for Dynamic Extensions.
  * <p>
  * This implementation populates the {@link BeanFactory} with {@link BeanDefinition}s by scanning for classes in
- * packages listed in an OSGi bundle's {@link Constants#EXPORT_PACKAGE}. This enables annotation-only, XML-free
- * {@link ApplicationContext} configuration.
+ * packages listed in the bundle's {@value #SPRING_CONFIGURATION_HEADER} header. This enables XML-free configuration.
  * <p>
  * Using annotation for configuring the ApplicationContext is the default and preferred option. (See below for notes on
  * configuring the ApplicationContext through XML.)
@@ -104,12 +102,15 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 
 	@Override
 	protected void loadBeanDefinitions(final DefaultListableBeanFactory beanFactory) throws IOException {
-		if (hasXmlConfiguration()) {
-			loadBeanDefinitionsFromXmlConfiguration(beanFactory);
-		} else if (hasSpringConfigurationHeader()) {
+		if (hasSpringConfigurationHeader()) {
 			scanBeanDefinitionsFromSpringConfigurationPackages(beanFactory);
+		} else if (hasXmlConfiguration()) {
+			loadBeanDefinitionsFromXmlConfiguration(beanFactory);
 		} else {
-			scanBeanDefinitionsFromExportedPackages(beanFactory);
+			if (logger.isWarnEnabled()) {
+				logger.warn(String.format("No Spring XML found in /META-INF/spring and no '%s' header specified.",
+						SPRING_CONFIGURATION_HEADER) + " No components will be instantiated.");
+			}
 		}
 	}
 
@@ -142,34 +143,6 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 			scanner.setResourceLoader(this);
 			scanner.scan(configurationPackages);
 			registerInfrastructureBeans(beanFactory);
-		}
-	}
-
-	/**
-	 * Populates the {@link BeanFactory} by scanning for classes listed in packages obtained from the Bundle's
-	 * {@link Constants#EXPORT_PACKAGE} header.
-	 * <p>
-	 * This allows for bundles that rely on annotation-based configuration only.
-	 * 
-	 * @param beanFactory
-	 * @deprecated Use {@link #scanBeanDefinitionsFromSpringConfigurationPackages(DefaultListableBeanFactory)} instead.
-	 */
-	@Deprecated
-	protected void scanBeanDefinitionsFromExportedPackages(final DefaultListableBeanFactory beanFactory) {
-		final String[] bundleExportPackages = getBundleExportPackages();
-		if (bundleExportPackages != null) {
-			final Descriptor serverDescriptor = getService(DescriptorService.class).getServerDescriptor();
-			final ClassPathBeanDefinitionScanner scanner = new AlfrescoPlatformBeanDefinitionScanner(beanFactory,
-					serverDescriptor);
-			scanner.setResourceLoader(this);
-			scanner.scan(bundleExportPackages);
-			registerInfrastructureBeans(beanFactory);
-		} else {
-			if (logger.isWarnEnabled()) {
-				logger.warn("Could not find Spring XML configuration in bundle "
-						+ "and could not detect any packages in the Export-Package bundle header. "
-						+ "No components will be instantiated.");
-			}
 		}
 	}
 
@@ -313,19 +286,6 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 					BeanDefinitionBuilder.rootBeanDefinition(DynamicExtensionsAdvisorAutoProxyCreator.class)
 							.getBeanDefinition());
 		}
-	}
-
-	/**
-	 * @deprecated Use {@link #getSpringConfigurationPackages()} instead
-	 */
-	@Deprecated
-	protected String[] getBundleExportPackages() {
-		String[] exportPackages = null;
-		final String exportPackageHeader = getBundle().getHeaders().get(Constants.EXPORT_PACKAGE);
-		if (StringUtils.hasText(exportPackageHeader)) {
-			exportPackages = ManifestHeaderParser.parseExportedPackages(exportPackageHeader);
-		}
-		return exportPackages;
 	}
 
 	protected String[] getSpringConfigurationPackages() {
