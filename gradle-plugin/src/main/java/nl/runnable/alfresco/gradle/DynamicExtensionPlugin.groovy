@@ -86,31 +86,28 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 
 	void configureDependencies(Project project) {
 		def alfresco = [
-			group: project.alfresco.group ?: "org.alfresco",
 			version: project.alfresco.version ?: Versions.ALFRESCO
 		]
 		def surf = [
-			group: project.surf.group ?: "org.springframework.extensions.surf",
 			version: project.surf.version ?: Versions.SURF
 		]
 		def dynamicExtensions = [
-			group: project.dynamicExtensions.group ?: "nl.runnable.alfresco.dynamicextensions",
 			version: project.dynamicExtensions.version ?: Versions.DYNAMIC_EXTENSIONS
 		]
+		def spring = [
+			version: project.surf.version ?: Versions.SURF
+		]
 		project.dependencies {
-			compile ("${alfresco.group}:alfresco-core:${alfresco.version}") { transitive = false }
-			compile ("${alfresco.group}:alfresco-repository:${alfresco.version}") { transitive = false }
-			compile ("${alfresco.group}:alfresco-data-model:${alfresco.version}") { transitive = false }
-			compile ("${surf.group}:spring-webscripts:${surf.version}") { transitive = false }
-			compile ("${surf.group}:spring-surf-core:${surf.version}") { transitive = false }
-			compile ("${dynamicExtensions.group}:annotations:${dynamicExtensions.version}") { transitive = false }
-		}
-
-		if (project.useJavaxAnnotations) {
-			project.dependencies {
-				compile group:"javax.inject", name: "javax.inject", version: "1"
-				compile group: "org.apache.geronimo.specs", name: "geronimo-annotation_1.1_spec", version: "1.0.1"
-			}
+			compile ("org.alfresco:alfresco-core:${alfresco.version}") { transitive = false }
+			compile ("org.alfresco:alfresco-repository:${alfresco.version}") { transitive = false }
+			compile ("org.alfresco:alfresco-data-model:${alfresco.version}") { transitive = false }
+			compile ("org.springframework.extensions.surf:spring-webscripts:${surf.version}") { transitive = false }
+			compile ("org.springframework.extensions.surf:spring-surf-core:${surf.version}") { transitive = false }
+			compile ("nl.runnable.alfresco.dynamicextensions:annotations:${dynamicExtensions.version}") { transitive = false }
+			// Since Spring is so fundamental, this is the one dependency we leave as transitive. 
+			compile ('org.springframework:spring-context:3.0.0.RELEASE')
+			// JSR-250 API contains the @Resource annotation for referencing dependencies by name.
+			compile ('javax.annotation:jsr250-api:1.0') { transitive = false }
 		}
 	}
 
@@ -158,7 +155,6 @@ class ProjectConvention {
 	def alfresco = [:]
 	def surf = [:]
 	def dynamicExtensions = [:]
-	boolean useJavaxAnnotations = false
 
 	ProjectConvention(Project project) {
 		this.project = project
@@ -174,10 +170,6 @@ class ProjectConvention {
 
 	void useSurfVersion(String version) {
 		project.surf.version = version
-	}
-
-	void useJavaxAnnotations(boolean useJavaxAnnotations = true) {
-		project.useJavaxAnnotations = useJavaxAnnotations
 	}
 
 	Task getInstallBundle() {
