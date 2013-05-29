@@ -1,8 +1,8 @@
-package nl.runnable.alfresco.extensions.controlpanel;
+package nl.runnable.alfresco.controlpanel;
 
 import java.util.Map;
 
-import nl.runnable.alfresco.extensions.controlpanel.template.Variables;
+import nl.runnable.alfresco.controlpanel.template.Variables;
 import nl.runnable.alfresco.webscripts.annotations.HttpMethod;
 import nl.runnable.alfresco.webscripts.annotations.ResponseTemplate;
 import nl.runnable.alfresco.webscripts.annotations.Uri;

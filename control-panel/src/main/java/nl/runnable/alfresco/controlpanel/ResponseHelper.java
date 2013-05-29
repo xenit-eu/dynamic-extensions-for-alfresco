@@ -1,10 +1,10 @@
-package nl.runnable.alfresco.extensions.controlpanel;
+package nl.runnable.alfresco.controlpanel;
 
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
-import nl.runnable.alfresco.extensions.controlpanel.template.Variables;
+import nl.runnable.alfresco.controlpanel.template.Variables;
 
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;

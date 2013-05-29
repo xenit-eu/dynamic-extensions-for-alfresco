@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.extensions.controlpanel;
+package nl.runnable.alfresco.controlpanel;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -6,7 +6,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import nl.runnable.alfresco.extensions.controlpanel.template.Variables;
+import nl.runnable.alfresco.controlpanel.template.Variables;
 import nl.runnable.alfresco.osgi.ConfigurationValues;
 import nl.runnable.alfresco.osgi.SystemPackage;
 import nl.runnable.alfresco.webscripts.annotations.Attribute;

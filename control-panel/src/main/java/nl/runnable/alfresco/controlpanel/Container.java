@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.extensions.controlpanel;
+package nl.runnable.alfresco.controlpanel;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -12,8 +12,8 @@ import java.util.concurrent.Executors;
 
 import javax.servlet.http.HttpServletResponse;
 
-import nl.runnable.alfresco.extensions.controlpanel.template.TemplateBundle;
-import nl.runnable.alfresco.extensions.controlpanel.template.Variables;
+import nl.runnable.alfresco.controlpanel.template.TemplateBundle;
+import nl.runnable.alfresco.controlpanel.template.Variables;
 import nl.runnable.alfresco.osgi.RepositoryStoreService;
 import nl.runnable.alfresco.webscripts.annotations.Attribute;
 import nl.runnable.alfresco.webscripts.annotations.Authentication;

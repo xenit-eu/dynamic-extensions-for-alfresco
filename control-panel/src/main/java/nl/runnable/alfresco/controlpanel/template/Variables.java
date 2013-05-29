@@ -1,8 +1,8 @@
-package nl.runnable.alfresco.extensions.controlpanel.template;
+package nl.runnable.alfresco.controlpanel.template;
 
 import java.util.List;
 
-import nl.runnable.alfresco.extensions.controlpanel.Container;
+import nl.runnable.alfresco.controlpanel.Container;
 import nl.runnable.alfresco.osgi.SystemPackage;
 
 import org.osgi.framework.Bundle;

@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.extensions.controlpanel.template;
+package nl.runnable.alfresco.controlpanel.template;
 
 import java.util.Arrays;
 import java.util.List;

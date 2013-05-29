@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.extensions.controlpanel;
+package nl.runnable.alfresco.controlpanel;
 
 import nl.runnable.alfresco.webscripts.annotations.Attribute;
 import nl.runnable.alfresco.webscripts.annotations.Uri;

@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.extensions.controlpanel;
+package nl.runnable.alfresco.controlpanel;
 
 import java.io.File;
 import java.io.FileInputStream;

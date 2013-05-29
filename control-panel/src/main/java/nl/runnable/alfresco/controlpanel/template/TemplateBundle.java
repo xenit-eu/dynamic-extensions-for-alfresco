@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.extensions.controlpanel.template;
+package nl.runnable.alfresco.controlpanel.template;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import nl.runnable.alfresco.extensions.controlpanel.BundleHelper;
+import nl.runnable.alfresco.controlpanel.BundleHelper;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;

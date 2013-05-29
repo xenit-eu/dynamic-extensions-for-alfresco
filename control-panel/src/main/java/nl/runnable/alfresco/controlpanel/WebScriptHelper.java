@@ -1,10 +1,10 @@
-package nl.runnable.alfresco.extensions.controlpanel;
+package nl.runnable.alfresco.controlpanel;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import nl.runnable.alfresco.extensions.controlpanel.template.TemplateWebScript;
+import nl.runnable.alfresco.controlpanel.template.TemplateWebScript;
 import nl.runnable.alfresco.webscripts.WebScriptUriRegistry;
 
 import org.springframework.beans.factory.annotation.Autowired;
