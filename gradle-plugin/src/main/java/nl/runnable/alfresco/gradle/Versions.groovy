@@ -6,11 +6,7 @@ package nl.runnable.alfresco.gradle
  */
 
 class Versions {
-	/*
-	 * It's good practice to avoid SNAPSHOT dependencies, so this plugin adds a dependency on the previous
-	 * Dynamic Extension milestone.
-	 */
-	static final DYNAMIC_EXTENSIONS = "1.0.0.M4"
+	static final DYNAMIC_EXTENSIONS = "1.0.0.M5"
 	
 	static final ALFRESCO = "4.0.e"
 	

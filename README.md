@@ -5,18 +5,24 @@ Rapid development of Alfresco repository extensions in Java. Deploy your code in
 
 Dynamic Extensions adds an OSGi container to the Alfresco repository, enabling live deployment of Java code packaged as OSGi bundles. Alfresco itself is not "OSGi-fied" in any way; the OSGi container runs completely separate from the core Alfresco platform.
 
-Latest release: Milestone 4
+Latest release: Milestone 5
 ---------------------------
 
-* **New**: Control Panel web interface for managing Dynamic Extensions.
-* **New**: Annotation-based Web Scripts now support Freemarker templates.
+* <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/wiki/Building-Alfresco-repository-extensions-for-Dynamic-Extensions-using-Gradle">Gradle plugin for building your own repository extensions</a>
+* `@RunAs`, `@RunAsSystem` annotations for running methods as a particular repository user
+* `@Transactional` annotation for running methods within a repository transaction.
+* `@Before` annotation for handling common Web Script preprocessing logic.
+* `@ExceptionHandler` annotation for generalizing exception handling in Web Scripts.
+* Bug fixes and fine-tunings throughout.
+
+Many thanks to @laurentvdl for his contributions.
 
 Installing Dynamic Extensions
 -----------------------------
 
 Dynamic Extensions is distributed as an Alfresco Module Package (AMP).
 
-* Download the <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/raw/mvn-repo/nl/runnable/alfresco/dynamicextensions/alfresco-module/1.0.0.M4/alfresco-module-1.0.0.M4.amp">Dynamic Extensions Milestone 4 AMP</a>.
+* Download the <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/raw/mvn-repo/nl/runnable/alfresco/dynamicextensions/alfresco-module/1.0.0.M5/alfresco-module-1.0.0.M5.amp">Dynamic Extensions Milestone 5 AMP</a>.
 * Use the <a href="http://docs.alfresco.com/4.0/index.jsp?topic=%2Fcom.alfresco.enterprise.doc%2Ftasks%2Famp-install.html">Module Management Tool</a> to install the AMP in the Alfresco repository of your choosing.
 * After restarting Alfresco, open the Control Panel: <a href="http://localhost:8080/alfresco/service/dynamic-extensions/">http://localhost:8080/alfresco/service/dynamic-extensions/</a>.
 * Accessing the Control Panel requires an admin account.
@@ -95,16 +101,9 @@ See also: <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/w
 
 More documentation on creating your own extensions will follow.
 
-In progress: Milestone 5 (May 2013)
------------------------------------
-
-* <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/wiki/Building-Alfresco-repository-extensions-for-Dynamic-Extensions-using-Gradle">Gradle plugin for building your own repository extensions</a>
-* Spring AOP support. Includes new `@RunAs`, `@RunAsSystem` and `@Transactional`  annotations for running methods as a particular Alfresco user or within a repository transaction.
-* Refactoring of annotation Web Scripts implementation. Includes new Web Script index in Control Panel.
-
-Milestone 5 will be the last release before the summer break.
-
-Next: Milestone 6 (September 2013)
+Milestone 6 (September 2013)
 ----------------------------------
 
-This milestone wraps up all the work that went into Dynamic Extensions over the past two years. It is focused on improving documentation and expanding test coverage.
+This milestone fine-tunes and wraps up all the work that went into Dynamic Extensions over the past two years.
+
+<a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/issues?milestone=4&state=open">issue list for milestone 6</a>.
