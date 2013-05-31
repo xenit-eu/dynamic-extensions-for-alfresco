@@ -6,8 +6,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import nl.runnable.alfresco.controlpanel.BundleHelper;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
@@ -28,6 +26,8 @@ import com.springsource.util.osgi.manifest.ImportedPackage;
 public class TemplateBundle implements Comparable<TemplateBundle> {
 
 	private static final int FRAMEWORK_BUNDLE_ID = 0;
+
+	private static final String ALFRESCO_DYNAMIC_EXTENSION_HEADER = "Alfresco-Dynamic-Extension";
 
 	private final Bundle bundle;
 
@@ -67,7 +67,7 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 	}
 
 	public boolean isDynamicExtension() {
-		return BundleHelper.isDynamicExtension(bundle);
+		return Boolean.valueOf(bundle.getHeaders().get(ALFRESCO_DYNAMIC_EXTENSION_HEADER));
 	}
 
 	public boolean isFragmentBundle() {

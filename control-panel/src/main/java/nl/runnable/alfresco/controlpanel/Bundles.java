@@ -39,15 +39,15 @@ public class Bundles extends AbstractControlPanelHandler {
 	/* Dependencies */
 
 	@Autowired
-	private BundleHelper bundleHelper;
+	private BundleService bundleService;
 
 	/* Main operations */
 
 	@Uri(method = HttpMethod.GET)
 	public Map<String, Object> index(@Attribute final ResponseHelper responseHelper) {
 		final Map<String, Object> model = new HashMap<String, Object>();
-		model.put(Variables.EXTENSION_BUNDLES, toTemplateBundles(bundleHelper.getExtensionBundles()));
-		model.put(Variables.FRAMEWORK_BUNDLES, toTemplateBundles(bundleHelper.getFrameworkBundles()));
+		model.put(Variables.EXTENSION_BUNDLES, toTemplateBundles(bundleService.getExtensionBundles()));
+		model.put(Variables.FRAMEWORK_BUNDLES, toTemplateBundles(bundleService.getFrameworkBundles()));
 		return model;
 	}
 
@@ -70,7 +70,7 @@ public class Bundles extends AbstractControlPanelHandler {
 		if (file != null) {
 			if (file.getFilename().endsWith(".jar")) {
 				try {
-					final Bundle installedBundle = bundleHelper.installBundleInRepository(file);
+					final Bundle installedBundle = bundleService.installBundleInRepository(file);
 					responseHelper.setFlashVariable(Variables.INSTALLED_BUNDLE, new TemplateBundle(installedBundle));
 				} catch (final Exception e) {
 					responseHelper.flashErrorMessage(String.format("Error installing Bundle: %s", e.getMessage()));
@@ -89,7 +89,7 @@ public class Bundles extends AbstractControlPanelHandler {
 			@Attribute final ResponseHelper responseHelper) {
 		if (bundle != null) {
 			try {
-				bundleHelper.uninstallAndDeleteBundle(bundle);
+				bundleService.uninstallAndDeleteBundle(bundle);
 				final String message = String.format("Deleted bundle %s %s",
 						bundle.getHeaders().get(Constants.BUNDLE_NAME), bundle.getVersion());
 				responseHelper.flashSuccessMessage(message);
@@ -135,7 +135,7 @@ public class Bundles extends AbstractControlPanelHandler {
 
 	@Attribute(Variables.REPOSITORY_STORE_LOCATION)
 	protected String getRepositoryStoreLocation() {
-		return bundleHelper.getBundleRepositoryLocation();
+		return bundleService.getBundleRepositoryLocation();
 	}
 
 	@Attribute(Variables.ID)
@@ -148,7 +148,7 @@ public class Bundles extends AbstractControlPanelHandler {
 			@RequestParam(value = "id", required = false) final Long paramId) {
 		final Long id = pathId != null ? pathId : paramId;
 		if (id != null) {
-			return bundleHelper.getBundle(id);
+			return bundleService.getBundle(id);
 		} else {
 			return null;
 		}

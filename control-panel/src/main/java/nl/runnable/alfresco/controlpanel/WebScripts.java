@@ -16,11 +16,11 @@ import org.springframework.stereotype.Component;
 public class WebScripts extends AbstractControlPanelHandler {
 
 	@Autowired
-	WebScriptHelper webScriptHelper;
+	WebScriptService webScriptService;
 
 	@Uri(method = HttpMethod.GET)
 	@ResponseTemplate
 	public void index(final Map<String, Object> model) {
-		model.put(Variables.WEB_SCRIPTS, webScriptHelper.getWebScripts());
+		model.put(Variables.WEB_SCRIPTS, webScriptService.getWebScripts());
 	}
 }

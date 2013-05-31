@@ -1,10 +1,10 @@
-package nl.runnable.alfresco.controlpanel;
+package nl.runnable.alfresco.controlpanel.impl;
 
 import org.osgi.framework.Version;
 
 class BundleIdentifier {
 
-	public static BundleIdentifier fromSymbolicNameAndVersion(final String symbolicName, final String version) {
+	static BundleIdentifier fromSymbolicNameAndVersion(final String symbolicName, final String version) {
 		return new BundleIdentifier(symbolicName, new Version(version));
 	}
 

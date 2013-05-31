@@ -1,9 +1,12 @@
-package nl.runnable.alfresco.controlpanel;
+package nl.runnable.alfresco.controlpanel.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import nl.runnable.alfresco.annotations.OsgiService;
+import nl.runnable.alfresco.controlpanel.BundleService;
+import nl.runnable.alfresco.controlpanel.WebScriptService;
 import nl.runnable.alfresco.controlpanel.template.TemplateWebScript;
 import nl.runnable.alfresco.webscripts.WebScriptUriRegistry;
 
@@ -13,13 +16,18 @@ import org.springframework.extensions.webscripts.WebScript;
 import org.springframework.stereotype.Component;
 
 @Component
-public class WebScriptHelper {
+@OsgiService
+public class WebScriptServiceImpl implements WebScriptService {
 
 	@Autowired
-	private BundleHelper bundleHelper;
+	private BundleService bundleService;
 
 	/* Main operations */
 
+	/* (non-Javadoc)
+	 * @see nl.runnable.alfresco.controlpanel.WebScriptService#getWebScripts()
+	 */
+	@Override
 	public List<TemplateWebScript> getWebScripts() {
 		final WebScriptUriRegistry registry = getApplicationContextBean(WebScriptUriRegistry.class);
 		if (registry != null) {
@@ -37,7 +45,7 @@ public class WebScriptHelper {
 	/* Utility operations */
 
 	protected <T> T getApplicationContextBean(final Class<T> clazz) {
-		final ApplicationContext applicationContext = bundleHelper.getService(ApplicationContext.class);
+		final ApplicationContext applicationContext = bundleService.getService(ApplicationContext.class);
 		if (applicationContext != null) {
 			return applicationContext.getBean(clazz);
 		} else {

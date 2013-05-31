@@ -50,7 +50,7 @@ public class Container extends AbstractControlPanelHandler {
 	/* Dependencies */
 
 	@Autowired
-	private BundleHelper bundleHelper;
+	private BundleService bundleService;
 
 	@Autowired
 	private FrameworkHelper frameworkHelper;
@@ -124,7 +124,7 @@ public class Container extends AbstractControlPanelHandler {
 	@SuppressWarnings("rawtypes")
 	protected List<TemplateBundle> getServicesByBundle() {
 		final Map<Long, List<ServiceReference>> servicesByBundleId = new LinkedHashMap<Long, List<ServiceReference>>();
-		final List<ServiceReference> allServices = bundleHelper.getAllServices();
+		final List<ServiceReference> allServices = bundleService.getAllServices();
 		for (final ServiceReference serviceReference : allServices) {
 			final long bundleId = serviceReference.getBundle().getBundleId();
 			if (servicesByBundleId.containsKey(bundleId) == false) {
@@ -134,7 +134,7 @@ public class Container extends AbstractControlPanelHandler {
 		}
 		final List<TemplateBundle> templateBundles = new ArrayList<TemplateBundle>(servicesByBundleId.keySet().size());
 		for (final Entry<Long, List<ServiceReference>> entry : servicesByBundleId.entrySet()) {
-			final Bundle bundle = bundleHelper.getBundle(entry.getKey());
+			final Bundle bundle = bundleService.getBundle(entry.getKey());
 			final List<ServiceReference> services = servicesByBundleId.get(entry.getKey());
 			templateBundles.add(new TemplateBundle(bundle, services));
 		}
@@ -165,7 +165,7 @@ public class Container extends AbstractControlPanelHandler {
 
 	@Attribute(Variables.REPOSITORY_STORE_LOCATION)
 	protected String getRepositoryStoreLocation() {
-		return bundleHelper.getBundleRepositoryLocation();
+		return bundleService.getBundleRepositoryLocation();
 	}
 
 	/* Utility operations */
