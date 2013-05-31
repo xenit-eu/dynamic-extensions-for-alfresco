@@ -14,7 +14,7 @@
       <thead>
         <tr>
           <th class="name">Service classes</th>
-          <th class="bean">Repository bean</th>
+          <th class="bean">Spring bean</th>
         </tr>
       </thead>
       <tbody>

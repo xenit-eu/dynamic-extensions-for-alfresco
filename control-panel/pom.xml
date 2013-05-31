@@ -55,6 +55,7 @@
 					<instructions>
 						<Alfresco-Dynamic-Extension>true</Alfresco-Dynamic-Extension>
 						<Alfresco-Spring-Configuration>nl.runnable.alfresco.controlpanel</Alfresco-Spring-Configuration>
+						<Spring-Context>;publish-context:=false</Spring-Context>
 						<Embed-Dependency>*;scope=compile</Embed-Dependency>
 						<!-- Extra Import-Package directives are necessary for Spring AOP. -->
 						<Import-Package>

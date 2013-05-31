@@ -22,15 +22,19 @@ import org.alfresco.service.descriptor.Descriptor;
 import org.alfresco.service.descriptor.DescriptorService;
 import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationContext;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.parsing.BeanDefinitionParsingException;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.beans.factory.xml.DefaultNamespaceHandlerResolver;
+import org.springframework.beans.factory.xml.DelegatingEntityResolver;
 import org.springframework.beans.factory.xml.NamespaceHandler;
 import org.springframework.beans.factory.xml.NamespaceHandlerResolver;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
@@ -78,6 +82,8 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 
 	private static final String SPRING_CONFIGURATION_HEADER = "Alfresco-Spring-Configuration";
 
+	private static final String ALFRESCO_DYNAMIC_EXTENSION_HEADER = "Alfresco-Dynamic-Extension";
+
 	private static final String HOST_APPLICATION_ALFRESCO_FILTER = "(hostApplication=alfresco)";
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -88,7 +94,7 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 
 	private final boolean hasXmlConfiguration;
 
-	/* Operations */
+	/* Main operations */
 
 	DynamicExtensionsApplicationContext(final String[] configurationLocations, final ApplicationContext parent) {
 		super(configurationLocations, parent);
@@ -103,35 +109,34 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 	@Override
 	protected void loadBeanDefinitions(final DefaultListableBeanFactory beanFactory) throws IOException {
 		if (hasSpringConfigurationHeader()) {
+			if (hasXmlConfiguration() && logger.isWarnEnabled()) {
+				logger.warn(String
+						.format("Spring XML configuration at /META-INF/spring will be ignored due to the presence of the '%s' header.",
+								SPRING_CONFIGURATION_HEADER));
+			}
 			scanBeanDefinitionsFromSpringConfigurationPackages(beanFactory);
 		} else if (hasXmlConfiguration()) {
-			loadBeanDefinitionsFromXmlConfiguration(beanFactory);
-		} else {
-			if (logger.isWarnEnabled()) {
-				logger.warn(String.format("No Spring XML found in /META-INF/spring and no '%s' header specified.",
-						SPRING_CONFIGURATION_HEADER) + " No components will be instantiated.");
+			try {
+				super.loadBeanDefinitions(beanFactory);
+			} catch (final BeanDefinitionParsingException e) {
+				if (logger.isWarnEnabled()) {
+					logger.warn("Error parsing bean definitions.", e);
+				}
 			}
 		}
+		if (isAlfrescoDynamicExtension()) {
+			registerInfrastructureBeans(beanFactory);
+		}
 	}
+
+	/* Utility operations */
 
 	protected boolean hasSpringConfigurationHeader() {
 		return getBundle().getHeaders().get(SPRING_CONFIGURATION_HEADER) != null;
 	}
 
-	/**
-	 * Populates the {@link BeanFactory} by loading the {@link BeanDefinition}s from Spring XML configuration.
-	 * 
-	 * @param beanFactory
-	 * @throws IOException
-	 */
-	protected void loadBeanDefinitionsFromXmlConfiguration(final DefaultListableBeanFactory beanFactory)
-			throws IOException {
-		final XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(beanFactory);
-		beanDefinitionReader.setResourceLoader(this);
-		beanDefinitionReader.setNamespaceHandlerResolver(getNamespaceHandlerResolver());
-		beanDefinitionReader.setEntityResolver(getEntityResolver());
-		loadBeanDefinitions(beanDefinitionReader);
-		registerInfrastructureBeans(beanFactory);
+	protected boolean isAlfrescoDynamicExtension() {
+		return Boolean.valueOf(getBundle().getHeaders().get(ALFRESCO_DYNAMIC_EXTENSION_HEADER));
 	}
 
 	protected void scanBeanDefinitionsFromSpringConfigurationPackages(final DefaultListableBeanFactory beanFactory) {
@@ -142,11 +147,18 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 					serverDescriptor);
 			scanner.setResourceLoader(this);
 			scanner.scan(configurationPackages);
-			registerInfrastructureBeans(beanFactory);
 		}
 	}
 
-	/* Utility operations */
+	@Override
+	protected void initBeanDefinitionReader(final XmlBeanDefinitionReader beanDefinitionReader) {
+		beanDefinitionReader.setResourceLoader(this);
+		beanDefinitionReader.setNamespaceHandlerResolver(new CompositeNamespaceHandlerResolver(
+				getOsgiNamespaceHandlerResolver(), new DefaultNamespaceHandlerResolver(getClassLoader()),
+				getHostNamespaceHandlerResolver()));
+		beanDefinitionReader.setEntityResolver(new CompositeEntityResolver(getOsgiEntityResolver(),
+				new DelegatingEntityResolver(getClassLoader()), getHostEntityResolver()));
+	}
 
 	/**
 	 * Registers infrastructure beans for additional services such as annotation-based Behaviours.
@@ -308,14 +320,34 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 		return getBundleContext().getService(serviceReference);
 	}
 
+	protected NamespaceHandlerResolver getOsgiNamespaceHandlerResolver() {
+		try {
+			final BundleContext bundleContext = getBundleContext();
+			return (NamespaceHandlerResolver) bundleContext.getService(bundleContext.getServiceReferences(
+					NamespaceHandlerResolver.class.getName(), BundleUtils.createNamespaceFilter(bundleContext))[0]);
+		} catch (final InvalidSyntaxException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	/**
 	 * Obtains the {@link NamespaceHandlerResolver} using a {@link ServiceReference}.
 	 */
-	protected NamespaceHandlerResolver getNamespaceHandlerResolver() {
+	protected NamespaceHandlerResolver getHostNamespaceHandlerResolver() {
 		try {
-			return (NamespaceHandlerResolver) getBundleContext().getService(
-					getBundleContext().getServiceReferences(NamespaceHandlerResolver.class.getName(),
-							HOST_APPLICATION_ALFRESCO_FILTER)[0]);
+			final BundleContext bundleContext = getBundleContext();
+			return (NamespaceHandlerResolver) bundleContext.getService(bundleContext.getServiceReferences(
+					NamespaceHandlerResolver.class.getName(), HOST_APPLICATION_ALFRESCO_FILTER)[0]);
+		} catch (final InvalidSyntaxException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected EntityResolver getOsgiEntityResolver() {
+		try {
+			final BundleContext bundleContext = getBundleContext();
+			return (EntityResolver) bundleContext.getService(bundleContext.getServiceReferences(
+					EntityResolver.class.getName(), BundleUtils.createNamespaceFilter(bundleContext))[0]);
 		} catch (final InvalidSyntaxException e) {
 			throw new RuntimeException(e);
 		}
@@ -324,11 +356,11 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 	/**
 	 * Obtains the {@link EntityResolver} using a {@link ServiceReference}.
 	 */
-	protected EntityResolver getEntityResolver() {
+	protected EntityResolver getHostEntityResolver() {
 		try {
-			return (EntityResolver) getBundleContext().getService(
-					getBundleContext().getServiceReferences(EntityResolver.class.getName(),
-							HOST_APPLICATION_ALFRESCO_FILTER)[0]);
+			final BundleContext bundleContext = getBundleContext();
+			return (EntityResolver) bundleContext.getService(bundleContext.getServiceReferences(
+					EntityResolver.class.getName(), HOST_APPLICATION_ALFRESCO_FILTER)[0]);
 		} catch (final InvalidSyntaxException e) {
 			throw new RuntimeException(e);
 		}

@@ -43,9 +43,6 @@
       <p>
         <a href="container/services">View all Services</a>
       </p>
-      <p>
-        The use of OSGi services is currently internal to Dynamic Extensions.
-      </p>      
 
     </div> <#-- .span6 -->
 

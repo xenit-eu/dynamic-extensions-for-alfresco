@@ -1,6 +1,5 @@
 package nl.runnable.alfresco.blueprint;
 
-import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -44,10 +43,6 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	/* Dependencies */
-
-	private final DefaultOsgiApplicationContextCreator defaultOsgiApplicationContextCreator = new DefaultOsgiApplicationContextCreator();
-
 	/* Configuration */
 
 	private String modelLocationPattern;
@@ -57,20 +52,7 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 	@Override
 	public DelegatedExecutionOsgiBundleApplicationContext createApplicationContext(final BundleContext bundleContext)
 			throws Exception {
-		if (isAlfrescoDynamicExtension(bundleContext.getBundle())) {
-			return createDynamicExtensionsApplicationContext(bundleContext);
-		} else {
-			return defaultOsgiApplicationContextCreator.createApplicationContext(bundleContext);
-		}
-
-	}
-
-	/* Utility operations */
-
-	protected DynamicExtensionsApplicationContext createDynamicExtensionsApplicationContext(
-			final BundleContext bundleContext) throws BundleException {
 		final Bundle bundle = bundleContext.getBundle();
-		uninstallBundlesWithDuplicateSymbolicName(bundleContext);
 		/*
 		 * WARNING: Avoid creating an instance of
 		 * org.eclipse.gemini.blueprint.extender.internal.blueprint.activator.support.BlueprintContainerConfig, since
@@ -87,13 +69,12 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 		if (config.isSpringPoweredBundle()) {
 			configurationLocations = config.getConfigurationLocations();
 		}
-		if (logger.isDebugEnabled()) {
-			if (configurationLocations != null && configurationLocations.length > 0) {
-				logger.debug("Initializing Dynamic Extension '{}' using Spring configuration: {}",
-						bundle.getSymbolicName(), Arrays.asList(configurationLocations));
-			} else {
-				logger.debug("Initializing Dynamic Extension '{}'.", bundle.getSymbolicName());
-			}
+		if ((configurationLocations == null || configurationLocations.length == 0)
+				&& isAlfrescoDynamicExtension(bundle) == false) {
+			return null;
+		}
+		if (isAlfrescoDynamicExtension(bundle)) {
+			uninstallBundlesWithDuplicateSymbolicName(bundleContext);
 		}
 		final DynamicExtensionsApplicationContext applicationContext = new DynamicExtensionsApplicationContext(
 				configurationLocations, getHostApplicationContext(bundleContext));
@@ -108,6 +89,7 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 			applicationContext.setModelLocationPattern(getModelLocationPattern());
 		}
 		return applicationContext;
+
 	}
 
 	protected boolean isAlfrescoDynamicExtension(final Bundle bundle) {
