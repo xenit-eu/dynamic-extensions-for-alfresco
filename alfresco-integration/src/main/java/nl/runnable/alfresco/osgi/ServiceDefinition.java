@@ -26,7 +26,7 @@ public class ServiceDefinition {
 	public ServiceDefinition(final String[] beanNames, final String[] serviceNames, final String serviceType,
 			final String platformVersion) {
 		Assert.notEmpty(beanNames, "Bean names cannot be empty.");
-		Assert.notEmpty(serviceNames, "OsgiService names cannot be empty.");
+		Assert.notEmpty(serviceNames, "Service names cannot be empty.");
 
 		this.beanNames = Arrays.asList(beanNames);
 		this.serviceNames = Arrays.asList(serviceNames);
@@ -36,7 +36,7 @@ public class ServiceDefinition {
 
 	public ServiceDefinition(final String[] beanNames, final String[] serviceNames, final String serviceType) {
 		Assert.notEmpty(beanNames, "Bean names cannot be empty.");
-		Assert.notEmpty(serviceNames, "OsgiService names cannot be empty.");
+		Assert.notEmpty(serviceNames, "Service names cannot be empty.");
 
 		this.beanNames = Arrays.asList(beanNames);
 		this.serviceNames = Arrays.asList(serviceNames);
@@ -45,7 +45,7 @@ public class ServiceDefinition {
 
 	public ServiceDefinition(final String beanName, final String... serviceNames) {
 		Assert.hasText(beanName, "Bean names cannot be empty.");
-		Assert.notEmpty(serviceNames, "OsgiService names cannot be empty.");
+		Assert.notEmpty(serviceNames, "Service names cannot be empty.");
 
 		this.beanNames = Arrays.asList(beanName);
 		this.serviceNames = Arrays.asList(serviceNames);
@@ -53,7 +53,7 @@ public class ServiceDefinition {
 
 	public ServiceDefinition(final String[] beanNames, final String... serviceNames) {
 		Assert.notEmpty(beanNames, "Bean names cannot be empty.");
-		Assert.notEmpty(serviceNames, "OsgiService names cannot be empty.");
+		Assert.notEmpty(serviceNames, "Service names cannot be empty.");
 		this.beanNames = Arrays.asList(beanNames);
 		this.serviceNames = Arrays.asList(serviceNames);
 	}
