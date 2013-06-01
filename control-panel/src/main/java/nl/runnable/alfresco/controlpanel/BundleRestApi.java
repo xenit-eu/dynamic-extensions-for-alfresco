@@ -37,7 +37,7 @@ public class BundleRestApi {
 	/* Dependencies */
 
 	@Autowired
-	private BundleService bundleService;
+	private BundleHelper bundleHelper;
 
 	/* Main operations */
 
@@ -49,7 +49,7 @@ public class BundleRestApi {
 					String.format("Can only accept content of type '%s'.", JAR_MIME_TYPE));
 		}
 		try {
-			final Bundle bundle = bundleService.installBundleInRepository(content);
+			final Bundle bundle = bundleHelper.installBundleInRepository(content);
 			response.sendBundleInstalledMessage(bundle);
 		} catch (final BundleException e) {
 			response.sendMessage(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());

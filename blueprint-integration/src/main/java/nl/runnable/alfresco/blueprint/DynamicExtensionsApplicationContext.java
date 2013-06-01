@@ -173,7 +173,6 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 		registerAnnotationBasedActionBeans(beanFactory);
 		registerAnnotationBasedWebScriptBeans(beanFactory);
 		registerAopProxyBeans(beanFactory);
-		registerOsgiServiceBeans(beanFactory);
 	}
 
 	/**
@@ -298,14 +297,6 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 			beanFactory.registerBeanDefinition(BeanNames.AUTO_PROXY_CREATOR,
 					BeanDefinitionBuilder.rootBeanDefinition(DynamicExtensionsAdvisorAutoProxyCreator.class)
 							.getBeanDefinition());
-		}
-	}
-
-	protected void registerOsgiServiceBeans(final DefaultListableBeanFactory beanFactory) {
-		if (beanFactory.containsBeanDefinition(BeanNames.OSGI_SERVICE_REGISTRAR) == false) {
-			beanFactory.registerBeanDefinition(BeanNames.OSGI_SERVICE_REGISTRAR, BeanDefinitionBuilder
-					.rootBeanDefinition(OsgiServiceRegistrar.class).setInitMethodName("registerOsgiServiceBeans")
-					.getBeanDefinition());
 		}
 	}
 

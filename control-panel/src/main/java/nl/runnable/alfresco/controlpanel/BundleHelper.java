@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.controlpanel.impl;
+package nl.runnable.alfresco.controlpanel;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,8 +18,6 @@ import java.util.jar.Manifest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import nl.runnable.alfresco.annotations.OsgiService;
-import nl.runnable.alfresco.controlpanel.BundleService;
 import nl.runnable.alfresco.osgi.RepositoryStoreService;
 
 import org.alfresco.model.ContentModel;
@@ -54,10 +52,21 @@ import com.springsource.util.osgi.manifest.BundleManifestFactory;
  * 
  */
 @Component
-@OsgiService
-public class BundleServiceImpl implements BundleService {
+public class BundleHelper {
 
-	final String ALFRESCO_DYNAMIC_EXTENSION_HEADER = "Alfresco-Dynamic-Extension";
+	private static final String ALFRESCO_DYNAMIC_EXTENSION_HEADER = "Alfresco-Dynamic-Extension";
+
+	/**
+	 * Tests if the given bundle contains a Dynamic Extension.
+	 * <p>
+	 * This implementation looks if the bundle header <code>Alfresco-Dynamic-Extension</code> equals the String "true".
+	 * 
+	 * @param bundle
+	 * @return
+	 */
+	public static boolean isDynamicExtension(final Bundle bundle) {
+		return "true".equals(bundle.getHeaders().get(ALFRESCO_DYNAMIC_EXTENSION_HEADER));
+	}
 
 	/* Dependencies */
 
@@ -80,91 +89,86 @@ public class BundleServiceImpl implements BundleService {
 
 	/* Main operations */
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Obtains the {@link Bundle}s that comprise the core framework.
 	 * 
-	 * @see nl.runnable.alfresco.controlpanel.BundleService#getFrameworkBundles()
+	 * @return
 	 */
-	@Override
 	public List<Bundle> getFrameworkBundles() {
 		final List<Bundle> bundles = new ArrayList<Bundle>();
 		for (final Bundle bundle : bundleContext.getBundles()) {
-			if ("true".equals(bundle.getHeaders().get(ALFRESCO_DYNAMIC_EXTENSION_HEADER)) == false) {
+			if (isDynamicExtension(bundle) == false) {
 				bundles.add(bundle);
 			}
 		}
 		return bundles;
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Obtains the {@link Bundle}s that comprise the core framework.
 	 * 
-	 * @see nl.runnable.alfresco.controlpanel.BundleService#getExtensionBundles()
+	 * @return
 	 */
-	@Override
 	public List<Bundle> getExtensionBundles() {
 		final List<Bundle> bundles = new ArrayList<Bundle>();
 		for (final Bundle bundle : bundleContext.getBundles()) {
-			if ("true".equals(bundle.getHeaders().get(ALFRESCO_DYNAMIC_EXTENSION_HEADER))) {
+			if (isDynamicExtension(bundle)) {
 				bundles.add(bundle);
 			}
 		}
 		return bundles;
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Obtains the {@link Bundle} for the given id.
 	 * 
-	 * @see nl.runnable.alfresco.controlpanel.BundleService#getBundle(long)
+	 * @param id
+	 * @return The matching {@link Bundle} or null if no match could be found.
 	 */
-	@Override
 	public Bundle getBundle(final long id) {
 		return bundleContext.getBundle(id);
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Obtains the {@link Framework} bundle.
 	 * 
-	 * @see nl.runnable.alfresco.controlpanel.BundleService#getFramework()
+	 * @return
 	 */
-	@Override
 	public Framework getFramework() {
 		return (Framework) bundleContext.getBundle(0);
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Installs an uploaded file as a bundle in the repository.
+	 * <p>
+	 * This implementation first saves the upload to a temporary file. It then attempts to install the file as a bundle.
+	 * If this succeeds, it saves the bundle in the repository.
 	 * 
-	 * @see
-	 * nl.runnable.alfresco.controlpanel.BundleService#installBundleInRepository(org.springframework.extensions.webscripts
-	 * .servlet.FormData.FormField)
+	 * @param file
+	 * @return
+	 * @throws IOException
+	 * @throws BundleException
 	 */
-	@Override
 	public Bundle installBundleInRepository(final FormField file) throws IOException, BundleException {
 		final File tempFile = saveToTempFile(file.getInputStream());
 		return doInstallBundleInRepository(tempFile, file.getFilename());
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Installs a bundle using the given {@link Content} and filename.
 	 * 
-	 * @see
-	 * nl.runnable.alfresco.controlpanel.BundleService#installBundleInRepository(org.springframework.extensions.surf
-	 * .util.Content)
+	 * @param content
+	 * @param filename
+	 * @return
+	 * @throws IOException
+	 * @throws BundleException
 	 */
-	@Override
 	public Bundle installBundleInRepository(final Content content) throws IOException, BundleException {
 		final File tempFile = saveToTempFile(content.getInputStream());
 		return doInstallBundleInRepository(tempFile, null);
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see nl.runnable.alfresco.controlpanel.BundleService#uninstallAndDeleteBundle(org.osgi.framework.Bundle)
-	 */
-	@Override
 	public void uninstallAndDeleteBundle(final Bundle bundle) throws BundleException {
 		final Matcher matcher = Pattern.compile("/Company Home(/.+)+/(.+\\.jar)$").matcher(bundle.getLocation());
 		if (matcher.matches()) {
@@ -182,12 +186,6 @@ public class BundleServiceImpl implements BundleService {
 		bundle.uninstall();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see nl.runnable.alfresco.controlpanel.BundleService#getAllServices()
-	 */
-	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public List<ServiceReference> getAllServices() {
 		try {
@@ -197,8 +195,7 @@ public class BundleServiceImpl implements BundleService {
 		}
 	}
 
-	@Override
-	public <T> T getService(final Class<T> service) {
+	protected <T> T getService(final Class<T> service) {
 		final ServiceReference<T> serviceReference = bundleContext.getServiceReference(service);
 		if (serviceReference != null) {
 			return bundleContext.getService(serviceReference);
@@ -298,12 +295,6 @@ public class BundleServiceImpl implements BundleService {
 
 	/* Container */
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see nl.runnable.alfresco.controlpanel.BundleService#getBundleRepositoryLocation()
-	 */
-	@Override
 	public String getBundleRepositoryLocation() {
 		return repositoryStoreService.getBundleRepositoryLocation();
 	}

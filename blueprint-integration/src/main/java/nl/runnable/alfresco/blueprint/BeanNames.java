@@ -32,8 +32,6 @@ public class BeanNames {
 
 	static final String STRING_VALUE_CONVERTER = "stringValueConverter";
 
-	static final String OSGI_SERVICE_REGISTRAR = "osgiServiceRegistrar";
-
 	private BeanNames() {
 	}
 }

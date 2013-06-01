@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Strategy for providing additional properties about an OSGi OsgiService when it is registered by a
+ * Strategy for providing additional properties about an OSGi Service when it is registered by a
  * {@link BundleContextRegistrar}.
  * 
  * @author Laurens Fridael

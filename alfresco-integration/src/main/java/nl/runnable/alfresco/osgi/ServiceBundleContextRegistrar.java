@@ -32,10 +32,10 @@ import org.springframework.util.StringUtils;
 @Service
 public class ServiceBundleContextRegistrar implements BundleContextRegistrar, ApplicationContextAware {
 
-	/* OsgiService property */
+	/* Service property */
 	private static final String ALFRESCO_SERVICE_TYPE = "alfresco.service.type";
 
-	/* OsgiService property for the Blueprint component name. */
+	/* Service property for the Blueprint component name. */
 	private static final String OSGI_SERVICE_BLUEPRINT_COMPNAME = "osgi.service.blueprint.compname";
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -94,7 +94,7 @@ public class ServiceBundleContextRegistrar implements BundleContextRegistrar, Ap
 				if (getApplicationContext().isSingleton(beanName) == false) {
 					if (logger.isWarnEnabled()) {
 						logger.warn(String.format(
-								"OsgiService \"{}\" is not a singleton. Can only register singleton beans.", beanName));
+								"Service \"{}\" is not a singleton. Can only register singleton beans.", beanName));
 					}
 					continue;
 				}
@@ -123,8 +123,8 @@ public class ServiceBundleContextRegistrar implements BundleContextRegistrar, Ap
 
 	protected ServiceRegistration<?> registerService(final BundleContext bundleContext, final Object service,
 			final List<String> serviceNames, final String beanName, final String serviceType, final int serviceRanking) {
-		Assert.notNull(service, "OsgiService cannot be null.");
-		Assert.notEmpty(serviceNames, "OsgiService names cannot be empty.");
+		Assert.notNull(service, "Service cannot be null.");
+		Assert.notEmpty(serviceNames, "Service names cannot be empty.");
 
 		final Hashtable<String, Object> serviceProperties = new Hashtable<String, Object>();
 		serviceProperties.put(OSGI_SERVICE_BLUEPRINT_COMPNAME, beanName);
