@@ -13,7 +13,7 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 /**
- * {@link WebScript} that generates a "503 Service Unavailable" response when request is issued to an
+ * {@link WebScript} that generates a "503 OsgiService Unavailable" response when request is issued to an
  * {@link AnnotationWebScript} that is currently unavailable.
  * 
  * @author Laurens Fridael
