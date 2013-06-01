@@ -21,8 +21,8 @@
         <#if systemPackageCacheExists>
           <p>
             If you change any of the Java libraries in the repository application, you should delete 
-            <#assign url = "${url.serviceContext}/api/node/content/${systemPackageCacheNodeRef?replace('://', '/')}" />
-            the <a href="${url}" target="_blank">System Package cache</a>.
+            <#assign systemPackageUrl = "${url.serviceContext}/api/node/content/${systemPackageCacheNodeRef?replace('://', '/')}" />
+            the <a href="${systemPackageUrl}" target="_blank">System Package cache</a>.
           </p>
           <form action="container/system-package-cache/delete" method="post" 
             data-title="Delete System Package cache"
@@ -77,7 +77,29 @@
           <p>
             <em>The OSGi container cannot be restarted.</em>
           </p>
-        </#if>
+        </#if>        
+      </div>
+      <h3>REST API</h3>
+      <#assign restartApiUrl = "${url.serviceContext}/dynamic-extensions/osgi/restart" />
+      <p>
+        You can also restart the OSGi container using the REST API:<br/>
+      </p>
+      <p>
+        <code>POST ${restartApiUrl}</code>
+      </p>
+      <p>
+        This API requires adminstrator-level access.
+      </p>
+      <div class="well">
+        <p>
+          Example of using the REST API through cURL:
+        </p>
+        <p>
+          <code>curl -X POST ${restartApiUrl} -u admin</code>
+        </p>
+        <p>
+          cURL will prompt you for the password.
+        </p>
       </div>
 
     </div> <#-- .span6 -->

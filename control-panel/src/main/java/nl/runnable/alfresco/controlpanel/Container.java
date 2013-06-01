@@ -97,7 +97,7 @@ public class Container extends AbstractControlPanelHandler {
 	}
 
 	@Uri(method = HttpMethod.POST, value = "/restart")
-	public void restartFramework(@Attribute final ResponseHelper response) throws IOException, BundleException {
+	public void restart(@Attribute final ResponseHelper response) throws IOException, BundleException {
 		if (osgiConfiguration.getMode().isFrameworkRestartEnabled() == false) {
 			response.status(HttpServletResponse.SC_FORBIDDEN, "Framework restart is currently not allowed.");
 			return;
