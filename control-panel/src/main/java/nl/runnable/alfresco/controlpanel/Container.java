@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import nl.runnable.alfresco.controlpanel.template.TemplateBundle;
 import nl.runnable.alfresco.controlpanel.template.Variables;
+import nl.runnable.alfresco.osgi.FrameworkService;
 import nl.runnable.alfresco.osgi.RepositoryStoreService;
 import nl.runnable.alfresco.webscripts.annotations.Attribute;
 import nl.runnable.alfresco.webscripts.annotations.Authentication;
@@ -53,7 +54,7 @@ public class Container extends AbstractControlPanelHandler {
 	private BundleHelper bundleHelper;
 
 	@Autowired
-	private FrameworkHelper frameworkHelper;
+	private FrameworkService frameworkService;
 
 	@Autowired
 	private FileFolderService fileFolderService;
@@ -116,7 +117,7 @@ public class Container extends AbstractControlPanelHandler {
 
 			@Override
 			public void run() {
-				frameworkHelper.restartFramework();
+				frameworkService.restartFramework();
 			}
 		});
 	}

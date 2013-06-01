@@ -1,6 +1,11 @@
 package nl.runnable.alfresco.osgi;
 
 import org.alfresco.repo.module.AbstractModuleComponent;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
+import org.alfresco.service.transaction.TransactionService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.extensions.webscripts.Container;
@@ -45,6 +50,8 @@ public class OsgiContainerModuleComponent extends AbstractModuleComponent implem
 	 */
 	private ConfigurableWebApplicationContext childApplicationContext;
 
+	private TransactionService transactionService;
+
 	/* Main module operations */
 
 	/**
@@ -66,12 +73,26 @@ public class OsgiContainerModuleComponent extends AbstractModuleComponent implem
 
 	@Override
 	public void restartFramework() {
-		try {
-			stopFramework();
-		} finally {
-			startFramework();
-			getWebScriptsContainer().reset();
-		}
+		final RetryingTransactionHelper transactionHelper = getTransactionService().getRetryingTransactionHelper();
+		transactionHelper.doInTransaction(new RetryingTransactionCallback<Void>() {
+
+			@Override
+			public Void execute() throws Throwable {
+				return AuthenticationUtil.runAs(new RunAsWork<Void>() {
+
+					@Override
+					public Void doWork() throws Exception {
+						try {
+							stopFramework();
+						} finally {
+							startFramework();
+							getWebScriptsContainer().reset();
+						}
+						return null;
+					}
+				}, AuthenticationUtil.SYSTEM_USER_NAME);
+			}
+		});
 	}
 
 	/* Utility operations */
@@ -122,6 +143,14 @@ public class OsgiContainerModuleComponent extends AbstractModuleComponent implem
 
 	public Container getWebScriptsContainer() {
 		return webScriptsContainer;
+	}
+
+	public void setTransactionService(final TransactionService transactionService) {
+		this.transactionService = transactionService;
+	}
+
+	protected TransactionService getTransactionService() {
+		return transactionService;
 	}
 
 	/* Configuration */

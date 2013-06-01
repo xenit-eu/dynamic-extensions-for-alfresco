@@ -1,0 +1,8 @@
+<webscript>
+  <shortname>Restart OSGi Container</shortname>
+  <description>Command-line example: curl -X POST http://127.0.0.1:8080/alfresco/service/dynamic-extensions/osgi/restart -uadmin</description>
+  <url>/dynamic-extensions/osgi/restart</url>
+  <authentication>admin</authentication>
+  <format default="json">argument</format>
+  <family>Dynamic Extensions</family>
+</webscript>
