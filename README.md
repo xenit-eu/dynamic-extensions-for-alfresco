@@ -101,7 +101,7 @@ See also: <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/w
 
 More documentation on creating your own extensions will follow.
 
-Milestone 6 (September 2013)
+Milestone 6 (October 2013)
 ----------------------------------
 
 This milestone fine-tunes and wraps up all the work that went into Dynamic Extensions over the past two years.
