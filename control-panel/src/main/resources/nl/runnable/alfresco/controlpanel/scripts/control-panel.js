@@ -37,7 +37,7 @@
 
   /**
    * Sets up fadeout of alert success messages.
-   * 
+   *
    * Error messages have to be dismissed manually.
    */
   $(function() {
@@ -53,13 +53,7 @@
     $('a[data-method="post"]').on('click', function(event) {
       event.preventDefault();
 
-      function performPost() {
-        $('form#post').attr('action', $(self).attr('href')).submit();
-
-        // Show dialog
-        var message = $(self).data('pendingMessage');
-        var title = $(self).data('pendingTitle');
-        if (message || title) {
+      function dialog(title, message) {
           var html = "";
           if (title) {
             html += "<h2>" + title + "</h2>";
@@ -67,16 +61,25 @@
           if (message) {
             html += "<p>" + message + "</p>";
           }
-          bootbox.alert(html, $(self).data('pendingButton'), function() {
+          return html;
+      }
+
+      function performPost() {
+        bootbox.dialog(dialog($(self).data('pendingTitle'), $(self).data('pendingMessage')));
+
+        // POST request
+        var data = $(self).data('json') || {};
+        var promise = $.ajax({
+          type: 'POST',
+          url: $(self).attr('href'),
+          dataType: 'json',
+          data: JSON.stringify(data)
+        }).then(function() {
+          bootbox.hideAll();
+          bootbox.alert(dialog($(self).data('completeTitle'), $(self).data('completeMessage')), function() {
             window.location.reload();
           });
-
-        }
-        // Reload after wait.
-        var wait = $(self).data('wait') || 0;
-        window.setTimeout(function() {
-          window.location.reload();
-        }, wait);
+        });
       }
 
       if ($(this).data('confirm')) {

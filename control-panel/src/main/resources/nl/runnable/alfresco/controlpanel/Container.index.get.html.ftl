@@ -57,14 +57,14 @@
             The Control Panel will be unavailable while the OSGI container is restarting.
           </p>
           <p>
-            <a href="container/restart" 
+            <a href="osgi/restart" 
               data-title="Restart OSGi container" 
               data-confirm="Are you sure you want to restart the OSGi container?"
               data-method="post" 
-              data-wait="15000" 
               data-pending-title="Restarting OSGi container"
-              data-pending-message="<p>Please wait while the OSGi container is restarting. The page will refresh automatically.</p>" 
-              data-pending-button="Refresh page now"
+              data-pending-message="Please wait while the OSGi container is restarting."
+              data-complete-title="Restarted OSGI container"
+              data-complete-message="The OSGi container was succesfully restarted."
               class="btn btn-primary">
               Restart OSGi container
             </a>

@@ -68,8 +68,6 @@
         </div>
       </div>
     </div>
-    <form id="post" method="post" target="postFrame" style="display: none;"></form>
-    <iframe name="postFrame" style="display: none;"></iframe>
     <script type="text/javascript" src="resources/scripts/jquery/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="resources/scripts/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="resources/scripts/jasny-bootstrap/bootstrap-fileupload.js"></script>

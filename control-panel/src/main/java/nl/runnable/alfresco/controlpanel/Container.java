@@ -8,13 +8,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.Executors;
-
-import javax.servlet.http.HttpServletResponse;
 
 import nl.runnable.alfresco.controlpanel.template.TemplateBundle;
 import nl.runnable.alfresco.controlpanel.template.Variables;
-import nl.runnable.alfresco.osgi.FrameworkService;
 import nl.runnable.alfresco.osgi.RepositoryStoreService;
 import nl.runnable.alfresco.webscripts.annotations.Attribute;
 import nl.runnable.alfresco.webscripts.annotations.Authentication;
@@ -52,9 +48,6 @@ public class Container extends AbstractControlPanelHandler {
 
 	@Autowired
 	private BundleHelper bundleHelper;
-
-	@Autowired
-	private FrameworkService frameworkService;
 
 	@Autowired
 	private FileFolderService fileFolderService;
@@ -96,31 +89,7 @@ public class Container extends AbstractControlPanelHandler {
 		responseHelper.redirectToContainer();
 	}
 
-	@Uri(method = HttpMethod.POST, value = "/restart")
-	public void restart(@Attribute final ResponseHelper response) throws IOException, BundleException {
-		if (osgiConfiguration.getMode().isFrameworkRestartEnabled() == false) {
-			response.status(HttpServletResponse.SC_FORBIDDEN, "Framework restart is currently not allowed.");
-			return;
-		}
-		response.status(HttpServletResponse.SC_OK, "Restarting framework.");
-		restartFrameworkAsynchronously();
-	}
-
 	/* Utility operations */
-
-	/**
-	 * Restarts the framework in a separate thread, running as the 'system' user and using a read-only transaction. This
-	 * boilerplate is necessary for accessing the repository during framework restart
-	 */
-	protected void restartFrameworkAsynchronously() {
-		Executors.newSingleThreadExecutor().execute(new Runnable() {
-
-			@Override
-			public void run() {
-				frameworkService.restartFramework();
-			}
-		});
-	}
 
 	@SuppressWarnings("rawtypes")
 	protected List<TemplateBundle> getServicesByBundle() {
