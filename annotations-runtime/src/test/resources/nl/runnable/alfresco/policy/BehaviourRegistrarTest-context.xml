@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<bean id="annotationBasedBehaviourRegistrar" class="nl.runnable.alfresco.policy.AnnotationBasedBehaviourRegistrar"
+		  init-method="bindBehaviours">
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="namespacePrefixResolver">
+			<bean class="nl.runnable.alfresco.policy.StaticNamespacePrefixResolver"/>
+		</property>
+	</bean>
+
+	<bean id="policyComponent" class="nl.runnable.alfresco.spring.MockFactoryBean">
+		<property name="class" value="org.alfresco.repo.policy.PolicyComponent"/>
+	</bean>
+
+	<!-- sample policies -->
+
+	<bean class="nl.runnable.alfresco.policy.samples.ContentBehaviour"/>
+
+	<bean class="nl.runnable.alfresco.policy.samples.AssociationBehaviourInheritClassAndContain"/>
+
+	<bean class="nl.runnable.alfresco.policy.samples.AssociationBehaviourContain"/>
+
+	<bean class="nl.runnable.alfresco.policy.samples.AssociationBehaviourVoid"/>
+
+	<bean class="nl.runnable.alfresco.policy.samples.PropertyBehaviour"/>
+</beans>
