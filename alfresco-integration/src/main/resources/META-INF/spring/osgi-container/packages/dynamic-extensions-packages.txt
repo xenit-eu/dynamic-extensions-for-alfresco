@@ -28,12 +28,3 @@ nl.runnable.alfresco.webscripts.arguments
 
 # Models
 nl.runnable.alfresco.models
-
-# While Dynamic Extensions autodetects the version of nearly every library, 
-# there are a handful of critical JARs that for which the version cannot be
-# determined.
-#
-# These Java packages and their libraries versions are listed here:
-
-javax.inject;1
-javax.annotation;1.1

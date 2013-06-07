@@ -24,3 +24,6 @@ org.aopalliance.aop
 org.aopalliance.intercept
 org.aspectj.lang
 org.aspectj.lang.annotation
+
+# Needed by Groovy runtimes.
+sun.reflect
