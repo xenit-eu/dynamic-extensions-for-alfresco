@@ -1,22 +1,7 @@
 package nl.runnable.alfresco.policy;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import nl.runnable.alfresco.AbstractAnnotationBasedRegistrar;
-import nl.runnable.alfresco.behaviours.annotations.AssociationPolicy;
-import nl.runnable.alfresco.behaviours.annotations.Behaviour;
-import nl.runnable.alfresco.behaviours.annotations.ClassPolicy;
-import nl.runnable.alfresco.behaviours.annotations.Event;
-import nl.runnable.alfresco.behaviours.annotations.PropertyPolicy;
-
+import nl.runnable.alfresco.behaviours.annotations.*;
 import org.alfresco.repo.policy.Behaviour.NotificationFrequency;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.Policy;
@@ -27,6 +12,16 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Registers {@link Behaviour}-annotated classes from beans in a {@link BeanFactory}.
@@ -119,10 +114,10 @@ public class AnnotationBasedBehaviourRegistrar extends AbstractAnnotationBasedRe
 		final AssociationPolicy associationPolicy = AnnotationUtils.findAnnotation(method, AssociationPolicy.class);
 		QName assocationName = null;
 		if (associationPolicy != null) {
-      final String[] associationPolicyValues = associationPolicy.value();
-      if (associationPolicyValues.length > 0) {
+      final String[] localClassNames = associationPolicy.value();
+      if (localClassNames.length > 0) {
         // fall back to @Behaviour classnames if none provided on @AssociationPolicy
-        classNames = parseQNames(associationPolicyValues, associationPolicy);
+        classNames = parseQNames(localClassNames, associationPolicy);
       }
 			assocationName = parseQName(associationPolicy.association(), associationPolicy);
 			if (associationPolicy.event().equals(Event.INHERITED_OR_ALL) == false) {
@@ -169,14 +164,16 @@ public class AnnotationBasedBehaviourRegistrar extends AbstractAnnotationBasedRe
 		final PropertyPolicy propertyPolicy = AnnotationUtils.findAnnotation(method, PropertyPolicy.class);
 		QName propertyName = null;
 		if (propertyPolicy != null) {
-			classNames = parseQNames(propertyPolicy.value(), propertyPolicy);
+			if (propertyPolicy.value().length > 0) {
+				classNames = parseQNames(propertyPolicy.value(), propertyPolicy);
+			}
 			propertyName = parseQName(propertyPolicy.property(), propertyPolicy);
 			if (propertyPolicy.event().equals(Event.INHERITED_OR_ALL) == false) {
 				notificationFrequency = propertyPolicy.event().toNotificationFrequency();
 			}
 		}
 		final JavaBehaviour behaviour = new JavaBehaviour(bean, method.getName(), notificationFrequency);
-		if (classNames.length > 1) {
+		if (classNames.length > 0) {
 			for (final QName className : classNames) {
 				if (propertyName != null) {
 					if (logger.isDebugEnabled()) {

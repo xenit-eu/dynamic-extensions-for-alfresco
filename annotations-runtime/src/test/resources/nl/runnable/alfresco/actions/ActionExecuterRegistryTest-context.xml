@@ -11,16 +11,9 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     </property>
     <property name="actionExecuterRegistry" ref="actionExecuterRegistry"/>
     <property name="runtimeActionService">
-      <bean id="dao" class="org.springframework.aop.framework.ProxyFactoryBean">
-        <property name="target">
-          <bean class="org.mockito.Mockito" factory-method="mock">
-            <constructor-arg value="org.alfresco.repo.action.RuntimeActionService"/>
-          </bean>
-        </property>
-        <property name="proxyInterfaces">
-          <value>org.alfresco.repo.action.RuntimeActionService</value>
-        </property>
-      </bean>
+		<bean class="nl.runnable.alfresco.spring.MockFactoryBean">
+			<property name="class" value="org.alfresco.repo.action.RuntimeActionService"/>
+		</bean>
     </property>
   </bean>
 
