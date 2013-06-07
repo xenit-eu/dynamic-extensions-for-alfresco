@@ -35,7 +35,7 @@ public class FrameworkRestartWebScript extends AbstractWebScript {
 	private void sendJsonResponse(final WebScriptResponse response) throws IOException {
 		try {
 			final JSONObject result = new JSONObject();
-			result.put("status", "200");
+			result.put("status", 200);
 			result.put("message", "Restarted OSGi framework.");
 			response.setContentType("application/json");
 			response.getWriter().write(result.toString(2) + "\n");
