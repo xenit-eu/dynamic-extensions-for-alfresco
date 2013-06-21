@@ -1,27 +1,10 @@
 package nl.runnable.alfresco.osgi;
 
-import static java.util.Arrays.*;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.jar.Attributes;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
-import java.util.zip.ZipEntry;
-
-import javax.servlet.ServletContext;
-
+import com.springsource.util.osgi.manifest.BundleManifest;
+import com.springsource.util.osgi.manifest.ExportedPackage;
+import com.springsource.util.osgi.manifest.internal.StandardBundleManifest;
+import com.springsource.util.osgi.manifest.parse.BundleManifestParseException;
+import com.springsource.util.osgi.manifest.parse.DummyParserLogger;
 import org.alfresco.service.descriptor.DescriptorService;
 import org.osgi.framework.Version;
 import org.slf4j.Logger;
@@ -32,10 +15,17 @@ import org.springframework.util.Assert;
 import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.context.support.ServletContextResourcePatternResolver;
 
-import com.springsource.util.osgi.manifest.BundleManifest;
-import com.springsource.util.osgi.manifest.ExportedPackage;
-import com.springsource.util.osgi.manifest.internal.StandardBundleManifest;
-import com.springsource.util.osgi.manifest.parse.DummyParserLogger;
+import javax.servlet.ServletContext;
+import java.io.IOException;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.jar.Attributes;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
+import java.util.zip.ZipEntry;
+
+import static java.util.Arrays.asList;
 
 /**
  * Provides operations for discovering Java packages.
@@ -135,14 +125,20 @@ public class JavaPackageScanner implements ServletContextAware {
 		final Manifest manifest = jarFile.getManifest();
 		if (manifest != null) {
 			final Map<String, String> contents = convertAttributesToMap(manifest.getMainAttributes());
-			final BundleManifest bundleManifest = new StandardBundleManifest(new DummyParserLogger(), contents);
-			if (bundleManifest.getBundleName() != null) {
-				final List<ExportedPackage> exportedPackages = bundleManifest.getExportPackage().getExportedPackages();
-				exportPackages = new LinkedHashSet<SystemPackage>(exportedPackages.size());
-				for (final ExportedPackage exportedPackage : exportedPackages) {
-					final SystemPackage exportPackage = new SystemPackage(exportedPackage.getPackageName(),
-							exportedPackage.getVersion().toString());
-					exportPackages.add(exportPackage);
+			try {
+				final BundleManifest bundleManifest = new StandardBundleManifest(new DummyParserLogger(), contents);
+				if (bundleManifest.getBundleName() != null) {
+					final List<ExportedPackage> exportedPackages = bundleManifest.getExportPackage().getExportedPackages();
+					exportPackages = new LinkedHashSet<SystemPackage>(exportedPackages.size());
+					for (final ExportedPackage exportedPackage : exportedPackages) {
+						final SystemPackage exportPackage = new SystemPackage(exportedPackage.getPackageName(),
+								exportedPackage.getVersion().toString());
+						exportPackages.add(exportPackage);
+					}
+				}
+			} catch (BundleManifestParseException e) {
+				if (logger.isDebugEnabled()) {
+					logger.debug(String.format("Failed to parse manifest for %s, reverting to content scanning.", jarFile), e);
 				}
 			}
 		}
