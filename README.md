@@ -3,7 +3,7 @@ Dynamic Extensions for Alfresco
 
 Rapid development of Alfresco repository extensions in Java. Deploy your code in seconds, not minutes. Life is too short for endless server restarts.
 
-Dynamic Extensions adds an OSGi container to the Alfresco repository, enabling live deployment of Java code, with no need to restart the server. Alfresco itself is not "OSGi-fied" in any way; the OSGi container runs completely separate from the core Alfresco platform.
+Dynamic Extensions adds an OSGi container to the Alfresco repository, enabling live deployment of Java code, with no need to restart the server. Alfresco itself is not "OSGi-fied" in any way; the OSGi container runs on top of the core Alfresco platform.
 
 Latest release: Milestone 5
 ---------------------------
@@ -27,22 +27,22 @@ Dynamic Extensions is distributed as an Alfresco Module Package (AMP).
 * After restarting Alfresco, open the Control Panel: <a href="http://localhost:8080/alfresco/service/dynamic-extensions/">http://localhost:8080/alfresco/service/dynamic-extensions/</a>.
 * Accessing the Control Panel requires an admin account.
 
-Support for Alfresco Community
-------------------------------
+Supported Alfresco versions
+---------------------------
 
 Dynamic Extensions is developed and tested against:
 
-* Alfresco Community 3.4
 * Alfresco Community 4.0
 * Alfresco Community 4.2
 
-Support for Alfresco Enterprise
--------------------------------
+Dynamic Extensions is also known to work on the Enterprise editions.
 
 * Alfresco Enterprise 4.0
-* Alfresco Enterprise 4.1
+* Alfresco Enterprise 4.1 
 
-The Enterprise editions are not part of the development and testing environment, but Dynamic Extensions is known to work on them.
+Dynamic Extensions also works with older versions of Alfresco, but some features are not supported.
+
+* Alfresco Community 3.4. (Known issue <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/issues/56">#56</a>)
 
 Example extension code
 ----------------------
@@ -102,8 +102,10 @@ See also: <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/w
 More documentation on creating your own extensions will follow.
 
 Milestone 6 (October 2013)
-----------------------------------
+--------------------------
 
-This milestone fine-tunes and wraps up all the work that went into Dynamic Extensions over the past two years.
+Work on the final pre-1.0 milestone will resume after the summer. Here we wrap up all the work that went into Dynamic Extensions over the past two years.
 
 <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/issues?milestone=4&state=open">Issue list for milestone 6</a>.
+
+The focus is on improving test coverage and cleaning up some parts of the implementation. There will be some minor breaking changes with regard to the annotation API, but nothing too serious. Extensions written against milestone 6 will continue to work in the 1.0 release and beyond.
