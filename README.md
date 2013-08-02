@@ -101,11 +101,13 @@ See also: <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/w
 
 More documentation on creating your own extensions will follow.
 
-Milestone 6 (October 2013)
+Milestone 6 (January 2014)
 --------------------------
 
-Work on the final pre-1.0 milestone will resume after the summer. Here we wrap up all the work that went into Dynamic Extensions over the past two years.
+Work on the final 1.0 milestone will resume in 2014. The long hiatius is due to being busy with contract work for the next couple of months.
 
 <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/issues?milestone=4&state=open">Issue list for milestone 6</a>.
 
-The focus is on improving test coverage and cleaning up some parts of the implementation. There will be some minor breaking changes with regard to the annotation API, but nothing too serious. Extensions written against milestone 6 will continue to work in the 1.0 release and beyond.
+The focus is on improving test coverage and cleaning up some older parts of the implementation. There will be some minor breaking changes with regard to the annotation API, but nothing too serious. Extensions written against this milestone will almost certainly continue to be supported in the 1.0 release and beyond.
+
+
