@@ -27,7 +27,7 @@ import org.springframework.util.Assert;
  * @author Laurens Fridael
  * 
  */
-class HostApplicationContext implements ApplicationContext {
+class NonPublishingApplicationContextWrapper implements ApplicationContext {
 
 	private final ApplicationContext applicationContext;
 
@@ -209,7 +209,7 @@ class HostApplicationContext implements ApplicationContext {
 		return applicationContext.getAliases(name);
 	}
 
-	HostApplicationContext(final ApplicationContext applicationContext) {
+	NonPublishingApplicationContextWrapper(final ApplicationContext applicationContext) {
 		Assert.notNull(applicationContext);
 		this.applicationContext = applicationContext;
 	}
