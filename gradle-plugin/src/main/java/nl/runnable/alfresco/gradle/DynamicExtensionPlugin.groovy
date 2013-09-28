@@ -1,8 +1,9 @@
 package nl.runnable.alfresco.gradle
 
-import org.gradle.api.*
+import org.gradle.api.Plugin
+import org.gradle.api.Project
+import org.gradle.api.Task
 import org.gradle.tooling.BuildException
-
 
 /**
  * Gradle plugin that configures build settings for an Alfresco Dynamic Extension.
@@ -142,7 +143,6 @@ class DynamicExtensionPlugin implements Plugin<Project> {
             ]
             project.jar {
                 manifest {
-                    println("manifest: " + project.jar.manifest.instructionValue("Import-Package"))
                     instruction "Import-Package", "*," + additionalPackages.join(",")
                 }
             }
