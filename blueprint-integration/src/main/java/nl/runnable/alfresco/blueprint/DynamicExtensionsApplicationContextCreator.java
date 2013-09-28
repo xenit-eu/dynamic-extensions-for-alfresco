@@ -16,6 +16,7 @@ import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 /**
@@ -36,6 +37,8 @@ import org.springframework.util.StringUtils;
 public class DynamicExtensionsApplicationContextCreator implements OsgiApplicationContextCreator {
 
 	private static final String ALFRESCO_DYNAMIC_EXTENSION_HEADER = "Alfresco-Dynamic-Extension";
+
+	private static final String ALFRESCO_DYNAMIC_EXTENSION_EXTENDS = "Dynamic-Extension-Extends-Bundle";
 
 	private static final String HOST_APPLICATION_CONTEXT_BEAN_NAME = "HostApplicationContext";
 
@@ -77,7 +80,7 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 			uninstallBundlesWithDuplicateSymbolicName(bundleContext);
 		}
 		final DynamicExtensionsApplicationContext applicationContext = new DynamicExtensionsApplicationContext(
-				configurationLocations, getHostApplicationContext(bundleContext));
+				configurationLocations, getParentApplicationContext(bundleContext));
 		applicationContext.setBundleContext(bundleContext);
 
 		final DefaultContextClassLoaderProvider contextClassLoaderProvider = new DefaultContextClassLoaderProvider();
@@ -126,11 +129,40 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 		}
 	}
 
+	protected ApplicationContext getParentApplicationContext(final BundleContext bundleContext) {
+		final String extendsBundle = bundleContext.getBundle().getHeaders().get(ALFRESCO_DYNAMIC_EXTENSION_EXTENDS);
+		if (extendsBundle != null) {
+			final ApplicationContext extensionContext = findApplicationContext(extendsBundle, bundleContext);
+			Assert.notNull(extendsBundle, String.format("the bundle you are trying to extend:%s, does not exist", extendsBundle));
+			logger.debug("extending Application context via Extends-Bundle[{}]", extendsBundle);
+			return new NonPublishingApplicationContextWrapper(extensionContext);
+		}
+		return new NonPublishingApplicationContextWrapper(getHostApplicationContext(bundleContext));
+	}
+
+	protected ApplicationContext findApplicationContext(final String bundleName, final BundleContext bundleContext) {
+		try {
+			if (bundleContext != null) {
+				ServiceReference<?>[] references = bundleContext.getAllServiceReferences(
+						ApplicationContext.class.getName(),
+						String.format("(org.springframework.context.service.name=%s)", bundleName)
+				);
+				if (references != null && references.length > 0) {
+					final ServiceReference<?> contextServiceReference = references[0];
+					return (ApplicationContext) bundleContext.getService(contextServiceReference);
+				}
+			}
+		} catch (InvalidSyntaxException e) {
+			throw new RuntimeException(e);
+		}
+		return null;
+	}
+
 	protected ApplicationContext getHostApplicationContext(final BundleContext bundleContext) {
 		final ServiceReference<?> serviceReference = getServiceReferenceWithBeanName(bundleContext,
 				ApplicationContext.class.getName(), HOST_APPLICATION_CONTEXT_BEAN_NAME);
 		if (serviceReference != null) {
-			return new HostApplicationContext((ApplicationContext) bundleContext.getService(serviceReference));
+			return (ApplicationContext) bundleContext.getService(serviceReference);
 		} else {
 			return null;
 		}

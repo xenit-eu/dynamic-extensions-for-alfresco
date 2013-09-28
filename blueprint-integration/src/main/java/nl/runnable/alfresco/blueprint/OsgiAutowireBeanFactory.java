@@ -49,4 +49,8 @@ class OsgiAutowireBeanFactory extends AutowireBeanFactory {
 		return candidateBeansByName;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("%s BeanFactory", bundleContext);
+	}
 }
