@@ -142,7 +142,6 @@ class DynamicExtensionPlugin implements Plugin<Project> {
             ]
             project.jar {
                 manifest {
-                    println("manifest: " + project.jar.manifest.instructionValue("Import-Package"))
                     instruction "Import-Package", "*," + additionalPackages.join(",")
                 }
             }
