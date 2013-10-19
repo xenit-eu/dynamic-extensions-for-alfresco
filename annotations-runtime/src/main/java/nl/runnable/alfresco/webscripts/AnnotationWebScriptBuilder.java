@@ -146,8 +146,10 @@ public class AnnotationWebScriptBuilder implements BeanFactoryAware {
 		});
 		final Set<String> ids = new HashSet<String>();
 		for (final org.springframework.extensions.webscripts.WebScript webScript : webScripts) {
-			if (ids.contains(webScript.getDescription().getId())) {
-				throw new IllegalStateException("Duplicate Web Script ID \"" + webScript.getDescription().getId()
+			final String webscriptId = webScript.getDescription().getId();
+			final boolean notContained = ids.add(webscriptId);
+			if (!notContained) {
+				throw new IllegalStateException("Duplicate Web Script ID \"" + webscriptId
 						+ "\" Make sure handler methods of annotation-based Web Scripts have unique names.");
 			}
 		}
