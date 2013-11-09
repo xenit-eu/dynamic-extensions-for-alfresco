@@ -1,17 +1,9 @@
 package nl.runnable.alfresco.osgi.spring;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.LineNumberReader;
-import java.io.PrintWriter;
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 import nl.runnable.alfresco.osgi.JavaPackageScanner;
 import nl.runnable.alfresco.osgi.PackageCacheMode;
 import nl.runnable.alfresco.osgi.RepositoryStoreService;
 import nl.runnable.alfresco.osgi.SystemPackage;
-
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.repository.ContentReader;
@@ -23,6 +15,14 @@ import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
+import java.io.PrintWriter;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Provides {@link SystemPackage}s by scanning the web application for Java packages.
@@ -65,11 +65,19 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<Set<S
 	/* Utility operations */
 
 	protected Set<SystemPackage> createSystemPackages() {
-		Set<SystemPackage> packages = getCachedPackages();
+		final JavaPackageScanner packageScanner = javaPackageScanner.getObject();
+		final boolean validCache = packageScanner.isCacheValid(repositoryStoreService.getSystemPackageCache());
+
+		Set<SystemPackage> packages;
+		if (validCache) {
+			packages = getCachedPackages();
+		} else {
+			packages = Collections.emptySet();
+		}
 		final boolean cacheDoesNotExist = CollectionUtils.isEmpty(packages);
 
-		if (packageCacheMode.isReadFromCache() == false || cacheDoesNotExist) {
-			packages = javaPackageScanner.getObject().scanWebApplicationPackages();
+		if (packageCacheMode.isReadFromCache() == false || cacheDoesNotExist || !validCache) {
+			packages = packageScanner.scanWebApplicationPackages();
 		}
 
 		if (packageCacheMode.isForceWriteToCache() || (cacheDoesNotExist && packageCacheMode.isWriteToCache())) {
