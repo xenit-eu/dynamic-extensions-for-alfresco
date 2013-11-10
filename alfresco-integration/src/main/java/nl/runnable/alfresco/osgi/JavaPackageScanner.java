@@ -5,6 +5,7 @@ import com.springsource.util.osgi.manifest.ExportedPackage;
 import com.springsource.util.osgi.manifest.internal.StandardBundleManifest;
 import com.springsource.util.osgi.manifest.parse.BundleManifestParseException;
 import com.springsource.util.osgi.manifest.parse.DummyParserLogger;
+import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.descriptor.DescriptorService;
 import org.osgi.framework.Version;
 import org.slf4j.Logger;
@@ -235,6 +236,28 @@ public class JavaPackageScanner implements ServletContextAware {
 		return null;
 	}
 
+	/**
+	 * Check if the cache node exists and postdates the WEB-INF/lib directory
+	 * @param systemPackageCache node storing the package list
+	 * @return true if node exists and postdates the lib directory
+	 */
+	public boolean isCacheValid(FileInfo systemPackageCache) {
+		if (systemPackageCache == null) {
+			return false;
+		}
+		final Resource libDir = resourcePatternResolver.getResource("/WEB-INF/lib");
+		try {
+			final boolean stale = libDir.lastModified() > systemPackageCache.getModifiedDate().getTime();
+			if (stale) {
+				logger.info("system package cache is older then WEB-INF/lib, rescan packages");
+			}
+			return !stale;
+		} catch (IOException e) {
+			logger.warn("unable to read WEB-INF/lib directory, keeping package cache");
+			return true;
+		}
+	}
+
 	/* Dependencies */
 
 	@Override
@@ -247,5 +270,4 @@ public class JavaPackageScanner implements ServletContextAware {
 		Assert.notNull(descriptorService);
 		this.descriptorService = descriptorService;
 	}
-
 }
