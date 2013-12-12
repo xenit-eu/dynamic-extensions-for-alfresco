@@ -1,10 +1,5 @@
 package nl.runnable.alfresco.webscripts;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
-
-import java.io.StringWriter;
-
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.extensions.webscripts.Container;
@@ -13,6 +8,11 @@ import org.springframework.extensions.webscripts.TemplateProcessor;
 import org.springframework.extensions.webscripts.TemplateProcessorRegistry;
 import org.springframework.extensions.webscripts.processor.FTLTemplateProcessor;
 import org.springframework.util.ClassUtils;
+
+import java.io.StringWriter;
+
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
 
 /**
  * Tests the handling of response templates.
@@ -55,6 +55,30 @@ public class ResponseTemplateTest extends AbstractWebScriptAnnotationsTest {
 		handleGet("/handleResponseTemplateWithCustomName", new MockWebScriptRequest().format("html").runtime(runtime),
 				new MockWebScriptResponse().writer(new StringWriter()));
 		verify(getTemplateProcessor(runtime), atLeastOnce()).hasTemplate("custom-template.html");
+	}
+
+	@Test
+	public void testCustomReturnedTemplate() throws SecurityException, NoSuchMethodException {
+		final Runtime runtime = createRuntime();
+		handleGet("/handleResponseTemplateWithReturnValue", new MockWebScriptRequest().format("html").runtime(runtime),
+				new MockWebScriptResponse().writer(new StringWriter()));
+		verify(getTemplateProcessor(runtime), atLeastOnce()).hasTemplate("custom-returned-template.html");
+	}
+
+	@Test
+	public void testCustomReturnedTemplateOverride() throws SecurityException, NoSuchMethodException {
+		final Runtime runtime = createRuntime();
+		handleGet("/handleResponseTemplateWithReturnValueOverride", new MockWebScriptRequest().format("html").runtime(runtime),
+				new MockWebScriptResponse().writer(new StringWriter()));
+		verify(getTemplateProcessor(runtime), atLeastOnce()).hasTemplate("custom-returned-template.html");
+	}
+
+	@Test
+	public void testCustomReturnedTemplateDefault() throws SecurityException, NoSuchMethodException {
+		final Runtime runtime = createRuntime();
+		handleGet("/handleResponseTemplateWithReturnValueDefault", new MockWebScriptRequest().format("html").runtime(runtime),
+				new MockWebScriptResponse().writer(new StringWriter()));
+		verify(getTemplateProcessor(runtime), atLeastOnce()).hasTemplate("default-template.html");
 	}
 
 	/* Utility operations */

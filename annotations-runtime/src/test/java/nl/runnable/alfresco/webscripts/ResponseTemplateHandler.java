@@ -1,15 +1,14 @@
 package nl.runnable.alfresco.webscripts;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import nl.runnable.alfresco.spring.Spied;
 import nl.runnable.alfresco.webscripts.annotations.Cache;
 import nl.runnable.alfresco.webscripts.annotations.ResponseTemplate;
 import nl.runnable.alfresco.webscripts.annotations.Uri;
 import nl.runnable.alfresco.webscripts.annotations.WebScript;
-
 import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 @WebScript(defaultFormat = "html")
@@ -32,4 +31,20 @@ public class ResponseTemplateHandler {
 	public void handleResponseTemplateWithCustomName() {
 	}
 
+	@Uri("handleResponseTemplateWithReturnValue")
+	public String handleResponseTemplateWithReturnValue() {
+		return "custom-returned-template.html";
+	}
+
+	@Uri("handleResponseTemplateWithReturnValueOverride")
+	@ResponseTemplate("default-template.html")
+	public String handleResponseTemplateWithReturnValueOverride() {
+		return "custom-returned-template.html";
+	}
+
+	@Uri("handleResponseTemplateWithReturnValueDefault")
+	@ResponseTemplate("default-template.html")
+	public String handleResponseTemplateWithReturnValueDefault() {
+		return null;
+	}
 }

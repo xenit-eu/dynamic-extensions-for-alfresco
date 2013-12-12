@@ -1,34 +1,20 @@
 package nl.runnable.alfresco.webscripts;
 
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
-
-import javax.servlet.http.HttpServletResponse;
-
 import nl.runnable.alfresco.webscripts.annotations.Attribute;
 import nl.runnable.alfresco.webscripts.arguments.HandlerMethodArgumentsResolver;
-
 import org.springframework.aop.support.AopUtils;
 import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.extensions.webscripts.Container;
-import org.springframework.extensions.webscripts.Description;
+import org.springframework.extensions.webscripts.*;
 import org.springframework.extensions.webscripts.Description.RequiredCache;
-import org.springframework.extensions.webscripts.Format;
-import org.springframework.extensions.webscripts.TemplateProcessor;
-import org.springframework.extensions.webscripts.TemplateProcessorRegistry;
-import org.springframework.extensions.webscripts.URLModelFactory;
-import org.springframework.extensions.webscripts.WebScript;
-import org.springframework.extensions.webscripts.WebScriptRequest;
-import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.*;
 
 public class AnnotationWebScript implements WebScript {
 
@@ -166,12 +152,12 @@ public class AnnotationWebScript implements WebScript {
 	@SuppressWarnings("unchecked")
 	protected void handleUriMethodReturnValue(final AnnotationWebScriptRequest request,
 			final WebScriptResponseWrapper response, final Object returnValue) throws IOException {
-		if (returnValue instanceof Map || handlerMethods.useResponseTemplate()) {
+		if (returnValue instanceof Map || handlerMethods.useResponseTemplate() || returnValue instanceof String) {
 			final Map<String, Object> model = request.getModel();
 			if (returnValue instanceof Map && returnValue != model) {
 				model.putAll((Map<String, Object>) returnValue);
 			}
-			processHandlerMethodTemplate(request, model, response, response.getStatus());
+			processHandlerMethodTemplate(request, model, response, response.getStatus(), returnValue);
 		}
 	}
 
@@ -210,7 +196,7 @@ public class AnnotationWebScript implements WebScript {
 	}
 
 	protected void processHandlerMethodTemplate(final WebScriptRequest request, final Map<String, Object> model,
-			final WebScriptResponse response, Integer status) throws IOException {
+			final WebScriptResponse response, Integer status, final Object returnValue) throws IOException {
 		if (StringUtils.hasText(request.getFormat()) == false) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.getWriter().write("No format specified.");
@@ -218,7 +204,7 @@ public class AnnotationWebScript implements WebScript {
 		}
 		populateTemplateModel(model, request);
 		status = status != null ? status : 200;
-		processTemplate(request, model, status, response);
+		processTemplate(request, model, status, response, returnValue);
 	}
 
 	/**
@@ -233,12 +219,12 @@ public class AnnotationWebScript implements WebScript {
 	}
 
 	protected void processTemplate(final WebScriptRequest request, final Map<String, Object> model, final int status,
-			final WebScriptResponse response) throws IOException {
+			final WebScriptResponse response, final Object returnValue) throws IOException {
 		final TemplateProcessorRegistry templateProcessorRegistry = request.getRuntime().getContainer()
 				.getTemplateProcessorRegistry();
 		final TemplateProcessor templateProcessor = templateProcessorRegistry.getTemplateProcessorByExtension("ftl");
 		final String format = request.getFormat();
-		String templateName = handlerMethods.getResponseTemplateName();
+		String templateName = handlerMethods.getResponseTemplateName(returnValue);
 		if (StringUtils.hasText(templateName) == false) {
 			templateName = generateTemplateName(templateProcessor, format, status);
 		}

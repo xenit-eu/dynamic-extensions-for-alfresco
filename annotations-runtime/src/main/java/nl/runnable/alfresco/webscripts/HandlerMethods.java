@@ -1,15 +1,14 @@
 package nl.runnable.alfresco.webscripts;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-
 import nl.runnable.alfresco.webscripts.annotations.Attribute;
 import nl.runnable.alfresco.webscripts.annotations.Before;
 import nl.runnable.alfresco.webscripts.annotations.ResponseTemplate;
 import nl.runnable.alfresco.webscripts.annotations.Uri;
-
 import org.springframework.core.annotation.AnnotationUtils;
+
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Parameter object for specifying {@link Uri}, {@link Before} and {@link Attribute}-annotated Web Script handler
@@ -58,7 +57,10 @@ public class HandlerMethods {
 		return (AnnotationUtils.findAnnotation(uriMethod, ResponseTemplate.class) != null);
 	}
 
-	public String getResponseTemplateName() {
+	public String getResponseTemplateName(final Object returnValue) {
+		if (returnValue instanceof String) {
+			return (String) returnValue;
+		}
 		final ResponseTemplate responseTemplate = AnnotationUtils.findAnnotation(uriMethod, ResponseTemplate.class);
 		return (responseTemplate != null ? responseTemplate.value() : null);
 	}
