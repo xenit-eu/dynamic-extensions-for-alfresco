@@ -1,8 +1,8 @@
 package nl.runnable.alfresco.osgi;
 
-import java.io.File;
-
 import org.springframework.util.Assert;
+
+import java.io.File;
 
 /**
  * Value object representing the OSGi container configuration;
@@ -11,29 +11,38 @@ import org.springframework.util.Assert;
  * 
  */
 public class Configuration {
+	private boolean frameworkRestartEnabled = true;
 
-	private Mode mode = Mode.DEVELOPMENT;
+	private boolean hotDeployEnabled = true;
 
-	private File bundleDirectory;
+	private boolean repositoryBundlesEnabled = true;
 
 	private File storageDirectory;
 
-	public Mode getMode() {
-		return mode;
+	private PackageCacheMode systemPackageCacheMode;
+
+	public boolean isFrameworkRestartEnabled() {
+		return frameworkRestartEnabled;
 	}
 
-	public void setMode(final Mode mode) {
-		Assert.notNull(mode);
-		this.mode = mode;
+	public void setFrameworkRestartEnabled(boolean frameworkRestartEnabled) {
+		this.frameworkRestartEnabled = frameworkRestartEnabled;
 	}
 
-	public File getBundleDirectory() {
-		return bundleDirectory;
+	public boolean isHotDeployEnabled() {
+		return hotDeployEnabled;
 	}
 
-	public void setBundleDirectory(final File bundleDirectory) {
-		Assert.notNull(bundleDirectory);
-		this.bundleDirectory = bundleDirectory;
+	public void setHotDeployEnabled(boolean hotDeployEnabled) {
+		this.hotDeployEnabled = hotDeployEnabled;
+	}
+
+	public boolean isRepositoryBundlesEnabled() {
+		return repositoryBundlesEnabled;
+	}
+
+	public void setRepositoryBundlesEnabled(boolean repositoryBundlesEnabled) {
+		this.repositoryBundlesEnabled = repositoryBundlesEnabled;
 	}
 
 	public File getStorageDirectory() {
@@ -45,4 +54,11 @@ public class Configuration {
 		this.storageDirectory = storageDirectory;
 	}
 
+	public void setSystemPackageCacheMode(PackageCacheMode systemPackageCacheMode) {
+		this.systemPackageCacheMode = systemPackageCacheMode;
+	}
+
+	public PackageCacheMode getSystemPackageCacheMode() {
+		return systemPackageCacheMode;
+	}
 }

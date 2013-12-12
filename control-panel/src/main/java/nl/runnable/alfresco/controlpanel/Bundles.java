@@ -1,34 +1,18 @@
 package nl.runnable.alfresco.controlpanel;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
-
 import nl.runnable.alfresco.controlpanel.template.TemplateBundle;
 import nl.runnable.alfresco.controlpanel.template.Variables;
-import nl.runnable.alfresco.webscripts.annotations.Attribute;
-import nl.runnable.alfresco.webscripts.annotations.Authentication;
-import nl.runnable.alfresco.webscripts.annotations.AuthenticationType;
-import nl.runnable.alfresco.webscripts.annotations.Cache;
-import nl.runnable.alfresco.webscripts.annotations.FileField;
-import nl.runnable.alfresco.webscripts.annotations.HttpMethod;
-import nl.runnable.alfresco.webscripts.annotations.RequestParam;
-import nl.runnable.alfresco.webscripts.annotations.Uri;
-import nl.runnable.alfresco.webscripts.annotations.UriVariable;
-import nl.runnable.alfresco.webscripts.annotations.WebScript;
-
+import nl.runnable.alfresco.webscripts.annotations.*;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.extensions.webscripts.servlet.FormData.FormField;
 import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.*;
 
 @Component
 @WebScript(baseUri = "/dynamic-extensions/bundles", defaultFormat = "html")
@@ -67,6 +51,8 @@ public class Bundles extends AbstractControlPanelHandler {
 
 	@Uri(method = HttpMethod.POST, value = "/install", multipartProcessing = true)
 	public void install(@FileField final FormField file, @Attribute final ResponseHelper responseHelper) {
+		responseHelper.redirectToBundles();
+		responseHelper.checkBundleInstallConfiguration();
 		if (file != null) {
 			if (file.getFilename().endsWith(".jar")) {
 				try {
@@ -81,12 +67,12 @@ public class Bundles extends AbstractControlPanelHandler {
 		} else {
 			responseHelper.flashErrorMessage("No file uploaded.");
 		}
-		responseHelper.redirectToBundles();
 	}
 
 	@Uri(method = HttpMethod.POST, value = "/delete")
 	public void delete(final @Attribute Bundle bundle, @Attribute final String id,
 			@Attribute final ResponseHelper responseHelper) {
+		responseHelper.checkBundleInstallConfiguration();
 		if (bundle != null) {
 			try {
 				bundleHelper.uninstallAndDeleteBundle(bundle);
@@ -105,6 +91,7 @@ public class Bundles extends AbstractControlPanelHandler {
 	@Uri(method = HttpMethod.POST, value = "/start")
 	public void start(final @Attribute Bundle bundle, @Attribute final String id,
 			@Attribute final ResponseHelper responseHelper) {
+		responseHelper.checkBundleInstallConfiguration();
 		if (bundle != null) {
 			try {
 				bundle.start();

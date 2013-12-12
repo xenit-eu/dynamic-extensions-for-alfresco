@@ -1,9 +1,6 @@
 package nl.runnable.alfresco.osgi.spring;
 
-import nl.runnable.alfresco.osgi.JavaPackageScanner;
-import nl.runnable.alfresco.osgi.PackageCacheMode;
-import nl.runnable.alfresco.osgi.RepositoryStoreService;
-import nl.runnable.alfresco.osgi.SystemPackage;
+import nl.runnable.alfresco.osgi.*;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.repository.ContentReader;
@@ -42,7 +39,7 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<Set<S
 
 	private FileFolderService fileFolderService;
 
-	private PackageCacheMode packageCacheMode;
+	private Configuration configuration;
 
 	/* Main operations */
 
@@ -76,6 +73,7 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<Set<S
 		}
 		final boolean cacheDoesNotExist = CollectionUtils.isEmpty(packages);
 
+		final PackageCacheMode packageCacheMode = configuration.getSystemPackageCacheMode();
 		if (packageCacheMode.isReadFromCache() == false || cacheDoesNotExist || !validCache) {
 			packages = packageScanner.scanWebApplicationPackages();
 		}
@@ -151,7 +149,7 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<Set<S
 		this.fileFolderService = fileFolderService;
 	}
 
-	public void setPackageCacheMode(final PackageCacheMode packageCacheMode) {
-		this.packageCacheMode = packageCacheMode;
+	public void setConfiguration(Configuration configuration) {
+		this.configuration = configuration;
 	}
 }

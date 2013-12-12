@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans
-http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context
-http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 	<description>Configures OSGi framework and related services.</description>
 
 	<bean id="osgi.container.Configuration" class="nl.runnable.alfresco.osgi.Configuration">
 		<description>Specifies the global OSGI container configuration.</description>
-		<property name="mode" value="${osgi.container.mode:DEVELOPMENT}" />
-		<property name="bundleDirectory" value="${osgi.container.bundle-directory:dynamic-extensions}" />
+		<property name="frameworkRestartEnabled" value="${osgi.container.restartable:true}" />
+		<property name="hotDeployEnabled" value="${osgi.container.hot-deploy:true}" />
+		<property name="repositoryBundlesEnabled" value="${osgi.container.repository-bundles:true}" />
 		<property name="storageDirectory" value="${osgi.container.storage-directory:tmp}" />
+		<property name="systemPackageCacheMode" value="${osgi.container.system-package-cache.mode:ENABLE}" />
 	</bean>
 
 	<bean id="osgi.container.FrameworkConfiguration" class="nl.runnable.alfresco.osgi.FrameworkConfiguration">
@@ -60,18 +61,11 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 			</list>
 		</property>
 		<property name="blueprintBundlesLocation" value="classpath:/alfresco/module/%module.id%/blueprint-bundles/*.jar" />
-		<property name="fileInstallBundlesLocation" value="classpath:/alfresco/module/%module.id%/file-install-bundles/*.jar" />
 		<property name="standardBundlesLocation" value="classpath:/alfresco/module/%module.id%/standard-bundles/*.jar" />
 		<property name="customBundlesLocation" value="classpath:/dynamic-extensions/bundles/*.jar" />
-		<property name="fileInstallConfigurer" ref="osgi.container.FileInstallConfigurer" />
 		<property name="configuration" ref="osgi.container.Configuration" />
 		<property name="repositoryStoreService" ref="osgi.container.RepositoryStoreService" />
 		<property name="contentService" ref="contentService" />
-	</bean>
-
-	<bean id="osgi.container.FileInstallConfigurer" class="nl.runnable.alfresco.osgi.FileInstallConfigurer"
-		init-method="configureSettings">
-		<property name="configuration" ref="osgi.container.Configuration" />
 	</bean>
 
 	<bean id="osgi.container.RepositoryStoreService" class="nl.runnable.alfresco.osgi.RepositoryStoreService">

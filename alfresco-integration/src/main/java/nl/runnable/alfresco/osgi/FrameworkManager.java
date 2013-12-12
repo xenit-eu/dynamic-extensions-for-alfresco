@@ -1,24 +1,10 @@
 package nl.runnable.alfresco.osgi;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.service.cmr.repository.ContentService;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleException;
-import org.osgi.framework.BundleListener;
-import org.osgi.framework.Constants;
-import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.*;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.wiring.FrameworkWiring;
 import org.slf4j.Logger;
@@ -31,6 +17,13 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Manages a {@link Framework}'s lifecycle. It taken care of initializing and destroying the Framework and
@@ -54,8 +47,6 @@ public class FrameworkManager implements ResourceLoaderAware {
 
 	private ResourcePatternResolver resourcePatternResolver;
 
-	private FileInstallConfigurer fileInstallConfigurer;
-
 	private RepositoryStoreService repositoryStoreService;
 
 	private ContentService contentService;
@@ -65,8 +56,6 @@ public class FrameworkManager implements ResourceLoaderAware {
 	private Configuration configuration;
 
 	private String blueprintBundlesLocation;
-
-	private String fileInstallBundlesLocation;
 
 	private String standardBundlesLocation;
 
@@ -82,9 +71,6 @@ public class FrameworkManager implements ResourceLoaderAware {
 		registerServices();
 		final List<Bundle> bundles = new ArrayList<Bundle>();
 		bundles.addAll(installCoreBundles());
-		if (isFileInstallEnabled() == false) {
-			bundles.addAll(installFilesystemBundles());
-		}
 		if (isRepositoryInstallEnabled()) {
 			bundles.addAll(installRepositoryBundles());
 		}
@@ -120,9 +106,6 @@ public class FrameworkManager implements ResourceLoaderAware {
 		try {
 			final List<String> locationPatterns = new ArrayList<String>();
 			locationPatterns.add(getBlueprintBundlesLocation());
-			if (isFileInstallEnabled() && StringUtils.hasText(getFileInstallBundlesLocation())) {
-				locationPatterns.add(getFileInstallBundlesLocation());
-			}
 			if (StringUtils.hasText(getStandardBundlesLocation())) {
 				locationPatterns.add(getStandardBundlesLocation());
 			}
@@ -153,47 +136,6 @@ public class FrameworkManager implements ResourceLoaderAware {
 		}
 		return bundles;
 
-	}
-
-	/**
-	 * Installs the Bundles on the filesystem.
-	 * <p>
-	 * This implementation looks for JAR files in the directories configured for File Install.
-	 * 
-	 * @return
-	 */
-	protected List<Bundle> installFilesystemBundles() {
-		final List<Bundle> bundles = new ArrayList<Bundle>();
-		for (final String directory : getFileInstallConfigurer().getDirectoriesAsAbsolutePaths()) {
-			final File dir = new File(directory);
-			if (dir.isDirectory() == false) {
-				if (logger.isWarnEnabled()) {
-					logger.warn("Directory does not exist: {}", dir.getAbsolutePath());
-				}
-				continue;
-			}
-			final File[] jarFiles = dir.listFiles(new FileFilter() {
-
-				@Override
-				public boolean accept(final File file) {
-					return file.getName().toLowerCase().endsWith(".jar");
-				}
-			});
-			for (final File jarFile : jarFiles) {
-				try {
-					final String location = jarFile.toURI().toString();
-					if (logger.isDebugEnabled()) {
-						logger.debug("Installing Bundle: {}", location);
-					}
-					final Bundle bundle = getFramework().getBundleContext().installBundle(location,
-							new FileInputStream(jarFile));
-					bundles.add(bundle);
-				} catch (final Exception e) {
-					logger.warn("Error installing Bundle: {}", e.getMessage(), e);
-				}
-			}
-		}
-		return bundles;
 	}
 
 	/**
@@ -344,14 +286,6 @@ public class FrameworkManager implements ResourceLoaderAware {
 		return resourcePatternResolver;
 	}
 
-	public void setFileInstallConfigurer(final FileInstallConfigurer fileInstallConfigurer) {
-		this.fileInstallConfigurer = fileInstallConfigurer;
-	}
-
-	protected FileInstallConfigurer getFileInstallConfigurer() {
-		return fileInstallConfigurer;
-	}
-
 	public void setRepositoryStoreService(final RepositoryStoreService repositoryFolderService) {
 		Assert.notNull(repositoryFolderService);
 		this.repositoryStoreService = repositoryFolderService;
@@ -391,14 +325,6 @@ public class FrameworkManager implements ResourceLoaderAware {
 		return blueprintBundlesLocation;
 	}
 
-	public void setFileInstallBundlesLocation(final String fileInstallBundlesLocation) {
-		this.fileInstallBundlesLocation = fileInstallBundlesLocation;
-	}
-
-	protected String getFileInstallBundlesLocation() {
-		return fileInstallBundlesLocation;
-	}
-
 	public void setStandardBundlesLocation(final String standardBundlesLocation) {
 		this.standardBundlesLocation = standardBundlesLocation;
 	}
@@ -415,12 +341,8 @@ public class FrameworkManager implements ResourceLoaderAware {
 		return customBundlesLocation;
 	}
 
-	protected boolean isFileInstallEnabled() {
-		return getConfiguration().getMode().isBundleInstallEnabled();
-	}
-
 	public boolean isRepositoryInstallEnabled() {
-		return getConfiguration().getMode().isBundleInstallEnabled();
+		return getConfiguration().isRepositoryBundlesEnabled();
 	}
 
 }

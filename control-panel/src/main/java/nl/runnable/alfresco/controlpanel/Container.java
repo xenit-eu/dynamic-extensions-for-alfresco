@@ -1,25 +1,9 @@
 package nl.runnable.alfresco.controlpanel;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import nl.runnable.alfresco.controlpanel.template.TemplateBundle;
 import nl.runnable.alfresco.controlpanel.template.Variables;
 import nl.runnable.alfresco.osgi.RepositoryStoreService;
-import nl.runnable.alfresco.webscripts.annotations.Attribute;
-import nl.runnable.alfresco.webscripts.annotations.Authentication;
-import nl.runnable.alfresco.webscripts.annotations.AuthenticationType;
-import nl.runnable.alfresco.webscripts.annotations.Cache;
-import nl.runnable.alfresco.webscripts.annotations.HttpMethod;
-import nl.runnable.alfresco.webscripts.annotations.Uri;
-import nl.runnable.alfresco.webscripts.annotations.WebScript;
-
+import nl.runnable.alfresco.webscripts.annotations.*;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
@@ -31,6 +15,11 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.launch.Framework;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * Handles requests for the configuration page.
@@ -115,7 +104,7 @@ public class Container extends AbstractControlPanelHandler {
 
 	@Attribute(Variables.CAN_RESTART_FRAMEWORK)
 	protected boolean canRestartFramework() {
-		return osgiConfiguration.getMode().isFrameworkRestartEnabled();
+		return osgiConfiguration.isFrameworkRestartEnabled();
 	}
 
 	@Attribute(Variables.SYSTEM_PACKAGE_CACHE_EXISTS)
@@ -145,8 +134,8 @@ public class Container extends AbstractControlPanelHandler {
 			framework.stop();
 			framework.waitForStop(0);
 			framework.start();
-		} catch (final BundleException e) {
-		} catch (final InterruptedException e) {
+		} catch (final BundleException ignore) {
+		} catch (final InterruptedException ignore) {
 		}
 	}
 

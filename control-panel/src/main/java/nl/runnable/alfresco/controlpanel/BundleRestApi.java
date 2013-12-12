@@ -1,23 +1,18 @@
 package nl.runnable.alfresco.controlpanel;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletResponse;
-
-import nl.runnable.alfresco.webscripts.annotations.Attribute;
-import nl.runnable.alfresco.webscripts.annotations.Authentication;
-import nl.runnable.alfresco.webscripts.annotations.AuthenticationType;
-import nl.runnable.alfresco.webscripts.annotations.Header;
-import nl.runnable.alfresco.webscripts.annotations.HttpMethod;
-import nl.runnable.alfresco.webscripts.annotations.Uri;
-import nl.runnable.alfresco.webscripts.annotations.WebScript;
-
+import nl.runnable.alfresco.osgi.Configuration;
+import nl.runnable.alfresco.webscripts.annotations.*;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.extensions.surf.util.Content;
+import org.springframework.extensions.webscripts.WebScriptException;
+import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * Handles requests for the Bundle REST API.
@@ -39,29 +34,28 @@ public class BundleRestApi {
 	@Autowired
 	private BundleHelper bundleHelper;
 
+	@Autowired
+	private Configuration configuration;
+
 	/* Main operations */
 
 	@Uri(method = HttpMethod.POST)
 	public void installBundle(final Content content, @Header("Content-Type") final String contentType,
-			@Attribute final JsonResponseHelper response) throws IOException {
+			@Attribute final JsonResponseHelper response) throws IOException, BundleException {
+		response.checkBundleInstallConfiguration();
 		if (JAR_MIME_TYPE.equalsIgnoreCase(contentType) == false) {
-			response.sendMessage(HttpServletResponse.SC_BAD_REQUEST,
+			throw new WebScriptException(HttpServletResponse.SC_BAD_REQUEST,
 					String.format("Can only accept content of type '%s'.", JAR_MIME_TYPE));
 		}
-		try {
-			final Bundle bundle = bundleHelper.installBundleInRepository(content);
-			response.sendBundleInstalledMessage(bundle);
-		} catch (final BundleException e) {
-			response.sendMessage(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-		}
-
+		final Bundle bundle = bundleHelper.installBundleInRepository(content);
+		response.sendBundleInstalledMessage(bundle);
 	}
 
 	/* Utility operations */
 
 	@Attribute
-	protected JsonResponseHelper getJsonResponseHelper(final WebScriptResponse response) {
-		return new JsonResponseHelper(response);
+	protected JsonResponseHelper getJsonResponseHelper(final WebScriptRequest request, final WebScriptResponse response) {
+		return new JsonResponseHelper(request, response, configuration);
 	}
 
 }

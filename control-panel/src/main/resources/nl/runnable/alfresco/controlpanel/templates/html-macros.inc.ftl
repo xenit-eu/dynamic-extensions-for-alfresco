@@ -4,6 +4,8 @@
 <html>
   <head>
     <title>${title}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <base href="${url.serviceContext}/dynamic-extensions/"/>
     <link rel="stylesheet" type="text/css" href="resources/stylesheets/bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="resources/stylesheets/bootstrap/css/bootstrap-responsive.min.css"/>
@@ -30,7 +32,7 @@
             </ul>
             <ul class="nav pull-right">
               <li>
-                <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco">
+                <a href="https://github.com/laurentvdl/dynamic-extensions-for-alfresco">
                   Github project
                 </a>
               </li>
@@ -56,14 +58,11 @@
     <div id="footer">
       <div class="container">
         <div class="row">
-          <div class="span6">
+            <div class="span6">
             <p class="last-updated">Last refreshed: <span id="last-updated">just now</span></p>
-          </div>
-          <div class="span3">
+            </div>
+          <div class="span6">
             <p class="login">Logged in as: ${currentUser}</p>
-          </div>
-          <div class="span3">
-            <p class="mode pull-right">Mode: ${configuration.mode}</p>
           </div>
         </div>
       </div>
@@ -125,3 +124,5 @@
     ${bundle.name} ${bundle.version}
   </a>
 </#macro>
+
+<#macro check test><#if test>&#x2713<#else>&#x2718</#if></#macro>

@@ -1,26 +1,23 @@
 package nl.runnable.alfresco.controlpanel;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletResponse;
-
+import nl.runnable.alfresco.osgi.Configuration;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.osgi.framework.Bundle;
+import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
-class JsonResponseHelper {
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+class JsonResponseHelper extends AbstractResponseHelper {
 
 	private static final String JSON_MIME_TYPE = "application/json";
 
-	/* Dependencies */
-
-	private final WebScriptResponse response;
-
 	/* Main operations */
 
-	JsonResponseHelper(final WebScriptResponse response) {
-		this.response = response;
+	protected JsonResponseHelper(WebScriptRequest request, WebScriptResponse response, Configuration configuration) {
+		super(request, response, configuration);
 	}
 
 	public void sendMessage(final int status, final String message) throws IOException {

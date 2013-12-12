@@ -1,22 +1,22 @@
 package nl.runnable.alfresco.controlpanel;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
 import nl.runnable.alfresco.controlpanel.template.Variables;
 import nl.runnable.alfresco.osgi.ConfigurationValues;
 import nl.runnable.alfresco.osgi.SystemPackage;
 import nl.runnable.alfresco.webscripts.annotations.Attribute;
 import nl.runnable.alfresco.webscripts.annotations.Before;
+import nl.runnable.alfresco.webscripts.annotations.ExceptionHandler;
 import nl.runnable.alfresco.webscripts.annotations.Uri;
-
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
+
+import javax.annotation.Resource;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Abstract base class for the Control Panel. This class defines common dependencies and {@link Attribute} and
@@ -40,7 +40,7 @@ abstract class AbstractControlPanelHandler {
 
 	@Attribute
 	protected ResponseHelper getResponseHelper(final WebScriptRequest request, final WebScriptResponse response) {
-		return new ResponseHelper(request, response);
+		return new ResponseHelper(request, response, osgiConfiguration);
 	}
 
 	@Attribute(Variables.CONFIGURATION)
@@ -61,6 +61,13 @@ abstract class AbstractControlPanelHandler {
 		for (final String variable : FLASH_VARIABLES) {
 			model.put(variable, responseHelper.getFlashVariable(variable));
 		}
+	}
+
+	/* Exception handling */
+
+	@ExceptionHandler(WebScriptException.class)
+	protected void handleWebscriptException(WebScriptException wx, @Attribute ResponseHelper responseHelper) {
+		responseHelper.flashErrorMessage(String.format(wx.getMessage()));
 	}
 
 	/* Utility operations */

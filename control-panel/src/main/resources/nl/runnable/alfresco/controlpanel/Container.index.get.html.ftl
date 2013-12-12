@@ -106,4 +106,50 @@
 
   </div> <#-- .row -->
 
+  <div class="row">
+    <div class="span12">
+      <h2>Settings</h2>
+      <p>Change these settings via the <code>osgi-container.properties</code> file.</p>
+      <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+          <th class="name">Key</th>
+          <th class="status">Value</th>
+          <th class="status">Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><code>osgi.container.restartable</code></td>
+          <td><@html.check configuration.frameworkRestartEnabled /></td>
+          <td>
+            Restart OSGi container @ runtime
+          </td>
+        </tr>
+        <tr>
+          <td><code>osgi.container.hot-deploy</code></td>
+          <td><@html.check configuration.hotDeployEnabled /></td>
+          <td>
+            Installing bundles via control-panel @ runtime
+          </td>
+        </tr>
+        <tr>
+          <td><code>osgi.container.repository-bundles</code></td>
+          <td><@html.check configuration.repositoryBundlesEnabled /></td>
+          <td>
+            Installing/starting bundles in the repository. (instead of classpath)
+          </td>
+        </tr>
+        <tr>
+          <td><code>osgi.container.system-package-cache.mode</code></td>
+          <td>${configuration.systemPackageCacheMode}</td>
+          <td>
+            System classpath scanning: cache mode
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
 </@html.document>

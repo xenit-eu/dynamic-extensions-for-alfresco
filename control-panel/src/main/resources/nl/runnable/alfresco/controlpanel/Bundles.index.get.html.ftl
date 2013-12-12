@@ -13,33 +13,16 @@
 
   <h2>Framework bundles</h2>
 
-  <@html.bundleTable bundles = frameworkBundles />  
+  <@html.bundleTable bundles = frameworkBundles />
 
+  <#if configuration.hotDeployEnabled>
   <div class="row">
-    <div class="span6">
-      <h2>Filesystem bundles</h2>
-      <#if configuration.mode.bundleInstallEnabled>
-        <p>Manage OSGi bundles from the filesystem:</p>
-        <p>
-           <code>${configuration.bundleDirectory.absolutePath}</code>
-        </p>
-        <p>
-          Add bundle files to this directory to install them in the OSGi container.
-          Installation may take several seconds, refresh this page to see the latest status.
-        </p>
-        <p>
-          Remove bundles from this directory to uninstall them from the OSGi container.
-        </p>
-      <#else>
-        <p>Managing OSGi bundles through the filesystem is disabled.</p>
-      </#if>
-    </div>
-    <div class="span6">
+    <div class="span12">
       <h2>Repository bundles</h2>
       <form action="bundles/install" enctype="multipart/form-data" method="post">
         <div class="control-group">
           <div class="control-label">
-            <label>Or upload an OSGi bundle here:</label>
+            <label>Upload an OSGi bundle here:</label>
           </div>
           <div class="controls">
             <div class="fileupload fileupload-new" data-provides="fileupload">
@@ -68,5 +51,8 @@
       </form>
     </div>
   </div>
+  <#else>
+  <p>Managing OSGi bundles after startup is disabled. Change <code>osgi.container.control-panel.bundle-install</code> to enable.</p>
+  </#if>
 
 </@html.document>
