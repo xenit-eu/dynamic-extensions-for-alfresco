@@ -1,7 +1,5 @@
 package nl.runnable.alfresco.blueprint;
 
-import java.io.IOException;
-
 import nl.runnable.alfresco.actions.AnnotationBasedActionRegistrar;
 import nl.runnable.alfresco.aop.DynamicExtensionsAdvisorAutoProxyCreator;
 import nl.runnable.alfresco.models.DAOModelRegistrar;
@@ -16,15 +14,17 @@ import nl.runnable.alfresco.webscripts.AnnotationWebScriptRegistrar;
 import nl.runnable.alfresco.webscripts.WebScriptUriRegistry;
 import nl.runnable.alfresco.webscripts.arguments.HandlerMethodArgumentsResolver;
 import nl.runnable.alfresco.webscripts.arguments.StringValueConverter;
-
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.descriptor.Descriptor;
 import org.alfresco.service.descriptor.DescriptorService;
 import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationContext;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.packageadmin.ExportedPackage;
+import org.osgi.service.packageadmin.PackageAdmin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
@@ -33,16 +33,14 @@ import org.springframework.beans.factory.parsing.BeanDefinitionParsingException;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.beans.factory.xml.DefaultNamespaceHandlerResolver;
-import org.springframework.beans.factory.xml.DelegatingEntityResolver;
-import org.springframework.beans.factory.xml.NamespaceHandler;
-import org.springframework.beans.factory.xml.NamespaceHandlerResolver;
-import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
+import org.springframework.beans.factory.xml.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 import org.springframework.extensions.webscripts.TemplateProcessor;
 import org.springframework.util.StringUtils;
 import org.xml.sax.EntityResolver;
+
+import java.io.IOException;
 
 /**
  * {@link ApplicationContext} for Dynamic Extensions.
@@ -108,13 +106,15 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 
 	@Override
 	protected void loadBeanDefinitions(final DefaultListableBeanFactory beanFactory) throws IOException {
+        final boolean isAlfrescoDynamicExtension = isAlfrescoDynamicExtension();
+
 		if (hasSpringConfigurationHeader()) {
 			if (hasXmlConfiguration() && logger.isWarnEnabled()) {
 				logger.warn(String
 						.format("Spring XML configuration at /META-INF/spring will be ignored due to the presence of the '%s' header.",
 								SPRING_CONFIGURATION_HEADER));
 			}
-			scanBeanDefinitionsFromSpringConfigurationPackages(beanFactory);
+            scanPackages(beanFactory, getSpringConfigurationPackages());
 		} else if (hasXmlConfiguration()) {
 			try {
 				super.loadBeanDefinitions(beanFactory);
@@ -123,8 +123,13 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 					logger.warn("Error parsing bean definitions.", e);
 				}
 			}
-		}
-		if (isAlfrescoDynamicExtension()) {
+		} else if (isAlfrescoDynamicExtension) {
+            // fall back to the OSGi "Export-Package" header (often created by BND tool)
+            // this provides a sensible default to reduce minimal required configuration
+            scanPackages(beanFactory, getBundleExportPackages());
+        }
+
+        if (isAlfrescoDynamicExtension) {
 			registerInfrastructureBeans(beanFactory);
 		}
 	}
@@ -139,18 +144,17 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 		return Boolean.valueOf(getBundle().getHeaders().get(ALFRESCO_DYNAMIC_EXTENSION_HEADER));
 	}
 
-	protected void scanBeanDefinitionsFromSpringConfigurationPackages(final DefaultListableBeanFactory beanFactory) {
-		final String[] configurationPackages = getSpringConfigurationPackages();
-		if (configurationPackages != null) {
-			final Descriptor serverDescriptor = getService(DescriptorService.class).getServerDescriptor();
-			final ClassPathBeanDefinitionScanner scanner = new AlfrescoPlatformBeanDefinitionScanner(beanFactory,
-					serverDescriptor);
-			scanner.setResourceLoader(this);
-			scanner.scan(configurationPackages);
-		}
-	}
+    private void scanPackages(DefaultListableBeanFactory beanFactory, String[] configurationPackages) {
+        if (configurationPackages != null) {
+            final Descriptor serverDescriptor = getService(DescriptorService.class).getServerDescriptor();
+            final ClassPathBeanDefinitionScanner scanner = new AlfrescoPlatformBeanDefinitionScanner(beanFactory,
+                    serverDescriptor);
+            scanner.setResourceLoader(this);
+            scanner.scan(configurationPackages);
+        }
+    }
 
-	@Override
+    @Override
 	protected void initBeanDefinitionReader(final XmlBeanDefinitionReader beanDefinitionReader) {
 		beanDefinitionReader.setResourceLoader(this);
 		beanDefinitionReader.setNamespaceHandlerResolver(new CompositeNamespaceHandlerResolver(
@@ -299,6 +303,29 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 							.getBeanDefinition());
 		}
 	}
+
+    /**
+     * Use the deprecated PackageAdmin to get the list of exported packages.
+     */
+    @SuppressWarnings("deprecation")
+    protected String[] getBundleExportPackages() {
+        final String exportPackageHeader = getBundle().getHeaders().get(Constants.EXPORT_PACKAGE);
+        if (StringUtils.hasText(exportPackageHeader)) {
+            final ServiceReference<PackageAdmin> serviceReference = getBundleContext().getServiceReference(PackageAdmin.class);
+            try {
+                final PackageAdmin packageAdmin = getBundleContext().getService(serviceReference);
+                final ExportedPackage[] exportedPackages = packageAdmin.getExportedPackages(getBundle());
+                String[] packageNames = new String[exportedPackages.length];
+                for (int i = 0; i < exportedPackages.length; i++) {
+                    packageNames[i] = exportedPackages[i].getName();
+                }
+                return packageNames;
+            } finally {
+                getBundleContext().ungetService(serviceReference);
+            }
+        }
+        return null;
+    }
 
 	protected String[] getSpringConfigurationPackages() {
 		final String header = getBundle().getHeaders().get(SPRING_CONFIGURATION_HEADER);
