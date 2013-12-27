@@ -1,0 +1,21 @@
+apply plugin: "osgi"
+
+dependencies {
+    compile project(":annotations-runtime")
+    compile project(":alfresco-integration")
+    compile "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
+    compile("org.eclipse.gemini:org.eclipse.gemini.blueprint.extender:${project.ext.geminiVersion}") {
+        exclude group: "org.springframework"
+    }
+    compile "org.springframework.extensions.surf:spring-webscripts:${ext.springSurfVersion}"
+    compile "javax.servlet:servlet-api:${ext.servletVersion}"
+    compile "com.springsource.util:com.springsource.util.osgi:${ext.springOsgiUtilVersion}"
+}
+
+jar {
+    manifest {
+        instruction 'Fragment-Host', 'org.eclipse.gemini.blueprint.extender'
+        instruction 'Import-Package', 'nl.runnable.alfresco.osgi.webscripts,nl.runnable.alfresco.annotations,*'
+        instruction 'Bundle-DocURL', 'https://github.com/laurentvdl/dynamic-extensions-for-alfresco'
+    }
+}

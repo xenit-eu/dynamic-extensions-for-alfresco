@@ -4,6 +4,15 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
+    <bean id="namespaceService" class="nl.runnable.alfresco.osgi.MockNamespaceService">
+        <property name="namespacesByPrefix">
+            <map>
+                <entry key="cm" value="http://www.alfresco.org/model/content/1.0" />
+                <entry key="app" value="http://www.alfresco.org/model/application/1.0" />
+            </map>
+        </property>
+    </bean>
+
   <bean id="annotationBasedActionRegistrar" class="nl.runnable.alfresco.actions.AnnotationBasedActionRegistrar"
         init-method="registerAnnotationBasedActions">
     <property name="dictionaryService">
@@ -11,10 +20,11 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     </property>
     <property name="actionExecuterRegistry" ref="actionExecuterRegistry"/>
     <property name="runtimeActionService">
-		<bean class="nl.runnable.alfresco.spring.MockFactoryBean">
-			<property name="class" value="org.alfresco.repo.action.RuntimeActionService"/>
-		</bean>
+        <bean class="nl.runnable.alfresco.spring.MockFactoryBean">
+            <property name="class" value="org.alfresco.repo.action.RuntimeActionService"/>
+        </bean>
     </property>
+    <property name="namespacePrefixResolver" ref="namespaceService"/>
   </bean>
 
   <bean id="actionExecuterRegistry" class="nl.runnable.alfresco.actions.DefaultActionExecuterRegistry"/>

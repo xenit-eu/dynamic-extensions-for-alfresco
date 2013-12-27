@@ -1,0 +1,60 @@
+configurations {
+    blueprint
+    bundles
+}
+
+dependencies {
+    amp(project(":alfresco-integration")) {transitive = false}
+    amp(project(":annotations")) {transitive = false}
+    amp(project(":annotations-runtime")) {transitive = false}
+
+    amp("org.apache.felix:org.apache.felix.framework:$ext.felixVersion") {transitive = false}
+    amp "com.springsource.util:com.springsource.util.osgi:$ext.springOsgiUtilVersion"
+    // The core asm library is already included in Alfresco distributions, so we just add asm-commons.
+    amp("asm:asm-commons:3.1") {transitive = false}
+
+    blueprint("org.eclipse.gemini:org.eclipse.gemini.blueprint.core:${ext.geminiVersion}") {transitive = false}
+    blueprint("org.eclipse.gemini:org.eclipse.gemini.blueprint.io:${ext.geminiVersion}") {transitive = false}
+    blueprint("org.eclipse.gemini:org.eclipse.gemini.blueprint.extender:${ext.geminiVersion}") {transitive = false}
+    blueprint(project(":blueprint-integration")) {transitive = false}
+
+    bundles "org.slf4j:slf4j-api:${project.slf4jVersion}"
+    bundles "org.slf4j:slf4j-log4j12:${project.slf4jVersion}"
+    bundles(project(":control-panel")) {transitive = false}
+
+    testCompile "org.springframework:spring-web:${ext.springVersion}"
+    testCompile "org.springframework.extensions.surf:spring-webscripts:${ext.springSurfVersion}"
+    testRuntime "org.springframework:spring-beans:${ext.springVersion}"
+}
+
+task amp(type: Zip, dependsOn: jar) {
+    from(configurations.blueprint) {
+        into("config/alfresco/module/$project.group/blueprint-bundles/")
+    }
+
+    from(configurations.bundles) {
+        into("config/alfresco/module/$project.group/standard-bundles")
+    }
+
+    from(configurations.amp) {
+        into("lib")
+    }
+
+    from("module.properties") {
+        expand(project.properties)
+    }
+
+    from("src/main/resources") {
+        into("config")
+    }
+
+    from("src/main/config") {
+        into("config/alfresco/module/$project.group")
+    }
+
+    baseName = project.group
+    extension "amp"
+    destinationDir = file("$buildDir/amps")
+}
+
+build.dependsOn("amp")

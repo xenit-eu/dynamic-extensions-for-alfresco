@@ -1,0 +1,16 @@
+dependencies {
+    compile project(':annotations')
+    compile "org.springframework.extensions.surf:spring-webscripts:${ext.springSurfVersion}"
+    compile "org.freemarker:freemarker:2.3.16"
+    compile "javax.servlet:servlet-api:${ext.servletVersion}"
+    compile "org.springframework:org.springframework.aop:${ext.springVersion}"
+    compile "org.springframework:org.springframework.transaction:${ext.springVersion}"
+    compile "org.springframework:org.springframework.jdbc:${ext.springVersion}"
+    compile "javax.transaction:transaction-api:${ext.transactionApiVersion}"
+
+    testRuntime "org.mybatis:mybatis:3.0.4"
+    testRuntime("org.hibernate:hibernate:${ext.hibernateVersion}") {
+        exclude group: "javax.transaction"
+    }
+    testRuntime 'cglib:cglib-nodep:2.2'
+}

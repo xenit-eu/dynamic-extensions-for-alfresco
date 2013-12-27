@@ -1,0 +1,9 @@
+dependencies {
+    compile project(':annotations-runtime')
+    compile "org.osgi:org.osgi.core:${ext.osgiVersion}"
+    compile "javax.servlet:servlet-api:${ext.servletVersion}"
+    compile "org.springframework.extensions.surf:spring-webscripts:${ext.springSurfVersion}"
+    compile "org.jibx:jibx-run:${ext.jibxVersion}"
+    compile "org.apache.felix:org.apache.felix.framework:${ext.felixVersion}"
+    compile "com.springsource.util:com.springsource.util.osgi:${ext.springOsgiUtilVersion}"
+}
