@@ -7,6 +7,7 @@ import nl.runnable.alfresco.webscripts.annotations.Uri;
 import nl.runnable.alfresco.webscripts.annotations.UriVariable;
 import nl.runnable.alfresco.webscripts.annotations.WebScript;
 
+import nl.runnable.alfresco.webscripts.support.AbstractBundleResourceHandler;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.stereotype.Component;
 

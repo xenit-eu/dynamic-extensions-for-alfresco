@@ -1,0 +1,4 @@
+dependencies {
+    compile "org.springframework.extensions.surf:spring-webscripts:${ext.springSurfVersion}"
+    compile "org.osgi:org.osgi.core:${ext.osgiVersion}"
+}

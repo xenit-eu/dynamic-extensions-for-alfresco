@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.controlpanel;
+package nl.runnable.alfresco.webscripts.support;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -91,6 +91,16 @@ public abstract class AbstractBundleResourceHandler {
 		}
 		return contentType;
 	}
+
+    /**
+     * Add long term cache headers for resources that are known not to change, ie. versioned filename.
+     */
+    protected void setInfinateCache(final WebScriptResponse response) {
+        final long future = new Date().getTime() + 31536000000L;
+        response.setHeader("Expires",
+            new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z").format(new Date(future)));
+        response.setHeader("Cache-Control", "max-age=" + future);
+    }
 
 	@PostConstruct
 	protected void initContentTypes() {
