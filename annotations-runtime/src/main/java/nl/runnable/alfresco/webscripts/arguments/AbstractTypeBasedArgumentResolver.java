@@ -26,7 +26,6 @@ public abstract class AbstractTypeBasedArgumentResolver<ArgumentType> implements
 	@Override
 	public final ArgumentType resolveArgument(final Class<?> argumentType, final Annotation parameterAnnotation,
 			final String name, final WebScriptRequest request, final WebScriptResponse response) {
-		Assert.isTrue(parameterAnnotation == null, "Did not expect a parameter annotation.");
 		final Class<?> expectedParameterType = getExpectedArgumentType();
 		if (argumentType.equals(expectedParameterType) == false) {
 			throw new IllegalArgumentException(String.format("Incorrect parameter type %s, expected type %s",
