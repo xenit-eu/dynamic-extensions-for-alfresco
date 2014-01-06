@@ -21,6 +21,7 @@ dependencies {
 
     bundles "org.slf4j:slf4j-api:${project.slf4jVersion}"
     bundles "org.slf4j:slf4j-log4j12:${project.slf4jVersion}"
+    bundles "org.scala-lang:scala-library:2.10.3"
     bundles(project(":control-panel")) {transitive = false}
 
     testCompile "org.springframework:spring-web:${ext.springVersion}"
