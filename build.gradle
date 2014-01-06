@@ -19,7 +19,7 @@ subprojects {
     uploadArchives {
         repositories {
             mavenDeployer {
-                repository(url: "file://${uploadPath}")
+                repository(url: 'file://' + (hasProperty('uploadPath') ? uploadPath : '/tmp'))
             }
         }
     }
