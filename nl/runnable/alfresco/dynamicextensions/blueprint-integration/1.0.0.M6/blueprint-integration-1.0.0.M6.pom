@@ -13,12 +13,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>nl.runnable.alfresco.dynamicextensions</groupId>
-      <artifactId>annotations-runtime</artifactId>
-      <version>1.0.0.M6</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.core</artifactId>
       <version>4.3.1</version>
@@ -43,12 +37,6 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>nl.runnable.alfresco.dynamicextensions</groupId>
-      <artifactId>alfresco-integration</artifactId>
-      <version>1.0.0.M6</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>org.alfresco</groupId>
       <artifactId>alfresco-data-model</artifactId>
       <version>4.2.e</version>
@@ -58,6 +46,12 @@
       <groupId>org.springframework.extensions.surf</groupId>
       <artifactId>spring-surf-core</artifactId>
       <version>1.2.0-M4</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>nl.runnable.alfresco.dynamicextensions</groupId>
+      <artifactId>alfresco-integration</artifactId>
+      <version>1.0.0.M6</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -73,16 +67,16 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.gemini</groupId>
-      <artifactId>org.eclipse.gemini.blueprint.extender</artifactId>
-      <version>1.0.2.RELEASE</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
       <version>1.9.5</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.gemini</groupId>
+      <artifactId>org.eclipse.gemini.blueprint.extender</artifactId>
+      <version>1.0.2.RELEASE</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.springsource.util</groupId>
@@ -94,6 +88,12 @@
       <groupId>org.springframework.extensions.surf</groupId>
       <artifactId>spring-webscripts</artifactId>
       <version>1.2.0-M4</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>nl.runnable.alfresco.dynamicextensions</groupId>
+      <artifactId>annotations-runtime</artifactId>
+      <version>1.0.0.M6</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
