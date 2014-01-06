@@ -5,13 +5,21 @@ allprojects {
 
 subprojects {
     apply plugin: 'java'
-
     apply plugin: 'maven'
+
+    task sourceJar(type: Jar) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    artifacts {
+        archives sourceJar
+    }
 
     uploadArchives {
         repositories {
             mavenDeployer {
-                repository(url: "file:///tmp/derepo/")
+                repository(url: "file://${uploadPath}")
             }
         }
     }
