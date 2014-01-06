@@ -25,6 +25,9 @@ Fixes in this milestone:
 Internal:
 * moved from Maven to Gradle: use "gradlew(.sh|.bat)" script to build the project
 
+Removed:
+* Felix file install: bundles can now only be installed either via classpath or using the REST API
+
 Many thanks to Laurens Fridael for his great work on Dynamic Extensions. May his work live long and prosper at its new home.
 
 Installing Dynamic Extensions
