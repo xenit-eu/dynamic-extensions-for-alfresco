@@ -15,7 +15,7 @@ Features:
 * Uri handlers can now return the template to use as a String return value
 * auto configuration of `Alfresco-Spring-Configuration` if not specified has Bundle header
 * new webscript-support module for the `AbstractBundleResourceHandler` (no more need to import control-panel)
-* Scala 2.10.3 is now included by default to easy deployment of Scala based extensions
+* Scala 2.10.3 is now included by default to ease deployment of Scala based extensions
 
 Fixes in this milestone:
 * integration: fallback to jar content scanning when MANIFEST.MF fails to parse (Vaadin jar)
