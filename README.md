@@ -5,24 +5,34 @@ Rapid development of Alfresco repository extensions in Java. Deploy your code in
 
 Dynamic Extensions adds an OSGi container to the Alfresco repository, enabling live deployment of Java code, with no need to restart the server. Alfresco itself is not "OSGi-fied" in any way; the OSGi container runs on top of the core Alfresco platform.
 
-Latest release: Milestone 5
+Latest release: Milestone 6
 ---------------------------
 
-* <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/wiki/Building-Alfresco-repository-extensions-for-Dynamic-Extensions-using-Gradle">Gradle plugin for building your own repository extensions</a>
-* `@RunAs`, `@RunAsSystem` annotations for running methods as a particular repository user
-* `@Transactional` annotation for running methods within a repository transaction.
-* `@Before` annotation for handling common Web Script preprocessing logic.
-* `@ExceptionHandler` annotation for generalizing exception handling in Web Scripts.
-* Bug fixes and fine-tunings throughout.
+Features:
+* REST endpoint for restarting the OSGi framework: `/service/dynamic-extensions/osgi/restart`
+* auto refresh system package cache when WEB-INF/lib has changed
+* runtime MODE (Production/Dev) is replaced with individual settings in osgi-container.properties (also visible in control-panel)
+* Uri handlers can now return the template to use as a String return value
+* auto configuration of `Alfresco-Spring-Configuration` if not specified has Bundle header
+* new webscript-support module for the `AbstractBundleResourceHandler` (no more need to import control-panel)
+* Scala 2.10.3 is now included by default to easy deployment of Scala based extensions
 
-Many thanks to laurentvdl for his contributions.
+Fixes in this milestone:
+* integration: fallback to jar content scanning when MANIFEST.MF fails to parse (Vaadin jar)
+* gradle-plugin: allow override of "Import-Package"
+* fix duplicate WebScript ID detection: make sure you Uri methods have a unique name (no overloading)
+
+Internal:
+* moved from Maven to Gradle: use "gradlew(.sh|.bat)" script to build the project
+
+Many thanks to Laurens Fridael for his great work on Dynamic Extensions. May his work live long and prosper at its new home.
 
 Installing Dynamic Extensions
 -----------------------------
 
 Dynamic Extensions is distributed as an Alfresco Module Package (AMP).
 
-* Download the <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/raw/mvn-repo/nl/runnable/alfresco/dynamicextensions/alfresco-module/1.0.0.M5/alfresco-module-1.0.0.M5.amp">Dynamic Extensions Milestone 5 AMP</a>.
+* Download the <a href="https://raw.github.com/laurentvdl/dynamic-extensions-for-alfresco/mvn-repo/nl/runnable/alfresco/dynamicextensions/alfresco-module/1.0.0.M6/nl.runnable.alfresco.dynamicextensions-1.0.0.M6.amp">Dynamic Extensions Milestone 6 AMP</a>.
 * Use the <a href="http://docs.alfresco.com/4.0/index.jsp?topic=%2Fcom.alfresco.enterprise.doc%2Ftasks%2Famp-install.html">Module Management Tool</a> to install the AMP in the Alfresco repository of your choosing.
 * After restarting Alfresco, open the Control Panel: <a href="http://localhost:8080/alfresco/service/dynamic-extensions/">http://localhost:8080/alfresco/service/dynamic-extensions/</a>.
 * Accessing the Control Panel requires an admin account.
@@ -100,14 +110,3 @@ Clone the example repo and explore it. Here are some pointers to get you going:
 See also: <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/wiki/Building-Alfresco-repository-extensions-for-Dynamic-Extensions-using-Gradle">Gradle plugin for building your own repository extensions</a>
 
 More documentation on creating your own extensions will follow.
-
-Milestone 6 (January 2014)
---------------------------
-
-Work on the final 1.0 milestone will resume in 2014. The long hiatius is due to being busy with contract work for the next couple of months.
-
-<a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/issues?milestone=4&state=open">Issue list for milestone 6</a>.
-
-The focus is on improving test coverage and cleaning up some older parts of the implementation. There will be some minor breaking changes with regard to the annotation API, but nothing too serious. Extensions written against this milestone will almost certainly continue to be supported in the 1.0 release and beyond.
-
-
