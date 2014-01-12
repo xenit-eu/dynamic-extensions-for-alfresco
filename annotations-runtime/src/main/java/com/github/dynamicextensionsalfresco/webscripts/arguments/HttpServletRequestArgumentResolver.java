@@ -1,8 +1,8 @@
-package nl.runnable.alfresco.webscripts.arguments;
+package com.github.dynamicextensionsalfresco.webscripts.arguments;
 
 import javax.servlet.http.HttpServletRequest;
 
-import nl.runnable.alfresco.webscripts.WebScriptUtil;
+import com.github.dynamicextensionsalfresco.webscripts.WebScriptUtil;
 
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;

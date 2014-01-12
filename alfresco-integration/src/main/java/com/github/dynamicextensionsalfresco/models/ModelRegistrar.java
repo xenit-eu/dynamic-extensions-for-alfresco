@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.models;
+package com.github.dynamicextensionsalfresco.models;
 
 /**
  * @author Laurent Van der Linden

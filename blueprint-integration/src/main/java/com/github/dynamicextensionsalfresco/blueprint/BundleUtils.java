@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.blueprint;
+package com.github.dynamicextensionsalfresco.blueprint;
 
 import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationContext;
 import org.osgi.framework.Bundle;

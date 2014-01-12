@@ -1,7 +1,7 @@
-package nl.runnable.alfresco.webscripts;
+package com.github.dynamicextensionsalfresco.webscripts;
 
 import static org.junit.Assert.*;
-import nl.runnable.alfresco.webscripts.annotations.Attribute;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Attribute;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

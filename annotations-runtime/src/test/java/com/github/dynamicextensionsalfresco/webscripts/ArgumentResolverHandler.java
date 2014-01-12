@@ -1,12 +1,12 @@
-package nl.runnable.alfresco.webscripts;
+package com.github.dynamicextensionsalfresco.webscripts;
 
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import nl.runnable.alfresco.spring.Spied;
-import nl.runnable.alfresco.webscripts.annotations.Uri;
+import com.github.dynamicextensionsalfresco.spring.Spied;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Uri;
 
 import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.webscripts.WebScriptRequest;

@@ -7,23 +7,23 @@ http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<description>Configures Spring AOP advisors</description>
 	
-	<bean id="dynamic-extensions.TransactionalAdvisor" class="nl.runnable.alfresco.aop.TransactionalPointcutAdvisor">
+	<bean id="dynamic-extensions.TransactionalAdvisor" class="com.github.dynamicextensionsalfresco.aop.TransactionalPointcutAdvisor">
 		<property name="advice">
-			<bean class="nl.runnable.alfresco.aop.TransactionalAdvice">
+			<bean class="com.github.dynamicextensionsalfresco.aop.TransactionalAdvice">
 				<property name="retryingTransactionHelper" ref="retryingTransactionHelper" />
 			</bean>
 		</property>
 	</bean>
 
-	<bean id="dynamic-extensions.RunAsAdvisor" class="nl.runnable.alfresco.aop.RunAsPointcutAdvisor">
+	<bean id="dynamic-extensions.RunAsAdvisor" class="com.github.dynamicextensionsalfresco.aop.RunAsPointcutAdvisor">
 		<property name="advice">
-			<bean class="nl.runnable.alfresco.aop.RunAsAdvice" />
+			<bean class="com.github.dynamicextensionsalfresco.aop.RunAsAdvice" />
 		</property>
 	</bean>
 
-	<bean id="dynamic-extensions.RunAsSystemAdvisor" class="nl.runnable.alfresco.aop.RunAsSystemPointcutAdvisor">
+	<bean id="dynamic-extensions.RunAsSystemAdvisor" class="com.github.dynamicextensionsalfresco.aop.RunAsSystemPointcutAdvisor">
 		<property name="advice">
-			<bean class="nl.runnable.alfresco.aop.RunAsSystemAdvice" />
+			<bean class="com.github.dynamicextensionsalfresco.aop.RunAsSystemAdvice" />
 		</property>
 	</bean>
 

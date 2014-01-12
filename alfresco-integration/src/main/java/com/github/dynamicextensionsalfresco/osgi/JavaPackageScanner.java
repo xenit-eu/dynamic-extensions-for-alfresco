@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.osgi;
+package com.github.dynamicextensionsalfresco.osgi;
 
 import com.springsource.util.osgi.manifest.BundleManifest;
 import com.springsource.util.osgi.manifest.ExportedPackage;

@@ -1,6 +1,6 @@
-package nl.runnable.alfresco.aop;
+package com.github.dynamicextensionsalfresco.aop;
 
-import nl.runnable.alfresco.annotations.Transactional;
+import com.github.dynamicextensionsalfresco.annotations.Transactional;
 
 import org.aopalliance.aop.Advice;
 import org.springframework.aop.PointcutAdvisor;

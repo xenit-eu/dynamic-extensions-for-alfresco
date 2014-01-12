@@ -1,11 +1,11 @@
-package nl.runnable.alfresco.models;
+package com.github.dynamicextensionsalfresco.models;
 
 import org.alfresco.repo.dictionary.M2Model;
 import org.springframework.core.io.Resource;
 
 /**
  * Wrapper for an M2Model and the resource it was loaded from.
- * This wrapper adds resource information for any interested {@link nl.runnable.alfresco.models.ModelRegistrar}.
+ * This wrapper adds resource information for any interested {@link com.github.dynamicextensionsalfresco.models.ModelRegistrar}.
  *
  * @author Laurent Van der Linden
  */

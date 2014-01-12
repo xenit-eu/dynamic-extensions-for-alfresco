@@ -6,7 +6,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 	<description>Configures OSGi framework and related services.</description>
 
-	<bean id="osgi.container.Configuration" class="nl.runnable.alfresco.osgi.Configuration">
+	<bean id="osgi.container.Configuration" class="com.github.dynamicextensionsalfresco.osgi.Configuration">
 		<description>Specifies the global OSGI container configuration.</description>
 		<property name="frameworkRestartEnabled" value="${osgi.container.restartable:true}" />
 		<property name="hotDeployEnabled" value="${osgi.container.hot-deploy:true}" />
@@ -15,18 +15,18 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 		<property name="systemPackageCacheMode" value="${osgi.container.system-package-cache.mode:ENABLE}" />
 	</bean>
 
-	<bean id="osgi.container.FrameworkConfiguration" class="nl.runnable.alfresco.osgi.FrameworkConfiguration">
+	<bean id="osgi.container.FrameworkConfiguration" class="com.github.dynamicextensionsalfresco.osgi.FrameworkConfiguration">
 		<property name="configuration" ref="osgi.container.Configuration" />
 		<property name="additionalSystemPackages" ref="osgi.container.SystemPackages">
 			<description>Refers to the system package configuration.</description>
 		</property>
 	</bean>
 
-	<bean id="osgi.container.Framework" class="nl.runnable.alfresco.osgi.felix.FelixFrameworkFactoryBean">
+	<bean id="osgi.container.Framework" class="com.github.dynamicextensionsalfresco.osgi.felix.FelixFrameworkFactoryBean">
 		<property name="frameworkConfiguration" ref="osgi.container.FrameworkConfiguration" />
 	</bean>
 
-	<bean id="osgi.container.ServiceBundleContextRegistrar" class="nl.runnable.alfresco.osgi.ServiceBundleContextRegistrar">
+	<bean id="osgi.container.ServiceBundleContextRegistrar" class="com.github.dynamicextensionsalfresco.osgi.ServiceBundleContextRegistrar">
 		<description>
 			Registers the host application services with the OSGi Framework.
 		</description>
@@ -34,7 +34,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 		<property name="serviceDefinitions" ref="osgi.container.HostServices" />
 		<property name="servicePropertiesProviders">
 			<list>
-				<bean class="nl.runnable.alfresco.osgi.HostApplicationServicePropertiesProvider">
+				<bean class="com.github.dynamicextensionsalfresco.osgi.HostApplicationServicePropertiesProvider">
 					<description>
 						Adds a "hostApplication" property to each host application service registered as an OSGi service.
 					</description>
@@ -44,11 +44,11 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 		</property>
 	</bean>
 
-	<bean id="osgi.container.ApplicationContextBundleContextRegistrar" class="nl.runnable.alfresco.osgi.ApplicationContextBundleContextRegistrar">
+	<bean id="osgi.container.ApplicationContextBundleContextRegistrar" class="com.github.dynamicextensionsalfresco.osgi.ApplicationContextBundleContextRegistrar">
 		<description>Registers this application context as an OSGi service.</description>
 	</bean>
 
-	<bean id="osgi.container.FrameworkManager" class="nl.runnable.alfresco.osgi.FrameworkManager" init-method="initialize"
+	<bean id="osgi.container.FrameworkManager" class="com.github.dynamicextensionsalfresco.osgi.FrameworkManager" init-method="initialize"
 		destroy-method="destroy">
 		<description>
 			Manages the lifecycle of the OSGi Framework and registers services and listeners.
@@ -68,7 +68,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 		<property name="contentService" ref="contentService" />
 	</bean>
 
-	<bean id="osgi.container.RepositoryStoreService" class="nl.runnable.alfresco.osgi.RepositoryStoreService">
+	<bean id="osgi.container.RepositoryStoreService" class="com.github.dynamicextensionsalfresco.osgi.RepositoryStoreService">
 		<property name="namespacePrefixResolver" ref="namespaceService" />
 		<property name="nodeService" ref="nodeService" />
 		<property name="fileFolderService" ref="fileFolderService" />

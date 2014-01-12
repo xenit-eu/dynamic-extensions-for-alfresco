@@ -1,6 +1,6 @@
-package nl.runnable.alfresco.osgi.felix;
+package com.github.dynamicextensionsalfresco.osgi.felix;
 
-import nl.runnable.alfresco.osgi.spring.AbstractFrameworkFactoryBean;
+import com.github.dynamicextensionsalfresco.osgi.spring.AbstractFrameworkFactoryBean;
 
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;

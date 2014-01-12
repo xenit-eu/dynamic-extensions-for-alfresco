@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.webscripts;
+package com.github.dynamicextensionsalfresco.webscripts;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -9,15 +9,15 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import nl.runnable.alfresco.webscripts.annotations.Attribute;
-import nl.runnable.alfresco.webscripts.annotations.Authentication;
-import nl.runnable.alfresco.webscripts.annotations.Before;
-import nl.runnable.alfresco.webscripts.annotations.Cache;
-import nl.runnable.alfresco.webscripts.annotations.ExceptionHandler;
-import nl.runnable.alfresco.webscripts.annotations.Transaction;
-import nl.runnable.alfresco.webscripts.annotations.Uri;
-import nl.runnable.alfresco.webscripts.annotations.WebScript;
-import nl.runnable.alfresco.webscripts.arguments.HandlerMethodArgumentsResolver;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Attribute;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Authentication;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Before;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Cache;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.ExceptionHandler;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Transaction;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Uri;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.WebScript;
+import com.github.dynamicextensionsalfresco.webscripts.arguments.HandlerMethodArgumentsResolver;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;

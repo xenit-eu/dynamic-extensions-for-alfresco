@@ -1,6 +1,6 @@
-package nl.runnable.alfresco.actions;
+package com.github.dynamicextensionsalfresco.actions;
 
-import nl.runnable.alfresco.actions.annotations.ActionMethod;
+import com.github.dynamicextensionsalfresco.actions.annotations.ActionMethod;
 
 import org.alfresco.service.cmr.action.ParameterDefinition;
 

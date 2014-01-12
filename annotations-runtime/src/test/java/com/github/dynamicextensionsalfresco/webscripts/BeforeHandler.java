@@ -1,11 +1,11 @@
-package nl.runnable.alfresco.webscripts;
+package com.github.dynamicextensionsalfresco.webscripts;
 
 import java.util.Map;
 
-import nl.runnable.alfresco.spring.Spied;
-import nl.runnable.alfresco.webscripts.annotations.Attribute;
-import nl.runnable.alfresco.webscripts.annotations.Before;
-import nl.runnable.alfresco.webscripts.annotations.Uri;
+import com.github.dynamicextensionsalfresco.spring.Spied;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Attribute;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Before;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Uri;
 
 import org.springframework.stereotype.Component;
 

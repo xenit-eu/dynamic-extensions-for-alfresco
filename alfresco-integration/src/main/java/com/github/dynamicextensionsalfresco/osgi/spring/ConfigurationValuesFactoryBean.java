@@ -1,10 +1,10 @@
-package nl.runnable.alfresco.osgi.spring;
+package com.github.dynamicextensionsalfresco.osgi.spring;
 
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import nl.runnable.alfresco.osgi.ConfigurationValues;
+import com.github.dynamicextensionsalfresco.osgi.ConfigurationValues;
 
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.util.Assert;

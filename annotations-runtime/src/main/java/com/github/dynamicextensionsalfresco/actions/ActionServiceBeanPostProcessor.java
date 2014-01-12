@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.actions;
+package com.github.dynamicextensionsalfresco.actions;
 
 import org.alfresco.repo.action.ActionServiceImpl;
 import org.springframework.beans.BeansException;

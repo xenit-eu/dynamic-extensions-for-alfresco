@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.aop;
+package com.github.dynamicextensionsalfresco.aop;
 
 import org.springframework.aop.Advisor;
 

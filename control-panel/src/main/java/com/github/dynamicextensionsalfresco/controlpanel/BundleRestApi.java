@@ -1,7 +1,7 @@
-package nl.runnable.alfresco.controlpanel;
+package com.github.dynamicextensionsalfresco.controlpanel;
 
-import nl.runnable.alfresco.osgi.Configuration;
-import nl.runnable.alfresco.webscripts.annotations.*;
+import com.github.dynamicextensionsalfresco.osgi.Configuration;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.*;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.springframework.beans.factory.annotation.Autowired;

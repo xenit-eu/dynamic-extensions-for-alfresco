@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.webscripts.arguments;
+package com.github.dynamicextensionsalfresco.webscripts.arguments;
 
 
 import org.springframework.extensions.surf.util.Content;

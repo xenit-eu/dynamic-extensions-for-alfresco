@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.controlpanel;
+package com.github.dynamicextensionsalfresco.controlpanel;
 
 import org.osgi.framework.Version;
 

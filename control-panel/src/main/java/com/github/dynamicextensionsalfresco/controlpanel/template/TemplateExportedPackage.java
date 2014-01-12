@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.controlpanel.template;
+package com.github.dynamicextensionsalfresco.controlpanel.template;
 
 public class TemplateExportedPackage {
 	private String name;

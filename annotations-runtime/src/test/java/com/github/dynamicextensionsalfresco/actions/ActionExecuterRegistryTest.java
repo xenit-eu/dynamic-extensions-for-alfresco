@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.actions;
+package com.github.dynamicextensionsalfresco.actions;
 
 import static org.junit.Assert.*;
 

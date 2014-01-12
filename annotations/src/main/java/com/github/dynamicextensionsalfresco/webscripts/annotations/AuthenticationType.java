@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.webscripts.annotations;
+package com.github.dynamicextensionsalfresco.webscripts.annotations;
 
 public enum AuthenticationType {
 	NONE, GUEST, USER, ADMIN;

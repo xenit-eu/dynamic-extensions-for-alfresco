@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.webscripts;
+package com.github.dynamicextensionsalfresco.webscripts;
 
 import static org.junit.Assert.*;
 

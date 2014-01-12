@@ -1,8 +1,8 @@
-package nl.runnable.alfresco.webscripts;
+package com.github.dynamicextensionsalfresco.webscripts;
 
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
-import nl.runnable.alfresco.webscripts.annotations.RequestParam;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.RequestParam;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;

@@ -5,13 +5,13 @@
 http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context
 http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<bean id="retryingTransactionHelper" class="nl.runnable.alfresco.spring.MockFactoryBean">
+	<bean id="retryingTransactionHelper" class="com.github.dynamicextensionsalfresco.spring.MockFactoryBean">
 		<property name="class" value="org.alfresco.repo.transaction.RetryingTransactionHelper" />
 	</bean>
 
-	<bean id="exampleBean" class="nl.runnable.alfresco.aop.ExampleBean" />
+	<bean id="exampleBean" class="com.github.dynamicextensionsalfresco.aop.ExampleBean" />
 
-	<bean class="nl.runnable.alfresco.aop.DynamicExtensionsAdvisorAutoProxyCreator" />
+	<bean class="com.github.dynamicextensionsalfresco.aop.DynamicExtensionsAdvisorAutoProxyCreator" />
 
 	<import resource="classpath:/META-INF/spring/dynamic-extensions/aop-advice-context.xml" />
 

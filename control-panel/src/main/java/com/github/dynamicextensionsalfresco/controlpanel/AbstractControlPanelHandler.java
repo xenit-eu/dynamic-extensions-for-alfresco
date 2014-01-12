@@ -1,12 +1,12 @@
-package nl.runnable.alfresco.controlpanel;
+package com.github.dynamicextensionsalfresco.controlpanel;
 
-import nl.runnable.alfresco.controlpanel.template.Variables;
-import nl.runnable.alfresco.osgi.ConfigurationValues;
-import nl.runnable.alfresco.osgi.SystemPackage;
-import nl.runnable.alfresco.webscripts.annotations.Attribute;
-import nl.runnable.alfresco.webscripts.annotations.Before;
-import nl.runnable.alfresco.webscripts.annotations.ExceptionHandler;
-import nl.runnable.alfresco.webscripts.annotations.Uri;
+import com.github.dynamicextensionsalfresco.controlpanel.template.Variables;
+import com.github.dynamicextensionsalfresco.osgi.ConfigurationValues;
+import com.github.dynamicextensionsalfresco.osgi.SystemPackage;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Attribute;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Before;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.ExceptionHandler;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Uri;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.extensions.webscripts.WebScriptException;
@@ -31,7 +31,7 @@ abstract class AbstractControlPanelHandler {
 			Variables.SUCCESS_MESSAGE, Variables.ERROR_MESSAGE };
 
 	@Autowired
-	protected nl.runnable.alfresco.osgi.Configuration osgiConfiguration;
+	protected com.github.dynamicextensionsalfresco.osgi.Configuration osgiConfiguration;
 
 	@Resource(name = "osgi.container.SystemPackages")
 	private ConfigurationValues<SystemPackage> systemPackages;
@@ -44,7 +44,7 @@ abstract class AbstractControlPanelHandler {
 	}
 
 	@Attribute(Variables.CONFIGURATION)
-	protected nl.runnable.alfresco.osgi.Configuration getConfiguration() {
+	protected com.github.dynamicextensionsalfresco.osgi.Configuration getConfiguration() {
 		return osgiConfiguration;
 	}
 

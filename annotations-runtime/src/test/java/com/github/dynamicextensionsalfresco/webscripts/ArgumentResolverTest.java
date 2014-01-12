@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.webscripts;
+package com.github.dynamicextensionsalfresco.webscripts;
 
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
@@ -6,7 +6,7 @@ import static org.mockito.Mockito.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import nl.runnable.alfresco.webscripts.annotations.HttpMethod;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.HttpMethod;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

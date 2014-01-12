@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.gradle
+package com.github.dynamicextensionsalfresco.gradle
 
 
 /**

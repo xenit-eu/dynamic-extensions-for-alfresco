@@ -1,6 +1,6 @@
-package nl.runnable.alfresco.osgi.spring;
+package com.github.dynamicextensionsalfresco.osgi.spring;
 
-import nl.runnable.alfresco.osgi.*;
+import com.github.dynamicextensionsalfresco.osgi.*;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.repository.ContentReader;

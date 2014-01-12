@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.controlpanel;
+package com.github.dynamicextensionsalfresco.controlpanel;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,7 +18,7 @@ import java.util.jar.Manifest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import nl.runnable.alfresco.osgi.RepositoryStoreService;
+import com.github.dynamicextensionsalfresco.osgi.RepositoryStoreService;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;

@@ -1,6 +1,6 @@
-package nl.runnable.alfresco.webscripts;
+package com.github.dynamicextensionsalfresco.webscripts;
 
-import nl.runnable.alfresco.webscripts.annotations.Command;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Command;
 
 /**
  * {@link Command} parameter object using by {@link CommandTest}.

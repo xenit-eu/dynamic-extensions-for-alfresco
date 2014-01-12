@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.osgi.webscripts;
+package com.github.dynamicextensionsalfresco.osgi.webscripts;
 
 import java.util.Collections;
 import java.util.List;

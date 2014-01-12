@@ -13,7 +13,7 @@ jar {
     manifest {
         instruction 'Alfresco-Dynamic-Extension', 'true'
         instruction 'Bundle-Description', 'Control Panel'
-        instruction 'Alfresco-Spring-Configuration', 'nl.runnable.alfresco.controlpanel'
+        instruction 'Alfresco-Spring-Configuration', 'com.github.dynamicextensionsalfresco.controlpanel'
         instruction 'Spring-Context', ';publish-context:=false'
         instruction 'Import-Package', """*,
 							net.sf.cglib.core,

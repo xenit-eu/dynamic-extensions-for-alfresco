@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.osgi.webscripts;
+package com.github.dynamicextensionsalfresco.osgi.webscripts;
 
 import org.springframework.extensions.webscripts.SearchPath;
 import org.springframework.extensions.webscripts.Store;

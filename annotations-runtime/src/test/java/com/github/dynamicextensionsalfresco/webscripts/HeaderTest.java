@@ -1,8 +1,8 @@
-package nl.runnable.alfresco.webscripts;
+package com.github.dynamicextensionsalfresco.webscripts;
 
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
-import nl.runnable.alfresco.webscripts.annotations.Header;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Header;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

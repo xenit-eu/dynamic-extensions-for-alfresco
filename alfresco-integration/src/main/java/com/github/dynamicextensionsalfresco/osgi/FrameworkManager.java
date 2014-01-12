@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.osgi;
+package com.github.dynamicextensionsalfresco.osgi;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.model.FileInfo;

@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.controlpanel.template;
+package com.github.dynamicextensionsalfresco.controlpanel.template;
 
 import com.springsource.util.osgi.manifest.ExportedPackage;
 import com.springsource.util.osgi.manifest.ImportedPackage;

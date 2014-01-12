@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.webscripts.annotations;
+package com.github.dynamicextensionsalfresco.webscripts.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

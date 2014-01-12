@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.osgi.spring;
+package com.github.dynamicextensionsalfresco.osgi.spring;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -6,8 +6,8 @@ import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import nl.runnable.alfresco.osgi.ServiceDefinition;
-import nl.runnable.alfresco.osgi.ServiceDefinitionEditor;
+import com.github.dynamicextensionsalfresco.osgi.ServiceDefinition;
+import com.github.dynamicextensionsalfresco.osgi.ServiceDefinitionEditor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

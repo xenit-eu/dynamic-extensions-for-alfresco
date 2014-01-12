@@ -1,9 +1,9 @@
-package nl.runnable.alfresco.webscripts;
+package com.github.dynamicextensionsalfresco.webscripts;
 
-import nl.runnable.alfresco.webscripts.annotations.Attribute;
-import nl.runnable.alfresco.webscripts.annotations.Before;
-import nl.runnable.alfresco.webscripts.annotations.ResponseTemplate;
-import nl.runnable.alfresco.webscripts.annotations.Uri;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Attribute;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Before;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.ResponseTemplate;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Uri;
 import org.springframework.core.annotation.AnnotationUtils;
 
 import java.lang.reflect.Method;

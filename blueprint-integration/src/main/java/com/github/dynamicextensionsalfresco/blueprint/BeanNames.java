@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.blueprint;
+package com.github.dynamicextensionsalfresco.blueprint;
 
 /**
  * Contains constants for bean names used by {@link DynamicExtensionsApplicationContext}.

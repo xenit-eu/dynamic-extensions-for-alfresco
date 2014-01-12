@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.spring;
+package com.github.dynamicextensionsalfresco.spring;
 
 import java.lang.annotation.Annotation;
 

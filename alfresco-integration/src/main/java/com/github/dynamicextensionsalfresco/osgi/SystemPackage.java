@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.osgi;
+package com.github.dynamicextensionsalfresco.osgi;
 
 import org.osgi.framework.launch.Framework;
 import org.springframework.util.Assert;

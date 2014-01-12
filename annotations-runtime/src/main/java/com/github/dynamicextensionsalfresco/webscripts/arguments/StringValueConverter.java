@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.webscripts.arguments;
+package com.github.dynamicextensionsalfresco.webscripts.arguments;
 
 import java.util.HashSet;
 import java.util.Set;

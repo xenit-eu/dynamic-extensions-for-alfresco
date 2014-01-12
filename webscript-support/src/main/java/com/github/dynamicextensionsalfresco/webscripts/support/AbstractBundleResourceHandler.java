@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.webscripts.support;
+package com.github.dynamicextensionsalfresco.webscripts.support;
 
 import java.io.IOException;
 import java.io.Writer;

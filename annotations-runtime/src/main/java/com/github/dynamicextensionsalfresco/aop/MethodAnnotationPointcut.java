@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.aop;
+package com.github.dynamicextensionsalfresco.aop;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;

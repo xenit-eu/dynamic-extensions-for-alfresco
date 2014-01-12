@@ -1,7 +1,7 @@
-package nl.runnable.alfresco.policy.samples;
+package com.github.dynamicextensionsalfresco.policy.samples;
 
-import nl.runnable.alfresco.behaviours.annotations.Behaviour;
-import nl.runnable.alfresco.behaviours.annotations.PropertyPolicy;
+import com.github.dynamicextensionsalfresco.behaviours.annotations.Behaviour;
+import com.github.dynamicextensionsalfresco.behaviours.annotations.PropertyPolicy;
 
 import java.io.Serializable;
 

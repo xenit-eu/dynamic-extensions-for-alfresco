@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.blueprint;
+package com.github.dynamicextensionsalfresco.blueprint;
 
 import org.springframework.beans.factory.xml.NamespaceHandler;
 import org.springframework.beans.factory.xml.NamespaceHandlerResolver;

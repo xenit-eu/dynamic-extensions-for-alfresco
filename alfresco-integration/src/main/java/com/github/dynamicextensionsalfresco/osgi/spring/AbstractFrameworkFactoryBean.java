@@ -1,8 +1,8 @@
-package nl.runnable.alfresco.osgi.spring;
+package com.github.dynamicextensionsalfresco.osgi.spring;
 
 import java.util.Map;
 
-import nl.runnable.alfresco.osgi.FrameworkConfiguration;
+import com.github.dynamicextensionsalfresco.osgi.FrameworkConfiguration;
 
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;

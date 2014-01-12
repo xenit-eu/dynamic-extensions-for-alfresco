@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.webscripts.annotations;
+package com.github.dynamicextensionsalfresco.webscripts.annotations;
 
 public enum FormatStyle {
 	ANY, EXTENSION, ARGUMENT;

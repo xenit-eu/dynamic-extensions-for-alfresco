@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.models;
+package com.github.dynamicextensionsalfresco.models;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.dictionary.RepositoryLocation;

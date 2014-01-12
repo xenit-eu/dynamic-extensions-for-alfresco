@@ -1,8 +1,8 @@
-package nl.runnable.alfresco.aop;
+package com.github.dynamicextensionsalfresco.aop;
 
-import nl.runnable.alfresco.annotations.RunAs;
-import nl.runnable.alfresco.annotations.RunAsSystem;
-import nl.runnable.alfresco.annotations.Transactional;
+import com.github.dynamicextensionsalfresco.annotations.RunAs;
+import com.github.dynamicextensionsalfresco.annotations.RunAsSystem;
+import com.github.dynamicextensionsalfresco.annotations.Transactional;
 
 public class ExampleBean {
 

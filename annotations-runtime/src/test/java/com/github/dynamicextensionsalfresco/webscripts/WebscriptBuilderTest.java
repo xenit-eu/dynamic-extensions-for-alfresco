@@ -1,6 +1,6 @@
-package nl.runnable.alfresco.webscripts;
+package com.github.dynamicextensionsalfresco.webscripts;
 
-import nl.runnable.alfresco.webscripts.annotations.WebScript;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.WebScript;
 import org.junit.Test;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;

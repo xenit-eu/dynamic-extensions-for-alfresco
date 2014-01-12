@@ -1,10 +1,10 @@
-package nl.runnable.alfresco.osgi.spring;
+package com.github.dynamicextensionsalfresco.osgi.spring;
 
 import java.lang.annotation.Annotation;
 import java.util.Map;
 
-import nl.runnable.alfresco.annotations.AlfrescoService;
-import nl.runnable.alfresco.annotations.ServiceType;
+import com.github.dynamicextensionsalfresco.annotations.AlfrescoService;
+import com.github.dynamicextensionsalfresco.annotations.ServiceType;
 
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.DependencyDescriptor;

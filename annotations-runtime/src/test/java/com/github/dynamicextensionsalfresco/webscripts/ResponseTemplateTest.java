@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.webscripts;
+package com.github.dynamicextensionsalfresco.webscripts;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -56,7 +56,7 @@ subprojects {
         }
     }
 
-    group = 'nl.runnable.alfresco.dynamicextensions'
+    group = 'com.github.dynamicextensionsalfresco'
     version = '1.0.0-SNAPSHOT'
 
     configurations.all {

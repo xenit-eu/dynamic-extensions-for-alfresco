@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.osgi;
+package com.github.dynamicextensionsalfresco.osgi;
 
 import java.util.ArrayList;
 import java.util.Collections;

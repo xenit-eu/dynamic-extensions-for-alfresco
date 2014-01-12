@@ -15,7 +15,7 @@ dependencies {
 jar {
     manifest {
         instruction 'Fragment-Host', 'org.eclipse.gemini.blueprint.extender'
-        instruction 'Import-Package', 'nl.runnable.alfresco.osgi.webscripts,nl.runnable.alfresco.annotations,*'
+        instruction 'Import-Package', 'com.github.dynamicextensionsalfresco.osgi.webscripts,com.github.dynamicextensionsalfresco.annotations,*'
         instruction 'Bundle-DocURL', 'https://github.com/laurentvdl/dynamic-extensions-for-alfresco'
     }
 }

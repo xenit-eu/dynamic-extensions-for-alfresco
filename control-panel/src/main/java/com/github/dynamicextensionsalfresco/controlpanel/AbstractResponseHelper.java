@@ -1,6 +1,6 @@
-package nl.runnable.alfresco.controlpanel;
+package com.github.dynamicextensionsalfresco.controlpanel;
 
-import nl.runnable.alfresco.osgi.Configuration;
+import com.github.dynamicextensionsalfresco.osgi.Configuration;
 import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;

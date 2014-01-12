@@ -1,7 +1,7 @@
-package nl.runnable.alfresco.osgi.spring;
+package com.github.dynamicextensionsalfresco.osgi.spring;
 
-import nl.runnable.alfresco.annotations.AlfrescoService;
-import nl.runnable.alfresco.annotations.ServiceType;
+import com.github.dynamicextensionsalfresco.annotations.AlfrescoService;
+import com.github.dynamicextensionsalfresco.annotations.ServiceType;
 
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.search.CategoryService;

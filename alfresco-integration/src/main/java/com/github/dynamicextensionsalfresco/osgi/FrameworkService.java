@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.osgi;
+package com.github.dynamicextensionsalfresco.osgi;
 
 /**
  * Defines operations for managing the Dynamic Extensions framework.

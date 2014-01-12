@@ -1,8 +1,8 @@
-package nl.runnable.alfresco.webscripts;
+package com.github.dynamicextensionsalfresco.webscripts;
 
-import nl.runnable.alfresco.spring.Spied;
-import nl.runnable.alfresco.webscripts.annotations.FileField;
-import nl.runnable.alfresco.webscripts.annotations.Uri;
+import com.github.dynamicextensionsalfresco.spring.Spied;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.FileField;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Uri;
 
 import org.springframework.extensions.webscripts.servlet.FormData.FormField;
 import org.springframework.stereotype.Component;

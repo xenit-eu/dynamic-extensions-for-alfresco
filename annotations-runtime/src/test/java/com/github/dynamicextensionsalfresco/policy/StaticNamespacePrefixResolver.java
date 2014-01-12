@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.policy;
+package com.github.dynamicextensionsalfresco.policy;
 
 import org.alfresco.service.namespace.NamespaceException;
 import org.alfresco.service.namespace.NamespacePrefixResolver;

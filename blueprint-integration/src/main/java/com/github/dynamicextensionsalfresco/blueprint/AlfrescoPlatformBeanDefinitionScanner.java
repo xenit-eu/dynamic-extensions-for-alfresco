@@ -1,9 +1,9 @@
-package nl.runnable.alfresco.blueprint;
+package com.github.dynamicextensionsalfresco.blueprint;
 
 import java.io.IOException;
 import java.util.Map;
 
-import nl.runnable.alfresco.annotations.AlfrescoPlatform;
+import com.github.dynamicextensionsalfresco.annotations.AlfrescoPlatform;
 
 import org.alfresco.service.descriptor.Descriptor;
 import org.alfresco.util.VersionNumber;

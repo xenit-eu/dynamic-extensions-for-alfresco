@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.annotations;
+package com.github.dynamicextensionsalfresco.annotations;
 
 /**
  * Represents the type of {@link AlfrescoService} dependency to use for autowiring.

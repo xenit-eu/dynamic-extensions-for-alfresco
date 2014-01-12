@@ -1,7 +1,7 @@
-package nl.runnable.alfresco.webscripts;
+package com.github.dynamicextensionsalfresco.webscripts;
 
-import nl.runnable.alfresco.webscripts.annotations.Attribute;
-import nl.runnable.alfresco.webscripts.arguments.HandlerMethodArgumentsResolver;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Attribute;
+import com.github.dynamicextensionsalfresco.webscripts.arguments.HandlerMethodArgumentsResolver;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.extensions.webscripts.*;

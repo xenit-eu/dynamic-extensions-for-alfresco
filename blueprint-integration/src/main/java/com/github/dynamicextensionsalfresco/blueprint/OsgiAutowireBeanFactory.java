@@ -1,10 +1,10 @@
-package nl.runnable.alfresco.blueprint;
+package com.github.dynamicextensionsalfresco.blueprint;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import nl.runnable.alfresco.osgi.spring.AutowireBeanFactory;
+import com.github.dynamicextensionsalfresco.osgi.spring.AutowireBeanFactory;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;

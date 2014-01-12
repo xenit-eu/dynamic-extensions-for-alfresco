@@ -1,8 +1,8 @@
-package nl.runnable.alfresco.aop;
+package com.github.dynamicextensionsalfresco.aop;
 
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
-import nl.runnable.alfresco.annotations.Transactional;
+import com.github.dynamicextensionsalfresco.annotations.Transactional;
 
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;

@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.actions;
+package com.github.dynamicextensionsalfresco.actions;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

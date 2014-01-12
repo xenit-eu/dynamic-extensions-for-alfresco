@@ -1,7 +1,7 @@
-package nl.runnable.alfresco.policy;
+package com.github.dynamicextensionsalfresco.policy;
 
-import nl.runnable.alfresco.AbstractAnnotationBasedRegistrar;
-import nl.runnable.alfresco.behaviours.annotations.*;
+import com.github.dynamicextensionsalfresco.AbstractAnnotationBasedRegistrar;
+import com.github.dynamicextensionsalfresco.behaviours.annotations.*;
 import org.alfresco.repo.policy.Behaviour.NotificationFrequency;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.Policy;

@@ -1,8 +1,8 @@
-package nl.runnable.alfresco.controlpanel;
+package com.github.dynamicextensionsalfresco.controlpanel;
 
-import nl.runnable.alfresco.controlpanel.template.TemplateBundle;
-import nl.runnable.alfresco.controlpanel.template.Variables;
-import nl.runnable.alfresco.webscripts.annotations.*;
+import com.github.dynamicextensionsalfresco.controlpanel.template.TemplateBundle;
+import com.github.dynamicextensionsalfresco.controlpanel.template.Variables;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.*;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;

@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.osgi;
+package com.github.dynamicextensionsalfresco.osgi;
 
 import org.alfresco.repo.module.AbstractModuleComponent;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;

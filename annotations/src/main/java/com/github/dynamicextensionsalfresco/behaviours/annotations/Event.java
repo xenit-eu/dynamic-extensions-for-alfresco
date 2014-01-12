@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.behaviours.annotations;
+package com.github.dynamicextensionsalfresco.behaviours.annotations;
 
 import org.alfresco.repo.policy.Behaviour.NotificationFrequency;
 

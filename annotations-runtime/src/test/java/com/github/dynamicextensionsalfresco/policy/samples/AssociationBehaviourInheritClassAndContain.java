@@ -1,8 +1,8 @@
-package nl.runnable.alfresco.policy.samples;
+package com.github.dynamicextensionsalfresco.policy.samples;
 
-import nl.runnable.alfresco.behaviours.annotations.AssociationPolicy;
-import nl.runnable.alfresco.behaviours.annotations.Behaviour;
-import nl.runnable.alfresco.behaviours.annotations.Event;
+import com.github.dynamicextensionsalfresco.behaviours.annotations.AssociationPolicy;
+import com.github.dynamicextensionsalfresco.behaviours.annotations.Behaviour;
+import com.github.dynamicextensionsalfresco.behaviours.annotations.Event;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.service.cmr.repository.AssociationRef;
 

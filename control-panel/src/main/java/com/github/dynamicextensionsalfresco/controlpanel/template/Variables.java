@@ -1,9 +1,9 @@
-package nl.runnable.alfresco.controlpanel.template;
+package com.github.dynamicextensionsalfresco.controlpanel.template;
 
 import java.util.List;
 
-import nl.runnable.alfresco.controlpanel.Container;
-import nl.runnable.alfresco.osgi.SystemPackage;
+import com.github.dynamicextensionsalfresco.controlpanel.Container;
+import com.github.dynamicextensionsalfresco.osgi.SystemPackage;
 
 import org.osgi.framework.Bundle;
 

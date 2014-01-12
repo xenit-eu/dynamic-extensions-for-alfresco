@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.actions;
+package com.github.dynamicextensionsalfresco.actions;
 
 import org.alfresco.repo.action.executer.ActionExecuter;
 import org.alfresco.service.cmr.action.Action;

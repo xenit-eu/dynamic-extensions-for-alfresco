@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.models;
+package com.github.dynamicextensionsalfresco.models;
 
 import org.alfresco.repo.dictionary.M2Namespace;
 import org.alfresco.service.cmr.dictionary.DictionaryException;

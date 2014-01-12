@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.osgi.spring;
+package com.github.dynamicextensionsalfresco.osgi.spring;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
-package nl.runnable.alfresco.actions;
+package com.github.dynamicextensionsalfresco.actions;
 
-import nl.runnable.alfresco.actions.annotations.ActionMethod;
-import nl.runnable.alfresco.actions.annotations.ActionParam;
+import com.github.dynamicextensionsalfresco.actions.annotations.ActionMethod;
+import com.github.dynamicextensionsalfresco.actions.annotations.ActionParam;
 
 /**
  * Sample action for testing.

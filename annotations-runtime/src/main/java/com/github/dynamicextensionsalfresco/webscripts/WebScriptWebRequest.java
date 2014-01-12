@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.webscripts;
+package com.github.dynamicextensionsalfresco.webscripts;
 
 import java.security.Principal;
 import java.util.Arrays;
@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
-import nl.runnable.alfresco.webscripts.arguments.CommandArgumentResolver;
+import com.github.dynamicextensionsalfresco.webscripts.arguments.CommandArgumentResolver;
 
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.web.context.request.WebRequest;

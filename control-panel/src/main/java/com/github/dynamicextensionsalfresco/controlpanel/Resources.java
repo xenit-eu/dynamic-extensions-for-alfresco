@@ -1,13 +1,13 @@
-package nl.runnable.alfresco.controlpanel;
+package com.github.dynamicextensionsalfresco.controlpanel;
 
 import java.io.IOException;
 
-import nl.runnable.alfresco.webscripts.annotations.FormatStyle;
-import nl.runnable.alfresco.webscripts.annotations.Uri;
-import nl.runnable.alfresco.webscripts.annotations.UriVariable;
-import nl.runnable.alfresco.webscripts.annotations.WebScript;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.FormatStyle;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Uri;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.UriVariable;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.WebScript;
 
-import nl.runnable.alfresco.webscripts.support.AbstractBundleResourceHandler;
+import com.github.dynamicextensionsalfresco.webscripts.support.AbstractBundleResourceHandler;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.stereotype.Component;
 

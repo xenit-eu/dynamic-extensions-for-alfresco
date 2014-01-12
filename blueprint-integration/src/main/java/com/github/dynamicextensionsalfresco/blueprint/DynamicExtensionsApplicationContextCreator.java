@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.blueprint;
+package com.github.dynamicextensionsalfresco.blueprint;
 
 import java.util.LinkedHashSet;
 import java.util.Set;

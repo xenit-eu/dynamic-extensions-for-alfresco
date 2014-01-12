@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.actions;
+package com.github.dynamicextensionsalfresco.actions;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import nl.runnable.alfresco.actions.annotations.ActionMethod;
+import com.github.dynamicextensionsalfresco.actions.annotations.ActionMethod;
 
 import org.alfresco.repo.action.executer.ActionExecuter;
 import org.alfresco.service.cmr.action.Action;

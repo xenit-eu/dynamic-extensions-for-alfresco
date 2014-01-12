@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.actions;
+package com.github.dynamicextensionsalfresco.actions;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -9,9 +9,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import nl.runnable.alfresco.AbstractAnnotationBasedRegistrar;
-import nl.runnable.alfresco.actions.annotations.ActionMethod;
-import nl.runnable.alfresco.actions.annotations.ActionParam;
+import com.github.dynamicextensionsalfresco.AbstractAnnotationBasedRegistrar;
+import com.github.dynamicextensionsalfresco.actions.annotations.ActionMethod;
+import com.github.dynamicextensionsalfresco.actions.annotations.ActionParam;
 
 import org.alfresco.repo.action.ActionDefinitionImpl;
 import org.alfresco.repo.action.ParameterDefinitionImpl;

@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.models;
+package com.github.dynamicextensionsalfresco.models;
 
 import java.io.IOException;
 import java.util.ArrayList;

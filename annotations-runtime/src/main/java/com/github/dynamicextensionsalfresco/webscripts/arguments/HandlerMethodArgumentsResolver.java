@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.webscripts.arguments;
+package com.github.dynamicextensionsalfresco.webscripts.arguments;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;

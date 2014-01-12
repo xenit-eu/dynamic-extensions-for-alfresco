@@ -11,7 +11,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<bean id="module.baseComponent" abstract="true" />
 
-	<bean name="service" class="nl.runnable.alfresco.osgi.MockServiceFactoryBean" abstract="true">
+	<bean name="service" class="com.github.dynamicextensionsalfresco.osgi.MockServiceFactoryBean" abstract="true">
 		<description>Acts as a template to make the mock service bean definitions shorter.</description>
 	</bean>
 
@@ -39,7 +39,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		<property name="class" value="org.alfresco.service.cmr.repository.MimetypeService" />
 	</bean>
 
-	<bean id="namespaceService" class="nl.runnable.alfresco.osgi.MockNamespaceService">
+	<bean id="namespaceService" class="com.github.dynamicextensionsalfresco.osgi.MockNamespaceService">
 		<property name="namespacesByPrefix">
 			<map>
 				<entry key="cm" value="http://www.alfresco.org/model/content/1.0" />

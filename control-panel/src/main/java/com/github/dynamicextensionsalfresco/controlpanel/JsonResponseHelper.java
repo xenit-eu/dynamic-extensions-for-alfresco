@@ -1,6 +1,6 @@
-package nl.runnable.alfresco.controlpanel;
+package com.github.dynamicextensionsalfresco.controlpanel;
 
-import nl.runnable.alfresco.osgi.Configuration;
+import com.github.dynamicextensionsalfresco.osgi.Configuration;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.osgi.framework.Bundle;

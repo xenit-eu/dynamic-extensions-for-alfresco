@@ -1,9 +1,9 @@
-package nl.runnable.alfresco.osgi.felix;
+package com.github.dynamicextensionsalfresco.osgi.felix;
 
 import java.util.List;
 import java.util.Map;
 
-import nl.runnable.alfresco.osgi.FrameworkConfiguration;
+import com.github.dynamicextensionsalfresco.osgi.FrameworkConfiguration;
 
 import org.osgi.framework.BundleActivator;
 import org.slf4j.Logger;

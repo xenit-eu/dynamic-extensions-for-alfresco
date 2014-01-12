@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.policy;
+package com.github.dynamicextensionsalfresco.policy;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

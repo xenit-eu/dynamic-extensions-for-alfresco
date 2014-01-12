@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.osgi.spring;
+package com.github.dynamicextensionsalfresco.osgi.spring;
 
 import org.mockito.Mockito;
 import org.springframework.beans.factory.FactoryBean;

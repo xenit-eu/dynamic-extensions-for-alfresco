@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.osgi;
+package com.github.dynamicextensionsalfresco.osgi;
 
 import java.beans.PropertyEditorSupport;
 import java.util.regex.Matcher;

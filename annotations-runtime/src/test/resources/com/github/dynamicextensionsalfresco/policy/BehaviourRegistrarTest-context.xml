@@ -4,27 +4,27 @@
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-	<bean id="annotationBasedBehaviourRegistrar" class="nl.runnable.alfresco.policy.AnnotationBasedBehaviourRegistrar"
+	<bean id="annotationBasedBehaviourRegistrar" class="com.github.dynamicextensionsalfresco.policy.AnnotationBasedBehaviourRegistrar"
 		  init-method="bindBehaviours">
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="namespacePrefixResolver">
-			<bean class="nl.runnable.alfresco.policy.StaticNamespacePrefixResolver"/>
+			<bean class="com.github.dynamicextensionsalfresco.policy.StaticNamespacePrefixResolver"/>
 		</property>
 	</bean>
 
-	<bean id="policyComponent" class="nl.runnable.alfresco.spring.MockFactoryBean">
+	<bean id="policyComponent" class="com.github.dynamicextensionsalfresco.spring.MockFactoryBean">
 		<property name="class" value="org.alfresco.repo.policy.PolicyComponent"/>
 	</bean>
 
 	<!-- sample policies -->
 
-	<bean class="nl.runnable.alfresco.policy.samples.ContentBehaviour"/>
+	<bean class="com.github.dynamicextensionsalfresco.policy.samples.ContentBehaviour"/>
 
-	<bean class="nl.runnable.alfresco.policy.samples.AssociationBehaviourInheritClassAndContain"/>
+	<bean class="com.github.dynamicextensionsalfresco.policy.samples.AssociationBehaviourInheritClassAndContain"/>
 
-	<bean class="nl.runnable.alfresco.policy.samples.AssociationBehaviourContain"/>
+	<bean class="com.github.dynamicextensionsalfresco.policy.samples.AssociationBehaviourContain"/>
 
-	<bean class="nl.runnable.alfresco.policy.samples.AssociationBehaviourVoid"/>
+	<bean class="com.github.dynamicextensionsalfresco.policy.samples.AssociationBehaviourVoid"/>
 
-	<bean class="nl.runnable.alfresco.policy.samples.PropertyBehaviour"/>
+	<bean class="com.github.dynamicextensionsalfresco.policy.samples.PropertyBehaviour"/>
 </beans>

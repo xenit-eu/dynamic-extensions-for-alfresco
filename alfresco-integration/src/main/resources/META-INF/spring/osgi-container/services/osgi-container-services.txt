@@ -3,13 +3,13 @@
 #
 # Format: <bean name>:<service name>[,<servicename>...]
 
-#osgi.container.WebScriptRegistry:nl.runnable.alfresco.osgi.webscripts.CompositeRegistry
-osgi.container.WebScriptUriRegistry:nl.runnable.alfresco.webscripts.WebScriptUriRegistry
+#osgi.container.WebScriptRegistry:com.github.dynamicextensionsalfresco.osgi.webscripts.CompositeRegistry
+osgi.container.WebScriptUriRegistry:com.github.dynamicextensionsalfresco.webscripts.WebScriptUriRegistry
 osgi.container.WebScriptContainer:org.springframework.extensions.webscripts.Container
-osgi.container.WebScriptSearchPathRegistry:nl.runnable.alfresco.osgi.webscripts.SearchPathRegistry
+osgi.container.WebScriptSearchPathRegistry:com.github.dynamicextensionsalfresco.osgi.webscripts.SearchPathRegistry
 osgi.container.NamespaceHandlerResolver:org.springframework.beans.factory.xml.NamespaceHandlerResolver
 osgi.container.EntityResolver:org.xml.sax.EntityResolver
-osgi.container.ActionExecuterRegistry:nl.runnable.alfresco.actions.ActionExecuterRegistry
-osgi.container.Configuration:nl.runnable.alfresco.osgi.Configuration
-osgi.container.RepositoryStoreService:nl.runnable.alfresco.osgi.RepositoryStoreService
-osgi.container.FrameworkService:nl.runnable.alfresco.osgi.FrameworkService
+osgi.container.ActionExecuterRegistry:com.github.dynamicextensionsalfresco.actions.ActionExecuterRegistry
+osgi.container.Configuration:com.github.dynamicextensionsalfresco.osgi.Configuration
+osgi.container.RepositoryStoreService:com.github.dynamicextensionsalfresco.osgi.RepositoryStoreService
+osgi.container.FrameworkService:com.github.dynamicextensionsalfresco.osgi.FrameworkService

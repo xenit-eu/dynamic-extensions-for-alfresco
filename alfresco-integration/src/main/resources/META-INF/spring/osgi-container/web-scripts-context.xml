@@ -7,7 +7,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<description>Web Script component implementations that will be made available as OSGi services.</description>
 
-	<bean id="osgi.container.WebScriptSearchPathRegistry" class="nl.runnable.alfresco.osgi.webscripts.SearchPathRegistryImpl">
+	<bean id="osgi.container.WebScriptSearchPathRegistry" class="com.github.dynamicextensionsalfresco.osgi.webscripts.SearchPathRegistryImpl">
 		<description>
 			OSGi bundles can register additional Web Script Stores with this service.
 		</description>	

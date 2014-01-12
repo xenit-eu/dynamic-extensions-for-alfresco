@@ -35,7 +35,7 @@ Installing Dynamic Extensions
 
 Dynamic Extensions is distributed as an Alfresco Module Package (AMP).
 
-* Download the <a href="https://raw.github.com/laurentvdl/dynamic-extensions-for-alfresco/mvn-repo/nl/runnable/alfresco/dynamicextensions/alfresco-module/1.0.0.M6/nl.runnable.alfresco.dynamicextensions-1.0.0.M6.amp">Dynamic Extensions Milestone 6 AMP</a>.
+* Download the <a href="https://raw.github.com/laurentvdl/dynamic-extensions-for-alfresco/mvn-repo/com/github/dynamicextensionsalfresco/dynamicextensions/alfresco-module/1.0.0.M6/com.github.dynamicextensionsalfresco.dynamicextensions-1.0.0.M6.amp">Dynamic Extensions Milestone 6 AMP</a>.
 * Use the <a href="http://docs.alfresco.com/4.0/index.jsp?topic=%2Fcom.alfresco.enterprise.doc%2Ftasks%2Famp-install.html">Module Management Tool</a> to install the AMP in the Alfresco repository of your choosing.
 * After restarting Alfresco, open the Control Panel: <a href="http://localhost:8080/alfresco/service/dynamic-extensions/">http://localhost:8080/alfresco/service/dynamic-extensions/</a>.
 * Accessing the Control Panel requires an admin account.
@@ -105,10 +105,10 @@ The <a href="https://github.com/lfridael/example-dynamic-extension">example Dyna
 
 Clone the example repo and explore it. Here are some pointers to get you going:
 
-* Annotation-based Web Scripts: <a href="https://github.com/lfridael/example-dynamic-extension/blob/master/src/main/java/nl/runnable/alfresco/examples/CategoriesWebScript.java">First example</a> and <a href="https://github.com/lfridael/example-dynamic-extension/blob/master/src/main/java/nl/runnable/alfresco/examples/HelloWebScript.java">another example</a>.
-* <a href="https://github.com/lfridael/example-dynamic-extension/blob/master/src/main/java/nl/runnable/alfresco/examples/ExampleActions.java">Annotation-based Action example</a >  and a <a href="https://github.com/lfridael/example-dynamic-extension/blob/master/src/main/java/nl/runnable/alfresco/examples/SetDescriptionWebScript.java">Web Script</a> that invokes the action.
-* <a href="https://github.com/lfridael/example-dynamic-extension/blob/master/src/main/java/nl/runnable/alfresco/examples/ExampleBehaviour.java">Annotation-based Behaviour example</a>.
-* <a href="https://github.com/lfridael/example-dynamic-extension/tree/master/src/main/java/nl/runnable/alfresco/examples">All examples</a>.
+* Annotation-based Web Scripts: <a href="https://github.com/lfridael/example-dynamic-extension/blob/master/src/main/java/com/github/dynamicextensionsalfresco/examples/CategoriesWebScript.java">First example</a> and <a href="https://github.com/lfridael/example-dynamic-extension/blob/master/src/main/java/com/github/dynamicextensionsalfresco/examples/HelloWebScript.java">another example</a>.
+* <a href="https://github.com/lfridael/example-dynamic-extension/blob/master/src/main/java/com/github/dynamicextensionsalfresco/examples/ExampleActions.java">Annotation-based Action example</a >  and a <a href="https://github.com/lfridael/example-dynamic-extension/blob/master/src/main/java/com/github/dynamicextensionsalfresco/examples/SetDescriptionWebScript.java">Web Script</a> that invokes the action.
+* <a href="https://github.com/lfridael/example-dynamic-extension/blob/master/src/main/java/com/github/dynamicextensionsalfresco/examples/ExampleBehaviour.java">Annotation-based Behaviour example</a>.
+* <a href="https://github.com/lfridael/example-dynamic-extension/tree/master/src/main/java/com/github/dynamicextensionsalfresco/examples">All examples</a>.
 
 See also: <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/wiki/Building-Alfresco-repository-extensions-for-Dynamic-Extensions-using-Gradle">Gradle plugin for building your own repository extensions</a>
 

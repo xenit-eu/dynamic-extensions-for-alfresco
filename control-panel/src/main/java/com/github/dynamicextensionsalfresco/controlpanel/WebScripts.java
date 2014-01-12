@@ -1,12 +1,12 @@
-package nl.runnable.alfresco.controlpanel;
+package com.github.dynamicextensionsalfresco.controlpanel;
 
 import java.util.Map;
 
-import nl.runnable.alfresco.controlpanel.template.Variables;
-import nl.runnable.alfresco.webscripts.annotations.HttpMethod;
-import nl.runnable.alfresco.webscripts.annotations.ResponseTemplate;
-import nl.runnable.alfresco.webscripts.annotations.Uri;
-import nl.runnable.alfresco.webscripts.annotations.WebScript;
+import com.github.dynamicextensionsalfresco.controlpanel.template.Variables;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.HttpMethod;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.ResponseTemplate;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Uri;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.WebScript;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -1,10 +1,10 @@
-package nl.runnable.alfresco.controlpanel.template;
+package com.github.dynamicextensionsalfresco.controlpanel.template;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
-import nl.runnable.alfresco.webscripts.AnnotationWebScript;
+import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScript;
 
 import org.springframework.extensions.webscripts.WebScript;
 import org.springframework.util.Assert;

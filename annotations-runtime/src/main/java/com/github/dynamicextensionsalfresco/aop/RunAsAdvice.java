@@ -1,8 +1,8 @@
-package nl.runnable.alfresco.aop;
+package com.github.dynamicextensionsalfresco.aop;
 
 import java.lang.reflect.InvocationTargetException;
 
-import nl.runnable.alfresco.annotations.RunAs;
+import com.github.dynamicextensionsalfresco.annotations.RunAs;
 
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;

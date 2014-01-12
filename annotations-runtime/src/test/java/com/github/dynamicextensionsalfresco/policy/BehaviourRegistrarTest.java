@@ -1,6 +1,6 @@
-package nl.runnable.alfresco.policy;
+package com.github.dynamicextensionsalfresco.policy;
 
-import nl.runnable.alfresco.policy.samples.*;
+import com.github.dynamicextensionsalfresco.policy.samples.*;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;

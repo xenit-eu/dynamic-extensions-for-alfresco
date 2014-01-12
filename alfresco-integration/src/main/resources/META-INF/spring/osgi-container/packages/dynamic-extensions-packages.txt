@@ -7,24 +7,24 @@
 # system package cache using the Dynamic Extensions Control Panel in this case.
 
 # OSGi integration
-nl.runnable.alfresco.osgi
-nl.runnable.alfresco.osgi.felix
-nl.runnable.alfresco.osgi.spring
-nl.runnable.alfresco.osgi.webscripts
+com.github.dynamicextensionsalfresco.osgi
+com.github.dynamicextensionsalfresco.osgi.felix
+com.github.dynamicextensionsalfresco.osgi.spring
+com.github.dynamicextensionsalfresco.osgi.webscripts
 
 # Annotations
-nl.runnable.alfresco.actions.annotations
-nl.runnable.alfresco.annotations
-nl.runnable.alfresco.behaviours.annotations
-nl.runnable.alfresco.webscripts.annotations
+com.github.dynamicextensionsalfresco.actions.annotations
+com.github.dynamicextensionsalfresco.annotations
+com.github.dynamicextensionsalfresco.behaviours.annotations
+com.github.dynamicextensionsalfresco.webscripts.annotations
 
 # Annotation handling
-nl.runnable.alfresco
-nl.runnable.alfresco.actions
-nl.runnable.alfresco.policy
-nl.runnable.alfresco.aop
-nl.runnable.alfresco.webscripts
-nl.runnable.alfresco.webscripts.arguments
+com.github.dynamicextensionsalfresco
+com.github.dynamicextensionsalfresco.actions
+com.github.dynamicextensionsalfresco.policy
+com.github.dynamicextensionsalfresco.aop
+com.github.dynamicextensionsalfresco.webscripts
+com.github.dynamicextensionsalfresco.webscripts.arguments
 
 # Models
-nl.runnable.alfresco.models
+com.github.dynamicextensionsalfresco.models

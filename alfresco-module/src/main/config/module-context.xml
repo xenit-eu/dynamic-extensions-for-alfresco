@@ -9,17 +9,17 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<import resource="classpath:/META-INF/spring/module/action-integration-context.xml" />
 
-	<bean id="osgi.container.ModuleComponent" class="nl.runnable.alfresco.osgi.OsgiContainerModuleComponent" parent="module.baseComponent"
+	<bean id="osgi.container.ModuleComponent" class="com.github.dynamicextensionsalfresco.osgi.OsgiContainerModuleComponent" parent="module.baseComponent"
 		destroy-method="destroy">
 		<description>Instantiates the child application context and initializes the FrameworkManager within it.</description>
-		<property name="moduleId" value="nl.runnable.alfresco.dynamicextensions" />
+		<property name="moduleId" value="com.github.dynamicextensionsalfresco.dynamicextensions" />
 		<property name="sinceVersion" value="0.0.1" />
 		<property name="appliesFromVersion" value="0.0.1" />
 		<property name="appliesToVersion" value="1.0.0" />
 		<property name="executeOnceOnly" value="false" />
 		<property name="applicationContextConfigLocations">
 			<list>
-				<value>classpath:/alfresco/module/nl.runnable.alfresco.dynamicextensions/osgi-container-context.xml</value>
+				<value>classpath:/alfresco/module/com.github.dynamicextensionsalfresco.dynamicextensions/osgi-container-context.xml</value>
 			</list>
 		</property>
 		<property name="webScriptsContainer" ref="webscripts.container" />
@@ -28,7 +28,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<alias name="osgi.container.ModuleComponent" alias="osgi.container.FrameworkService" />
 
-	<bean id="webscript.dynamic-extensions.restart-framework.post" class="nl.runnable.alfresco.osgi.FrameworkRestartWebScript">
+	<bean id="webscript.dynamic-extensions.restart-framework.post" class="com.github.dynamicextensionsalfresco.osgi.FrameworkRestartWebScript">
 		<property name="frameworkService" ref="osgi.container.FrameworkService" />
 	</bean>
 

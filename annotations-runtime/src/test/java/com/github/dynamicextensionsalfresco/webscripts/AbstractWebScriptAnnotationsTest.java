@@ -1,10 +1,10 @@
-package nl.runnable.alfresco.webscripts;
+package com.github.dynamicextensionsalfresco.webscripts;
 
 import static org.junit.Assert.*;
 
 import java.io.IOException;
 
-import nl.runnable.alfresco.webscripts.annotations.HttpMethod;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.HttpMethod;
 
 import org.junit.Before;
 import org.junit.runner.RunWith;

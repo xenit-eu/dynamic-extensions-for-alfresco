@@ -8,34 +8,34 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
 	<bean id="webscripts.index.prototype" class="org.springframework.extensions.webscripts.JaxRSUriIndex" />
 
-	<bean id="webscript.uriRegistry" class="nl.runnable.alfresco.webscripts.WebScriptUriRegistry" primary="true">
+	<bean id="webscript.uriRegistry" class="com.github.dynamicextensionsalfresco.webscripts.WebScriptUriRegistry" primary="true">
 		<property name="uriIndexBeanName" value="webscripts.index.prototype" />
 	</bean>
 
-	<bean class="nl.runnable.alfresco.webscripts.AnnotationWebScriptRegistrar" init-method="registerWebScripts">
+	<bean class="com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptRegistrar" init-method="registerWebScripts">
 		<property name="annotationBasedWebScriptBuilder" ref="webscripts.builder" />
 		<property name="webScriptUriRegistry" ref="webscript.uriRegistry" />
 	</bean>
 
-	<bean id="webscripts.builder" class="nl.runnable.alfresco.webscripts.AnnotationWebScriptBuilder">
+	<bean id="webscripts.builder" class="com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptBuilder">
 		<property name="handlerMethodArgumentsResolver" ref="webscripts.argumentsResolver" />
 	</bean>
 
-	<bean id="webscripts.argumentsResolver" class="nl.runnable.alfresco.webscripts.arguments.HandlerMethodArgumentsResolver"
+	<bean id="webscripts.argumentsResolver" class="com.github.dynamicextensionsalfresco.webscripts.arguments.HandlerMethodArgumentsResolver"
 		init-method="initializeArgumentResolvers">
 		<property name="stringValueConverter">
-			<bean class="nl.runnable.alfresco.webscripts.arguments.StringValueConverter">
+			<bean class="com.github.dynamicextensionsalfresco.webscripts.arguments.StringValueConverter">
 				<property name="namespacePrefixResolver" ref="namespacePrefixResolver" />
 			</bean>
 		</property>
 	</bean>
 
-	<bean id="namespacePrefixResolver" class="nl.runnable.alfresco.spring.MockFactoryBean">
+	<bean id="namespacePrefixResolver" class="com.github.dynamicextensionsalfresco.spring.MockFactoryBean">
 		<property name="class" value="org.alfresco.service.namespace.NamespacePrefixResolver" />
 	</bean>
 
-	<bean class="nl.runnable.alfresco.spring.SpyBeanPostProcessor"/>
+	<bean class="com.github.dynamicextensionsalfresco.spring.SpyBeanPostProcessor"/>
 
-	<context:component-scan base-package="nl.runnable.alfresco.webscripts" />
+	<context:component-scan base-package="com.github.dynamicextensionsalfresco.webscripts" />
 
 </beans>

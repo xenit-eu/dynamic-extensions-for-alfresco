@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.policy.samples;
+package com.github.dynamicextensionsalfresco.policy.samples;
 
 import org.alfresco.repo.policy.PropertyPolicy;
 import org.alfresco.service.namespace.NamespaceService;

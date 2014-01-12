@@ -1,11 +1,11 @@
-package nl.runnable.alfresco.webscripts.arguments;
+package com.github.dynamicextensionsalfresco.webscripts.arguments;
 
 import java.lang.annotation.Annotation;
 
-import nl.runnable.alfresco.webscripts.AnnotationWebScriptRequest;
-import nl.runnable.alfresco.webscripts.WebScriptUtil;
-import nl.runnable.alfresco.webscripts.annotations.FileField;
-import nl.runnable.alfresco.webscripts.annotations.Header;
+import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptRequest;
+import com.github.dynamicextensionsalfresco.webscripts.WebScriptUtil;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.FileField;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Header;
 
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;

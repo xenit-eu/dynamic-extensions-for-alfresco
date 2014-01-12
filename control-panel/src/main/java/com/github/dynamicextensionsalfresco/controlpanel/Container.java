@@ -1,9 +1,9 @@
-package nl.runnable.alfresco.controlpanel;
+package com.github.dynamicextensionsalfresco.controlpanel;
 
-import nl.runnable.alfresco.controlpanel.template.TemplateBundle;
-import nl.runnable.alfresco.controlpanel.template.Variables;
-import nl.runnable.alfresco.osgi.RepositoryStoreService;
-import nl.runnable.alfresco.webscripts.annotations.*;
+import com.github.dynamicextensionsalfresco.controlpanel.template.TemplateBundle;
+import com.github.dynamicextensionsalfresco.controlpanel.template.Variables;
+import com.github.dynamicextensionsalfresco.osgi.RepositoryStoreService;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.*;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;

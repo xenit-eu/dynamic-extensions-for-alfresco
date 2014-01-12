@@ -1,7 +1,7 @@
-package nl.runnable.alfresco.aop;
+package com.github.dynamicextensionsalfresco.aop;
 
 import static org.junit.Assert.*;
-import nl.runnable.alfresco.annotations.RunAs;
+import com.github.dynamicextensionsalfresco.annotations.RunAs;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

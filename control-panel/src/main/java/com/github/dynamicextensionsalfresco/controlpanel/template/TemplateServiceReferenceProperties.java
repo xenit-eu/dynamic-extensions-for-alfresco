@@ -1,4 +1,4 @@
-package nl.runnable.alfresco.controlpanel.template;
+package com.github.dynamicextensionsalfresco.controlpanel.template;
 
 import org.osgi.framework.ServiceReference;
 import org.springframework.util.Assert;
