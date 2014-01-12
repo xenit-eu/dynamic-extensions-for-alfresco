@@ -5,6 +5,7 @@ allprojects {
 
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'jacoco'
     apply plugin: 'maven'
 
     task sourceJar(type: Jar) {
@@ -19,7 +20,7 @@ subprojects {
     uploadArchives {
         repositories {
             mavenDeployer {
-                repository(url: 'file://' + (hasProperty('uploadPath') ? uploadPath : '/tmp'))
+                repository(url: 'file://' + (hasProperty('uploadPath') ? uploadPath : System.properties['java.io.tmpdir']))
             }
         }
     }
@@ -31,20 +32,22 @@ subprojects {
         targetCompatibility = 1.6
     }
 
-    ext.alfrescoVersion = '4.2.e'
-    ext.springVersion = '3.0.5.RELEASE'
-    ext.geminiVersion = '1.0.2.RELEASE'
-    ext.slf4jVersion = '1.7.5'
-    ext.osgiVersion = '4.3.1'
-    ext.springSurfVersion = '1.2.0-M4'
-    ext.junitVersion = '4.8.2'
-    ext.transactionApiVersion = '1.1'
-    ext.felixVersion = '4.2.1'
-    ext.springOsgiUtilVersion = '2.0.5.RELEASE'
-    ext.mockitoVersion = '1.9.5'
-    ext.jibxVersion = '1.2.3'
-    ext.hibernateVersion = '3.2.6.ga'
-    ext.servletVersion = '2.5'
+    ext {
+        alfrescoVersion = '4.0.e'
+        springVersion = '3.0.5.RELEASE'
+        geminiVersion = '1.0.2.RELEASE'
+        slf4jVersion = '1.7.5'
+        osgiVersion = '4.3.1'
+        springSurfVersion = '1.2.0-M4'
+        junitVersion = '4.8.2'
+        transactionApiVersion = '1.1'
+        felixVersion = '4.2.1'
+        springOsgiUtilVersion = '2.0.5.RELEASE'
+        mockitoVersion = '1.9.5'
+        jibxVersion = '1.2.3'
+        hibernateVersion = '3.2.6.ga'
+        servletVersion = '2.5'
+    }
 
     repositories {
         mavenCentral()
@@ -54,7 +57,7 @@ subprojects {
     }
 
     group = 'nl.runnable.alfresco.dynamicextensions'
-    version = '1.0.0.M6'
+    version = '1.0.0-SNAPSHOT'
 
     configurations.all {
         exclude group: 'jaxen'
@@ -70,22 +73,6 @@ subprojects {
     configurations {
         amp
         compile.extendsFrom(amp)
-    }
-
-    dependencies {
-        compile("org.alfresco:alfresco-repository:${ext.alfrescoVersion}") { transitive = false }
-        compile("org.alfresco:alfresco-data-model:${ext.alfrescoVersion}") { transitive = false }
-        compile("org.alfresco:alfresco-core:${ext.alfrescoVersion}") { transitive = false }
-        compile("org.alfresco:alfresco-remote-api:${ext.alfrescoVersion}") { transitive = false }
-        compile("org.springframework:spring-context:${ext.springVersion}") { transitive = false }
-        compile("org.springframework.extensions.surf:spring-surf-core:${ext.springSurfVersion}") { transitive = false }
-        compile "org.slf4j:slf4j-api:${ext.slf4jVersion}"
-
-        testCompile "junit:junit:${ext.junitVersion}"
-        testCompile "org.mockito:mockito-core:${ext.mockitoVersion}"
-        testCompile "org.springframework:spring-test:${ext.springVersion}"
-        testCompile "org.springframework:spring-beans:${ext.springVersion}"
-        testCompile "javax.transaction:transaction-api:$ext.transactionApiVersion"
     }
 }
 

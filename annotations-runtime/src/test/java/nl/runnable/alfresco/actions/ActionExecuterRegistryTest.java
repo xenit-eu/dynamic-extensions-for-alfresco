@@ -3,7 +3,6 @@ package nl.runnable.alfresco.actions;
 import static org.junit.Assert.*;
 
 import java.util.List;
-import java.util.Set;
 
 import org.alfresco.repo.action.executer.ActionExecuter;
 import org.alfresco.service.cmr.action.ActionDefinition;
@@ -36,7 +35,7 @@ public class ActionExecuterRegistryTest {
 	private void validateMetadata(final ActionExecuter exampleAction, final boolean withConstraint) {
 		assertNotNull(exampleAction);
 		final ActionDefinition actionDefinition = exampleAction.getActionDefinition();
-		final Set<QName> applicableTypes = actionDefinition.getApplicableTypes();
+		final List<QName> applicableTypes = actionDefinition.getApplicableTypes();
 		assertEquals(2, applicableTypes.size());
 
 		assertEquals(true, actionDefinition.getAdhocPropertiesAllowed());

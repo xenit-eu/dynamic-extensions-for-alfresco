@@ -24,8 +24,14 @@ dependencies {
     bundles "org.scala-lang:scala-library:2.10.3"
     bundles(project(":control-panel")) {transitive = false}
 
+    testCompile "junit:junit:${ext.junitVersion}"
+    testCompile "org.mockito:mockito-core:${ext.mockitoVersion}"
+    testCompile "org.springframework:spring-test:${ext.springVersion}"
     testCompile "org.springframework:spring-web:${ext.springVersion}"
     testCompile "org.springframework.extensions.surf:spring-webscripts:${ext.springSurfVersion}"
+    testCompile("org.alfresco:alfresco-repository:${ext.alfrescoVersion}") { transitive = false }
+    testCompile("org.alfresco:alfresco-data-model:${ext.alfrescoVersion}") { transitive = false }
+
     testRuntime "org.springframework:spring-beans:${ext.springVersion}"
 }
 

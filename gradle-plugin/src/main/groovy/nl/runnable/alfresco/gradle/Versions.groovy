@@ -6,7 +6,7 @@ package nl.runnable.alfresco.gradle
  */
 
 class Versions {
-	static final DYNAMIC_EXTENSIONS = "1.0.0.M5"
+	static final DYNAMIC_EXTENSIONS = "1.0.0-SNAPSHOT"
 	
 	static final ALFRESCO = "4.0.e"
 	

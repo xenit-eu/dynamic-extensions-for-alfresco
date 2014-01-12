@@ -1,5 +1,6 @@
 dependencies {
     compile project(':annotations')
+    compile "org.slf4j:slf4j-api:${ext.slf4jVersion}"
     compile "org.springframework.extensions.surf:spring-webscripts:${ext.springSurfVersion}"
     compile "org.freemarker:freemarker:2.3.16"
     compile "javax.servlet:servlet-api:${ext.servletVersion}"
@@ -7,6 +8,10 @@ dependencies {
     compile "org.springframework:org.springframework.transaction:${ext.springVersion}"
     compile "org.springframework:org.springframework.jdbc:${ext.springVersion}"
     compile "javax.transaction:transaction-api:${ext.transactionApiVersion}"
+
+    testCompile "junit:junit:${ext.junitVersion}"
+    testCompile "org.mockito:mockito-core:${ext.mockitoVersion}"
+    testCompile "org.springframework:spring-test:${ext.springVersion}"
 
     testRuntime "org.mybatis:mybatis:3.0.4"
     testRuntime("org.hibernate:hibernate:${ext.hibernateVersion}") {
