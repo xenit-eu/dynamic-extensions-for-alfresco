@@ -9,7 +9,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<!-- The AMP main module context. -->
 	<import
-		resource="classpath:alfresco/module/com.github.dynamicextensionsalfresco.dynamicextensions/module-context.xml" />
+		resource="classpath:alfresco/module/com.github.dynamicextensionsalfresco/module-context.xml" />
 
 	<!-- The mock services. -->
 	<import resource="mock-services-context.xml" />

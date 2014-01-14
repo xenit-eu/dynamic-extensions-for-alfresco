@@ -12,14 +12,14 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	<bean id="osgi.container.ModuleComponent" class="com.github.dynamicextensionsalfresco.osgi.OsgiContainerModuleComponent" parent="module.baseComponent"
 		destroy-method="destroy">
 		<description>Instantiates the child application context and initializes the FrameworkManager within it.</description>
-		<property name="moduleId" value="com.github.dynamicextensionsalfresco.dynamicextensions" />
+		<property name="moduleId" value="com.github.dynamicextensionsalfresco" />
 		<property name="sinceVersion" value="0.0.1" />
 		<property name="appliesFromVersion" value="0.0.1" />
 		<property name="appliesToVersion" value="1.0.0" />
 		<property name="executeOnceOnly" value="false" />
 		<property name="applicationContextConfigLocations">
 			<list>
-				<value>classpath:/alfresco/module/com.github.dynamicextensionsalfresco.dynamicextensions/osgi-container-context.xml</value>
+				<value>classpath:/alfresco/module/com.github.dynamicextensionsalfresco/osgi-container-context.xml</value>
 			</list>
 		</property>
 		<property name="webScriptsContainer" ref="webscripts.container" />

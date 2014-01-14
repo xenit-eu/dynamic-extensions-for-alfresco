@@ -18,7 +18,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 			Uses this format: %module.property%
 		</description>
 		<property name="location"
-			value="classpath:/alfresco/module/com.github.dynamicextensionsalfresco.dynamicextensions/module.properties" />
+			value="classpath:/alfresco/module/com.github.dynamicextensionsalfresco/module.properties" />
 		<property name="placeholderPrefix" value="%" />
 		<property name="placeholderSuffix" value="%" />
 	</bean>
