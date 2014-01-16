@@ -9,6 +9,8 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<import resource="classpath:/META-INF/spring/module/action-integration-context.xml" />
 
+	<import resource="classpath:/META-INF/spring/module/workflow-integration-context.xml" />
+
 	<bean id="osgi.container.ModuleComponent" class="com.github.dynamicextensionsalfresco.osgi.OsgiContainerModuleComponent" parent="module.baseComponent"
 		destroy-method="destroy">
 		<description>Instantiates the child application context and initializes the FrameworkManager within it.</description>

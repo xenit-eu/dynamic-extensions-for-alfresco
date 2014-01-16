@@ -16,7 +16,6 @@ import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.util.StringUtils;
 
 /**
  * {@link OsgiApplicationContextCreator} that creates a {@link DynamicExtensionsApplicationContext} if a bundle has been
@@ -42,10 +41,6 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 	private static final String OSGI_SERVICE_BLUEPRINT_COMPNAME = "osgi.service.blueprint.compname";
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
-
-	/* Configuration */
-
-	private String modelLocationPattern;
 
 	/* Operations */
 
@@ -85,9 +80,7 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 		applicationContext.setContextClassLoaderProvider(contextClassLoaderProvider);
 
 		applicationContext.setPublishContextAsService(config.isPublishContextAsService());
-		if (StringUtils.hasText(getModelLocationPattern())) {
-			applicationContext.setModelLocationPattern(getModelLocationPattern());
-		}
+
 		return applicationContext;
 
 	}
@@ -149,15 +142,5 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 		} catch (final InvalidSyntaxException e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	/* Configuration */
-
-	public void setModelLocationPattern(final String modelLocationPattern) {
-		this.modelLocationPattern = modelLocationPattern;
-	}
-
-	protected String getModelLocationPattern() {
-		return modelLocationPattern;
 	}
 }

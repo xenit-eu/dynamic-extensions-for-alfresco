@@ -31,20 +31,11 @@ public class M2ModelListFactoryBean implements FactoryBean<List<M2ModelResource>
 
 	/* Configuration */
 
-	private String locationPattern;
+    private static final String modelLocationPattern = "osgibundle:/META-INF/alfresco/models/*.xml";
 
 	/* State */
 
 	private List<M2ModelResource> models;
-
-	/* Construction */
-
-	public M2ModelListFactoryBean(final String locationPattern) {
-		this.locationPattern = locationPattern;
-	}
-
-	public M2ModelListFactoryBean() {
-	}
 
 	/* Operations */
 
@@ -61,8 +52,6 @@ public class M2ModelListFactoryBean implements FactoryBean<List<M2ModelResource>
 
 	@Override
 	public List<M2ModelResource> getObject() throws IOException {
-		Assert.state(StringUtils.hasText(locationPattern), "Location pattern has not been configured.");
-
 		if (models == null) {
 			models = createModels();
 		}
@@ -71,7 +60,7 @@ public class M2ModelListFactoryBean implements FactoryBean<List<M2ModelResource>
 
 	protected List<M2ModelResource> createModels() throws IOException {
 		final List<M2ModelResource> models = new ArrayList<M2ModelResource>();
-		for (final Resource resource : getResourcePatternResolver().getResources(locationPattern)) {
+		for (final Resource resource : getResourcePatternResolver().getResources(modelLocationPattern)) {
 			try {
 				final M2Model model = createM2Model(resource);
 				models.add(new M2ModelResource(resource, model));
@@ -84,11 +73,9 @@ public class M2ModelListFactoryBean implements FactoryBean<List<M2ModelResource>
 		return models;
 	}
 
-	protected M2Model createM2Model(final Resource resource) throws IOException {
-		final M2ModelFactoryBean factoryBean = new M2ModelFactoryBean();
-		factoryBean.setModel(resource);
-		return factoryBean.getObject();
-	}
+    protected M2Model createM2Model(Resource resource) throws IOException {
+        return M2Model.createModel(resource.getInputStream());
+    }
 
 	/* Dependencies */
 
@@ -101,15 +88,4 @@ public class M2ModelListFactoryBean implements FactoryBean<List<M2ModelResource>
 	protected ResourcePatternResolver getResourcePatternResolver() {
 		return resourcePatternResolver;
 	}
-
-	/* Configuration */
-
-	public void setLocationPattern(final String locationPattern) {
-		this.locationPattern = locationPattern;
-	}
-
-	public String getLocationPattern() {
-		return locationPattern;
-	}
-
 }

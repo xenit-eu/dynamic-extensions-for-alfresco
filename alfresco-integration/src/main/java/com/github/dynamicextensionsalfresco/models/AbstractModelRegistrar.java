@@ -4,8 +4,12 @@ import org.alfresco.repo.dictionary.M2Namespace;
 import org.alfresco.service.cmr.dictionary.DictionaryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ResourceLoaderAware;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.util.Assert;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -13,17 +17,18 @@ import java.util.*;
  *
  * @author Laurent Van der Linden
  */
-public abstract class AbstractModelRegistrar implements ModelRegistrar {
+public abstract class AbstractModelRegistrar implements ModelRegistrar, ResourceLoaderAware {
 	private final static Logger logger = LoggerFactory.getLogger(AbstractModelRegistrar.class);
 
 	/* Configuration */
 
-	private List<M2ModelResource> models = Collections.emptyList();
+	private List<M2ModelResource> models = null;
+    private ResourcePatternResolver resourcePatternResolver;
+    private List<M2ModelResource> modelsToRegister;
 
-	@Override
+    @Override
 	public void registerModels() {
 		final Map<String, M2ModelResource> namespaceProviders = new HashMap<String, M2ModelResource>();
-		final List<M2ModelResource> modelsToRegister = getModels();
 		for (final M2ModelResource m2ModelResource : modelsToRegister) {
 			for (final M2Namespace m2Namespace : m2ModelResource.getM2Model().getNamespaces()) {
 				logger.debug("{} will provide namespace '{}'", m2ModelResource.getName(), m2Namespace.getUri());
@@ -69,12 +74,16 @@ public abstract class AbstractModelRegistrar implements ModelRegistrar {
 
 	/* Configuration */
 
-	public void setModels(final List<M2ModelResource> models) {
-		Assert.notNull(models, "Models cannot be null.");
-		this.models = models;
-	}
+    @Override
+    public void setResourceLoader(ResourceLoader resourceLoader) {
+        this.resourcePatternResolver = (ResourcePatternResolver) resourceLoader;
+    }
 
-	public List<M2ModelResource> getModels() {
-		return models;
-	}
+    protected ResourcePatternResolver getResourcePatternResolver() {
+        return resourcePatternResolver;
+    }
+
+    public void setModels(List<M2ModelResource> m2ModelResources) {
+        this.modelsToRegister = m2ModelResources;
+    }
 }

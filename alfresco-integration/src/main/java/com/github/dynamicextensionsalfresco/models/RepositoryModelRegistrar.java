@@ -1,28 +1,18 @@
 package com.github.dynamicextensionsalfresco.models;
 
-import org.alfresco.model.ContentModel;
+import com.github.dynamicextensionsalfresco.ContentComparator;
 import org.alfresco.repo.dictionary.RepositoryLocation;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.admin.RepoAdminService;
-import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.service.cmr.repository.ContentService;
-import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.transaction.TransactionService;
-import org.alfresco.util.ISO9075;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.io.IOException;
-import java.util.List;
-
-import static org.alfresco.repo.admin.RepoAdminServiceImpl.defaultSubtypeOfDictionaryModel;
 
 /**
  * Register models in the repository as cm:dictionaryModel's using the {@link RepoAdminService}.
@@ -56,6 +46,8 @@ public class RepositoryModelRegistrar extends AbstractModelRegistrar {
 	@Autowired
 	protected TransactionService transactionService;
 
+    @Autowired
+    protected ContentComparator contentComparator;
 	/* Main operations */
 
 	public void unregisterModels() {
@@ -72,7 +64,7 @@ public class RepositoryModelRegistrar extends AbstractModelRegistrar {
 						@Override
 						public Object execute() throws Throwable {
 							try {
-								if (existingModelDiffers(modelResource)) {
+								if (contentComparator.nodeDiffersFromResource(modelResource.getResource(), customModelsRepositoryLocation)) {
 									repoAdminService.deployModel(
 											modelResource.getResource().getInputStream(),
 											modelResource.getResource().getFilename()
@@ -91,33 +83,5 @@ public class RepositoryModelRegistrar extends AbstractModelRegistrar {
 				return null;
 			}
 		});
-	}
-
-	private boolean existingModelDiffers(M2ModelResource modelResource) throws IOException {
-		StoreRef storeRef = customModelsRepositoryLocation.getStoreRef();
-		NodeRef rootNode = nodeService.getRootNode(storeRef);
-		List<NodeRef> nodeRefs = searchService.selectNodes(rootNode,
-				String.format("%s/cm:%s[%s]",
-						customModelsRepositoryLocation.getPath(), ISO9075.encode(modelResource.getResource().getFilename()),
-						defaultSubtypeOfDictionaryModel
-				), null, namespaceService, false);
-		if (nodeRefs.isEmpty() == false) {
-			final NodeRef modelRef = nodeRefs.get(0);
-			final ContentReader reader = contentService.getReader(modelRef, ContentModel.PROP_CONTENT);
-			if (IOUtils.contentEquals(reader.getContentInputStream(), modelResource.getResource().getInputStream())) {
-				logger.debug("Existing repo model is up to date.");
-				return false;
-			}
-		}
-		return true;
-	}
-
-	@Autowired
-	public void setModelsFactroy(M2ModelListFactoryBean m2ModelListFactoryBean) {
-		try {
-			super.setModels(m2ModelListFactoryBean.getObject());
-		} catch (IOException e) {
-			logger.error("Failed to get list of Document models.", e);
-		}
 	}
 }

@@ -38,10 +38,8 @@ public class DAOModelRegistrar extends AbstractModelRegistrar {
 		for (final Iterator<QName> it = registeredModelNames.iterator(); it.hasNext();) {
 			final QName modelName = it.next();
 			try {
-				if (logger.isDebugEnabled()) {
-					logger.debug("Unregistering model '{}' via DictionaryDAO", modelName);
-				}
-				getDictionaryDao().removeModel(modelName);
+                logger.debug("Unregistering model '{}' via DictionaryDAO", modelName);
+                getDictionaryDao().removeModel(modelName);
 			} finally {
 				it.remove();
 			}

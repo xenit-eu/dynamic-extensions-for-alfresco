@@ -7,11 +7,6 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 	<bean id="applicationContextCreator" class="com.github.dynamicextensionsalfresco.blueprint.DynamicExtensionsApplicationContextCreator">
 		<description>Creates the ApplicationContext for each bundle.</description>
-		<property name="modelLocationPattern" value="osgibundle:/META-INF/alfresco/models/*.xml">
-			<description>The pattern for locating XML models in OSGi bundles. These models are registered and unregistered
-				automatically.
-			</description>
-		</property>
 	</bean>
 
 </beans>

@@ -1,9 +1,10 @@
 package com.github.dynamicextensionsalfresco.blueprint;
 
+import com.github.dynamicextensionsalfresco.ContentComparator;
 import com.github.dynamicextensionsalfresco.actions.AnnotationBasedActionRegistrar;
 import com.github.dynamicextensionsalfresco.aop.DynamicExtensionsAdvisorAutoProxyCreator;
-import com.github.dynamicextensionsalfresco.models.DAOModelRegistrar;
 import com.github.dynamicextensionsalfresco.models.M2ModelListFactoryBean;
+import com.github.dynamicextensionsalfresco.models.RepositoryModelRegistrar;
 import com.github.dynamicextensionsalfresco.osgi.webscripts.SearchPathRegistry;
 import com.github.dynamicextensionsalfresco.osgi.webscripts.SearchPathRegistryManager;
 import com.github.dynamicextensionsalfresco.policy.AnnotationBasedBehaviourRegistrar;
@@ -14,6 +15,8 @@ import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptRegist
 import com.github.dynamicextensionsalfresco.webscripts.WebScriptUriRegistry;
 import com.github.dynamicextensionsalfresco.webscripts.arguments.HandlerMethodArgumentsResolver;
 import com.github.dynamicextensionsalfresco.webscripts.arguments.StringValueConverter;
+import com.github.dynamicextensionsalfresco.workflow.WorkflowDefinitionRegistrar;
+import com.github.dynamicextensionsalfresco.workflow.activiti.WorkflowTaskRegistrar;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.descriptor.Descriptor;
 import org.alfresco.service.descriptor.DescriptorService;
@@ -85,10 +88,6 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 	private static final String HOST_APPLICATION_ALFRESCO_FILTER = "(hostApplication=alfresco)";
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
-
-	/* Configuration */
-
-	private String modelLocationPattern;
 
 	private final boolean hasXmlConfiguration;
 
@@ -170,16 +169,17 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 	 * @param beanFactory
 	 */
 	protected void registerInfrastructureBeans(final DefaultListableBeanFactory beanFactory) {
-		if (StringUtils.hasText(getModelLocationPattern())) {
-			registerModelDeploymentBeans(beanFactory);
-		}
-		registerAnnotationBasedBehaviourBeans(beanFactory);
-		registerAnnotationBasedActionBeans(beanFactory);
-		registerAnnotationBasedWebScriptBeans(beanFactory);
-		registerAopProxyBeans(beanFactory);
-	}
+        registerContentSupportBeans(beanFactory);
+        registerModelDeploymentBeans(beanFactory);
+        registerWorkflowDeployment(beanFactory);
+        registerAnnotationBasedBehaviourBeans(beanFactory);
+        registerAnnotationBasedActionBeans(beanFactory);
+        registerAnnotationBasedWebScriptBeans(beanFactory);
+        registerAopProxyBeans(beanFactory);
+        registerWorkflowBeans(beanFactory);
+    }
 
-	/**
+    /**
 	 * Registers the infrastructure beans necessary for automatic XML content model deployment.
 	 * 
 	 * @param beanFactory
@@ -189,18 +189,27 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 			beanFactory.registerBeanDefinition(
 					BeanNames.M2_MODEL_LIST_FACTORY,
 					BeanDefinitionBuilder.rootBeanDefinition(M2ModelListFactoryBean.class)
-							.addPropertyValue("locationPattern", getModelLocationPattern()).getBeanDefinition());
+                    .getBeanDefinition());
 		}
 		if (beanFactory.containsBeanDefinition(BeanNames.MODEL_REGISTRAR) == false) {
 			beanFactory.registerBeanDefinition(
-					BeanNames.MODEL_REGISTRAR,
-					BeanDefinitionBuilder.rootBeanDefinition(DAOModelRegistrar.class)
-							.addPropertyReference("models", BeanNames.M2_MODEL_LIST_FACTORY)
-							.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE)
-							.setInitMethodName("registerModels").setDestroyMethodName("unregisterModels")
-							.getBeanDefinition());
+                BeanNames.MODEL_REGISTRAR,
+                BeanDefinitionBuilder.rootBeanDefinition(RepositoryModelRegistrar.class)
+                    .setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE)
+                    .setInitMethodName("registerModels").setDestroyMethodName("unregisterModels")
+                    .getBeanDefinition());
 		}
 	}
+
+    private void registerWorkflowDeployment(DefaultListableBeanFactory beanFactory) {
+        if (beanFactory.containsBeanDefinition(BeanNames.WORKFLOW_DEFINITION_REGISTRAR) == false) {
+            beanFactory.registerBeanDefinition(
+                BeanNames.WORKFLOW_DEFINITION_REGISTRAR,
+                BeanDefinitionBuilder.rootBeanDefinition(WorkflowDefinitionRegistrar.class)
+                    .setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE)
+                    .getBeanDefinition());
+        }
+    }
 
 	/**
 	 * Registers the infrastructure beans that facilitate annotation-based Behaviours.
@@ -304,6 +313,24 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 		}
 	}
 
+    protected void registerWorkflowBeans(final DefaultListableBeanFactory beanFactory) {
+        if (!beanFactory.containsBeanDefinition(BeanNames.TYPE_BASED_WORKFLOW_REGISTRAR)) {
+            beanFactory.registerBeanDefinition(BeanNames.TYPE_BASED_WORKFLOW_REGISTRAR,
+                BeanDefinitionBuilder.rootBeanDefinition(WorkflowTaskRegistrar.class).getBeanDefinition()
+            );
+        }
+    }
+
+    private void registerContentSupportBeans(DefaultListableBeanFactory beanFactory) {
+        if (beanFactory.containsBeanDefinition(BeanNames.CONTENT_COMPARATOR) == false) {
+            beanFactory.registerBeanDefinition(
+                BeanNames.CONTENT_COMPARATOR,
+                BeanDefinitionBuilder.rootBeanDefinition(ContentComparator.class)
+                    .setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE)
+                    .getBeanDefinition());
+        }
+    }
+
     /**
      * Use the deprecated PackageAdmin to get the list of exported packages.
      */
@@ -395,15 +422,7 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 
 	/* Configuration */
 
-	public void setModelLocationPattern(final String modelLocationPattern) {
-		this.modelLocationPattern = modelLocationPattern;
-	}
-
-	protected String getModelLocationPattern() {
-		return modelLocationPattern;
-	}
-
-	protected boolean hasXmlConfiguration() {
+    protected boolean hasXmlConfiguration() {
 		return hasXmlConfiguration;
 	}
 

@@ -16,6 +16,8 @@ public class BeanNames {
 
 	static final String ANNOTATION_BASED_WEB_SCRIPT_REGISTRAR = "annotationBasedWebScriptRegistrar";
 
+	static final String TYPE_BASED_WORKFLOW_REGISTRAR = "typeBasedWorkflowRegistrar";
+
 	static final String AUTO_PROXY_CREATOR = "autoProxyCreator";
 
 	static final String BEHAVIOUR_PROXY_FACTORY = "behaviourProxyFactory";
@@ -26,11 +28,15 @@ public class BeanNames {
 
 	static final String MODEL_REGISTRAR = "modelRegistrar";
 
+	static final String WORKFLOW_DEFINITION_REGISTRAR = "workflowDefinitionRegistrar";
+
 	static final String PROXY_POLICY_COMPONENT = "proxyPolicyComponent";
 
 	static final String SEARCH_PATH_REGISTRY_MANAGER = "searchPathRegistryManager";
 
 	static final String STRING_VALUE_CONVERTER = "stringValueConverter";
+
+	static final String CONTENT_COMPARATOR = "contentComparator";
 
 	private BeanNames() {
 	}
