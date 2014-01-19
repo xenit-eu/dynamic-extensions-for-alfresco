@@ -195,6 +195,7 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 			beanFactory.registerBeanDefinition(
                 BeanNames.MODEL_REGISTRAR,
                 BeanDefinitionBuilder.rootBeanDefinition(RepositoryModelRegistrar.class)
+                    .addPropertyReference("models", BeanNames.M2_MODEL_LIST_FACTORY)
                     .setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE)
                     .setInitMethodName("registerModels").setDestroyMethodName("unregisterModels")
                     .getBeanDefinition());

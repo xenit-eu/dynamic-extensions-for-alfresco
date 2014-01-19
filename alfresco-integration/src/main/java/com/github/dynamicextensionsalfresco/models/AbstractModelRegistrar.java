@@ -9,7 +9,6 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.util.Assert;
 
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -22,7 +21,6 @@ public abstract class AbstractModelRegistrar implements ModelRegistrar, Resource
 
 	/* Configuration */
 
-	private List<M2ModelResource> models = null;
     private ResourcePatternResolver resourcePatternResolver;
     private List<M2ModelResource> modelsToRegister;
 
@@ -53,8 +51,10 @@ public abstract class AbstractModelRegistrar implements ModelRegistrar, Resource
 						!visitedModels.contains(providingModel),
 						String.format("Circular dependency detected between %s and %s", modelResource.getName(),
 								providingModel.getName()));
-				logger.debug("Discovered {} dependency on '{}', resolving {} first", new Object[] { modelResource.getName(),
-						anImport.getUri(), providingModel.getName() });
+				logger.debug(
+                    "Discovered {} dependency on '{}', resolving {} first",
+                    modelResource.getName(), anImport.getUri(), providingModel.getName()
+                );
 				visitModel(providingModel, namespaceProviders, registeredModels, visitedModels);
 			}
 		}
