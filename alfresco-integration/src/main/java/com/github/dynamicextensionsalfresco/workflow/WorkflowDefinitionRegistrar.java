@@ -38,6 +38,9 @@ import static org.alfresco.repo.security.authentication.AuthenticationUtil.runAs
 /**
  * Service that inspect the {@link WorkflowDefinitionRegistrar#workflowLocationPattern} to find workflow definitions and
  * stores them in the Data Dictionary to enable update detection.
+ * <br/>
+ * Know issue: Alfresco has policies in place to deploy workflow definitions from  the Data Dictionary / Workflow Definitions
+ * folder. However these show up as <i>(Nameless deployment)</i> in the Activiti admin console.
  *
  * @author Laurent Van der Linden
  */

@@ -6,11 +6,13 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 	<bean id="osgi.container.WorkflowTaskRegistry" class="com.github.dynamicextensionsalfresco.workflow.activiti.DefaultWorkflowTaskRegistry" />
 
     <bean class="com.github.dynamicextensionsalfresco.workflow.activiti.WorkflowPostProcessor">
+        <description>Expose the WorkflowTaskRegistry to Activiti.</description>
         <property name="workflowTaskRegistry" ref="osgi.container.WorkflowTaskRegistry"/>
         <property name="activitiBeanRegistry" ref="activitiBeanRegistry"/>
     </bean>
 
     <bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+        <description>Enable AOP for these Activiti task listeners.</description>
         <property name="beanNames">
             <list>
                 <value>activitiCompleteTaskListener</value>

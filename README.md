@@ -5,6 +5,22 @@ Rapid development of Alfresco repository extensions in Java. Deploy your code in
 
 Dynamic Extensions adds an OSGi container to the Alfresco repository, enabling live deployment of Java code, with no need to restart the server. Alfresco itself is not "OSGi-fied" in any way; the OSGi container runs on top of the core Alfresco platform.
 
+Upcoming 1.0.0 release
+----------------------
+
+Important note: due to the project ownership change, the base package structure has changed.
+Simply replacing `nl.runnable.alfresco` with `com.github.dynamicextensionsalfresco` will make any previous extension compatible with the 1.0.0 release.
+
+You can test snapshot releases by changing the plugin version and group:
+```groovy
+buildscript {
+  repositories { maven { url 'https://raw.github.com/lfridael/dynamic-extensions-for-alfresco/mvn-repo/' } }
+  dependencies {
+    classpath group: 'com.github.dynamicextensionsalfresco', name: 'gradle-plugin', version: '1.0.0-SNAPSHOT'
+  }
+}
+```
+
 Latest release: Milestone 6
 ---------------------------
 
@@ -45,18 +61,18 @@ Supported Alfresco versions
 
 Dynamic Extensions is developed and tested against:
 
+* Alfresco Enterprise 4.1
+* Alfresco Enterprise 4.2
+
+Dynamic Extensions is also known to work on:
+
+* Alfresco Enterprise 4.0
 * Alfresco Community 4.0
 * Alfresco Community 4.2
 
-Dynamic Extensions is also known to work on the Enterprise editions.
-
-* Alfresco Enterprise 4.0
-* Alfresco Enterprise 4.1 
-* Alfresco Enterprise 4.2
-
 Dynamic Extensions also works with older versions of Alfresco, but some features are not supported.
 
-* Alfresco Community 3.4. (Known issue <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/issues/56">#56</a>)
+* Alfresco Community 3.4. (Known issue <a href="https://github.com/laurentvdl/dynamic-extensions-for-alfresco/issues/56">#56</a>)
 
 Example extension code
 ----------------------
@@ -102,15 +118,19 @@ The example above may be trivial, but the point is that, behind the scenes, serv
 Creating your own Alfresco extensions
 -------------------------------------
 
-The <a href="https://github.com/lfridael/example-dynamic-extension">example Dynamic Extension</a> provides a good starting point for creating your own extensions.
+The <a href="https://github.com/laurentvdl/example-dynamic-extension">example Dynamic Extension</a> provides a good starting point for creating your own extensions.
 
 Clone the example repo and explore it. Here are some pointers to get you going:
 
-* Annotation-based Web Scripts: <a href="https://github.com/lfridael/example-dynamic-extension/blob/master/src/main/java/com/github/dynamicextensionsalfresco/examples/CategoriesWebScript.java">First example</a> and <a href="https://github.com/lfridael/example-dynamic-extension/blob/master/src/main/java/com/github/dynamicextensionsalfresco/examples/HelloWebScript.java">another example</a>.
-* <a href="https://github.com/laurentvdl/example-dynamic-extension/blob/master/src/main/java/com/github/dynamicextensionsalfresco/examples/ExampleActions.java">Annotation-based Action example</a >  and a <a href="https://github.com/lfridael/example-dynamic-extension/blob/master/src/main/java/com/github/dynamicextensionsalfresco/examples/SetDescriptionWebScript.java">Web Script</a> that invokes the action.
+* Annotation-based Web Scripts: <a href="https://github.com/laurentvdl/example-dynamic-extension/blob/master/src/main/java/com/github/dynamicextensionsalfresco/examples/CategoriesWebScript.java">First example</a> and <a href="https://github.com/laurentvdl/example-dynamic-extension/blob/master/src/main/java/com/github/dynamicextensionsalfresco/examples/HelloWebScript.java">another example</a>.
+* <a href="https://github.com/laurentvdl/example-dynamic-extension/blob/master/src/main/java/com/github/dynamicextensionsalfresco/examples/ExampleActions.java">Annotation-based Action example</a >  and a <a href="https://github.com/laurentvdl/example-dynamic-extension/blob/master/src/main/java/com/github/dynamicextensionsalfresco/examples/SetDescriptionWebScript.java">Web Script</a> that invokes the action.
 * <a href="https://github.com/laurentvdl/example-dynamic-extension/blob/master/src/main/java/com/github/dynamicextensionsalfresco/examples/ExampleBehaviour.java">Annotation-based Behaviour example</a>.
 * <a href="https://github.com/laurentvdl/example-dynamic-extension/tree/master/src/main/java/com/github/dynamicextensionsalfresco/examples">All examples</a>.
 
 See also: <a href="https://github.com/laurentvdl/dynamic-extensions-for-alfresco/wiki/Building-Alfresco-repository-extensions-for-Dynamic-Extensions-using-Gradle">Gradle plugin for building your own repository extensions</a>
 
-More documentation on creating your own extensions will follow.
+Barcelona 2013 presentation
+---------------------------
+
+One hour presentation on using and exploring Dynamic Extensions for Alfresco:
+<iframe width="640" height="390" src="//www.youtube.com/embed/Pc62PM7U3Ns" frameborder="0" allowfullscreen></iframe>

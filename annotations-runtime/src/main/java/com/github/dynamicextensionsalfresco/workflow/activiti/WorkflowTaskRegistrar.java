@@ -13,7 +13,7 @@ import org.springframework.context.ApplicationContextAware;
 import java.util.Map;
 
 /**
- * Detects workflows tasks from Spring beans implementing the {@link DelegateTask} interface.
+ * Detects workflow tasks from Spring beans implementing the {@link DelegateTask} interface.
  *
  * @author Laurent Van der Linden
  */
