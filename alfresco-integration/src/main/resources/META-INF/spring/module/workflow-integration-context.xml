@@ -9,4 +9,13 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
         <property name="workflowTaskRegistry" ref="osgi.container.WorkflowTaskRegistry"/>
         <property name="activitiBeanRegistry" ref="activitiBeanRegistry"/>
     </bean>
+
+    <bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+        <property name="beanNames">
+            <list>
+                <value>activitiCompleteTaskListener</value>
+                <value>activitiCreateTaskListener</value>
+            </list>
+        </property>
+    </bean>
 </beans>
