@@ -1,10 +1,10 @@
 package com.github.dynamicextensionsalfresco.workflow;
 
 import com.github.dynamicextensionsalfresco.ContentComparator;
+import com.google.common.collect.ImmutableMap;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;
 import org.alfresco.repo.dictionary.RepositoryLocation;
-import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.workflow.WorkflowModel;
@@ -15,8 +15,8 @@ import org.alfresco.service.cmr.repository.ContentWriter;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.search.SearchService;
-import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.namespace.NamespaceService;
+import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,13 +29,14 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.alfresco.repo.security.authentication.AuthenticationUtil.runAsSystem;
 
 /**
- * Service that inspect the {@link WorkflowDefinitionRegistrar.workflowLocationPattern} to find workflow definitions and
+ * Service that inspect the {@link WorkflowDefinitionRegistrar#workflowLocationPattern} to find workflow definitions and
  * stores them in the Data Dictionary to enable update detection.
  *
  * @author Laurent Van der Linden
@@ -67,12 +68,6 @@ public class WorkflowDefinitionRegistrar implements InitializingBean, ResourceLo
 
     @Autowired
     protected TransactionService transactionService;
-
-    @Autowired @javax.annotation.Resource(name = "policyBehaviourFilter")
-    protected BehaviourFilter behaviourFilter;
-
-    @Autowired
-    protected WorkflowService workflowService;
 
     private ResourcePatternResolver resourcePatternResolver;
 
@@ -119,25 +114,24 @@ public class WorkflowDefinitionRegistrar implements InitializingBean, ResourceLo
         final List<NodeRef> parentNodes = searchService.selectNodes(rootNode, customWorkflowDefsRepositoryLocation.getPath(), null, namespaceService, false);
         Assert.isTrue(parentNodes.size() == 1, "Custom workflow definition location leads to not 1 unique Node reference");
 
-        final FileInfo fileInfo = fileFolderService.create(parentNodes.get(0), workflowDefinition.getFilename(), WorkflowModel.TYPE_WORKFLOW_DEF);
+        final String fileName = workflowDefinition.getFilename();
+        final FileInfo fileInfo = fileFolderService.create(parentNodes.get(0), fileName, WorkflowModel.TYPE_WORKFLOW_DEF);
+        final NodeRef nodeRef = fileInfo.getNodeRef();
 
-        final ContentWriter writer = contentService.getWriter(fileInfo.getNodeRef(), ContentModel.PROP_CONTENT, true);
+        final ContentWriter writer = contentService.getWriter(nodeRef, ContentModel.PROP_CONTENT, true);
         writer.putContent(workflowDefinition.getInputStream());
         writer.setMimetype(MimetypeMap.MIMETYPE_XML);
         writer.setEncoding("UTF-8");
 
-        // disable standard deployment as this will omit a definition name
-        behaviourFilter.disableBehaviour(fileInfo.getNodeRef());
-        try {
-            nodeService.setProperty(fileInfo.getNodeRef(), WorkflowModel.PROP_WORKFLOW_DEF_ENGINE_ID, "activiti");
-            nodeService.setProperty(fileInfo.getNodeRef(), WorkflowModel.PROP_WORKFLOW_DEF_NAME, workflowDefinition.getFilename());
-            nodeService.setProperty(fileInfo.getNodeRef(), WorkflowModel.PROP_WORKFLOW_DEFINITION_NAME, workflowDefinition.getFilename());
-            nodeService.setProperty(fileInfo.getNodeRef(), WorkflowModel.PROP_WORKFLOW_DEF_DEPLOYED, true);
-        } finally {
-            behaviourFilter.enableBehaviour(fileInfo.getNodeRef());
-        }
-
-        workflowService.deployDefinition("activiti", workflowDefinition.getInputStream(), "text/xml", workflowDefinition.getFilename());
+        // rely on standard deployment policy: will deploy as nameless workflow definition
+        nodeService.setProperty(nodeRef, WorkflowModel.PROP_WORKFLOW_DEF_ENGINE_ID, "activiti");
+        nodeService.setProperty(nodeRef, WorkflowModel.PROP_WORKFLOW_DEF_NAME, fileName);
+        nodeService.setProperty(nodeRef, WorkflowModel.PROP_WORKFLOW_DEFINITION_NAME, fileName);
+        nodeService.addAspect(nodeRef, ContentModel.ASPECT_TITLED, ImmutableMap.<QName, Serializable>builder()
+            .put(ContentModel.PROP_TITLE, fileName)
+            .build()
+        );
+        nodeService.setProperty(nodeRef, WorkflowModel.PROP_WORKFLOW_DEF_DEPLOYED, true);
     }
 
     private List<Resource> findWorkflowDefinitions() throws IOException {

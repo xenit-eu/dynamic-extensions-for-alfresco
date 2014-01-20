@@ -10,6 +10,7 @@ dependencies {
     compile "javax.transaction:transaction-api:${ext.transactionApiVersion}"
     compile("org.activiti:activiti-engine:5.7") {transitive = false}
     compile 'com.google.code.findbugs:jsr305:2.0.1'
+    compile 'com.google.collections:google-collections:1.0'
 
     testCompile "junit:junit:${ext.junitVersion}"
     testCompile "org.mockito:mockito-core:${ext.mockitoVersion}"
