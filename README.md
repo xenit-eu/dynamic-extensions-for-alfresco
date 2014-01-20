@@ -132,5 +132,4 @@ See also: <a href="https://github.com/laurentvdl/dynamic-extensions-for-alfresco
 Barcelona 2013 presentation
 ---------------------------
 
-One hour presentation on using and exploring Dynamic Extensions for Alfresco:
-<iframe width="640" height="390" src="//www.youtube.com/embed/Pc62PM7U3Ns" frameborder="0" allowfullscreen></iframe>
+<a href="http://summit.alfresco.com/barcelona/sessions/life-too-short-endless-restarts">One hour presentation on using and exploring Dynamic Extensions for Alfresco</>
