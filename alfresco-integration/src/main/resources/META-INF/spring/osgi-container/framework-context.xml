@@ -74,7 +74,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 		<property name="fileFolderService" ref="fileFolderService" />
 		<property name="baseFolderDescription">
 			<value>
-				Dynamic Extensions for Alfresco. https://github.com/lfridael/dynamic-extensions-for-alfresco
+				Dynamic Extensions for Alfresco. https://github.com/laurentvdl/dynamic-extensions-for-alfresco
 			</value>
 		</property>
 		<property name="bundleFolderDescription">
