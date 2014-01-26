@@ -1,14 +1,14 @@
 package com.github.dynamicextensionsalfresco.actions;
 
-import java.lang.reflect.Method;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.alfresco.repo.action.ActionDefinitionImpl;
 import org.alfresco.service.namespace.QName;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
+
+import java.lang.reflect.Method;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Contains utility methods for dealing with API compatibility issues across different versions of the Alfresco API.
@@ -22,7 +22,7 @@ class ApiCompatibilityUtil {
 	 * Provides a workaround breaking API change in {@link ActionDefinitionImpl#setApplicableTypes(List)}. The
 	 * {@link List} argument was changed into a {@link Set} in version 4.2 of the Alfresco Community API.
 	 * <p>
-	 * See: <a href="https://github.com/lfridael/dynamic-extensions-for-alfresco/issues/10">Issue on Github</a>.
+	 * See: <a href="https://github.com/laurentvdl/dynamic-extensions-for-alfresco/issues/10">Issue on Github</a>.
 	 * 
 	 * @param actionDefinition
 	 * @throws IllegalStateException

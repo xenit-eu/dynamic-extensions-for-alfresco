@@ -155,7 +155,7 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 			mavenCentral()
 			maven { url "https://artifacts.alfresco.com/nexus/content/groups/public" }
 			maven { url "http://repo.springsource.org/release" }
-			maven { url "https://raw.github.com/lfridael/dynamic-extensions-for-alfresco/mvn-repo/" }
+			maven { url "https://raw.github.com/laurentvdl/dynamic-extensions-for-alfresco/mvn-repo/" }
 		}
 	}
 }

@@ -14,7 +14,7 @@ Simply replacing `nl.runnable.alfresco` with `com.github.dynamicextensionsalfres
 You can test snapshot releases by changing the plugin version and group:
 ```groovy
 buildscript {
-  repositories { maven { url 'https://raw.github.com/lfridael/dynamic-extensions-for-alfresco/mvn-repo/' } }
+  repositories { maven { url 'https://raw.github.com/laurentvdl/dynamic-extensions-for-alfresco/mvn-repo/' } }
   dependencies {
     classpath group: 'com.github.dynamicextensionsalfresco', name: 'gradle-plugin', version: '1.0.0-SNAPSHOT'
   }
