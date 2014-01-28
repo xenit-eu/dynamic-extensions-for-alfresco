@@ -33,12 +33,12 @@ subprojects {
     }
 
     ext {
-        alfrescoVersion = '4.0.e'
+        alfrescoVersion = '4.2.e'
         springVersion = '3.0.5.RELEASE'
         geminiVersion = '1.0.2.RELEASE'
         slf4jVersion = '1.7.5'
         osgiVersion = '4.3.1'
-        springSurfVersion = '1.2.0-M4'
+        springSurfVersion = '1.2.0-SNAPSHOT'
         junitVersion = '4.8.2'
         transactionApiVersion = '1.1'
         felixVersion = '4.2.1'
@@ -53,6 +53,9 @@ subprojects {
         mavenCentral()
         maven {
             url "https://artifacts.alfresco.com/nexus/content/groups/public/"
+        }
+        maven {
+            url "https://artifacts.alfresco.com/nexus/content/groups/public-snapshots/"
         }
     }
 
