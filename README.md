@@ -51,7 +51,7 @@ Installing Dynamic Extensions
 
 Dynamic Extensions is distributed as an Alfresco Module Package (AMP).
 
-* Download the <a href="https://raw.github.com/laurentvdl/dynamic-extensions-for-alfresco/mvn-repo/com/github/dynamicextensionsalfresco/dynamicextensions/alfresco-module/1.0.0.M6/com.github.dynamicextensionsalfresco-1.0.0.M6.amp">Dynamic Extensions Milestone 6 AMP</a>.
+* Download the <a href="https://raw.github.com/laurentvdl/dynamic-extensions-for-alfresco/mvn-repo/nl/runnable/alfresco/dynamicextensions/alfresco-module/1.0.0.M6/nl.runnable.alfresco.dynamicextensions-1.0.0.M6.amp">Dynamic Extensions Milestone 6 AMP</a>.
 * Use the <a href="http://docs.alfresco.com/4.0/index.jsp?topic=%2Fcom.alfresco.enterprise.doc%2Ftasks%2Famp-install.html">Module Management Tool</a> to install the AMP in the Alfresco repository of your choosing.
 * After restarting Alfresco, open the Control Panel: <a href="http://localhost:8080/alfresco/service/dynamic-extensions/">http://localhost:8080/alfresco/service/dynamic-extensions/</a>.
 * Accessing the Control Panel requires an admin account.
