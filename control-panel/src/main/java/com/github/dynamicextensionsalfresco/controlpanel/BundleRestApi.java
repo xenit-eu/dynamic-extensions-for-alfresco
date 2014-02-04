@@ -47,8 +47,13 @@ public class BundleRestApi {
 			throw new WebScriptException(HttpServletResponse.SC_BAD_REQUEST,
 					String.format("Can only accept content of type '%s'.", JAR_MIME_TYPE));
 		}
-		final Bundle bundle = bundleHelper.installBundleInRepository(content);
-		response.sendBundleInstalledMessage(bundle);
+        final Bundle bundle;
+        try {
+            bundle = bundleHelper.installBundleInRepository(content);
+            response.sendBundleInstalledMessage(bundle);
+        } catch (BundleException e) {
+            response.sendMessage(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+        }
 	}
 
 	/* Utility operations */
