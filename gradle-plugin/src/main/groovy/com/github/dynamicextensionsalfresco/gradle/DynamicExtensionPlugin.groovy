@@ -34,6 +34,8 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 		project.convention.plugins[ProjectConvention.class.name] = new ProjectConvention(project)
 		project.ext.username = project.has('username') ? project.username : null
 		project.ext.password = project.has('password') ? project.password : null
+		project.ext.host = project.has('host') ? project.host : "localhost"
+		project.ext.port = project.has('port') ? project.port : "8080"
 	}
 
 	void configureInstallBundleTask(Project project) {
