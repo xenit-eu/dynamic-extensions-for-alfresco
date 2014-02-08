@@ -348,17 +348,13 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
         final String exportPackageHeader = getBundle().getHeaders().get(Constants.EXPORT_PACKAGE);
         if (StringUtils.hasText(exportPackageHeader)) {
             final ServiceReference<PackageAdmin> serviceReference = getBundleContext().getServiceReference(PackageAdmin.class);
-            try {
-                final PackageAdmin packageAdmin = getBundleContext().getService(serviceReference);
-                final ExportedPackage[] exportedPackages = packageAdmin.getExportedPackages(getBundle());
-                String[] packageNames = new String[exportedPackages.length];
-                for (int i = 0; i < exportedPackages.length; i++) {
-                    packageNames[i] = exportedPackages[i].getName();
-                }
-                return packageNames;
-            } finally {
-                getBundleContext().ungetService(serviceReference);
+            final PackageAdmin packageAdmin = getBundleContext().getService(serviceReference);
+            final ExportedPackage[] exportedPackages = packageAdmin.getExportedPackages(getBundle());
+            String[] packageNames = new String[exportedPackages.length];
+            for (int i = 0; i < exportedPackages.length; i++) {
+                packageNames[i] = exportedPackages[i].getName();
             }
+            return packageNames;
         }
         return null;
     }
