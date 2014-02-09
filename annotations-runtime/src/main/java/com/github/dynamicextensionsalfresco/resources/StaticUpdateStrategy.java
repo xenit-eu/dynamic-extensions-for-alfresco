@@ -6,9 +6,15 @@ import org.springframework.core.io.Resource;
 /**
  * @author Laurent Van der Linden
  */
-public class NoUpdateStrategy implements UpdateStrategy {
+public class StaticUpdateStrategy implements UpdateStrategy {
+    private boolean strategy;
+
+    public StaticUpdateStrategy(boolean strategy) {
+        this.strategy = strategy;
+    }
+
     @Override
     public boolean updateNode(Resource resource, NodeRef nodeRef) {
-        return false;
+        return strategy;
     }
 }
