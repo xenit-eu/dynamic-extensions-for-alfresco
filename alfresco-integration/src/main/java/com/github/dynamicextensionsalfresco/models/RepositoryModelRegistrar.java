@@ -1,6 +1,6 @@
 package com.github.dynamicextensionsalfresco.models;
 
-import com.github.dynamicextensionsalfresco.ContentComparator;
+import com.github.dynamicextensionsalfresco.resources.ResourceHelper;
 import org.alfresco.repo.dictionary.RepositoryLocation;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
@@ -47,7 +47,7 @@ public class RepositoryModelRegistrar extends AbstractModelRegistrar {
 	protected TransactionService transactionService;
 
     @Autowired
-    protected ContentComparator contentComparator;
+    protected ResourceHelper resourceHelper;
 	/* Main operations */
 
 	public void unregisterModels() {
@@ -64,7 +64,7 @@ public class RepositoryModelRegistrar extends AbstractModelRegistrar {
 						@Override
 						public Object execute() throws Throwable {
 							try {
-								if (contentComparator.nodeDiffersFromResource(modelResource.getResource(), customModelsRepositoryLocation)) {
+								if (resourceHelper.nodeDiffersFromResource(modelResource.getResource(), customModelsRepositoryLocation)) {
 									repoAdminService.deployModel(
 											modelResource.getResource().getInputStream(),
 											modelResource.getResource().getFilename()

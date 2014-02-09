@@ -22,4 +22,5 @@ dependencies {
         exclude group: "javax.transaction"
     }
     testRuntime 'cglib:cglib-nodep:2.2'
+    testRuntime 'xerces:xercesImpl:2.8.0'
 }

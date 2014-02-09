@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+  <bean id="resourceHelper" class="com.github.dynamicextensionsalfresco.resources.ResourceHelper"/>
+
+  <bean id="bootstrapService" class="com.github.dynamicextensionsalfresco.resources.DefaultBootstrapService"/>
+
+  <bean class="com.github.dynamicextensionsalfresco.spring.MockFactoryBean">
+      <property name="class" value="org.alfresco.service.cmr.repository.NodeService"/>
+  </bean>
+
+  <bean class="com.github.dynamicextensionsalfresco.spring.MockFactoryBean">
+      <property name="class" value="org.alfresco.service.cmr.repository.ContentService"/>
+  </bean>
+
+  <bean class="com.github.dynamicextensionsalfresco.spring.MockFactoryBean">
+      <property name="class" value="org.alfresco.service.cmr.search.SearchService"/>
+  </bean>
+
+  <bean class="com.github.dynamicextensionsalfresco.spring.MockFactoryBean">
+      <property name="class" value="org.alfresco.service.namespace.NamespaceService"/>
+  </bean>
+
+  <bean class="com.github.dynamicextensionsalfresco.spring.MockFactoryBean">
+      <property name="class" value="org.alfresco.service.cmr.model.FileFolderService"/>
+  </bean>
+
+  <bean class="com.github.dynamicextensionsalfresco.spring.MockFactoryBean">
+      <property name="class" value="org.alfresco.service.cmr.repository.MimetypeService"/>
+  </bean>
+</beans>

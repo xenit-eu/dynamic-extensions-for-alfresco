@@ -1,6 +1,5 @@
 package com.github.dynamicextensionsalfresco.blueprint;
 
-import com.github.dynamicextensionsalfresco.ContentComparator;
 import com.github.dynamicextensionsalfresco.actions.AnnotationBasedActionRegistrar;
 import com.github.dynamicextensionsalfresco.aop.DynamicExtensionsAdvisorAutoProxyCreator;
 import com.github.dynamicextensionsalfresco.models.M2ModelListFactoryBean;
@@ -10,6 +9,8 @@ import com.github.dynamicextensionsalfresco.osgi.webscripts.SearchPathRegistryMa
 import com.github.dynamicextensionsalfresco.policy.AnnotationBasedBehaviourRegistrar;
 import com.github.dynamicextensionsalfresco.policy.DefaultBehaviourProxyFactory;
 import com.github.dynamicextensionsalfresco.policy.ProxyPolicyComponentFactoryBean;
+import com.github.dynamicextensionsalfresco.resources.DefaultBootstrapService;
+import com.github.dynamicextensionsalfresco.resources.ResourceHelper;
 import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptBuilder;
 import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptRegistrar;
 import com.github.dynamicextensionsalfresco.webscripts.WebScriptUriRegistry;
@@ -324,10 +325,17 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
     }
 
     private void registerContentSupportBeans(DefaultListableBeanFactory beanFactory) {
-        if (beanFactory.containsBeanDefinition(BeanNames.CONTENT_COMPARATOR) == false) {
+        if (beanFactory.containsBeanDefinition(BeanNames.RESOURCE_HELPER) == false) {
             beanFactory.registerBeanDefinition(
-                BeanNames.CONTENT_COMPARATOR,
-                BeanDefinitionBuilder.rootBeanDefinition(ContentComparator.class)
+                BeanNames.RESOURCE_HELPER,
+                BeanDefinitionBuilder.rootBeanDefinition(ResourceHelper.class)
+                    .setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE)
+                    .getBeanDefinition());
+        }
+        if (beanFactory.containsBeanDefinition(BeanNames.BOOTSTRAP_SERVICE) == false) {
+            beanFactory.registerBeanDefinition(
+                BeanNames.BOOTSTRAP_SERVICE,
+                BeanDefinitionBuilder.rootBeanDefinition(DefaultBootstrapService.class)
                     .setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE)
                     .getBeanDefinition());
         }

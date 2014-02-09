@@ -36,7 +36,9 @@ public class BeanNames {
 
 	static final String STRING_VALUE_CONVERTER = "stringValueConverter";
 
-    static final String CONTENT_COMPARATOR = "contentComparator";
+    static final String RESOURCE_HELPER = "resourceHelper";
+
+    static final String BOOTSTRAP_SERVICE = "bootstrapService";
 
     static final String OSGI_SERVICE_REGISTRAR = "osgiServiceRegistrar";
 
