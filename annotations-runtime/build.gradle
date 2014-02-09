@@ -1,5 +1,6 @@
 dependencies {
     compile project(':annotations')
+    compile "org.apache.felix:org.apache.felix.framework:${ext.felixVersion}"
     compile "org.slf4j:slf4j-api:${ext.slf4jVersion}"
     compile "org.springframework.extensions.surf:spring-webscripts:${ext.springSurfVersion}"
     compile "org.freemarker:freemarker:2.3.16"

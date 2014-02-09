@@ -1,18 +1,20 @@
 package com.github.dynamicextensionsalfresco.webscripts.arguments;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
+import org.osgi.framework.BundleContext;
+import org.osgi.util.tracker.ServiceTracker;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.util.Assert;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Strategy for resolving handler method arguments.
@@ -26,6 +28,8 @@ public class HandlerMethodArgumentsResolver {
 
 	private StringValueConverter stringValueConverter;
 
+    private BundleContext bundleContext;
+
 	/* Configuration */
 
 	private List<ArgumentResolver<Object, Annotation>> argumentResolvers;
@@ -33,6 +37,7 @@ public class HandlerMethodArgumentsResolver {
 	private final Map<Integer, ArgumentResolver<Object, Annotation>> argumentResolversByHashCode = new ConcurrentHashMap<Integer, ArgumentResolver<Object, Annotation>>();
 
 	private final ParameterNameDiscoverer parameterNameDiscoverer = new LocalVariableTableParameterNameDiscoverer();
+    private ServiceTracker resolverTracker;
 
 	/* Main Operations */
 
@@ -53,9 +58,14 @@ public class HandlerMethodArgumentsResolver {
 		argumentResolvers.add((ArgumentResolver) new WebScriptSessionArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new HttpServletRequestArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new HttpServletResponseArgumentResolver());
-	}
 
-	/**
+        if (bundleContext != null) {
+            resolverTracker = new ServiceTracker(bundleContext, ArgumentResolver.class, null);
+            resolverTracker.open(true);
+        }
+    }
+
+    /**
 	 * Resolves the arguments of the given handler method.
 	 * 
 	 * @param method
@@ -123,7 +133,23 @@ public class HandlerMethodArgumentsResolver {
 				return argumentResolver;
 			}
 		}
-		return null;
+
+        if (resolverTracker != null) {
+            // check for Osgi additions
+            final Object[] services = resolverTracker.getServices();
+            if (services != null) {
+                for (Object service : services) {
+                    @SuppressWarnings("unchecked")
+                    final ArgumentResolver<Object,Annotation> argumentResolver = (ArgumentResolver<Object,Annotation>)service;
+                    if (argumentResolver.supports(parameterType, annotationType)) {
+                        // cannot cache these due to dynamic nature
+                        return argumentResolver;
+                    }
+                }
+            }
+        }
+
+        return null;
 	}
 
 	/**
@@ -151,4 +177,7 @@ public class HandlerMethodArgumentsResolver {
 		return stringValueConverter;
 	}
 
+    public void setBundleContext(BundleContext bundleContext) {
+        this.bundleContext = bundleContext;
+    }
 }

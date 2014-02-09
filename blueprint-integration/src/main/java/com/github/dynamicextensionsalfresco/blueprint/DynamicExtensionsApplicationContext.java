@@ -275,6 +275,7 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 			beanFactory.registerBeanDefinition(BeanNames.HANDLER_METHOD_ARGUMENTS_RESOLVER,
 					BeanDefinitionBuilder.rootBeanDefinition(HandlerMethodArgumentsResolver.class)
 							.addPropertyReference("stringValueConverter", BeanNames.STRING_VALUE_CONVERTER)
+							.addPropertyValue("bundleContext", getBundleContext())
 							.setInitMethodName("initializeArgumentResolvers").getBeanDefinition());
 		}
 		if (beanFactory.containsBeanDefinition(BeanNames.ANNOTATION_BASED_WEB_SCRIPT_BUILDER) == false) {
