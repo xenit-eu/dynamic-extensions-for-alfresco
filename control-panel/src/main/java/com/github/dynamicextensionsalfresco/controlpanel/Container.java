@@ -4,6 +4,8 @@ import com.github.dynamicextensionsalfresco.controlpanel.template.TemplateBundle
 import com.github.dynamicextensionsalfresco.controlpanel.template.Variables;
 import com.github.dynamicextensionsalfresco.osgi.RepositoryStoreService;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.*;
+import com.github.dynamicextensionsalfresco.webscripts.resolutions.RedirectResolution;
+import com.github.dynamicextensionsalfresco.webscripts.resolutions.Resolution;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
@@ -65,7 +67,7 @@ public class Container extends AbstractControlPanelHandler {
 	}
 
 	@Uri(method = HttpMethod.POST, value = "/system-package-cache/delete")
-	public void deleteSystemPackageCache(@Attribute final ResponseHelper responseHelper) {
+	public Resolution deleteSystemPackageCache(@Attribute final ResponseHelper responseHelper) {
 		final FileInfo systemPackageCache = repositoryStoreService.getSystemPackageCache();
 		if (systemPackageCache != null) {
 			nodeService.addAspect(systemPackageCache.getNodeRef(), ContentModel.ASPECT_TEMPORARY,
@@ -75,7 +77,7 @@ public class Container extends AbstractControlPanelHandler {
 		} else {
 			responseHelper.flashErrorMessage("System Package cache was not found, It may have been deleted already.");
 		}
-		responseHelper.redirectToContainer();
+		return new RedirectResolution(Urls.CONTAINER);
 	}
 
 	/* Utility operations */

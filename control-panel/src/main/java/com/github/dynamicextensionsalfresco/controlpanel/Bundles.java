@@ -3,6 +3,10 @@ package com.github.dynamicextensionsalfresco.controlpanel;
 import com.github.dynamicextensionsalfresco.controlpanel.template.TemplateBundle;
 import com.github.dynamicextensionsalfresco.controlpanel.template.Variables;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.*;
+import com.github.dynamicextensionsalfresco.webscripts.resolutions.ErrorResolution;
+import com.github.dynamicextensionsalfresco.webscripts.resolutions.RedirectResolution;
+import com.github.dynamicextensionsalfresco.webscripts.resolutions.Resolution;
+import com.github.dynamicextensionsalfresco.webscripts.resolutions.TemplateResolution;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
@@ -19,7 +23,6 @@ import java.util.*;
 @Authentication(AuthenticationType.ADMIN)
 @Cache(neverCache = true)
 public class Bundles extends AbstractControlPanelHandler {
-
 	/* Dependencies */
 
 	@Autowired
@@ -36,7 +39,7 @@ public class Bundles extends AbstractControlPanelHandler {
 	}
 
 	@Uri(method = HttpMethod.GET, value = "/{id}")
-	public Map<String, Object> show(final @Attribute Bundle bundle, @Attribute final ResponseHelper responseHelper,
+	public Resolution show(final @Attribute Bundle bundle, @Attribute final ResponseHelper responseHelper,
 			final Map<String, Object> model) throws IOException {
 		if (bundle != null) {
 			if (bundle.getBundleId() == 0) {
@@ -44,14 +47,13 @@ public class Bundles extends AbstractControlPanelHandler {
 			}
 			model.put(Variables.BUNDLE, new TemplateBundle(bundle));
 		} else {
-			responseHelper.status(HttpServletResponse.SC_NOT_FOUND);
+			return new ErrorResolution(HttpServletResponse.SC_NOT_FOUND);
 		}
-		return model;
+		return new TemplateResolution(model);
 	}
 
 	@Uri(method = HttpMethod.POST, value = "/install", multipartProcessing = true)
-	public void install(@FileField final FormField file, @Attribute final ResponseHelper responseHelper) {
-		responseHelper.redirectToBundles();
+	public Resolution install(@FileField final FormField file, @Attribute final ResponseHelper responseHelper) {
 		responseHelper.checkBundleInstallConfiguration();
 		if (file != null) {
 			if (file.getFilename().endsWith(".jar")) {
@@ -67,11 +69,12 @@ public class Bundles extends AbstractControlPanelHandler {
 		} else {
 			responseHelper.flashErrorMessage("No file uploaded.");
 		}
+        return new RedirectResolution(Urls.BUNDLES);
 	}
 
 	@Uri(method = HttpMethod.POST, value = "/delete")
-	public void delete(final @Attribute Bundle bundle, @Attribute final String id,
-			@Attribute final ResponseHelper responseHelper) {
+	public Resolution delete(final @Attribute Bundle bundle, @Attribute final String id,
+                             @Attribute final ResponseHelper responseHelper) {
 		responseHelper.checkBundleInstallConfiguration();
 		if (bundle != null) {
 			try {
@@ -85,11 +88,11 @@ public class Bundles extends AbstractControlPanelHandler {
 		} else {
 			responseHelper.flashErrorMessage(String.format("Cannot delete bundle. Bundle with ID %d not found.", id));
 		}
-		responseHelper.redirectToBundles();
+		return new RedirectResolution(Urls.BUNDLES);
 	}
 
 	@Uri(method = HttpMethod.POST, value = "/start")
-	public void start(final @Attribute Bundle bundle, @Attribute final String id,
+	public Resolution start(final @Attribute Bundle bundle, @Attribute final String id,
 			@Attribute final ResponseHelper responseHelper) {
 		responseHelper.checkBundleInstallConfiguration();
 		if (bundle != null) {
@@ -98,14 +101,14 @@ public class Bundles extends AbstractControlPanelHandler {
 				final String message = String.format("Started bundle %s %s",
 						bundle.getHeaders().get(Constants.BUNDLE_NAME), bundle.getVersion());
 				responseHelper.flashSuccessMessage(message);
-				responseHelper.redirectToBundles();
+				return new RedirectResolution(Urls.BUNDLES);
 			} catch (final BundleException e) {
 				responseHelper.flashErrorMessage(String.format("Error starting Bundle: %s", e.getMessage()));
-				responseHelper.redirectToBundle(bundle.getBundleId());
-			}
+                return new RedirectToBundle(bundle);
+            }
 		} else {
 			responseHelper.flashErrorMessage(String.format("Cannot start bundle. Bundle with ID %d not found.", id));
-			responseHelper.redirectToBundles();
+			return new RedirectToBundle(bundle);
 		}
 	}
 
@@ -141,4 +144,9 @@ public class Bundles extends AbstractControlPanelHandler {
 		}
 	}
 
+    private static class RedirectToBundle extends RedirectResolution {
+        private RedirectToBundle(Bundle bundle) {
+            super(String.format("/dynamic-extensions/bundles/%d", bundle.getBundleId()));
+        }
+    }
 }

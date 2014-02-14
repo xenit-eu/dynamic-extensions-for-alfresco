@@ -57,10 +57,7 @@ public class HandlerMethods {
 		return (AnnotationUtils.findAnnotation(uriMethod, ResponseTemplate.class) != null);
 	}
 
-	public String getResponseTemplateName(final Object returnValue) {
-		if (returnValue instanceof String) {
-			return (String) returnValue;
-		}
+	public String getResponseTemplateName() {
 		final ResponseTemplate responseTemplate = AnnotationUtils.findAnnotation(uriMethod, ResponseTemplate.class);
 		return (responseTemplate != null ? responseTemplate.value() : null);
 	}

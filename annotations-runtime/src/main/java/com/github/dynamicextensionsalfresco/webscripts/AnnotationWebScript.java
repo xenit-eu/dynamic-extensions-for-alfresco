@@ -2,26 +2,22 @@ package com.github.dynamicextensionsalfresco.webscripts;
 
 import com.github.dynamicextensionsalfresco.webscripts.annotations.Attribute;
 import com.github.dynamicextensionsalfresco.webscripts.arguments.HandlerMethodArgumentsResolver;
-import org.springframework.aop.support.AopUtils;
+import com.github.dynamicextensionsalfresco.webscripts.resolutions.DefaultResolutionParameters;
+import com.github.dynamicextensionsalfresco.webscripts.resolutions.Resolution;
+import com.github.dynamicextensionsalfresco.webscripts.resolutions.TemplateResolution;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.extensions.webscripts.*;
-import org.springframework.extensions.webscripts.Description.RequiredCache;
 import org.springframework.util.Assert;
-import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 public class AnnotationWebScript implements WebScript {
-
-	private static final String URL_VARIABLE = "url";
-
-	private static final String WEBSCRIPT_VARIABLE = "webscript";
-
 	/* Dependencies */
 
 	private HandlerMethodArgumentsResolver argumentsResolver;
@@ -63,15 +59,14 @@ public class AnnotationWebScript implements WebScript {
 	@Override
 	public final void execute(final WebScriptRequest request, final WebScriptResponse response) throws IOException {
 		final AnnotationWebScriptRequest annotationRequest = new AnnotationWebScriptRequest(request);
-		final WebScriptResponseWrapper wrappedResponse = new WebScriptResponseWrapper(response);
-		final Map<String, Object> model = new HashMap<String, Object>();
+		final AnnotationWebscriptResponse wrappedResponse = new AnnotationWebscriptResponse(response);
 		try {
 			invokeAttributeHandlerMethods(annotationRequest, wrappedResponse);
 			invokeBeforeHandlerMethods(annotationRequest, wrappedResponse);
 			final Object returnValue = invokeUriHandlerMethod(annotationRequest, wrappedResponse);
-			handleUriMethodReturnValue(annotationRequest, wrappedResponse, returnValue);
+			handleUriMethodReturnValue(handlerMethods, annotationRequest, wrappedResponse, returnValue);
 		} catch (final Throwable e) {
-			invokeExceptionHandlerMethods(e, annotationRequest, wrappedResponse, model);
+			invokeExceptionHandlerMethods(e, annotationRequest, wrappedResponse);
 		}
 	}
 
@@ -141,7 +136,7 @@ public class AnnotationWebScript implements WebScript {
 	}
 
 	protected Object invokeUriHandlerMethod(final AnnotationWebScriptRequest request,
-			final WebScriptResponseWrapper response) throws IOException {
+			final AnnotationWebscriptResponse response) throws IOException {
 		final Method uriMethod = handlerMethods.getUriMethod();
 		final Object[] arguments = argumentsResolver.resolveHandlerMethodArguments(uriMethod, handler, request,
 				response);
@@ -150,19 +145,37 @@ public class AnnotationWebScript implements WebScript {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void handleUriMethodReturnValue(final AnnotationWebScriptRequest request,
-			final WebScriptResponseWrapper response, final Object returnValue) throws IOException {
-		if (returnValue instanceof Map || handlerMethods.useResponseTemplate() || returnValue instanceof String) {
-			final Map<String, Object> model = request.getModel();
-			if (returnValue instanceof Map && returnValue != model) {
-				model.putAll((Map<String, Object>) returnValue);
-			}
-			processHandlerMethodTemplate(request, model, response, response.getStatus(), returnValue);
-		}
-	}
+	protected void handleUriMethodReturnValue(HandlerMethods handlerMethods, final AnnotationWebScriptRequest request,
+                                              final AnnotationWebscriptResponse response, final Object returnValue) throws Exception {
+        Resolution resolution = null;
+        if (returnValue instanceof Map) {
+            resolution = new TemplateResolution((Map<String, Object>) returnValue);
+        } else if (returnValue instanceof String) {
+            resolution = new TemplateResolution((String)returnValue);
+        } else if (returnValue instanceof Resolution) {
+            resolution = (Resolution) returnValue;
+        } else if (this.handlerMethods.useResponseTemplate()) {
+            resolution = new TemplateResolution(handlerMethods.getResponseTemplateName());
+        }
+        if (resolution != null) {
+            if (resolution instanceof TemplateResolution) {
+                final TemplateResolution templateResolution = (TemplateResolution)resolution;
+                final Map<String, Object> model = request.getModel();
+
+                if (templateResolution.getModel() != null && templateResolution.getModel() != model) {
+                    model.putAll(templateResolution.getModel());
+                }
+                templateResolution.setModel(model);
+            }
+
+            resolution.resolve(request, response,
+                new DefaultResolutionParameters(handlerMethods.getUriMethod(), description, handler)
+            );
+        }
+    }
 
 	protected void invokeExceptionHandlerMethods(final Throwable exception, final AnnotationWebScriptRequest request,
-			final WebScriptResponse response, final Map<String, Object> model) throws IOException {
+			final WebScriptResponse response) throws IOException {
 		final List<Method> exceptionHandlerMethods = handlerMethods.findExceptionHandlers(exception);
 		if (exceptionHandlerMethods.isEmpty()) {
 			translateException(exception);
@@ -192,95 +205,6 @@ public class AnnotationWebScript implements WebScript {
 			throw (RuntimeException) e;
 		} else {
 			throw new RuntimeException(e);
-		}
-	}
-
-	protected void processHandlerMethodTemplate(final WebScriptRequest request, final Map<String, Object> model,
-			final WebScriptResponse response, Integer status, final Object returnValue) throws IOException {
-		if (StringUtils.hasText(request.getFormat()) == false) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			response.getWriter().write("No format specified.");
-			return;
-		}
-		populateTemplateModel(model, request);
-		status = status != null ? status : 200;
-		processTemplate(request, model, status, response, returnValue);
-	}
-
-	/**
-	 * Populates the model with utility objects for use in rendering templates.
-	 * 
-	 * @param model
-	 * @param request
-	 */
-	protected void populateTemplateModel(final Map<String, Object> model, final WebScriptRequest request) {
-		model.put(WEBSCRIPT_VARIABLE, description);
-		model.put(URL_VARIABLE, new UrlModel(request));
-	}
-
-	protected void processTemplate(final WebScriptRequest request, final Map<String, Object> model, final int status,
-			final WebScriptResponse response, final Object returnValue) throws IOException {
-		final TemplateProcessorRegistry templateProcessorRegistry = request.getRuntime().getContainer()
-				.getTemplateProcessorRegistry();
-		final TemplateProcessor templateProcessor = templateProcessorRegistry.getTemplateProcessorByExtension("ftl");
-		final String format = request.getFormat();
-		String templateName = handlerMethods.getResponseTemplateName(returnValue);
-		if (StringUtils.hasText(templateName) == false) {
-			templateName = generateTemplateName(templateProcessor, format, status);
-		}
-		if (templateProcessor.hasTemplate(templateName)) {
-			response.setContentType(Format.valueOf(format.toUpperCase()).mimetype());
-			response.setContentEncoding("utf-8");
-			addCacheControlHeaders(response);
-			templateProcessor.process(templateName, model, response.getWriter());
-		} else {
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			response.getWriter().write(String.format("Could not find template: %s", templateName));
-		}
-	}
-
-	protected String generateTemplateName(final TemplateProcessor templateProcessor, final String format,
-			final int status) {
-		final Class<?> handlerClass = AopUtils.getTargetClass(handler);
-		final String methodName = handlerMethods.getUriMethod().getName();
-		final String httpMethod = description.getMethod().toLowerCase();
-
-		final String baseTemplateName = String.format("%s.%s.%s",
-				ClassUtils.getQualifiedName(handlerClass).replace('.', '/'), methodName, httpMethod);
-		/* <java class + method>.<http method>.<format>.ftl */
-		final String defaultTemplateName = String.format("%s.%s.ftl", baseTemplateName, format.toLowerCase());
-
-		/* <java class + method>.<http method>.<format>.<status>.ftl */
-		String templateName = String.format("%s.%s.%d.ftl", baseTemplateName, format.toLowerCase(), status);
-		if (templateProcessor.hasTemplate(templateName) == false) {
-			final String packageName = handlerClass.getPackage().getName().replace('.', '/');
-			/* <java package>.<format>.<status>.ftl */
-			templateName = String.format("%s/%s.%d.ftl", packageName, format.toLowerCase(), status);
-		}
-		if (templateProcessor.hasTemplate(templateName) == false) {
-			/* <format>.<status>.ftl */
-			templateName = String.format("%s.%d.ftl", format, status);
-		}
-		if (templateProcessor.hasTemplate(templateName) == false) {
-			templateName = defaultTemplateName;
-		}
-		return templateName;
-	}
-
-	protected void addCacheControlHeaders(final WebScriptResponse response) {
-		final List<String> cacheValues = new ArrayList<String>(3);
-		final RequiredCache requiredCache = description.getRequiredCache();
-		if (requiredCache != null) {
-			if (requiredCache.getNeverCache()) {
-				cacheValues.add("no-cache");
-				cacheValues.add("no-store");
-			}
-			if (requiredCache.getMustRevalidate()) {
-				cacheValues.add("must-revalidate");
-			}
-		}
-		if (cacheValues.isEmpty() == false) {
-			response.setHeader("Cache-Control", StringUtils.collectionToDelimitedString(cacheValues, ", "));
 		}
 	}
 

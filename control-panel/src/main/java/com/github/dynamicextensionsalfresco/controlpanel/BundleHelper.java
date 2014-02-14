@@ -1,25 +1,8 @@
 package com.github.dynamicextensionsalfresco.controlpanel;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.jar.Attributes;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import com.github.dynamicextensionsalfresco.osgi.RepositoryStoreService;
-
+import com.springsource.util.osgi.manifest.BundleManifest;
+import com.springsource.util.osgi.manifest.BundleManifestFactory;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;
 import org.alfresco.service.cmr.model.FileFolderService;
@@ -28,13 +11,10 @@ import org.alfresco.service.cmr.repository.ContentWriter;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleException;
-import org.osgi.framework.Constants;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
+import org.osgi.framework.*;
 import org.osgi.framework.launch.Framework;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.webscripts.servlet.FormData.FormField;
@@ -42,8 +22,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
 
-import com.springsource.util.osgi.manifest.BundleManifest;
-import com.springsource.util.osgi.manifest.BundleManifestFactory;
+import java.io.*;
+import java.util.*;
+import java.util.jar.Attributes;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Helper for working with {@link Bundle}s.
@@ -53,6 +38,7 @@ import com.springsource.util.osgi.manifest.BundleManifestFactory;
  */
 @Component
 public class BundleHelper {
+    private final static Logger logger = LoggerFactory.getLogger(BundleHelper.class);
 
 	private static final String ALFRESCO_DYNAMIC_EXTENSION_HEADER = "Alfresco-Dynamic-Extension";
 
@@ -157,9 +143,8 @@ public class BundleHelper {
 	/**
 	 * Installs a bundle using the given {@link Content} and filename.
 	 * 
-	 * @param content
-	 * @param filename
-	 * @return
+	 * @param content uploaded content
+	 * @return installted Bundle
 	 * @throws IOException
 	 * @throws BundleException
 	 */
@@ -219,6 +204,11 @@ public class BundleHelper {
 			}
 			final String location = generateRepositoryLocation(filename);
 			Bundle bundle = bundleContext.getBundle(location);
+            boolean classpathBundle = false;
+            if (bundle == null) {
+                bundle = findBundleBySymbolicName(identifier);
+                classpathBundle = bundle != null;
+            }
 			final FileInputStream in = new FileInputStream(tempFile);
 			if (bundle != null) {
 				bundle.update(in);
@@ -228,15 +218,29 @@ public class BundleHelper {
 			if (isFragmentBundle(bundle) == false) {
 				bundle.start();
 			}
-			final BundleManifest manifest = BundleManifestFactory.createBundleManifest(bundle.getHeaders());
-			saveBundleInRepository(tempFile, filename, manifest);
-			return bundle;
+            if (!classpathBundle) {
+                final BundleManifest manifest = BundleManifestFactory.createBundleManifest(bundle.getHeaders());
+                saveBundleInRepository(tempFile, filename, manifest);
+            } else {
+                logger.warn("Temporarily updated classpath bundle: {}, update will be reverted after restart.", bundle.getSymbolicName());
+            }
+            return bundle;
 		} finally {
 			tempFile.delete();
 		}
 	}
 
-	protected File saveToTempFile(final InputStream data) throws IOException {
+    private Bundle findBundleBySymbolicName(BundleIdentifier identifier) {
+        final Bundle[] allBundles = bundleContext.getBundles();
+        for (Bundle aBundle : allBundles) {
+            if (aBundle.getSymbolicName().equals(identifier.getSymbolicName())) {
+                return aBundle;
+            }
+        }
+        return null;
+    }
+
+    protected File saveToTempFile(final InputStream data) throws IOException {
 		final File tempFile = File.createTempFile("dynamic-extensions-bundle", null);
 		tempFile.deleteOnExit();
 		FileCopyUtils.copy(data, new FileOutputStream(tempFile));

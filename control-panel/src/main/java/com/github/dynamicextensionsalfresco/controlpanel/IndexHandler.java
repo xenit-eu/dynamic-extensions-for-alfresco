@@ -3,7 +3,8 @@ package com.github.dynamicextensionsalfresco.controlpanel;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.Attribute;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.Uri;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.WebScript;
-
+import com.github.dynamicextensionsalfresco.webscripts.resolutions.RedirectResolution;
+import com.github.dynamicextensionsalfresco.webscripts.resolutions.Resolution;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,9 +17,8 @@ import org.springframework.stereotype.Component;
 @Component
 @WebScript
 public class IndexHandler extends AbstractControlPanelHandler {
-
 	@Uri("/dynamic-extensions/")
-	public void redirectToBundles(@Attribute final ResponseHelper response) {
-		response.redirectToBundles();
+	public Resolution redirectToBundles(@Attribute final ResponseHelper response) {
+		return new RedirectResolution(Urls.BUNDLES);
 	}
 }

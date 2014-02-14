@@ -1,22 +1,21 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.Writer;
-
 import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.Runtime;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.extensions.webscripts.WrappingWebScriptResponse;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Writer;
+
 /**
- * For internal use by {@link AnnotationWebScriptHandler}. This class wraps a {@link WebScriptResponse} and
- * captures the status.
+ * This class wraps a {@link WebScriptResponse} and captures the status.
  * 
  * @author Laurens Fridael
  * 
  */
-class WebScriptResponseWrapper implements WrappingWebScriptResponse {
+public class AnnotationWebscriptResponse implements WrappingWebScriptResponse {
 
 	private final WebScriptResponse response;
 
@@ -24,7 +23,7 @@ class WebScriptResponseWrapper implements WrappingWebScriptResponse {
 
 	/* Main operations */
 
-	WebScriptResponseWrapper(final WebScriptResponse response) {
+	AnnotationWebscriptResponse(final WebScriptResponse response) {
 		this.response = response;
 	}
 
@@ -33,7 +32,7 @@ class WebScriptResponseWrapper implements WrappingWebScriptResponse {
 	 * 
 	 * @return The status code or null if none has been set.
 	 */
-	Integer getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
 

@@ -1,10 +1,10 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
-import java.util.Collections;
-import java.util.Map;
-
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.util.Assert;
+
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * 
@@ -14,7 +14,7 @@ import org.springframework.util.Assert;
  * Since Dynamic Extensions strives to support older Alfresco releases, we simply use take ownership of this problem
  * using this class.
  * <p>
- * {@link AnnotationWebScriptHandler} uses this class for the 'url' helper in the template model.
+ * {@link com.github.dynamicextensionsalfresco.webscripts.resolutions.TemplateResolution} uses this class for the 'url' helper in the template model.
  * <p>
  * This class has public visibility in order to satisfy JavaBeans conventions. (Freemarker requires models to follow
  * JavaBeans conventions.)
@@ -25,7 +25,7 @@ public class UrlModel {
 
 	private final WebScriptRequest request;
 
-	UrlModel(final WebScriptRequest request) {
+	public UrlModel(final WebScriptRequest request) {
 		Assert.notNull(request);
 		this.request = request;
 	}
