@@ -1,7 +1,6 @@
 package com.github.dynamicextensionsalfresco.gradle
 
-import java.net.*
-import groovy.json.*
+import groovy.json.JsonSlurper
 
 /**
  * Client for performing REST operations on the Alfresco service layer.
@@ -29,7 +28,7 @@ class RestClient {
 			return new JsonSlurper().parseText(conn.content.text)
 		} catch (e) {
 			String message = e.message;
-			if (conn.getHeaderField('Content-Type') == 'application/json') {			
+			if (conn.getHeaderField('Content-Type').contains('application/json')) {
 				def json = new JsonSlurper().parseText(conn.errorStream.text)
 				message = json.message
 			}
