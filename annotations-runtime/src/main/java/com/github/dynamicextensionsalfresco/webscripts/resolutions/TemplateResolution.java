@@ -7,6 +7,7 @@ import org.springframework.extensions.webscripts.Format;
 import org.springframework.extensions.webscripts.TemplateProcessor;
 import org.springframework.extensions.webscripts.TemplateProcessorRegistry;
 import org.springframework.extensions.webscripts.WebScriptResponse;
+import org.springframework.extensions.webscripts.json.JSONUtils;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
@@ -20,6 +21,7 @@ import java.util.Map;
 public class TemplateResolution extends AbstractResolution {
     private static final String URL_VARIABLE = "url";
     private static final String WEBSCRIPT_VARIABLE = "webscript";
+    private static final String JSON_UTILS = "jsonUtils";
 
     private String template;
     private Map<String,Object> model;
@@ -52,6 +54,7 @@ public class TemplateResolution extends AbstractResolution {
     protected void populateTemplateModel(Map<String, Object> model, AnnotationWebScriptRequest request, ResolutionParameters params) {
         model.put(WEBSCRIPT_VARIABLE, params.getDescription());
         model.put(URL_VARIABLE, new UrlModel(request));
+        model.put(JSON_UTILS, new JSONUtils());
     }
 
     protected TemplateProcessor getTemplateProcessor(AnnotationWebScriptRequest request) {
