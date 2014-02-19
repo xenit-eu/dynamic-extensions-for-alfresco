@@ -154,8 +154,18 @@ public class AnnotationWebScript implements WebScript {
             resolution = new TemplateResolution((String)returnValue);
         } else if (returnValue instanceof Resolution) {
             resolution = (Resolution) returnValue;
-        } else if (this.handlerMethods.useResponseTemplate()) {
-            resolution = new TemplateResolution(handlerMethods.getResponseTemplateName());
+        }
+        if (this.handlerMethods.useResponseTemplate()) {
+            final String responseTemplateName = handlerMethods.getResponseTemplateName();
+            if (responseTemplateName != null) {
+                if (resolution instanceof TemplateResolution) {
+                    if (((TemplateResolution) resolution).getTemplate() == null) {
+                        ((TemplateResolution) resolution).setTemplate(responseTemplateName);
+                    }
+                } else if (resolution == null) {
+                    resolution = new TemplateResolution(responseTemplateName);
+                }
+            }
         }
         if (resolution != null) {
             if (resolution instanceof TemplateResolution) {
