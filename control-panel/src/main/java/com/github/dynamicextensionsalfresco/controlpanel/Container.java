@@ -1,6 +1,7 @@
 package com.github.dynamicextensionsalfresco.controlpanel;
 
 import com.github.dynamicextensionsalfresco.controlpanel.template.TemplateBundle;
+import com.github.dynamicextensionsalfresco.controlpanel.template.TemplateServiceReference;
 import com.github.dynamicextensionsalfresco.controlpanel.template.Variables;
 import com.github.dynamicextensionsalfresco.osgi.RepositoryStoreService;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.*;
@@ -15,11 +16,14 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.launch.Framework;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.Proxy;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -63,7 +67,45 @@ public class Container extends AbstractControlPanelHandler {
 
 	@Uri(method = HttpMethod.GET, value = "/services")
 	public Map<String, Object> services() {
-		return model(Variables.SERVICES_BY_BUNDLE, getServicesByBundle());
+		return model(Variables.SERVICES_BY_BUNDLE, getTemplateServicesByBundle());
+	}
+
+	@Uri(method = HttpMethod.GET, value = "/services/bundle/{bundleid}/{serviceIndex}")
+	public Map<String, Object> service(@UriVariable final long bundleid, @UriVariable int serviceIndex) {
+        final List<TemplateBundle> servicesByBundle = getTemplateServicesByBundle();
+        TemplateServiceReference serviceReferences = null;
+        for (TemplateBundle templateBundle : servicesByBundle) {
+            if (templateBundle.getBundleId() == bundleid) {
+                serviceReferences = templateBundle.getServices().get(serviceIndex);
+                break;
+            }
+        }
+        final Object context;
+        if (serviceReferences != null) {
+            context = bundleHelper.getBundle(bundleid).getBundleContext().getService(serviceReferences.getServiceReference());
+            if (context instanceof ApplicationContext) {
+                ApplicationContext applicationContext = (ApplicationContext)context;
+                final String[] definitionNames = applicationContext.getBeanDefinitionNames();
+                final Map<String,String> beans = new HashMap<String, String>(definitionNames.length);
+                for (String name : definitionNames) {
+                    final Object instance = applicationContext.getBean(name);
+                    final String className;
+                    if (AopUtils.isAopProxy(instance)) {
+                        // remark: getTargetClass does not resolve for non Spring Proxies
+                        className = "[Spring Proxy] " + AopUtils.getTargetClass(instance).getName();
+                    } else if (Proxy.isProxyClass(instance.getClass())) {
+                        className = "[Java Proxy] " + Proxy.getInvocationHandler(instance).getClass().getName() + " -> " + Arrays.toString(instance.getClass().getInterfaces());
+                    } else {
+                        className = instance.getClass().getCanonicalName();
+                    }
+                    beans.put(name, className);
+                }
+                return model("contextBeans", beans);
+            }
+            throw new IllegalArgumentException("Service is not a Spring ApplicationContext, but a " + context.getClass().getName());
+        } else {
+            throw new IllegalArgumentException(String.format("No service found for bundle %s at index %s.",bundleid, serviceIndex));
+        }
 	}
 
 	@Uri(method = HttpMethod.POST, value = "/system-package-cache/delete")
@@ -83,16 +125,8 @@ public class Container extends AbstractControlPanelHandler {
 	/* Utility operations */
 
 	@SuppressWarnings("rawtypes")
-	protected List<TemplateBundle> getServicesByBundle() {
-		final Map<Long, List<ServiceReference>> servicesByBundleId = new LinkedHashMap<Long, List<ServiceReference>>();
-		final List<ServiceReference> allServices = bundleHelper.getAllServices();
-		for (final ServiceReference serviceReference : allServices) {
-			final long bundleId = serviceReference.getBundle().getBundleId();
-			if (servicesByBundleId.containsKey(bundleId) == false) {
-				servicesByBundleId.put(bundleId, new ArrayList<ServiceReference>());
-			}
-			servicesByBundleId.get(bundleId).add(serviceReference);
-		}
+	protected List<TemplateBundle> getTemplateServicesByBundle() {
+        final Map<Long, List<ServiceReference>> servicesByBundleId = getServicesByBundleId();
 		final List<TemplateBundle> templateBundles = new ArrayList<TemplateBundle>(servicesByBundleId.keySet().size());
 		for (final Entry<Long, List<ServiceReference>> entry : servicesByBundleId.entrySet()) {
 			final Bundle bundle = bundleHelper.getBundle(entry.getKey());
@@ -100,6 +134,19 @@ public class Container extends AbstractControlPanelHandler {
 			templateBundles.add(new TemplateBundle(bundle, services));
 		}
 		return templateBundles;
+	}
+
+    protected Map<Long, List<ServiceReference>> getServicesByBundleId() {
+        final Map<Long, List<ServiceReference>> servicesByBundleId = new LinkedHashMap<Long, List<ServiceReference>>();
+        final List<ServiceReference> allServices = bundleHelper.getAllServices();
+        for (final ServiceReference serviceReference : allServices) {
+            final long bundleId = serviceReference.getBundle().getBundleId();
+            if (servicesByBundleId.containsKey(bundleId) == false) {
+                servicesByBundleId.put(bundleId, new ArrayList<ServiceReference>());
+            }
+            servicesByBundleId.get(bundleId).add(serviceReference);
+        }
+        return servicesByBundleId;
 	}
 
 	/* Reference data */

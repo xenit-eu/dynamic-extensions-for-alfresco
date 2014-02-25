@@ -21,11 +21,13 @@
         <#list bundle.services as service>
           <tr>
             <td class="name">
+			  <#if service.springContext><a href="container/services/bundle/${bundle.bundleId}/${service_index}"></#if>
               <ul>
                 <#list service.objectClasses as objectClass>
                   <li>${objectClass}</li>
                 </#list>
               </ul>
+    		  <#if service.springContext></a></#if>
             </td>
             <td class="bean">
               ${service.beanName!'n/a'}

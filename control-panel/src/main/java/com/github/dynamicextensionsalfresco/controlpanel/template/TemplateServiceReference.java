@@ -1,11 +1,13 @@
 package com.github.dynamicextensionsalfresco.controlpanel.template;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
+import org.springframework.context.ApplicationContext;
 import org.springframework.util.Assert;
+
+import java.util.List;
+
+import static java.util.Arrays.asList;
 
 /**
  * Adapts a {@link ServiceReference} for display in a Freemarker template.
@@ -44,15 +46,27 @@ public class TemplateServiceReference implements Comparable<TemplateServiceRefer
 		return (String) serviceReference.getProperty(SERVICE_TYPE_PROPERTY);
 	}
 
+    public boolean isSpringContext() {
+        return asList(getObjectClasses()).contains(ApplicationContext.class.getName());
+    }
+
+    public String getServiceId() {
+        return serviceReference.toString();
+    }
+
 	public List<String> getPropertyKeys() {
-		return Arrays.asList(serviceReference.getPropertyKeys());
+		return asList(serviceReference.getPropertyKeys());
 	}
 
 	public TemplateServiceReferenceProperties getProperties() {
 		return new TemplateServiceReferenceProperties(serviceReference);
 	}
 
-	@Override
+    public ServiceReference getServiceReference() {
+        return serviceReference;
+    }
+
+    @Override
 	public int compareTo(final TemplateServiceReference other) {
 		int compare = 0;
 		final String name1 = getObjectClasses()[0];
