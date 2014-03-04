@@ -1,8 +1,5 @@
 package com.github.dynamicextensionsalfresco.osgi;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
@@ -12,10 +9,14 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.alfresco.service.namespace.QName;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Provides operations for storing OSGi bundles and framework configuration in the repository.
@@ -37,6 +38,8 @@ public class RepositoryStoreService {
 
 	private FileFolderService fileFolderService;
 
+    private PermissionService permissionService;
+
 	/* Configuration */
 
 	private String baseFolderDescription;
@@ -55,6 +58,7 @@ public class RepositoryStoreService {
 		NodeRef nodeRef = getChildOf(dataDictionary, name);
 		if (nodeRef == null && createIfNotExists) {
 			nodeRef = createFolder(dataDictionary, name, "Dynamic Extensions", getBaseFolderDescription());
+            permissionService.setInheritParentPermissions(nodeRef, false);
 		}
 		return nodeRef;
 	}
@@ -259,7 +263,11 @@ public class RepositoryStoreService {
 		this.configurationFolderDescription = configurationFolderDescription;
 	}
 
-	public void setBundleRepositoryLocation(final String bundleRepositoryLocation) {
+    public void setPermissionService(PermissionService permissionService) {
+        this.permissionService = permissionService;
+    }
+
+    public void setBundleRepositoryLocation(final String bundleRepositoryLocation) {
 		Assert.hasText(bundleRepositoryLocation);
 		this.bundleRepositoryLocation = bundleRepositoryLocation;
 	}
