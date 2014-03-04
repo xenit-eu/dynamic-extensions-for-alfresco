@@ -3,6 +3,8 @@ package com.github.dynamicextensionsalfresco.webscripts.resolutions;
 import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptRequest;
 import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebscriptResponse;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * @author Laurent Van der Linden
  */
@@ -10,7 +12,7 @@ public abstract class JsonResolution implements Resolution {
     public static final String APPLICATION_JSON = "application/json";
     public static final String UTF_8 = "utf-8";
 
-    private int status;
+    private int status = HttpServletResponse.SC_OK;
 
     protected JsonResolution() {
     }
