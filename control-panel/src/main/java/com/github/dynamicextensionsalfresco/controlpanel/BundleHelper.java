@@ -137,7 +137,7 @@ public class BundleHelper {
 	 */
 	public Bundle installBundleInRepository(final FormField file) throws IOException, BundleException {
 		final File tempFile = saveToTempFile(file.getInputStream());
-		return doInstallBundleInRepository(tempFile, file.getFilename());
+		return doInstallBundleInRepository(tempFile);
 	}
 
 	/**
@@ -150,11 +150,12 @@ public class BundleHelper {
 	 */
 	public Bundle installBundleInRepository(final Content content) throws IOException, BundleException {
 		final File tempFile = saveToTempFile(content.getInputStream());
-		return doInstallBundleInRepository(tempFile, null);
+		return doInstallBundleInRepository(tempFile);
 
 	}
 
-	public void uninstallAndDeleteBundle(final Bundle bundle) throws BundleException {
+	public NodeRef uninstallAndDeleteBundle(final Bundle bundle) throws BundleException {
+        NodeRef matchingNode = null;
 		final Matcher matcher = Pattern.compile("/Company Home(/.+)+/(.+\\.jar)$").matcher(bundle.getLocation());
 		if (matcher.matches()) {
 			final String filename = matcher.group(2);
@@ -165,10 +166,13 @@ public class BundleHelper {
 					final Map<QName, Serializable> properties = Collections.<QName, Serializable> emptyMap();
 					nodeService.addAspect(file, ContentModel.ASPECT_TEMPORARY, properties);
 					nodeService.deleteNode(file);
+                    matchingNode = file;
 				}
 			}
 		}
 		bundle.uninstall();
+
+        return matchingNode;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -191,23 +195,31 @@ public class BundleHelper {
 
 	/* Utility operations */
 
-	protected Bundle doInstallBundleInRepository(final File tempFile, String filename) throws FileNotFoundException,
-			BundleException, IOException {
+	protected Bundle doInstallBundleInRepository(final File tempFile) throws
+        BundleException, IOException {
 		try {
 			final BundleIdentifier identifier = getBundleIdentifier(tempFile);
 			if (identifier == null) {
 				throw new BundleException(
 						"Could not generate Bundle filename. Make sure the content is an OSGi bundle.");
 			}
-			if (filename == null) {
-				filename = identifier.toJarFilename();
-			}
-			final String location = generateRepositoryLocation(filename);
+            final String filename = identifier.toJarFilename();
+            final String location = generateRepositoryLocation(filename);
 			Bundle bundle = bundleContext.getBundle(location);
             boolean classpathBundle = false;
             if (bundle == null) {
                 bundle = findBundleBySymbolicName(identifier);
-                classpathBundle = bundle != null;
+                if (bundle != null) {
+                    final NodeRef deletedNode = uninstallAndDeleteBundle(bundle);
+                    if (deletedNode != null) {
+                        logger.warn(
+                            "Deleted existing repository bundle {} with an identical Symbolic name: {}.",
+                            deletedNode, identifier.getSymbolicName()
+                        );
+                    } else {
+                        classpathBundle = true;
+                    }
+                }
             }
 			final FileInputStream in = new FileInputStream(tempFile);
 			if (bundle != null) {
@@ -262,16 +274,6 @@ public class BundleHelper {
 		} finally {
 			jarFile.close();
 		}
-	}
-
-	protected Bundle findInstalledBundle(final BundleIdentifier bundleIdentifier) {
-		for (final Bundle bundle : bundleContext.getBundles()) {
-			if (bundle.getSymbolicName().equals(bundleIdentifier.getSymbolicName())
-					&& bundle.getVersion().equals(bundleIdentifier.getVersion())) {
-				return bundle;
-			}
-		}
-		return null;
 	}
 
 	protected void saveBundleInRepository(final File file, final String filename, final BundleManifest manifest)

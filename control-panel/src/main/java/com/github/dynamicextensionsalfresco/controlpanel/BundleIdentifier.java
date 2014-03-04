@@ -26,7 +26,14 @@ class BundleIdentifier {
 	}
 
 	public String toJarFilename() {
-		return String.format("%s-%s.jar", getSymbolicName(), getVersion().toString());
+		return String.format("%s.jar", getSymbolicName());
 	}
 
+    @Override
+    public String toString() {
+        return "BundleIdentifier{" +
+            "symbolicName='" + symbolicName + '\'' +
+            ", version=" + version +
+            '}';
+    }
 }
