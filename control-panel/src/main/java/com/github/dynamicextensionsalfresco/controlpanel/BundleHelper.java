@@ -216,6 +216,7 @@ public class BundleHelper {
                             "Deleted existing repository bundle {} with an identical Symbolic name: {}.",
                             deletedNode, identifier.getSymbolicName()
                         );
+                        bundle = null;
                     } else {
                         classpathBundle = true;
                     }
