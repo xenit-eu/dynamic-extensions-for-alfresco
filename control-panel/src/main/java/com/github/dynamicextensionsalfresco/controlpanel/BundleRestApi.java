@@ -72,7 +72,7 @@ public class BundleRestApi {
     private static class JsonMessage extends JsonResolution {
         private final JSONObject jsonObject;
 
-        private JsonMessage(JSONObject jsonObject, int status) {
+        private JsonMessage(JSONObject jsonObject, Integer status) {
             super(status);
             this.jsonObject = jsonObject;
         }

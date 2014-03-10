@@ -7,7 +7,6 @@ import com.springsource.util.osgi.manifest.parse.BundleManifestParseException;
 import com.springsource.util.osgi.manifest.parse.DummyParserLogger;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.descriptor.DescriptorService;
-import org.osgi.framework.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -26,6 +25,7 @@ import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 
+import static com.github.dynamicextensionsalfresco.osgi.ManifestUtils.parseImplementationVersion;
 import static java.util.Arrays.asList;
 
 /**
@@ -210,33 +210,7 @@ public class JavaPackageScanner implements ServletContextAware {
 		return packageName.startsWith("org.alfresco");
 	}
 
-	private String parseImplementationVersion(final JarFile jarFile) throws IOException {
-		final Manifest manifest = jarFile.getManifest();
-		if (manifest == null) {
-			return null;
-		}
-		final List<Attributes> attributesList = new ArrayList<Attributes>(manifest.getEntries().size() + 1);
-		attributesList.add(manifest.getMainAttributes());
-		attributesList.addAll(manifest.getEntries().values());
-		for (final Attributes attributes : attributesList) {
-			String version = (String) attributes.get(Attributes.Name.IMPLEMENTATION_VERSION);
-			if (version != null) {
-				try {
-					version = version.split("\\s")[0];
-					Version.parseVersion(version);
-					return version;
-				} catch (final IllegalArgumentException e) {
-					if (logger.isDebugEnabled()) {
-						logger.debug("Found invalid version '{}' in Implementation-Version header in JAR '{}'.",
-								version, jarFile.getName());
-					}
-				}
-			}
-		}
-		return null;
-	}
-
-	/**
+    /**
 	 * Check if the cache node exists and postdates the WEB-INF/lib directory
 	 * @param systemPackageCache node storing the package list
 	 * @return true if node exists and postdates the lib directory

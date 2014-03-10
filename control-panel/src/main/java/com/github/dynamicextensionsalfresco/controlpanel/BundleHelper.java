@@ -1,5 +1,7 @@
 package com.github.dynamicextensionsalfresco.controlpanel;
 
+import aQute.bnd.osgi.Analyzer;
+import com.github.dynamicextensionsalfresco.osgi.ManifestUtils;
 import com.github.dynamicextensionsalfresco.osgi.RepositoryStoreService;
 import com.springsource.util.osgi.manifest.BundleManifest;
 import com.springsource.util.osgi.manifest.BundleManifestFactory;
@@ -46,9 +48,6 @@ public class BundleHelper {
 	 * Tests if the given bundle contains a Dynamic Extension.
 	 * <p>
 	 * This implementation looks if the bundle header <code>Alfresco-Dynamic-Extension</code> equals the String "true".
-	 * 
-	 * @param bundle
-	 * @return
 	 */
 	public static boolean isDynamicExtension(final Bundle bundle) {
 		return "true".equals(bundle.getHeaders().get(ALFRESCO_DYNAMIC_EXTENSION_HEADER));
@@ -77,8 +76,6 @@ public class BundleHelper {
 
 	/**
 	 * Obtains the {@link Bundle}s that comprise the core framework.
-	 * 
-	 * @return
 	 */
 	public List<Bundle> getFrameworkBundles() {
 		final List<Bundle> bundles = new ArrayList<Bundle>();
@@ -92,8 +89,6 @@ public class BundleHelper {
 
 	/**
 	 * Obtains the {@link Bundle}s that comprise the core framework.
-	 * 
-	 * @return
 	 */
 	public List<Bundle> getExtensionBundles() {
 		final List<Bundle> bundles = new ArrayList<Bundle>();
@@ -108,7 +103,7 @@ public class BundleHelper {
 	/**
 	 * Obtains the {@link Bundle} for the given id.
 	 * 
-	 * @param id
+	 * @param id BundleId
 	 * @return The matching {@link Bundle} or null if no match could be found.
 	 */
 	public Bundle getBundle(final long id) {
@@ -117,8 +112,6 @@ public class BundleHelper {
 
 	/**
 	 * Obtains the {@link Framework} bundle.
-	 * 
-	 * @return
 	 */
 	public Framework getFramework() {
 		return (Framework) bundleContext.getBundle(0);
@@ -130,14 +123,14 @@ public class BundleHelper {
 	 * This implementation first saves the upload to a temporary file. It then attempts to install the file as a bundle.
 	 * If this succeeds, it saves the bundle in the repository.
 	 * 
-	 * @param file
-	 * @return
+	 * @param file form field
+	 * @return installed Bundle
 	 * @throws IOException
 	 * @throws BundleException
 	 */
 	public Bundle installBundleInRepository(final FormField file) throws IOException, BundleException {
 		final File tempFile = saveToTempFile(file.getInputStream());
-		return doInstallBundleInRepository(tempFile);
+        return doInstallBundleInRepository(tempFile, file.getFilename());
 	}
 
 	/**
@@ -150,7 +143,7 @@ public class BundleHelper {
 	 */
 	public Bundle installBundleInRepository(final Content content) throws IOException, BundleException {
 		final File tempFile = saveToTempFile(content.getInputStream());
-		return doInstallBundleInRepository(tempFile);
+		return doInstallBundleInRepository(tempFile, null);
 
 	}
 
@@ -167,10 +160,10 @@ public class BundleHelper {
 					nodeService.addAspect(file, ContentModel.ASPECT_TEMPORARY, properties);
 					nodeService.deleteNode(file);
                     matchingNode = file;
+                    bundle.uninstall();
 				}
 			}
 		}
-		bundle.uninstall();
 
         return matchingNode;
 	}
@@ -195,13 +188,20 @@ public class BundleHelper {
 
 	/* Utility operations */
 
-	protected Bundle doInstallBundleInRepository(final File tempFile) throws
+	protected Bundle doInstallBundleInRepository(File tempFile, String fileName) throws
         BundleException, IOException {
 		try {
-			final BundleIdentifier identifier = getBundleIdentifier(tempFile);
+			BundleIdentifier identifier = getBundleIdentifier(tempFile);
 			if (identifier == null) {
-				throw new BundleException(
-						"Could not generate Bundle filename. Make sure the content is an OSGi bundle.");
+                tempFile = wrapPlainJar(tempFile, fileName);
+                if (tempFile != null) {
+                    identifier = getBundleIdentifier(tempFile);
+                }
+                if (identifier == null) {
+                    throw new BundleException(
+                        "Could not generate Bundle filename. Make sure the content is an OSGi bundle.");
+                }
+                logger.info("Wrapped plain jar as a OSGi bundle: {}.", identifier.getSymbolicName());
 			}
             final String filename = identifier.toJarFilename();
             final String location = generateRepositoryLocation(filename);
@@ -239,9 +239,46 @@ public class BundleHelper {
             }
             return bundle;
 		} finally {
-			tempFile.delete();
-		}
+            if (tempFile != null) {
+                tempFile.delete();
+            }
+        }
 	}
+
+    private File wrapPlainJar(File tempFile, String fileName) {
+        try {
+            JarFile jar = new JarFile(tempFile);
+
+            final Analyzer analyzer = new Analyzer();
+            final String manifestVersion = ManifestUtils.parseImplementationVersion(jar);
+            if (manifestVersion != null) {
+                analyzer.setBundleVersion(manifestVersion);
+            }
+            String name = ManifestUtils.getImplementationTitle(jar);
+            if (name == null) {
+                if (fileName == null) {
+                    return null;
+                } else {
+                    name = fileName.replaceFirst("^(.+)\\.\\w+$", "$1");
+                }
+            }
+            analyzer.setBundleSymbolicName(name);
+
+            analyzer.setJar(tempFile);
+            analyzer.setImportPackage("*;resolution:=optional");
+            analyzer.setExportPackage("*");
+            analyzer.analyze();
+            final Manifest manifest = analyzer.calcManifest();
+            analyzer.getJar().setManifest(manifest);
+            final File wrappedTempFile = File.createTempFile("wrapped", ".jar");
+            analyzer.save(wrappedTempFile, true);
+            return wrappedTempFile;
+        } catch (Exception e) {
+            logger.warn(String.format("Failed to wrap plain %s jar using bnd.", tempFile), e);
+            return null;
+        }
+    }
+
 
     private Bundle findBundleBySymbolicName(BundleIdentifier identifier) {
         final Bundle[] allBundles = bundleContext.getBundles();

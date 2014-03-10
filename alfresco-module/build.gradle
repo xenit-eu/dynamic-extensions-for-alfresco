@@ -23,6 +23,7 @@ dependencies {
     bundles "org.slf4j:slf4j-log4j12:${project.slf4jVersion}"
     bundles "org.scala-lang:scala-library:2.10.3"
     bundles(project(":control-panel")) {transitive = false}
+    bundles fileTree(dir: '../lib', include: '*.jar')
 
     testCompile "junit:junit:${ext.junitVersion}"
     testCompile "org.mockito:mockito-core:${ext.mockitoVersion}"
