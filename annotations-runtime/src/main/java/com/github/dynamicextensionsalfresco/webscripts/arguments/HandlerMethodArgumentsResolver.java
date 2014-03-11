@@ -3,6 +3,9 @@ package com.github.dynamicextensionsalfresco.webscripts.arguments;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 import org.springframework.aop.support.AopUtils;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.extensions.webscripts.WebScriptRequest;
@@ -20,9 +23,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * Strategy for resolving handler method arguments.
  * 
  * @author Laurens Fridael
+ * @author Laurent Van der Linden
  * @see ArgumentResolver
  */
-public class HandlerMethodArgumentsResolver {
+public class HandlerMethodArgumentsResolver implements ApplicationContextAware {
 
 	/* Dependencies */
 
@@ -38,6 +42,7 @@ public class HandlerMethodArgumentsResolver {
 
 	private final ParameterNameDiscoverer parameterNameDiscoverer = new LocalVariableTableParameterNameDiscoverer();
     private ServiceTracker resolverTracker;
+    private ApplicationContext applicationContext;
 
 	/* Main Operations */
 
@@ -119,10 +124,12 @@ public class HandlerMethodArgumentsResolver {
 
 	/* Utility Operations */
 
-	protected ArgumentResolver<Object, Annotation> getArgumentResolver(final Class<?> parameterType,
+	@SuppressWarnings("unchecked")
+    protected ArgumentResolver<Object, Annotation> getArgumentResolver(final Class<?> parameterType,
 			final Class<? extends Annotation> annotationType) {
 		Assert.notNull(parameterType, "ParameterType cannot be null.");
 
+        // static resolvers
 		final int hashCode = calculateHashCode(parameterType, annotationType);
 		if (argumentResolversByHashCode.containsKey(hashCode)) {
 			return argumentResolversByHashCode.get(hashCode);
@@ -134,12 +141,20 @@ public class HandlerMethodArgumentsResolver {
 			}
 		}
 
+        // spring component resolvers
+        final Map<String, ArgumentResolver> localArgumentResolvers = applicationContext.getBeansOfType(ArgumentResolver.class);
+        for (ArgumentResolver argumentResolver : localArgumentResolvers.values()) {
+            if (argumentResolver.supports(parameterType, annotationType)) {
+                return argumentResolver;
+            }
+        }
+
+        // osgi resolvers
         if (resolverTracker != null) {
             // check for Osgi additions
             final Object[] services = resolverTracker.getServices();
             if (services != null) {
                 for (Object service : services) {
-                    @SuppressWarnings("unchecked")
                     final ArgumentResolver<Object,Annotation> argumentResolver = (ArgumentResolver<Object,Annotation>)service;
                     if (argumentResolver.supports(parameterType, annotationType)) {
                         // cannot cache these due to dynamic nature
@@ -179,5 +194,10 @@ public class HandlerMethodArgumentsResolver {
 
     public void setBundleContext(BundleContext bundleContext) {
         this.bundleContext = bundleContext;
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 }

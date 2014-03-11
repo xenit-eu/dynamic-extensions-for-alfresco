@@ -3,7 +3,7 @@ package com.github.dynamicextensionsalfresco.webscripts;
 import com.github.dynamicextensionsalfresco.spring.Spied;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.Attribute;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.Uri;
-
+import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -33,4 +33,7 @@ public class AttributeHandler {
 	protected Person getSomePerson() {
 		return new Person();
 	}
+
+    @Uri("/handleAttributeByTypeResolver")
+    public void handleAttributeByTypeResolver(JSONObject jsonObject) {}
 }
