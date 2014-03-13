@@ -1,8 +1,5 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.webscripts.Description.FormatStyle;
 import org.springframework.extensions.webscripts.Match;
@@ -10,6 +7,9 @@ import org.springframework.extensions.webscripts.Runtime;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WrappingWebScriptRequest;
 import org.springframework.util.Assert;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class AnnotationWebScriptRequest implements WrappingWebScriptRequest {
 

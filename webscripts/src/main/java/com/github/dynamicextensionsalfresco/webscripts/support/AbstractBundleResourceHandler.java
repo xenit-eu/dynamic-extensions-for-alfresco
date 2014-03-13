@@ -1,5 +1,14 @@
 package com.github.dynamicextensionsalfresco.webscripts.support;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.extensions.webscripts.WebScriptResponse;
+import org.springframework.util.Assert;
+import org.springframework.util.FileCopyUtils;
+
+import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
 import java.net.URL;
@@ -11,16 +20,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletResponse;
-
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.extensions.webscripts.WebScriptResponse;
-import org.springframework.util.Assert;
-import org.springframework.util.FileCopyUtils;
 
 /**
  * Abstract base class for annotation-based Web Scripts that send static resources, such as Resources, CSS and images,

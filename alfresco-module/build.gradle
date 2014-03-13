@@ -7,7 +7,7 @@ dependencies {
     amp(project(":alfresco-integration")) {transitive = false}
     amp(project(":annotations")) {transitive = false}
     amp(project(":annotations-runtime")) {transitive = false}
-    amp(project(":webscript-support")) {transitive = false}
+    amp(project(":webscripts")) {transitive = false}
 
     amp("org.apache.felix:org.apache.felix.framework:$ext.felixVersion") {transitive = false}
     amp "com.springsource.util:com.springsource.util.osgi:$ext.springOsgiUtilVersion"

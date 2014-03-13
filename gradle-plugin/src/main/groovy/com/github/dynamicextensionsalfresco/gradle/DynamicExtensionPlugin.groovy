@@ -108,8 +108,7 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 			compile ("org.springframework.extensions.surf:spring-webscripts:${surf.version}") { transitive = false }
 			compile ("org.springframework.extensions.surf:spring-surf-core:${surf.version}") { transitive = false }
 			compile ("com.github.dynamicextensionsalfresco:annotations:${dynamicExtensions.version}") { transitive = false }
-            compile ("com.github.dynamicextensionsalfresco:annotations-runtime:${dynamicExtensions.version}") { transitive = false }
-            compile ("com.github.dynamicextensionsalfresco:webscript-support:${dynamicExtensions.version}") { transitive = false }
+            compile ("com.github.dynamicextensionsalfresco:webscripts:${dynamicExtensions.version}") { transitive = false }
 			// Since Spring is so fundamental, this is the one dependency we leave as transitive.
 			compile ('org.springframework:spring-context:3.0.0.RELEASE')
 			// JSR-250 API contains the @Resource annotation for referencing dependencies by name.

@@ -1,14 +1,12 @@
 package com.github.dynamicextensionsalfresco.webscripts.arguments;
 
-import java.lang.annotation.Annotation;
-
-import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScript;
-
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
+import java.lang.annotation.Annotation;
+
 /**
- * Strategy for resolving method arguments for handler methods managed by an {@link AnnotationWebScript}.
+ * Strategy for resolving method arguments for handler methods managed by an annotated WebScript.
  * 
  * @author Laurens Fridael
  * 

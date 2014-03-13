@@ -3,7 +3,7 @@ apply plugin: 'osgi'
 dependencies {
     compile project(":alfresco-integration")
     compile project(":annotations")
-    compile project(":webscript-support")
+    compile project(":webscripts")
     compile "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
     compile "org.springframework.extensions.surf:spring-webscripts:${project.ext.springSurfVersion}"
     compile "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
