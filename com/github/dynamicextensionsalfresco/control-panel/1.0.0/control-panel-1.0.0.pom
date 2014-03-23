@@ -13,12 +13,6 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>com.github.dynamicextensionsalfresco</groupId>
-      <artifactId>alfresco-integration</artifactId>
-      <version>1.0.0</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.core</artifactId>
       <version>4.3.1</version>
@@ -32,7 +26,7 @@
     </dependency>
     <dependency>
       <groupId>com.github.dynamicextensionsalfresco</groupId>
-      <artifactId>webscripts</artifactId>
+      <artifactId>alfresco-integration</artifactId>
       <version>1.0.0</version>
       <scope>compile</scope>
     </dependency>
@@ -40,6 +34,12 @@
       <groupId>org.springframework.extensions.surf</groupId>
       <artifactId>spring-webscripts</artifactId>
       <version>1.2.0-M4</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.dynamicextensionsalfresco</groupId>
+      <artifactId>webscripts</artifactId>
+      <version>1.0.0</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>

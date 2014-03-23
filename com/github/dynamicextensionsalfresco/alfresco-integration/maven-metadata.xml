@@ -2,12 +2,11 @@
 <metadata>
   <groupId>com.github.dynamicextensionsalfresco</groupId>
   <artifactId>alfresco-integration</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0</version>
   <versioning>
     <versions>
-      <version>1.0.0-SNAPSHOT</version>
       <version>1.0.0</version>
     </versions>
-    <lastUpdated>20140323102001</lastUpdated>
+    <lastUpdated>20140323102853</lastUpdated>
   </versioning>
 </metadata>
