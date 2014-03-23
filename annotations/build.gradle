@@ -1,5 +1,5 @@
 dependencies {
-    compile("org.alfresco:alfresco-repository:${ext.alfrescoVersion}") { transitive = false }
-    compile("org.alfresco:alfresco-data-model:${ext.alfrescoVersion}") { transitive = false }
-    compile("org.alfresco:alfresco-core:${ext.alfrescoVersion}") { transitive = false }
+    compile("org.alfresco:alfresco-repository:${project.ext.alfrescoVersion}") { transitive = false }
+    compile("org.alfresco:alfresco-data-model:${project.ext.alfrescoVersion}") { transitive = false }
+    compile("org.alfresco:alfresco-core:${project.ext.alfrescoVersion}") { transitive = false }
 }

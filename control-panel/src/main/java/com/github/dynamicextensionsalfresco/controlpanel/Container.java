@@ -82,7 +82,9 @@ public class Container extends AbstractControlPanelHandler {
         }
         final Object context;
         if (serviceReferences != null) {
-            context = bundleHelper.getBundle(bundleid).getBundleContext().getService(serviceReferences.getServiceReference());
+            @SuppressWarnings("unchecked")
+            final ServiceReference<Object> serviceReference = serviceReferences.getServiceReference();
+            context = bundleHelper.getBundle(bundleid).getBundleContext().getService(serviceReference);
             if (context instanceof ApplicationContext) {
                 ApplicationContext applicationContext = (ApplicationContext)context;
                 final String[] definitionNames = applicationContext.getBeanDefinitionNames();

@@ -1,15 +1,11 @@
 package com.github.dynamicextensionsalfresco.controlpanel;
 
-import java.io.IOException;
-
-import com.github.dynamicextensionsalfresco.webscripts.annotations.FormatStyle;
-import com.github.dynamicextensionsalfresco.webscripts.annotations.Uri;
-import com.github.dynamicextensionsalfresco.webscripts.annotations.UriVariable;
-import com.github.dynamicextensionsalfresco.webscripts.annotations.WebScript;
-
+import com.github.dynamicextensionsalfresco.webscripts.annotations.*;
 import com.github.dynamicextensionsalfresco.webscripts.support.AbstractBundleResourceHandler;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
 
 /**
  * Web Script for handling requests for static resources for the Web Console.
@@ -21,6 +17,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @WebScript
+@Authentication(AuthenticationType.NONE)
 public class Resources extends AbstractBundleResourceHandler {
 
 	/* State */

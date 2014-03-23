@@ -1,13 +1,13 @@
 dependencies {
     compile project(':annotations-runtime')
-    compile "org.osgi:org.osgi.core:${ext.osgiVersion}"
-    compile "javax.servlet:servlet-api:${ext.servletVersion}"
-    compile "org.springframework.extensions.surf:spring-webscripts:${ext.springSurfVersion}"
-    compile "org.jibx:jibx-run:${ext.jibxVersion}"
-    compile "org.apache.felix:org.apache.felix.framework:${ext.felixVersion}"
-    compile "com.springsource.util:com.springsource.util.osgi:${ext.springOsgiUtilVersion}"
+    compile "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
+    compile "javax.servlet:servlet-api:${project.ext.servletVersion}"
+    compile "org.springframework.extensions.surf:spring-webscripts:${project.ext.springSurfVersion}"
+    compile "org.jibx:jibx-run:${project.ext.jibxVersion}"
+    compile "org.apache.felix:org.apache.felix.framework:${project.ext.felixVersion}"
+    compile "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
 
-    testCompile "junit:junit:${ext.junitVersion}"
-    testCompile "org.mockito:mockito-core:${ext.mockitoVersion}"
-    testCompile "org.springframework:spring-test:${ext.springVersion}"
+    testCompile "junit:junit:${project.ext.junitVersion}"
+    testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
+    testCompile "org.springframework:spring-test:${project.ext.springVersion}"
 }

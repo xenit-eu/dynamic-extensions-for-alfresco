@@ -3,55 +3,46 @@ Dynamic Extensions for Alfresco
 
 Rapid development of Alfresco repository extensions in Java. Deploy your code in seconds, not minutes. Life is too short for endless server restarts.
 
-Dynamic Extensions adds an OSGi container to the Alfresco repository, enabling live deployment of Java code, with no need to restart the server. Alfresco itself is not "OSGi-fied" in any way; the OSGi container runs on top of the core Alfresco platform.
+Dynamic Extensions adds an OSGi container to the Alfresco repository, enabling live deployment of Java code, with no need to restart the server.
+Alfresco itself is not "OSGi-fied" in any way; the OSGi container runs on top of the core Alfresco platform.
 
-Upcoming 1.0.0 release
-----------------------
+1.0.0 release
+-------------
 
-Important note: due to the project ownership change, the base package structure has changed.
-Simply replacing `nl.runnable.alfresco` with `com.github.dynamicextensionsalfresco` will make any previous extension compatible with the 1.0.0 release.
-
-You can test snapshot releases by changing the plugin version and group:
+You can upgrade your extension project by updating the buildscript configuration:
 ```groovy
 buildscript {
   repositories { maven { url 'https://raw.github.com/laurentvdl/dynamic-extensions-for-alfresco/mvn-repo/' } }
   dependencies {
-    classpath group: 'com.github.dynamicextensionsalfresco', name: 'gradle-plugin', version: '1.0.0-SNAPSHOT'
+    classpath group: 'com.github.dynamicextensionsalfresco', name: 'gradle-plugin', version: '1.0.0'
   }
 }
 ```
 
-Latest release: Milestone 6
----------------------------
-
 Features:
-* REST endpoint for restarting the OSGi framework: `/service/dynamic-extensions/osgi/restart`
-* auto refresh system package cache when WEB-INF/lib has changed
-* runtime MODE (Production/Dev) is replaced with individual settings in osgi-container.properties (also visible in control-panel)
-* Uri handlers can now return the template to use as a String return value
-* auto configuration of `Alfresco-Spring-Configuration` if not specified has Bundle header
-* new webscript-support module for the `AbstractBundleResourceHandler` (no more need to import control-panel)
-* Scala 2.10.3 is now included by default to ease deployment of Scala based extensions
+* webscript resolutions: https://github.com/laurentvdl/dynamic-extensions-for-alfresco/wiki/Annotated-WebScripts#resolutions
+* custom webscript ArgumentResolvers: https://github.com/laurentvdl/dynamic-extensions-for-alfresco/wiki/Annotated-WebScripts#attribute-providers-and-injection
+* Activiti workflow support: extension Service Tasks: https://github.com/laurentvdl/dynamic-extensions-for-alfresco/wiki/Workflow
+* automatic wrapping of non OSGi dependencies: https://github.com/laurentvdl/dynamic-extensions-for-alfresco/wiki/Extension-dependencies
+* 2 amp distributions: Scala build is optional
+* Abstract base class for serving static resources: https://github.com/laurentvdl/dynamic-extensions-for-alfresco/wiki/Annotated-WebScripts#serving-static-resources
+* annotation support for exporting OSGi services: `@Component @OsgiService`
 
-Fixes in this milestone:
-* integration: fallback to jar content scanning when MANIFEST.MF fails to parse (Vaadin jar)
-* gradle-plugin: allow override of "Import-Package"
-* fix duplicate WebScript ID detection: make sure you Uri methods have a unique name (no overloading)
+Breaking changes:
 
-Internal:
-* moved from Maven to Gradle: use "gradlew(.sh|.bat)" script to build the project
+The support for Activiti breaks Alfresco 3.4 compatibility, so 4.0 is now the minimum required version.
 
-Removed:
-* Felix file install: bundles can now only be installed either via classpath or using the REST API
+Important note: due to the project ownership change, the base package structure has changed.
+Replacing `nl.runnable.alfresco` with `com.github.dynamicextensionsalfresco` will make any previous extension compatible with the 1.0.0 release.
 
-Many thanks to Laurens Fridael for his great work on Dynamic Extensions. May his work live long and prosper at its new home.
 
 Installing Dynamic Extensions
 -----------------------------
 
 Dynamic Extensions is distributed as an Alfresco Module Package (AMP).
 
-* Download the <a href="https://raw.github.com/laurentvdl/dynamic-extensions-for-alfresco/mvn-repo/nl/runnable/alfresco/dynamicextensions/alfresco-module/1.0.0.M6/nl.runnable.alfresco.dynamicextensions-1.0.0.M6.amp">Dynamic Extensions Milestone 6 AMP</a>.
+* Download the <a href="https://raw.github.com/laurentvdl/dynamic-extensions-for-alfresco/mvn-repo/com/github/dynamicextensionsalfresco/alfresco-module/1.0.0/com.github.dynamicextensionsalfresco-1.0.0.amp">Dynamic Extensions AMP</a>.
+* For Scala based development, you can use the prepackaged Scala amp: <a href="https://raw.github.com/laurentvdl/dynamic-extensions-for-alfresco/mvn-repo/com/github/dynamicextensionsalfresco/alfresco-module/1.0.0/com.github.dynamicextensionsalfresco-scala-1.0.0.amp">Dynamic Extensions AMP for Scala</a>.
 * Use the <a href="http://docs.alfresco.com/4.0/index.jsp?topic=%2Fcom.alfresco.enterprise.doc%2Ftasks%2Famp-install.html">Module Management Tool</a> to install the AMP in the Alfresco repository of your choosing.
 * After restarting Alfresco, open the Control Panel: <a href="http://localhost:8080/alfresco/service/dynamic-extensions/">http://localhost:8080/alfresco/service/dynamic-extensions/</a>.
 * Accessing the Control Panel requires an admin account.
@@ -70,9 +61,9 @@ Dynamic Extensions is also known to work on:
 * Alfresco Community 4.0
 * Alfresco Community 4.2
 
-Dynamic Extensions also works with older versions of Alfresco, but some features are not supported.
+Due to Activiti support, Alfresco 3.4 is not supported, you can use a 3.4 specific fork if you need support:
 
-* Alfresco Community 3.4. (Known issue <a href="https://github.com/laurentvdl/dynamic-extensions-for-alfresco/issues/56">#56</a>)
+https://github.com/lfridael/dynamic-extensions-for-alfresco-3.4
 
 Example extension code
 ----------------------
