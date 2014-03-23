@@ -43,6 +43,12 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>com.github.dynamicextensionsalfresco</groupId>
+      <artifactId>webscripts</artifactId>
+      <version>1.0.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>org.springframework.transaction</artifactId>
       <version>3.0.5.RELEASE</version>
@@ -88,12 +94,6 @@
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.framework</artifactId>
       <version>4.2.1</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.github.dynamicextensionsalfresco</groupId>
-      <artifactId>webscripts</artifactId>
-      <version>1.0.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
