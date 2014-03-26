@@ -1,5 +1,6 @@
 package com.github.dynamicextensionsalfresco.workflow.activiti;
 
+import org.activiti.engine.delegate.ExecutionListener;
 import org.activiti.engine.delegate.JavaDelegate;
 import org.activiti.engine.delegate.TaskListener;
 
@@ -17,7 +18,9 @@ public class DefaultWorkflowTaskRegistry implements WorkflowTaskRegistry {
 
     private final Map<String, JavaDelegate> delegates = new ConcurrentHashMap<String, JavaDelegate>();
 
-    private final Map<String, TaskListener> listeners = new ConcurrentHashMap<String, TaskListener>();
+    private final Map<String, TaskListener> taskListeners = new ConcurrentHashMap<String, TaskListener>();
+
+    private final Map<String, ExecutionListener> executionListeners = new ConcurrentHashMap<String, ExecutionListener>();
 
     @Override
     public void registerDelegate(@Nonnull String id, @Nonnull JavaDelegate delegate) {
@@ -38,20 +41,38 @@ public class DefaultWorkflowTaskRegistry implements WorkflowTaskRegistry {
     }
 
     @Override
-    public void registerListener(@Nonnull String id, @Nonnull TaskListener taskListener) {
-        final TaskListener existing = listeners.put(id, taskListener);
+    public void registerTaskListener(@Nonnull String id, @Nonnull TaskListener taskListener) {
+        final TaskListener existing = taskListeners.put(id, taskListener);
         if (existing != null) {
-            throw new IllegalStateException(String.format("overwrite of existing listener using id <%s>", id));
+            throw new IllegalStateException(String.format("overwrite of existing execution listener using id <%s>", id));
         }
     }
 
     @Override
-    public void unregisterListener(@Nonnull String id) {
-        listeners.remove(id);
+    public void unregisterTaskListener(@Nonnull String id) {
+        taskListeners.remove(id);
     }
 
     @Override
-    public TaskListener findListener(@Nonnull String id) {
-        return listeners.get(id);
+    public TaskListener findTaskListener(@Nonnull String id) {
+        return taskListeners.get(id);
+    }
+
+    @Override
+    public void registerExecutionListener(@Nonnull String id, @Nonnull ExecutionListener executionListener) {
+        final ExecutionListener existing = executionListeners.put(id, executionListener);
+        if (existing != null) {
+            throw new IllegalStateException(String.format("overwrite of existing execution listener using id <%s>", id));
+        }
+    }
+
+    @Override
+    public void unregisterExecutionListener(@Nonnull String id) {
+        executionListeners.remove(id);
+    }
+
+    @Override
+    public ExecutionListener findExecutionListener(@Nonnull String id) {
+        return executionListeners.get(id);
     }
 }

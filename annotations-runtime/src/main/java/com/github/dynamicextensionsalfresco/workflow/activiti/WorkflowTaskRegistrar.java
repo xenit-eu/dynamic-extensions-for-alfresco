@@ -1,5 +1,6 @@
 package com.github.dynamicextensionsalfresco.workflow.activiti;
 
+import org.activiti.engine.delegate.ExecutionListener;
 import org.activiti.engine.delegate.JavaDelegate;
 import org.activiti.engine.delegate.TaskListener;
 import org.slf4j.Logger;
@@ -42,10 +43,16 @@ public class WorkflowTaskRegistrar implements InitializingBean, ApplicationConte
             logger.debug("Register Bundle JavaDelegate {} -> {}.", entry.getKey(), entry.getValue().getClass());
         }
 
-        final Map<String,TaskListener> listeners = applicationContext.getBeansOfType(TaskListener.class);
-        for (Map.Entry<String, TaskListener> entry : listeners.entrySet()) {
-            workflowTaskRegistry.registerListener(entry.getKey(), entry.getValue());
+        final Map<String,TaskListener> taskListeners = applicationContext.getBeansOfType(TaskListener.class);
+        for (Map.Entry<String, TaskListener> entry : taskListeners.entrySet()) {
+            workflowTaskRegistry.registerTaskListener(entry.getKey(), entry.getValue());
             logger.debug("Register Bundle TaskListener {} -> {}.", entry.getKey(), entry.getValue().getClass());
+        }
+
+        final Map<String,ExecutionListener> executionListeners = applicationContext.getBeansOfType(ExecutionListener.class);
+        for (Map.Entry<String, ExecutionListener> entry : executionListeners.entrySet()) {
+            workflowTaskRegistry.registerExecutionListener(entry.getKey(), entry.getValue());
+            logger.debug("Register Bundle ExecutionListener {} -> {}.", entry.getKey(), entry.getValue().getClass());
         }
     }
 
@@ -56,7 +63,11 @@ public class WorkflowTaskRegistrar implements InitializingBean, ApplicationConte
         }
 
         for (String key : applicationContext.getBeansOfType(TaskListener.class).keySet()) {
-            workflowTaskRegistry.unregisterListener(key);
+            workflowTaskRegistry.unregisterTaskListener(key);
+        }
+
+        for (String key : applicationContext.getBeansOfType(ExecutionListener.class).keySet()) {
+            workflowTaskRegistry.unregisterExecutionListener(key);
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.github.dynamicextensionsalfresco.workflow.activiti;
 
+import org.activiti.engine.delegate.ExecutionListener;
 import org.activiti.engine.delegate.JavaDelegate;
 import org.activiti.engine.delegate.TaskListener;
 
@@ -15,9 +16,15 @@ public interface WorkflowTaskRegistry {
 
     public JavaDelegate findDelegate(@Nonnull String id);
 
-    public void registerListener(@Nonnull String id, @Nonnull TaskListener taskListener);
+    public void registerTaskListener(@Nonnull String id, @Nonnull TaskListener taskListener);
 
-    public void unregisterListener(@Nonnull String id);
+    public void unregisterTaskListener(@Nonnull String id);
 
-    public TaskListener findListener(@Nonnull String id);
+    public TaskListener findTaskListener(@Nonnull String id);
+
+    public void registerExecutionListener(@Nonnull String id, @Nonnull ExecutionListener executionListener);
+
+    public void unregisterExecutionListener(@Nonnull String id);
+
+    public ExecutionListener findExecutionListener(@Nonnull String id);
 }
