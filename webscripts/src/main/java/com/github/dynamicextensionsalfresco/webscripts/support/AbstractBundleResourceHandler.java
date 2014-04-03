@@ -113,6 +113,8 @@ public abstract class AbstractBundleResourceHandler {
 		contentTypesByExtension.put("gif", "image/gif");
 		contentTypesByExtension.put("png", "image/png");
 		contentTypesByExtension.put("jpg", "image/jpeg");
+		contentTypesByExtension.put("jpg", "image/jpeg");
+		contentTypesByExtension.put("html", "text/html");
 	}
 
 	protected String getContentEncoding(final URL resource) {
