@@ -38,7 +38,7 @@ public class HandlerMethodArgumentsResolver implements ApplicationContextAware {
 
 	private List<ArgumentResolver<Object, Annotation>> argumentResolvers;
 
-	private final Map<Integer, ArgumentResolver<Object, Annotation>> argumentResolversByHashCode = new ConcurrentHashMap<Integer, ArgumentResolver<Object, Annotation>>();
+	private final Map<ArgumentResolverKey, ArgumentResolver<Object, Annotation>> argumentResolverCache = new ConcurrentHashMap<ArgumentResolverKey, ArgumentResolver<Object, Annotation>>();
 
 	private final ParameterNameDiscoverer parameterNameDiscoverer = new LocalVariableTableParameterNameDiscoverer();
     private ServiceTracker resolverTracker;
@@ -129,14 +129,16 @@ public class HandlerMethodArgumentsResolver implements ApplicationContextAware {
 			final Class<? extends Annotation> annotationType) {
 		Assert.notNull(parameterType, "ParameterType cannot be null.");
 
-        // static resolvers
-		final int hashCode = calculateHashCode(parameterType, annotationType);
-		if (argumentResolversByHashCode.containsKey(hashCode)) {
-			return argumentResolversByHashCode.get(hashCode);
+		final ArgumentResolverKey cacheKey = new ArgumentResolverKey(parameterType, annotationType);
+        final ArgumentResolver<Object, Annotation> match = argumentResolverCache.get(cacheKey);
+		if (match != null) {
+            return match;
 		}
+
+        // static resolvers
 		for (final ArgumentResolver<Object, Annotation> argumentResolver : argumentResolvers) {
 			if (argumentResolver.supports(parameterType, annotationType)) {
-				argumentResolversByHashCode.put(hashCode, argumentResolver);
+				argumentResolverCache.put(cacheKey, argumentResolver);
 				return argumentResolver;
 			}
 		}
@@ -145,6 +147,7 @@ public class HandlerMethodArgumentsResolver implements ApplicationContextAware {
         final Map<String, ArgumentResolver> localArgumentResolvers = applicationContext.getBeansOfType(ArgumentResolver.class);
         for (ArgumentResolver argumentResolver : localArgumentResolvers.values()) {
             if (argumentResolver.supports(parameterType, annotationType)) {
+                argumentResolverCache.put(cacheKey, argumentResolver);
                 return argumentResolver;
             }
         }
@@ -167,21 +170,6 @@ public class HandlerMethodArgumentsResolver implements ApplicationContextAware {
         return null;
 	}
 
-	/**
-	 * Calculates the hash code for an array of Classes. For internal use by {@link #getArgumentResolver(Class, Class)}
-	 * 
-	 * @param classes
-	 * @return
-	 */
-	private static int calculateHashCode(final Class<?>... classes) {
-		final int prime = 31;
-		int result = 1;
-		for (final Class<?> clazz : classes) {
-			result = prime * result + (clazz != null ? clazz.hashCode() : 0);
-		}
-		return result;
-	}
-
 	/* Dependencies */
 
 	public void setStringValueConverter(final StringValueConverter stringValueConverter) {
@@ -199,5 +187,32 @@ public class HandlerMethodArgumentsResolver implements ApplicationContextAware {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
+    }
+
+    private static class ArgumentResolverKey {
+        public Class parameterType;
+        public Class annotationType;
+
+        private ArgumentResolverKey(Class parameterType, Class annotationType) {
+            this.parameterType = parameterType;
+            this.annotationType = annotationType;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            ArgumentResolverKey that = (ArgumentResolverKey) o;
+
+            return !(annotationType != null ? !annotationType.equals(that.annotationType) : that.annotationType != null) && parameterType.equals(that.parameterType);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = parameterType.hashCode();
+            result = 31 * result + (annotationType != null ? annotationType.hashCode() : 0);
+            return result;
+        }
     }
 }
