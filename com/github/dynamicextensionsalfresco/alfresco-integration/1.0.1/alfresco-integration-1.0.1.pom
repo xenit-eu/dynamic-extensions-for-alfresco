@@ -7,12 +7,6 @@
   <version>1.0.1</version>
   <dependencies>
     <dependency>
-      <groupId>com.github.dynamicextensionsalfresco</groupId>
-      <artifactId>annotations-runtime</artifactId>
-      <version>1.0.1</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.8.2</version>
@@ -53,6 +47,12 @@
       <artifactId>spring-test</artifactId>
       <version>3.0.5.RELEASE</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.dynamicextensionsalfresco</groupId>
+      <artifactId>annotations-runtime</artifactId>
+      <version>1.0.1</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
