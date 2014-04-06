@@ -6,7 +6,7 @@ package com.github.dynamicextensionsalfresco.gradle
  */
 
 class Versions {
-	static final DYNAMIC_EXTENSIONS = "1.0.0"
+	static final DYNAMIC_EXTENSIONS = "1.0.1"
 	
 	static final ALFRESCO = "4.0.e"
 	
