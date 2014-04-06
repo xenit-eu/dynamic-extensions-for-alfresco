@@ -18,7 +18,7 @@ public class ModelArgumentResolver implements ArgumentResolver<Map<String, Objec
 
 	@Override
 	public boolean supports(final Class<?> parameterType, final Class<? extends Annotation> annotationType) {
-		return Map.class.isAssignableFrom(parameterType);
+		return Map.class.equals(parameterType);
 	}
 
 	@Override
