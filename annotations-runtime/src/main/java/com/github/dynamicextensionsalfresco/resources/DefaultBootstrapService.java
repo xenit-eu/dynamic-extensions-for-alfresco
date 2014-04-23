@@ -20,6 +20,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.util.Assert;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -136,7 +137,9 @@ public class DefaultBootstrapService implements ResourceLoaderAware, BootstrapSe
         String encoding = "UTF-8";
         try {
             if (in != null) {
-                Charset charset = mimetypeService.getContentCharsetFinder().getCharset(in, mimetype);
+                // The InputStream must support marks
+                final BufferedInputStream bufferedInputStream = new BufferedInputStream(in);
+                Charset charset = mimetypeService.getContentCharsetFinder().getCharset(bufferedInputStream, mimetype);
                 encoding = charset.name();
             }
         } finally {
