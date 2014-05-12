@@ -18,6 +18,7 @@ import java.io.IOException;
 @Component
 @WebScript
 @Authentication(AuthenticationType.NONE)
+@Transaction(TransactionType.NONE)
 public class Resources extends AbstractBundleResourceHandler {
 
 	/* State */
