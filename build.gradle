@@ -58,7 +58,7 @@ subprojects {
     }
 
     group = 'com.github.dynamicextensionsalfresco'
-    version = '1.0.1'
+    version = '1.0.2'
 
     configurations.all {
         exclude group: 'jaxen'

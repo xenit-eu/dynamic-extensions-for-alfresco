@@ -25,7 +25,7 @@ import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 
-import static com.github.dynamicextensionsalfresco.osgi.ManifestUtils.parseImplementationVersion;
+import static com.github.dynamicextensionsalfresco.osgi.ManifestUtils.getImplementationVersion;
 import static java.util.Arrays.asList;
 
 /**
@@ -167,7 +167,7 @@ public class JavaPackageScanner implements ServletContextAware {
 	 * @throws IOException
 	 */
 	protected Set<SystemPackage> scanJavaPackages(final JarFile jarFile) throws IOException {
-		final String implementationVersion = parseImplementationVersion(jarFile);
+		final String implementationVersion = getImplementationVersion(jarFile);
 		final Set<SystemPackage> systemPackages = new LinkedHashSet<SystemPackage>(30);
 		final Set<String> foundPackages = new HashSet<String>(30, 0.1f);
 		for (final Enumeration<JarEntry> entries = jarFile.entries(); entries.hasMoreElements();) {

@@ -250,7 +250,7 @@ public class BundleHelper {
             JarFile jar = new JarFile(tempFile);
 
             final Analyzer analyzer = new Analyzer();
-            final String manifestVersion = ManifestUtils.parseImplementationVersion(jar);
+            final String manifestVersion = ManifestUtils.getImplementationVersion(jar);
             if (manifestVersion != null) {
                 analyzer.setBundleVersion(manifestVersion);
             }
