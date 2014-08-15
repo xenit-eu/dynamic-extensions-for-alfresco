@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  * @author Laurens Fridael
  */
 @Component
-@WebScript
+@WebScript(families = "control panel")
 public class IndexHandler extends AbstractControlPanelHandler {
 	@Uri("/dynamic-extensions/")
 	public Resolution redirectToBundles(@Attribute final ResponseHelper response) {

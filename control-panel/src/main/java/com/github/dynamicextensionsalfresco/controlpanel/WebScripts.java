@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-@WebScript(baseUri = "/dynamic-extensions/web-scripts", defaultFormat = "html")
+@WebScript(baseUri = "/dynamic-extensions/web-scripts", defaultFormat = "html", families = "control panel")
 public class WebScripts extends AbstractControlPanelHandler {
 
 	@Autowired

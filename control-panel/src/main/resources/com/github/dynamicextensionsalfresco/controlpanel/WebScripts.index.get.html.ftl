@@ -3,43 +3,53 @@
 
   <h2>Annotation Web Scripts</h2>
 
-  <#if (webScripts?size > 0) >
-    <table class="web-script table table-striped table-bordered">
-      <thead>
-        <tr>
-          <th class="method">
-            Method
-          </th>
-          <th class="uri">
-            URI
-          </th>
-          <th class="handler">
-            Handler
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <#list webScripts as webScript>
-          <tr>
-            <td class="method">
-              ${webScript.method}
-            </td>
-            <td class="uri">
-              <ul>
-                <#list webScript.uris as uri>
-                  <li>
-                    <a href="${url.serviceContext}${uri}">${uri}</a>
-                  </li>
-                </#list>
-              </ul>
-            </td>
-            <td class="handler">
-              ${webScript.handler!'n/a'}
-            </td>
-          </tr>
-        </#list>
-      </tbody>
-    </table>
+  <#if (webScriptsByFamily?size > 0) >
+    <#list webScriptsByFamily?keys as family>
+        <#assign webScripts=webScriptsByFamily[family]>
+	    <h3>${family}</h3>
+	    <table class="web-script table table-striped table-bordered">
+	      <thead>
+	        <tr>
+	          <th class="method">
+	            Method
+	          </th>
+	          <th class="method" title="default format">
+	            Format
+	          </th>
+	          <th class="uri">
+	            URI
+	          </th>
+	          <th class="handler">
+	            Handler
+	          </th>
+	        </tr>
+	      </thead>
+	      <tbody>
+	        <#list webScripts as webScript>
+	          <tr title="${webScript.description!""}">
+	            <td class="method">
+	              ${webScript.method}
+	            </td>
+	            <td class="method">
+	              ${webScript.defaultFormat!""}
+	            </td>
+	            <td class="uri">
+	              <ul>
+	                <#list webScript.uris as uri>
+	                  <li>
+	                    <a href="${url.serviceContext}${uri}">${uri}</a>
+	                  </li>
+	                </#list>
+	              </ul>
+	            </td>
+	            <td class="handler">
+	              ${webScript.handler!'n/a'}
+	            </td>
+	          </tr>
+	        </#list>
+	      </tbody>
+	    </table>
+    </#list>
   <#else>
     <p>No Web Scripts found.</p>
   </#if>

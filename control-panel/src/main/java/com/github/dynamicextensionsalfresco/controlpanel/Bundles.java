@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.*;
 
 @Component
-@WebScript(baseUri = "/dynamic-extensions/bundles", defaultFormat = "html")
+@WebScript(baseUri = "/dynamic-extensions/bundles", defaultFormat = "html", families = "control panel")
 @Authentication(AuthenticationType.ADMIN)
 @Cache(neverCache = true)
 public class Bundles extends AbstractControlPanelHandler {

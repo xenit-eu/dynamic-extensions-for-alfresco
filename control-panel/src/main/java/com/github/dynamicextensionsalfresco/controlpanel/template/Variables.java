@@ -99,7 +99,7 @@ public class Variables {
 	/**
 	 * Refers to a collection of {@link TemplateWebScript}s.
 	 */
-	public static final String WEB_SCRIPTS = "webScripts";
+	public static final String WEB_SCRIPTS = "webScriptsByFamily";
 
 	private Variables() {
 	}

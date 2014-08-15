@@ -16,7 +16,7 @@ import java.io.IOException;
  * 
  */
 @Component
-@WebScript
+@WebScript(families = "control panel")
 @Authentication(AuthenticationType.NONE)
 @Transaction(TransactionType.NONE)
 public class Resources extends AbstractBundleResourceHandler {

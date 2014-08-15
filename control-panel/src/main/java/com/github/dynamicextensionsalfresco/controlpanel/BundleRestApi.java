@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
  * 
  */
 @Component
-@WebScript(baseUri = "/dynamic-extensions/api/bundles")
+@WebScript(baseUri = "/dynamic-extensions/api/bundles", families = "control panel")
 @Authentication(value = AuthenticationType.ADMIN)
 public class BundleRestApi {
 

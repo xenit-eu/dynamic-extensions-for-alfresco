@@ -34,7 +34,7 @@ import java.util.Map.Entry;
  * 
  */
 @Component
-@WebScript(baseUri = "/dynamic-extensions/container", defaultFormat = "html")
+@WebScript(baseUri = "/dynamic-extensions/container", defaultFormat = "html", families = "control panel")
 @Authentication(AuthenticationType.ADMIN)
 @Cache(neverCache = true)
 public class Container extends AbstractControlPanelHandler {

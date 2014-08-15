@@ -2,7 +2,11 @@ package com.github.dynamicextensionsalfresco.controlpanel;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.github.dynamicextensionsalfresco.controlpanel.template.TemplateWebScript;
 import com.github.dynamicextensionsalfresco.webscripts.WebScriptUriRegistry;
@@ -12,6 +16,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.extensions.webscripts.WebScript;
 import org.springframework.stereotype.Component;
 
+import static java.util.Arrays.asList;
+
 @Component
 public class WebScriptHelper {
 
@@ -20,7 +26,7 @@ public class WebScriptHelper {
 
 	/* Main operations */
 
-	public List<TemplateWebScript> getWebScripts() {
+	public Map<String,List<TemplateWebScript>> getWebScripts() {
 		final WebScriptUriRegistry registry = getApplicationContextBean(WebScriptUriRegistry.class);
 		if (registry != null) {
 			final List<WebScript> webScripts = registry.getWebScripts();
@@ -28,9 +34,24 @@ public class WebScriptHelper {
 			for (final WebScript webScript : webScripts) {
 				templateWebScripts.add(new TemplateWebScript(webScript));
 			}
-			return templateWebScripts;
+			Map<String,List<TemplateWebScript>> byFamily = new HashMap<String, List<TemplateWebScript>>();
+			for (TemplateWebScript templateWebScript : templateWebScripts) {
+				Set<String> familys = templateWebScript.getFamilys();
+				if (familys == null) {
+					familys = new HashSet<String>(asList("no family"));
+				}
+				for (String family : familys) {
+					List<TemplateWebScript> familiyList = byFamily.get(family);
+					if (familiyList == null) {
+						familiyList = new ArrayList<TemplateWebScript>();
+						byFamily.put(family, familiyList);
+					}
+					familiyList.add(templateWebScript);
+				}
+			}
+			return byFamily;
 		} else {
-			return Collections.emptyList();
+			return Collections.emptyMap();
 		}
 	}
 

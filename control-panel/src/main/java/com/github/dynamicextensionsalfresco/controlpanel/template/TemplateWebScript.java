@@ -3,6 +3,7 @@ package com.github.dynamicextensionsalfresco.controlpanel.template;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScript;
 
@@ -34,5 +35,17 @@ public class TemplateWebScript {
 		} else {
 			return null;
 		}
+	}
+
+	public Set<String> getFamilys() {
+		return webScript.getDescription().getFamilys();
+	}
+
+	public String getDescription() {
+		return webScript.getDescription().getDescription();
+	}
+
+	public String getDefaultFormat() {
+		return webScript.getDescription().getDefaultFormat();
 	}
 }
