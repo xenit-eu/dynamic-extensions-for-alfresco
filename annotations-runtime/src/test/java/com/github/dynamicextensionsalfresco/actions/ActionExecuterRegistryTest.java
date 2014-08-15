@@ -7,6 +7,7 @@ import java.util.List;
 import org.alfresco.repo.action.executer.ActionExecuter;
 import org.alfresco.service.cmr.action.ActionDefinition;
 import org.alfresco.service.cmr.action.ParameterDefinition;
+import org.alfresco.service.cmr.dictionary.DataTypeDefinition;
 import org.alfresco.service.namespace.QName;
 import org.junit.Test;
 import org.junit.runner.RunWith;
