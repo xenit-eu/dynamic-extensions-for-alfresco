@@ -7,12 +7,15 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.github.dynamicextensionsalfresco.AbstractAnnotationBasedRegistrar;
 import com.github.dynamicextensionsalfresco.actions.annotations.ActionMethod;
 import com.github.dynamicextensionsalfresco.actions.annotations.ActionParam;
 
+import com.google.common.collect.ImmutableMap;
 import org.alfresco.repo.action.ActionDefinitionImpl;
 import org.alfresco.repo.action.ParameterDefinitionImpl;
 import org.alfresco.repo.action.RuntimeActionService;
@@ -23,6 +26,7 @@ import org.alfresco.service.cmr.action.ParameterDefinition;
 import org.alfresco.service.cmr.dictionary.DataTypeDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.QName;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -53,6 +57,8 @@ public class AnnotationBasedActionRegistrar extends AbstractAnnotationBasedRegis
 	private RuntimeActionService runtimeActionService;
 
 	private final ParameterNameDiscoverer parameterNameDiscoverer = new LocalVariableTableParameterNameDiscoverer();
+
+	private final Map<Class<?>,QName> parameterTypes = getActionParameterMapping();
 
 	/* State */
 
@@ -230,7 +236,11 @@ public class AnnotationBasedActionRegistrar extends AbstractAnnotationBasedRegis
 				throw new RuntimeException(String.format("Invalid or unknown DataType: %s", actionParameter.type()));
 			}
 		} else {
-			dataType = getDictionaryService().getDataType(clazz);
+			final QName qName = parameterTypes.get(clazz);
+			if (qName == null) {
+				throw new RuntimeException(String.format("%s is not a standard parameter type, specify the type explicitly", clazz));
+			}
+			dataType = getDictionaryService().getDataType(qName);
 		}
 		return dataType;
 	}
@@ -254,6 +264,17 @@ public class AnnotationBasedActionRegistrar extends AbstractAnnotationBasedRegis
 			return null;
 		}
 
+	}
+
+	protected Map<Class<?>, QName> getActionParameterMapping() {
+		return ImmutableMap.<Class<?>,QName>builder()
+			.put(String.class, DataTypeDefinition.TEXT)
+			.put(Long.class, DataTypeDefinition.LONG)
+			.put(Double.class, DataTypeDefinition.DOUBLE)
+			.put(Date.class, DataTypeDefinition.DATETIME)
+			.put(Boolean.class, DataTypeDefinition.BOOLEAN)
+			.put(NodeRef.class, DataTypeDefinition.NODE_REF)
+			.build();
 	}
 
 	/* Dependencies */
