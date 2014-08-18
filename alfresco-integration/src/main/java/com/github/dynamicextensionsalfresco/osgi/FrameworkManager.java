@@ -4,7 +4,11 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.service.cmr.repository.ContentService;
-import org.osgi.framework.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.BundleListener;
+import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.wiring.FrameworkWiring;
 import org.slf4j.Logger;
@@ -259,7 +263,7 @@ public class FrameworkManager implements ResourceLoaderAware {
 		this.framework = framework;
 	}
 
-	protected Framework getFramework() {
+	public Framework getFramework() {
 		return framework;
 	}
 

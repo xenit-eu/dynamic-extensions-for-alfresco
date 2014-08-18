@@ -168,7 +168,7 @@ public class OsgiContainerModuleComponent extends AbstractModuleComponent implem
 	/**
 	 * Obtains the {@link FrameworkManager} from the OSGi container{@link ApplicationContext}.
 	 */
-	protected FrameworkManager getFrameworkManager() {
+	public FrameworkManager getFrameworkManager() {
 		Assert.state(childApplicationContext != null);
 		return childApplicationContext.getBean(BeanNames.CONTAINER_FRAMEWORK_MANAGER, FrameworkManager.class);
 	}

@@ -8,6 +8,7 @@ package com.github.dynamicextensionsalfresco.osgi;
  */
 public interface FrameworkService {
 
-	public void restartFramework();
+	void restartFramework();
 
+	FrameworkManager getFrameworkManager();
 }
