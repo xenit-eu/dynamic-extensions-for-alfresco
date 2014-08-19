@@ -56,7 +56,7 @@ public class RepositoryModelRegistrar extends AbstractModelRegistrar {
 
 	@Override
 	protected void registerModel(final M2ModelResource modelResource) {
-		AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+		AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Object>() {
 			@Override
 			public Object doWork() throws Exception {
 				try {
@@ -82,6 +82,6 @@ public class RepositoryModelRegistrar extends AbstractModelRegistrar {
 				}
 				return null;
 			}
-		});
+		}, AuthenticationUtil.getSystemUserName());
 	}
 }

@@ -318,6 +318,11 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 	}
 
     protected void registerWorkflowBeans(final DefaultListableBeanFactory beanFactory) {
+        try {
+            Class.forName("org.activiti.engine.delegate.JavaDelegate");
+        } catch (Throwable ignore) {
+            return;
+        }
         if (!beanFactory.containsBeanDefinition(BeanNames.TYPE_BASED_WORKFLOW_REGISTRAR)) {
             beanFactory.registerBeanDefinition(BeanNames.TYPE_BASED_WORKFLOW_REGISTRAR,
                 BeanDefinitionBuilder.rootBeanDefinition(WorkflowTaskRegistrar.class).getBeanDefinition()

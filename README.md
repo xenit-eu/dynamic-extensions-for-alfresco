@@ -39,16 +39,14 @@ Dynamic Extensions is developed and tested against:
 
 * Alfresco Enterprise 4.1
 * Alfresco Enterprise 4.2
+* Alfresco Community 5.0
 
 Dynamic Extensions is also known to work on:
 
+* Alfresco Enterprise 3.4
 * Alfresco Enterprise 4.0
 * Alfresco Community 4.0
 * Alfresco Community 4.2
-
-Due to Activiti support, Alfresco 3.4 is not supported, you can use a 3.4 specific fork if you need support:
-
-https://github.com/lfridael/dynamic-extensions-for-alfresco-3.4
 
 Example extension code
 ----------------------

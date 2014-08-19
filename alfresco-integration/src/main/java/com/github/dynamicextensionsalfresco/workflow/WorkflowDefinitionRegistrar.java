@@ -23,7 +23,7 @@ import org.springframework.core.io.Resource;
 import java.io.Serializable;
 import java.util.Map;
 
-import static org.alfresco.repo.security.authentication.AuthenticationUtil.runAsSystem;
+import static org.alfresco.repo.security.authentication.AuthenticationUtil.runAs;
 
 /**
  * Service that inspect the {@link WorkflowDefinitionRegistrar#workflowLocationPattern} to find workflow definitions and
@@ -55,7 +55,7 @@ public class WorkflowDefinitionRegistrar implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+        runAs(new AuthenticationUtil.RunAsWork<Object>() {
             @Override
             public Object doWork() throws Exception {
                 try {
@@ -93,6 +93,6 @@ public class WorkflowDefinitionRegistrar implements InitializingBean {
                 }
                 return null;
             }
-        });
+        }, AuthenticationUtil.getSystemUserName());
     }
 }

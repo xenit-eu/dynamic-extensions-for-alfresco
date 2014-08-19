@@ -2,6 +2,8 @@ package com.github.dynamicextensionsalfresco.workflow.activiti;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 import java.util.Map;
 
@@ -11,14 +13,18 @@ import java.util.Map;
  *
  * @author Laurent Van der Linden
  */
-public class WorkflowPostProcessor implements BeanPostProcessor {
-    private WorkflowTaskRegistry workflowTaskRegistry;
-    private Map<String,Object> activitiBeanRegistry;
+public class WorkflowPostProcessor implements BeanPostProcessor, ApplicationContextAware {
+    private ApplicationContext applicationContext;
 
+    @SuppressWarnings("unchecked")
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        if (beanName.equals("activitiProcessEngineConfiguration")) {
-            activitiBeanRegistry.put(DefaultWorkflowTaskRegistry.BEAN_NAME, workflowTaskRegistry);
+        if (applicationContext.containsBean("activitiBeanRegistry")) {
+            final Object workflowTaskRegistry = applicationContext.getBean("osgi.container.WorkflowTaskRegistry");
+            final Map<String,Object> activitiBeanRegistry = (Map<String, Object>) applicationContext.getBean("activitiBeanRegistry");
+            if (beanName.equals("activitiProcessEngineConfiguration")) {
+                activitiBeanRegistry.put(DefaultWorkflowTaskRegistry.BEAN_NAME, workflowTaskRegistry);
+            }
         }
         return bean;
     }
@@ -28,11 +34,8 @@ public class WorkflowPostProcessor implements BeanPostProcessor {
         return bean;
     }
 
-    public void setWorkflowTaskRegistry(WorkflowTaskRegistry workflowTaskRegistry) {
-        this.workflowTaskRegistry = workflowTaskRegistry;
-    }
-
-    public void setActivitiBeanRegistry(Map<String, Object> activitiBeanRegistry) {
-        this.activitiBeanRegistry = activitiBeanRegistry;
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 }
