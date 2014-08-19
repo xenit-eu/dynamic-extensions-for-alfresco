@@ -89,9 +89,13 @@ public class RequestParamArgumentResolver implements ArgumentResolver<Object, Re
 				throw new IllegalStateException(String.format("Request parameter not available: %s", parameterName));
 			}
 		}
-		final String[] parameterValues = parameterValue.split(requestParam.delimiter());
-		return convertToArray(parameterType.getComponentType(), parameterValues);
-	}
+        if (parameterValue != null) {
+            final String[] parameterValues = parameterValue.split(requestParam.delimiter());
+            return convertToArray(parameterType.getComponentType(), parameterValues);
+        } else {
+            return null;
+        }
+    }
 
 	private Object handleMultipleParameters(final Class<?> parameterType, final RequestParam requestParam,
 			final WebScriptRequest request, final String parameterName) {

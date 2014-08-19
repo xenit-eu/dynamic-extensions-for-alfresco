@@ -180,7 +180,7 @@ public class Container extends AbstractControlPanelHandler {
 
 	/* Utility operations */
 
-	protected void restartFramework(final Framework framework) throws IOException {
+	protected void restartFramework(final Framework framework) {
 		try {
 			framework.stop();
 			framework.waitForStop(0);

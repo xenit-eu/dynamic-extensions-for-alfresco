@@ -94,7 +94,7 @@ public class ServiceBundleContextRegistrar implements BundleContextRegistrar, Ap
 				if (getApplicationContext().isSingleton(beanName) == false) {
 					if (logger.isWarnEnabled()) {
 						logger.warn(String.format(
-								"Service \"{}\" is not a singleton. Can only register singleton beans.", beanName));
+								"Service \"%s\" is not a singleton. Can only register singleton beans.", beanName));
 					}
 					continue;
 				}
@@ -140,12 +140,11 @@ public class ServiceBundleContextRegistrar implements BundleContextRegistrar, Ap
 			}
 		}
 		if (logger.isDebugEnabled()) {
-			logger.debug("Registering bean \"{}\" under service names {} with properties {}", new Object[] { beanName,
-					serviceNames, serviceProperties });
+			logger.debug("Registering bean \"{}\" under service names {} with properties {}", beanName,
+                serviceNames, serviceProperties);
 		}
-		final ServiceRegistration<?> serviceRegistration = bundleContext.registerService(
-				serviceNames.toArray(new String[serviceNames.size()]), service, serviceProperties);
-		return serviceRegistration;
+        return bundleContext.registerService(
+                serviceNames.toArray(new String[serviceNames.size()]), service, serviceProperties);
 	}
 
 	public void unregisterFromBundleContext() {

@@ -13,7 +13,7 @@ import java.lang.reflect.Method;
  * @author Laurent Van der Linden
  */
 public class ServiceInvocationHandler implements MethodInterceptor, InvocationHandler {
-	private Tracker tracker;
+	private final Tracker tracker;
 
 	public ServiceInvocationHandler(Tracker tracker) {
 		this.tracker = tracker;

@@ -13,7 +13,7 @@ import java.lang.annotation.Annotation;
  * @param <ArgumentType>
  * @param <AnnotationType>
  */
-public interface ArgumentResolver<ArgumentType extends Object, AnnotationType extends Annotation> {
+public interface ArgumentResolver<ArgumentType, AnnotationType extends Annotation> {
 
 	/**
 	 * Indicates whether this implementation support parameters of the given type in combination with an optional

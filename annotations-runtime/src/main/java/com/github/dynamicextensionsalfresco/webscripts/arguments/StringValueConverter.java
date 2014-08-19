@@ -66,7 +66,7 @@ public class StringValueConverter {
 		} else if (QName.class.equals(type)) {
 			if (stringValue.matches("\\{\\.+?\\}\\.+?")) {
 				value = QName.createQName(stringValue);
-			} else if (stringValue.matches("\\w+?\\:\\w+?")) {
+			} else if (stringValue.matches("\\w+?:\\w+?")) {
 				value = QName.createQName(stringValue, getNamespacePrefixResolver());
 			} else {
 				throw new IllegalArgumentException("Invalid QName format: " + stringValue);

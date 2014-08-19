@@ -1,6 +1,5 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
-import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import javax.servlet.http.HttpServletRequest;

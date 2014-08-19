@@ -86,7 +86,7 @@ public class Bundles extends AbstractControlPanelHandler {
 				responseHelper.flashErrorMessage("Error uninstalling Bundle");
 			}
 		} else {
-			responseHelper.flashErrorMessage(String.format("Cannot delete bundle. Bundle with ID %d not found.", id));
+			responseHelper.flashErrorMessage(String.format("Cannot delete bundle. Bundle with ID %s not found.", id));
 		}
 		return new RedirectResolution(Urls.BUNDLES);
 	}
@@ -108,7 +108,7 @@ public class Bundles extends AbstractControlPanelHandler {
             }
 		} else {
 			responseHelper.flashErrorMessage(String.format("Cannot start bundle. Bundle with ID %d not found.", id));
-			return new RedirectToBundle(bundle);
+			return new RedirectResolution("/dynamic-extensions/bundles");
 		}
 	}
 

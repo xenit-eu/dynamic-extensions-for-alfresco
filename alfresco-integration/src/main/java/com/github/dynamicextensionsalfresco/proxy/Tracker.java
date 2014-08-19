@@ -18,8 +18,8 @@ import org.slf4j.LoggerFactory;
 public class Tracker {
 	private final static Logger logger = LoggerFactory.getLogger(Tracker.class);
 
-	private FilterModel filterModel;
-	private FrameworkService frameworkService;
+	private final FilterModel filterModel;
+	private final FrameworkService frameworkService;
 
 	private volatile ServiceTracker<Object,Object> serviceTracker;
 	private volatile FrameworkManager frameworkManager;
@@ -106,8 +106,8 @@ public class Tracker {
 			}
 
 			@Override
-			public void setServiceFilter(String ldapFilter) {
-				filterModel.setServiceFilter(ldapFilter);
+			public void setServiceFilterString(String ldapFilter) {
+				filterModel.setServiceFilterString(ldapFilter);
 				closeServiceTracker();
 			}
 		};

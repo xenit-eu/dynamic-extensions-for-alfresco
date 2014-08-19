@@ -20,7 +20,7 @@ public class AttributeArgumentResolver implements ArgumentResolver<Object, Attri
 	@Override
 	public Object resolveArgument(final Class<?> argumentType, final Attribute attribute, String name,
 			final WebScriptRequest request, final WebScriptResponse response) {
-		Object value = null;
+		Object value;
 		final Map<String, Object> attributesByName = ((AnnotationWebScriptRequest) request).getModel();
 		if (StringUtils.hasText(attribute.value())) {
 			name = attribute.value();

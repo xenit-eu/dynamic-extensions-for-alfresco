@@ -9,7 +9,7 @@ import java.io.IOException;
  * @author Laurent Van der Linden
  */
 public class ContentCompareStrategy implements UpdateStrategy {
-    private ResourceHelper resourceHelper;
+    private final ResourceHelper resourceHelper;
 
     public ContentCompareStrategy(ResourceHelper resourceHelper) {
         this.resourceHelper = resourceHelper;

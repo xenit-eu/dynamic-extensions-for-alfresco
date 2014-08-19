@@ -11,7 +11,6 @@ import org.springframework.util.ClassUtils;
 
 import java.io.StringWriter;
 
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 /**

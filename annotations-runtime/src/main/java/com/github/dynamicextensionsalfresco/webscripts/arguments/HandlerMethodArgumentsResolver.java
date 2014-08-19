@@ -190,8 +190,8 @@ public class HandlerMethodArgumentsResolver implements ApplicationContextAware {
     }
 
     private static class ArgumentResolverKey {
-        public Class parameterType;
-        public Class annotationType;
+        public final Class parameterType;
+        public final Class annotationType;
 
         private ArgumentResolverKey(Class parameterType, Class annotationType) {
             this.parameterType = parameterType;

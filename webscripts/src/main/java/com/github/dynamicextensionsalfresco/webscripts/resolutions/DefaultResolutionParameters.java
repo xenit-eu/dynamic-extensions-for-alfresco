@@ -9,9 +9,9 @@ import java.lang.reflect.Method;
  * @author Laurent Van der Linden
  */
 public class DefaultResolutionParameters implements ResolutionParameters {
-    private Method uriMethod;
-    private Description description;
-    private Object handler;
+    private final Method uriMethod;
+    private final Description description;
+    private final Object handler;
 
     public DefaultResolutionParameters(Method uriMethod, Description description, Object handler) {
         this.uriMethod = uriMethod;

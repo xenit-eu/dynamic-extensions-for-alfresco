@@ -45,7 +45,7 @@ class QNamePropertyEditor extends PropertyEditorSupport {
 		} else {
 			throw new IllegalArgumentException("Invalid value: " + text);
 		}
-	};
+	}
 
 	/* Dependencies */
 

@@ -136,7 +136,7 @@ public class AnnotationWebScript implements WebScript {
 	}
 
 	protected Object invokeUriHandlerMethod(final AnnotationWebScriptRequest request,
-			final AnnotationWebscriptResponse response) throws IOException {
+			final AnnotationWebscriptResponse response) {
 		final Method uriMethod = handlerMethods.getUriMethod();
 		final Object[] arguments = argumentsResolver.resolveHandlerMethodArguments(uriMethod, handler, request,
 				response);

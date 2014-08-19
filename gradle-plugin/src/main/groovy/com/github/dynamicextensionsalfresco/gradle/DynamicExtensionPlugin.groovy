@@ -47,10 +47,9 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 		task.ext.repository = [:] << Endpoint.DEFAULTS
 		task.doFirst {
 			if (installInDirectory) {
-				File dir = new java.io.File(directory)
+				File dir = new File(directory)
 				if (!dir.exists()) {
 					throw new BuildException("Directory '$directory' does not exist.", null)
-					logger.error()
 				} else if (!dir.isDirectory()) {
 					throw new BuildException("'$directory' is not a directory", null)
 				}
@@ -99,7 +98,7 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 			version: project.dynamicExtensions.version ?: Versions.DYNAMIC_EXTENSIONS
 		]
 		def spring = [
-			version: project.surf.version ?: Versions.SURF
+			version: project.spring.version ?: Versions.SPRING
 		]
 		project.dependencies {
 			compile ("org.alfresco:alfresco-core:${alfresco.version}") { transitive = false }
@@ -110,7 +109,7 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 			compile ("com.github.dynamicextensionsalfresco:annotations:${dynamicExtensions.version}") { transitive = false }
             compile ("com.github.dynamicextensionsalfresco:webscripts:${dynamicExtensions.version}") { transitive = false }
 			// Since Spring is so fundamental, this is the one dependency we leave as transitive.
-			compile ('org.springframework:spring-context:3.0.0.RELEASE')
+			compile ("org.springframework:spring-context:${spring.version}")
 			// JSR-250 API contains the @Resource annotation for referencing dependencies by name.
 			compile ('javax.annotation:jsr250-api:1.0') { transitive = false }
 		}
@@ -169,6 +168,7 @@ class ProjectConvention {
 	def alfresco = [:]
 	def surf = [:]
 	def dynamicExtensions = [:]
+    def spring = [:]
 
 	ProjectConvention(Project project) {
 		this.project = project
@@ -186,6 +186,10 @@ class ProjectConvention {
 		project.surf.version = version
 	}
 
+    void useSpringVersion(String version) {
+        project.spring.version = version
+    }
+
 	Task getInstallBundle() {
 		project.tasks["installBundle"]
 	}
@@ -195,7 +199,6 @@ class ProjectConvention {
 			if (installInRepository) {
 				throw new BuildException("Cannot use toDirectory() and toRepository() simultaneously.");
 			}
-			directory = directory
 			installInDirectory = true
 		}
 	}

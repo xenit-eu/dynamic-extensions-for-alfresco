@@ -128,9 +128,9 @@ public class BehaviourProxy implements Behaviour {
 
 	private static class ProxyPolicy {
 
-		Object proxy;
+		final Object proxy;
 
-		ProxyPolicyInvocationHandler handler;
+		final ProxyPolicyInvocationHandler handler;
 
 		private ProxyPolicy(final Object proxy, final ProxyPolicyInvocationHandler handler) {
 			this.proxy = proxy;

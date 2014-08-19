@@ -8,8 +8,8 @@ package com.github.dynamicextensionsalfresco.osgi;
 public enum PackageCacheMode {
 	ENABLE(true, true, false), DISABLE(false, false, false), UPDATE(false, true, true);
 
-	private boolean readFromCache;
-	private boolean writeToCache;
+	private final boolean readFromCache;
+	private final boolean writeToCache;
 	private final boolean forceWriteToCache;
 
 	private PackageCacheMode(boolean readFromCache, boolean writeToCache, boolean forceWriteToCache) {

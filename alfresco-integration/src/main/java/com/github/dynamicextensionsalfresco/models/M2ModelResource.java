@@ -10,8 +10,8 @@ import org.springframework.core.io.Resource;
  * @author Laurent Van der Linden
  */
 public class M2ModelResource {
-	private Resource resource;
-	private M2Model m2Model;
+	private final Resource resource;
+	private final M2Model m2Model;
 
 	public M2ModelResource(Resource resource, M2Model m2Model) {
 		this.resource = resource;

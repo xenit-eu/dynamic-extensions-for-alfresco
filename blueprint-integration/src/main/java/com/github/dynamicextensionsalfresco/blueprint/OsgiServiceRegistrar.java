@@ -35,7 +35,7 @@ public class OsgiServiceRegistrar implements ApplicationContextAware, BundleCont
 		final Class<?> type = applicationContext.getType(beanName);
 		final Class<?>[] interfaces = getInterfaces(type, service);
         try {
-            logger.debug("Registering bean {} as OSGi service {}.", Arrays.asList(interfaces));
+            logger.debug("Registering bean {} as OSGi service using interfaces {}.", beanName, Arrays.asList(interfaces));
             final OsgiServiceFactoryBean factoryBean = new OsgiServiceFactoryBean();
             factoryBean.setServiceProperties(getServiceProperties(service));
             factoryBean.setInterfaces(interfaces);

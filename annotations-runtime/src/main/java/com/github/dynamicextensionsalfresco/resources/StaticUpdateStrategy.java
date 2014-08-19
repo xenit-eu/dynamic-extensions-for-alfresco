@@ -7,7 +7,7 @@ import org.springframework.core.io.Resource;
  * @author Laurent Van der Linden
  */
 public class StaticUpdateStrategy implements UpdateStrategy {
-    private boolean strategy;
+    private final boolean strategy;
 
     public StaticUpdateStrategy(boolean strategy) {
         this.strategy = strategy;

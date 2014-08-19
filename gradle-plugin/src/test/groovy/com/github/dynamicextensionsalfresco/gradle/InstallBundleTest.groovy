@@ -1,3 +1,5 @@
+package com.github.dynamicextensionsalfresco.gradle
+
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Assert
@@ -19,5 +21,8 @@ class InstallBundleTest {
 
         project.useSurfVersion("1.2-silly")
         Assert.assertEquals("1.2-silly", project.surf.version)
+
+        project.useSpringVersion("4.0.0")
+        Assert.assertEquals("4.0.0", project.spring.version)
     }
 }

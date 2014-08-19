@@ -26,10 +26,8 @@ class BundleUtils {
 			final Object service = ctx.getService(ref);
 			if (service instanceof PackageAdmin) {
 				final PackageAdmin pa = (PackageAdmin) service;
-				if (pa != null) {
-					return pa.getBundle(OsgiBundleXmlApplicationContext.class);
-				}
-			}
+                return pa.getBundle(OsgiBundleXmlApplicationContext.class);
+            }
 		}
 		return null;
 	}

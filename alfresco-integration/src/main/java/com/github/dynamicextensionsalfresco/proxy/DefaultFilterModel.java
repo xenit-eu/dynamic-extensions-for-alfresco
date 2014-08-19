@@ -11,7 +11,7 @@ import org.osgi.framework.InvalidSyntaxException;
  * @author Laurent Van der Linden
  */
 public class DefaultFilterModel implements FilterModel {
-	private Class<?>[] targetInterfaces;
+	private final Class<?>[] targetInterfaces;
 
 	private Filter filter;
 
@@ -45,7 +45,7 @@ public class DefaultFilterModel implements FilterModel {
 	}
 
 	@Override
-	public void setServiceFilter(String ldapFilter) {
+	public void setServiceFilterString(String ldapFilter) {
 		try {
 			this.filter = new FilterImpl(ldapFilter);
 		} catch (InvalidSyntaxException e) {

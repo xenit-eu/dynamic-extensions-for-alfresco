@@ -7,8 +7,8 @@ import org.springframework.util.Assert;
  * Represents a {@link Framework} system package.
  * 
  * @author Laurens Fridael
- * @see FrameworkConfiguration#setCoreSystemPackages(java.util.Set)
- * @see FrameworkConfiguration#setAdditionalSystemPackages(java.util.Set)
+ * @see FrameworkConfiguration#setCoreSystemPackages(ConfigurationValues)
+ * @see FrameworkConfiguration#setAdditionalSystemPackages(ConfigurationValues)
  */
 public class SystemPackage {
 

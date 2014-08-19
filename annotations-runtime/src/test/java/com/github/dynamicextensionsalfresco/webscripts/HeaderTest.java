@@ -1,6 +1,5 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
-import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.Header;
 

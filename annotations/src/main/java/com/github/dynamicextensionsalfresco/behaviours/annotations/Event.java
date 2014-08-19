@@ -40,7 +40,7 @@ public enum Event {
 	 */
 	INHERITED_OR_ALL(NotificationFrequency.EVERY_EVENT);
 
-	private NotificationFrequency notificationFrequency;
+	private final NotificationFrequency notificationFrequency;
 
 	private Event(final NotificationFrequency notificationFrequency) {
 		this.notificationFrequency = notificationFrequency;

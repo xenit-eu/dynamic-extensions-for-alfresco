@@ -41,8 +41,12 @@ public class BundleServiceProxyFactory implements FactoryBean<Object> {
 
 	@Override
 	public Class<?> getObjectType() {
-		return targetInterfaces[0];
-	}
+        if (targetInterfaces == null || targetInterfaces.length == 0) {
+            return null;
+        } else {
+            return targetInterfaces[0];
+        }
+    }
 
 	@Override
 	public boolean isSingleton() {

@@ -27,7 +27,7 @@ public class MockFrameworkService implements FrameworkService {
 		when(frameworkMock.getBundleContext()).thenReturn(contextMock);
 
 		try {
-			ServiceReference serviceReferenceMock = mock(ServiceReference.class);
+			ServiceReference<?> serviceReferenceMock = mock(ServiceReference.class);
 			when(contextMock.getAllServiceReferences(null, "(&(objectClass=java.lang.Runnable)(objectClass=java.lang.reflect.InvocationHandler))"))
 				.thenReturn(new ServiceReference[]{serviceReferenceMock});
 			when(contextMock.getService(serviceReferenceMock)).thenReturn(new DummyService());

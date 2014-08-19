@@ -82,8 +82,7 @@ public class SystemPackageConfigurationFactoryBean extends AbstractConfiguration
 				if (in != null) {
 					try {
 						in.close();
-					} catch (final IOException e) {
-					}
+					} catch (final IOException ignore) {}
 				}
 			}
 		}

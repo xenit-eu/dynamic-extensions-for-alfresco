@@ -93,7 +93,7 @@ public class AnnotationBasedBehaviourRegistrar extends AbstractAnnotationBasedRe
 					if (logger.isDebugEnabled()) {
 						logger.debug(
 								"Binding class Behaviour for policy {} and class {} for method {} with notification frequency {}.",
-								new Object[] { policyName, className, method, notificationFrequency });
+                            policyName, className, method, notificationFrequency);
 					}
 					getPolicyComponent().bindClassBehaviour(policyName, className, behaviour);
 				}
@@ -101,7 +101,7 @@ public class AnnotationBasedBehaviourRegistrar extends AbstractAnnotationBasedRe
 		} else {
 			if (logger.isDebugEnabled()) {
 				logger.debug("Binding class Behaviour for policy {} for method {} with notification frequency {}.",
-						new Object[] { policyName, method, notificationFrequency });
+                    policyName, method, notificationFrequency);
 			}
 			getPolicyComponent().bindClassBehaviour(policyName, bean, behaviour);
 		}
@@ -131,14 +131,14 @@ public class AnnotationBasedBehaviourRegistrar extends AbstractAnnotationBasedRe
 					if (logger.isDebugEnabled()) {
 						logger.debug(
 								"Binding association Behaviour for policy {}, class {} and association {} for method {} with notification frequency {}.",
-								new Object[] { policyName, className, assocationName, method, notificationFrequency });
+                            policyName, className, assocationName, method, notificationFrequency);
 					}
 					getPolicyComponent().bindAssociationBehaviour(policyName, className, assocationName, behaviour);
 				} else {
 					if (logger.isDebugEnabled()) {
 						logger.debug(
 								"Binding association Behaviour for policy {} and class {} for method {} with notification frequency {}.",
-								new Object[] { policyName, className, method, notificationFrequency });
+                            policyName, className, method, notificationFrequency);
 					}
 					getPolicyComponent().bindAssociationBehaviour(policyName, className, behaviour);
 				}
@@ -147,7 +147,7 @@ public class AnnotationBasedBehaviourRegistrar extends AbstractAnnotationBasedRe
 			if (logger.isDebugEnabled()) {
 				logger.debug(
 						"Binding association Behaviour for policy {} for method {} with notification frequency {}.",
-						new Object[] { policyName, method, notificationFrequency });
+                    policyName, method, notificationFrequency);
 			}
 			getPolicyComponent().bindAssociationBehaviour(policyName, bean, behaviour);
 		}
@@ -179,14 +179,14 @@ public class AnnotationBasedBehaviourRegistrar extends AbstractAnnotationBasedRe
 					if (logger.isDebugEnabled()) {
 						logger.debug(
 								"Binding property Behaviour for policy {}, class {} and property {} for method {} with notification frequency {}.",
-								new Object[] { policyName, className, propertyName, method, notificationFrequency });
+                            policyName, className, propertyName, method, notificationFrequency);
 					}
 					getPolicyComponent().bindPropertyBehaviour(policyName, className, propertyName, behaviour);
 				} else {
 					if (logger.isDebugEnabled()) {
 						logger.debug(
 								"Binding property Behaviour for policy {} and class {} for method {} with notification frequency {}.",
-								new Object[] { policyName, className, method, notificationFrequency });
+                            policyName, className, method, notificationFrequency);
 					}
 					getPolicyComponent().bindPropertyBehaviour(policyName, className, behaviour);
 				}
@@ -194,7 +194,7 @@ public class AnnotationBasedBehaviourRegistrar extends AbstractAnnotationBasedRe
 		} else {
 			if (logger.isDebugEnabled()) {
 				logger.debug("Binding property Behaviour for policy {} for method {} with notification frequency {}.",
-						new Object[] { policyName, method, notificationFrequency });
+                    policyName, method, notificationFrequency);
 			}
 			getPolicyComponent().bindPropertyBehaviour(policyName, bean, behaviour);
 		}
@@ -258,7 +258,7 @@ public class AnnotationBasedBehaviourRegistrar extends AbstractAnnotationBasedRe
 		return policyInterfacesByType;
 	}
 
-	private Map<PolicyType, List<BehaviourMethod>> getBehaviourMethodsByType(final Class<? extends Object> beanClass) {
+	private Map<PolicyType, List<BehaviourMethod>> getBehaviourMethodsByType(final Class<?> beanClass) {
 		final Map<PolicyType, List<Class<? extends Policy>>> policyInterfacesByType = getPolicyInterfacesByType(beanClass);
 		final Map<PolicyType, List<BehaviourMethod>> behaviourMethodsByType = new HashMap<PolicyType, List<BehaviourMethod>>();
 		for (final Entry<PolicyType, List<Class<? extends Policy>>> entry : policyInterfacesByType.entrySet()) {

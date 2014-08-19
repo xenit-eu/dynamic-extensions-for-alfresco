@@ -33,7 +33,7 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 
 	private BundleManifest manifest;
 
-	private List<TemplateServiceReference> services;
+	private final List<TemplateServiceReference> services;
 
 	@SuppressWarnings("rawtypes")
 	public TemplateBundle(final Bundle bundle, final List<ServiceReference> services) {

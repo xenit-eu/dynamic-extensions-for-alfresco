@@ -251,8 +251,7 @@ public class FrameworkManager implements ResourceLoaderAware {
 			getFramework().waitForStop(0);
 		} catch (final BundleException e) {
 			logger.error("Could not stop Framework.", e);
-		} catch (final InterruptedException e) {
-		}
+		} catch (final InterruptedException ignore) {}
 	}
 
 	/* Dependencies */

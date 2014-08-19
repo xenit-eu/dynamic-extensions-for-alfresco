@@ -191,10 +191,10 @@ public class AnnotationWebScriptBuilder implements BeanFactoryAware {
 		if (uri.value().length > 0) {
 			uris = new String[uri.value().length];
 			for (int i = 0; i < uris.length; i++) {
-				uris[i] = String.format("%s/%s", baseUri.replaceAll("\\/$", ""), uri.value()[i].replaceAll("^\\/", ""));
+				uris[i] = String.format("%s/%s", baseUri.replaceAll("/$", ""), uri.value()[i].replaceAll("^/", ""));
 			}
 		} else if (StringUtils.hasText(baseUri)) {
-			uris = new String[] { baseUri.replaceAll("\\/$", "") };
+			uris = new String[] { baseUri.replaceAll("/$", "") };
 		} else {
 			throw new RuntimeException(String.format(
 					"No value specified for @Uri on method '%s' and no base URI found for @WebScript on class.",

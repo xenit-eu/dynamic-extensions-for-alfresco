@@ -10,5 +10,5 @@ import org.osgi.framework.Filter;
 public interface FilterModel {
 	Filter getServiceFilter();
 	void setServiceFilter(Filter serviceFilter);
-	void setServiceFilter(String ldapFilter);
+	void setServiceFilterString(String ldapFilter);
 }

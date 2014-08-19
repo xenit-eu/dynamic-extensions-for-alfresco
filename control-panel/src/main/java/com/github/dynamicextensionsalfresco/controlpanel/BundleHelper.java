@@ -156,7 +156,7 @@ public class BundleHelper {
 			if (bundleFolder != null) {
 				final NodeRef file = fileFolderService.searchSimple(bundleFolder, filename);
 				if (file != null) {
-					final Map<QName, Serializable> properties = Collections.<QName, Serializable> emptyMap();
+					final Map<QName, Serializable> properties = Collections.emptyMap();
 					nodeService.addAspect(file, ContentModel.ASPECT_TEMPORARY, properties);
 					nodeService.deleteNode(file);
                     matchingNode = file;

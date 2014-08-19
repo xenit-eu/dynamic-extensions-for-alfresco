@@ -4,7 +4,6 @@ import java.lang.annotation.Annotation;
 
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
-import org.springframework.util.Assert;
 
 /**
  * Convenenience adapter for {@link ArgumentResolver} implementations that rely solely on the parameter type and do not

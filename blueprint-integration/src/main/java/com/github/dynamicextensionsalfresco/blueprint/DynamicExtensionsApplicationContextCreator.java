@@ -96,7 +96,7 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 	 * @param bundleContext
 	 * @throws BundleException
 	 */
-	protected void uninstallBundlesWithDuplicateSymbolicName(final BundleContext bundleContext) throws BundleException {
+	protected void uninstallBundlesWithDuplicateSymbolicName(final BundleContext bundleContext) {
 		final Bundle currentBundle = bundleContext.getBundle();
 		final Set<Bundle> duplicateInstalledBundles = new LinkedHashSet<Bundle>();
 		for (final Bundle installedBundle : bundleContext.getBundles()) {

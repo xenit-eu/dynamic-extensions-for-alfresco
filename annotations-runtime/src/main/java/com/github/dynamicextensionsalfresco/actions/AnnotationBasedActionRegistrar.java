@@ -198,7 +198,7 @@ public class AnnotationBasedActionRegistrar extends AbstractAnnotationBasedRegis
 					if (StringUtils.isEmpty(name)) {
 						throw new RuntimeException(
 								String.format(
-										"Cannot determine name of parameter at index {} of method {}."
+										"Cannot determine name of parameter at index %s of method %s."
 												+ " No name specified in @RequestParam annotation and no name available in debug info.",
 										index, method));
 					}
@@ -274,6 +274,7 @@ public class AnnotationBasedActionRegistrar extends AbstractAnnotationBasedRegis
 			.put(Date.class, DataTypeDefinition.DATETIME)
 			.put(Boolean.class, DataTypeDefinition.BOOLEAN)
 			.put(NodeRef.class, DataTypeDefinition.NODE_REF)
+			.put(QName.class, DataTypeDefinition.QNAME)
 			.build();
 	}
 

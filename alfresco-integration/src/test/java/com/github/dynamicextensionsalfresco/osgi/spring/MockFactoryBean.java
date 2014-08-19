@@ -30,7 +30,7 @@ public class MockFactoryBean implements FactoryBean<Object> {
 	}
 
 	@Override
-	public Class<? extends Object> getObjectType() {
+	public Class<?> getObjectType() {
 		return clazz;
 	}
 

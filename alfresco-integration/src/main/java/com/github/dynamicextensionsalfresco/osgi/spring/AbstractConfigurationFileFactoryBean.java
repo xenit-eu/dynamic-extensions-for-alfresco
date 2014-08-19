@@ -61,7 +61,7 @@ public abstract class AbstractConfigurationFileFactoryBean<T> implements Factory
 		this.configurations = configurations;
 	}
 
-	protected List<Resource> getConfigurations() throws IOException {
+	protected List<Resource> getConfigurations() {
 		return configurations;
 	}
 
