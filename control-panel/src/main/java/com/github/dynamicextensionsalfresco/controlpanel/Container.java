@@ -5,13 +5,8 @@ import com.github.dynamicextensionsalfresco.controlpanel.template.TemplateServic
 import com.github.dynamicextensionsalfresco.controlpanel.template.Variables;
 import com.github.dynamicextensionsalfresco.osgi.RepositoryStoreService;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.*;
-import com.github.dynamicextensionsalfresco.webscripts.resolutions.RedirectResolution;
-import com.github.dynamicextensionsalfresco.webscripts.resolutions.Resolution;
-import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.model.FileFolderService;
-import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.namespace.QName;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
@@ -21,8 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.io.Serializable;
 import java.lang.reflect.Proxy;
 import java.util.*;
 import java.util.Map.Entry;
@@ -110,20 +103,6 @@ public class Container extends AbstractControlPanelHandler {
         }
 	}
 
-	@Uri(method = HttpMethod.POST, value = "/system-package-cache/delete")
-	public Resolution deleteSystemPackageCache(@Attribute final ResponseHelper responseHelper) {
-		final FileInfo systemPackageCache = repositoryStoreService.getSystemPackageCache();
-		if (systemPackageCache != null) {
-			nodeService.addAspect(systemPackageCache.getNodeRef(), ContentModel.ASPECT_TEMPORARY,
-					Collections.<QName, Serializable> emptyMap());
-			fileFolderService.delete(systemPackageCache.getNodeRef());
-			responseHelper.flashSuccessMessage("Deleted System Package cache.");
-		} else {
-			responseHelper.flashErrorMessage("System Package cache was not found, It may have been deleted already.");
-		}
-		return new RedirectResolution(Urls.CONTAINER);
-	}
-
 	/* Utility operations */
 
 	@SuppressWarnings("rawtypes")
@@ -160,17 +139,7 @@ public class Container extends AbstractControlPanelHandler {
 
 	@Attribute(Variables.SYSTEM_PACKAGE_CACHE_EXISTS)
 	protected boolean systemPackageCacheExists() {
-		return (repositoryStoreService.getSystemPackageCache() != null);
-	}
-
-	@Attribute(Variables.SYSTEM_PACKAGE_CACHE_NODEREF)
-	protected String getSystemPackageCacheNodeRef() {
-		final FileInfo systemPackageCache = repositoryStoreService.getSystemPackageCache();
-		if (systemPackageCache != null) {
-			return systemPackageCache.getNodeRef().toString();
-		} else {
-			return null;
-		}
+		return (getConfiguration().getSystemPackageCache().isFile());
 	}
 
 	@Attribute(Variables.REPOSITORY_STORE_LOCATION)

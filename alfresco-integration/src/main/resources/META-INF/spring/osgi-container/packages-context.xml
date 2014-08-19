@@ -33,8 +33,6 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 	<bean id="osgi.container.WebApplicationJavaPackages" class="com.github.dynamicextensionsalfresco.osgi.spring.WebApplicationSystemPackageFactoryBean">
 		<description>Scans for Java packages in JARs in /WEB-INF/lib</description>
 		<property name="javaPackageScanner" ref="osgi.container.JavaPackageScannerFactory" />
-		<property name="repositoryStoreService" ref="osgi.container.RepositoryStoreService" />
-		<property name="fileFolderService" ref="fileFolderService" />
 		<property name="configuration" ref="osgi.container.Configuration" />
 	</bean>
 

@@ -11,6 +11,8 @@ import java.io.File;
  * 
  */
 public class Configuration {
+    public static final String SYSTEM_PACKAGE_CACHE_FILENAME = "system-packages.txt";
+
 	private boolean frameworkRestartEnabled = true;
 
 	private boolean hotDeployEnabled = true;
@@ -61,4 +63,8 @@ public class Configuration {
 	public PackageCacheMode getSystemPackageCacheMode() {
 		return systemPackageCacheMode;
 	}
+
+    public File getSystemPackageCache() {
+        return new File(System.getProperty("java.io.tmpdir"), SYSTEM_PACKAGE_CACHE_FILENAME);
+    }
 }

@@ -1,10 +1,9 @@
 package com.github.dynamicextensionsalfresco.osgi.spring;
 
-import com.github.dynamicextensionsalfresco.osgi.*;
-import org.alfresco.service.cmr.model.FileFolderService;
-import org.alfresco.service.cmr.model.FileInfo;
-import org.alfresco.service.cmr.repository.ContentReader;
-import org.alfresco.service.cmr.repository.ContentWriter;
+import com.github.dynamicextensionsalfresco.osgi.Configuration;
+import com.github.dynamicextensionsalfresco.osgi.JavaPackageScanner;
+import com.github.dynamicextensionsalfresco.osgi.PackageCacheMode;
+import com.github.dynamicextensionsalfresco.osgi.SystemPackage;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,10 +12,7 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.LineNumberReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -34,10 +30,6 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<Set<S
 	/* Dependencies */
 
 	private ObjectFactory<JavaPackageScanner> javaPackageScanner;
-
-	private RepositoryStoreService repositoryStoreService;
-
-	private FileFolderService fileFolderService;
 
 	private Configuration configuration;
 
@@ -63,7 +55,7 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<Set<S
 
 	protected Set<SystemPackage> createSystemPackages() {
 		final JavaPackageScanner packageScanner = javaPackageScanner.getObject();
-		final boolean validCache = packageScanner.isCacheValid(repositoryStoreService.getSystemPackageCache());
+		final boolean validCache = packageScanner.isCacheValid(configuration.getSystemPackageCache());
 
 		Set<SystemPackage> packages;
 		if (validCache) {
@@ -83,51 +75,56 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<Set<S
 		}
 
 		if (packageCacheMode.isWriteToCache() == false) {
-			final FileInfo currentCache = repositoryStoreService.getSystemPackageCache();
-			if (currentCache != null) {
-				fileFolderService.delete(currentCache.getNodeRef());
+            final File cacheFile = configuration.getSystemPackageCache();
+			if (cacheFile.isFile()) {
+				cacheFile.delete();
 			}
 		}
 
 		return packages;
 	}
 
-	private Set<SystemPackage> getCachedPackages() {
-		final FileInfo systemPackagesCached = repositoryStoreService.getSystemPackageCache();
-		if (systemPackagesCached != null) {
-			final ContentReader contentReader = fileFolderService.getReader(systemPackagesCached.getNodeRef());
-			final LineNumberReader in = new LineNumberReader(new InputStreamReader(
-					contentReader.getContentInputStream()));
-			try {
-				final Set<SystemPackage> systemPackages = new LinkedHashSet<SystemPackage>(4500, 0.1f);
-				for (String line; (line = in.readLine()) != null;) {
-					line = line.trim();
-					if (line.isEmpty() == false) {
-						systemPackages.add(SystemPackage.fromString(line));
-					}
-				}
-				return systemPackages;
-			} catch (final IOException e) {
-				if (logger.isWarnEnabled()) {
-					logger.warn("Error reading cached system package configuration from repository: {}.",
-							e.getMessage());
-				}
-			} finally {
-				IOUtils.closeQuietly(in);
-			}
-		}
+    private Set<SystemPackage> getCachedPackages() {
+        File packageCache = configuration.getSystemPackageCache();
+		if (packageCache.isFile()) {
+            try {
+                final LineNumberReader in = new LineNumberReader(new InputStreamReader(new FileInputStream(packageCache)));
+                try {
+                    final Set<SystemPackage> systemPackages = new LinkedHashSet<SystemPackage>(4500, 0.1f);
+                    for (String line; (line = in.readLine()) != null;) {
+                        line = line.trim();
+                        if (line.isEmpty() == false) {
+                            systemPackages.add(SystemPackage.fromString(line));
+                        }
+                    }
+                    return systemPackages;
+                } catch (final IOException e) {
+                    if (logger.isWarnEnabled()) {
+                        logger.warn("Error reading cached system package configuration from repository: {}.",
+                                e.getMessage());
+                    }
+                } finally {
+                    IOUtils.closeQuietly(in);
+                }
+            } catch (IOException e) {
+                logger.warn("Failed to open Java packages cache reader", e);
+            }
+        }
 		return null;
 	}
 
 	private void writeCachedPackages(final Set<SystemPackage> packages) {
-		final FileInfo systemPackagesCached = repositoryStoreService.createSystemPackageCache();
-		final ContentWriter cw = fileFolderService.getWriter(systemPackagesCached.getNodeRef());
-		final PrintWriter writer = new PrintWriter(cw.getContentOutputStream());
-		try {
-			for (final SystemPackage systemPackage : packages) {
-				writer.println(systemPackage.toString());
-			}
-		} finally {
+		final File packageCache = configuration.getSystemPackageCache();
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter(new FileOutputStream(packageCache));
+            for (final SystemPackage systemPackage : packages) {
+                writer.println(systemPackage.toString());
+            }
+            logger.debug("Wrote system package list to {}.", packageCache.getAbsolutePath());
+		} catch (FileNotFoundException e) {
+            logger.warn("Failed t");
+        } finally {
 			IOUtils.closeQuietly(writer);
 		}
 	}
@@ -140,14 +137,6 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<Set<S
 	}
 
 	/* Configuration */
-
-	public void setRepositoryStoreService(final RepositoryStoreService repositoryStoreService) {
-		this.repositoryStoreService = repositoryStoreService;
-	}
-
-	public void setFileFolderService(final FileFolderService fileFolderService) {
-		this.fileFolderService = fileFolderService;
-	}
 
 	public void setConfiguration(Configuration configuration) {
 		this.configuration = configuration;

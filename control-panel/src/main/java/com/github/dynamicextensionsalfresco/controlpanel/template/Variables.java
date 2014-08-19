@@ -72,11 +72,6 @@ public class Variables {
 	public static final String SYSTEM_PACKAGE_COUNT = "systemPackageCount";
 
 	/**
-	 * Refers to a String with the repository path to the {@link SystemPackage} cache file.
-	 */
-	public static final String SYSTEM_PACKAGE_CACHE_NODEREF = "systemPackageCacheNodeRef";
-
-	/**
 	 * Refers to a Boolean indicating if the {@link SystemPackage} cache exists.
 	 */
 	public static final String SYSTEM_PACKAGE_CACHE_EXISTS = "systemPackageCacheExists";

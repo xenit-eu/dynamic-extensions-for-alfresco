@@ -26,8 +26,6 @@ import java.util.List;
  */
 public class RepositoryStoreService {
 
-	private static final String SYSTEM_PACKAGE_CACHE_FILENAME = "system-packages.txt";
-
 	private static final String DEFAULT_BUNDLE_REPOSITORY_LOCATION = "/Company Home/Data Dictionary/Dynamic Extensions/Bundles";
 
 	/* Dependencies */
@@ -99,36 +97,6 @@ public class RepositoryStoreService {
 			}
 		}
 		return jarFiles;
-	}
-
-	/**
-	 * Obtains information on the System Package cache file.
-	 * 
-	 * @return The matching {@link FileInfo} or null if the cache could not be found.
-	 */
-	public FileInfo getSystemPackageCache() {
-		FileInfo systemPackageCache = null;
-		final NodeRef configurationFolder = getConfigurationFolder(false);
-		if (configurationFolder != null) {
-			final NodeRef nodeRef = getFileFolderService().searchSimple(configurationFolder,
-					SYSTEM_PACKAGE_CACHE_FILENAME);
-			if (nodeRef != null) {
-				systemPackageCache = getFileFolderService().getFileInfo(nodeRef);
-			}
-		}
-		return systemPackageCache;
-	}
-
-	/**
-	 * Creates the System Package cache file or obtains the handle to the existing cache file.
-	 */
-	public FileInfo createSystemPackageCache() {
-		FileInfo systemPackageCache = getSystemPackageCache();
-		if (systemPackageCache == null) {
-			systemPackageCache = getFileFolderService().create(getConfigurationFolder(true),
-					SYSTEM_PACKAGE_CACHE_FILENAME, ContentModel.TYPE_CONTENT);
-		}
-		return systemPackageCache;
 	}
 
 	/* Utility operations */

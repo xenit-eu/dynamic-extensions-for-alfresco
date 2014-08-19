@@ -14,31 +14,10 @@
           are available to OSGi bundles.
         </p>
         <p>
-          Dynamic Extensions scans the System Packages when it starts up for the first time and 
-          caches them to speed up subsequent repository startups.
+          Dynamic Extensions scans the System Packages when it starts up for the first time and
+          caches them to speed up subsequent repository startups. Updating the WEB-INF/lib folder will expire the cache.
         </p>
-      <div class="well">
-        <#if systemPackageCacheExists>
-          <p>
-            If you change any of the Java libraries in the repository application, you should delete 
-            <#assign systemPackageUrl = "${url.serviceContext}/api/node/content/${systemPackageCacheNodeRef?replace('://', '/')}" />
-            the <a href="${systemPackageUrl}" target="_blank">System Package cache</a>.
-          </p>
-          <form action="container/system-package-cache/delete" method="post" 
-            data-title="Delete System Package cache"
-            data-confirm="Are you sure you want to delete the System Package cache?">
-            <button class="btn btn-danger">Delete System Package cache</button>
-          </form>
-          <p>
-            The cache will be recreated the next time your restart the framework or the repository.
-          </p>
-        <#else>
-          <p>
-            <em>The System Package cache cannot be found.</em>
-          </p>
-        </#if>
-      </div>
-      
+
       <h2>Services</h2>
       <p>
         <a href="container/services">View all Services</a>

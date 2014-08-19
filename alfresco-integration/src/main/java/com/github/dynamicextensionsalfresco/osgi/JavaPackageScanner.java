@@ -5,7 +5,6 @@ import com.springsource.util.osgi.manifest.ExportedPackage;
 import com.springsource.util.osgi.manifest.internal.StandardBundleManifest;
 import com.springsource.util.osgi.manifest.parse.BundleManifestParseException;
 import com.springsource.util.osgi.manifest.parse.DummyParserLogger;
-import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.descriptor.DescriptorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +15,7 @@ import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.context.support.ServletContextResourcePatternResolver;
 
 import javax.servlet.ServletContext;
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
@@ -212,16 +212,16 @@ public class JavaPackageScanner implements ServletContextAware {
 
     /**
 	 * Check if the cache node exists and postdates the WEB-INF/lib directory
-	 * @param systemPackageCache node storing the package list
+	 * @param systemPackageCache file storing the package list
 	 * @return true if node exists and postdates the lib directory
 	 */
-	public boolean isCacheValid(FileInfo systemPackageCache) {
-		if (systemPackageCache == null) {
+	public boolean isCacheValid(File systemPackageCache) {
+		if (!systemPackageCache.isFile()) {
 			return false;
 		}
 		final Resource libDir = resourcePatternResolver.getResource("/WEB-INF/lib");
 		try {
-			final boolean stale = libDir.lastModified() > systemPackageCache.getModifiedDate().getTime();
+			final boolean stale = libDir.lastModified() > systemPackageCache.lastModified();
 			if (stale) {
 				logger.info("system package cache is older then WEB-INF/lib, rescan packages");
 			}
