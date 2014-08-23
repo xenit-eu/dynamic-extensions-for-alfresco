@@ -14,7 +14,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.osgi.framework.*;
-import org.osgi.framework.launch.Framework;
+import org.osgi.service.packageadmin.PackageAdmin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +24,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
 import java.io.*;
 import java.util.*;
 import java.util.jar.Attributes;
@@ -70,11 +71,31 @@ public class BundleHelper {
 	@Autowired
 	private NodeService nodeService;
 
-	/* Container */
+	private final List<Bundle> bundlesToStart = new ArrayList<Bundle>(2);
 
 	/* Main operations */
 
-	/**
+    @PostConstruct
+    public void registerFrameworkListener() throws Exception {
+        bundleContext.addFrameworkListener(new FrameworkListener() {
+            @Override
+            public void frameworkEvent(FrameworkEvent event) {
+                // start any bundles that were recently updated after the PackageAdmin has refreshed (restarted) any dependencies
+                synchronized (bundlesToStart) {
+                    for (Bundle bundle : bundlesToStart) {
+                        try {
+                            bundle.start();
+                        } catch (BundleException e) {
+                            logger.error("Failed to start updated bundle", e);
+                        }
+                    }
+                    bundlesToStart.clear();
+                }
+            }
+        });
+    }
+
+    /**
 	 * Obtains the {@link Bundle}s that comprise the core framework.
 	 */
 	public List<Bundle> getFrameworkBundles() {
@@ -108,13 +129,6 @@ public class BundleHelper {
 	 */
 	public Bundle getBundle(final long id) {
 		return bundleContext.getBundle(id);
-	}
-
-	/**
-	 * Obtains the {@link Framework} bundle.
-	 */
-	public Framework getFramework() {
-		return (Framework) bundleContext.getBundle(0);
 	}
 
 	/**
@@ -224,8 +238,15 @@ public class BundleHelper {
             }
 			final FileInputStream in = new FileInputStream(tempFile);
 			if (bundle != null) {
+                // we stop and delay restarting the bundle, as otherwise, the refresh would cause 2 immediate restarts,
+                // this in turn causes havoc upon the asynchronous Spring integration startup
+                bundle.stop();
 				bundle.update(in);
-			} else {
+                getPackageAdmin().refreshPackages(new Bundle[]{bundle});
+                synchronized (bundlesToStart) {
+                    bundlesToStart.add(bundle);
+                }
+            } else {
 				bundle = bundleContext.installBundle(location, in);
 			}
 			if (isFragmentBundle(bundle) == false) {
@@ -244,6 +265,11 @@ public class BundleHelper {
             }
         }
 	}
+
+    @SuppressWarnings("deprecation")
+    private PackageAdmin getPackageAdmin() {
+        return bundleContext.getService(bundleContext.getServiceReference(PackageAdmin.class));
+    }
 
     private File wrapPlainJar(File tempFile, String fileName) {
         try {
@@ -342,5 +368,4 @@ public class BundleHelper {
 	public String getBundleRepositoryLocation() {
 		return repositoryStoreService.getBundleRepositoryLocation();
 	}
-
 }
