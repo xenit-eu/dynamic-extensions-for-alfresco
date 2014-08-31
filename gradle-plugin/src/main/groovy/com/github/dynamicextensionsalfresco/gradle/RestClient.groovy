@@ -1,5 +1,7 @@
 package com.github.dynamicextensionsalfresco.gradle
 
+import com.github.dynamicextensionsalfresco.gradle.configuration.Authentication
+import com.github.dynamicextensionsalfresco.gradle.configuration.Endpoint
 import groovy.json.JsonSlurper
 
 /**
@@ -9,61 +11,65 @@ import groovy.json.JsonSlurper
  */
 class RestClient {
 
-	Endpoint endpoint = new Endpoint()
-	Authentication authentication = new Authentication()
+    Endpoint endpoint = new Endpoint()
+    Authentication authentication = new Authentication()
 
-	def postFile(Map options) {
-		HttpURLConnection conn = new URL("${endpoint.url}/${options.path.replaceAll(/^\//, "")}").openConnection()
-		conn.method = "POST"
-		Authentication authentication = options.authentication ?: authentication
-		if (authentication) {
-			conn.setRequestProperty("Authorization", "Basic ${authentication.basic}")
-		}
-		conn.setRequestProperty("Content-Length", "${options.file.length()}")
-		conn.setRequestProperty("Content-Type", options.mimeType)
-		conn.doOutput = true
-		options.file.withInputStream { data -> conn.outputStream << data }
-		conn.outputStream.flush()
-		try {
-			return new JsonSlurper().parseText(conn.content.text)
-		} catch (e) {
-			String message = e.message;
-			if (conn.getHeaderField('Content-Type').contains('application/json')) {
-				def json = new JsonSlurper().parseText(conn.errorStream.text)
-				message = json.message
-			}
-			throw new RestClientException([status: [code: conn.responseCode, message: conn.responseMessage ], message: message]) 
-		}
-	}
+    def postFile(Map options) {
+        return connect(options, 'POST', { conn ->
+            conn.doOutput = true
+
+            options.file.withInputStream { data -> conn.outputStream << data }
+            conn.outputStream.flush()
+        })
+    }
+
+    def post(Map options) {
+        return connect(options, 'POST', { conn ->
+            conn.doOutput = true
+
+            if (options.body) conn.outputStream << options.body
+            conn.outputStream.flush()
+        })
+    }
+
+    def get(Map options) {
+        return connect(options, 'GET')
+    }
+
+    def connect(Map options, String method, Closure onConnect = null) {
+        if (!options.path) throw new NullPointerException("A url path should be provided")
+        HttpURLConnection conn = new URL("${endpoint.url}/${options.path.replaceAll(/^\//, "")}").openConnection()
+        conn.method = method
+        Authentication authentication = options.authentication ?: authentication
+        if (authentication) {
+            conn.setRequestProperty("Authorization", "Basic ${authentication.basic}")
+        }
+
+        if (options.mimeType) {
+            conn.setRequestProperty("Content-Type", options.mimeType)
+        }
+
+        try {
+            if (onConnect) onConnect(conn)
+
+            return new JsonSlurper().parseText(conn.content.text)
+        } catch (e) {
+            String message = e.message;
+            def errorText = conn.errorStream?.text
+            if (errorText) {
+                message = errorText;
+            }
+            if (conn.getHeaderField('Content-Type')?.contains('application/json')) {
+                def json = new JsonSlurper().parseText(errorText)
+                if (json.message) {
+                    message = json.message
+                }
+            }
+            throw new RestClientException([status: [code: conn.responseCode, message: conn.responseMessage ], message: message])
+        }
+    }
 }
 
-class Authentication {
-	
-	String username
-	String password
-
-	boolean asBoolean() {
-		(username && password)
-	}
-
-	String getBasic() {
-		// Use toString() as a workaround for http://jira.codehaus.org/browse/GROOVY-5761
-		"$username:$password".toString().bytes.encodeBase64()
-	}
-}
-
-class Endpoint {
-	
-	static Map DEFAULTS = [host: "localhost", port: "8080", servicePath: "/alfresco/service"]
-	
-	String host = DEFAULTS.host
-	String port = DEFAULTS.port
-	String servicePath = DEFAULTS.servicePath
-
-	URL getUrl() {
-		new URL("http://$host:$port/${servicePath.replaceAll(/^\//, "")}")
-	}
-}
 
 class RestClientException extends RuntimeException {
 	

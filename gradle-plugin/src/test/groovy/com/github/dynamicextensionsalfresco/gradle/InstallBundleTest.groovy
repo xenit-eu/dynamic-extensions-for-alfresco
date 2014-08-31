@@ -1,5 +1,6 @@
 package com.github.dynamicextensionsalfresco.gradle
 
+import com.github.dynamicextensionsalfresco.gradle.tasks.InstallBundle
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Assert
@@ -11,18 +12,24 @@ class InstallBundleTest {
         Project project = ProjectBuilder.builder().build()
         project.apply plugin: 'alfresco-dynamic-extension'
 
-        Assert.assertNotNull(project.tasks.installBundle)
+        project.configure(project.alfrescoDynamicExtensions, {
+            repository {
+                endpoint {
+                    host = 'localhost'
+                    port = '9090'
+                    serviceUrl = '/alfresco/service'
+                }
+                authentication {
+                    username = 'admin'
+                    password = 'password'
+                }
+            }
+            versions {
+                dynamicExtensions = '1.1.0'
+                alfresco = '4.2.f'
+            }
+        })
 
-        project.useDynamicExtensionsVersion("M6-silly")
-        Assert.assertEquals("M6-silly", project.dynamicExtensions.version)
-
-        project.useAlfrescoVersion("6-silly")
-        Assert.assertEquals("6-silly", project.alfresco.version)
-
-        project.useSurfVersion("1.2-silly")
-        Assert.assertEquals("1.2-silly", project.surf.version)
-
-        project.useSpringVersion("4.0.0")
-        Assert.assertEquals("4.0.0", project.spring.version)
+        Assert.assertTrue(project.tasks.installBundle instanceof InstallBundle)
     }
 }

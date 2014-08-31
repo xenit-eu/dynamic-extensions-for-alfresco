@@ -1,15 +1,15 @@
 package com.github.dynamicextensionsalfresco.gradle
 
+import com.github.dynamicextensionsalfresco.gradle.configuration.BaseConfig
+import com.github.dynamicextensionsalfresco.gradle.tasks.InstallBundle
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.Task
-import org.gradle.tooling.BuildException
 
 /**
  * Gradle plugin that configures build settings for an Alfresco Dynamic Extension.
  * 
  * @author Laurens Fridael
- *
+ * @author Laurent Van der Linden
  */
 class DynamicExtensionPlugin implements Plugin<Project> {
 
@@ -17,7 +17,7 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 	void apply(Project project) {
 		configurePlugins(project)
 		configureExtensions(project)
-		configureInstallBundleTask(project)
+		configureTasks(project)
 		project.afterEvaluate {
 			configureDependencies(project)
 			configureRepositories(project)
@@ -25,80 +25,31 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 		}
 	}
 
-	void configurePlugins(Project project) {
+    static void configurePlugins(Project project) {
 		project.apply plugin: "java"
 		project.apply plugin: "osgi"
 	}
 
-	void configureExtensions(Project project) {
-		project.convention.plugins[ProjectConvention.class.name] = new ProjectConvention(project)
-		project.ext.username = project.has('username') ? project.username : null
-		project.ext.password = project.has('password') ? project.password : null
-		project.ext.host = project.has('host') ? project.host : null
-		project.ext.port = project.has('port') ? project.port : null
-		project.ext.servicePath = project.has('servicePath') ? project.servicePath : null
+    static void configureExtensions(Project project) {
+		project.extensions.create("alfrescoDynamicExtensions", BaseConfig.class, project)
 	}
 
-	void configureInstallBundleTask(Project project) {
-		def task = project.tasks.create("installBundle")
-		task.dependsOn("build")
-		task.ext.installInDirectory = false
-		task.ext.installInRepository = false
-		task.ext.repository = [:] << Endpoint.DEFAULTS
-		task.doFirst {
-			if (installInDirectory) {
-				File dir = new File(directory)
-				if (!dir.exists()) {
-					throw new BuildException("Directory '$directory' does not exist.", null)
-				} else if (!dir.isDirectory()) {
-					throw new BuildException("'$directory' is not a directory", null)
-				}
-			}
-		}
-		task << {
-			if (installInDirectory) {
-				project.copy {
-					from project.jar.archivePath
-					into directory
-				}
-			}
-			if (installInRepository) {
-				BundleService bundleService = new BundleService()
-				bundleService.client.with {
-					endpoint.host = repository.host
-					endpoint.port = repository.port
-					endpoint.servicePath = repository.servicePath
-					authentication.username = repository.username
-					authentication.password = repository.password
-				}
-				try {
-					def response = bundleService.installBundle project.jar.archivePath
-					project.logger.info response.message
-					project.logger.info "Bundle ID: ${response.bundleId}"
-				} catch (RestClientException e) {
-					if (e.status.code == 401) {
-						throw new BuildException("User not authorized to install bundles in repository. " + 
-							"Make sure you specify the correct username and password for an admin-level account.", e)
-					} else if (e.status.code == 500) {
-						throw new BuildException("Error installing bundle in repository: ${e.message}", e)
-					}
-				}
-			}
-		}
+    static void configureTasks(Project project) {
+		project.tasks.create("installBundle", InstallBundle.class)
 	}
 
 	void configureDependencies(Project project) {
 		def alfresco = [
-			version: project.alfresco.version ?: Versions.ALFRESCO
+			version: project.alfrescoDynamicExtensions.versions.alfresco
 		]
 		def surf = [
-			version: project.surf.version ?: Versions.SURF
+			version: project.alfrescoDynamicExtensions.versions.surf
 		]
 		def dynamicExtensions = [
-			version: project.dynamicExtensions.version ?: Versions.DYNAMIC_EXTENSIONS
+			version: project.alfrescoDynamicExtensions.versions.dynamicExtensions
 		]
 		def spring = [
-			version: project.spring.version ?: Versions.SPRING
+			version: project.alfrescoDynamicExtensions.versions.spring
 		]
 		project.dependencies {
 			compile ("org.alfresco:alfresco-core:${alfresco.version}") { transitive = false }
@@ -154,7 +105,7 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 
 	void configureRepositories(Project project) {
 		project.repositories {
-			mavenCentral()
+			jcenter()
 			maven { url "https://artifacts.alfresco.com/nexus/content/groups/public" }
 			maven { url "http://repo.springsource.org/release" }
 			maven { url "https://raw.github.com/laurentvdl/dynamic-extensions-for-alfresco/mvn-repo/" }
@@ -162,55 +113,4 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 	}
 }
 
-class ProjectConvention {
 
-	Project project
-	def alfresco = [:]
-	def surf = [:]
-	def dynamicExtensions = [:]
-    def spring = [:]
-
-	ProjectConvention(Project project) {
-		this.project = project
-	}
-
-	void useAlfrescoVersion(String version) {
-		project.alfresco.version = version
-	}
-
-	void useDynamicExtensionsVersion(String version) {
-		project.dynamicExtensions.version = version
-	}
-
-	void useSurfVersion(String version) {
-		project.surf.version = version
-	}
-
-    void useSpringVersion(String version) {
-        project.spring.version = version
-    }
-
-	Task getInstallBundle() {
-		project.tasks["installBundle"]
-	}
-	
-	void toDirectory(String directory) {
-		installBundle.ext.with {
-			if (installInRepository) {
-				throw new BuildException("Cannot use toDirectory() and toRepository() simultaneously.");
-			}
-			installInDirectory = true
-		}
-	}
-
-	void toRepository(Map options) {
-		installBundle.ext.with {
-			if (installInDirectory) {
-				throw new BuildException("Cannot use toDirectory() and toRepository() simultaneously.");
-			}
-			repository << options
-			installInRepository = true
-		}
-	}
-
-}
