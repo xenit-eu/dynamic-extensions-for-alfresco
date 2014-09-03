@@ -92,3 +92,6 @@ form#post {
   margin: 0;
 }
 
+.popover {
+	max-width: initial;
+}

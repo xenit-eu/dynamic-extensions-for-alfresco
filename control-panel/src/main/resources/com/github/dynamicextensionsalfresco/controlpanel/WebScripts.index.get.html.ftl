@@ -26,7 +26,7 @@
 	      </thead>
 	      <tbody>
 	        <#list webScripts as webScript>
-	          <tr title="${webScript.description!""}">
+	          <tr>
 	            <td class="method">
 	              ${webScript.method}
 	            </td>
@@ -37,7 +37,7 @@
 	              <ul>
 	                <#list webScript.uris as uri>
 	                  <li>
-	                    <a href="${url.serviceContext}${uri}">${uri}</a>
+	                    <a href="${url.serviceContext}${uri}" data-content="${webScript.description!""}" data-trigger="hover" data-delay="1000" class="webscript">${uri}</a>
 	                  </li>
 	                </#list>
 	              </ul>

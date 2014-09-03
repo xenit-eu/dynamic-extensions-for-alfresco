@@ -10,7 +10,7 @@
    */
   $(function() {
     bootbox.animate(false);
-    $('a.bundle').popover();
+    $('a[data-content]').popover();
   });
 
   /**
