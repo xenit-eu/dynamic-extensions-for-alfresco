@@ -35,7 +35,7 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 	}
 
     static void configureTasks(Project project) {
-		project.tasks.create("installBundle", InstallBundle.class)
+		project.tasks.create("installBundle", InstallBundle.class).dependsOn('jar')
 	}
 
 	void configureDependencies(Project project) {
