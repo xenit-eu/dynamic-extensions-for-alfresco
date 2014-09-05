@@ -1,18 +1,15 @@
 package com.github.dynamicextensionsalfresco.webscripts.resolutions;
 
-import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptRequest;
-import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebscriptResponse;
 import org.json.JSONException;
 import org.json.JSONWriter;
 
 /**
  * @author Laurent Van der Linden
  */
-public abstract class JsonWriterResolution extends JsonResolution {
+public abstract class JsonWriterResolution extends AbstractJsonResolution {
     @Override
-    public void resolve(AnnotationWebScriptRequest request, AnnotationWebscriptResponse response, ResolutionParameters params) throws Exception {
-        super.resolve(request, response, params);
-        final JSONWriter jsonWriter = new JSONWriter(response.getWriter());
+    void resolve() throws Exception {
+        final JSONWriter jsonWriter = new JSONWriter(getResponse().getWriter());
         writeJson(jsonWriter);
     }
 

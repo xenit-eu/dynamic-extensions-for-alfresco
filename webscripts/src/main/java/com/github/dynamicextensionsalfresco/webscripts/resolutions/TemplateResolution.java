@@ -40,7 +40,11 @@ public class TemplateResolution extends AbstractResolution {
     }
 
     @Override
-    public void resolve(AnnotationWebScriptRequest request, AnnotationWebscriptResponse response, ResolutionParameters params) throws IOException {
+    void resolve() throws Exception {
+        final AnnotationWebScriptRequest request = getRequest();
+        final AnnotationWebscriptResponse response = getResponse();
+        final ResolutionParameters params = getParams();
+
         if (StringUtils.hasText(request.getFormat()) == false) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().write("No format specified.");
