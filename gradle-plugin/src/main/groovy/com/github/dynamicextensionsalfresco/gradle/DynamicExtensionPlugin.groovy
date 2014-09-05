@@ -19,7 +19,7 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 		configureExtensions(project)
 		configureTasks(project)
 		project.afterEvaluate {
-			configureDependencies(project)
+            configureDependencies(project)
 			configureRepositories(project)
 			configureJarManifest(project)
 		}
@@ -39,9 +39,6 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 	}
 
 	void configureDependencies(Project project) {
-		def alfresco = [
-			version: project.alfrescoDynamicExtensions.versions.alfresco
-		]
 		def surf = [
 			version: project.alfrescoDynamicExtensions.versions.surf
 		]
@@ -52,12 +49,10 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 			version: project.alfrescoDynamicExtensions.versions.spring
 		]
 		project.dependencies {
-			compile ("org.alfresco:alfresco-core:${alfresco.version}") { transitive = false }
-			compile ("org.alfresco:alfresco-repository:${alfresco.version}") { transitive = false }
-			compile ("org.alfresco:alfresco-data-model:${alfresco.version}") { transitive = false }
 			compile ("org.springframework.extensions.surf:spring-webscripts:${surf.version}") { transitive = false }
 			compile ("org.springframework.extensions.surf:spring-surf-core:${surf.version}") { transitive = false }
 			compile ("com.github.dynamicextensionsalfresco:annotations:${dynamicExtensions.version}") { transitive = false }
+			compile ("com.github.dynamicextensionsalfresco:annotations-runtime:${dynamicExtensions.version}") { transitive = false }
             compile ("com.github.dynamicextensionsalfresco:webscripts:${dynamicExtensions.version}") { transitive = false }
 			// Since Spring is so fundamental, this is the one dependency we leave as transitive.
 			compile ("org.springframework:spring-context:${spring.version}")
@@ -108,7 +103,6 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 			jcenter()
 			maven { url "https://artifacts.alfresco.com/nexus/content/groups/public" }
 			maven { url "http://repo.springsource.org/release" }
-			maven { url "https://raw.github.com/laurentvdl/dynamic-extensions-for-alfresco/mvn-repo/" }
 		}
 	}
 }

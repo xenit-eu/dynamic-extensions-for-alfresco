@@ -6,11 +6,9 @@ package com.github.dynamicextensionsalfresco.gradle.configuration
  */
 
 class Versions {
-	String dynamicExtensions = "1.1.0-SNAPSHOT"
+	String dynamicExtensions = "1.1.0"
 	
-	String alfresco = "4.0.e"
-	
-	String surf = "1.2.0-M3"
+	String surf = "1.2.1-M16"
 
 	String spring = "3.0.5.RELEASE"
 }

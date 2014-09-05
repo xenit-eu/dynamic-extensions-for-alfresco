@@ -26,7 +26,6 @@ class InstallBundleTest {
             }
             versions {
                 dynamicExtensions = '1.1.0'
-                alfresco = '4.2.f'
             }
         })
 
