@@ -6,28 +6,12 @@ Rapid development of Alfresco repository extensions in Java. Deploy your code in
 Dynamic Extensions adds an OSGi container to the Alfresco repository, enabling live deployment of Java code, with no need to restart the server.
 Alfresco itself is not "OSGi-fied" in any way; the OSGi container runs on top of the core Alfresco platform.
 
-1.0.2 release
--------------
-
-This is a bugfix release:
-* fix bootstrapping encoded resources: wrap inputsteam with buffer for charset finder: the InputStream must support marks
-* be more lenient in parsing Alfresco library versions: "5.13-alf-20130918" was not parsed by the OSGi manifest parser
-
-<a href="https://github.com/laurentvdl/dynamic-extensions-for-alfresco/releases/tag/1.0.2">release notes and download links</a>
-
-1.0.1 release
--------------
-
-This release focuses on WebScript extensibility and Workflow integration.
-
-<a href="https://github.com/laurentvdl/dynamic-extensions-for-alfresco/releases/tag/1.0.2">release notes and download links</a>
-
 Installing Dynamic Extensions
 -----------------------------
 
 Dynamic Extensions is distributed as an Alfresco Module Package (AMP).
 
-* Download the <a href="https://github.com/laurentvdl/dynamic-extensions-for-alfresco/releases/tag/1.0.2">Dynamic Extensions AMP (separate download for Scala development)</a>.
+* Download the latest <a href="https://github.com/laurentvdl/dynamic-extensions-for-alfresco/releases">Dynamic Extensions AMP</a>.
 * Use the <a href="http://docs.alfresco.com/4.0/index.jsp?topic=%2Fcom.alfresco.enterprise.doc%2Ftasks%2Famp-install.html">Module Management Tool</a> to install the AMP in the Alfresco repository of your choosing.
 * After restarting Alfresco, open the Control Panel: <a href="http://localhost:8080/alfresco/service/dynamic-extensions/">http://localhost:8080/alfresco/service/dynamic-extensions/</a>.
 * Accessing the Control Panel requires an admin account.
