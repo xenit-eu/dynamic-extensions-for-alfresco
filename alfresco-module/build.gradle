@@ -1,7 +1,6 @@
 configurations {
     blueprint
     bundles
-    bundlesScala
 }
 
 dependencies {
@@ -22,7 +21,6 @@ dependencies {
 
     bundles "org.slf4j:slf4j-api:${project.slf4jVersion}"
     bundles "org.slf4j:slf4j-log4j12:${project.slf4jVersion}"
-    bundlesScala "org.scala-lang:scala-library:2.10.3"
     bundles(project(":control-panel")) {transitive = false}
     bundles fileTree(dir: '../lib', include: '*.jar')
 
@@ -71,15 +69,4 @@ task amp(type: Zip, dependsOn: jar) {
     baseName = project.group
 }
 
-task scalaAmp(type: Zip, dependsOn: jar) {
-    configure ampConfig
-
-    from(configurations.bundlesScala) {
-        into("config/alfresco/module/$project.group/standard-bundles")
-    }
-
-    baseName = project.group + '-scala'
-}
-
 build.dependsOn("amp")
-build.dependsOn("scalaAmp")
