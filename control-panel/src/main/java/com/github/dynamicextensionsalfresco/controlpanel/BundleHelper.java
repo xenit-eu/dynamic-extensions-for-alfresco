@@ -242,15 +242,25 @@ public class BundleHelper {
                 // this in turn causes havoc upon the asynchronous Spring integration startup
                 bundle.stop();
 				bundle.update(in);
-                getPackageAdmin().refreshPackages(new Bundle[]{bundle});
-                synchronized (bundlesToStart) {
-                    bundlesToStart.add(bundle);
+
+                final PackageAdmin packageAdmin = getPackageAdmin();
+                final Bundle[] bundleSet = {bundle};
+
+                // resolve to synchronously assert dependencies are in order
+                packageAdmin.resolveBundles(bundleSet);
+
+                if (isFragmentBundle(bundle) == false) {
+                    synchronized (bundlesToStart) {
+                        bundlesToStart.add(bundle);
+                    }
+                    // async operation
+                    packageAdmin.refreshPackages(bundleSet);
                 }
             } else {
 				bundle = bundleContext.installBundle(location, in);
-			}
-			if (isFragmentBundle(bundle) == false) {
-				bundle.start();
+                if (isFragmentBundle(bundle) == false) {
+                    bundle.start();
+                }
 			}
             if (!classpathBundle) {
                 final BundleManifest manifest = BundleManifestFactory.createBundleManifest(bundle.getHeaders());
