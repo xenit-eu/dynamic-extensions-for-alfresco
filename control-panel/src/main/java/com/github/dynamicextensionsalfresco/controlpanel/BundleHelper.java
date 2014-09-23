@@ -27,6 +27,7 @@ import org.springframework.util.StringUtils;
 import javax.annotation.PostConstruct;
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
@@ -71,7 +72,7 @@ public class BundleHelper {
 	@Autowired
 	private NodeService nodeService;
 
-	private final List<Bundle> bundlesToStart = new ArrayList<Bundle>(2);
+	private final Queue<Bundle> bundlesToStart = new ConcurrentLinkedQueue<Bundle>();
 
 	/* Main operations */
 
@@ -81,15 +82,13 @@ public class BundleHelper {
             @Override
             public void frameworkEvent(FrameworkEvent event) {
                 // start any bundles that were recently updated after the PackageAdmin has refreshed (restarted) any dependencies
-                synchronized (bundlesToStart) {
-                    for (Bundle bundle : bundlesToStart) {
-                        try {
-                            bundle.start();
-                        } catch (BundleException e) {
-                            logger.error("Failed to start updated bundle", e);
-                        }
+                Bundle bundle;
+                while ((bundle = bundlesToStart.poll()) != null) {
+                    try {
+                        bundle.start();
+                    } catch (BundleException e) {
+                        logger.error("Failed to start updated bundle", e);
                     }
-                    bundlesToStart.clear();
                 }
             }
         });
@@ -250,9 +249,7 @@ public class BundleHelper {
                 packageAdmin.resolveBundles(bundleSet);
 
                 if (isFragmentBundle(bundle) == false) {
-                    synchronized (bundlesToStart) {
-                        bundlesToStart.add(bundle);
-                    }
+                    bundlesToStart.offer(bundle);
                     // async operation
                     packageAdmin.refreshPackages(bundleSet);
                 }
