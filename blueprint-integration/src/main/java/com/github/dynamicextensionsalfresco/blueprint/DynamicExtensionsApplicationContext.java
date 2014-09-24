@@ -18,6 +18,7 @@ import com.github.dynamicextensionsalfresco.webscripts.arguments.HandlerMethodAr
 import com.github.dynamicextensionsalfresco.webscripts.arguments.StringValueConverter;
 import com.github.dynamicextensionsalfresco.workflow.WorkflowDefinitionRegistrar;
 import com.github.dynamicextensionsalfresco.workflow.activiti.WorkflowTaskRegistrar;
+import com.github.dynamicextensionsalfresco.workflow.activiti.WorkflowTaskRegistry;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.descriptor.Descriptor;
 import org.alfresco.service.descriptor.DescriptorService;
@@ -319,7 +320,7 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 
     protected void registerWorkflowBeans(final DefaultListableBeanFactory beanFactory) {
         try {
-            Class.forName("org.activiti.engine.delegate.JavaDelegate");
+            WorkflowTaskRegistry.class.getClassLoader().loadClass("org.activiti.engine.delegate.JavaDelegate");
         } catch (Throwable ignore) {
             return;
         }
