@@ -7,8 +7,9 @@ class Endpoint {
     String host = "localhost"
     String port = "8080"
     String serviceUrl = "/alfresco/service"
+    String protocol = "http"
 
     URL getUrl() {
-        new URL("http://$host:$port/${serviceUrl.replaceAll(/^\//, "")}")
+        new URL("$protocol://$host:$port/${serviceUrl.replaceAll(/^\//, "")}")
     }
 }
