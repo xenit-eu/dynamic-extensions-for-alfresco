@@ -32,15 +32,19 @@ class InstallBundle extends DefaultTask {
             if (e.status.code == 401) {
                 throw new BuildException("User not authorized to install bundles in repository. " +
                         "Make sure you specify the correct username and password for an admin-level account.", e)
-            } else if (e.status.code == 500) {
-                throw new BuildException("Error installing bundle in repository: ${e.message}", e)
+            } else {
+                throw new BuildException("Error installing bundle ${bundle.name} in repository ${bundleService.client.endpoint.url}: ${e.message}", e)
             }
         }
     }
 
     def install(bundle, bundleService) {
-        def response = bundleService.installBundle(bundle)
-        project.logger.debug response.message
-        project.logger.info "${bundle.name} deployed to ${bundleService.client.endpoint.host}: Bundle ID ${response.bundleId}"
+        try {
+            def response = bundleService.installBundle(bundle)
+            project.logger.debug response.message
+            project.logger.info "${bundle.name} deployed to ${bundleService.client.endpoint.url}: Bundle ID ${response.bundleId}"
+        } catch (e) {
+            throw new BuildException("Error installing bundle ${bundle.name} in repository ${bundleService.client.endpoint.url}: ${e.message}", e)
+        }
     }
 }
