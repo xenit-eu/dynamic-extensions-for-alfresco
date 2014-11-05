@@ -7,7 +7,7 @@ dependencies {
     compile("org.eclipse.gemini:org.eclipse.gemini.blueprint.extender:${project.ext.geminiVersion}") {
         exclude group: "org.springframework"
     }
-    compile "org.springframework.extensions.surf:spring-webscripts:${project.ext.springSurfVersion}"
+    compile "org.springframework.extensions.surf:spring-webscripts:${project.ext.alfrescoVersion}"
     compile "javax.servlet:servlet-api:${project.ext.servletVersion}"
     compile "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
 }
@@ -15,7 +15,31 @@ dependencies {
 jar {
     manifest {
         instruction 'Fragment-Host', 'org.eclipse.gemini.blueprint.extender'
-        instruction 'Import-Package', 'com.github.dynamicextensionsalfresco.osgi.webscripts,com.github.dynamicextensionsalfresco.annotations,*'
+        instruction 'Import-Package', '''
+com.github.dynamicextensionsalfresco.osgi.webscripts,c
+om.github.dynamicextensionsalfresco.annotations,com.github.dynamicext
+ensionsalfresco.actions,com.github.dynamicextensionsalfresco.aop,com.
+github.dynamicextensionsalfresco.models,com.github.dynamicextensionsa
+lfresco.osgi,com.github.dynamicextensionsalfresco.osgi.spring,com.git
+hub.dynamicextensionsalfresco.policy,com.github.dynamicextensionsalfr
+esco.resources,com.github.dynamicextensionsalfresco.webscripts,com.gi
+thub.dynamicextensionsalfresco.webscripts.arguments,com.github.dynami
+cextensionsalfresco.workflow,com.github.dynamicextensionsalfresco.wor
+kflow.activiti,freemarker.cache",org.alfresco.repo.p
+olicy,org.alfresco.service.descriptor,org.alfresco.service.namespace,
+org.alfresco.util,org.dom4j,org.eclipse.gemini.blueprint.context",
+org.eclipse.gemini.blueprint.context.support",org.eclipse.gemini.blueprint.extender",
+org.eclipse.gemini.blueprint.extender.support",org.eclips
+e.gemini.blueprint.service.exporter.support",org.osg
+i.framework",org.osgi.service.packageadmin",org.slf4j",org.springframework.beans,
+org.springframework.beans.factory,org.springframework.beans.factory.config,
+org.springframework.beans.factory.parsing,org.springframework.beans.f
+actory.support,org.springframework.beans.factory.xml,org.springframew
+ork.context,org.springframework.context.annotation,org.springframewor
+k.context.support,org.springframework.core.io,org.springframework.cor
+e.type,org.springframework.core.type.classreading,org.springframework
+.extensions.surf.util,org.springframework.extensions.webscripts,org.s
+pringframework.util,org.xml.sax'''.replaceAll(/\s|\n/, '')
         instruction 'Bundle-DocURL', 'https://github.com/laurentvdl/dynamic-extensions-for-alfresco'
     }
 }

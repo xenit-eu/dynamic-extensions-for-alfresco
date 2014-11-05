@@ -1,21 +1,24 @@
 package com.github.dynamicextensionsalfresco.blueprint;
 
-import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.util.Locale;
-import java.util.Map;
-
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
+
+import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * {@link ApplicationContext} wrapper that contains no-op implementation of {@link #publishEvent(ApplicationEvent)}.
@@ -23,11 +26,15 @@ import org.springframework.util.Assert;
  * <p>
  * Publishing {@link ApplicationEvent}s, such as {@link ContextRefreshedEvent}, has unwanted side-effects on
  * {@link ApplicationContext}s that are expected to remain static during the lifetime of an application.
+ * <p>
+ * We extend {@link AbstractApplicationContext} in preference to the {@link org.springframework.context.ApplicationContext}
+ * interface to avoid referencing the newly introduced Spring Environment type and this remain compatible with different
+ * Alfresco versions
  * 
  * @author Laurens Fridael
- * 
+ * @author Laurent Van der Linden
  */
-class HostApplicationContext implements ApplicationContext {
+class HostApplicationContext extends AbstractApplicationContext {
 
 	private final ApplicationContext applicationContext;
 
@@ -214,4 +221,14 @@ class HostApplicationContext implements ApplicationContext {
 		this.applicationContext = applicationContext;
 	}
 
+	@Override
+	protected void refreshBeanFactory() throws BeansException, IllegalStateException {}
+
+	@Override
+	protected void closeBeanFactory() {}
+
+	@Override
+	public ConfigurableListableBeanFactory getBeanFactory() throws IllegalStateException {
+		return ((ConfigurableApplicationContext) applicationContext).getBeanFactory();
+	}
 }

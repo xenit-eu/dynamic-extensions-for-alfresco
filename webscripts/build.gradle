@@ -1,5 +1,5 @@
 dependencies {
-    compile "org.springframework.extensions.surf:spring-webscripts:${project.ext.springSurfVersion}"
+    compile "org.springframework.extensions.surf:spring-webscripts:${project.ext.alfrescoVersion}"
     compile "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
     compile("org.alfresco:alfresco-data-model:${project.ext.alfrescoVersion}") { transitive = false }
 }

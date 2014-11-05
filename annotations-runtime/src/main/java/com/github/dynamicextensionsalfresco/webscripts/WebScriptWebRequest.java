@@ -166,4 +166,8 @@ public class WebScriptWebRequest implements WebRequest {
 	public void registerDestructionCallback(final String name, final Runnable callback, final int scope) {
 	}
 
+	@Override
+	public boolean checkNotModified(String etag) {
+		return false;
+	}
 }

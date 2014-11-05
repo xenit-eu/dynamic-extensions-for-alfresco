@@ -6,9 +6,9 @@ package com.github.dynamicextensionsalfresco.gradle.configuration
  */
 
 class Versions {
-	String dynamicExtensions = "1.1.2"
+	String dynamicExtensions = "1.1.3"
 	
-	String surf = "1.2.1-M16"
+	String surf = "5.0.b"
 
-	String spring = "3.0.5.RELEASE"
+	String spring = "3.2.10.RELEASE"
 }
