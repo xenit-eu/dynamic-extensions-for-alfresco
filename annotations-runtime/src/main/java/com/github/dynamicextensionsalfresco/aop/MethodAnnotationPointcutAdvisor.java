@@ -14,7 +14,7 @@ import org.springframework.util.Assert;
  * @author Laurens Fridael
  * 
  */
-class MethodAnnotationPointcutAdvisor implements PointcutAdvisor, DynamicExtensionsAdvisor {
+public class MethodAnnotationPointcutAdvisor implements PointcutAdvisor, DynamicExtensionsAdvisor {
 
 	/* Configuration */
 
