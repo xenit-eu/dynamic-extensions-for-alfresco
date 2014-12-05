@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * Qualifier for distinguishing between different types of Alfresco services when autowiring dependencies by type.
  * <p>
- * This annotation should be used in conjunction with the {@link javax.inject.Inject} annotation.
+ * This annotation should be used in conjunction with the {@link org.springframework.beans.factory.annotation.Autowired} annotation.
  * <p>
  * Example:
  * 
@@ -21,9 +21,10 @@ import java.lang.annotation.Target;
  * </pre>
  * 
  * @author Laurens Fridael
- * 
+ * @author Laurent Van der Linden
+ *
  */
-@Target({ ElementType.METHOD, ElementType.FIELD })
+@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AlfrescoService {
 

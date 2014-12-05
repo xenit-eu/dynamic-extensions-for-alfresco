@@ -9,16 +9,18 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class Example {
+	NodeService lowLevelNodeService;
 
 	@Autowired
-	NodeService nodeService;
+	public Example(@AlfrescoService(ServiceType.LOW_LEVEL) NodeService lowLevelNodeService) {
+		this.lowLevelNodeService = lowLevelNodeService;
+	}
 
 	@Autowired
 	NodeService namedNodeService;
 
 	@Autowired
-	@AlfrescoService(ServiceType.LOW_LEVEL)
-	NodeService lowLevelNodeService;
+	NodeService nodeService;
 
 	@Autowired
 	NamespaceService namespaceService;
