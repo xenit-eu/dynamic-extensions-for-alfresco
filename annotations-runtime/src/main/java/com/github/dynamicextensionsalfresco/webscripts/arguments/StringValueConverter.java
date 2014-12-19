@@ -64,7 +64,7 @@ public class StringValueConverter {
 		} else if (Boolean.class.equals(type)) {
 			value = Boolean.valueOf(stringValue);
 		} else if (QName.class.equals(type)) {
-			if (stringValue.matches("\\{\\.+?\\}\\.+?")) {
+			if (stringValue.matches("\\{.+?\\}.+?")) {
 				value = QName.createQName(stringValue);
 			} else if (stringValue.matches("\\w+?:\\w+?")) {
 				value = QName.createQName(stringValue, getNamespacePrefixResolver());
