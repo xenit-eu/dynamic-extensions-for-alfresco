@@ -63,6 +63,7 @@ public class HandlerMethodArgumentsResolver implements ApplicationContextAware {
 		argumentResolvers.add((ArgumentResolver) new WebScriptSessionArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new HttpServletRequestArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new HttpServletResponseArgumentResolver());
+		argumentResolvers.add((ArgumentResolver) new JsonObjectArgumentResolver());
 
         if (bundleContext != null) {
             resolverTracker = new ServiceTracker(bundleContext, ArgumentResolver.class, null);
@@ -135,14 +136,6 @@ public class HandlerMethodArgumentsResolver implements ApplicationContextAware {
             return match;
 		}
 
-        // static resolvers
-		for (final ArgumentResolver<Object, Annotation> argumentResolver : argumentResolvers) {
-			if (argumentResolver.supports(parameterType, annotationType)) {
-				argumentResolverCache.put(cacheKey, argumentResolver);
-				return argumentResolver;
-			}
-		}
-
         // spring component resolvers
         final Map<String, ArgumentResolver> localArgumentResolvers = applicationContext.getBeansOfType(ArgumentResolver.class);
         for (ArgumentResolver argumentResolver : localArgumentResolvers.values()) {
@@ -166,6 +159,14 @@ public class HandlerMethodArgumentsResolver implements ApplicationContextAware {
                 }
             }
         }
+
+		// static resolvers
+		for (final ArgumentResolver<Object, Annotation> argumentResolver : argumentResolvers) {
+			if (argumentResolver.supports(parameterType, annotationType)) {
+				argumentResolverCache.put(cacheKey, argumentResolver);
+				return argumentResolver;
+			}
+		}
 
         return null;
 	}
