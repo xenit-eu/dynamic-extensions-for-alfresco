@@ -64,6 +64,14 @@ def ampConfig = {
     destinationDir = file("$buildDir/amps")
 }
 
+publishing {
+    publications {
+        mavenAmp(MavenPublication) {
+            artifact "${file("$buildDir/amps")}/${project.group}-${project.version}.amp"
+        }
+    }
+}
+
 task amp(type: Zip, dependsOn: jar) {
     configure ampConfig
     baseName = project.group
