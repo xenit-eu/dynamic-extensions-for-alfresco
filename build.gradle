@@ -25,10 +25,10 @@ subprojects {
         }
         repositories {
             maven {
-                url "https://api.bintray.com/maven/laurentvanderlinden/maven/dynamic-extensions-alfresco"
+                url 'https://api.bintray.com/maven/laurentvanderlinden/maven/dynamic-extensions-alfresco'
                 credentials {
-                    username = bintray_username
-                    password = bintray_api_key
+                    username = project.hasProperty('bintray_username') ? project.bintray_username : ''
+                    password = project.hasProperty('bintray_api_key') ? project.bintray_api_key : ''
                 }
             }
         }
