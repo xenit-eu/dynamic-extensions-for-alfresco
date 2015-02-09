@@ -8,7 +8,7 @@ import org.json.JSONWriter;
  */
 public abstract class JsonWriterResolution extends AbstractJsonResolution {
     @Override
-    void resolve() throws Exception {
+    public void resolve() throws Exception {
         final JSONWriter jsonWriter = new JSONWriter(getResponse().getWriter());
         writeJson(jsonWriter);
     }

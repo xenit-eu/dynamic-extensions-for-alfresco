@@ -40,7 +40,7 @@ public class TemplateResolution extends AbstractResolution {
     }
 
     @Override
-    void resolve() throws Exception {
+    public void resolve() throws Exception {
         final AnnotationWebScriptRequest request = getRequest();
         final AnnotationWebscriptResponse response = getResponse();
         final ResolutionParameters params = getParams();

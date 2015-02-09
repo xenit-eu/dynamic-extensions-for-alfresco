@@ -55,5 +55,5 @@ public abstract class AbstractResolution implements Resolution {
         return params;
     }
 
-    abstract void resolve() throws Exception;
+    public abstract void resolve() throws Exception;
 }
