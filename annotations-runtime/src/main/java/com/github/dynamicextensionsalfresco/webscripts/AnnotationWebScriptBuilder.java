@@ -248,17 +248,26 @@ public class AnnotationWebScriptBuilder implements BeanFactoryAware {
 			description.setDefaultFormat(uri.defaultFormat());
 		}
 		description.setMultipartProcessing(uri.multipartProcessing());
-	}
+
+        final Authentication methodAuthentication = method.getAnnotation(Authentication.class);
+        if (methodAuthentication != null) {
+            handleAuthenticationAnnotation(methodAuthentication, description);
+        }
+    }
 
 	protected void handleTypeAnnotations(final String beanName, final WebScript webScript,
 			final DescriptionImpl description) {
 		final ConfigurableListableBeanFactory beanFactory = getBeanFactory();
 		handleWebScriptAnnotation(webScript, beanName, description);
-		Authentication authentication = beanFactory.findAnnotationOnBean(beanName, Authentication.class);
-		if (authentication == null) {
-			authentication = getDefaultAuthenticationAnnotation();
-		}
-		handleAuthenticationAnnotation(authentication, beanName, description);
+
+        if (description.getRequiredAuthentication() == null) {
+            Authentication authentication = beanFactory.findAnnotationOnBean(beanName, Authentication.class);
+            if (authentication == null) {
+                authentication = getDefaultAuthenticationAnnotation();
+            }
+            handleAuthenticationAnnotation(authentication, description);
+        }
+
 		Transaction transaction = beanFactory.findAnnotationOnBean(beanName, Transaction.class);
 		if (transaction == null) {
 			transaction = getDefaultTransactionAnnotation();
@@ -323,10 +332,9 @@ public class AnnotationWebScriptBuilder implements BeanFactoryAware {
 		description.setLifecycle(lifecycle);
 	}
 
-	protected void handleAuthenticationAnnotation(final Authentication authentication, final String beanName,
+	protected void handleAuthenticationAnnotation(final Authentication authentication,
 			final DescriptionImpl description) {
 		Assert.notNull(authentication, "Annotation cannot be null.");
-		Assert.hasText(beanName, "Bean name cannot be empty.");
 		Assert.notNull(description, "Description cannot be null.");
 		if (StringUtils.hasText(authentication.runAs())) {
 			description.setRunAs(authentication.runAs());
