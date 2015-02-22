@@ -16,7 +16,7 @@ dependencies {
 
     blueprint("org.eclipse.gemini:org.eclipse.gemini.blueprint.core:${project.ext.geminiVersion}") {transitive = false}
     blueprint("org.eclipse.gemini:org.eclipse.gemini.blueprint.io:${project.ext.geminiVersion}") {transitive = false}
-    blueprint("org.eclipse.gemini:org.eclipse.gemini.blueprint.extender:${project.ext.geminiVersion}") {transitive = false}
+    blueprint(project(path: ":blueprint-override", configuration: 'patch')) {transitive = false}
     blueprint(project(":blueprint-integration")) {transitive = false}
 
     bundles "org.slf4j:slf4j-api:${project.slf4jVersion}"

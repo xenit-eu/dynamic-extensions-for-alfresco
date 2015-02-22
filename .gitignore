@@ -7,3 +7,6 @@ target
 tmp
 *.sublime-project
 *.sublime-workspace
+*.iml
+*.ipr
+*.iws

@@ -1,1 +1,1 @@
-include 'alfresco-integration','alfresco-module','annotations','annotations-runtime','blueprint-integration','gradle-plugin','webscripts','control-panel'
+include 'alfresco-integration','alfresco-module','annotations','annotations-runtime','blueprint-integration','gradle-plugin','webscripts','control-panel','blueprint-override'

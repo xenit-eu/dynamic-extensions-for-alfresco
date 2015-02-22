@@ -1,0 +1,34 @@
+apply plugin: 'java'
+
+configurations {
+  extender
+  patch
+}
+
+dependencies {
+  compile("org.eclipse.gemini:org.eclipse.gemini.blueprint.extender:${project.ext.geminiVersion}") {
+    exclude group: "org.springframework"
+  }
+  extender("org.eclipse.gemini:org.eclipse.gemini.blueprint.extender:${project.ext.geminiVersion}") {
+    transitive = false
+  }
+}
+
+project.tasks.remove(jar)
+
+task patch(type: Zip) {
+  from(zipTree(configurations.extender.first())) {
+    exclude("**/DefaultApplicationContextConfigurationFactory.class")
+  }
+  from(sourceSets.main.output)
+
+  destinationDir = libsDir
+  extension = 'jar'
+  baseName = 'blueprint-synchronous'
+}
+
+artifacts {
+  patch file: patch.archivePath, name: 'blueprint-synchronous', type: 'jar', builtBy: patch
+}
+
+defaultTasks 'patch'
