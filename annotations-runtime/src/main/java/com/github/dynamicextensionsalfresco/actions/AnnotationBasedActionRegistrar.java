@@ -69,31 +69,34 @@ public class AnnotationBasedActionRegistrar extends AbstractAnnotationBasedRegis
 	public void registerAnnotationBasedActions() {
 		final ConfigurableListableBeanFactory beanFactory = getBeanFactory();
 		for (final String beanName : beanFactory.getBeanDefinitionNames()) {
-			ReflectionUtils.doWithMethods(beanFactory.getType(beanName), new MethodCallback() {
+			final Class<?> type = beanFactory.getType(beanName);
+			if (type != null) { // bean might be abstract
+				ReflectionUtils.doWithMethods(type, new MethodCallback() {
 
-				@Override
-				public void doWith(final Method method) throws IllegalArgumentException, IllegalAccessException {
-					final ActionMethod actionMethod = AnnotationUtils.findAnnotation(method, ActionMethod.class);
-					if (actionMethod != null) {
-						final ActionExecuter actionExecuter = createActionExecuter(beanFactory.getBean(beanName),
+					@Override
+					public void doWith(final Method method) throws IllegalArgumentException, IllegalAccessException {
+						final ActionMethod actionMethod = AnnotationUtils.findAnnotation(method, ActionMethod.class);
+						if (actionMethod != null) {
+							final ActionExecuter actionExecuter = createActionExecuter(beanFactory.getBean(beanName),
 								method, actionMethod);
-						final ActionDefinition actionDefinition = actionExecuter.getActionDefinition();
-						final String name = actionDefinition.getName();
-						if (getActionExecuterRegistry().hasActionExecuter(name) == false) {
-							if (logger.isDebugEnabled()) {
-								logger.debug("Registering ActionExecuter {}.", name);
-							}
-							getActionExecuterRegistry().registerActionExecuter(actionExecuter);
-							registeredActionExecutors.add(actionExecuter);
-							registerActionToken(actionDefinition);
-						} else {
-							if (logger.isWarnEnabled()) {
-								logger.warn("ActionExecuter name has already been registered.");
+							final ActionDefinition actionDefinition = actionExecuter.getActionDefinition();
+							final String name = actionDefinition.getName();
+							if (getActionExecuterRegistry().hasActionExecuter(name) == false) {
+								if (logger.isDebugEnabled()) {
+									logger.debug("Registering ActionExecuter {}.", name);
+								}
+								getActionExecuterRegistry().registerActionExecuter(actionExecuter);
+								registeredActionExecutors.add(actionExecuter);
+								registerActionToken(actionDefinition);
+							} else {
+								if (logger.isWarnEnabled()) {
+									logger.warn("ActionExecuter name has already been registered.");
+								}
 							}
 						}
 					}
-				}
-			});
+				});
+			}
 		}
 	}
 
