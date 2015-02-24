@@ -4,7 +4,14 @@ import com.github.dynamicextensionsalfresco.controlpanel.template.TemplateBundle
 import com.github.dynamicextensionsalfresco.controlpanel.template.TemplateServiceReference;
 import com.github.dynamicextensionsalfresco.controlpanel.template.Variables;
 import com.github.dynamicextensionsalfresco.osgi.RepositoryStoreService;
-import com.github.dynamicextensionsalfresco.webscripts.annotations.*;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Attribute;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Authentication;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.AuthenticationType;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Cache;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.HttpMethod;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Uri;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.UriVariable;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.WebScript;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.osgi.framework.Bundle;
@@ -12,12 +19,19 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.launch.Framework;
 import org.springframework.aop.support.AopUtils;
+import org.springframework.beans.factory.BeanIsAbstractException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Proxy;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 /**
@@ -83,17 +97,19 @@ public class Container extends AbstractControlPanelHandler {
                 final String[] definitionNames = applicationContext.getBeanDefinitionNames();
                 final Map<String,String> beans = new HashMap<String, String>(definitionNames.length);
                 for (String name : definitionNames) {
-                    final Object instance = applicationContext.getBean(name);
-                    final String className;
-                    if (AopUtils.isAopProxy(instance)) {
-                        // remark: getTargetClass does not resolve for non Spring Proxies
-                        className = "[Spring Proxy] " + AopUtils.getTargetClass(instance).getName();
-                    } else if (Proxy.isProxyClass(instance.getClass())) {
-                        className = "[Java Proxy] " + Proxy.getInvocationHandler(instance).getClass().getName() + " -> " + Arrays.toString(instance.getClass().getInterfaces());
-                    } else {
-                        className = instance.getClass().getCanonicalName();
-                    }
-                    beans.put(name, className);
+	                try {
+		                final Object instance = applicationContext.getBean(name);
+		                final String className;
+		                if (AopUtils.isAopProxy(instance)) {
+		                    // remark: getTargetClass does not resolve for non Spring Proxies
+		                    className = "[Spring Proxy] " + AopUtils.getTargetClass(instance).getName();
+		                } else if (Proxy.isProxyClass(instance.getClass())) {
+		                    className = "[Java Proxy] " + Proxy.getInvocationHandler(instance).getClass().getName() + " -> " + Arrays.toString(instance.getClass().getInterfaces());
+		                } else {
+		                    className = instance.getClass().getCanonicalName();
+		                }
+		                beans.put(name, className);
+	                } catch (BeanIsAbstractException ignore) {}
                 }
                 return model("contextBeans", beans);
             }
