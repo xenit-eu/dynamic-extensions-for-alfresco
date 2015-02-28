@@ -8,7 +8,6 @@ import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransacti
 import org.alfresco.service.transaction.TransactionService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.extensions.webscripts.Container;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
@@ -30,11 +29,6 @@ public class OsgiContainerModuleComponent extends AbstractModuleComponent implem
 	 * The containing {@link ApplicationContext}.
 	 */
 	private ConfigurableWebApplicationContext applicationContext;
-
-	/**
-	 * The {@link Container} must be reset manually after restarting the OSGi framework.
-	 */
-	private Container webScriptsContainer;
 
 	/* Configuration */
 
@@ -86,7 +80,6 @@ public class OsgiContainerModuleComponent extends AbstractModuleComponent implem
 							stopFramework();
 						} finally {
 							startFramework();
-							getWebScriptsContainer().reset();
 						}
 						return null;
 					}
@@ -135,14 +128,6 @@ public class OsgiContainerModuleComponent extends AbstractModuleComponent implem
 
 	protected ConfigurableWebApplicationContext getApplicationContext() {
 		return applicationContext;
-	}
-
-	public void setWebScriptsContainer(final Container webScriptsContainer) {
-		this.webScriptsContainer = webScriptsContainer;
-	}
-
-	public Container getWebScriptsContainer() {
-		return webScriptsContainer;
 	}
 
 	public void setTransactionService(final TransactionService transactionService) {

@@ -13,20 +13,41 @@ import org.alfresco.service.cmr.repository.ContentWriter;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
-import org.osgi.framework.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.Constants;
+import org.osgi.framework.FrameworkEvent;
+import org.osgi.framework.FrameworkListener;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.extensions.surf.util.Content;
+import org.springframework.extensions.webscripts.DeclarativeRegistry;
+import org.springframework.extensions.webscripts.Registry;
 import org.springframework.extensions.webscripts.servlet.FormData.FormField;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
-import java.io.*;
-import java.util.*;
+import javax.annotation.Resource;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
@@ -71,6 +92,9 @@ public class BundleHelper {
 
 	@Autowired
 	private NodeService nodeService;
+
+	@Autowired @Resource(name = "webscripts.container")
+	private org.springframework.extensions.webscripts.Container webScriptsContainer;
 
 	private final Queue<Bundle> bundlesToStart = new ConcurrentLinkedQueue<Bundle>();
 
@@ -265,6 +289,9 @@ public class BundleHelper {
             } else {
                 logger.warn("Temporarily updated classpath bundle: {}, update will be reverted after restart.", bundle.getSymbolicName());
             }
+
+			resetWebScriptsCache();
+
             return bundle;
 		} finally {
             if (tempFile != null) {
@@ -368,6 +395,26 @@ public class BundleHelper {
 
 	protected boolean isFragmentBundle(final Bundle bundle) {
 		return bundle.getHeaders().get(Constants.FRAGMENT_HOST) != null;
+	}
+
+	/**
+	 * The DeclarativeRegistry caches 404 results, which can hide new webscript deployments.
+	 * Unfortunately there is no public API for resetting this cache.
+	 */
+	private void resetWebScriptsCache() {
+		final Registry registry = webScriptsContainer.getRegistry();
+		if (registry instanceof DeclarativeRegistry) {
+			try {
+				final Field cacheField = DeclarativeRegistry.class.getDeclaredField("uriIndexCache");
+				if (!cacheField.isAccessible()) {
+					cacheField.setAccessible(true);
+				}
+				final Map cache = (Map) cacheField.get(registry);
+				cache.clear();
+			} catch (Exception e) {
+				logger.error("failed to reset webscript cache", e);
+			}
+		}
 	}
 
 	/* Container */

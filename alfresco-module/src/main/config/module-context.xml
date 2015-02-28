@@ -22,7 +22,6 @@
 				<value>classpath:/alfresco/module/com.github.dynamicextensionsalfresco/osgi-container-context.xml</value>
 			</list>
 		</property>
-		<property name="webScriptsContainer" ref="webscripts.container" />
 		<property name="transactionService" ref="transactionService" />
 	</bean>
 
@@ -30,5 +29,6 @@
 
 	<bean id="webscript.dynamic-extensions.restart-framework.post" class="com.github.dynamicextensionsalfresco.osgi.FrameworkRestartWebScript">
 		<property name="frameworkService" ref="osgi.container.FrameworkService" />
+        <property name="webScriptsContainer" ref="webscripts.container" />
 	</bean>
 </beans>

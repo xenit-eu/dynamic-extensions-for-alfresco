@@ -1,12 +1,13 @@
 package com.github.dynamicextensionsalfresco.osgi;
 
-import java.io.IOException;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.extensions.webscripts.AbstractWebScript;
+import org.springframework.extensions.webscripts.Container;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
+
+import java.io.IOException;
 
 /**
  * Web Script for restarting the OSGi framework.
@@ -22,11 +23,14 @@ public class FrameworkRestartWebScript extends AbstractWebScript {
 
 	private FrameworkService frameworkService;
 
+	private Container webScriptsContainer;
+
 	/* Main operations */
 
 	@Override
 	public void execute(final WebScriptRequest request, final WebScriptResponse response) throws IOException {
 		frameworkService.restartFramework();
+		webScriptsContainer.reset();
 		sendJsonResponse(response);
 	}
 
@@ -50,4 +54,7 @@ public class FrameworkRestartWebScript extends AbstractWebScript {
 		this.frameworkService = frameworkService;
 	}
 
+	public void setWebScriptsContainer(Container webScriptsContainer) {
+		this.webScriptsContainer = webScriptsContainer;
+	}
 }
