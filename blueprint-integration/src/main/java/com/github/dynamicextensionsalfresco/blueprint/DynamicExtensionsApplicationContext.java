@@ -1,5 +1,6 @@
 package com.github.dynamicextensionsalfresco.blueprint;
 
+import com.github.dynamicextensionsalfresco.BeanNames;
 import com.github.dynamicextensionsalfresco.actions.AnnotationBasedActionRegistrar;
 import com.github.dynamicextensionsalfresco.aop.DynamicExtensionsAdvisorAutoProxyCreator;
 import com.github.dynamicextensionsalfresco.models.M2ModelListFactoryBean;
@@ -19,7 +20,6 @@ import com.github.dynamicextensionsalfresco.webscripts.arguments.StringValueConv
 import com.github.dynamicextensionsalfresco.workflow.WorkflowDefinitionRegistrar;
 import com.github.dynamicextensionsalfresco.workflow.activiti.WorkflowTaskRegistrar;
 import com.github.dynamicextensionsalfresco.workflow.activiti.WorkflowTaskRegistry;
-import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.descriptor.Descriptor;
 import org.alfresco.service.descriptor.DescriptorService;
 import org.alfresco.service.namespace.NamespacePrefixResolver;
@@ -188,17 +188,17 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 	 * @param beanFactory
 	 */
 	protected void registerModelDeploymentBeans(final DefaultListableBeanFactory beanFactory) {
-		if (beanFactory.containsBeanDefinition(BeanNames.M2_MODEL_LIST_FACTORY) == false) {
+		if (beanFactory.containsBeanDefinition(BeanNames.M2_MODEL_LIST_FACTORY.id()) == false) {
 			beanFactory.registerBeanDefinition(
-					BeanNames.M2_MODEL_LIST_FACTORY,
+					BeanNames.M2_MODEL_LIST_FACTORY.id(),
 					BeanDefinitionBuilder.rootBeanDefinition(M2ModelListFactoryBean.class)
                     .getBeanDefinition());
 		}
-		if (beanFactory.containsBeanDefinition(BeanNames.MODEL_REGISTRAR) == false) {
+		if (beanFactory.containsBeanDefinition(BeanNames.MODEL_REGISTRAR.id()) == false) {
 			beanFactory.registerBeanDefinition(
-                BeanNames.MODEL_REGISTRAR,
+                BeanNames.MODEL_REGISTRAR.id(),
                 BeanDefinitionBuilder.rootBeanDefinition(RepositoryModelRegistrar.class)
-                    .addPropertyReference("models", BeanNames.M2_MODEL_LIST_FACTORY)
+                    .addPropertyReference("models", BeanNames.M2_MODEL_LIST_FACTORY.id())
                     .setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE)
                     .setInitMethodName("registerModels").setDestroyMethodName("unregisterModels")
                     .getBeanDefinition());
@@ -206,9 +206,9 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 	}
 
     private void registerWorkflowDeployment(DefaultListableBeanFactory beanFactory) {
-        if (beanFactory.containsBeanDefinition(BeanNames.WORKFLOW_DEFINITION_REGISTRAR) == false) {
+        if (beanFactory.containsBeanDefinition(BeanNames.WORKFLOW_DEFINITION_REGISTRAR.id()) == false) {
             beanFactory.registerBeanDefinition(
-                BeanNames.WORKFLOW_DEFINITION_REGISTRAR,
+                BeanNames.WORKFLOW_DEFINITION_REGISTRAR.id(),
                 BeanDefinitionBuilder.rootBeanDefinition(WorkflowDefinitionRegistrar.class)
                     .setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE)
                     .getBeanDefinition());
@@ -221,23 +221,23 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 	 * @param beanFactory
 	 */
 	protected void registerAnnotationBasedBehaviourBeans(final DefaultListableBeanFactory beanFactory) {
-		if (beanFactory.containsBeanDefinition(BeanNames.BEHAVIOUR_PROXY_FACTORY) == false) {
-			beanFactory.registerBeanDefinition(BeanNames.BEHAVIOUR_PROXY_FACTORY, BeanDefinitionBuilder
+		if (beanFactory.containsBeanDefinition(BeanNames.BEHAVIOUR_PROXY_FACTORY.id()) == false) {
+			beanFactory.registerBeanDefinition(BeanNames.BEHAVIOUR_PROXY_FACTORY.id(), BeanDefinitionBuilder
 					.rootBeanDefinition(DefaultBehaviourProxyFactory.class).getBeanDefinition());
 		}
-		if (beanFactory.containsBeanDefinition(BeanNames.PROXY_POLICY_COMPONENT) == false) {
+		if (beanFactory.containsBeanDefinition(BeanNames.PROXY_POLICY_COMPONENT.id()) == false) {
 			beanFactory.registerBeanDefinition(
-					BeanNames.PROXY_POLICY_COMPONENT,
+					BeanNames.PROXY_POLICY_COMPONENT.id(),
 					BeanDefinitionBuilder.rootBeanDefinition(ProxyPolicyComponentFactoryBean.class)
-							.addPropertyValue("policyComponent", getService(PolicyComponent.class))
-							.addPropertyReference("behaviourProxyFactory", BeanNames.BEHAVIOUR_PROXY_FACTORY)
+							.addPropertyReference("policyComponent", "policyComponent")
+							.addPropertyReference("behaviourProxyFactory", BeanNames.BEHAVIOUR_PROXY_FACTORY.id())
 							.getBeanDefinition());
 		}
-		if (beanFactory.containsBeanDefinition(BeanNames.ANNOTATION_BASED_BEHAVIOUR_REGISTRAR) == false) {
+		if (beanFactory.containsBeanDefinition(BeanNames.ANNOTATION_BASED_BEHAVIOUR_REGISTRAR.id()) == false) {
 			beanFactory.registerBeanDefinition(
-					BeanNames.ANNOTATION_BASED_BEHAVIOUR_REGISTRAR,
+					BeanNames.ANNOTATION_BASED_BEHAVIOUR_REGISTRAR.id(),
 					BeanDefinitionBuilder.rootBeanDefinition(AnnotationBasedBehaviourRegistrar.class)
-							.addPropertyReference("policyComponent", BeanNames.PROXY_POLICY_COMPONENT)
+							.addPropertyReference("policyComponent", BeanNames.PROXY_POLICY_COMPONENT.id())
 							.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE)
 							.setInitMethodName("bindBehaviours").getBeanDefinition());
 		}
@@ -249,9 +249,9 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 	 * @param beanFactory
 	 */
 	protected void registerAnnotationBasedActionBeans(final DefaultListableBeanFactory beanFactory) {
-		if (beanFactory.containsBeanDefinition(BeanNames.ANNOTATION_BASED_ACTION_REGISTRAR) == false) {
+		if (beanFactory.containsBeanDefinition(BeanNames.ANNOTATION_BASED_ACTION_REGISTRAR.id()) == false) {
 			beanFactory.registerBeanDefinition(
-					BeanNames.ANNOTATION_BASED_ACTION_REGISTRAR,
+					BeanNames.ANNOTATION_BASED_ACTION_REGISTRAR.id(),
 					BeanDefinitionBuilder.rootBeanDefinition(AnnotationBasedActionRegistrar.class)
 							.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE)
 							.setInitMethodName("registerAnnotationBasedActions")
@@ -265,42 +265,42 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 	 * @param beanFactory
 	 */
 	protected void registerAnnotationBasedWebScriptBeans(final DefaultListableBeanFactory beanFactory) {
-		if (beanFactory.containsBeanDefinition(BeanNames.STRING_VALUE_CONVERTER) == false) {
+		if (beanFactory.containsBeanDefinition(BeanNames.STRING_VALUE_CONVERTER.id()) == false) {
 			beanFactory.registerBeanDefinition(
-					BeanNames.STRING_VALUE_CONVERTER,
+					BeanNames.STRING_VALUE_CONVERTER.id(),
 					BeanDefinitionBuilder.rootBeanDefinition(StringValueConverter.class)
 							.addPropertyValue("namespacePrefixResolver", getService(NamespacePrefixResolver.class))
 							.getBeanDefinition());
 		}
-		if (beanFactory.containsBeanDefinition(BeanNames.HANDLER_METHOD_ARGUMENTS_RESOLVER) == false) {
-			beanFactory.registerBeanDefinition(BeanNames.HANDLER_METHOD_ARGUMENTS_RESOLVER,
+		if (beanFactory.containsBeanDefinition(BeanNames.HANDLER_METHOD_ARGUMENTS_RESOLVER.id()) == false) {
+			beanFactory.registerBeanDefinition(BeanNames.HANDLER_METHOD_ARGUMENTS_RESOLVER.id(),
 					BeanDefinitionBuilder.rootBeanDefinition(HandlerMethodArgumentsResolver.class)
-							.addPropertyReference("stringValueConverter", BeanNames.STRING_VALUE_CONVERTER)
+							.addPropertyReference("stringValueConverter", BeanNames.STRING_VALUE_CONVERTER.id())
 							.addPropertyValue("bundleContext", getBundleContext())
 							.setInitMethodName("initializeArgumentResolvers").getBeanDefinition());
 		}
-		if (beanFactory.containsBeanDefinition(BeanNames.ANNOTATION_BASED_WEB_SCRIPT_BUILDER) == false) {
+		if (beanFactory.containsBeanDefinition(BeanNames.ANNOTATION_BASED_WEB_SCRIPT_BUILDER.id()) == false) {
 			beanFactory.registerBeanDefinition(
-					BeanNames.ANNOTATION_BASED_WEB_SCRIPT_BUILDER,
+					BeanNames.ANNOTATION_BASED_WEB_SCRIPT_BUILDER.id(),
 					BeanDefinitionBuilder
 							.rootBeanDefinition(AnnotationWebScriptBuilder.class)
 							.addPropertyReference("handlerMethodArgumentsResolver",
-									BeanNames.HANDLER_METHOD_ARGUMENTS_RESOLVER).getBeanDefinition());
+									BeanNames.HANDLER_METHOD_ARGUMENTS_RESOLVER.id()).getBeanDefinition());
 		}
-		if (beanFactory.containsBeanDefinition(BeanNames.ANNOTATION_BASED_WEB_SCRIPT_REGISTRAR) == false) {
+		if (beanFactory.containsBeanDefinition(BeanNames.ANNOTATION_BASED_WEB_SCRIPT_REGISTRAR.id()) == false) {
 			beanFactory.registerBeanDefinition(
-					BeanNames.ANNOTATION_BASED_WEB_SCRIPT_REGISTRAR,
+					BeanNames.ANNOTATION_BASED_WEB_SCRIPT_REGISTRAR.id(),
 					BeanDefinitionBuilder
 							.rootBeanDefinition(AnnotationWebScriptRegistrar.class)
 							.addPropertyReference("annotationBasedWebScriptBuilder",
-									BeanNames.ANNOTATION_BASED_WEB_SCRIPT_BUILDER)
+									BeanNames.ANNOTATION_BASED_WEB_SCRIPT_BUILDER.id())
 							.addPropertyValue("webScriptUriRegistry", getService(WebScriptUriRegistry.class))
 							.setInitMethodName("registerWebScripts").setDestroyMethodName("unregisterWebScripts")
 							.getBeanDefinition());
 		}
-		if (beanFactory.containsBeanDefinition(BeanNames.SEARCH_PATH_REGISTRY_MANAGER) == false) {
+		if (beanFactory.containsBeanDefinition(BeanNames.SEARCH_PATH_REGISTRY_MANAGER.id()) == false) {
 			beanFactory.registerBeanDefinition(
-					BeanNames.SEARCH_PATH_REGISTRY_MANAGER,
+					BeanNames.SEARCH_PATH_REGISTRY_MANAGER.id(),
 					BeanDefinitionBuilder.rootBeanDefinition(SearchPathRegistryManager.class)
 							.addPropertyValue("searchPathRegistry", getService(SearchPathRegistry.class))
 							.addPropertyValue("stores", new BundleStore(getBundle()))
@@ -311,8 +311,8 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 	}
 
 	protected void registerAopProxyBeans(final DefaultListableBeanFactory beanFactory) {
-		if (beanFactory.containsBeanDefinition(BeanNames.AUTO_PROXY_CREATOR) == false) {
-			beanFactory.registerBeanDefinition(BeanNames.AUTO_PROXY_CREATOR,
+		if (beanFactory.containsBeanDefinition(BeanNames.AUTO_PROXY_CREATOR.id()) == false) {
+			beanFactory.registerBeanDefinition(BeanNames.AUTO_PROXY_CREATOR.id(),
 					BeanDefinitionBuilder.rootBeanDefinition(DynamicExtensionsAdvisorAutoProxyCreator.class)
 							.getBeanDefinition());
 		}
@@ -324,24 +324,24 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
         } catch (Throwable ignore) {
             return;
         }
-        if (!beanFactory.containsBeanDefinition(BeanNames.TYPE_BASED_WORKFLOW_REGISTRAR)) {
-            beanFactory.registerBeanDefinition(BeanNames.TYPE_BASED_WORKFLOW_REGISTRAR,
+        if (!beanFactory.containsBeanDefinition(BeanNames.TYPE_BASED_WORKFLOW_REGISTRAR.id())) {
+            beanFactory.registerBeanDefinition(BeanNames.TYPE_BASED_WORKFLOW_REGISTRAR.id(),
                 BeanDefinitionBuilder.rootBeanDefinition(WorkflowTaskRegistrar.class).getBeanDefinition()
             );
         }
     }
 
     private void registerContentSupportBeans(DefaultListableBeanFactory beanFactory) {
-        if (beanFactory.containsBeanDefinition(BeanNames.RESOURCE_HELPER) == false) {
+        if (beanFactory.containsBeanDefinition(BeanNames.RESOURCE_HELPER.id()) == false) {
             beanFactory.registerBeanDefinition(
-                BeanNames.RESOURCE_HELPER,
+                BeanNames.RESOURCE_HELPER.id(),
                 BeanDefinitionBuilder.rootBeanDefinition(ResourceHelper.class)
                     .setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE)
                     .getBeanDefinition());
         }
-        if (beanFactory.containsBeanDefinition(BeanNames.BOOTSTRAP_SERVICE) == false) {
+        if (beanFactory.containsBeanDefinition(BeanNames.BOOTSTRAP_SERVICE.id()) == false) {
             beanFactory.registerBeanDefinition(
-                BeanNames.BOOTSTRAP_SERVICE,
+                BeanNames.BOOTSTRAP_SERVICE.id(),
                 BeanDefinitionBuilder.rootBeanDefinition(DefaultBootstrapService.class)
                     .setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE)
                     .getBeanDefinition());
@@ -349,8 +349,8 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
     }
 
     protected void registerOsgiServiceBeans(final DefaultListableBeanFactory beanFactory) {
-        if (beanFactory.containsBeanDefinition(BeanNames.OSGI_SERVICE_REGISTRAR) == false) {
-            beanFactory.registerBeanDefinition(BeanNames.OSGI_SERVICE_REGISTRAR, BeanDefinitionBuilder
+        if (beanFactory.containsBeanDefinition(BeanNames.OSGI_SERVICE_REGISTRAR.id()) == false) {
+            beanFactory.registerBeanDefinition(BeanNames.OSGI_SERVICE_REGISTRAR.id(), BeanDefinitionBuilder
                 .rootBeanDefinition(OsgiServiceRegistrar.class).getBeanDefinition());
         }
     }

@@ -3,5 +3,4 @@
 
 DescriptorService:org.alfresco.service.descriptor.DescriptorService
 webscripts.repo.templateprocessor:org.springframework.extensions.webscripts.TemplateProcessor
-policyComponent:org.alfresco.repo.policy.PolicyComponent:default
 NamespaceService:org.alfresco.service.namespace.NamespacePrefixResolver

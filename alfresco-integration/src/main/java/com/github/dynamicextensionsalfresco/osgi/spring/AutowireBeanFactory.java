@@ -1,16 +1,18 @@
 package com.github.dynamicextensionsalfresco.osgi.spring;
 
-import java.lang.annotation.Annotation;
-import java.util.Map;
-
+import com.github.dynamicextensionsalfresco.BeanNames;
 import com.github.dynamicextensionsalfresco.annotations.AlfrescoService;
 import com.github.dynamicextensionsalfresco.annotations.ServiceType;
-
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.DependencyDescriptor;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
+
+import java.lang.annotation.Annotation;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * {@link BeanFactory} that augments default autowiring logic by attempting to resolve dependencies using Alfresco
@@ -20,17 +22,29 @@ import org.springframework.util.StringUtils;
  * 
  */
 public class AutowireBeanFactory extends DefaultListableBeanFactory {
+	private final Set<String> internalBeanNames = new HashSet<String>();
 
 	/* Main operations */
 
-	public AutowireBeanFactory(final BeanFactory parentBeanFactory) {
+	public  AutowireBeanFactory(final BeanFactory parentBeanFactory) {
 		super(parentBeanFactory);
+
+		for (BeanNames beanName : BeanNames.values()) {
+			internalBeanNames.add(beanName.id());
+		}
 	}
 
 	@Override
 	protected String determinePrimaryCandidate(final Map<String, Object> candidateBeans,
 			final DependencyDescriptor descriptor) {
 		String beanName = ClassUtils.getShortName(descriptor.getDependencyType());
+
+		for (String id : candidateBeans.keySet()) {
+			if (internalBeanNames.contains(id)) {
+				return id;
+			}
+		}
+
 		final AlfrescoService alfrescoService = getAnnotation(descriptor, AlfrescoService.class);
 		final ServiceType serviceType = alfrescoService != null ? alfrescoService.value() : ServiceType.DEFAULT;
 		switch (serviceType) {

@@ -39,7 +39,7 @@ ork.context,org.springframework.context.annotation,org.springframewor
 k.context.support,org.springframework.core.io,org.springframework.cor
 e.type,org.springframework.core.type.classreading,org.springframework
 .extensions.surf.util,org.springframework.extensions.webscripts,org.s
-pringframework.util,org.xml.sax'''.replaceAll(/\s|\n/, '')
+pringframework.util,org.xml.sax,com.github.dynamicextensionsalfresco'''.replaceAll(/\s|\n/, '')
         instruction 'Bundle-DocURL', 'https://github.com/laurentvdl/dynamic-extensions-for-alfresco'
     }
 }
