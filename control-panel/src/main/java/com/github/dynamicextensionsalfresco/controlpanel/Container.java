@@ -23,6 +23,7 @@ import org.springframework.beans.factory.BeanIsAbstractException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ClassUtils;
 
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
@@ -104,7 +105,7 @@ public class Container extends AbstractControlPanelHandler {
 		                    // remark: getTargetClass does not resolve for non Spring Proxies
 		                    className = "[Spring Proxy] " + AopUtils.getTargetClass(instance).getName();
 		                } else if (Proxy.isProxyClass(instance.getClass())) {
-		                    className = "[Java Proxy] " + Proxy.getInvocationHandler(instance).getClass().getName() + " -> " + Arrays.toString(instance.getClass().getInterfaces());
+		                    className = "[Java Proxy] " + Proxy.getInvocationHandler(instance).getClass().getName() + " -> " + Arrays.toString(ClassUtils.getAllInterfaces(instance));
 		                } else {
 		                    className = instance.getClass().getCanonicalName();
 		                }

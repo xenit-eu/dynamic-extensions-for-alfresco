@@ -11,6 +11,7 @@ import org.alfresco.service.namespace.QName;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.Assert;
+import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.annotation.Annotation;
@@ -239,7 +240,7 @@ public class AnnotationBasedBehaviourRegistrar extends AbstractAnnotationBasedRe
 	@SuppressWarnings("unchecked")
 	private Map<PolicyType, List<Class<? extends Policy>>> getPolicyInterfacesByType(final Class<?> clazz) {
 		final Map<PolicyType, List<Class<? extends Policy>>> policyInterfacesByType = new HashMap<PolicyType, List<Class<? extends Policy>>>();
-		for (final Class<?> interfaceClass : clazz.getInterfaces()) {
+		for (final Class<?> interfaceClass : ClassUtils.getAllInterfacesForClassAsSet(clazz)) {
 			PolicyType policyType = null;
 			if (org.alfresco.repo.policy.ClassPolicy.class.isAssignableFrom(interfaceClass)) {
 				policyType = PolicyType.Class;
