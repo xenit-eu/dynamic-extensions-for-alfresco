@@ -113,7 +113,7 @@ public abstract class AbstractBundleResourceHandler {
 		contentTypesByExtension.put("gif", "image/gif");
 		contentTypesByExtension.put("png", "image/png");
 		contentTypesByExtension.put("jpg", "image/jpeg");
-		contentTypesByExtension.put("jpg", "image/jpeg");
+        contentTypesByExtension.put("svg", "image/svg+xml");
 		contentTypesByExtension.put("html", "text/html");
 	}
 
