@@ -7,7 +7,6 @@
 
     <h3>
       <a href="bundles/${bundle.bundleId?string.computer}">${bundle.name} ${bundle.version}</a>
-      services
     </h3>
 
     <table class="service table table-striped table-bordered">

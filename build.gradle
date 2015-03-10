@@ -25,10 +25,10 @@ subprojects {
         }
         repositories {
             maven {
-                url 'https://api.bintray.com/maven/laurentvanderlinden/maven/dynamic-extensions-alfresco'
+                url project.hasProperty('de_publish_url') ? project.de_publish_url : 'https://api.bintray.com/maven/laurentvanderlinden/maven/dynamic-extensions-alfresco'
                 credentials {
-                    username = project.hasProperty('bintray_username') ? project.bintray_username : ''
-                    password = project.hasProperty('bintray_api_key') ? project.bintray_api_key : ''
+                    username = project.hasProperty('de_publish_username') ? project.de_publish_username : ''
+                    password = project.hasProperty('de_publish_password') ? project.de_publish_password : ''
                 }
             }
         }
@@ -48,14 +48,24 @@ subprojects {
         geminiVersion = '1.0.2.RELEASE'
         slf4jVersion = '1.7.5'
         osgiVersion = '4.3.1'
-        junitVersion = '4.8.2'
+        junitVersion = '4.12'
         transactionApiVersion = '1.1'
         felixVersion = '4.2.1'
         springOsgiUtilVersion = '2.0.5.RELEASE'
-        mockitoVersion = '1.9.5'
+        mockitoVersion = '1.10.19'
         jibxVersion = '1.2.3'
         hibernateVersion = '3.2.6.ga'
         servletVersion = '2.5'
+        kotlinVersion = '0.10.770'
+    }
+
+    buildscript {
+      repositories {
+          mavenCentral()
+      }
+      dependencies {
+          classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+      }
     }
 
     repositories {

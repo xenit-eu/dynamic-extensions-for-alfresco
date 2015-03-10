@@ -20,8 +20,9 @@ dependencies {
     blueprint(project(":blueprint-integration")) {transitive = false}
 
     bundles "org.slf4j:slf4j-api:${project.slf4jVersion}"
-    bundles "org.slf4j:slf4j-log4j12:${project.slf4jVersion}"
+    bundles("org.slf4j:slf4j-log4j12:${project.slf4jVersion}") {transitive = false}
     bundles(project(":control-panel")) {transitive = false}
+    bundles(project(":event-bus")) {transitive = false}
     bundles fileTree(dir: '../lib', include: '*.jar')
 
     testCompile "junit:junit:${project.ext.junitVersion}"

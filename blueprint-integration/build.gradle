@@ -10,6 +10,7 @@ dependencies {
     compile "org.springframework.extensions.surf:spring-webscripts:${project.ext.alfrescoVersion}"
     compile "javax.servlet:servlet-api:${project.ext.servletVersion}"
     compile "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
+    compile project(":event-bus")
 }
 
 jar {
@@ -39,7 +40,8 @@ ork.context,org.springframework.context.annotation,org.springframewor
 k.context.support,org.springframework.core.io,org.springframework.cor
 e.type,org.springframework.core.type.classreading,org.springframework
 .extensions.surf.util,org.springframework.extensions.webscripts,org.s
-pringframework.util,org.xml.sax,com.github.dynamicextensionsalfresco'''.replaceAll(/\s|\n/, '')
+pringframework.util,org.xml.sax,com.github.dynamicextensionsalfresco,
+com.github.dynamicextensionsalfresco.event,com.github.dynamicextensionsalfresco.event.events'''.replaceAll(/\s|\n/, '')
         instruction 'Bundle-DocURL', 'https://github.com/laurentvdl/dynamic-extensions-for-alfresco'
     }
 }

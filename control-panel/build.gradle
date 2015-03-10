@@ -1,4 +1,5 @@
 apply plugin: 'osgi'
+apply plugin: 'kotlin'
 
 dependencies {
     compile project(":alfresco-integration")
@@ -8,6 +9,10 @@ dependencies {
     compile "org.springframework.extensions.surf:spring-webscripts:${project.ext.alfrescoVersion}"
     compile "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
     compile fileTree(dir: '../lib', include: '*.jar')
+    compile project(":event-bus")
+    testCompile "org.jetbrains.kotlin:kotlin-stdlib:${project.ext.kotlinVersion}"
+    testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
+    testCompile "junit:junit:${project.ext.junitVersion}"
 }
 
 jar {

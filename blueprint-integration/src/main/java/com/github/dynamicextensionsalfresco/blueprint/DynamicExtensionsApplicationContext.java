@@ -3,6 +3,8 @@ package com.github.dynamicextensionsalfresco.blueprint;
 import com.github.dynamicextensionsalfresco.BeanNames;
 import com.github.dynamicextensionsalfresco.actions.AnnotationBasedActionRegistrar;
 import com.github.dynamicextensionsalfresco.aop.DynamicExtensionsAdvisorAutoProxyCreator;
+import com.github.dynamicextensionsalfresco.event.EventBus;
+import com.github.dynamicextensionsalfresco.event.events.SpringContextException;
 import com.github.dynamicextensionsalfresco.models.M2ModelListFactoryBean;
 import com.github.dynamicextensionsalfresco.models.RepositoryModelRegistrar;
 import com.github.dynamicextensionsalfresco.osgi.webscripts.SearchPathRegistry;
@@ -32,6 +34,7 @@ import org.osgi.service.packageadmin.ExportedPackage;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.parsing.BeanDefinitionParsingException;
@@ -446,4 +449,14 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
 		return hasXmlConfiguration;
 	}
 
+	@Override
+	protected void cancelRefresh(BeansException ex) {
+		super.cancelRefresh(ex);
+
+		try {
+			getService(EventBus.class).publish(new SpringContextException(getBundle(), ex));
+		} catch (Exception bx){
+			logger.error("failed to broadcast Spring refresh failure", bx);
+		}
+	}
 }

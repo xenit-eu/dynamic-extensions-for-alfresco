@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.util.ClassUtils;
 
 import java.util.Arrays;
 import java.util.Hashtable;
@@ -61,7 +62,7 @@ public class OsgiServiceRegistrar implements ApplicationContextAware, BundleCont
 		if (type.isInterface()) {
 			return new Class<?>[] { type };
 		} else {
-			final Class<?>[] interfaces = service.interfaces().length > 0 ? service.interfaces() : type.getInterfaces();
+			final Class<?>[] interfaces = service.interfaces().length > 0 ? service.interfaces() : ClassUtils.getAllInterfacesForClass(type);
 			if (interfaces.length == 0) {
 				return new Class[] {type};
 			}

@@ -1,15 +1,11 @@
 package com.github.dynamicextensionsalfresco.controlpanel;
 
 import com.github.dynamicextensionsalfresco.osgi.Configuration;
-import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptRequest;
-import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebscriptResponse;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.*;
-import com.github.dynamicextensionsalfresco.webscripts.resolutions.JsonResolution;
+import com.github.dynamicextensionsalfresco.webscripts.resolutions.AbstractJsonResolution;
 import com.github.dynamicextensionsalfresco.webscripts.resolutions.Resolution;
-import com.github.dynamicextensionsalfresco.webscripts.resolutions.ResolutionParameters;
 import org.json.JSONObject;
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.webscripts.WebScriptException;
@@ -60,7 +56,7 @@ public class BundleRestApi {
                         .put("message", String.format("Installed bundle %s %s", bundle.getSymbolicName(), bundle.getVersion()))
                         .put("bundleId", bundle.getBundleId())
                     , HttpServletResponse.SC_OK);
-            } catch (final BundleException e) {
+            } catch (final Exception e) {
                 return new JsonMessage(
                     new JSONObject().put("message", e.getMessage()),
                     HttpServletResponse.SC_INTERNAL_SERVER_ERROR
@@ -69,7 +65,7 @@ public class BundleRestApi {
         }
     }
 
-    private static class JsonMessage extends JsonResolution {
+    private static class JsonMessage extends AbstractJsonResolution {
         private final JSONObject jsonObject;
 
         private JsonMessage(JSONObject jsonObject, Integer status) {
@@ -77,10 +73,9 @@ public class BundleRestApi {
             this.jsonObject = jsonObject;
         }
 
-        @Override
-        public void resolve(AnnotationWebScriptRequest request, AnnotationWebscriptResponse response, ResolutionParameters params) throws Exception {
-            super.resolve(request, response, params);
-            response.getWriter().append(jsonObject.toString(2));
+	    @Override
+	    public void resolve() throws Exception {
+            getResponse().getWriter().append(jsonObject.toString(2));
         }
     }
 }

@@ -1,6 +1,8 @@
 package com.github.dynamicextensionsalfresco.controlpanel;
 
 import aQute.bnd.osgi.Analyzer;
+import com.github.dynamicextensionsalfresco.event.EventListener;
+import com.github.dynamicextensionsalfresco.event.events.SpringContextException;
 import com.github.dynamicextensionsalfresco.osgi.ManifestUtils;
 import com.github.dynamicextensionsalfresco.osgi.RepositoryStoreService;
 import com.springsource.util.osgi.manifest.BundleManifest;
@@ -35,12 +37,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,7 +45,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.TimeUnit;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
@@ -62,7 +62,7 @@ import java.util.regex.Pattern;
  * 
  */
 @Component
-public class BundleHelper {
+public class BundleHelper implements EventListener<SpringContextException>, FrameworkListener {
     private final static Logger logger = LoggerFactory.getLogger(BundleHelper.class);
 
 	private static final String ALFRESCO_DYNAMIC_EXTENSION_HEADER = "Alfresco-Dynamic-Extension";
@@ -79,43 +79,34 @@ public class BundleHelper {
 	/* Dependencies */
 
 	@Autowired
-	private BundleContext bundleContext;
+	BundleContext bundleContext;
 
 	@Autowired
-	private RepositoryStoreService repositoryStoreService;
+	RepositoryStoreService repositoryStoreService;
 
 	@Autowired
-	private FileFolderService fileFolderService;
+	FileFolderService fileFolderService;
 
 	@Autowired
-	private ContentService contentService;
+	ContentService contentService;
 
 	@Autowired
-	private NodeService nodeService;
+	NodeService nodeService;
 
 	@Autowired @Resource(name = "webscripts.container")
-	private org.springframework.extensions.webscripts.Container webScriptsContainer;
+	org.springframework.extensions.webscripts.Container webScriptsContainer;
 
 	private final Queue<Bundle> bundlesToStart = new ConcurrentLinkedQueue<Bundle>();
+
+	private final BlockingQueue<InstallResult> installResults = new LinkedBlockingDeque<InstallResult>();
 
 	/* Main operations */
 
     @PostConstruct
-    public void registerFrameworkListener() throws Exception {
-        bundleContext.addFrameworkListener(new FrameworkListener() {
-            @Override
-            public void frameworkEvent(FrameworkEvent event) {
-                // start any bundles that were recently updated after the PackageAdmin has refreshed (restarted) any dependencies
-                Bundle bundle;
-                while ((bundle = bundlesToStart.poll()) != null) {
-                    try {
-                        bundle.start();
-                    } catch (BundleException e) {
-                        logger.error("Failed to start updated bundle", e);
-                    }
-                }
-            }
-        });
+    void registerEventListeners() throws Exception {
+	    bundleContext.registerService(EventListener.class, this, null);
+
+	    bundleContext.addFrameworkListener(this);
     }
 
     /**
@@ -227,6 +218,9 @@ public class BundleHelper {
 
 	protected Bundle doInstallBundleInRepository(File tempFile, String fileName) throws
         BundleException, IOException {
+
+		installResults.clear();
+
 		try {
 			BundleIdentifier identifier = getBundleIdentifier(tempFile);
 			if (identifier == null) {
@@ -259,14 +253,15 @@ public class BundleHelper {
                     }
                 }
             }
-			final FileInputStream in = new FileInputStream(tempFile);
+
+			final InputStream in = createStreamForFile(tempFile);
 			if (bundle != null) {
                 // we stop and delay restarting the bundle, as otherwise, the refresh would cause 2 immediate restarts,
                 // this in turn causes havoc upon the asynchronous Spring integration startup
                 bundle.stop();
 				bundle.update(in);
 
-                final PackageAdmin packageAdmin = getPackageAdmin();
+                @SuppressWarnings("deprecation") final PackageAdmin packageAdmin = getPackageAdmin();
                 final Bundle[] bundleSet = {bundle};
 
                 // resolve to synchronously assert dependencies are in order
@@ -276,23 +271,32 @@ public class BundleHelper {
                     bundlesToStart.offer(bundle);
                     // async operation
                     packageAdmin.refreshPackages(bundleSet);
+                } else {
+	                return bundle;
                 }
             } else {
 				bundle = bundleContext.installBundle(location, in);
                 if (isFragmentBundle(bundle) == false) {
                     bundle.start();
+                    installResults.add(new InstallResult(null));
                 }
 			}
             if (!classpathBundle) {
-                final BundleManifest manifest = BundleManifestFactory.createBundleManifest(bundle.getHeaders());
+                final BundleManifest manifest = createBundleManifest(bundle);
                 saveBundleInRepository(tempFile, filename, manifest);
             } else {
                 logger.warn("Temporarily updated classpath bundle: {}, update will be reverted after restart.", bundle.getSymbolicName());
             }
 
+			try {
+				evaluateInstallationResult(installResults.poll(15, TimeUnit.SECONDS));
+			} catch (InterruptedException tx) {
+                logger.warn("Timed out waiting for an installation result", tx);
+            }
+
 			resetWebScriptsCache();
 
-            return bundle;
+			return bundle;
 		} finally {
             if (tempFile != null) {
                 tempFile.delete();
@@ -300,8 +304,26 @@ public class BundleHelper {
         }
 	}
 
-    @SuppressWarnings("deprecation")
-    private PackageAdmin getPackageAdmin() {
+    protected BundleManifest createBundleManifest(Bundle bundle) {
+        return BundleManifestFactory.createBundleManifest(bundle.getHeaders());
+    }
+
+    protected InputStream createStreamForFile(File file) throws FileNotFoundException {
+        return new FileInputStream(file);
+    }
+
+    private static void evaluateInstallationResult(InstallResult installResult) throws BundleException {
+        if (installResult != null) {
+            if (installResult.exception instanceof RuntimeException) {
+                throw (RuntimeException)installResult.exception;
+            } else if (installResult.exception instanceof BundleException) {
+                throw (BundleException)installResult.exception;
+            }
+        }
+    }
+
+	@SuppressWarnings("deprecation")
+    protected PackageAdmin getPackageAdmin() {
         return bundleContext.getService(bundleContext.getServiceReference(PackageAdmin.class));
     }
 
@@ -340,7 +362,7 @@ public class BundleHelper {
     }
 
 
-    private Bundle findBundleBySymbolicName(BundleIdentifier identifier) {
+    protected Bundle findBundleBySymbolicName(BundleIdentifier identifier) {
         final Bundle[] allBundles = bundleContext.getBundles();
         for (Bundle aBundle : allBundles) {
             if (aBundle.getSymbolicName().equals(identifier.getSymbolicName())) {
@@ -386,7 +408,7 @@ public class BundleHelper {
 		nodeService.setProperty(nodeRef, ContentModel.PROP_DESCRIPTION, manifest.getBundleDescription());
 		final ContentWriter writer = contentService.getWriter(nodeRef, ContentModel.PROP_CONTENT, true);
 		writer.setMimetype(MimetypeMap.MIMETYPE_ZIP);
-		writer.putContent(new FileInputStream(file));
+		writer.putContent(createStreamForFile(file));
 	}
 
 	protected String generateRepositoryLocation(final String filename) {
@@ -401,7 +423,7 @@ public class BundleHelper {
 	 * The DeclarativeRegistry caches 404 results, which can hide new webscript deployments.
 	 * Unfortunately there is no public API for resetting this cache.
 	 */
-	private void resetWebScriptsCache() {
+	protected void resetWebScriptsCache() {
 		final Registry registry = webScriptsContainer.getRegistry();
 		if (registry instanceof DeclarativeRegistry) {
 			try {
@@ -417,9 +439,38 @@ public class BundleHelper {
 		}
 	}
 
-	/* Container */
+    @Override
+    public void onEvent(SpringContextException event) {
+        installResults.add(new InstallResult(event.getException()));
+    }
+
+    @Override
+    public void frameworkEvent(FrameworkEvent event) {
+        if (event.getType() == FrameworkEvent.PACKAGES_REFRESHED) {
+            // start any bundles that were recently updated after the PackageAdmin has refreshed (restarted) any dependencies
+            Bundle bundle;
+            while ((bundle = bundlesToStart.poll()) != null) {
+                try {
+                    bundle.start();
+                    installResults.add(new InstallResult(null));
+                } catch (BundleException bx) {
+                    installResults.add(new InstallResult(bx));
+                }
+            }
+        }
+    }
+
+    /* Container */
 
 	public String getBundleRepositoryLocation() {
 		return repositoryStoreService.getBundleRepositoryLocation();
+	}
+
+	private static class InstallResult {
+		public final Exception exception;
+
+		public InstallResult(Exception runtimeException) {
+			this.exception = runtimeException;
+		}
 	}
 }
