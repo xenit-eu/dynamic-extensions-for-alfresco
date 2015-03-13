@@ -96,16 +96,24 @@ public class BundleHelper implements EventListener<SpringContextException>, Fram
 	@Autowired @Resource(name = "webscripts.container")
 	org.springframework.extensions.webscripts.Container webScriptsContainer;
 
+    /**
+     * async backlog of bundles to start when the package-admin is done refreshing dependencies
+     */
 	private final Queue<Bundle> bundlesToStart = new ConcurrentLinkedQueue<Bundle>();
 
+    /**
+     * installBundle operations block on this queue until either an error or successful install is reported
+     */
 	private final BlockingQueue<InstallResult> installResults = new LinkedBlockingDeque<InstallResult>();
 
 	/* Main operations */
 
     @PostConstruct
     void registerEventListeners() throws Exception {
+        // get notified of Spring context start failures
 	    bundleContext.registerService(EventListener.class, this, null);
 
+        // get notified of PackageAdmin refresh events
 	    bundleContext.addFrameworkListener(this);
     }
 
@@ -237,6 +245,8 @@ public class BundleHelper implements EventListener<SpringContextException>, Fram
             final String filename = identifier.toJarFilename();
             final String location = generateRepositoryLocation(filename);
 			Bundle bundle = bundleContext.getBundle(location);
+
+            // a classpath bundle cannot be replaced in a persistent way, so we only do temporary updates here
             boolean classpathBundle = false;
             if (bundle == null) {
                 bundle = findBundleBySymbolicName(identifier);
@@ -257,7 +267,6 @@ public class BundleHelper implements EventListener<SpringContextException>, Fram
 			final InputStream in = createStreamForFile(tempFile);
 			if (bundle != null) {
                 // we stop and delay restarting the bundle, as otherwise, the refresh would cause 2 immediate restarts,
-                // this in turn causes havoc upon the asynchronous Spring integration startup
                 bundle.stop();
 				bundle.update(in);
 
@@ -289,7 +298,7 @@ public class BundleHelper implements EventListener<SpringContextException>, Fram
             }
 
 			try {
-				evaluateInstallationResult(installResults.poll(15, TimeUnit.SECONDS));
+				evaluateInstallationResult(installResults.poll(1, TimeUnit.MINUTES));
 			} catch (InterruptedException tx) {
                 logger.warn("Timed out waiting for an installation result", tx);
             }

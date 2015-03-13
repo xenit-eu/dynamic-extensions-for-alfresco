@@ -7,6 +7,8 @@ import java.io.IOException;
 
 /**
  * @author Laurent Van der Linden
+ *
+ * @deprecated replaced with {@see StatusResolution}
  */
 public class ErrorResolution implements Resolution {
     private int status;

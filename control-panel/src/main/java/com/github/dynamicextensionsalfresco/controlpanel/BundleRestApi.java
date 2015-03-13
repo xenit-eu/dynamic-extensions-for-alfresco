@@ -75,7 +75,7 @@ public class BundleRestApi {
 
 	    @Override
 	    public void resolve() throws Exception {
-            getResponse().getWriter().append(jsonObject.toString(2));
+            getWriter().append(jsonObject.toString(2));
         }
     }
 }

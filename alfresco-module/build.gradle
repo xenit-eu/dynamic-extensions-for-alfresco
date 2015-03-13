@@ -79,3 +79,6 @@ task amp(type: Zip, dependsOn: jar) {
 }
 
 build.dependsOn("amp")
+
+publish.dependsOn("amp")
+publishToMavenLocal.dependsOn("amp")

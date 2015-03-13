@@ -3,7 +3,7 @@ package com.github.dynamicextensionsalfresco.controlpanel;
 import com.github.dynamicextensionsalfresco.controlpanel.template.TemplateBundle;
 import com.github.dynamicextensionsalfresco.controlpanel.template.Variables;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.*;
-import com.github.dynamicextensionsalfresco.webscripts.resolutions.ErrorResolution;
+import com.github.dynamicextensionsalfresco.webscripts.resolutions.StatusResolution;
 import com.github.dynamicextensionsalfresco.webscripts.resolutions.RedirectResolution;
 import com.github.dynamicextensionsalfresco.webscripts.resolutions.Resolution;
 import com.github.dynamicextensionsalfresco.webscripts.resolutions.TemplateResolution;
@@ -47,7 +47,7 @@ public class Bundles extends AbstractControlPanelHandler {
 			}
 			model.put(Variables.BUNDLE, new TemplateBundle(bundle));
 		} else {
-			return new ErrorResolution(HttpServletResponse.SC_NOT_FOUND);
+			return new StatusResolution(HttpServletResponse.SC_NOT_FOUND);
 		}
 		return new TemplateResolution(model);
 	}

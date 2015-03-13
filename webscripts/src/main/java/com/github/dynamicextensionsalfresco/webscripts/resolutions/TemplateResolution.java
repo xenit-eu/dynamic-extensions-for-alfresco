@@ -13,9 +13,12 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Can be used directly by controllers or implicitly by returning a Map.
+ *
  * @author Laurent Van der Linden
  */
 public class TemplateResolution extends AbstractResolution {
@@ -25,6 +28,10 @@ public class TemplateResolution extends AbstractResolution {
 
     private String template;
     private Map<String,Object> model;
+
+    public TemplateResolution() {
+        this.model = new HashMap<String, Object>(3);
+    }
 
     public TemplateResolution(Map<String, Object> model) {
         this.model = model;

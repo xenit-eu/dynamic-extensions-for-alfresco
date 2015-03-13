@@ -4,6 +4,7 @@ import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptReques
 import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebscriptResponse;
 import org.springframework.util.Assert;
 
+import javax.annotation.Nonnull;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -18,7 +19,9 @@ public class RedirectResolution implements Resolution {
     }
 
     @Override
-    public void resolve(AnnotationWebScriptRequest request, AnnotationWebscriptResponse response, ResolutionParameters params) throws IOException {
+    public void resolve(@Nonnull AnnotationWebScriptRequest request,
+                        @Nonnull AnnotationWebscriptResponse response,
+                        @Nonnull ResolutionParameters params) throws IOException {
         Assert.hasText(path);
         if (path.startsWith("/") == false) {
             path = "/" + path;

@@ -4,6 +4,7 @@ import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptReques
 import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebscriptResponse;
 import org.alfresco.repo.content.MimetypeMap;
 
+import javax.annotation.Nonnull;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -12,22 +13,31 @@ import javax.servlet.http.HttpServletResponse;
 public abstract class AbstractJsonResolution extends AbstractResolution {
     public static final String UTF_8 = "UTF-8";
 
-    private int status = HttpServletResponse.SC_OK;
+    private Integer status = null;
 
     protected AbstractJsonResolution() {
     }
 
+    /**
+     * @deprecated use {@link #withStatus(int)} instead
+     *
+     * @param status http status code
+     */
     protected AbstractJsonResolution(int status) {
         this.status = status;
     }
 
     @Override
-    public void resolve(AnnotationWebScriptRequest request, AnnotationWebscriptResponse response,
-                        ResolutionParameters params) throws Exception {
+    public void resolve(@Nonnull AnnotationWebScriptRequest request,
+                        @Nonnull AnnotationWebscriptResponse response,
+                        @Nonnull ResolutionParameters params) throws Exception {
         super.resolve(request, response, params);
         response.setContentType(MimetypeMap.MIMETYPE_JSON);
         response.setContentEncoding(UTF_8);
         response.setHeader("Cache-Control", "no-cache");
-        response.setStatus(status);
+
+        if (status != null) {
+            response.setStatus(status);
+        }
     }
 }
