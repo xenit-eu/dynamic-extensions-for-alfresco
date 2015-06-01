@@ -41,7 +41,7 @@ k.context.support,org.springframework.core.io,org.springframework.cor
 e.type,org.springframework.core.type.classreading,org.springframework
 .extensions.surf.util,org.springframework.extensions.webscripts,org.s
 pringframework.util,org.xml.sax,com.github.dynamicextensionsalfresco,
-com.github.dynamicextensionsalfresco.event,com.github.dynamicextensionsalfresco.event.events'''.replaceAll(/\s|\n/, '')
+com.github.dynamicextensionsalfresco.event,com.github.dynamicextensionsalfresco.event.events,com.github.dynamicextensionsalfresco.messages'''.replaceAll(/\s|\n/, '')
         instruction 'Bundle-DocURL', 'https://github.com/laurentvdl/dynamic-extensions-for-alfresco'
     }
 }
