@@ -1,3 +1,13 @@
+buildscript {
+    ext.kotlin_version = '0.12.200'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
 allprojects {
     apply plugin: 'idea'
     apply plugin: 'eclipse'

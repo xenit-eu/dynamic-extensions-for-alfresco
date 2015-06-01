@@ -40,7 +40,9 @@ public enum BeanNames {
 
     BOOTSTRAP_SERVICE("bootstrapService"),
 
-    OSGI_SERVICE_REGISTRAR("osgiServiceRegistrar");
+    OSGI_SERVICE_REGISTRAR("osgiServiceRegistrar"),
+
+	QUARTZ_JOB_REGISTRAR("quartzJobRegistrar");
 
 	private String id;
 

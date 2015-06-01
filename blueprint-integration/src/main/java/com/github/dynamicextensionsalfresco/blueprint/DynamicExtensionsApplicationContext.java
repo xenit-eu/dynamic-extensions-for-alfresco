@@ -12,6 +12,7 @@ import com.github.dynamicextensionsalfresco.osgi.webscripts.SearchPathRegistryMa
 import com.github.dynamicextensionsalfresco.policy.AnnotationBasedBehaviourRegistrar;
 import com.github.dynamicextensionsalfresco.policy.DefaultBehaviourProxyFactory;
 import com.github.dynamicextensionsalfresco.policy.ProxyPolicyComponentFactoryBean;
+import com.github.dynamicextensionsalfresco.quartz.QuartzJobRegistrar;
 import com.github.dynamicextensionsalfresco.resources.DefaultBootstrapService;
 import com.github.dynamicextensionsalfresco.resources.ResourceHelper;
 import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptBuilder;
@@ -183,6 +184,7 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
         registerAopProxyBeans(beanFactory);
         registerWorkflowBeans(beanFactory);
         registerOsgiServiceBeans(beanFactory);
+        registerQuartzBeans(beanFactory);
     }
 
     /**
@@ -352,9 +354,19 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
     }
 
     protected void registerOsgiServiceBeans(final DefaultListableBeanFactory beanFactory) {
-        if (beanFactory.containsBeanDefinition(BeanNames.OSGI_SERVICE_REGISTRAR.id()) == false) {
+        if (!beanFactory.containsBeanDefinition(BeanNames.OSGI_SERVICE_REGISTRAR.id())) {
             beanFactory.registerBeanDefinition(BeanNames.OSGI_SERVICE_REGISTRAR.id(), BeanDefinitionBuilder
                 .rootBeanDefinition(OsgiServiceRegistrar.class).getBeanDefinition());
+        }
+    }
+
+    protected void registerQuartzBeans(final DefaultListableBeanFactory beanFactory) {
+        if (!beanFactory.containsBeanDefinition(BeanNames.QUARTZ_JOB_REGISTRAR.id())) {
+            beanFactory.registerBeanDefinition(BeanNames.QUARTZ_JOB_REGISTRAR.id(), BeanDefinitionBuilder
+					.rootBeanDefinition(QuartzJobRegistrar.class)
+					.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE)
+					.getBeanDefinition())
+			;
         }
     }
 
