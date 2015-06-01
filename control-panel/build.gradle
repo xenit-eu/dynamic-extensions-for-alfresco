@@ -10,7 +10,6 @@ dependencies {
     compile "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
     compile fileTree(dir: '../lib', include: '*.jar')
     compile project(":event-bus")
-    testCompile "org.jetbrains.kotlin:kotlin-stdlib:${project.ext.kotlinVersion}"
     testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
     testCompile "junit:junit:${project.ext.junitVersion}"
 }

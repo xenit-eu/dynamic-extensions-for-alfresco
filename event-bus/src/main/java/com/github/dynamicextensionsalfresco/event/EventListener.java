@@ -5,4 +5,5 @@ package com.github.dynamicextensionsalfresco.event;
  */
 public interface EventListener<T extends Event> {
 	void onEvent(T event);
+	Class<?>[] getSupportedEventTypes();
 }

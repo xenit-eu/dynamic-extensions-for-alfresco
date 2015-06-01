@@ -453,7 +453,12 @@ public class BundleHelper implements EventListener<SpringContextException>, Fram
         installResults.add(new InstallResult(event.getException()));
     }
 
-    @Override
+	@Override
+	public Class<?>[] getSupportedEventTypes() {
+		return new Class[] {SpringContextException.class};
+	}
+
+	@Override
     public void frameworkEvent(FrameworkEvent event) {
         if (event.getType() == FrameworkEvent.PACKAGES_REFRESHED) {
             // start any bundles that were recently updated after the PackageAdmin has refreshed (restarted) any dependencies

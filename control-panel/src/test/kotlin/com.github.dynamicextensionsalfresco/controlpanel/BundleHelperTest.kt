@@ -43,9 +43,10 @@ public class BundleHelperTest {
 
         bundleHelper.registerEventListeners()
 
-        whenever(bundleHelper.bundleContext.getBundles()).thenReturn(array<Bundle>())
+        whenever(bundleHelper.bundleContext.getBundles()).thenReturn(arrayOf())
 
-        whenever(bundleHelper.bundleContext.getAllServiceReferences(eq(javaClass<EventListener<*>>().getName()), anyString())).thenReturn(array(mock(javaClass<ServiceReference<*>>())))
+        whenever(bundleHelper.bundleContext.getAllServiceReferences(eq(javaClass<EventListener<*>>().getName()), anyString()))
+                .thenReturn(arrayOf(mock(javaClass<ServiceReference<*>>())))
         whenever(bundleHelper.bundleContext.getService(anyObject<ServiceReference<*>>())).thenReturn(bundleHelper)
 
         return Actors(bundleHelper, bundleHelper, bundleHelper.bundleContext, bundleHelper)
