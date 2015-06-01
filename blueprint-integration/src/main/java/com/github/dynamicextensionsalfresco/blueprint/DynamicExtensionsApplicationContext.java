@@ -5,6 +5,7 @@ import com.github.dynamicextensionsalfresco.actions.AnnotationBasedActionRegistr
 import com.github.dynamicextensionsalfresco.aop.DynamicExtensionsAdvisorAutoProxyCreator;
 import com.github.dynamicextensionsalfresco.event.EventBus;
 import com.github.dynamicextensionsalfresco.event.events.SpringContextException;
+import com.github.dynamicextensionsalfresco.messages.MessagesRegistrar;
 import com.github.dynamicextensionsalfresco.models.M2ModelListFactoryBean;
 import com.github.dynamicextensionsalfresco.models.RepositoryModelRegistrar;
 import com.github.dynamicextensionsalfresco.osgi.webscripts.SearchPathRegistry;
@@ -178,6 +179,7 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
         registerContentSupportBeans(beanFactory);
         registerModelDeploymentBeans(beanFactory);
         registerWorkflowDeployment(beanFactory);
+		registerMessagesDeployment(beanFactory);
         registerAnnotationBasedBehaviourBeans(beanFactory);
         registerAnnotationBasedActionBeans(beanFactory);
         registerAnnotationBasedWebScriptBeans(beanFactory);
@@ -219,6 +221,17 @@ class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContex
                     .getBeanDefinition());
         }
     }
+
+	private void registerMessagesDeployment(DefaultListableBeanFactory beanFactory) {
+		if (beanFactory.containsBeanDefinition(BeanNames.MESSAGES_REGISTRAR.id()) == false) {
+			beanFactory.registerBeanDefinition(
+					BeanNames.MESSAGES_REGISTRAR.id(),
+					BeanDefinitionBuilder.rootBeanDefinition(MessagesRegistrar.class)
+						.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE)
+						.getBeanDefinition());
+		}
+	}
+
 
 	/**
 	 * Registers the infrastructure beans that facilitate annotation-based Behaviours.

@@ -30,6 +30,8 @@ public enum BeanNames {
 
 	WORKFLOW_DEFINITION_REGISTRAR("workflowDefinitionRegistrar"),
 
+	MESSAGES_REGISTRAR("messagesRegistrar"),
+
 	PROXY_POLICY_COMPONENT("proxyPolicyComponent"),
 
 	SEARCH_PATH_REGISTRY_MANAGER("searchPathRegistryManager"),
