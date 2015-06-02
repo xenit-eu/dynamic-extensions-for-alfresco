@@ -24,7 +24,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import static org.alfresco.repo.security.authentication.AuthenticationUtil.runAs;
+import static org.alfresco.repo.security.authentication.AuthenticationUtil.runAsSystem;
 
 /**
  * Service that scans a Dynamic Extension for translations in {@link MessagesRegistrar#BUNDLE_MESSAGES}. It stores them
@@ -53,7 +53,7 @@ public class MessagesRegistrar implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        runAs(new AuthenticationUtil.RunAsWork<Object>() {
+        runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
             @Override
             public Object doWork() throws Exception {
                 try {
@@ -65,7 +65,7 @@ public class MessagesRegistrar implements InitializingBean {
                             Map<Resource, NodeRef> resources = bootstrapService.deployResources(BUNDLE_MESSAGES, repositoryLocation, new ContentCompareStrategy(resourceHelper), null, MimetypeMap.MIMETYPE_TEXT_PLAIN, ContentModel.TYPE_CONTENT);
                             Set<String> registered = new HashSet<String>();
                             for (Resource resource : resources.keySet()) {
-                                String baseName = resource.getFilename().toString().replaceAll("^([a-z-A-Z]+)(_|.).+$", "$1");
+                                String baseName = resource.getFilename().replaceAll("^([a-z-A-Z]+)(_|.).+$", "$1");
                                 String messageBundlePath = StoreRef.STORE_REF_WORKSPACE_SPACESSTORE + repositoryLocation.getPath() + "/cm:" + baseName;
                                 if (!registered.contains(baseName)) {
                                     logger.debug("Registering messagebundle {}", messageBundlePath);
@@ -75,7 +75,7 @@ public class MessagesRegistrar implements InitializingBean {
                             }
                             logger.debug("Deploying messages done.");
 
-                            // DIRTY HACK. Otherwise other code complaints not having a transaction.
+                            // DIRTY HACK. Initialize early, otherwise other code complaints not having a transaction.
                             String message = messageService.getMessage("cm_contentmodel.property.cm_name.title", Locale.US);
                             logger.debug("Fetching failing message {}", message);
                             return null;
@@ -86,6 +86,6 @@ public class MessagesRegistrar implements InitializingBean {
                 }
                 return null;
             }
-        }, AuthenticationUtil.getSystemUserName());
+        });
     }
 }

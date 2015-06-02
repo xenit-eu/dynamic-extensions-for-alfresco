@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
 import org.springframework.stereotype.Component
+import org.springframework.util.Assert
 
 import java.util.ArrayList
 
@@ -32,6 +33,9 @@ public class QuartzJobRegistrar @Autowired constructor(var scheduler: Scheduler)
         val scheduledBeans = applicationContext!!.getBeansWithAnnotation(javaClass<ScheduledQuartzJob>())
         for (entry in scheduledBeans.entrySet()) {
             val bean = entry.getValue()
+
+            Assert.isInstanceOf(javaClass<Job>(), bean, "annotated Quartz job classes should implement org.quartz.Job")
+
             val annotation = bean.javaClass.getAnnotation(javaClass<ScheduledQuartzJob>())
 
             try {
@@ -61,8 +65,7 @@ public class QuartzJobRegistrar @Autowired constructor(var scheduler: Scheduler)
         }
     }
 
-    throws(BeansException::class)
-    override fun setApplicationContext(applicationContext: ApplicationContext) {
+    override fun setApplicationContext(applicationContext: ApplicationContext?) {
         this.applicationContext = applicationContext
     }
 }
