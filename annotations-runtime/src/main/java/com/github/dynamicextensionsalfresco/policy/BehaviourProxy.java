@@ -6,6 +6,7 @@ import java.lang.reflect.Proxy;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.github.dynamicextensionsalfresco.metrics.Timer;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.Policy;
 import org.alfresco.repo.policy.PolicyComponent;
@@ -112,7 +113,12 @@ public class BehaviourProxy implements Behaviour {
 			} else if (Policy.class.isAssignableFrom(method.getDeclaringClass())) {
 				/* Policy interface operations always return void. */
 				if (target != null) {
-					method.invoke(target, args);
+					Timer.instance.start(target.toString(), args);
+					try {
+						method.invoke(target, args);
+					} finally {
+						Timer.instance.stop();
+					}
 				}
 				return null;
 			} else {
