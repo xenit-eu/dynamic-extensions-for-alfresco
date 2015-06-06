@@ -87,7 +87,7 @@ public class AnnotationBasedBehaviourRegistrar extends AbstractAnnotationBasedRe
 				notificationFrequency = classPolicy.event().toNotificationFrequency();
 			}
 		}
-		final JavaBehaviour behaviour = new JavaBehaviour(bean, method.getName(), notificationFrequency);
+		final JavaBehaviour behaviour = new DescriptiveJavaBehaviour(bean, method, notificationFrequency);
 		if (classNames.length > 0) {
 			for (final QName className : classNames) {
 				if (className != null) {
@@ -125,7 +125,7 @@ public class AnnotationBasedBehaviourRegistrar extends AbstractAnnotationBasedRe
 				notificationFrequency = associationPolicy.event().toNotificationFrequency();
 			}
 		}
-		final JavaBehaviour behaviour = new JavaBehaviour(bean, method.getName(), notificationFrequency);
+		final JavaBehaviour behaviour = new DescriptiveJavaBehaviour(bean, method, notificationFrequency);
 		if (classNames.length > 0) {
 			for (final QName className : classNames) {
 				if (assocationName != null) {
@@ -173,7 +173,7 @@ public class AnnotationBasedBehaviourRegistrar extends AbstractAnnotationBasedRe
 				notificationFrequency = propertyPolicy.event().toNotificationFrequency();
 			}
 		}
-		final JavaBehaviour behaviour = new JavaBehaviour(bean, method.getName(), notificationFrequency);
+		final JavaBehaviour behaviour = new DescriptiveJavaBehaviour(bean, method, notificationFrequency);
 		if (classNames.length > 0) {
 			for (final QName className : classNames) {
 				if (propertyName != null) {

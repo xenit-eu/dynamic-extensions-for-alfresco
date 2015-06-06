@@ -42,7 +42,7 @@ public class BehaviourRegistrarTest {
 				eq(NodeServicePolicies.OnCreateNodePolicy.QNAME),
 				eq(ContentModel.TYPE_CONTENT),
 				refEq(new JavaBehaviour(contentBehaviour, "onCreateNode", Behaviour.NotificationFrequency.EVERY_EVENT),
-						"proxies", "disabled")
+						"proxies", "disabled", "methodReference")
 		);
 	}
 
@@ -53,20 +53,20 @@ public class BehaviourRegistrarTest {
 				eq(ContentModel.TYPE_CONTENT),
 				eq(ContentModel.ASSOC_CONTAINS),
 				refEq(new JavaBehaviour(associationBehaviourInheritClassAndContain, "onCreateAssociation", Behaviour.NotificationFrequency.FIRST_EVENT),
-						"proxies", "disabled")
+						"proxies", "disabled", "methodReference")
 		);
 		verify(policyComponent).bindAssociationBehaviour(
 				eq(NodeServicePolicies.OnCreateAssociationPolicy.QNAME),
 				eq(ContentModel.TYPE_FOLDER),
 				eq(ContentModel.ASSOC_CONTAINS),
 				refEq(new JavaBehaviour(associationBehaviourContain, "onCreateAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT),
-						"proxies", "disabled")
+						"proxies", "disabled", "methodReference")
 		);
 		verify(policyComponent).bindAssociationBehaviour(
 				eq(NodeServicePolicies.OnCreateAssociationPolicy.QNAME),
 				eq(associationBehaviourVoid),
 				refEq(new JavaBehaviour(associationBehaviourVoid, "onCreateAssociation", Behaviour.NotificationFrequency.EVERY_EVENT),
-						"proxies", "disabled")
+						"proxies", "disabled", "methodReference")
 		);
 	}
 
@@ -77,7 +77,7 @@ public class BehaviourRegistrarTest {
 				eq(ContentModel.TYPE_CONTENT),
 				eq(ContentModel.PROP_NAME),
 				refEq(new JavaBehaviour(propertyBehaviour, "onNewValue", Behaviour.NotificationFrequency.EVERY_EVENT),
-						"proxies", "disabled")
+						"proxies", "disabled", "methodReference")
 		);
 	}
 }

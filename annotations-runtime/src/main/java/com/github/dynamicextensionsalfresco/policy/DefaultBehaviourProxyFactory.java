@@ -51,8 +51,7 @@ public class DefaultBehaviourProxyFactory implements BehaviourProxyFactory, Appl
 			try {
 				final BehaviourProxy behaviourProxy = it.next();
 				if (logger.isDebugEnabled()) {
-					logger.debug("Releasing reference from BehaviourProxy to {} instance.", behaviourProxy
-							.getBehaviour().getClass().getName());
+					logger.debug("Releasing reference from BehaviourProxy to {} instance.", behaviourProxy);
 				}
 				behaviourProxy.release();
 			} finally {

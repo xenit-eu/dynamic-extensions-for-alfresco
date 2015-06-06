@@ -46,7 +46,7 @@ public class QuartzJobRegistrar @Autowired constructor(var scheduler: Scheduler)
 
                 registeredJobs.add(annotation)
 
-                logger.debug {"scheduled job for bean ${entry.getKey()}" }
+                logger.debug { "scheduled job ${annotation.name} from group ${annotation.group} using cron ${annotation.cron}" }
             } catch (e: Exception) {
                 logger.error("failed to register job ${annotation.name} using cron ${annotation.cron}", e)
             }
@@ -59,6 +59,7 @@ public class QuartzJobRegistrar @Autowired constructor(var scheduler: Scheduler)
         for (job in registeredJobs) {
             try {
                 scheduler.unscheduleJob(job.name, job.group)
+                logger.debug { "unscheduled job ${job.name} from group ${job.group}" }
             } catch (e: SchedulerException) {
                 logger.error("failed to cleanup quartz job " + job, e)
             }

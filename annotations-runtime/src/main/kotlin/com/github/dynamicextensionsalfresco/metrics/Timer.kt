@@ -1,8 +1,11 @@
 package com.github.dynamicextensionsalfresco.metrics
 
+import org.alfresco.repo.policy.JavaBehaviour
 import org.alfresco.repo.transaction.AlfrescoTransactionSupport
 import org.alfresco.repo.transaction.TransactionListenerAdapter
+import org.alfresco.service.cmr.repository.NodeRef
 import org.alfresco.service.transaction.TransactionService
+import org.alfresco.util.transaction.TransactionListener
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -21,6 +24,9 @@ public class Timer {
 
     val identifier = javaClass.getPackage().getName()
 
+    val enabled: Boolean
+        get() = logger.isTraceEnabled()
+
     private val stopWatch: StopWatch
         get() {
             var stopWatch = TransactionSynchronizationManager.getResource(identifier) as? StopWatch
@@ -34,31 +40,41 @@ public class Timer {
         }
 
     private fun registerTxListener() {
-        AlfrescoTransactionSupport.bindListener(object : TransactionListenerAdapter() {
+        AlfrescoTransactionSupport.bindListener(object : TransactionListener {
+            override fun beforeCompletion() {}
+
+            override fun beforeCommit(readOnly: Boolean) {}
+
+            override fun afterRollback() {}
+
             override fun afterCommit() {
                 logger.trace(stopWatch.prettyPrint())
             }
         })
     }
 
-    inline fun time(label: String, args: Array<Any>?, operation: () -> Unit) {
-        start(label, args)
-        try {
+    inline fun time(labelProvider: () -> String, operation: () -> Unit) {
+        if (enabled) {
+            start(labelProvider.invoke())
+            try {
+                operation()
+            } finally {
+                stop()
+            }
+        } else {
             operation()
-        } finally {
-            stop()
         }
     }
 
-    fun start(label: String, args: Array<Any>?) {
-        if (logger.isTraceEnabled()) {
+    fun start(label: String) {
+        if (enabled) {
             var stopWatch = stopWatch
-            stopWatch.start(label + if (args != null) " - " + Arrays.toString(args) else "")
+            stopWatch.start(label)
         }
     }
 
     fun stop() {
-        if (logger.isTraceEnabled()) {
+        if (enabled) {
             stopWatch.stop()
         }
     }
