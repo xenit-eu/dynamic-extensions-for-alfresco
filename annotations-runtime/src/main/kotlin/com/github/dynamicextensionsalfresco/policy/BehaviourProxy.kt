@@ -6,6 +6,7 @@ import java.lang.reflect.Proxy
 import java.util.concurrent.ConcurrentHashMap
 
 import com.github.dynamicextensionsalfresco.metrics.Timer
+import com.github.dynamicextensionsalfresco.metrics.time
 import org.alfresco.repo.policy.Behaviour
 import org.alfresco.repo.policy.Policy
 import org.alfresco.repo.policy.PolicyComponent
@@ -24,7 +25,7 @@ import org.springframework.util.Assert
 
  * @author Laurens Fridael
  */
-public class BehaviourProxy(private var behaviour: Behaviour) : Behaviour by behaviour {
+public class BehaviourProxy(private var behaviour: Behaviour, val timer: Timer) : Behaviour by behaviour {
 
     private val proxiesByPolicyClass = ConcurrentHashMap<Class<*>, ProxyPolicy>()
 
@@ -32,12 +33,12 @@ public class BehaviourProxy(private var behaviour: Behaviour) : Behaviour by beh
     override fun <T> getInterface(policy: Class<T>?): T {
         return proxiesByPolicyClass.getOrPut(policy) {
             if (behaviour is NoOpBehaviour) {
-                val proxyHandler = ProxyPolicyInvocationHandler(null, behaviour)
+                val proxyHandler = ProxyPolicyInvocationHandler(null, behaviour, timer)
                 val proxy = Proxy.newProxyInstance(javaClass.getClassLoader(), arrayOf(policy), proxyHandler) as T
                 ProxyPolicy(proxy, proxyHandler)
             } else {
                 val originalHandler = behaviour.getInterface<T>(policy)
-                val proxyHandler = ProxyPolicyInvocationHandler(originalHandler, behaviour)
+                val proxyHandler = ProxyPolicyInvocationHandler(originalHandler, behaviour, timer)
                 val proxy = Proxy.newProxyInstance(javaClass.getClassLoader(), arrayOf(policy), proxyHandler) as T
                 ProxyPolicy(proxy, proxyHandler)
             }
@@ -55,7 +56,8 @@ public class BehaviourProxy(private var behaviour: Behaviour) : Behaviour by beh
         }
     }
 
-    private class ProxyPolicyInvocationHandler(private var target: Any?, private var behaviour: Behaviour?) : InvocationHandler {
+    private class ProxyPolicyInvocationHandler(private var target: Any?, private var behaviour: Behaviour?, val timer: Timer) : InvocationHandler {
+
         override fun invoke(proxy: Any, method: Method, args: Array<Any>?): Any? {
             if (method.getDeclaringClass().isAssignableFrom(javaClass<Any>())) {
                 // Direct Object methods to ourselves.
@@ -63,7 +65,7 @@ public class BehaviourProxy(private var behaviour: Behaviour) : Behaviour by beh
             } else if (javaClass<Policy>().isAssignableFrom(method.getDeclaringClass())) {
                 /* Policy interface operations always return void. */
                 if (behaviour != null) {
-                    Timer.instance.time( {
+                    timer.time( {
                         behaviour.toString() + " " + args?.filterIsInstance(javaClass<NodeRef>())?.joinToString(",")
                     } , {method.invoke(target, *args)})
                 }

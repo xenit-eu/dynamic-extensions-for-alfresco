@@ -1,5 +1,7 @@
 package com.github.dynamicextensionsalfresco;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Contains constants for bean names used by the bundle Spring application contexts.
  * 
@@ -44,7 +46,9 @@ public enum BeanNames {
 
     OSGI_SERVICE_REGISTRAR("osgiServiceRegistrar"),
 
-	QUARTZ_JOB_REGISTRAR("quartzJobRegistrar");
+	QUARTZ_JOB_REGISTRAR("quartzJobRegistrar"),
+
+	METRICS_TIMER("metricsTimer");
 
 	private String id;
 
