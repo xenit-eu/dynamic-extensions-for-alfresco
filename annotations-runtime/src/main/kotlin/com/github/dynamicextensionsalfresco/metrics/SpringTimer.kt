@@ -46,14 +46,22 @@ public class SpringTimer : Timer {
 
     override fun start(label: String) {
         if (enabled) {
-            var stopWatch = stopWatch
-            stopWatch.start(label)
+            with(stopWatch) {
+                if (isRunning()) {
+                    stop()
+                }
+                start(label)
+            }
         }
     }
 
     override fun stop() {
         if (enabled) {
-            stopWatch.stop()
+            with(stopWatch) {
+                if (isRunning()) {
+                    stop()
+                }
+            }
         }
     }
 }
