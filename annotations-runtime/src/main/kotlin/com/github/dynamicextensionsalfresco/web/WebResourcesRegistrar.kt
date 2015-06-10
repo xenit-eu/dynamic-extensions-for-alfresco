@@ -19,6 +19,8 @@ import javax.annotation.PostConstruct
 import javax.annotation.PreDestroy
 
 /**
+ *  Register resources webscript if /META-INF/alfresco/web resources are found
+ *
  * @author Laurent Van der Linden
  */
 public class WebResourcesRegistrar Autowired constructor(

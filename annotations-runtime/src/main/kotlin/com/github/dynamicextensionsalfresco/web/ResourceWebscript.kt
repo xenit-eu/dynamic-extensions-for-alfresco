@@ -7,10 +7,12 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.extensions.webscripts.*
 import java.util.*
+import javax.servlet.http.HttpServletResponse
 
 /**
- * Webscript to server static web resources found in an extension
- * registered only if /META-INF/alfresco/web resources are found
+ * Webscript to serve static web resources found in an extension
+ * When requests are prefixed with symbolic-name/web, no cache headers are set,
+ * with the /web-cached/$version prefix, cache is set to expire now + 1 year
  *
  * @author Laurent Van der Linden
  */
@@ -22,18 +24,18 @@ public class ResourceWebscript(private val bundleContext: BundleContext) : WebSc
     }
 
     private val descriptionImpl = run {
-        val url = "/$module/web/{path}"
+        val uris = arrayOf("/$module/web/{path}", "/$module/web-cached/{version}/{path}")
         val id = "${module}-web"
         val descriptionImpl = DescriptionImpl(
                 id,
                 "staticWebResource$module",
                 "static web resources for extension $module",
-                url
+                uris.first()
         )
         descriptionImpl.setMethod("GET")
         descriptionImpl.setDefaultFormat("html")
         descriptionImpl.setFormatStyle(Description.FormatStyle.argument)
-        descriptionImpl.setUris(arrayOf(url))
+        descriptionImpl.setUris(uris)
         descriptionImpl.setFamilys(setOf("static-web"))
         descriptionImpl.setStore(DummyStore())
         descriptionImpl.setRequiredAuthentication(Description.RequiredAuthentication.none)
@@ -56,7 +58,16 @@ public class ResourceWebscript(private val bundleContext: BundleContext) : WebSc
     override fun execute(req: WebScriptRequest, res: WebScriptResponse) {
         val path = req.getServiceMatch().getTemplateVars().get("path")
 
-        handleResource(path, res)
+        if (path != null) {
+            if (req.getServiceMatch().getPath().startsWith("/$module/web-cached/")) {
+                setInfinateCache(res)
+            }
+
+            handleResource(path, res)
+        } else {
+            res.setStatus(HttpServletResponse.SC_BAD_REQUEST)
+        }
+
     }
 
     override fun getBundleEntryPath(path: String?): String? {
