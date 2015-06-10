@@ -1,5 +1,6 @@
 dependencies {
     compile("org.alfresco:alfresco-repository:${project.ext.alfrescoVersion}") { transitive = false }
     compile("org.alfresco:alfresco-data-model:${project.ext.alfrescoVersion}") { transitive = false }
+    compile("org.alfresco:alfresco-remote-api:${project.ext.alfrescoVersion}") { transitive = false }
     compile("org.alfresco:alfresco-core:${project.ext.alfrescoVersion}")
 }

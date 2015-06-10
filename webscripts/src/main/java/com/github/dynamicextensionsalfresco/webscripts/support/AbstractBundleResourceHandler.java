@@ -84,7 +84,10 @@ public abstract class AbstractBundleResourceHandler {
 	protected String getContentType(final URL resource) {
 		final Matcher matcher = Pattern.compile(".+\\.(\\w+)$").matcher(resource.getFile());
 		final String extension = matcher.matches() ? matcher.group(1) : null;
-		String contentType = getContentTypesByExtension().get(extension);
+		String contentType = null;
+		if (extension != null) {
+			contentType = getContentTypesByExtension().get(extension.toLowerCase());
+		}
 		if (contentType == null) {
 			contentType = getDefaultContentType();
 		}

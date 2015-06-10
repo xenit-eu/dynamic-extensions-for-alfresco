@@ -172,7 +172,7 @@ public class AnnotationWebScriptBuilder implements BeanFactoryAware {
 				description.getMethod().toLowerCase());
 		description.setId(id);
 		final Object handler = getBeanFactory().getBean(beanName);
-		description.setStore(new AnnotationWebScriptStore());
+		description.setStore(new DummyStore());
 		return createWebScript(description, handler, handlerMethods);
 	}
 

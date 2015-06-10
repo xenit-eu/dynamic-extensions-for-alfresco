@@ -8,7 +8,7 @@ package com.github.dynamicextensionsalfresco.gradle.configuration
 class Versions {
 	String dynamicExtensions = "1.3.0-SNAPSHOT"
 	
-	String surf = "5.0.b"
+	String surf = "5.0.d"
 
 	String spring = "3.2.10.RELEASE"
 }

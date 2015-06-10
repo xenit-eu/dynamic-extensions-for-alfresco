@@ -18,7 +18,7 @@ import freemarker.cache.TemplateLoader;
  * @author Laurens Fridael
  * 
  */
-class AnnotationWebScriptStore implements Store {
+public class DummyStore implements Store {
 
 	private boolean secure = false;
 

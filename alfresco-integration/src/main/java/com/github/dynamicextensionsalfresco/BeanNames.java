@@ -48,6 +48,8 @@ public enum BeanNames {
 
 	QUARTZ_JOB_REGISTRAR("quartzJobRegistrar"),
 
+	RESOURCES_WEB("resourcesWeb"),
+
 	METRICS_TIMER("metricsTimer");
 
 	private String id;

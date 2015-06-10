@@ -18,6 +18,7 @@ import com.github.dynamicextensionsalfresco.policy.ProxyPolicyComponentFactoryBe
 import com.github.dynamicextensionsalfresco.quartz.QuartzJobRegistrar
 import com.github.dynamicextensionsalfresco.resources.DefaultBootstrapService
 import com.github.dynamicextensionsalfresco.resources.ResourceHelper
+import com.github.dynamicextensionsalfresco.web.WebResourcesRegistrar
 import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptBuilder
 import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptRegistrar
 import com.github.dynamicextensionsalfresco.webscripts.WebScriptUriRegistry
@@ -182,6 +183,7 @@ class DynamicExtensionsApplicationContext(configurationLocations: Array<String>?
         registerOsgiServiceBeans(beanFactory)
         registerQuartzBeans(beanFactory)
         registerMetrics(beanFactory)
+        registerWebResources(beanFactory)
     }
 
     /**
@@ -314,6 +316,12 @@ class DynamicExtensionsApplicationContext(configurationLocations: Array<String>?
 
     protected fun registerMetrics(beanFactory: DefaultListableBeanFactory) {
         beanFactory.bean(BeanNames.METRICS_TIMER, javaClass<SpringTimer>()) {
+            autowireByType()
+        }
+    }
+
+    protected fun registerWebResources(beanFactory: DefaultListableBeanFactory) {
+        beanFactory.bean(BeanNames.RESOURCES_WEB, javaClass<WebResourcesRegistrar>()) {
             autowireByType()
         }
     }
