@@ -42,7 +42,7 @@ public class MessagesRegistrar implements InitializingBean {
     @Autowired
     protected BootstrapService bootstrapService;
 
-    @Autowired
+    @Autowired @javax.annotation.Resource(name = "messageService")
     protected MessageService messageService;
 
     @Autowired
