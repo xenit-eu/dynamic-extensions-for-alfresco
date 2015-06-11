@@ -1,7 +1,7 @@
 package com.github.dynamicextensionsalfresco.metrics
 
 import org.alfresco.repo.transaction.AlfrescoTransactionSupport
-import org.alfresco.util.transaction.TransactionListener
+import org.alfresco.repo.transaction.TransactionListener
 import org.slf4j.LoggerFactory
 import org.springframework.transaction.support.TransactionSynchronizationManager
 import org.springframework.util.StopWatch
@@ -32,6 +32,8 @@ public class SpringTimer : Timer {
 
     private fun registerTxListener() {
         AlfrescoTransactionSupport.bindListener(object : TransactionListener {
+            override fun flush() {}
+
             override fun beforeCompletion() {}
 
             override fun beforeCommit(readOnly: Boolean) {}
