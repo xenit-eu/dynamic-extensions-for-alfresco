@@ -40,7 +40,7 @@ public class BundleRestApi {
 
 	@Uri(method = HttpMethod.POST)
 	public Resolution installBundle(final Content content, @Header("Content-Type") final String contentType) throws Exception {
-        if (!configuration.isHotDeployEnabled()) {
+        if (!configuration.getHotDeployEnabled()) {
             return new JsonMessage(new JSONObject()
                 .put("message", "osgi.container.control-panel.bundle-install is disabled"),
                 HttpServletResponse.SC_FORBIDDEN);

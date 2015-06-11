@@ -11,7 +11,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 		<property name="frameworkRestartEnabled" value="${osgi.container.restartable:true}" />
 		<property name="hotDeployEnabled" value="${osgi.container.hot-deploy:true}" />
 		<property name="repositoryBundlesEnabled" value="${osgi.container.repository-bundles:true}" />
-		<property name="storageDirectory" value="${osgi.container.storage-directory:tmp}" />
+		<property name="storageDirectory" value="${osgi.container.storage-directory:#{null}}" />
 		<property name="systemPackageCacheMode" value="${osgi.container.system-package-cache.mode:ENABLE}" />
 	</bean>
 

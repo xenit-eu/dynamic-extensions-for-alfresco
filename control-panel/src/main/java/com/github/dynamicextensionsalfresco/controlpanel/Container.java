@@ -4,14 +4,7 @@ import com.github.dynamicextensionsalfresco.controlpanel.template.TemplateBundle
 import com.github.dynamicextensionsalfresco.controlpanel.template.TemplateServiceReference;
 import com.github.dynamicextensionsalfresco.controlpanel.template.Variables;
 import com.github.dynamicextensionsalfresco.osgi.RepositoryStoreService;
-import com.github.dynamicextensionsalfresco.webscripts.annotations.Attribute;
-import com.github.dynamicextensionsalfresco.webscripts.annotations.Authentication;
-import com.github.dynamicextensionsalfresco.webscripts.annotations.AuthenticationType;
-import com.github.dynamicextensionsalfresco.webscripts.annotations.Cache;
-import com.github.dynamicextensionsalfresco.webscripts.annotations.HttpMethod;
-import com.github.dynamicextensionsalfresco.webscripts.annotations.Uri;
-import com.github.dynamicextensionsalfresco.webscripts.annotations.UriVariable;
-import com.github.dynamicextensionsalfresco.webscripts.annotations.WebScript;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.*;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.osgi.framework.Bundle;
@@ -26,13 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
 
 import java.lang.reflect.Proxy;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 /**
@@ -151,7 +138,7 @@ public class Container extends AbstractControlPanelHandler {
 
 	@Attribute(Variables.CAN_RESTART_FRAMEWORK)
 	protected boolean canRestartFramework() {
-		return osgiConfiguration.isFrameworkRestartEnabled();
+		return osgiConfiguration.getFrameworkRestartEnabled();
 	}
 
 	@Attribute(Variables.SYSTEM_PACKAGE_CACHE_EXISTS)
