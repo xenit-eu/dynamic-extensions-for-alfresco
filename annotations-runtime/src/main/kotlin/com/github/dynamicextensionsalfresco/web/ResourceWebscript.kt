@@ -3,10 +3,8 @@ package com.github.dynamicextensionsalfresco.web
 import com.github.dynamicextensionsalfresco.webscripts.DummyStore
 import com.github.dynamicextensionsalfresco.webscripts.support.AbstractBundleResourceHandler
 import org.osgi.framework.BundleContext
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.extensions.webscripts.*
-import java.util.*
+import java.util.ResourceBundle
 import javax.servlet.http.HttpServletResponse
 
 /**
@@ -17,7 +15,7 @@ import javax.servlet.http.HttpServletResponse
  * @author Laurent Van der Linden
  */
 public class ResourceWebscript(private val bundleContext: BundleContext) : WebScript, AbstractBundleResourceHandler() {
-    private val module = bundleContext.getBundle().getSymbolicName().toLowerCase()
+    private val module = bundleContext.getBundle().getSymbolicName().replace(".", "-").toLowerCase()
 
     init {
         initContentTypes()
@@ -33,7 +31,6 @@ public class ResourceWebscript(private val bundleContext: BundleContext) : WebSc
                 uris.first()
         )
         descriptionImpl.setMethod("GET")
-        descriptionImpl.setDefaultFormat("html")
         descriptionImpl.setFormatStyle(Description.FormatStyle.argument)
         descriptionImpl.setUris(uris)
         descriptionImpl.setFamilys(setOf("static-web"))
