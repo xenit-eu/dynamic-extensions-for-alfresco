@@ -123,15 +123,17 @@ public class Container extends AbstractControlPanelHandler {
 
     protected Map<Long, List<ServiceReference>> getServicesByBundleId() {
         final Map<Long, List<ServiceReference>> servicesByBundleId = new LinkedHashMap<Long, List<ServiceReference>>();
-        final List<ServiceReference> allServices = bundleHelper.getAllServices();
-        for (final ServiceReference serviceReference : allServices) {
-            final long bundleId = serviceReference.getBundle().getBundleId();
-            if (servicesByBundleId.containsKey(bundleId) == false) {
-                servicesByBundleId.put(bundleId, new ArrayList<ServiceReference>());
+        final ServiceReference<?>[] allServices = bundleHelper.getAllServices();
+		if (allServices != null) {
+			for (final ServiceReference serviceReference : allServices) {
+                final long bundleId = serviceReference.getBundle().getBundleId();
+                if (servicesByBundleId.containsKey(bundleId) == false) {
+                    servicesByBundleId.put(bundleId, new ArrayList<ServiceReference>());
+                }
+                servicesByBundleId.get(bundleId).add(serviceReference);
             }
-            servicesByBundleId.get(bundleId).add(serviceReference);
-        }
-        return servicesByBundleId;
+		}
+		return servicesByBundleId;
 	}
 
 	/* Reference data */

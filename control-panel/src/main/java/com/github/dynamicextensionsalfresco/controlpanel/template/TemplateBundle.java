@@ -1,23 +1,21 @@
 package com.github.dynamicextensionsalfresco.controlpanel.template;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-
 import com.github.dynamicextensionsalfresco.controlpanel.BundleHelper;
-
+import com.springsource.util.osgi.manifest.BundleManifest;
+import com.springsource.util.osgi.manifest.BundleManifestFactory;
+import com.springsource.util.osgi.manifest.ExportedPackage;
+import com.springsource.util.osgi.manifest.ImportedPackage;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
 import org.springframework.util.Assert;
 
-import com.springsource.util.osgi.manifest.BundleManifest;
-import com.springsource.util.osgi.manifest.BundleManifestFactory;
-import com.springsource.util.osgi.manifest.ExportedPackage;
-import com.springsource.util.osgi.manifest.ImportedPackage;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Adapts an {@link Bundle} for display in a Freemarker template.
@@ -67,7 +65,7 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 	}
 
 	public boolean isDynamicExtension() {
-		return BundleHelper.isDynamicExtension(bundle);
+		return BundleHelper.Companion.isDynamicExtension(bundle);
 	}
 
 	public boolean isFragmentBundle() {
