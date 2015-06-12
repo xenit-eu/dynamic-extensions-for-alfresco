@@ -48,24 +48,24 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 		<description>Registers this application context as an OSGi service.</description>
 	</bean>
 
-	<bean id="osgi.container.FrameworkManager" class="com.github.dynamicextensionsalfresco.osgi.FrameworkManager" init-method="initialize"
+	<bean id="osgi.container.FrameworkManager" class="com.github.dynamicextensionsalfresco.osgi.DefaultFrameworkManager" init-method="initialize"
 		destroy-method="destroy">
 		<description>
 			Manages the lifecycle of the OSGi Framework and registers services and listeners.
 		</description>
-		<property name="framework" ref="osgi.container.Framework" />
-		<property name="bundleContextRegistrars">
+		<constructor-arg name="framework" ref="osgi.container.Framework"/>
+		<constructor-arg name="bundleContextRegistrars">
 			<list>
 				<ref bean="osgi.container.ServiceBundleContextRegistrar" />
 				<ref bean="osgi.container.ApplicationContextBundleContextRegistrar" />
 			</list>
-		</property>
-		<property name="blueprintBundlesLocation" value="classpath:/alfresco/module/%module.id%/blueprint-bundles/*.jar" />
-		<property name="standardBundlesLocation" value="classpath:/alfresco/module/%module.id%/standard-bundles/*.jar" />
-		<property name="customBundlesLocation" value="classpath:/dynamic-extensions/bundles/*.jar" />
-		<property name="configuration" ref="osgi.container.Configuration" />
-		<property name="repositoryStoreService" ref="osgi.container.RepositoryStoreService" />
-		<property name="contentService" ref="contentService" />
+		</constructor-arg>
+		<constructor-arg name="repositoryStoreService" ref="osgi.container.RepositoryStoreService" />
+		<constructor-arg name="contentService" ref="contentService" />
+		<constructor-arg name="configuration" ref="osgi.container.Configuration" />
+		<constructor-arg name="blueprintBundlesLocation" value="classpath:/alfresco/module/%module.id%/blueprint-bundles/*.jar" />
+		<constructor-arg name="standardBundlesLocation" value="classpath:/alfresco/module/%module.id%/standard-bundles/*.jar" />
+		<constructor-arg name="customBundlesLocation" value="classpath:/dynamic-extensions/bundles/*.jar" />
 	</bean>
 
 	<bean id="osgi.container.RepositoryStoreService" class="com.github.dynamicextensionsalfresco.osgi.RepositoryStoreService">
