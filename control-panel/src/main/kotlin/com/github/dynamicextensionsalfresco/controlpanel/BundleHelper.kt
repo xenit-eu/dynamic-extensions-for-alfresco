@@ -342,6 +342,12 @@ public open class BundleHelper Autowired constructor(
         val title = "%s %s".format(manifest.getBundleName(), manifest.getBundleVersion())
         nodeService.setProperty(nodeRef, ContentModel.PROP_TITLE, title as java.lang.String)
 
+        // disable indexing
+        nodeService.setProperty(nodeRef, ContentModel.PROP_DESCRIPTION, manifest.getBundleDescription() as? java.lang.String)
+        nodeService.addAspect(nodeRef, ContentModel.ASPECT_INDEX_CONTROL, mapOf(
+                ContentModel.PROP_IS_INDEXED to false as java.lang.Boolean
+        ));
+
         val writer = contentService.getWriter(nodeRef, ContentModel.PROP_CONTENT, true)
         writer.setMimetype(MimetypeMap.MIMETYPE_ZIP)
         writer.putContent(createStreamForFile(file))
