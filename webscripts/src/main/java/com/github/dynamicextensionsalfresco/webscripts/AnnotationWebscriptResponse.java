@@ -23,7 +23,7 @@ public class AnnotationWebscriptResponse implements WrappingWebScriptResponse {
 
 	/* Main operations */
 
-	AnnotationWebscriptResponse(final WebScriptResponse response) {
+	public AnnotationWebscriptResponse(final WebScriptResponse response) {
 		this.response = response;
 	}
 

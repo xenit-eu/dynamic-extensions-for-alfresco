@@ -1,8 +1,13 @@
 package com.github.dynamicextensionsalfresco.webscripts.support;
 
+import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptRequest;
+import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebscriptResponse;
+import com.github.dynamicextensionsalfresco.webscripts.resolutions.Resolution;
+import com.github.dynamicextensionsalfresco.webscripts.resolutions.TemplateResolution;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.util.Assert;
 import org.springframework.util.FileCopyUtils;
@@ -13,11 +18,9 @@ import java.io.IOException;
 import java.io.Writer;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,11 +46,14 @@ public abstract class AbstractBundleResourceHandler {
 
 	/* Main operations */
 
-	protected final void handleResource(final String path, final WebScriptResponse response) throws IOException {
+	protected final void handleResource(final String path, final WebScriptRequest request, final WebScriptResponse response) throws Exception {
 		final String entryPath = getBundleEntryPath(path);
 		final URL resource = getBundleContext().getBundle().getEntry(entryPath);
 		if (resource != null) {
-			sendResource(response, resource);
+            if(resource.getPath().endsWith("/")) {
+                sendDirectoryListing(request, response, resource);
+            }
+			else sendResource(response, resource);
 		} else {
 			handleResourceNotFound(path, response);
 		}
@@ -69,6 +75,25 @@ public abstract class AbstractBundleResourceHandler {
 		}
 		FileCopyUtils.copy(connection.getInputStream(), response.getOutputStream());
 	}
+
+    protected void sendDirectoryListing(final WebScriptRequest request, final WebScriptResponse response, final URL resource) throws Exception {
+        Enumeration<String> entries = getBundleContext().getBundle().getEntryPaths(resource.getPath());
+        List<String> paths = new ArrayList<String>();
+        while(entries.hasMoreElements()){
+            String entry = entries.nextElement();
+            String path = Paths.get(entry).getFileName().toString();
+            if(entry.endsWith("/"))
+                path += "/";
+            paths.add(path);
+        }
+        Map<String,Object> model = new HashMap<String, Object>();
+        model.put("paths",paths);
+        Resolution resolution = new TemplateResolution("com/github/dynamicextensionsalfresco/webscripts/support/directory-listing.html.ftl",model);
+        resolution.resolve(
+                new AnnotationWebScriptRequest(request),
+                new AnnotationWebscriptResponse(response),
+                null);
+    }
 
 	protected void handleResourceNotFound(final String path, final WebScriptResponse response) throws IOException {
 		response.setStatus(HttpServletResponse.SC_NOT_FOUND);

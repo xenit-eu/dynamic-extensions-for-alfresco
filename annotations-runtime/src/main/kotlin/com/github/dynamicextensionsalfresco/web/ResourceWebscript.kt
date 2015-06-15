@@ -60,11 +60,10 @@ public class ResourceWebscript(private val bundleContext: BundleContext) : WebSc
                 setInfinateCache(res)
             }
 
-            handleResource(path, res)
+            handleResource(path, req, res)
         } else {
             res.setStatus(HttpServletResponse.SC_BAD_REQUEST)
         }
-
     }
 
     override fun getBundleEntryPath(path: String?): String? {

@@ -3,10 +3,7 @@ package com.github.dynamicextensionsalfresco.webscripts.resolutions;
 import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptRequest;
 import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebscriptResponse;
 import com.github.dynamicextensionsalfresco.webscripts.UrlModel;
-import org.springframework.extensions.webscripts.Format;
-import org.springframework.extensions.webscripts.TemplateProcessor;
-import org.springframework.extensions.webscripts.TemplateProcessorRegistry;
-import org.springframework.extensions.webscripts.WebScriptResponse;
+import org.springframework.extensions.webscripts.*;
 import org.springframework.extensions.webscripts.json.JSONUtils;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
@@ -63,12 +60,13 @@ public class TemplateResolution extends AbstractResolution {
     }
 
     protected void populateTemplateModel(Map<String, Object> model, AnnotationWebScriptRequest request, ResolutionParameters params) {
-        model.put(WEBSCRIPT_VARIABLE, params.getDescription());
+        if(params!=null)
+            model.put(WEBSCRIPT_VARIABLE, params.getDescription());
         model.put(URL_VARIABLE, new UrlModel(request));
         model.put(JSON_UTILS, new JSONUtils());
     }
 
-    protected TemplateProcessor getTemplateProcessor(AnnotationWebScriptRequest request) {
+    protected TemplateProcessor getTemplateProcessor(WebScriptRequest request) {
         final TemplateProcessorRegistry templateProcessorRegistry = request.getRuntime().getContainer()
             .getTemplateProcessorRegistry();
         return templateProcessorRegistry.getTemplateProcessorByExtension("ftl");
@@ -102,7 +100,7 @@ public class TemplateResolution extends AbstractResolution {
         return templateName;
     }
 
-    protected void processTemplate(final AnnotationWebScriptRequest request, final Map<String, Object> model, final int status,
+    protected void processTemplate(final WebScriptRequest request, final Map<String, Object> model, final int status,
                                    final WebScriptResponse response, ResolutionParameters params) throws IOException {
         final TemplateProcessor templateProcessor = getTemplateProcessor(request);
         final String format = request.getFormat();
@@ -113,7 +111,8 @@ public class TemplateResolution extends AbstractResolution {
         if (templateProcessor.hasTemplate(templateName)) {
             response.setContentType(Format.valueOf(format.toUpperCase()).mimetype());
             response.setContentEncoding("utf-8");
-            addCacheControlHeaders(response, params);
+            if(params != null)
+                addCacheControlHeaders(response, params);
             templateProcessor.process(templateName, model, response.getWriter());
         } else {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
