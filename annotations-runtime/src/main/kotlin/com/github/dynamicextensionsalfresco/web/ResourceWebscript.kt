@@ -56,7 +56,7 @@ public class ResourceWebscript(private val bundleContext: BundleContext) : WebSc
     override fun execute(req: WebScriptRequest, res: WebScriptResponse) {
         val path = req.getServiceMatch().getTemplateVars().get("path")
 
-        handleResource(path, res)
+        handleResource(path, req, res)
     }
 
     override fun getBundleEntryPath(path: String?): String? {

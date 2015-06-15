@@ -21,7 +21,7 @@ public class AnnotationWebScriptRequest implements WrappingWebScriptRequest {
 
 	private Throwable thrownException;
 
-	AnnotationWebScriptRequest(final WebScriptRequest webScriptRequest) {
+	public AnnotationWebScriptRequest(final WebScriptRequest webScriptRequest) {
 		Assert.notNull(webScriptRequest);
 		this.webScriptRequest = webScriptRequest;
 	}

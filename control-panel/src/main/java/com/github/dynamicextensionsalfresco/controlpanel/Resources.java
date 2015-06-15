@@ -2,6 +2,7 @@ package com.github.dynamicextensionsalfresco.controlpanel;
 
 import com.github.dynamicextensionsalfresco.webscripts.annotations.*;
 import com.github.dynamicextensionsalfresco.webscripts.support.AbstractBundleResourceHandler;
+import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.stereotype.Component;
 
@@ -32,8 +33,8 @@ public class Resources extends AbstractBundleResourceHandler {
 	}
 
 	@Uri(value = "/dynamic-extensions/resources/{path}", formatStyle = FormatStyle.ARGUMENT)
-	public void handleResources(@UriVariable final String path, final WebScriptResponse response) throws IOException {
-		handleResource(path, response);
+	public void handleResources(@UriVariable final String path, final WebScriptRequest request, final WebScriptResponse response) throws Exception {
+		handleResource(path, request, response);
 	}
 
 	/* Utility operations */
