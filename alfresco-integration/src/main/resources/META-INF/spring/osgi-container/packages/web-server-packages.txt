@@ -14,7 +14,6 @@
 # Part of the server infrastructure:
 javax.servlet
 javax.servlet.http
-org.apache.commons.logging
 
 # Used by Gemini Blueprint:
 org.xml.sax
