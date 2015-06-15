@@ -4,14 +4,7 @@ import com.github.dynamicextensionsalfresco.controlpanel.template.TemplateBundle
 import com.github.dynamicextensionsalfresco.controlpanel.template.TemplateServiceReference;
 import com.github.dynamicextensionsalfresco.controlpanel.template.Variables;
 import com.github.dynamicextensionsalfresco.osgi.RepositoryStoreService;
-import com.github.dynamicextensionsalfresco.webscripts.annotations.Attribute;
-import com.github.dynamicextensionsalfresco.webscripts.annotations.Authentication;
-import com.github.dynamicextensionsalfresco.webscripts.annotations.AuthenticationType;
-import com.github.dynamicextensionsalfresco.webscripts.annotations.Cache;
-import com.github.dynamicextensionsalfresco.webscripts.annotations.HttpMethod;
-import com.github.dynamicextensionsalfresco.webscripts.annotations.Uri;
-import com.github.dynamicextensionsalfresco.webscripts.annotations.UriVariable;
-import com.github.dynamicextensionsalfresco.webscripts.annotations.WebScript;
+import com.github.dynamicextensionsalfresco.webscripts.annotations.*;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.osgi.framework.Bundle;
@@ -26,13 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
 
 import java.lang.reflect.Proxy;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 /**
@@ -136,22 +123,24 @@ public class Container extends AbstractControlPanelHandler {
 
     protected Map<Long, List<ServiceReference>> getServicesByBundleId() {
         final Map<Long, List<ServiceReference>> servicesByBundleId = new LinkedHashMap<Long, List<ServiceReference>>();
-        final List<ServiceReference> allServices = bundleHelper.getAllServices();
-        for (final ServiceReference serviceReference : allServices) {
-            final long bundleId = serviceReference.getBundle().getBundleId();
-            if (servicesByBundleId.containsKey(bundleId) == false) {
-                servicesByBundleId.put(bundleId, new ArrayList<ServiceReference>());
+        final ServiceReference<?>[] allServices = bundleHelper.getAllServices();
+		if (allServices != null) {
+			for (final ServiceReference serviceReference : allServices) {
+                final long bundleId = serviceReference.getBundle().getBundleId();
+                if (servicesByBundleId.containsKey(bundleId) == false) {
+                    servicesByBundleId.put(bundleId, new ArrayList<ServiceReference>());
+                }
+                servicesByBundleId.get(bundleId).add(serviceReference);
             }
-            servicesByBundleId.get(bundleId).add(serviceReference);
-        }
-        return servicesByBundleId;
+		}
+		return servicesByBundleId;
 	}
 
 	/* Reference data */
 
 	@Attribute(Variables.CAN_RESTART_FRAMEWORK)
 	protected boolean canRestartFramework() {
-		return osgiConfiguration.isFrameworkRestartEnabled();
+		return osgiConfiguration.getFrameworkRestartEnabled();
 	}
 
 	@Attribute(Variables.SYSTEM_PACKAGE_CACHE_EXISTS)

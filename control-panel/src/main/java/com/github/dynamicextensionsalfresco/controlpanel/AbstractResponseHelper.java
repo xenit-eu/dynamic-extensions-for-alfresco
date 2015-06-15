@@ -26,7 +26,7 @@ public abstract class AbstractResponseHelper {
 	}
 
 	public void checkBundleInstallConfiguration() {
-		if (!configuration.isHotDeployEnabled()) {
+		if (!configuration.getHotDeployEnabled()) {
 			throw new WebScriptException(
 					HttpServletResponse.SC_FORBIDDEN,
 					"osgi.container.control-panel.bundle-install is disabled"

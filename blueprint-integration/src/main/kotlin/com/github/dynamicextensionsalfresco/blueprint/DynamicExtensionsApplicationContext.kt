@@ -7,7 +7,6 @@ import com.github.dynamicextensionsalfresco.event.EventBus
 import com.github.dynamicextensionsalfresco.event.events.SpringContextException
 import com.github.dynamicextensionsalfresco.messages.MessagesRegistrar
 import com.github.dynamicextensionsalfresco.metrics.SpringTimer
-import com.github.dynamicextensionsalfresco.metrics.Timer
 import com.github.dynamicextensionsalfresco.models.M2ModelListFactoryBean
 import com.github.dynamicextensionsalfresco.models.RepositoryModelRegistrar
 import com.github.dynamicextensionsalfresco.osgi.webscripts.SearchPathRegistry
@@ -27,34 +26,26 @@ import com.github.dynamicextensionsalfresco.webscripts.arguments.StringValueConv
 import com.github.dynamicextensionsalfresco.workflow.WorkflowDefinitionRegistrar
 import com.github.dynamicextensionsalfresco.workflow.activiti.WorkflowTaskRegistrar
 import com.github.dynamicextensionsalfresco.workflow.activiti.WorkflowTaskRegistry
-import org.alfresco.service.descriptor.Descriptor
 import org.alfresco.service.descriptor.DescriptorService
 import org.alfresco.service.namespace.NamespacePrefixResolver
 import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationContext
-import org.osgi.framework.BundleContext
 import org.osgi.framework.Constants
-import org.osgi.framework.InvalidSyntaxException
-import org.osgi.framework.ServiceReference
-import org.osgi.service.packageadmin.ExportedPackage
 import org.osgi.service.packageadmin.PackageAdmin
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.BeansException
-import org.springframework.beans.factory.BeanFactory
-import org.springframework.beans.factory.config.BeanDefinition
 import org.springframework.beans.factory.parsing.BeanDefinitionParsingException
 import org.springframework.beans.factory.support.AbstractBeanDefinition
 import org.springframework.beans.factory.support.BeanDefinitionBuilder
 import org.springframework.beans.factory.support.DefaultListableBeanFactory
-import org.springframework.beans.factory.xml.*
+import org.springframework.beans.factory.xml.DefaultNamespaceHandlerResolver
+import org.springframework.beans.factory.xml.DelegatingEntityResolver
+import org.springframework.beans.factory.xml.NamespaceHandlerResolver
+import org.springframework.beans.factory.xml.XmlBeanDefinitionReader
 import org.springframework.context.ApplicationContext
-import org.springframework.context.annotation.ClassPathBeanDefinitionScanner
 import org.springframework.extensions.webscripts.TemplateProcessor
 import org.springframework.util.StringUtils
 import org.xml.sax.EntityResolver
-
 import java.io.IOException
-import kotlin.reflect.KClass
 
 /**
  * [ApplicationContext] for Dynamic Extensions.
@@ -383,11 +374,11 @@ class DynamicExtensionsApplicationContext(configurationLocations: Array<String>?
         return hasXmlConfiguration
     }
 
-    override fun cancelRefresh(ex: BeansException?) {
+    override fun cancelRefresh(ex: BeansException) {
         super.cancelRefresh(ex)
 
         try {
-            getService(javaClass<EventBus>()).publish<SpringContextException>(SpringContextException(getBundle(), ex))
+            getService(javaClass<EventBus>()).publish(SpringContextException(getBundle(), ex))
         } catch (bx: Exception) {
             log.error("failed to broadcast Spring refresh failure", bx)
         }
