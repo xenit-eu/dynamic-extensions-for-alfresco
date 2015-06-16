@@ -69,12 +69,12 @@
         </div>
       </div>
     </div>
-    <script type="text/javascript" src="resources/scripts/jquery/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="resources/scripts/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="resources/scripts/jasny-bootstrap/bootstrap-fileupload.js"></script>
-    <script type="text/javascript" src="resources/scripts/bootbox/bootbox.min.js"></script>
-    <script type="text/javascript" src="resources/scripts/moment/moment.min.js"></script>
-    <script type="text/javascript" src="resources/scripts/control-panel.js"></script>
+    <script type="text/javascript" src="${resourceBase}scripts/jquery/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="${resourceBase}scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="${resourceBase}scripts/jasny-bootstrap/bootstrap-fileupload.js"></script>
+    <script type="text/javascript" src="${resourceBase}scripts/bootbox/bootbox.min.js"></script>
+    <script type="text/javascript" src="${resourceBase}scripts/moment/moment.min.js"></script>
+    <script type="text/javascript" src="${resourceBase}scripts/control-panel.js"></script>
   </body>
 </html>
 </#macro>
