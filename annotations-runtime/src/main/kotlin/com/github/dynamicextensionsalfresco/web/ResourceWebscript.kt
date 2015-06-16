@@ -32,6 +32,7 @@ public class ResourceWebscript(private val bundleContext: BundleContext) : WebSc
         )
         descriptionImpl.setMethod("GET")
         descriptionImpl.setFormatStyle(Description.FormatStyle.argument)
+        descriptionImpl.setDefaultFormat("html")
         descriptionImpl.setUris(uris)
         descriptionImpl.setFamilys(setOf("static-web"))
         descriptionImpl.setStore(DummyStore())

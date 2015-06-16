@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -46,14 +45,32 @@ public abstract class AbstractBundleResourceHandler {
 
 	/* Main operations */
 
+	/**
+	 * copy the resource if any from the classpath to the outputstream
+	 * @deprecated replaced with {@link AbstractBundleResourceHandler#handleResource(String, WebScriptRequest, WebScriptResponse)}
+	 * to enable directory listing
+	 */
+	protected final void handleResource(final String path, final WebScriptResponse response) throws IOException {
+		try {
+			handleResource(path, null, response);
+		} catch (IOException iox) {
+			throw iox;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * handle the requested path
+	 */
 	protected final void handleResource(final String path, final WebScriptRequest request, final WebScriptResponse response) throws Exception {
-		final String entryPath = getBundleEntryPath(path);
+		final String entryPath = getBundleEntryPath(path.replace("//", "/")); // forgive double slashes
 		final URL resource = getBundleContext().getBundle().getEntry(entryPath);
 		if (resource != null) {
-            if(resource.getPath().endsWith("/")) {
+            if(resource.getPath().endsWith("/") && request != null) {
                 sendDirectoryListing(request, response, resource);
             }
-			else sendResource(response, resource);
+			else sendResource(request, response, resource);
 		} else {
 			handleResourceNotFound(path, response);
 		}
@@ -61,7 +78,18 @@ public abstract class AbstractBundleResourceHandler {
 
 	/* Utility operations */
 
+	/**
+	 * copy the resource if any from the classpath to the outputstream
+	 * @deprecated replaced with {@link AbstractBundleResourceHandler#sendResource(WebScriptRequest, WebScriptResponse, URL)}
+	 */
 	protected void sendResource(final WebScriptResponse response, final URL resource) throws IOException {
+		sendResource(null, response, resource);
+	}
+
+	/**
+	 *  copy the resource if any from the classpath to the outputstream
+	 */
+	protected void sendResource(final WebScriptRequest request, final WebScriptResponse response, final URL resource) throws IOException {
 		final String contentType = getContentType(resource);
 		response.setContentType(contentType);
 		response.setContentEncoding(getContentEncoding(resource));
@@ -76,23 +104,24 @@ public abstract class AbstractBundleResourceHandler {
 		FileCopyUtils.copy(connection.getInputStream(), response.getOutputStream());
 	}
 
-    protected void sendDirectoryListing(final WebScriptRequest request, final WebScriptResponse response, final URL resource) throws Exception {
+	protected void sendDirectoryListing(final WebScriptRequest request, final WebScriptResponse response, final URL resource) throws Exception {
         Enumeration<String> entries = getBundleContext().getBundle().getEntryPaths(resource.getPath());
         List<String> paths = new ArrayList<String>();
         while(entries.hasMoreElements()){
             String entry = entries.nextElement();
-            String path = Paths.get(entry).getFileName().toString();
-            if(entry.endsWith("/"))
-                path += "/";
-            paths.add(path);
+			if (entry.endsWith("/")) {
+				paths.add(entry.substring(entry.lastIndexOf('/', entry.length() - 2) + 1));
+			} else {
+				paths.add(entry.substring(entry.lastIndexOf('/') + 1));
+			}
         }
         Map<String,Object> model = new HashMap<String, Object>();
-        model.put("paths",paths);
-        Resolution resolution = new TemplateResolution("com/github/dynamicextensionsalfresco/webscripts/support/directory-listing.html.ftl",model);
+        model.put("paths", paths);
+        Resolution resolution = new TemplateResolution("dynamicextensionsalfresco/directory-listing.html.ftl",model);
         resolution.resolve(
-                new AnnotationWebScriptRequest(request),
-                new AnnotationWebscriptResponse(response),
-                null);
+				new AnnotationWebScriptRequest(request),
+				new AnnotationWebscriptResponse(response),
+				null);
     }
 
 	protected void handleResourceNotFound(final String path, final WebScriptResponse response) throws IOException {
