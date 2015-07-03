@@ -10,3 +10,8 @@ tmp
 *.iml
 *.ipr
 *.iws
+build
+out
+*.hprof
+*.log
+.gradle

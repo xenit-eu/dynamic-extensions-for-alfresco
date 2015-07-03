@@ -255,7 +255,7 @@ class DynamicExtensionsApplicationContext(configurationLocations: Array<String>?
             setInitMethodName("initializeArgumentResolvers")
         }
         beanFactory.bean(BeanNames.ANNOTATION_BASED_WEB_SCRIPT_BUILDER, javaClass<AnnotationWebScriptBuilder>()) {
-            addPropertyReference("handlerMethodArgumentsResolver", BeanNames.HANDLER_METHOD_ARGUMENTS_RESOLVER.id())
+            addConstructorArgReference(BeanNames.HANDLER_METHOD_ARGUMENTS_RESOLVER.id())
         }
         beanFactory.bean(BeanNames.ANNOTATION_BASED_WEB_SCRIPT_REGISTRAR, javaClass<AnnotationWebScriptRegistrar>()) {
             addPropertyReference("annotationBasedWebScriptBuilder", BeanNames.ANNOTATION_BASED_WEB_SCRIPT_BUILDER.id())

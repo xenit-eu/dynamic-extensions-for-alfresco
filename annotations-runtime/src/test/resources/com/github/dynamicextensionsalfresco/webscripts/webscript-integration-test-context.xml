@@ -18,7 +18,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	</bean>
 
 	<bean id="webscripts.builder" class="com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptBuilder">
-		<property name="handlerMethodArgumentsResolver" ref="webscripts.argumentsResolver" />
+		<constructor-arg ref="webscripts.argumentsResolver"/>
 	</bean>
 
 	<bean id="webscripts.argumentsResolver" class="com.github.dynamicextensionsalfresco.webscripts.arguments.HandlerMethodArgumentsResolver"

@@ -1,5 +1,7 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
+import com.github.dynamicextensionsalfresco.webscripts.annotations.ExceptionHandler;
+
 import java.lang.reflect.Method;
 
 class ExceptionHandlerMethod {
@@ -8,8 +10,8 @@ class ExceptionHandlerMethod {
 
 	private final Method method;
 
-	ExceptionHandlerMethod(final Class<? extends Throwable>[] exceptionTypes, final Method method) {
-		this.exceptionTypes = exceptionTypes;
+	ExceptionHandlerMethod(final ExceptionHandler exceptionHandlerAnnotation, final Method method) {
+		this.exceptionTypes = exceptionHandlerAnnotation.value();
 		this.method = method;
 	}
 

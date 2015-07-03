@@ -1,6 +1,7 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
 import com.github.dynamicextensionsalfresco.webscripts.annotations.WebScript;
+import com.github.dynamicextensionsalfresco.webscripts.arguments.HandlerMethodArgumentsResolver;
 import org.junit.Test;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -18,8 +19,8 @@ public class WebscriptBuilderTest extends AbstractWebScriptAnnotationsTest {
 	@Test
 	public void testDuplicatId() {
 		final String webscriptId = "webscriptId";
-		AnnotationWebScriptBuilder builder = new AnnotationWebScriptBuilder();
 		ConfigurableListableBeanFactory dummyBeanFactory = mock(ConfigurableListableBeanFactory.class);
+		AnnotationWebScriptBuilder builder = new AnnotationWebScriptBuilder(mock(HandlerMethodArgumentsResolver.class));
 		when(dummyBeanFactory.getType(webscriptId)).thenAnswer(new Returns(DuplicateIdWebScript.class));
 		final DuplicateIdWebScript instance = new DuplicateIdWebScript();
 		when(dummyBeanFactory.findAnnotationOnBean(webscriptId, WebScript.class)).thenReturn(instance.getClass().getAnnotation(WebScript.class));
