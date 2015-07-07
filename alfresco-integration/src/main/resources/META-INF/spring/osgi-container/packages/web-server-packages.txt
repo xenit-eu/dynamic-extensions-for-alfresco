@@ -15,6 +15,9 @@
 javax.servlet
 javax.servlet.http
 
+# Part of JDK 6
+com.sun.net.httpserver
+
 # Used by Gemini Blueprint:
 org.xml.sax
 
