@@ -110,8 +110,8 @@ public class HandlerMethodArgumentsResolver implements ApplicationContextAware {
 				}
 			}
 			if (argumentResolver == null) {
-				throw new IllegalStateException(String.format("Cannot map parameter at index %d of method %s.", index,
-						method.getName()));
+				throw new IllegalStateException(String.format("Cannot map parameter at index %d of method %s.%s.", index,
+						handler.getClass().getSimpleName(), method.getName()));
 			}
 			String name = null;
 			if (methodParameterNames != null) {
