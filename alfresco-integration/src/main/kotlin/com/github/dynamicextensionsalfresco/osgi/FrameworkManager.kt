@@ -57,12 +57,10 @@ public class DefaultFrameworkManager(
     public fun initialize() {
         startFramework()
         registerServices()
-        val bundles = ArrayList<Bundle>()
-        bundles.addAll(installCoreBundles())
+        startBundles(installCoreBundles())
         if (repositoryInstallEnabled) {
-            bundles.addAll(installRepositoryBundles())
+            startBundles(installRepositoryBundles())
         }
-        startBundles(bundles)
     }
 
     protected fun startFramework() {
