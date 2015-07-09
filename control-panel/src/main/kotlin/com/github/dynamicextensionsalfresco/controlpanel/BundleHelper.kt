@@ -15,7 +15,7 @@ import org.alfresco.service.cmr.repository.NodeRef
 import org.alfresco.service.cmr.repository.NodeService
 import org.alfresco.service.namespace.QName
 import org.osgi.framework.*
-import org.osgi.service.packageadmin.PackageAdmin
+import org.osgi.framework.wiring.FrameworkWiring
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.extensions.surf.util.Content
@@ -68,9 +68,6 @@ public open class BundleHelper Autowired constructor(
     public fun registerEventListeners() {
         // get notified of Spring context start failures
         bundleContext.registerService(javaClass<EventListener<SpringContextException>>(), this, null)
-
-        // get notified of PackageAdmin refresh events
-        bundleContext.addFrameworkListener(this)
     }
 
     /**
@@ -211,16 +208,22 @@ public open class BundleHelper Autowired constructor(
                 bundle.stop()
                 bundle.update(inputStream)
 
-                @SuppressWarnings("deprecation") val packageAdmin = getPackageAdmin()
-                val bundleSet = arrayOf(bundle)
+                val wiring = bundleContext.getBundle(0).adapt(javaClass<FrameworkWiring>())
+
+                val bundleSet = setOf(bundle)
 
                 // resolve to synchronously assert dependencies are in order
-                packageAdmin.resolveBundles(bundleSet)
+                wiring.resolveBundles(bundleSet)
 
                 if (isFragmentBundle(bundle) == false) {
                     bundlesToStart.offer(bundle)
+                    val dependantBundles = wiring.getDependencyClosure(bundleSet) filter { it.getState() == Bundle.ACTIVE}
+                    for (dependendant in dependantBundles) {
+                        dependendant.stop()
+                        bundlesToStart.offer(dependendant)
+                    }
                     // async operation
-                    packageAdmin.refreshPackages(bundleSet)
+                    wiring.refreshBundles(bundleSet, this)
                 } else {
                     return bundle
                 }
@@ -262,11 +265,6 @@ public open class BundleHelper Autowired constructor(
     throws(FileNotFoundException::class)
     protected open fun createStreamForFile(file: File): InputStream {
         return FileInputStream(file)
-    }
-
-    SuppressWarnings("deprecation")
-    protected open fun getPackageAdmin(): PackageAdmin {
-        return bundleContext.getService(bundleContext.getServiceReference(javaClass<PackageAdmin>()))
     }
 
     private fun wrapPlainJar(tempFile: File, fileName: String?): File {
