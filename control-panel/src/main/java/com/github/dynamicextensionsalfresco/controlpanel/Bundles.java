@@ -53,7 +53,7 @@ public class Bundles extends AbstractControlPanelHandler {
 	}
 
 	@Uri(method = HttpMethod.POST, value = "/install", multipartProcessing = true)
-	public Resolution install(@FileField final FormField file, @Attribute final ResponseHelper responseHelper) {
+	public Resolution install(@FileField final FormField file, @Attribute final ResponseHelper responseHelper) throws IOException {
 		responseHelper.checkBundleInstallConfiguration();
 		if (file != null) {
 			if (file.getFilename().endsWith(".jar")) {
@@ -61,20 +61,20 @@ public class Bundles extends AbstractControlPanelHandler {
 					final Bundle installedBundle = bundleHelper.installBundleInRepository(file);
 					responseHelper.setFlashVariable(Variables.INSTALLED_BUNDLE, new TemplateBundle(installedBundle));
 				} catch (final Exception e) {
-					responseHelper.flashErrorMessage(String.format("Error installing Bundle: %s", e.getMessage()));
+					responseHelper.flashErrorMessage(String.format("Error installing Bundle: %s", e.getMessage()), e);
 				}
 			} else {
-				responseHelper.flashErrorMessage(String.format("Not a JAR file: %s", file.getFilename()));
+				responseHelper.flashErrorMessage(String.format("Not a JAR file: %s", file.getFilename()), null);
 			}
 		} else {
-			responseHelper.flashErrorMessage("No file uploaded.");
+			responseHelper.flashErrorMessage("No file uploaded.", null);
 		}
         return new RedirectResolution(Urls.BUNDLES);
 	}
 
 	@Uri(method = HttpMethod.POST, value = "/delete")
 	public Resolution delete(final @Attribute Bundle bundle, @Attribute final String id,
-                             @Attribute final ResponseHelper responseHelper) {
+                             @Attribute final ResponseHelper responseHelper) throws IOException {
 		responseHelper.checkBundleInstallConfiguration();
 		if (bundle != null) {
 			try {
@@ -83,17 +83,17 @@ public class Bundles extends AbstractControlPanelHandler {
 						bundle.getHeaders().get(Constants.BUNDLE_NAME), bundle.getVersion());
 				responseHelper.flashSuccessMessage(message);
 			} catch (final BundleException e) {
-				responseHelper.flashErrorMessage("Error uninstalling Bundle");
+				responseHelper.flashErrorMessage("Error uninstalling Bundle", e);
 			}
 		} else {
-			responseHelper.flashErrorMessage(String.format("Cannot delete bundle. Bundle with ID %s not found.", id));
+			responseHelper.flashErrorMessage(String.format("Cannot delete bundle. Bundle with ID %s not found.", id), null);
 		}
 		return new RedirectResolution(Urls.BUNDLES);
 	}
 
 	@Uri(method = HttpMethod.POST, value = "/start")
 	public Resolution start(final @Attribute Bundle bundle, @Attribute final String id,
-			@Attribute final ResponseHelper responseHelper) {
+			@Attribute final ResponseHelper responseHelper) throws IOException {
 		responseHelper.checkBundleInstallConfiguration();
 		if (bundle != null) {
 			try {
@@ -103,11 +103,11 @@ public class Bundles extends AbstractControlPanelHandler {
 				responseHelper.flashSuccessMessage(message);
 				return new RedirectResolution(Urls.BUNDLES);
 			} catch (final BundleException e) {
-				responseHelper.flashErrorMessage(String.format("Error starting Bundle: %s", e.getMessage()));
+				responseHelper.flashErrorMessage(String.format("Error starting Bundle: %s", e.getMessage()), e);
                 return new RedirectToBundle(bundle);
             }
 		} else {
-			responseHelper.flashErrorMessage(String.format("Cannot start bundle. Bundle with ID %d not found.", id));
+			responseHelper.flashErrorMessage(String.format("Cannot start bundle. Bundle with ID %s not found.", id), null);
 			return new RedirectResolution("/dynamic-extensions/bundles");
 		}
 	}

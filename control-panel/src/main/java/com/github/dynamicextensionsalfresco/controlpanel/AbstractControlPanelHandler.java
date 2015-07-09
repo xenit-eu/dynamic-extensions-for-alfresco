@@ -14,6 +14,7 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -66,8 +67,8 @@ abstract class AbstractControlPanelHandler {
 	/* Exception handling */
 
 	@ExceptionHandler(WebScriptException.class)
-	protected void handleWebscriptException(WebScriptException wx, @Attribute ResponseHelper responseHelper) {
-		responseHelper.flashErrorMessage(String.format(wx.getMessage()));
+	protected void handleWebscriptException(WebScriptException wx, @Attribute ResponseHelper responseHelper) throws IOException {
+		responseHelper.flashErrorMessage(wx.getMessage(), wx);
 	}
 
 	/* Utility operations */
@@ -79,15 +80,10 @@ abstract class AbstractControlPanelHandler {
 	/**
 	 * Constructs a {@link Map} with a single value. This is useful for {@link Uri} handlers that contribute only one
 	 * value to a model.
-	 * 
-	 * @param name
-	 * @param value
-	 * @return
 	 */
 	protected Map<String, Object> model(final String name, final Object value) {
 		final HashMap<String, Object> model = new HashMap<String, Object>();
 		model.put(name, value);
 		return model;
 	}
-
 }
