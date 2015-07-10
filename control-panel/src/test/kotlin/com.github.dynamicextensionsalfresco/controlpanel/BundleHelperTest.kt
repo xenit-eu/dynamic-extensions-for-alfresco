@@ -13,11 +13,13 @@ import org.alfresco.service.cmr.repository.ContentService
 import org.alfresco.service.cmr.repository.NodeRef
 import org.alfresco.service.cmr.repository.NodeService
 import org.junit.Test
+import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.anyObject
 import org.mockito.Matchers.anyString
 import org.mockito.Matchers.eq
 import org.mockito.Mockito.mock
 import org.osgi.framework.*
+import org.osgi.framework.wiring.FrameworkWiring
 import org.osgi.service.packageadmin.PackageAdmin
 import org.springframework.beans.BeansException
 import org.springframework.context.ApplicationContextException
@@ -167,11 +169,15 @@ class MockBundleHelper(val update: Boolean, val mockBundle: (BundleContext) -> B
         return null
     }
 
-    override fun getPackageAdmin(): PackageAdmin {
-        val packageAdmin = mock(javaClass<PackageAdmin>())
-        whenever(packageAdmin.refreshPackages(anyObject())).then {
-            frameworkEvent(FrameworkEvent(FrameworkEvent.PACKAGES_REFRESHED, mock(javaClass<Bundle>())))
+    override val frameworkWiring: FrameworkWiring
+        get() {
+            val wiring = mock(javaClass<FrameworkWiring>())
+            val frameworkListener = ArgumentCaptor.forClass(javaClass<FrameworkListener>())
+            whenever(wiring.refreshBundles(anyObject(), frameworkListener.capture())).then {
+                frameworkListener.getValue().frameworkEvent(
+                        FrameworkEvent(FrameworkEvent.PACKAGES_REFRESHED, mock(javaClass<Bundle>()))
+                )
+            }
+            return wiring
         }
-        return packageAdmin
-    }
 }

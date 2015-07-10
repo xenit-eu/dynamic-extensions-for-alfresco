@@ -168,6 +168,9 @@ public open class BundleHelper Autowired constructor(
 
     /* Utility operations */
 
+    protected open val frameworkWiring: FrameworkWiring
+        get() = bundleContext.getBundle(0).adapt(javaClass<FrameworkWiring>())
+
     fun doInstallBundleInRepository(tempFile: File, fileName: String?): Bundle? {
         var jarToInstall = tempFile
 
@@ -208,7 +211,7 @@ public open class BundleHelper Autowired constructor(
                 bundle.stop()
                 bundle.update(inputStream)
 
-                val wiring = bundleContext.getBundle(0).adapt(javaClass<FrameworkWiring>())
+                val wiring = frameworkWiring
 
                 val bundleSet = setOf(bundle)
 
@@ -217,7 +220,7 @@ public open class BundleHelper Autowired constructor(
 
                 if (isFragmentBundle(bundle) == false) {
                     bundlesToStart.offer(bundle)
-                    val dependantBundles = wiring.getDependencyClosure(bundleSet) filter { it.getState() == Bundle.ACTIVE}
+                    val dependantBundles = wiring.getDependencyClosure(bundleSet) filter { it.isActive }
                     for (dependendant in dependantBundles) {
                         dependendant.stop()
                         bundlesToStart.offer(dependendant)
