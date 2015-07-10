@@ -12,6 +12,7 @@ import org.alfresco.repo.policy.Policy
 import org.alfresco.repo.policy.PolicyComponent
 import org.alfresco.service.cmr.repository.NodeRef
 import org.springframework.util.Assert
+import java.lang.reflect.InvocationTargetException
 
 /**
  * Proxy that allows a [Behaviour] to be garbage-collected.
@@ -65,9 +66,13 @@ public class BehaviourProxy(private var behaviour: Behaviour, val timer: Timer) 
             } else if (javaClass<Policy>().isAssignableFrom(method.getDeclaringClass())) {
                 /* Policy interface operations always return void. */
                 if (behaviour != null) {
-                    timer.time( {
-                        behaviour.toString() + " " + args?.filterIsInstance(javaClass<NodeRef>())?.joinToString(",")
-                    } , {method.invoke(target, *args)})
+                    try {
+                        timer.time( {
+                            behaviour.toString() + " " + args?.filterIsInstance(javaClass<NodeRef>())?.joinToString(",")
+                        } , {method.invoke(target, *args)})
+                    } catch(e: InvocationTargetException) {
+                        throw e.getTargetException()
+                    }
                 }
                 return null
             } else {
