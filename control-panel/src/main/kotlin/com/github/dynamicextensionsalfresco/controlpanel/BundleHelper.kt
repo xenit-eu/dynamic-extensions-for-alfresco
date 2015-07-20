@@ -6,6 +6,7 @@ import com.github.dynamicextensionsalfresco.event.events.SpringContextException
 import com.github.dynamicextensionsalfresco.osgi.BundleDependencies
 import com.github.dynamicextensionsalfresco.osgi.ManifestUtils
 import com.github.dynamicextensionsalfresco.osgi.RepositoryStoreService
+import com.github.dynamicextensionsalfresco.osgi.isActive
 import com.springsource.util.osgi.manifest.BundleManifest
 import com.springsource.util.osgi.manifest.BundleManifestFactory
 import org.alfresco.model.ContentModel

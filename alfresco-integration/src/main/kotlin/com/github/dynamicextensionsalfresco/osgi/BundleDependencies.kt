@@ -1,6 +1,6 @@
 package com.github.dynamicextensionsalfresco.osgi
 
-import com.github.dynamicextensionsalfresco.controlpanel.manifest
+import com.github.dynamicextensionsalfresco.osgi.manifest
 import org.osgi.framework.Bundle
 
 /**
