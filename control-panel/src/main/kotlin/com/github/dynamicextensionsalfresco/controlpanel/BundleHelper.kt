@@ -3,6 +3,7 @@ package com.github.dynamicextensionsalfresco.controlpanel
 import aQute.bnd.osgi.Analyzer
 import com.github.dynamicextensionsalfresco.event.EventListener
 import com.github.dynamicextensionsalfresco.event.events.SpringContextException
+import com.github.dynamicextensionsalfresco.osgi.BundleDependencies
 import com.github.dynamicextensionsalfresco.osgi.ManifestUtils
 import com.github.dynamicextensionsalfresco.osgi.RepositoryStoreService
 import com.springsource.util.osgi.manifest.BundleManifest
@@ -221,10 +222,15 @@ public open class BundleHelper Autowired constructor(
                 if (isFragmentBundle(bundle) == false) {
                     bundlesToStart.offer(bundle)
                     val dependantBundles = wiring.getDependencyClosure(bundleSet) filter { it.isActive }
-                    for (dependendant in dependantBundles) {
+                    val dependantBundlesSorted = BundleDependencies.sortByDependencies(dependantBundles)
+
+                    for (dependendant in dependantBundlesSorted.reverse()) {
                         dependendant.stop()
+                    }
+                    for (dependendant in dependantBundlesSorted) {
                         bundlesToStart.offer(dependendant)
                     }
+
                     // async operation
                     wiring.refreshBundles(bundleSet, this)
                 } else {

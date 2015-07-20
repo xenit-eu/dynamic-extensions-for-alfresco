@@ -1,6 +1,9 @@
 package com.github.dynamicextensionsalfresco.controlpanel
 
+import com.springsource.util.osgi.manifest.BundleManifest
+import com.springsource.util.osgi.manifest.BundleManifestFactory
 import org.osgi.framework.Bundle
+import kotlin.properties.Delegates
 
 val Bundle.stateDescription: String
     get() = when (this.getState()) {
@@ -15,3 +18,6 @@ val Bundle.stateDescription: String
 
 val Bundle.isActive: Boolean
     get() = getState() == Bundle.ACTIVE
+
+val Bundle.manifest: BundleManifest
+    get() = BundleManifestFactory.createBundleManifest(getHeaders())

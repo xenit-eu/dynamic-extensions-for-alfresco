@@ -19,7 +19,7 @@ import org.springframework.util.Assert
 import org.springframework.util.StringUtils
 import java.io.FileNotFoundException
 import java.io.IOException
-import java.util.ArrayList
+import java.util.*
 
 /**
  * Manages a [Framework]'s lifecycle. It taken care of initializing and destroying the Framework and
@@ -161,15 +161,12 @@ public class DefaultFrameworkManager(
         if (frameworkWiring.resolveBundles(bundles) == false) {
             logger.warn { "Could not resolve all ${bundles.size()} bundles." }
         }
-        for (bundle in bundles) {
+
+        val sortedByDependency = BundleDependencies.sortByDependencies(bundles)
+
+        for (bundle in sortedByDependency) {
             if (isFragmentBundle(bundle) == false) {
-                if (bundle.getState() == Bundle.RESOLVED) {
-                    startBundle(bundle)
-                } else {
-                    logger.warn {
-                        "Bundle '${bundle.getSymbolicName()}' (${bundle.getBundleId()}) is not resolved. Cannot start bundle."
-                    }
-                }
+                startBundle(bundle)
             }
         }
     }
@@ -178,7 +175,7 @@ public class DefaultFrameworkManager(
         try {
             logger.debug("Starting Bundle {}.", bundle.getBundleId())
             bundle.start()
-        } catch (e: BundleException) {
+        } catch (e: Exception) {
             logger.error("Error starting Bundle ${bundle.getBundleId()}.", e)
         }
 
