@@ -34,7 +34,7 @@ public abstract class AbstractJsonResolution extends AbstractResolution {
         super.resolve(request, response, params);
         response.setContentType(MimetypeMap.MIMETYPE_JSON);
         response.setContentEncoding(UTF_8);
-        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Cache-Control", "no-cache,no-store");
 
         if (status != null) {
             response.setStatus(status);

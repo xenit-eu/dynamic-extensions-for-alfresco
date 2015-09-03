@@ -27,7 +27,7 @@ public abstract class JsonResolution implements Resolution {
                         ResolutionParameters params) throws Exception {
         response.setContentType(MimetypeMap.MIMETYPE_JSON);
         response.setContentEncoding(UTF_8);
-        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Cache-Control", "no-cache,no-store");
         response.setStatus(status);
     }
 }
