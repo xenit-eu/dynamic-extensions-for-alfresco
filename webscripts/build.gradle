@@ -1,6 +1,9 @@
+apply plugin: 'kotlin'
+
 dependencies {
     compile "org.springframework.extensions.surf:spring-webscripts:${project.ext.alfrescoVersion}"
     compile "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
     compile("org.alfresco:alfresco-data-model:${project.ext.alfrescoVersion}") { transitive = false }
     compile 'com.google.code.findbugs:jsr305:2.0.1'
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
