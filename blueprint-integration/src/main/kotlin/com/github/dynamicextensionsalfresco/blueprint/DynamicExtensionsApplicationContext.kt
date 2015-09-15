@@ -24,6 +24,7 @@ import com.github.dynamicextensionsalfresco.webscripts.WebScriptUriRegistry
 import com.github.dynamicextensionsalfresco.webscripts.arguments.HandlerMethodArgumentsResolver
 import com.github.dynamicextensionsalfresco.webscripts.arguments.StringValueConverter
 import com.github.dynamicextensionsalfresco.workflow.WorkflowDefinitionRegistrar
+import com.github.dynamicextensionsalfresco.workflow.activiti.DefaultWorkflowTaskRegistry
 import com.github.dynamicextensionsalfresco.workflow.activiti.WorkflowTaskRegistrar
 import com.github.dynamicextensionsalfresco.workflow.activiti.WorkflowTaskRegistry
 import org.alfresco.service.descriptor.DescriptorService
@@ -283,7 +284,10 @@ class DynamicExtensionsApplicationContext(configurationLocations: Array<String>?
             return
         }
 
-        beanFactory.bean(BeanNames.TYPE_BASED_WORKFLOW_REGISTRAR, javaClass<WorkflowTaskRegistrar>())
+        beanFactory.bean(BeanNames.TYPE_BASED_WORKFLOW_REGISTRAR, javaClass<WorkflowTaskRegistrar>()) {
+            addConstructorArgReference("activitiBeanRegistry")
+            addConstructorArgReference(DefaultWorkflowTaskRegistry.BEAN_NAME)
+        }
     }
 
     private fun registerContentSupportBeans(beanFactory: DefaultListableBeanFactory) {
