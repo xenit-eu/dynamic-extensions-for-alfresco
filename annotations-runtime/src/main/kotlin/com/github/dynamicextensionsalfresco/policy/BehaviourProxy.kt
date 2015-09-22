@@ -9,9 +9,7 @@ import com.github.dynamicextensionsalfresco.metrics.Timer
 import com.github.dynamicextensionsalfresco.metrics.time
 import org.alfresco.repo.policy.Behaviour
 import org.alfresco.repo.policy.Policy
-import org.alfresco.repo.policy.PolicyComponent
 import org.alfresco.service.cmr.repository.NodeRef
-import org.springframework.util.Assert
 import java.lang.reflect.InvocationTargetException
 
 /**
@@ -30,17 +28,17 @@ public class BehaviourProxy(private var behaviour: Behaviour, val timer: Timer) 
 
     private val proxiesByPolicyClass = ConcurrentHashMap<Class<*>, ProxyPolicy>()
 
-    suppress("UNCHECKED_CAST")
+    @Suppress("UNCHECKED_CAST")
     override fun <T> getInterface(policy: Class<T>?): T {
-        return proxiesByPolicyClass.getOrPut(policy) {
+        return proxiesByPolicyClass.concurrentGetOrPut(policy) {
             if (behaviour is NoOpBehaviour) {
                 val proxyHandler = ProxyPolicyInvocationHandler(null, behaviour, timer)
-                val proxy = Proxy.newProxyInstance(javaClass.getClassLoader(), arrayOf(policy), proxyHandler) as T
+                val proxy = Proxy.newProxyInstance(javaClass.classLoader, arrayOf(policy), proxyHandler)
                 ProxyPolicy(proxy, proxyHandler)
             } else {
                 val originalHandler = behaviour.getInterface<T>(policy)
                 val proxyHandler = ProxyPolicyInvocationHandler(originalHandler, behaviour, timer)
-                val proxy = Proxy.newProxyInstance(javaClass.getClassLoader(), arrayOf(policy), proxyHandler) as T
+                val proxy = Proxy.newProxyInstance(javaClass.classLoader, arrayOf(policy), proxyHandler)
                 ProxyPolicy(proxy, proxyHandler)
             }
         }.proxy as T
@@ -50,8 +48,8 @@ public class BehaviourProxy(private var behaviour: Behaviour, val timer: Timer) 
      * Clears the reference to the original [Behaviour] and clears the target references for the
      * [ProxyPolicyComponentInvocationHandler]s.
      */
-    synchronized public fun release() {
-        behaviour = NoOpBehaviour(behaviour.getNotificationFrequency(), behaviour.isEnabled())
+    @Synchronized public fun release() {
+        behaviour = NoOpBehaviour(behaviour.notificationFrequency, behaviour.isEnabled)
         for (proxyPolicy in proxiesByPolicyClass.values()) {
             proxyPolicy.handler.release()
         }
@@ -60,24 +58,24 @@ public class BehaviourProxy(private var behaviour: Behaviour, val timer: Timer) 
     private class ProxyPolicyInvocationHandler(private var target: Any?, private var behaviour: Behaviour?, val timer: Timer) : InvocationHandler {
 
         override fun invoke(proxy: Any, method: Method, args: Array<Any>?): Any? {
-            if (method.getDeclaringClass().isAssignableFrom(javaClass<Any>())) {
+            if (method.declaringClass.isAssignableFrom(Any::class.java)) {
                 // Direct Object methods to ourselves.
                 return method.invoke(this, *args)
-            } else if (javaClass<Policy>().isAssignableFrom(method.getDeclaringClass())) {
+            } else if (Policy::class.java.isAssignableFrom(method.declaringClass)) {
                 /* Policy interface operations always return void. */
                 if (behaviour != null) {
                     try {
                         timer.time( {
-                            behaviour.toString() + " " + args?.filterIsInstance(javaClass<NodeRef>())?.joinToString(",")
+                            behaviour.toString() + " " + args?.filterIsInstance(NodeRef::class.java)?.joinToString(",")
                         } , {method.invoke(target, *args)})
                     } catch(e: InvocationTargetException) {
-                        throw e.getTargetException()
+                        throw e.targetException
                     }
                 }
                 return null
             } else {
                 /* We should never get to this point. */
-                throw AssertionError("Cannot handle methods from " + method.getDeclaringClass())
+                throw AssertionError("Cannot handle methods from " + method.declaringClass)
             }
         }
 

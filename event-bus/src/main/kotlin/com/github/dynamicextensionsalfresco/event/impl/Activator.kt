@@ -8,12 +8,12 @@ import org.osgi.framework.BundleContext
  * @author Laurent Van der Linden
  */
 public class Activator : BundleActivator {
-    throws(Exception::class)
+    @Throws(Exception::class)
     override fun start(context: BundleContext) {
-        context.registerService(javaClass<EventBus>(), DefaultEventBus(context), null)
+        context.registerService(EventBus::class.java, DefaultEventBus(context), null)
     }
 
-    throws(Exception::class)
+    @Throws(Exception::class)
     override fun stop(context: BundleContext) {
     }
 }

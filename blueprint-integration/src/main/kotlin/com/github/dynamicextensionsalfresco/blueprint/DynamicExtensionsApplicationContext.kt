@@ -97,15 +97,15 @@ class DynamicExtensionsApplicationContext(configurationLocations: Array<String>?
     protected val hasXmlConfiguration: Boolean = configurationLocations?.isNotEmpty() ?: false
 
     override fun createBeanFactory(): DefaultListableBeanFactory {
-        return OsgiAutowireBeanFactory(getInternalParentBeanFactory(), getBundleContext())
+        return OsgiAutowireBeanFactory(internalParentBeanFactory, bundleContext)
     }
 
-    throws(IOException::class)
+    @Throws(IOException::class)
     override fun loadBeanDefinitions(beanFactory: DefaultListableBeanFactory) {
         val isAlfrescoDynamicExtension = isAlfrescoDynamicExtension()
 
         if (hasSpringConfigurationHeader()) {
-            if (hasXmlConfiguration() && log.isWarnEnabled()) {
+            if (hasXmlConfiguration() && log.isWarnEnabled) {
                 log.warn("Spring XML configuration at /META-INF/spring will be ignored due to the presence of the '$SPRING_CONFIGURATION_HEADER' header.")
             }
             scanPackages(beanFactory, getSpringConfigurationPackages())
@@ -130,31 +130,31 @@ class DynamicExtensionsApplicationContext(configurationLocations: Array<String>?
     /* Utility operations */
 
     protected fun hasSpringConfigurationHeader(): Boolean {
-        return getBundle().getHeaders().get(SPRING_CONFIGURATION_HEADER) != null
+        return bundle.headers.get(SPRING_CONFIGURATION_HEADER) != null
     }
 
     protected fun isAlfrescoDynamicExtension(): Boolean {
-        return java.lang.Boolean.valueOf(getBundle().getHeaders().get(ALFRESCO_DYNAMIC_EXTENSION_HEADER))
+        return java.lang.Boolean.valueOf(bundle.headers.get(ALFRESCO_DYNAMIC_EXTENSION_HEADER))
     }
 
     private fun scanPackages(beanFactory: DefaultListableBeanFactory, configurationPackages: List<String>?) {
         if (configurationPackages != null) {
-            val serverDescriptor = getService(javaClass<DescriptorService>()).getServerDescriptor()
+            val serverDescriptor = getService(DescriptorService::class.java).serverDescriptor
             val scanner = AlfrescoPlatformBeanDefinitionScanner(beanFactory, serverDescriptor)
-            scanner.setResourceLoader(this)
+            scanner.resourceLoader = this
             scanner.scan(*configurationPackages.toTypedArray())
         }
     }
 
     override fun initBeanDefinitionReader(beanDefinitionReader: XmlBeanDefinitionReader?) {
-        beanDefinitionReader!!.setResourceLoader(this)
+        beanDefinitionReader!!.resourceLoader = this
         beanDefinitionReader.setNamespaceHandlerResolver(
                 CompositeNamespaceHandlerResolver(
                         getOsgiNamespaceHandlerResolver(),
-                        DefaultNamespaceHandlerResolver(getClassLoader()
+                        DefaultNamespaceHandlerResolver(classLoader
                 ), getHostNamespaceHandlerResolver())
         )
-        beanDefinitionReader.setEntityResolver(CompositeEntityResolver(getOsgiEntityResolver(), DelegatingEntityResolver(getClassLoader()), getHostEntityResolver()))
+        beanDefinitionReader.setEntityResolver(CompositeEntityResolver(getOsgiEntityResolver(), DelegatingEntityResolver(classLoader), getHostEntityResolver()))
     }
 
     /**
@@ -184,9 +184,9 @@ class DynamicExtensionsApplicationContext(configurationLocations: Array<String>?
      * @param beanFactory
      */
     protected fun registerModelDeploymentBeans(beanFactory: DefaultListableBeanFactory) {
-        beanFactory.bean(BeanNames.M2_MODEL_LIST_FACTORY, javaClass<M2ModelListFactoryBean>())
+        beanFactory.bean(BeanNames.M2_MODEL_LIST_FACTORY, M2ModelListFactoryBean::class.java)
 
-        beanFactory.bean(BeanNames.MODEL_REGISTRAR, javaClass<RepositoryModelRegistrar>()) {
+        beanFactory.bean(BeanNames.MODEL_REGISTRAR, RepositoryModelRegistrar::class.java) {
             autowireByType()
             setInitMethodName("registerModels")
             setDestroyMethodName("unregisterModels")
@@ -195,13 +195,13 @@ class DynamicExtensionsApplicationContext(configurationLocations: Array<String>?
     }
 
     private fun registerWorkflowDeployment(beanFactory: DefaultListableBeanFactory) {
-        beanFactory.bean(BeanNames.WORKFLOW_DEFINITION_REGISTRAR, javaClass<WorkflowDefinitionRegistrar>()) {
+        beanFactory.bean(BeanNames.WORKFLOW_DEFINITION_REGISTRAR, WorkflowDefinitionRegistrar::class.java) {
             autowireByType()
         }
     }
 
     private fun registerMessagesDeployment(beanFactory: DefaultListableBeanFactory) {
-        beanFactory.bean(BeanNames.MESSAGES_REGISTRAR, javaClass<MessagesRegistrar>()) {
+        beanFactory.bean(BeanNames.MESSAGES_REGISTRAR, MessagesRegistrar::class.java) {
             autowireByType()
         }
     }
@@ -213,15 +213,15 @@ class DynamicExtensionsApplicationContext(configurationLocations: Array<String>?
      * @param beanFactory
      */
     protected fun registerAnnotationBasedBehaviourBeans(beanFactory: DefaultListableBeanFactory) {
-        beanFactory.bean(BeanNames.BEHAVIOUR_PROXY_FACTORY, javaClass<DefaultBehaviourProxyFactory>()) {
+        beanFactory.bean(BeanNames.BEHAVIOUR_PROXY_FACTORY, DefaultBehaviourProxyFactory::class.java) {
             autowireByType()
         }
-        beanFactory.bean(BeanNames.PROXY_POLICY_COMPONENT, javaClass<ProxyPolicyComponentFactoryBean>()) {
+        beanFactory.bean(BeanNames.PROXY_POLICY_COMPONENT, ProxyPolicyComponentFactoryBean::class.java) {
             addPropertyReference("policyComponent", "policyComponent")
             addPropertyReference("behaviourProxyFactory", BeanNames.BEHAVIOUR_PROXY_FACTORY.id())
 
         }
-        beanFactory.bean(BeanNames.ANNOTATION_BASED_BEHAVIOUR_REGISTRAR, javaClass<AnnotationBasedBehaviourRegistrar>()) {
+        beanFactory.bean(BeanNames.ANNOTATION_BASED_BEHAVIOUR_REGISTRAR, AnnotationBasedBehaviourRegistrar::class.java) {
             addPropertyReference("policyComponent", BeanNames.PROXY_POLICY_COMPONENT.id())
             autowireByType()
             setInitMethodName("bindBehaviours")
@@ -234,7 +234,7 @@ class DynamicExtensionsApplicationContext(configurationLocations: Array<String>?
      * @param beanFactory
      */
     protected fun registerAnnotationBasedActionBeans(beanFactory: DefaultListableBeanFactory) {
-        beanFactory.bean(BeanNames.ANNOTATION_BASED_ACTION_REGISTRAR, javaClass<AnnotationBasedActionRegistrar>()) {
+        beanFactory.bean(BeanNames.ANNOTATION_BASED_ACTION_REGISTRAR, AnnotationBasedActionRegistrar::class.java) {
             autowireByType()
             setInitMethodName("registerAnnotationBasedActions")
             setDestroyMethodName("unregisterAnnotationBasedActions")
@@ -247,76 +247,76 @@ class DynamicExtensionsApplicationContext(configurationLocations: Array<String>?
      * @param beanFactory
      */
     protected fun registerAnnotationBasedWebScriptBeans(beanFactory: DefaultListableBeanFactory) {
-        beanFactory.bean(BeanNames.STRING_VALUE_CONVERTER, javaClass<StringValueConverter>()) {
-            addPropertyValue("namespacePrefixResolver", getService(javaClass<NamespacePrefixResolver>()))
+        beanFactory.bean(BeanNames.STRING_VALUE_CONVERTER, StringValueConverter::class.java) {
+            addPropertyValue("namespacePrefixResolver", getService(NamespacePrefixResolver::class.java))
         }
-        beanFactory.bean(BeanNames.HANDLER_METHOD_ARGUMENTS_RESOLVER, javaClass<HandlerMethodArgumentsResolver>()) {
+        beanFactory.bean(BeanNames.HANDLER_METHOD_ARGUMENTS_RESOLVER, HandlerMethodArgumentsResolver::class.java) {
             addPropertyReference("stringValueConverter", BeanNames.STRING_VALUE_CONVERTER.id())
-            addPropertyValue("bundleContext", getBundleContext())
+            addPropertyValue("bundleContext", bundleContext)
             setInitMethodName("initializeArgumentResolvers")
         }
-        beanFactory.bean(BeanNames.ANNOTATION_BASED_WEB_SCRIPT_BUILDER, javaClass<AnnotationWebScriptBuilder>()) {
+        beanFactory.bean(BeanNames.ANNOTATION_BASED_WEB_SCRIPT_BUILDER, AnnotationWebScriptBuilder::class.java) {
             addConstructorArgReference(BeanNames.HANDLER_METHOD_ARGUMENTS_RESOLVER.id())
         }
-        beanFactory.bean(BeanNames.ANNOTATION_BASED_WEB_SCRIPT_REGISTRAR, javaClass<AnnotationWebScriptRegistrar>()) {
+        beanFactory.bean(BeanNames.ANNOTATION_BASED_WEB_SCRIPT_REGISTRAR, AnnotationWebScriptRegistrar::class.java) {
             addPropertyReference("annotationBasedWebScriptBuilder", BeanNames.ANNOTATION_BASED_WEB_SCRIPT_BUILDER.id())
-            addPropertyValue("webScriptUriRegistry", getService(javaClass<WebScriptUriRegistry>()))
+            addPropertyValue("webScriptUriRegistry", getService(WebScriptUriRegistry::class.java))
             setInitMethodName("registerWebScripts")
             setDestroyMethodName("unregisterWebScripts")
         }
-        beanFactory.bean(BeanNames.SEARCH_PATH_REGISTRY_MANAGER, javaClass<SearchPathRegistryManager>()) {
-            addPropertyValue("searchPathRegistry", getService(javaClass<SearchPathRegistry>()))
-            addPropertyValue("stores", BundleStore(getBundle()))
-            addPropertyValue("templateProcessor", getService(javaClass<TemplateProcessor>()))
+        beanFactory.bean(BeanNames.SEARCH_PATH_REGISTRY_MANAGER, SearchPathRegistryManager::class.java) {
+            addPropertyValue("searchPathRegistry", getService(SearchPathRegistry::class.java))
+            addPropertyValue("stores", BundleStore(bundle))
+            addPropertyValue("templateProcessor", getService(TemplateProcessor::class.java))
             setInitMethodName("registerStores")
             setDestroyMethodName("unregisterStores")
         }
     }
 
     protected fun registerAopProxyBeans(beanFactory: DefaultListableBeanFactory) {
-        beanFactory.bean(BeanNames.AUTO_PROXY_CREATOR, javaClass<DynamicExtensionsAdvisorAutoProxyCreator>())
+        beanFactory.bean(BeanNames.AUTO_PROXY_CREATOR, DynamicExtensionsAdvisorAutoProxyCreator::class.java)
     }
 
     protected fun registerWorkflowBeans(beanFactory: DefaultListableBeanFactory) {
         try {
-            javaClass<WorkflowTaskRegistry>().getClassLoader().loadClass("org.activiti.engine.delegate.JavaDelegate")
+            WorkflowTaskRegistry::class.java.classLoader.loadClass("org.activiti.engine.delegate.JavaDelegate")
         } catch (ignore: Throwable) {
             return
         }
 
-        beanFactory.bean(BeanNames.TYPE_BASED_WORKFLOW_REGISTRAR, javaClass<WorkflowTaskRegistrar>()) {
+        beanFactory.bean(BeanNames.TYPE_BASED_WORKFLOW_REGISTRAR, WorkflowTaskRegistrar::class.java) {
             addConstructorArgReference("activitiBeanRegistry")
             addConstructorArgReference(DefaultWorkflowTaskRegistry.BEAN_NAME)
         }
     }
 
     private fun registerContentSupportBeans(beanFactory: DefaultListableBeanFactory) {
-        beanFactory.bean(BeanNames.RESOURCE_HELPER, javaClass<ResourceHelper>()) {
+        beanFactory.bean(BeanNames.RESOURCE_HELPER, ResourceHelper::class.java) {
             autowireByType()
         }
-        beanFactory.bean(BeanNames.BOOTSTRAP_SERVICE, javaClass<DefaultBootstrapService>()) {
+        beanFactory.bean(BeanNames.BOOTSTRAP_SERVICE, DefaultBootstrapService::class.java) {
             autowireByType()
         }
     }
 
     protected fun registerOsgiServiceBeans(beanFactory: DefaultListableBeanFactory) {
-        beanFactory.bean(BeanNames.OSGI_SERVICE_REGISTRAR, javaClass<OsgiServiceRegistrar>())
+        beanFactory.bean(BeanNames.OSGI_SERVICE_REGISTRAR, OsgiServiceRegistrar::class.java)
     }
 
     protected fun registerQuartzBeans(beanFactory: DefaultListableBeanFactory) {
-        beanFactory.bean(BeanNames.QUARTZ_JOB_REGISTRAR, javaClass<QuartzJobRegistrar>()) {
+        beanFactory.bean(BeanNames.QUARTZ_JOB_REGISTRAR, QuartzJobRegistrar::class.java) {
             autowireByType()
         }
     }
 
     protected fun registerMetrics(beanFactory: DefaultListableBeanFactory) {
-        beanFactory.bean(BeanNames.METRICS_TIMER, javaClass<SpringTimer>()) {
+        beanFactory.bean(BeanNames.METRICS_TIMER, SpringTimer::class.java) {
             autowireByType()
         }
     }
 
     protected fun registerWebResources(beanFactory: DefaultListableBeanFactory) {
-        beanFactory.bean(BeanNames.RESOURCES_WEB, javaClass<WebResourcesRegistrar>()) {
+        beanFactory.bean(BeanNames.RESOURCES_WEB, WebResourcesRegistrar::class.java) {
             autowireByType()
         }
     }
@@ -325,16 +325,16 @@ class DynamicExtensionsApplicationContext(configurationLocations: Array<String>?
      * Use the deprecated PackageAdmin to get the list of exported packages.
      */
     protected fun getBundleExportPackages(): List<String>? {
-        val exportPackageHeader = getBundle().getHeaders().get(Constants.EXPORT_PACKAGE)
+        val exportPackageHeader = bundle.headers.get(Constants.EXPORT_PACKAGE)
         if (StringUtils.hasText(exportPackageHeader)) {
-            val packageAdmin = getService(javaClass<PackageAdmin>())
-            return packageAdmin.getExportedPackages(getBundle()).map { it.getName() }
+            val packageAdmin = getService(PackageAdmin::class.java)
+            return packageAdmin.getExportedPackages(bundle).map { it.name }
         }
         return null
     }
 
     protected fun getSpringConfigurationPackages(): List<String>? {
-        val header = getBundle().getHeaders().get(SPRING_CONFIGURATION_HEADER)
+        val header = bundle.headers.get(SPRING_CONFIGURATION_HEADER)
         if (StringUtils.hasText(header)) {
             return header.splitBy(",")
         } else {
@@ -345,31 +345,31 @@ class DynamicExtensionsApplicationContext(configurationLocations: Array<String>?
     /* Dependencies */
 
     protected fun <T> getService(clazz: Class<T>, filter: String? = null): T {
-        val serviceReference = getBundleContext().getServiceReferences<T>(clazz, filter).firstOrNull()
-				?: throw IllegalStateException("Cannot obtain '${clazz.getName()}' service reference from bundle context.")
-        return getBundleContext().getService<T>(serviceReference)
+        val serviceReference = bundleContext.getServiceReferences<T>(clazz, filter).firstOrNull()
+				?: throw IllegalStateException("Cannot obtain '${clazz.name}' service reference from bundle context.")
+        return bundleContext.getService<T>(serviceReference)
     }
 
     protected fun getOsgiNamespaceHandlerResolver(): NamespaceHandlerResolver {
-		return getService(javaClass<NamespaceHandlerResolver>(), BundleUtils.createNamespaceFilter(getBundleContext()))
+		return getService(NamespaceHandlerResolver::class.java, BundleUtils.createNamespaceFilter(bundleContext))
     }
 
     /**
      * Obtains the [NamespaceHandlerResolver] using a [ServiceReference].
      */
     protected fun getHostNamespaceHandlerResolver(): NamespaceHandlerResolver {
-		return getService(javaClass<org.springframework.beans.factory.xml.NamespaceHandlerResolver>(), HOST_APPLICATION_ALFRESCO_FILTER)
+		return getService(org.springframework.beans.factory.xml.NamespaceHandlerResolver::class.java, HOST_APPLICATION_ALFRESCO_FILTER)
 	}
 
     protected fun getOsgiEntityResolver(): EntityResolver {
-		return getService(javaClass<EntityResolver>(), BundleUtils.createNamespaceFilter(getBundleContext()))
+		return getService(EntityResolver::class.java, BundleUtils.createNamespaceFilter(bundleContext))
     }
 
     /**
      * Obtains the [EntityResolver] using a [ServiceReference].
      */
     protected fun getHostEntityResolver(): EntityResolver {
-		return getService(javaClass<EntityResolver>(), HOST_APPLICATION_ALFRESCO_FILTER)
+		return getService(EntityResolver::class.java, HOST_APPLICATION_ALFRESCO_FILTER)
     }
 
     /* Configuration */
@@ -382,7 +382,7 @@ class DynamicExtensionsApplicationContext(configurationLocations: Array<String>?
         super.cancelRefresh(ex)
 
         try {
-            getService(javaClass<EventBus>()).publish(SpringContextException(getBundle(), ex))
+            getService(EventBus::class.java).publish(SpringContextException(bundle, ex))
         } catch (bx: Exception) {
             log.error("failed to broadcast Spring refresh failure", bx)
         }
@@ -405,7 +405,7 @@ class DynamicExtensionsApplicationContext(configurationLocations: Array<String>?
             if (body != null) {
                 beanDefinitionBuilder.body()
             }
-            registerBeanDefinition(name.id(), beanDefinitionBuilder.getBeanDefinition())
+            registerBeanDefinition(name.id(), beanDefinitionBuilder.beanDefinition)
         }
     }
 

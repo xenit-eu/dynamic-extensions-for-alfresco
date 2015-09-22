@@ -11,7 +11,7 @@ import org.quartz.JobExecutionException
  */
 public class GenericQuartzJob : Job {
 
-    throws(JobExecutionException::class)
+    @Throws(JobExecutionException::class)
     override fun execute(jobExecutionContext: JobExecutionContext) {
         val lockedJob = jobExecutionContext.getJobDetail().getJobDataMap().get(BEAN_ID) as Job
         lockedJob.execute(jobExecutionContext)

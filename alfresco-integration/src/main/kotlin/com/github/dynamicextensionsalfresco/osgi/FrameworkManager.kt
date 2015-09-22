@@ -31,7 +31,7 @@ interface FrameworkManager {
     val framework: Framework
 }
 
-Service
+@Service
 public class DefaultFrameworkManager(
         override val framework: Framework,
         private val bundleContextRegistrars: List<BundleContextRegistrar>,
@@ -157,7 +157,7 @@ public class DefaultFrameworkManager(
     }
 
     protected fun startBundles(bundles: List<Bundle>) {
-        val frameworkWiring = framework.adapt(javaClass<FrameworkWiring>())
+        val frameworkWiring = framework.adapt(FrameworkWiring::class.java)
         if (frameworkWiring.resolveBundles(bundles) == false) {
             logger.warn { "Could not resolve all ${bundles.size()} bundles." }
         }
@@ -221,7 +221,7 @@ public class DefaultFrameworkManager(
     }
 
     override fun setResourceLoader(resourceLoader: ResourceLoader) {
-        Assert.isInstanceOf(javaClass<ResourcePatternResolver>(), resourceLoader)
+        Assert.isInstanceOf(ResourcePatternResolver::class.java, resourceLoader)
         this.resourcePatternResolver = resourceLoader as ResourcePatternResolver
     }
 

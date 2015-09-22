@@ -10,8 +10,8 @@ import java.lang.reflect.Method
  * @author Laurent Van der Linden
  */
 class DescriptiveJavaBehaviour(instance: Any?, private val methodReference: Method, frequency: Behaviour.NotificationFrequency?)
-        : JavaBehaviour(instance, methodReference.getName(), frequency) {
-    override fun toString(): String? {
-        return methodReference.getDeclaringClass().getName() + "." + methodReference.getName()
+        : JavaBehaviour(instance, methodReference.name, frequency) {
+    override fun toString(): String {
+        return methodReference.declaringClass.name + "." + methodReference.name
     }
 }

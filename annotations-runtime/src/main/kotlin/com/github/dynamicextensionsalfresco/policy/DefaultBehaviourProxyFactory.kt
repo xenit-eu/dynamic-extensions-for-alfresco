@@ -17,7 +17,7 @@ import org.springframework.context.event.ContextClosedEvent
 
  * @author Laurens Fridael
  */
-public class DefaultBehaviourProxyFactory Autowired constructor(private val timer: Timer) : BehaviourProxyFactory, ApplicationListener<ContextClosedEvent> {
+public class DefaultBehaviourProxyFactory @Autowired constructor(private val timer: Timer) : BehaviourProxyFactory, ApplicationListener<ContextClosedEvent> {
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
@@ -29,7 +29,7 @@ public class DefaultBehaviourProxyFactory Autowired constructor(private val time
 
     override fun createBehaviourProxy(behaviour: Behaviour): BehaviourProxy {
         logger.debug {
-            "Creating BehaviourProxy for ${behaviour.javaClass.getName()} instance."
+            "Creating BehaviourProxy for ${behaviour.javaClass.name} instance."
         }
         val behaviourProxy = BehaviourProxy(behaviour, timer)
         behaviourProxies.add(behaviourProxy)

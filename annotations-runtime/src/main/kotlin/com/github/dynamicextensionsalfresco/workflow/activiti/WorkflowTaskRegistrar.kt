@@ -5,12 +5,9 @@ import com.github.dynamicextensionsalfresco.warn
 import org.activiti.engine.delegate.ExecutionListener
 import org.activiti.engine.delegate.JavaDelegate
 import org.activiti.engine.delegate.TaskListener
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.beans.BeansException
 import org.springframework.beans.factory.DisposableBean
 import org.springframework.beans.factory.InitializingBean
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
 
@@ -24,12 +21,12 @@ import org.springframework.context.ApplicationContextAware
  */
 public open class WorkflowTaskRegistrar(val activitiBeanRegistry: MutableMap<String, Any>, val workflowTaskRegistry: WorkflowTaskRegistry)
         : InitializingBean, ApplicationContextAware, DisposableBean {
-    private val logger = LoggerFactory.getLogger(javaClass<WorkflowTaskRegistrar>())
+    private val logger = LoggerFactory.getLogger(WorkflowTaskRegistrar::class.java)
 
-    private var applicationContext: ApplicationContext? = null
+    private lateinit var applicationContext: ApplicationContext
 
     private fun workflowDelegateTypes() = listOf(
-            javaClass<JavaDelegate>(), javaClass<TaskListener>(), javaClass<ExecutionListener>()
+            JavaDelegate::class.java, TaskListener::class.java, ExecutionListener::class.java
     )
 
     override fun setApplicationContext(applicationContext: ApplicationContext) {
@@ -38,7 +35,7 @@ public open class WorkflowTaskRegistrar(val activitiBeanRegistry: MutableMap<Str
 
     override fun afterPropertiesSet() {
         for (type in workflowDelegateTypes()) {
-            val delegates = applicationContext!!.getBeansOfType(type)
+            val delegates = applicationContext.getBeansOfType(type)
             for ((name,bean) in delegates) {
                 val existing = activitiBeanRegistry.put(name, bean)
                 if (existing != null) {
@@ -58,7 +55,7 @@ public open class WorkflowTaskRegistrar(val activitiBeanRegistry: MutableMap<Str
 
     override fun destroy() {
         for (type in workflowDelegateTypes()) {
-            val delegates = applicationContext!!.getBeansOfType(type)
+            val delegates = applicationContext.getBeansOfType(type)
             for ((name, bean) in delegates) {
                 activitiBeanRegistry.remove(name)
                 logger.debug { "unregistered Bundle component $name (type: $type) -> $bean" }

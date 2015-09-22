@@ -1,6 +1,5 @@
 package com.github.dynamicextensionsalfresco.controlpanel
 
-import com.github.dynamicextensionsalfresco.event.Event
 import com.github.dynamicextensionsalfresco.event.EventListener
 import com.github.dynamicextensionsalfresco.event.events.SpringContextException
 import com.github.dynamicextensionsalfresco.event.impl.DefaultEventBus
@@ -20,113 +19,111 @@ import org.mockito.Matchers.eq
 import org.mockito.Mockito.mock
 import org.osgi.framework.*
 import org.osgi.framework.wiring.FrameworkWiring
-import org.osgi.service.packageadmin.PackageAdmin
 import org.springframework.beans.BeansException
 import org.springframework.context.ApplicationContextException
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.InputStream
-import kotlin.test.failsWith
+import kotlin.test.assertFailsWith
 import org.mockito.Mockito.`when` as whenever
 
 /**
  * @author Laurent Van der Linden
  */
 public class BundleHelperTest {
-    fun stageActors(update: Boolean, mockBundleProvider: (BundleContext) -> Bundle = {mock(javaClass<Bundle>())}): Actors {
-        val bundleHelper = MockBundleHelper(update, mockBundleProvider, mock(javaClass<BundleContext>()),
-                mock(javaClass<RepositoryStoreService>()), mock(javaClass<FileFolderService>()),
-                mock(javaClass<ContentService>()), mock(javaClass<NodeService>()),
-                mock(javaClass<org.springframework.extensions.webscripts.Container>()))
+    fun stageActors(update: Boolean, mockBundleProvider: (BundleContext) -> Bundle = {mock(Bundle::class.java)}): Actors {
+        val bundleHelper = MockBundleHelper(update, mockBundleProvider, mock(BundleContext::class.java),
+                mock(RepositoryStoreService::class.java), mock(FileFolderService::class.java),
+                mock(ContentService::class.java), mock(NodeService::class.java),
+                mock(org.springframework.extensions.webscripts.Container::class.java))
 
         bundleHelper.registerEventListeners()
 
-        whenever(bundleHelper.bundleContext.getBundles()).thenReturn(arrayOf())
+        whenever(bundleHelper.bundleContext.bundles).thenReturn(arrayOf())
 
-        whenever(bundleHelper.bundleContext.getAllServiceReferences(eq(javaClass<EventListener<*>>().getName()), anyString()))
-                .thenReturn(arrayOf(mock(javaClass<ServiceReference<*>>())))
+        whenever(bundleHelper.bundleContext.getAllServiceReferences(eq(EventListener::class.java.name), anyString()))
+                .thenReturn(arrayOf(mock(ServiceReference::class.java)))
         whenever(bundleHelper.bundleContext.getService(anyObject<ServiceReference<*>>())).thenReturn(bundleHelper)
 
-        return Actors(bundleHelper, bundleHelper, bundleHelper.bundleContext, bundleHelper)
+        return Actors(bundleHelper, bundleHelper.bundleContext, bundleHelper)
     }
 
-    class Actors(val bundleHelper: BundleHelper, val eventListener: EventListener<out Event>,
-                 val bundleContext: BundleContext, val frameworkListener: FrameworkListener?)
+    class Actors(val bundleHelper: BundleHelper, val bundleContext: BundleContext, val frameworkListener: FrameworkListener?)
 
-    Test
+    @Test
     fun bundleWithInvalidManifest() {
         val actors = stageActors(update = false)
 
         whenever(actors.bundleContext.installBundle(anyString(), anyObject())).thenThrow(BundleException("cannot resolve some crazy import"))
 
-        failsWith(javaClass<BundleException>()) {
+        assertFailsWith(BundleException::class.java, {
             actors.bundleHelper.doInstallBundleInRepository(File("."), ".")!!
-        }
+        })
     }
 
-    Test
+    @Test
     fun bundleWithInvalidSpringConfig() {
         val actors = stageActors(update = false)
 
         whenever(actors.bundleContext.installBundle(anyString(), anyObject<InputStream>())).then {
-            DefaultEventBus(actors.bundleContext).publish(SpringContextException(mock(javaClass<Bundle>()), ApplicationContextException("Spring could not autowire some stuff")))
-            mock(javaClass<Bundle>())
+            DefaultEventBus(actors.bundleContext).publish(SpringContextException(mock(Bundle::class.java), ApplicationContextException("Spring could not autowire some stuff")))
+            mock(Bundle::class.java)
         }
 
-        failsWith(javaClass<BeansException>()) {
+        assertFailsWith(BeansException::class.java, {
             actors.bundleHelper.doInstallBundleInRepository(File("."), "any")!!
-        }
+        })
     }
 
-    Test
+    @Test
     fun installableBundle() {
         val actors = stageActors(update = false)
 
         whenever(actors.bundleContext.installBundle(anyString(), anyObject<InputStream>())).then {
-            actors.frameworkListener!!.frameworkEvent(FrameworkEvent(FrameworkEvent.PACKAGES_REFRESHED, mock(javaClass<Bundle>())))
+            actors.frameworkListener!!.frameworkEvent(FrameworkEvent(FrameworkEvent.PACKAGES_REFRESHED, mock(Bundle::class.java)))
 
-            mock(javaClass<Bundle>())
+            mock(Bundle::class.java)
         }
 
         actors.bundleHelper.doInstallBundleInRepository(File("."), "any")
     }
 
-    Test
+    @Test
     fun updateBundleWithInvalidManifest() {
         val actors = stageActors(update = true, mockBundleProvider = { bc ->
-            val mockBundle = mock(javaClass<Bundle>())
+            val mockBundle = mock(Bundle::class.java)
             whenever(mockBundle.start()).thenThrow(BundleException("failed to resolve test bundle", BundleException.RESOLVE_ERROR))
             mockBundle
         })
 
-        failsWith(javaClass<BundleException>()) {
+        assertFailsWith(BundleException::class.java, {
             actors.bundleHelper.doInstallBundleInRepository(File("."), "any")!!
-        }
+        })
     }
 
-    Test
+    @Test
     fun updateBundleWithInvalidSpringConfig() {
         val actors = stageActors(update = true, mockBundleProvider = { bundleContext ->
-            val mockBundle = mock(javaClass<Bundle>())
+            val mockBundle = mock(Bundle::class.java)
             whenever(mockBundle.start()).then {
-                DefaultEventBus(bundleContext).publish(SpringContextException(mock(javaClass<Bundle>()), ApplicationContextException("Spring could not autowire some stuff")))
+                DefaultEventBus(bundleContext).publish(SpringContextException(mock(Bundle::class.java), ApplicationContextException("Spring could not autowire some stuff")))
             }
             mockBundle
         })
 
-        failsWith(javaClass<BeansException>()) {
+        assertFailsWith(BeansException::class.java, {
             actors.bundleHelper.doInstallBundleInRepository(File("."), "any")!!
-        }
+        })
     }
 
-    Test
+    @Test
     fun updateInstallableBundle() {
         val actors = stageActors(update = true)
 
         whenever(actors.bundleContext.installBundle(anyString(), anyObject<InputStream>())).then {
-            actors.frameworkListener!!.frameworkEvent(FrameworkEvent(FrameworkEvent.PACKAGES_REFRESHED, mock(javaClass<Bundle>())))
+            actors.frameworkListener!!.frameworkEvent(FrameworkEvent(FrameworkEvent.PACKAGES_REFRESHED, mock(Bundle::class.java)))
 
-            mock(javaClass<Bundle>())
+            mock(Bundle::class.java)
         }
 
         actors.bundleHelper.doInstallBundleInRepository(File("."), "any")
@@ -171,11 +168,11 @@ class MockBundleHelper(val update: Boolean, val mockBundle: (BundleContext) -> B
 
     override val frameworkWiring: FrameworkWiring
         get() {
-            val wiring = mock(javaClass<FrameworkWiring>())
-            val frameworkListener = ArgumentCaptor.forClass(javaClass<FrameworkListener>())
+            val wiring = mock(FrameworkWiring::class.java)
+            val frameworkListener = ArgumentCaptor.forClass(FrameworkListener::class.java)
             whenever(wiring.refreshBundles(anyObject(), frameworkListener.capture())).then {
-                frameworkListener.getValue().frameworkEvent(
-                        FrameworkEvent(FrameworkEvent.PACKAGES_REFRESHED, mock(javaClass<Bundle>()))
+                frameworkListener.value.frameworkEvent(
+                        FrameworkEvent(FrameworkEvent.PACKAGES_REFRESHED, mock(Bundle::class.java))
                 )
             }
             return wiring

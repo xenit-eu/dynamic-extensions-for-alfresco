@@ -2,16 +2,11 @@ package com.github.dynamicextensionsalfresco.models
 
 import com.github.dynamicextensionsalfresco.osgi.DependencyMetadataProvider
 import com.github.dynamicextensionsalfresco.osgi.DependencySorter
-import org.alfresco.repo.dictionary.M2Namespace
 import org.alfresco.service.cmr.dictionary.DictionaryException
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.context.ResourceLoaderAware
 import org.springframework.core.io.ResourceLoader
 import org.springframework.core.io.support.ResourcePatternResolver
-import org.springframework.util.Assert
-
-import java.util.*
 
 /**
  * Based class for Model registrars. Registers Models by dependency order.
@@ -19,7 +14,7 @@ import java.util.*
  * @author Laurent Van der Linden
  */
 public abstract class AbstractModelRegistrar : ModelRegistrar, ResourceLoaderAware, DependencyMetadataProvider<M2ModelResource> {
-    private val logger = LoggerFactory.getLogger(javaClass<AbstractModelRegistrar>())
+    private val logger = LoggerFactory.getLogger(AbstractModelRegistrar::class.java)
 
     /* Configuration */
 
@@ -34,19 +29,19 @@ public abstract class AbstractModelRegistrar : ModelRegistrar, ResourceLoaderAwa
             try {
                 registerModel(modelResource)
             } catch (e: DictionaryException) {
-                if (logger.isWarnEnabled()) {
-                    logger.warn("Could not register model '${modelResource.getName()}'", e)
+                if (logger.isWarnEnabled) {
+                    logger.warn("Could not register model '${modelResource.name}'", e)
                 }
             }
         }
     }
 
-    override fun imports(item: M2ModelResource): Collection<*> {
-        return item.getM2Model().getImports().map { it.getUri() }
+    override fun imports(item: M2ModelResource): Collection<Any> {
+        return item.m2Model.imports.map { it.uri }
     }
 
-    override fun exports(item: M2ModelResource): Collection<*> {
-        return item.getM2Model().getNamespaces().map { it.getUri() }
+    override fun exports(item: M2ModelResource): Collection<Any> {
+        return item.m2Model.namespaces.map { it.uri }
     }
 
     override val allowCircularReferences: Boolean

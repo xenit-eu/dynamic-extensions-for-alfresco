@@ -1,8 +1,6 @@
 package com.github.dynamicextensionsalfresco.osgi
 
-import org.osgi.framework.Bundle
 import org.slf4j.LoggerFactory
-import org.springframework.util.Assert
 import java.util.*
 
 /**
@@ -24,8 +22,8 @@ public object DependencySorter {
             visit(item, exports, result, visitedItems, metadataPovider)
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("sorting ${input.firstOrNull()?.javaClass}:")
+        if (logger.isDebugEnabled) {
+            logger.debug("sorting ${input.firstOrNull()}:")
             logger.debug("  input")
             for (item in input) {
                 logger.debug("  - $item")
@@ -79,7 +77,7 @@ public object DependencySorter {
 interface DependencyMetadataProvider<T> {
     val allowCircularReferences: Boolean
 
-    fun imports(item: T): Collection<*>
+    fun imports(item: T): Collection<Any>
 
-    fun exports(item: T): Collection<*>
+    fun exports(item: T): Collection<Any>
 }

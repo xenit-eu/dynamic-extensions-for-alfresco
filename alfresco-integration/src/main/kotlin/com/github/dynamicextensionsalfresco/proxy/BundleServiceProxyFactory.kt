@@ -1,7 +1,6 @@
 package com.github.dynamicextensionsalfresco.proxy
 
 import com.github.dynamicextensionsalfresco.osgi.FrameworkService
-import org.osgi.framework.BundleContext
 import org.osgi.framework.Filter
 import org.springframework.beans.factory.FactoryBean
 
@@ -30,13 +29,13 @@ public class BundleServiceProxyFactory : FactoryBean<Any> {
     var filter: Filter? = null
     var targetInterfaces: Array<Class<*>>? = null
 
-    throws(Exception::class)
+    @Throws(Exception::class)
     override fun getObject(): Any {
         val tracker = Tracker(DefaultFilterModel(targetInterfaces, filter), frameworkService)
 
         val proxyClasses = arrayOfNulls<Class<out Any>>(targetInterfaces!!.size() + 1)
         System.arraycopy(targetInterfaces, 0, proxyClasses, 0, targetInterfaces!!.size())
-        proxyClasses[targetInterfaces!!.size()] = javaClass<FilterModel>()
+        proxyClasses[targetInterfaces!!.size()] = FilterModel::class.java
 
         return Proxy.newProxyInstance(javaClass.getClassLoader(), proxyClasses, ServiceInvocationHandler(tracker))
     }

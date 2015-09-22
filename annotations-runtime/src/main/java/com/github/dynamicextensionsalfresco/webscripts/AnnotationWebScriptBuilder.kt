@@ -5,13 +5,11 @@ import com.github.dynamicextensionsalfresco.webscripts.annotations.*
 import java.lang.reflect.Method
 import java.util.ArrayList
 import java.util.Arrays
-import java.util.Collections
 import java.util.HashSet
 import java.util.LinkedHashSet
 
 import com.github.dynamicextensionsalfresco.webscripts.arguments.HandlerMethodArgumentsResolver
 
-import org.springframework.beans.BeansException
 import org.springframework.beans.factory.BeanFactory
 import org.springframework.beans.factory.BeanFactoryAware
 import org.springframework.beans.factory.annotation.Autowired
@@ -35,7 +33,7 @@ import kotlin.properties.Delegates
  * @author Laurens Fridael
  * @author Laurent Van der Linden
  */
-public class AnnotationWebScriptBuilder Autowired constructor(
+public class AnnotationWebScriptBuilder @Autowired constructor(
 		private val handlerMethodArgumentsResolver: HandlerMethodArgumentsResolver
 	) : BeanFactoryAware {
 
@@ -62,7 +60,7 @@ public class AnnotationWebScriptBuilder Autowired constructor(
 
         val beanFactory = beanFactory
         val beanType = beanFactory.getType(beanName) ?: return emptyList()
-        val webScriptAnnotation = beanFactory.findAnnotationOnBean<WebScript>(beanName, javaClass<WebScript>()) ?: getDefaultWebScriptAnnotation()
+        val webScriptAnnotation = beanFactory.findAnnotationOnBean<WebScript>(beanName, WebScript::class.java) ?: getDefaultWebScriptAnnotation()
         val baseUri = webScriptAnnotation.baseUri
         if (StringUtils.hasText(baseUri) && baseUri.startsWith("/") == false) {
             throw RuntimeException("@WebScript baseUri for class '$beanType' does not start with a slash: '$baseUri'")
@@ -70,39 +68,39 @@ public class AnnotationWebScriptBuilder Autowired constructor(
 
         val handlerMethods = HandlerMethods()
         ReflectionUtils.doWithMethods(beanType) { method: Method ->
-            val before = AnnotationUtils.findAnnotation<Before>(method, javaClass<Before>())
+            val before = AnnotationUtils.findAnnotation<Before>(method, Before::class.java)
             if (before != null) {
-                if (AnnotationUtils.findAnnotation<Attribute>(method, javaClass<Attribute>()) != null || AnnotationUtils.findAnnotation<Uri>(method, javaClass<Uri>()) != null) {
+                if (AnnotationUtils.findAnnotation<Attribute>(method, Attribute::class.java) != null || AnnotationUtils.findAnnotation<Uri>(method, Uri::class.java) != null) {
                     throw RuntimeException("Cannot combine @Before, @Attribute and @Uri on a single method. Method: ${ClassUtils.getQualifiedMethodName(method)}")
                 }
-                handlerMethods.getBeforeMethods().add(method)
+                handlerMethods.beforeMethods.add(method)
             }
         }
         ReflectionUtils.doWithMethods(beanType) { method: Method ->
-            val attribute = AnnotationUtils.findAnnotation<Attribute>(method, javaClass<Attribute>())
+            val attribute = AnnotationUtils.findAnnotation<Attribute>(method, Attribute::class.java)
             if (attribute != null) {
-                if (AnnotationUtils.findAnnotation<Before>(method, javaClass<Before>()) != null || AnnotationUtils.findAnnotation<Uri>(method, javaClass<Uri>()) != null) {
+                if (AnnotationUtils.findAnnotation<Before>(method, Before::class.java) != null || AnnotationUtils.findAnnotation<Uri>(method, Uri::class.java) != null) {
                     throw RuntimeException(("Cannot combine @Before, @Attribute and @Uri on a single method. Method: ${ClassUtils.getQualifiedMethodName(method)}"))
                 }
-                if (method.getReturnType() == Void.TYPE) {
+                if (method.returnType == Void.TYPE) {
                     throw RuntimeException("@Attribute methods cannot have a void return type.")
                 }
-                handlerMethods.getAttributeMethods().add(method)
+                handlerMethods.attributeMethods.add(method)
             }
         }
         ReflectionUtils.doWithMethods(beanType) { method: Method ->
-            val exceptionHandler = AnnotationUtils.findAnnotation<ExceptionHandler>(method, javaClass<ExceptionHandler>())
+            val exceptionHandler = AnnotationUtils.findAnnotation<ExceptionHandler>(method, ExceptionHandler::class.java)
             if (exceptionHandler != null) {
-                if (AnnotationUtils.findAnnotation<Attribute>(method, javaClass<Attribute>()) != null || AnnotationUtils.findAnnotation<Before>(method, javaClass<Before>()) != null || AnnotationUtils.findAnnotation<Uri>(method, javaClass<Uri>()) != null) {
+                if (AnnotationUtils.findAnnotation<Attribute>(method, Attribute::class.java) != null || AnnotationUtils.findAnnotation<Before>(method, Before::class.java) != null || AnnotationUtils.findAnnotation<Uri>(method, Uri::class.java) != null) {
                     throw RuntimeException("Cannot combine @Before, @Attribute @ExceptionHandler or @Uri on a single method. Method: ${ClassUtils.getQualifiedMethodName(method)}")
                 }
-                handlerMethods.getExceptionHandlerMethods().add(ExceptionHandlerMethod(exceptionHandler, method))
+                handlerMethods.exceptionHandlerMethods.add(ExceptionHandlerMethod(exceptionHandler, method))
             }
         }
 
         val webScripts = ArrayList<org.springframework.extensions.webscripts.WebScript>()
         ReflectionUtils.doWithMethods(beanType) { method: Method ->
-            val uri = AnnotationUtils.findAnnotation<Uri>(method, javaClass<Uri>())
+            val uri = AnnotationUtils.findAnnotation<Uri>(method, Uri::class.java)
             if (uri != null) {
                 val webScript = createWebScript(beanName, webScriptAnnotation, uri, handlerMethods.createForUriMethod(method))
                 webScripts.add(webScript)
@@ -111,7 +109,7 @@ public class AnnotationWebScriptBuilder Autowired constructor(
 
         val ids = HashSet<String>()
         for (webScript in webScripts) {
-            val webscriptId = webScript.getDescription().getId()
+            val webscriptId = webScript.description.id
             val notContained = ids.add(webscriptId)
             if (!notContained) {
                 throw IllegalStateException("Duplicate Web Script ID \"" + webscriptId + "\" Make sure handler methods of annotation-based Web Scripts have unique names.")
@@ -126,15 +124,15 @@ public class AnnotationWebScriptBuilder Autowired constructor(
     protected fun createWebScript(beanName: String, webScript: WebScript, uri: Uri, handlerMethods: HandlerMethods): AnnotationWebScript {
         val description = DescriptionImpl()
         if (webScript.defaultFormat.hasText()) {
-            description.setDefaultFormat(webScript.defaultFormat)
+            description.defaultFormat = webScript.defaultFormat
         }
         val baseUri = webScript.baseUri
-        handleHandlerMethodAnnotation(uri, handlerMethods.getUriMethod(), description, baseUri)
+        handleHandlerMethodAnnotation(uri, handlerMethods.uriMethod, description, baseUri)
         handleTypeAnnotations(beanName, webScript, description)
-        val id = "%s.%s.%s".format(generateId(beanName), handlerMethods.getUriMethod().getName(), description.getMethod().toLowerCase())
-        description.setId(id)
+        val id = "%s.%s.%s".format(generateId(beanName), handlerMethods.uriMethod.name, description.method.toLowerCase())
+        description.id = id
         val handler = beanFactory.getBean(beanName)
-        description.setStore(DummyStore())
+        description.store = DummyStore()
         return createWebScript(description, handler, handlerMethods)
     }
 
@@ -163,32 +161,32 @@ public class AnnotationWebScriptBuilder Autowired constructor(
 		 * For the sake of consistency we translate the HTTP method from the HttpMethod enum. This also shields us from
 		 * changes in the HttpMethod enum names.
 		 */
-        description.setMethod(when (uri.method) {
+        description.method = when (uri.method) {
             HttpMethod.GET -> "GET"
             HttpMethod.POST -> "POST"
             HttpMethod.PUT -> "PUT"
             HttpMethod.DELETE -> "DELETE"
             HttpMethod.OPTIONS -> "OPTIONS"
-        })
+        }
         /*
 		 * Idem dito for FormatStyle.
 		 */
-        description.setFormatStyle(when (uri.formatStyle) {
+        description.formatStyle = when (uri.formatStyle) {
             FormatStyle.ANY -> Description.FormatStyle.any
             FormatStyle.ARGUMENT -> Description.FormatStyle.argument
             FormatStyle.EXTENSION -> Description.FormatStyle.extension
-        })
-        if (uri.defaultFormat.hasText()) {
-            description.setDefaultFormat(uri.defaultFormat)
         }
-        description.setMultipartProcessing(uri.multipartProcessing)
+        if (uri.defaultFormat.hasText()) {
+            description.defaultFormat = uri.defaultFormat
+        }
+        description.multipartProcessing = uri.multipartProcessing
 
-        val methodAuthentication = method.getAnnotation<Authentication>(javaClass<Authentication>())
+        val methodAuthentication = method.getAnnotation<Authentication>(Authentication::class.java)
         if (methodAuthentication != null) {
             handleAuthenticationAnnotation(methodAuthentication, description)
         }
 
-        val methodTransaction = method.getAnnotation<Transaction>(javaClass<Transaction>())
+        val methodTransaction = method.getAnnotation<Transaction>(Transaction::class.java)
         if (methodTransaction != null) {
             handleTransactionAnnotation(methodTransaction, description)
         }
@@ -197,16 +195,16 @@ public class AnnotationWebScriptBuilder Autowired constructor(
     protected fun handleTypeAnnotations(beanName: String, webScript: WebScript, description: DescriptionImpl) {
         handleWebScriptAnnotation(webScript, beanName, description)
 
-        if (description.getRequiredAuthentication() == null) {
-            var authentication = beanFactory.findAnnotationOnBean<Authentication>(beanName, javaClass<Authentication>())
+        if (description.requiredAuthentication == null) {
+            var authentication = beanFactory.findAnnotationOnBean<Authentication>(beanName, Authentication::class.java)
                 ?: getDefaultAuthenticationAnnotation()
             handleAuthenticationAnnotation(authentication, description)
         }
 
-        if (description.getRequiredTransactionParameters() == null) {
-            var transaction = beanFactory.findAnnotationOnBean<Transaction>(beanName, javaClass<Transaction>())
+        if (description.requiredTransactionParameters == null) {
+            var transaction = beanFactory.findAnnotationOnBean<Transaction>(beanName, Transaction::class.java)
             if (transaction == null) {
-                if (description.getMethod().equals("GET")) {
+                if (description.method.equals("GET")) {
                     transaction = getDefaultReadonlyTransactionAnnotation()
                 } else {
                     transaction = getDefaultReadWriteTransactionAnnotation()
@@ -215,32 +213,32 @@ public class AnnotationWebScriptBuilder Autowired constructor(
             handleTransactionAnnotation(transaction, description)
         }
 
-        val cache = beanFactory.findAnnotationOnBean<Cache>(beanName, javaClass<Cache>()) ?: getDefaultCacheAnnotation()
+        val cache = beanFactory.findAnnotationOnBean<Cache>(beanName, Cache::class.java) ?: getDefaultCacheAnnotation()
         handleCacheAnnotation(cache, beanName, description)
 
-        description.setDescPath("")
+        description.descPath = ""
     }
 
     protected fun handleWebScriptAnnotation(webScript: WebScript, beanName: String, description: DescriptionImpl) {
         Assert.notNull(webScript, "Annotation cannot be null.")
         Assert.hasText(beanName, "Bean name cannot be empty.")
         Assert.notNull(description, "Description cannot be null.")
-        Assert.hasText(description.getMethod(), "Description method is not specified.")
+        Assert.hasText(description.method, "Description method is not specified.")
 
         if (webScript.value.hasText()) {
-            description.setShortName(webScript.value)
+            description.shortName = webScript.value
         } else {
-            description.setShortName(generateShortName(beanName))
+            description.shortName = generateShortName(beanName)
         }
         if (webScript.description.hasText()) {
-            description.setDescription(webScript.description)
+            description.description = webScript.description
         } else {
-            description.setDescription("Annotation-based WebScript for class %s".format(beanFactory.getType(beanName).getName()))
+            description.description = "Annotation-based WebScript for class %s".format(beanFactory.getType(beanName).name)
         }
         if (webScript.families.size() > 0) {
-            description.setFamilys(LinkedHashSet(Arrays.asList(*webScript.families)))
+            description.familys = LinkedHashSet(Arrays.asList(*webScript.families))
         }
-        description.setLifecycle(when (webScript.lifecycle) {
+        description.lifecycle = when (webScript.lifecycle) {
             Lifecycle.NONE -> Description.Lifecycle.none
             Lifecycle.DRAFT -> Description.Lifecycle.draft
             Lifecycle.DRAFT_PUBLIC_API -> Description.Lifecycle.draft_public_api
@@ -248,21 +246,21 @@ public class AnnotationWebScriptBuilder Autowired constructor(
             Lifecycle.INTERNAL -> Description.Lifecycle.internal
             Lifecycle.PUBLIC_API -> Description.Lifecycle.public_api
             Lifecycle.SAMPLE -> Description.Lifecycle.sample
-        })
+        }
     }
 
     protected fun handleAuthenticationAnnotation(authentication: Authentication, description: DescriptionImpl) {
         Assert.notNull(authentication, "Annotation cannot be null.")
         Assert.notNull(description, "Description cannot be null.")
         if (authentication.runAs.hasText()) {
-            description.setRunAs(authentication.runAs)
+            description.runAs = authentication.runAs
         }
-        description.setRequiredAuthentication(when (authentication.value) {
+        description.requiredAuthentication = when (authentication.value) {
             AuthenticationType.NONE -> RequiredAuthentication.none
             AuthenticationType.GUEST -> RequiredAuthentication.guest
             AuthenticationType.USER -> RequiredAuthentication.user
             AuthenticationType.ADMIN -> RequiredAuthentication.admin
-        })
+        }
     }
 
     protected fun handleTransactionAnnotation(transaction: Transaction, description: DescriptionImpl) {
@@ -270,18 +268,18 @@ public class AnnotationWebScriptBuilder Autowired constructor(
         Assert.notNull(description, "Description cannot be null.")
 
         val transactionParameters = TransactionParameters()
-        transactionParameters.setRequired(when (transaction.value) {
+        transactionParameters.required = when (transaction.value) {
             TransactionType.NONE -> RequiredTransaction.none
             TransactionType.REQUIRED -> RequiredTransaction.required
             TransactionType.REQUIRES_NEW -> RequiredTransaction.requiresnew
-        })
-        if (transaction.readOnly) {
-            transactionParameters.setCapability(TransactionCapability.readonly)
-        } else {
-            transactionParameters.setCapability(TransactionCapability.readwrite)
         }
-        transactionParameters.setBufferSize(transaction.bufferSize)
-        description.setRequiredTransactionParameters(transactionParameters)
+        if (transaction.readOnly) {
+            transactionParameters.capability = TransactionCapability.readonly
+        } else {
+            transactionParameters.capability = TransactionCapability.readwrite
+        }
+        transactionParameters.bufferSize = transaction.bufferSize
+        description.requiredTransactionParameters = transactionParameters
     }
 
     protected fun handleCacheAnnotation(cache: Cache, beanName: String, description: DescriptionImpl) {
@@ -290,16 +288,16 @@ public class AnnotationWebScriptBuilder Autowired constructor(
         Assert.notNull(description, "Description cannot be null.")
 
         val requiredCache = org.springframework.extensions.webscripts.Cache()
-        requiredCache.setNeverCache(cache.neverCache)
-        requiredCache.setIsPublic(cache.isPublic)
-        requiredCache.setMustRevalidate(cache.mustRevalidate)
-        description.setRequiredCache(requiredCache)
+        requiredCache.neverCache = cache.neverCache
+        requiredCache.isPublic = cache.isPublic
+        requiredCache.mustRevalidate = cache.mustRevalidate
+        description.requiredCache = requiredCache
     }
 
     protected fun generateId(beanName: String): String {
         Assert.hasText(beanName, "Bean name cannot be empty")
         val clazz = beanFactory.getType(beanName)
-        return clazz.getName()
+        return clazz.name
     }
 
     protected fun generateShortName(beanName: String): String {
@@ -314,37 +312,37 @@ public class AnnotationWebScriptBuilder Autowired constructor(
     private fun getDefaultAuthenticationAnnotation(): Authentication {
         @Authentication
         class Default
-        return javaClass<Default>().getAnnotation(javaClass<Authentication>())
+        return Default::class.java.getAnnotation(Authentication::class.java)
     }
 
     private fun getDefaultReadWriteTransactionAnnotation(): Transaction {
         @Transaction
         class Default
-        return javaClass<Default>().getAnnotation(javaClass<Transaction>())
+        return Default::class.java.getAnnotation(Transaction::class.java)
     }
 
     private fun getDefaultReadonlyTransactionAnnotation(): Transaction {
         @Transaction(readOnly = true)
         class Default
-        return javaClass<Default>().getAnnotation(javaClass<Transaction>())
+        return Default::class.java.getAnnotation(Transaction::class.java)
     }
 
     private fun getDefaultCacheAnnotation(): Cache {
         @Cache
         class Default
-        return javaClass<Default>().getAnnotation(javaClass<Cache>())
+        return Default::class.java.getAnnotation(Cache::class.java)
     }
 
     private fun getDefaultWebScriptAnnotation(): WebScript {
         @WebScript
         class Default
-        return javaClass<Default>().getAnnotation(javaClass<WebScript>())
+        return Default::class.java.getAnnotation(WebScript::class.java)
     }
 
     /* Dependencies */
 
     override fun setBeanFactory(beanFactory: BeanFactory) {
-        Assert.isInstanceOf(javaClass<ConfigurableListableBeanFactory>(), beanFactory, "BeanFactory is not of type ConfigurableListableBeanFactory.")
+        Assert.isInstanceOf(ConfigurableListableBeanFactory::class.java, beanFactory, "BeanFactory is not of type ConfigurableListableBeanFactory.")
         this.beanFactory = beanFactory as ConfigurableListableBeanFactory
     }
 }

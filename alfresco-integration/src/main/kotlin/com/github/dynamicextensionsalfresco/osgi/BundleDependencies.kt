@@ -1,6 +1,5 @@
 package com.github.dynamicextensionsalfresco.osgi
 
-import com.github.dynamicextensionsalfresco.osgi.manifest
 import org.osgi.framework.Bundle
 
 /**
@@ -20,12 +19,12 @@ public object BundleDependencies : DependencyMetadataProvider<BundleDependencies
         return DependencySorter.sort(descriptors, this).map { it.bundle }
     }
 
-    override fun imports(item: BundleDescriptor): Collection<*> {
-        return item.manifest.getImportPackage().getImportedPackages().map { it.getPackageName() }
+    override fun imports(item: BundleDescriptor): Collection<Any> {
+        return item.manifest.importPackage.importedPackages.map { it.packageName }
     }
 
-    override fun exports(item: BundleDescriptor): Collection<*> {
-        return item.manifest.getExportPackage().getExportedPackages().map { it.getPackageName() }
+    override fun exports(item: BundleDescriptor): Collection<Any> {
+        return item.manifest.exportPackage.exportedPackages.map { it.packageName }
     }
 
     override val allowCircularReferences: Boolean
@@ -39,7 +38,7 @@ public object BundleDependencies : DependencyMetadataProvider<BundleDependencies
         val manifest = bundle.manifest
 
         override fun toString(): String {
-            return "%3d: %s".format(bundle.getBundleId(), bundle.getSymbolicName())
+            return "%3d: %s".format(bundle.bundleId, bundle.symbolicName)
         }
     }
 }
