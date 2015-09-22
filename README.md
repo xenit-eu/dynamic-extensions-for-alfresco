@@ -1,6 +1,8 @@
 Dynamic Extensions for Alfresco
 ===============================
 
+[![Build Status](https://travis-ci.org/laurentvdl/dynamic-extensions-for-alfresco.svg)](https://travis-ci.org/laurentvdl/dynamic-extensions-for-alfresco.svg)
+
 Rapid development of Alfresco repository extensions in Java. Deploy your code in seconds, not minutes. Life is too short for endless server restarts.
 
 Dynamic Extensions adds an OSGi container to the Alfresco repository, enabling live deployment of Java code, with no need to restart the server.
