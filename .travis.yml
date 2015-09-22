@@ -2,4 +2,4 @@ sudo: false
 language: java
 script: gradle test
 jdk:
-  - oraclejdk6
+  - oraclejdk7
