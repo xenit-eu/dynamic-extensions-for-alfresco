@@ -6,7 +6,7 @@ package com.github.dynamicextensionsalfresco.gradle.configuration
  */
 
 class Versions {
-	String dynamicExtensions = "1.4.0-SNAPSHOT"
+	String dynamicExtensions = "1.4.0"
 	
 	String surf = "5.0.d"
 
