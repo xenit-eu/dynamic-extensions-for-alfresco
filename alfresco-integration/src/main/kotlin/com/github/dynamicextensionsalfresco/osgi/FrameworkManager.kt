@@ -99,10 +99,10 @@ public class DefaultFrameworkManager(
             for (locationPattern in locationPatterns) {
                 try {
                     for (bundleResource in resourcePatternResolver!!.getResources(locationPattern)) {
-                        val location = bundleResource.getURI().toString()
+                        val location = bundleResource.uri.toString()
                         logger.debug ("Installing Bundle: {}", location)
                         try {
-                            val bundle = framework.getBundleContext().installBundle(location, bundleResource.getInputStream())
+                            val bundle = framework.bundleContext.installBundle(location, bundleResource.inputStream)
                             bundles.add(bundle)
                         } catch (e: BundleException) {
                             logger.error("Error installing Bundle: $location", e)
@@ -129,19 +129,19 @@ public class DefaultFrameworkManager(
      */
     protected fun installRepositoryBundles(): List<Bundle> {
         val bundles = ArrayList<Bundle>()
-        for (jarFile in repositoryStoreService.getBundleJarFiles()) {
+        for (jarFile in repositoryStoreService.bundleJarFiles) {
             try {
-                val location = "%s/%s".format(repositoryStoreService.getBundleRepositoryLocation(), jarFile.getName())
+                val location = "%s/%s".format(repositoryStoreService.bundleRepositoryLocation, jarFile.name)
                 logger.debug("Installing Bundle: {}", location)
-                val reader = contentService.getReader(jarFile.getNodeRef(), ContentModel.PROP_CONTENT)
+                val reader = contentService.getReader(jarFile.nodeRef, ContentModel.PROP_CONTENT)
                 if (reader != null) {
-                    val bundle = framework.getBundleContext().installBundle(location, reader.getContentInputStream())
+                    val bundle = framework.bundleContext.installBundle(location, reader.contentInputStream)
                     bundles.add(bundle)
                 } else {
-                    logger.warn("unable to read extension content for ${jarFile?.getNodeRef()}")
+                    logger.warn("unable to read extension content for ${jarFile?.nodeRef}")
                 }
             } catch (e: Exception) {
-                logger.warn("Error installing Bundle: ${jarFile?.getNodeRef()}", e)
+                logger.warn("Error installing Bundle: ${jarFile?.nodeRef}", e)
             }
 
         }
@@ -151,7 +151,7 @@ public class DefaultFrameworkManager(
     protected fun registerServices() {
         logger.debug("Registering services.")
         for (bundleContextRegistrar in bundleContextRegistrars) {
-            val servicesRegistered = bundleContextRegistrar.registerInBundleContext(framework.getBundleContext())
+            val servicesRegistered = bundleContextRegistrar.registerInBundleContext(framework.bundleContext)
             serviceRegistrations.addAll(servicesRegistered)
         }
     }
@@ -173,16 +173,16 @@ public class DefaultFrameworkManager(
 
     protected fun startBundle(bundle: Bundle) {
         try {
-            logger.debug("Starting Bundle {}.", bundle.getBundleId())
+            logger.debug("Starting Bundle {}.", bundle.bundleId)
             bundle.start()
         } catch (e: Exception) {
-            logger.error("Error starting Bundle ${bundle.getBundleId()}.", e)
+            logger.error("Error starting Bundle ${bundle.bundleId}.", e)
         }
 
     }
 
     protected fun isFragmentBundle(bundle: Bundle): Boolean {
-        return bundle.getHeaders().get(Constants.FRAGMENT_HOST) != null
+        return bundle.headers.get(Constants.FRAGMENT_HOST) != null
     }
 
     /**
@@ -199,7 +199,7 @@ public class DefaultFrameworkManager(
         while (it.hasNext()) {
             val serviceRegistration = it.next()
             try {
-                logger.debug { "Unregistering service ${serviceRegistration.getReference()}" }
+                logger.debug { "Unregistering service ${serviceRegistration.reference}" }
                 serviceRegistration.unregister()
             } catch (e: RuntimeException) {
                 logger.warn("Error unregistering service $serviceRegistration.", e)

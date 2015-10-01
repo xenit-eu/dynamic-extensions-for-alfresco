@@ -6,7 +6,7 @@ import org.osgi.framework.Bundle
 import kotlin.properties.Delegates
 
 val Bundle.stateDescription: String
-    get() = when (this.getState()) {
+    get() = when (this.state) {
     Bundle.UNINSTALLED -> "uninstalled"
     Bundle.INSTALLED -> "installed"
     Bundle.RESOLVED -> "resolved"
@@ -17,7 +17,7 @@ val Bundle.stateDescription: String
 }
 
 val Bundle.isActive: Boolean
-    get() = getState() == Bundle.ACTIVE
+    get() = state == Bundle.ACTIVE
 
 val Bundle.manifest: BundleManifest
-    get() = BundleManifestFactory.createBundleManifest(getHeaders())
+    get() = BundleManifestFactory.createBundleManifest(headers)

@@ -8,11 +8,11 @@ import java.lang.reflect.Method;
  * @author Laurent Van der Linden
  */
 public interface ResolutionParameters {
-    public Method getUriMethod();
+    Method getUriMethod();
 
-    public Description getDescription();
+    Description getDescription();
 
-    public Object getHandler();
+    Object getHandler();
 
-    public Class<?> getHandlerClass();
+    Class<?> getHandlerClass();
 }

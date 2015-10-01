@@ -12,7 +12,7 @@ import org.springframework.extensions.webscripts.Store;
  */
 public interface SearchPathRegistry {
 
-	public void addStore(Store store);
+	void addStore(Store store);
 
-	public void removeStore(Store store);
+	void removeStore(Store store);
 }

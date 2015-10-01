@@ -42,7 +42,7 @@ public enum Event {
 
 	private final NotificationFrequency notificationFrequency;
 
-	private Event(final NotificationFrequency notificationFrequency) {
+	Event(final NotificationFrequency notificationFrequency) {
 		this.notificationFrequency = notificationFrequency;
 	}
 

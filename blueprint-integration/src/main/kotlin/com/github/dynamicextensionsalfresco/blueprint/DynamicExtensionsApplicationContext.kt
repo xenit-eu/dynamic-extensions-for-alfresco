@@ -336,7 +336,7 @@ class DynamicExtensionsApplicationContext(configurationLocations: Array<String>?
     protected fun getSpringConfigurationPackages(): List<String>? {
         val header = bundle.headers.get(SPRING_CONFIGURATION_HEADER)
         if (StringUtils.hasText(header)) {
-            return header.splitBy(",")
+            return header.split(",")
         } else {
             return null
         }

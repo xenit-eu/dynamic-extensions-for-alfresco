@@ -18,7 +18,7 @@ public @interface OsgiService {
 
     ExportHeader[] headers() default {};
 
-    static @interface ExportHeader {
+    @interface ExportHeader {
         String key();
         String value();
     }

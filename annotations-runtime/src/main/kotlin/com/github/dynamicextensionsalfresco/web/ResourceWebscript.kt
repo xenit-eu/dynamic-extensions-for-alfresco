@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse
  * @author Laurent Van der Linden
  */
 public class ResourceWebscript(private val bundleContext: BundleContext) : WebScript, AbstractBundleResourceHandler() {
-    private val module = bundleContext.getBundle().getSymbolicName().replace(".", "-").toLowerCase()
+    private val module = bundleContext.bundle.symbolicName.replace(".", "-").toLowerCase()
 
     init {
         initContentTypes()
@@ -30,17 +30,17 @@ public class ResourceWebscript(private val bundleContext: BundleContext) : WebSc
                 "static web resources for extension $module",
                 uris.first()
         )
-        descriptionImpl.setMethod("GET")
-        descriptionImpl.setFormatStyle(Description.FormatStyle.argument)
-        descriptionImpl.setDefaultFormat("html")
+        descriptionImpl.method = "GET"
+        descriptionImpl.formatStyle = Description.FormatStyle.argument
+        descriptionImpl.defaultFormat = "html"
         descriptionImpl.setUris(uris)
-        descriptionImpl.setFamilys(setOf("static-web"))
-        descriptionImpl.setStore(DummyStore())
-        descriptionImpl.setRequiredAuthentication(Description.RequiredAuthentication.none)
-        descriptionImpl.setRequiredTransactionParameters(with(TransactionParameters()) {
-            setRequired(Description.RequiredTransaction.none)
+        descriptionImpl.familys = setOf("static-web")
+        descriptionImpl.store = DummyStore()
+        descriptionImpl.requiredAuthentication = Description.RequiredAuthentication.none
+        descriptionImpl.requiredTransactionParameters = with(TransactionParameters()) {
+            required = Description.RequiredTransaction.none
             this
-        })
+        }
 
         descriptionImpl
     }
@@ -54,10 +54,10 @@ public class ResourceWebscript(private val bundleContext: BundleContext) : WebSc
     override fun init(container: Container?, description: Description?) {}
 
     override fun execute(req: WebScriptRequest, res: WebScriptResponse) {
-        val path = req.getServiceMatch().getTemplateVars().get("path")
+        val path = req.serviceMatch.templateVars.get("path")
 
         if (path != null) {
-            if (req.getServiceMatch().getPath().startsWith("/$module/web-cached/")) {
+            if (req.serviceMatch.path.startsWith("/$module/web-cached/")) {
                 setInfinateCache(res)
             }
 

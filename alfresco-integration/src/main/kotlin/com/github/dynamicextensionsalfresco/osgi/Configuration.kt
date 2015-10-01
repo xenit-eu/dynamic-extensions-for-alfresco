@@ -16,7 +16,7 @@ public class Configuration {
     var repositoryBundlesEnabled = true
 
     var storageDirectory: File? = null
-		get() = $storageDirectory ?: File(System.getProperty("java.io.tmpdir"), "bundles")
+		get() = field ?: File(System.getProperty("java.io.tmpdir"), "bundles")
 
     var systemPackageCacheMode: PackageCacheMode? = null
 

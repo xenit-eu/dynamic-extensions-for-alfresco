@@ -15,10 +15,10 @@ import kotlin.properties.Delegates
  * @author Laurent Van der Linden
  */
 public class TransactionTest : AbstractWebScriptAnnotationsTest() {
-	Autowired
+	@Autowired
 	private var uriIndex: UriIndex? = null
 
-	Test
+	@Test
     public fun testTransactionOverridesUntyped() {
 		assertEquals(
 				Description.TransactionCapability.readonly,
@@ -49,7 +49,7 @@ public class TransactionTest : AbstractWebScriptAnnotationsTest() {
 
     }
 
-	Test
+	@Test
     public fun testTransactionOverridesWithTypeAnnotation() {
 		assertEquals(
 				Description.TransactionCapability.readwrite,

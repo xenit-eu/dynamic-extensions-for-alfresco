@@ -12,7 +12,7 @@ public enum PackageCacheMode {
 	private final boolean writeToCache;
 	private final boolean forceWriteToCache;
 
-	private PackageCacheMode(boolean readFromCache, boolean writeToCache, boolean forceWriteToCache) {
+	PackageCacheMode(boolean readFromCache, boolean writeToCache, boolean forceWriteToCache) {
 		this.readFromCache = readFromCache;
 		this.writeToCache = writeToCache;
 		this.forceWriteToCache = forceWriteToCache;

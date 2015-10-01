@@ -8,14 +8,14 @@ import org.slf4j.Logger
  * @author Laurent Van der Linden
  */
 inline fun Logger.debug(p: () -> String) {
-    if (isDebugEnabled()) debug(p())
+    if (isDebugEnabled) debug(p())
 }
 
 inline fun Logger.info(p: () -> String) {
-    if (isInfoEnabled()) info(p())
+    if (isInfoEnabled) info(p())
 }
 
 inline fun Logger.warn(p: () -> String) {
-    if (isWarnEnabled()) warn(p())
+    if (isWarnEnabled) warn(p())
 }
 

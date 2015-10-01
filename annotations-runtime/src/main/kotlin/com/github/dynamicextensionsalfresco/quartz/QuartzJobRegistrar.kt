@@ -38,7 +38,7 @@ public class QuartzJobRegistrar @Autowired constructor(var scheduler: Scheduler)
             try {
                 val trigger = CronTrigger(annotation.name, annotation.group, annotation.cron)
                 val jobDetail = JobDetail(annotation.name, annotation.group, GenericQuartzJob::class.java)
-                jobDetail.getJobDataMap().put(GenericQuartzJob.BEAN_ID, bean)
+                jobDetail.jobDataMap.put(GenericQuartzJob.BEAN_ID, bean)
                 scheduler.scheduleJob(jobDetail, trigger)
 
                 registeredJobs.add(annotation)

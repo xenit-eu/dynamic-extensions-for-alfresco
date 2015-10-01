@@ -19,5 +19,5 @@ public interface BundleContextRegistrar {
 	 * @param bundleContext
 	 * @return The {@link ServiceRegistration}s.
 	 */
-	public List<ServiceRegistration<?>> registerInBundleContext(BundleContext bundleContext);
+	List<ServiceRegistration<?>> registerInBundleContext(BundleContext bundleContext);
 }

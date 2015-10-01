@@ -13,10 +13,10 @@ import org.springframework.util.StopWatch
 public class SpringTimer : Timer {
     val logger = LoggerFactory.getLogger(javaClass)
 
-    val identifier = javaClass.getPackage().getName()
+    val identifier = javaClass.`package`.name
 
     override val enabled: Boolean
-        get() = logger.isTraceEnabled()
+        get() = logger.isTraceEnabled
 
     private val stopWatch: StopWatch
         get() {
@@ -49,7 +49,7 @@ public class SpringTimer : Timer {
     override fun start(label: String) {
         if (enabled) {
             with(stopWatch) {
-                if (isRunning()) {
+                if (isRunning) {
                     stop()
                 }
                 start(label)
@@ -60,7 +60,7 @@ public class SpringTimer : Timer {
     override fun stop() {
         if (enabled) {
             with(stopWatch) {
-                if (isRunning()) {
+                if (isRunning) {
                     stop()
                 }
             }

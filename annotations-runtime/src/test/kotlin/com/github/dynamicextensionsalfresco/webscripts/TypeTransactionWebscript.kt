@@ -6,17 +6,17 @@ import com.github.dynamicextensionsalfresco.webscripts.annotations.Uri
 import com.github.dynamicextensionsalfresco.webscripts.annotations.WebScript
 import org.springframework.stereotype.Component
 
-Component
-WebScript
-Transaction(readOnly = false)
+@Component
+@WebScript
+@Transaction(readOnly = false)
 class TypeTransactionWebscript {
-    Uri("/ttxdefault")
+    @Uri("/ttxdefault")
     public fun defaults() {}
 
-    Uri("/ttxgetwrite")
+    @Uri("/ttxgetwrite")
     @Transaction(readOnly = false)
     public fun getwrite() {}
 
-    Uri("/ttxpost", method = HttpMethod.POST)
+    @Uri("/ttxpost", method = HttpMethod.POST)
     public fun post() {}
 }

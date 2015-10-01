@@ -21,6 +21,6 @@ public interface ServicePropertiesProvider {
 	 *            The names under which it will be registered.
 	 * @return The service properties or null if none could be determined.
 	 */
-	public Map<String, Object> getServiceProperties(Object service, List<String> serviceNames);
+	Map<String, Object> getServiceProperties(Object service, List<String> serviceNames);
 
 }

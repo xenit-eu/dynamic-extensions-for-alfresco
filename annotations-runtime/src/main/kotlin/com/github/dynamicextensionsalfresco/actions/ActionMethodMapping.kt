@@ -32,7 +32,7 @@ class ActionMethodMapping(private val bean: Any, private val method: Method) {
     private val parameterMappingsByName = HashMap<String, ParameterMapping>()
 
     init {
-        this.parameterCount = method.getParameterTypes().size()
+        this.parameterCount = method.parameterTypes.size()
     }
 
     public fun invokeActionMethod(action: Action, nodeRef: NodeRef) {
@@ -45,19 +45,19 @@ class ActionMethodMapping(private val bean: Any, private val method: Method) {
         }
         for (entry in parameterMappingsByName.entrySet()) {
             val parameterMapping = entry.getValue()
-            var value = action.getParameterValue(parameterMapping.getName())
-            if (parameterMapping.isMandatory() && value == null) {
+            var value = action.getParameterValue(parameterMapping.name)
+            if (parameterMapping.isMandatory && value == null) {
                 /*
                  * We throw RuleServiceException just as ParameterizedItemAbstractBase does when it encounters a missing
                  * value for a mandatory property.
                  */
-                throw RuleServiceException("Parameter '${parameterMapping.getName()}' is mandatory, but no value was given.")
+                throw RuleServiceException("Parameter '${parameterMapping.name}' is mandatory, but no value was given.")
             }
             /* Single values for a multi-valued property are wrapped in an ArrayList automatically. */
-            if (parameterMapping.isMultivalued() && (value is Collection<*>) == false) {
+            if (parameterMapping.isMultivalued && (value is Collection<*>) == false) {
                 value = ArrayList(Arrays.asList<Serializable>(value))
             }
-            parameters[parameterMapping.getIndex()] = value
+            parameters[parameterMapping.index] = value
         }
 
         ReflectionUtils.invokeMethod(method, bean, *parameters)
@@ -68,7 +68,7 @@ class ActionMethodMapping(private val bean: Any, private val method: Method) {
     }
 
     public fun addParameterMapping(parameterMapping: ParameterMapping) {
-        val name = parameterMapping.getName()
+        val name = parameterMapping.name
         if (parameterMappingsByName.containsKey(name) == false) {
             parameterMappingsByName.put(name, parameterMapping)
         } else {

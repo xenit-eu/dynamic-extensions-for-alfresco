@@ -37,7 +37,7 @@ public class BundleServiceProxyFactory : FactoryBean<Any> {
         System.arraycopy(targetInterfaces, 0, proxyClasses, 0, targetInterfaces!!.size())
         proxyClasses[targetInterfaces!!.size()] = FilterModel::class.java
 
-        return Proxy.newProxyInstance(javaClass.getClassLoader(), proxyClasses, ServiceInvocationHandler(tracker))
+        return Proxy.newProxyInstance(javaClass.classLoader, proxyClasses, ServiceInvocationHandler(tracker))
     }
 
     override fun getObjectType(): Class<*>? {

@@ -37,9 +37,8 @@ public class M2ModelResource {
 
 		M2ModelResource that = (M2ModelResource) o;
 
-		if (!m2Model.equals(that.m2Model)) return false;
+		return m2Model.equals(that.m2Model);
 
-		return true;
 	}
 
 	@Override
