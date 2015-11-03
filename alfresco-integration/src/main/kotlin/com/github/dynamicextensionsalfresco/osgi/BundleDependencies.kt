@@ -10,7 +10,7 @@ import org.osgi.framework.Bundle
  */
 public object BundleDependencies : DependencyMetadataProvider<BundleDependencies.BundleDescriptor> {
     fun sortByDependencies(bundles: List<Bundle>): List<Bundle> {
-        if (bundles.size() == 1) {
+        if (bundles.size == 1) {
             return bundles
         }
 

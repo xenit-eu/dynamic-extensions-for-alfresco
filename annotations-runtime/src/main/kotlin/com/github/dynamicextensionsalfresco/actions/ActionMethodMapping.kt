@@ -1,15 +1,11 @@
 package com.github.dynamicextensionsalfresco.actions
 
 import java.io.Serializable
-import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
 import java.util.ArrayList
 import java.util.Arrays
 import java.util.HashMap
 
-import com.github.dynamicextensionsalfresco.actions.annotations.ActionMethod
-
-import org.alfresco.repo.action.executer.ActionExecuter
 import org.alfresco.service.cmr.action.Action
 import org.alfresco.service.cmr.repository.NodeRef
 import org.alfresco.service.cmr.rule.RuleServiceException
@@ -32,7 +28,7 @@ class ActionMethodMapping(private val bean: Any, private val method: Method) {
     private val parameterMappingsByName = HashMap<String, ParameterMapping>()
 
     init {
-        this.parameterCount = method.parameterTypes.size()
+        this.parameterCount = method.parameterTypes.size
     }
 
     public fun invokeActionMethod(action: Action, nodeRef: NodeRef) {
@@ -43,8 +39,8 @@ class ActionMethodMapping(private val bean: Any, private val method: Method) {
         if (actionParameterIndex > -1) {
             parameters[actionParameterIndex] = action
         }
-        for (entry in parameterMappingsByName.entrySet()) {
-            val parameterMapping = entry.getValue()
+        for (entry in parameterMappingsByName.entries) {
+            val parameterMapping = entry.value
             var value = action.getParameterValue(parameterMapping.name)
             if (parameterMapping.isMandatory && value == null) {
                 /*

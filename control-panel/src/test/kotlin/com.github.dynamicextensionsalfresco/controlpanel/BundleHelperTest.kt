@@ -80,7 +80,7 @@ public class BundleHelperTest {
         val actors = stageActors(update = false)
 
         whenever(actors.bundleContext.installBundle(anyString(), anyObject<InputStream>())).then {
-            actors.frameworkListener!!.frameworkEvent(FrameworkEvent(FrameworkEvent.PACKAGES_REFRESHED, mock(Bundle::class.java)))
+            actors.frameworkListener!!.frameworkEvent(FrameworkEvent(FrameworkEvent.PACKAGES_REFRESHED, mock(Bundle::class.java), null))
 
             mock(Bundle::class.java)
         }
@@ -121,7 +121,7 @@ public class BundleHelperTest {
         val actors = stageActors(update = true)
 
         whenever(actors.bundleContext.installBundle(anyString(), anyObject<InputStream>())).then {
-            actors.frameworkListener!!.frameworkEvent(FrameworkEvent(FrameworkEvent.PACKAGES_REFRESHED, mock(Bundle::class.java)))
+            actors.frameworkListener!!.frameworkEvent(FrameworkEvent(FrameworkEvent.PACKAGES_REFRESHED, mock(Bundle::class.java), null))
 
             mock(Bundle::class.java)
         }
@@ -172,7 +172,7 @@ class MockBundleHelper(val update: Boolean, val mockBundle: (BundleContext) -> B
             val frameworkListener = ArgumentCaptor.forClass(FrameworkListener::class.java)
             whenever(wiring.refreshBundles(anyObject(), frameworkListener.capture())).then {
                 frameworkListener.value.frameworkEvent(
-                        FrameworkEvent(FrameworkEvent.PACKAGES_REFRESHED, mock(Bundle::class.java))
+                        FrameworkEvent(FrameworkEvent.PACKAGES_REFRESHED, mock(Bundle::class.java), null)
                 )
             }
             return wiring

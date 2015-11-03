@@ -50,7 +50,7 @@ public class BehaviourProxy(private var behaviour: Behaviour, val timer: Timer) 
      */
     @Synchronized public fun release() {
         behaviour = NoOpBehaviour(behaviour.notificationFrequency, behaviour.isEnabled)
-        for (proxyPolicy in proxiesByPolicyClass.values()) {
+        for (proxyPolicy in proxiesByPolicyClass.values) {
             proxyPolicy.handler.release()
         }
     }
@@ -60,14 +60,24 @@ public class BehaviourProxy(private var behaviour: Behaviour, val timer: Timer) 
         override fun invoke(proxy: Any, method: Method, args: Array<Any>?): Any? {
             if (method.declaringClass.isAssignableFrom(Any::class.java)) {
                 // Direct Object methods to ourselves.
-                return method.invoke(this, *args)
+                if (args != null) {
+                    return method.invoke(this, *args)
+                } else {
+                    return method.invoke(this)
+                }
             } else if (Policy::class.java.isAssignableFrom(method.declaringClass)) {
                 /* Policy interface operations always return void. */
                 if (behaviour != null) {
                     try {
                         timer.time( {
                             behaviour.toString() + " " + args?.filterIsInstance(NodeRef::class.java)?.joinToString(",")
-                        } , {method.invoke(target, *args)})
+                        } , {
+                            if (args != null) {
+                                return method.invoke(target, *args)
+                            } else {
+                                return method.invoke(target)
+                            }
+                        })
                     } catch(e: InvocationTargetException) {
                         throw e.targetException
                     }

@@ -115,7 +115,7 @@ public class DefaultFrameworkManager(
 
             }
         } catch (e: IOException) {
-            throw RuntimeException("Error installing core Bundles: ${e.getMessage()}", e)
+            throw RuntimeException("Error installing core Bundles: ${e.message}", e)
         }
 
         return bundles
@@ -159,7 +159,7 @@ public class DefaultFrameworkManager(
     protected fun startBundles(bundles: List<Bundle>) {
         val frameworkWiring = framework.adapt(FrameworkWiring::class.java)
         if (frameworkWiring.resolveBundles(bundles) == false) {
-            logger.warn { "Could not resolve all ${bundles.size()} bundles." }
+            logger.warn { "Could not resolve all ${bundles.size} bundles." }
         }
 
         val sortedByDependency = BundleDependencies.sortByDependencies(bundles)

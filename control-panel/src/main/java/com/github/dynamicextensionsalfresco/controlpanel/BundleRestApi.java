@@ -69,7 +69,7 @@ public class BundleRestApi {
         private final JSONObject jsonObject;
 
         private JsonMessage(JSONObject jsonObject, Integer status) {
-            super(status);
+            withStatus(status);
             this.jsonObject = jsonObject;
         }
 

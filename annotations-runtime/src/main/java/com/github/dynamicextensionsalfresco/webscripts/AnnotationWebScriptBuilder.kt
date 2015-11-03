@@ -39,8 +39,7 @@ public class AnnotationWebScriptBuilder @Autowired constructor(
 
     /* Dependencies */
 
-    protected var beanFactory: ConfigurableListableBeanFactory by Delegates.notNull()
-        private set
+    protected var beanFactory: ConfigurableListableBeanFactory? = null
 
     private val trailingSlashExpression = "/$".toRegex()
     private val leadingSlashExpression = "^/".toRegex()
@@ -59,7 +58,7 @@ public class AnnotationWebScriptBuilder @Autowired constructor(
         Assert.hasText(beanName, "Bean name cannot be empty.")
 
         val beanFactory = beanFactory
-        val beanType = beanFactory.getType(beanName) ?: return emptyList()
+        val beanType = beanFactory!!.getType(beanName) ?: return emptyList()
         val webScriptAnnotation = beanFactory.findAnnotationOnBean<WebScript>(beanName, WebScript::class.java) ?: getDefaultWebScriptAnnotation()
         val baseUri = webScriptAnnotation.baseUri
         if (StringUtils.hasText(baseUri) && baseUri.startsWith("/") == false) {
@@ -131,7 +130,7 @@ public class AnnotationWebScriptBuilder @Autowired constructor(
         handleTypeAnnotations(beanName, webScript, description)
         val id = "%s.%s.%s".format(generateId(beanName), handlerMethods.uriMethod.name, description.method.toLowerCase())
         description.id = id
-        val handler = beanFactory.getBean(beanName)
+        val handler = beanFactory!!.getBean(beanName)
         description.store = DummyStore()
         return createWebScript(description, handler, handlerMethods)
     }
@@ -146,7 +145,7 @@ public class AnnotationWebScriptBuilder @Autowired constructor(
         Assert.notNull(description, "Description cannot be null.")
 
         val uris: Array<String>
-        if (uri.value.size() > 0) {
+        if (uri.value.size > 0) {
             uris = uri.value.map { "${baseUri.replace(trailingSlashExpression, "")}/${it.replace(leadingSlashExpression, "")}" }.toTypedArray()
         } else if (StringUtils.hasText(baseUri)) {
             uris = arrayOf(baseUri.replace(trailingSlashExpression, ""))
@@ -196,13 +195,13 @@ public class AnnotationWebScriptBuilder @Autowired constructor(
         handleWebScriptAnnotation(webScript, beanName, description)
 
         if (description.requiredAuthentication == null) {
-            var authentication = beanFactory.findAnnotationOnBean<Authentication>(beanName, Authentication::class.java)
+            var authentication = beanFactory!!.findAnnotationOnBean<Authentication>(beanName, Authentication::class.java)
                 ?: getDefaultAuthenticationAnnotation()
             handleAuthenticationAnnotation(authentication, description)
         }
 
         if (description.requiredTransactionParameters == null) {
-            var transaction = beanFactory.findAnnotationOnBean<Transaction>(beanName, Transaction::class.java)
+            var transaction = beanFactory!!.findAnnotationOnBean<Transaction>(beanName, Transaction::class.java)
             if (transaction == null) {
                 if (description.method.equals("GET")) {
                     transaction = getDefaultReadonlyTransactionAnnotation()
@@ -213,7 +212,7 @@ public class AnnotationWebScriptBuilder @Autowired constructor(
             handleTransactionAnnotation(transaction, description)
         }
 
-        val cache = beanFactory.findAnnotationOnBean<Cache>(beanName, Cache::class.java) ?: getDefaultCacheAnnotation()
+        val cache = beanFactory!!.findAnnotationOnBean<Cache>(beanName, Cache::class.java) ?: getDefaultCacheAnnotation()
         handleCacheAnnotation(cache, beanName, description)
 
         description.descPath = ""
@@ -233,9 +232,9 @@ public class AnnotationWebScriptBuilder @Autowired constructor(
         if (webScript.description.hasText()) {
             description.description = webScript.description
         } else {
-            description.description = "Annotation-based WebScript for class %s".format(beanFactory.getType(beanName).name)
+            description.description = "Annotation-based WebScript for class %s".format(beanFactory!!.getType(beanName).name)
         }
-        if (webScript.families.size() > 0) {
+        if (webScript.families.size > 0) {
             description.familys = LinkedHashSet(Arrays.asList(*webScript.families))
         }
         description.lifecycle = when (webScript.lifecycle) {
@@ -296,13 +295,13 @@ public class AnnotationWebScriptBuilder @Autowired constructor(
 
     protected fun generateId(beanName: String): String {
         Assert.hasText(beanName, "Bean name cannot be empty")
-        val clazz = beanFactory.getType(beanName)
+        val clazz = beanFactory!!.getType(beanName)
         return clazz.name
     }
 
     protected fun generateShortName(beanName: String): String {
         Assert.hasText(beanName, "Bean name cannot be empty")
-        val clazz = beanFactory.getType(beanName)
+        val clazz = beanFactory!!.getType(beanName)
         return ClassUtils.getShortName(clazz)
     }
 

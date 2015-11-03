@@ -28,8 +28,8 @@ public class QuartzJobRegistrar @Autowired constructor(var scheduler: Scheduler)
     @Throws(Exception::class)
     override fun afterPropertiesSet() {
         val scheduledBeans = applicationContext!!.getBeansWithAnnotation(ScheduledQuartzJob::class.java)
-        for (entry in scheduledBeans.entrySet()) {
-            val bean = entry.getValue()
+        for (entry in scheduledBeans.entries) {
+            val bean = entry.value
 
             Assert.isInstanceOf(Job::class.java, bean, "annotated Quartz job classes should implement org.quartz.Job")
 

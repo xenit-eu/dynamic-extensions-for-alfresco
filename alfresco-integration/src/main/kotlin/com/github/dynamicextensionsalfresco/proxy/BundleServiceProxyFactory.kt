@@ -33,15 +33,15 @@ public class BundleServiceProxyFactory : FactoryBean<Any> {
     override fun getObject(): Any {
         val tracker = Tracker(DefaultFilterModel(targetInterfaces, filter), frameworkService)
 
-        val proxyClasses = arrayOfNulls<Class<out Any>>(targetInterfaces!!.size() + 1)
-        System.arraycopy(targetInterfaces, 0, proxyClasses, 0, targetInterfaces!!.size())
-        proxyClasses[targetInterfaces!!.size()] = FilterModel::class.java
+        val proxyClasses = arrayOfNulls<Class<out Any>>(targetInterfaces!!.size + 1)
+        System.arraycopy(targetInterfaces, 0, proxyClasses, 0, targetInterfaces!!.size)
+        proxyClasses[targetInterfaces!!.size] = FilterModel::class.java
 
         return Proxy.newProxyInstance(javaClass.classLoader, proxyClasses, ServiceInvocationHandler(tracker))
     }
 
     override fun getObjectType(): Class<*>? {
-        if (targetInterfaces == null || targetInterfaces!!.size() == 0) {
+        if (targetInterfaces == null || targetInterfaces!!.size == 0) {
             return null
         } else {
             return targetInterfaces!![0]
