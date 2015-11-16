@@ -221,7 +221,7 @@ public open class BundleHelper @Autowired constructor(
 
                 if (isFragmentBundle(bundle) == false) {
                     bundlesToStart.offer(bundle)
-                    val dependantBundles = wiring.getDependencyClosure(bundleSet) filter { it.isActive }
+                    val dependantBundles = wiring.getDependencyClosure(bundleSet).filter { it.isActive }
                     val dependantBundlesSorted = BundleDependencies.sortByDependencies(dependantBundles)
 
                     for (dependendant in dependantBundlesSorted.reversed()) {
@@ -345,12 +345,12 @@ public open class BundleHelper @Autowired constructor(
             nodeRef = fileFolderService.create(bundleFolder, filename, ContentModel.TYPE_CONTENT).nodeRef
         }
         val title = "%s %s".format(manifest.bundleName, manifest.bundleVersion)
-        nodeService.setProperty(nodeRef, ContentModel.PROP_TITLE, title as java.lang.String)
+        nodeService.setProperty(nodeRef, ContentModel.PROP_TITLE, title)
 
         // disable indexing
-        nodeService.setProperty(nodeRef, ContentModel.PROP_DESCRIPTION, manifest.bundleDescription as? java.lang.String)
+        nodeService.setProperty(nodeRef, ContentModel.PROP_DESCRIPTION, manifest.bundleDescription)
         nodeService.addAspect(nodeRef, ContentModel.ASPECT_INDEX_CONTROL, mapOf(
-                ContentModel.PROP_IS_INDEXED to false as java.lang.Boolean
+                ContentModel.PROP_IS_INDEXED to false
         ));
 
         val writer = contentService.getWriter(nodeRef, ContentModel.PROP_CONTENT, true)

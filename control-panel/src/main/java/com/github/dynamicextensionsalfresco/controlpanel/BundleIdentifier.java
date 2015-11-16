@@ -2,7 +2,7 @@ package com.github.dynamicextensionsalfresco.controlpanel;
 
 import org.osgi.framework.Version;
 
-class BundleIdentifier {
+public class BundleIdentifier {
 
 	public static BundleIdentifier fromSymbolicNameAndVersion(final String symbolicName, final String version) {
 		return new BundleIdentifier(symbolicName, new Version(version));
