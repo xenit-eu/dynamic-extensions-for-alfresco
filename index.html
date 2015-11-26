@@ -1,0 +1,150 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Dynamic-extensions-for-alfresco by laurentvdl</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-dark.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/laurentvdl/dynamic-extensions-for-alfresco">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/laurentvdl/dynamic-extensions-for-alfresco/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/laurentvdl/dynamic-extensions-for-alfresco/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Dynamic-extensions-for-alfresco</h1>
+          <p>Rapid development of Alfresco repository extensions in Java. Deploy your code in seconds, not minutes. Life is too short for endless server restarts.</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/laurentvdl">laurentvdl</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>
+<a id="dynamic-extensions-for-alfresco" class="anchor" href="#dynamic-extensions-for-alfresco" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dynamic Extensions for Alfresco</h1>
+
+<p><a href="https://travis-ci.org/laurentvdl/dynamic-extensions-for-alfresco"><img src="https://travis-ci.org/laurentvdl/dynamic-extensions-for-alfresco.svg" alt="Build Status"></a></p>
+
+<p>Rapid development of Alfresco repository extensions in Java. Deploy your code in seconds, not minutes. Life is too short for endless server restarts.</p>
+
+<p>Dynamic Extensions adds an OSGi container to the Alfresco repository, enabling live deployment of Java code, with no need to restart the server.
+Alfresco itself is not "OSGi-fied" in any way; the OSGi container runs on top of the core Alfresco platform.</p>
+
+<h2>
+<a id="installing-dynamic-extensions" class="anchor" href="#installing-dynamic-extensions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installing Dynamic Extensions</h2>
+
+<p>Dynamic Extensions is distributed as an Alfresco Module Package (AMP).</p>
+
+<ul>
+<li>Download the latest <a href="https://github.com/laurentvdl/dynamic-extensions-for-alfresco/releases">Dynamic Extensions AMP</a>.</li>
+<li>Use the <a href="http://docs.alfresco.com/4.0/index.jsp?topic=%2Fcom.alfresco.enterprise.doc%2Ftasks%2Famp-install.html">Module Management Tool</a> to install the AMP in the Alfresco repository of your choosing.</li>
+<li>After restarting Alfresco, open the Control Panel: <a href="http://localhost:8080/alfresco/service/dynamic-extensions/">http://localhost:8080/alfresco/service/dynamic-extensions/</a>.</li>
+<li>Accessing the Control Panel requires an admin account.</li>
+</ul>
+
+<h2>
+<a id="supported-alfresco-versions" class="anchor" href="#supported-alfresco-versions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Supported Alfresco versions</h2>
+
+<p>Dynamic Extensions is developed and tested against:</p>
+
+<ul>
+<li>Alfresco Enterprise 4.1</li>
+<li>Alfresco Enterprise 4.2</li>
+<li>Alfresco Community 5.0</li>
+</ul>
+
+<p>Dynamic Extensions is also known to work on:</p>
+
+<ul>
+<li>Alfresco Enterprise 3.4</li>
+<li>Alfresco Enterprise 4.0</li>
+<li>Alfresco Community 4.0</li>
+<li>Alfresco Community 4.2</li>
+</ul>
+
+<h2>
+<a id="example-extension-code" class="anchor" href="#example-extension-code" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example extension code</h2>
+
+<p>This example Web Script examines a node and passes information to a Freemarker template:</p>
+
+<div class="highlight highlight-source-java"><pre>@<span class="pl-smi">Component</span>
+@<span class="pl-smi">WebScript</span>
+<span class="pl-k">public</span> <span class="pl-smi">ExampleWebScript</span> {
+
+  @<span class="pl-smi">Autowired</span>
+  <span class="pl-k">private</span> <span class="pl-smi">NodeService</span> nodeService;
+
+  @Uri(<span class="pl-s"><span class="pl-pds">"</span>/show-node<span class="pl-pds">"</span></span>)
+  <span class="pl-c">// Example: http://localhost/alfresco/service/show-node?nodeRef=workspace://SpacesStore/12345</span>
+  <span class="pl-k">public</span> <span class="pl-k">Map&lt;<span class="pl-smi">String</span>, <span class="pl-smi">Object</span>&gt;</span> displayNodeName(@<span class="pl-smi">RequestParam</span> <span class="pl-smi">NodeRef</span> nodeRef) {
+    <span class="pl-k">Map&lt;<span class="pl-smi">String</span>, <span class="pl-smi">Object</span>&gt;</span> model <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-k">HashMap&lt;<span class="pl-smi">String</span>, <span class="pl-smi">Object</span>&gt;</span>();
+    model<span class="pl-k">.</span>put(<span class="pl-s"><span class="pl-pds">"</span>properties<span class="pl-pds">"</span></span>, nodeService<span class="pl-k">.</span>getProperties(nodeRef));    
+    <span class="pl-k">return</span> model; <span class="pl-c">// Model is passed to Freemarker template.</span>
+  }
+}</pre></div>
+
+<p>Note that this is an <em>annotation Web Script</em>. These types of Web Script are configured through Java annotations instead of <code>*.desc.xml</code> descriptors. Annotation Web Scripts are similar to Spring MVC's annotation-based controllers.</p>
+
+<p>Here's the accompanying Freemarker template fragment:</p>
+
+<div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">table</span>&gt;
+  &lt;#list properties?keys as name&gt;    
+    &lt;<span class="pl-ent">tr</span>&gt;
+      &lt;<span class="pl-ent">th</span>&gt;${name}&lt;/<span class="pl-ent">th</span>&gt;
+      &lt;<span class="pl-ent">td</span>&gt;${properties[name]!''}&lt;/<span class="pl-ent">td</span>&gt;
+    &lt;/<span class="pl-ent">tr</span>&gt;
+  &lt;/#list&gt;
+&lt;/<span class="pl-ent">table</span>&gt;</pre></div>
+
+<p>This is all the code that is required; there's no need for Spring XML config or Web Script XML descriptors. Hot-reloading and reducing configuration overhead are not particularly novel concepts in the Java development world at large. Essentially, Dynamic Extensions modernizes the development of Alfresco repository extensions.</p>
+
+<p>The example above may be trivial, but the point is that, behind the scenes, services are still wired together through Spring and handled by the Web Script framework. Conceptually there is no real difference between a Dynamic Extension and a regular Alfresco extension. There's just less overhead and more convenience.</p>
+
+<h2>
+<a id="creating-your-own-alfresco-extensions" class="anchor" href="#creating-your-own-alfresco-extensions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating your own Alfresco extensions</h2>
+
+<p>The <a href="https://github.com/laurentvdl/example-dynamic-extension">example Dynamic Extension</a> provides a good starting point for creating your own extensions.</p>
+
+<p>Clone the example repo and explore it. Here are some pointers to get you going:</p>
+
+<ul>
+<li>Annotation-based Web Scripts: <a href="https://github.com/laurentvdl/example-dynamic-extension/blob/master/src/main/java/com/github/dynamicextensionsalfresco/examples/CategoriesWebScript.java">First example</a> and <a href="https://github.com/laurentvdl/example-dynamic-extension/blob/master/src/main/java/com/github/dynamicextensionsalfresco/examples/HelloWebScript.java">another example</a>.</li>
+<li>
+<a href="https://github.com/laurentvdl/example-dynamic-extension/blob/master/src/main/java/com/github/dynamicextensionsalfresco/examples/ExampleActions.java">Annotation-based Action example</a>  and a <a href="https://github.com/laurentvdl/example-dynamic-extension/blob/master/src/main/java/com/github/dynamicextensionsalfresco/examples/SetDescriptionWebScript.java">Web Script</a> that invokes the action.</li>
+<li>
+<a href="https://github.com/laurentvdl/example-dynamic-extension/blob/master/src/main/java/com/github/dynamicextensionsalfresco/examples/ExampleBehaviour.java">Annotation-based Behaviour example</a>.</li>
+<li>
+<a href="https://github.com/laurentvdl/example-dynamic-extension/tree/master/src/main/java/com/github/dynamicextensionsalfresco/examples">All examples</a>.</li>
+</ul>
+
+<p>See also: <a href="https://github.com/laurentvdl/dynamic-extensions-for-alfresco/wiki/Building-Alfresco-repository-extensions-for-Dynamic-Extensions-using-Gradle">Gradle plugin for building your own repository extensions</a></p>
+
+<h2>
+<a id="barcelona-2013-presentation" class="anchor" href="#barcelona-2013-presentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Barcelona 2013 presentation</h2>
+
+<p><a href="http://summit.alfresco.com/barcelona/sessions/life-too-short-endless-restarts">One hour presentation on using and exploring Dynamic Extensions for Alfresco</a></p>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
