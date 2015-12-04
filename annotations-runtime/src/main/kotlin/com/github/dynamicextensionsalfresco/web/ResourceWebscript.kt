@@ -57,7 +57,7 @@ public class ResourceWebscript(private val bundleContext: BundleContext) : WebSc
         val path = req.serviceMatch.templateVars.get("path")
 
         if (path != null) {
-            if (req.serviceMatch.path.startsWith("/$module/web-cached/")) {
+            if (req.serviceMatch.path.startsWith("/$module/web-cached/") && !shouldNotCache(path)) {
                 setInfinateCache(res)
             }
 
@@ -66,6 +66,8 @@ public class ResourceWebscript(private val bundleContext: BundleContext) : WebSc
             res.setStatus(HttpServletResponse.SC_BAD_REQUEST)
         }
     }
+
+    private fun shouldNotCache(path: String) = path.endsWith(".map")
 
     override fun getBundleEntryPath(path: String?): String? {
         return "/META-INF/alfresco/web/$path"

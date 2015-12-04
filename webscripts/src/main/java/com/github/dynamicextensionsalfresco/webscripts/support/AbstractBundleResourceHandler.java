@@ -165,6 +165,7 @@ public abstract class AbstractBundleResourceHandler {
 		}
 		contentTypesByExtension = new HashMap<String, String>();
 		contentTypesByExtension.put("js", "text/javascript");
+		contentTypesByExtension.put("map", "application/json");
 		contentTypesByExtension.put("css", "text/css");
 		contentTypesByExtension.put("json", "application/json");
 		contentTypesByExtension.put("gif", "image/gif");
