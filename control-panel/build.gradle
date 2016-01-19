@@ -12,6 +12,7 @@ dependencies {
     compile project(":event-bus")
     testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
     testCompile "junit:junit:${project.ext.junitVersion}"
+    testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
 }
 
 jar {

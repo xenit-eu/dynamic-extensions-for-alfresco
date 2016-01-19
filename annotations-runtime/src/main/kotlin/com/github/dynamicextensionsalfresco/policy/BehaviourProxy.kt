@@ -30,7 +30,7 @@ public class BehaviourProxy(private var behaviour: Behaviour, val timer: Timer) 
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getInterface(policy: Class<T>?): T {
-        return proxiesByPolicyClass.concurrentGetOrPut(policy) {
+        return proxiesByPolicyClass.getOrPut(policy) {
             if (behaviour is NoOpBehaviour) {
                 val proxyHandler = ProxyPolicyInvocationHandler(null, behaviour, timer)
                 val proxy = Proxy.newProxyInstance(javaClass.classLoader, arrayOf(policy), proxyHandler)
