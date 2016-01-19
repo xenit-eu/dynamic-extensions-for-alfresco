@@ -28,8 +28,7 @@ public class ModelRegistrarTest {
 	public void setup() {
 		dictionaryDAOMock = mock(DictionaryDAO.class);
 
-		daoModelRegistrar = new DAOModelRegistrar();
-		daoModelRegistrar.setDictionaryDao(dictionaryDAOMock);
+		daoModelRegistrar = new DAOModelRegistrar(dictionaryDAOMock);
 	}
 
 	/**
