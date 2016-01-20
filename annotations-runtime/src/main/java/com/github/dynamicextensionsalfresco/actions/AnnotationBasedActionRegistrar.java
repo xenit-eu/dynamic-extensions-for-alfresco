@@ -218,8 +218,8 @@ public class AnnotationBasedActionRegistrar extends AbstractAnnotationBasedRegis
 							dataType.getName(), mandatory, displayLabel, multivalued, constraintName);
 					parameterDefinitions.add(parameterDefinition);
 					final String parameterName = parameterDefinition.getName();
-					if (mapping.hasParameter(parameterName) == false) {
-						mapping.addParameterMapping(new ParameterMapping(parameterDefinition, index, clazz));
+					if (!mapping.hasParameter(parameterName)) {
+						mapping.addParameterMapping(new ParameterMapping(parameterDefinition, index));
 					} else {
 						throw new RuntimeException(String.format("Duplicate parameter '%s'", parameterName));
 					}
