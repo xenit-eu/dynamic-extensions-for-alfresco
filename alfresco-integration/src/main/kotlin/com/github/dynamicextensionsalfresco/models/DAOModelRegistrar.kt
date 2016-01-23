@@ -15,7 +15,7 @@ import java.util.*
 
  * @author Laurens Fridael
  */
-public open class DAOModelRegistrar(private val dictionaryDao: DictionaryDAO) : AbstractModelRegistrar() {
+public open class DAOModelRegistrar(private val dictionaryDao: DictionaryDAO, modelsToRegister: M2ModelListProvider) : AbstractModelRegistrar(modelsToRegister) {
 
     private val logger = LoggerFactory.getLogger(javaClass)
 

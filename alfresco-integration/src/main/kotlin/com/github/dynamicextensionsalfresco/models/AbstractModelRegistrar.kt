@@ -13,17 +13,16 @@ import org.springframework.core.io.support.ResourcePatternResolver
 
  * @author Laurent Van der Linden
  */
-public abstract class AbstractModelRegistrar : ModelRegistrar, ResourceLoaderAware, DependencyMetadataProvider<M2ModelResource> {
+public abstract class AbstractModelRegistrar(val modelsToRegister: M2ModelListProvider) : ModelRegistrar, ResourceLoaderAware, DependencyMetadataProvider<M2ModelResource> {
     private val logger = LoggerFactory.getLogger(AbstractModelRegistrar::class.java)
 
     /* Configuration */
 
     protected var resourcePatternResolver: ResourcePatternResolver? = null
         private set
-    private var modelsToRegister: List<M2ModelResource>? = null
 
     override fun registerModels() {
-        val sortedModels = DependencySorter.sort(modelsToRegister!!, this)
+        val sortedModels = DependencySorter.sort(modelsToRegister.models, this)
 
         for (modelResource in sortedModels) {
             try {
@@ -53,9 +52,5 @@ public abstract class AbstractModelRegistrar : ModelRegistrar, ResourceLoaderAwa
 
     override fun setResourceLoader(resourceLoader: ResourceLoader) {
         this.resourcePatternResolver = resourceLoader as ResourcePatternResolver
-    }
-
-    public fun setModels(m2ModelResources: List<M2ModelResource>) {
-        this.modelsToRegister = m2ModelResources
     }
 }

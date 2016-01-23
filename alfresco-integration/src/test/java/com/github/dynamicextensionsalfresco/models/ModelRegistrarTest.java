@@ -2,6 +2,7 @@ package com.github.dynamicextensionsalfresco.models;
 
 import org.alfresco.repo.dictionary.DictionaryDAO;
 import org.alfresco.repo.dictionary.M2Model;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -24,11 +25,19 @@ public class ModelRegistrarTest {
 
 	private DictionaryDAO dictionaryDAOMock;
 
+	private List<M2ModelResource> models;
+
 	@Before
 	public void setup() {
 		dictionaryDAOMock = mock(DictionaryDAO.class);
 
-		daoModelRegistrar = new DAOModelRegistrar(dictionaryDAOMock);
+		daoModelRegistrar = new DAOModelRegistrar(dictionaryDAOMock, new M2ModelListProvider() {
+			@NotNull
+			@Override
+			public List<M2ModelResource> getModels() {
+				return models;
+			}
+		});
 	}
 
 	/**
@@ -40,11 +49,11 @@ public class ModelRegistrarTest {
 		final M2Model user = M2Model.createModel("user");
 		final M2Model provider = M2Model.createModel("provider");
 		final M2Model superProvider = M2Model.createModel("superprovider");
-		daoModelRegistrar.setModels(asList(
+		models = asList(
 				new M2ModelResource(null, user),
 				new M2ModelResource(null, provider),
 				new M2ModelResource(null, superProvider)
-		));
+		);
 
 		user.createImport("http://www.alfresco.org/model/provider/1.0", "provider");
 		provider.createNamespace("http://www.alfresco.org/model/provider/1.0", "provider");
@@ -71,10 +80,10 @@ public class ModelRegistrarTest {
 	public void testCircularReferenceModels() {
 		final M2Model user = M2Model.createModel("user");
 		final M2Model provider = M2Model.createModel("provider");
-		daoModelRegistrar.setModels(asList(
+		models = asList(
 				new M2ModelResource(null, user),
 				new M2ModelResource(null, provider)
-		));
+		);
 
 		// create bidirectional dependency between provider and user
 		user.createNamespace("http://www.alfresco.org/model/user/1.0", "provider");

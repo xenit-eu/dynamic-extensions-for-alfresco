@@ -7,7 +7,8 @@ import com.github.dynamicextensionsalfresco.event.EventBus
 import com.github.dynamicextensionsalfresco.event.events.SpringContextException
 import com.github.dynamicextensionsalfresco.messages.MessagesRegistrar
 import com.github.dynamicextensionsalfresco.metrics.SpringTimer
-import com.github.dynamicextensionsalfresco.models.M2ModelListFactoryBean
+import com.github.dynamicextensionsalfresco.models.M2ModelListProvider
+import com.github.dynamicextensionsalfresco.models.M2ModelResourceListProvider
 import com.github.dynamicextensionsalfresco.models.RepositoryModelRegistrar
 import com.github.dynamicextensionsalfresco.osgi.webscripts.SearchPathRegistry
 import com.github.dynamicextensionsalfresco.osgi.webscripts.SearchPathRegistryManager
@@ -184,13 +185,12 @@ class DynamicExtensionsApplicationContext(configurationLocations: Array<String>?
      * @param beanFactory
      */
     protected fun registerModelDeploymentBeans(beanFactory: DefaultListableBeanFactory) {
-        beanFactory.bean(BeanNames.M2_MODEL_LIST_FACTORY, M2ModelListFactoryBean::class.java)
+        beanFactory.bean(BeanNames.M2_MODEL_LIST_FACTORY, M2ModelResourceListProvider::class.java)
 
         beanFactory.bean(BeanNames.MODEL_REGISTRAR, RepositoryModelRegistrar::class.java) {
             autowireByType()
             setInitMethodName("registerModels")
             setDestroyMethodName("unregisterModels")
-            addPropertyReference("models", BeanNames.M2_MODEL_LIST_FACTORY.id())
         }
     }
 
