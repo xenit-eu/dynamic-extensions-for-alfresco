@@ -30,7 +30,7 @@ import org.mockito.Mockito.`when` as whenever
 /**
  * @author Laurent Van der Linden
  */
-public class BundleHelperTest {
+class BundleHelperTest {
     fun stageActors(update: Boolean, mockBundleProvider: (BundleContext) -> Bundle = {mock(Bundle::class.java)}): Actors {
         val bundleHelper = MockBundleHelper(update, mockBundleProvider, mock(BundleContext::class.java),
                 mock(RepositoryStoreService::class.java), mock(FileFolderService::class.java),
@@ -56,7 +56,7 @@ public class BundleHelperTest {
 
         whenever(actors.bundleContext.installBundle(anyString(), anyObject())).thenThrow(BundleException("cannot resolve some crazy import"))
 
-        assertFailsWith(BundleException::class.java, {
+        assertFailsWith(BundleException::class, {
             actors.bundleHelper.doInstallBundleInRepository(File("."), ".")!!
         })
     }
@@ -70,7 +70,7 @@ public class BundleHelperTest {
             mock(Bundle::class.java)
         }
 
-        assertFailsWith(BeansException::class.java, {
+        assertFailsWith(BeansException::class, {
             actors.bundleHelper.doInstallBundleInRepository(File("."), "any")!!
         })
     }
@@ -96,7 +96,7 @@ public class BundleHelperTest {
             mockBundle
         })
 
-        assertFailsWith(BundleException::class.java, {
+        assertFailsWith(BundleException::class, {
             actors.bundleHelper.doInstallBundleInRepository(File("."), "any")!!
         })
     }
@@ -111,7 +111,7 @@ public class BundleHelperTest {
             mockBundle
         })
 
-        assertFailsWith(BeansException::class.java, {
+        assertFailsWith(BeansException::class, {
             actors.bundleHelper.doInstallBundleInRepository(File("."), "any")!!
         })
     }

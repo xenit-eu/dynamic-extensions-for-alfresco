@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.0.0-beta-4583'
+    ext.kotlin_version = '1.0.0-rc-1036'
     repositories {
         mavenCentral()
     }
@@ -87,7 +87,7 @@ subprojects {
     }
 
     group = 'com.github.dynamicextensionsalfresco'
-    version = '1.4.1'
+    version = '1.4.2'
 
     configurations.all {
         exclude group: 'jaxen'
