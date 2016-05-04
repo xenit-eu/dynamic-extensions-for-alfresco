@@ -84,6 +84,12 @@ subprojects {
             url "https://artifacts.alfresco.com/nexus/content/groups/public/"
         }
         jcenter()
+        maven {
+            url "http://repository.springsource.com/maven/bundles/release"
+        }
+        maven {
+            url "http://repository.springsource.com/maven/bundles/external"
+        }
     }
 
     group = 'com.github.dynamicextensionsalfresco'
