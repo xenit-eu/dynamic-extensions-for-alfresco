@@ -1,6 +1,7 @@
 package com.github.dynamicextensionsalfresco.osgi
 
 import com.github.dynamicextensionsalfresco.debug
+import com.github.dynamicextensionsalfresco.info
 import com.github.dynamicextensionsalfresco.warn
 import org.alfresco.model.ContentModel
 import org.alfresco.service.cmr.repository.ContentService
@@ -12,6 +13,7 @@ import org.osgi.framework.launch.Framework
 import org.osgi.framework.wiring.FrameworkWiring
 import org.slf4j.LoggerFactory
 import org.springframework.context.ResourceLoaderAware
+import org.springframework.core.io.Resource
 import org.springframework.core.io.ResourceLoader
 import org.springframework.core.io.support.ResourcePatternResolver
 import org.springframework.stereotype.Service
@@ -31,8 +33,7 @@ interface FrameworkManager {
     val framework: Framework
 }
 
-@Service
-public class DefaultFrameworkManager(
+@Service class DefaultFrameworkManager(
         override val framework: Framework,
         private val bundleContextRegistrars: List<BundleContextRegistrar>,
         private val repositoryStoreService: RepositoryStoreService,
@@ -54,7 +55,7 @@ public class DefaultFrameworkManager(
 
      * @throws BundleException
      */
-    public fun initialize() {
+    fun initialize() {
         startFramework()
         registerServices()
         startBundles(installCoreBundles())
@@ -102,7 +103,7 @@ public class DefaultFrameworkManager(
                         val location = bundleResource.uri.toString()
                         logger.debug ("Installing Bundle: {}", location)
                         try {
-                            val bundle = framework.bundleContext.installBundle(location, bundleResource.inputStream)
+                            val bundle = installBundle(bundleResource, location)
                             bundles.add(bundle)
                         } catch (e: BundleException) {
                             logger.error("Error installing Bundle: $location", e)
@@ -119,6 +120,23 @@ public class DefaultFrameworkManager(
         }
 
         return bundles
+    }
+
+    /**
+     * optimistic install: first install & if it turns out to be a regular jar, replace with wrapped jar
+     */
+    private fun installBundle(bundleResource: Resource, location: String): Bundle {
+        var bundle = framework.bundleContext.installBundle(location, bundleResource.inputStream)
+        if (bundle.symbolicName == null) {
+            bundle.uninstall()
+            val localCopy = bundleResource.inputStream.toTempFile("wrapped", ".jar")
+            bundle = framework.bundleContext.installBundle(
+                    location,
+                    localCopy.convertToBundle(bundleResource.filename).inputStream()
+            )
+            logger.info { "Wrapped plain jar as a OSGi bundle: ${bundle.symbolicName}." }
+        }
+        return bundle
     }
 
     /**
@@ -189,7 +207,7 @@ public class DefaultFrameworkManager(
 
      * Unregisters services and [BundleListener]s and stops the [Framework].
      */
-    public fun destroy() {
+    fun destroy() {
         unregisterServices()
         stopFramework()
     }

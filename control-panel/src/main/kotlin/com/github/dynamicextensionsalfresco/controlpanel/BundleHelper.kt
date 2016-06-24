@@ -3,6 +3,7 @@ package com.github.dynamicextensionsalfresco.controlpanel
 import aQute.bnd.osgi.Analyzer
 import com.github.dynamicextensionsalfresco.event.EventListener
 import com.github.dynamicextensionsalfresco.event.events.SpringContextException
+import com.github.dynamicextensionsalfresco.info
 import com.github.dynamicextensionsalfresco.osgi.BundleDependencies
 import com.github.dynamicextensionsalfresco.osgi.ManifestUtils
 import com.github.dynamicextensionsalfresco.osgi.RepositoryStoreService
@@ -185,7 +186,8 @@ public open class BundleHelper @Autowired constructor(
                 if (identifier == null) {
                     throw BundleException("Could not generate Bundle filename. Make sure the content is an OSGi bundle.")
                 }
-                logger.info("Wrapped plain jar as a OSGi bundle: {}.", identifier.symbolicName)
+                val symbolicName = identifier.symbolicName
+                logger.info { "Wrapped plain jar as a OSGi bundle: $symbolicName." }
             }
             val filename = identifier.toJarFilename()
             val location = generateRepositoryLocation(filename)

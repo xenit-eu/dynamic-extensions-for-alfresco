@@ -8,6 +8,7 @@ dependencies {
     compile "org.jibx:jibx-run:${project.ext.jibxVersion}"
     compile "org.apache.felix:org.apache.felix.framework:${project.ext.felixVersion}"
     compile "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
+    compile "biz.aQute.bnd:biz.aQute.bnd:${project.ext.bndVersion}"
 
     testCompile "junit:junit:${project.ext.junitVersion}"
     testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"

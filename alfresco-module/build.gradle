@@ -16,6 +16,8 @@ dependencies {
 
     amp "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
+    amp "biz.aQute.bnd:biz.aQute.bnd:${project.ext.bndVersion}"
+
     blueprint("org.eclipse.gemini:org.eclipse.gemini.blueprint.core:${project.ext.geminiVersion}") {transitive = false}
     blueprint("org.eclipse.gemini:org.eclipse.gemini.blueprint.io:${project.ext.geminiVersion}") {transitive = false}
     blueprint(project(path: ":blueprint-override", configuration: 'patch')) {transitive = false}
@@ -25,7 +27,6 @@ dependencies {
     bundles("org.slf4j:slf4j-log4j12:${project.slf4jVersion}") {transitive = false}
     bundles(project(":control-panel")) {transitive = false}
     bundles(project(":event-bus")) {transitive = false}
-    bundles "biz.aQute.bnd:biz.aQute.bnd:${project.ext.bndVersion}"
     bundles 'org.apache.felix:org.apache.felix.log:1.0.1'
 
     testCompile "junit:junit:${project.ext.junitVersion}"
