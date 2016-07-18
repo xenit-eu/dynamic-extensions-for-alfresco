@@ -1,15 +1,11 @@
 package com.github.dynamicextensionsalfresco.actions
 
-import java.io.Serializable
-import java.lang.reflect.Method
-import java.util.ArrayList
-import java.util.Arrays
-import java.util.HashMap
-
 import org.alfresco.service.cmr.action.Action
 import org.alfresco.service.cmr.repository.NodeRef
 import org.alfresco.service.cmr.rule.RuleServiceException
 import org.springframework.util.ReflectionUtils
+import java.lang.reflect.Method
+import java.util.*
 
 /**
  * Represents a mapping from [ActionExecuter.execute] to an [ActionMethod] -annotated
@@ -19,9 +15,9 @@ import org.springframework.util.ReflectionUtils
  */
 class ActionMethodMapping(private val bean: Any, private val method: Method) {
 
-    public var nodeRefParameterIndex: Int = -1
+    var nodeRefParameterIndex: Int = -1
 
-    public var actionParameterIndex: Int = -1
+    var actionParameterIndex: Int = -1
 
     private val parameterCount: Int
 
@@ -31,7 +27,7 @@ class ActionMethodMapping(private val bean: Any, private val method: Method) {
         this.parameterCount = method.parameterTypes.size
     }
 
-    public fun invokeActionMethod(action: Action, nodeRef: NodeRef) {
+    fun invokeActionMethod(action: Action, nodeRef: NodeRef?) {
         val parameters = arrayOfNulls<Any>(parameterCount)
         if (nodeRefParameterIndex > -1) {
             parameters[nodeRefParameterIndex] = nodeRef
@@ -39,8 +35,7 @@ class ActionMethodMapping(private val bean: Any, private val method: Method) {
         if (actionParameterIndex > -1) {
             parameters[actionParameterIndex] = action
         }
-        for (entry in parameterMappingsByName.entries) {
-            val parameterMapping = entry.value
+        for ((key, parameterMapping) in parameterMappingsByName) {
             var value = action.getParameterValue(parameterMapping.name)
             if (parameterMapping.isMandatory && value == null) {
                 /*
@@ -51,7 +46,7 @@ class ActionMethodMapping(private val bean: Any, private val method: Method) {
             }
             /* Single values for a multi-valued property are wrapped in an ArrayList automatically. */
             if (parameterMapping.isMultivalued && (value is Collection<*>) == false) {
-                value = ArrayList(Arrays.asList<Serializable>(value))
+                value = arrayListOf(value)
             }
             parameters[parameterMapping.index] = value
         }
@@ -59,11 +54,11 @@ class ActionMethodMapping(private val bean: Any, private val method: Method) {
         ReflectionUtils.invokeMethod(method, bean, *parameters)
     }
 
-    public fun hasParameter(name: String): Boolean {
+    fun hasParameter(name: String): Boolean {
         return parameterMappingsByName.containsKey(name)
     }
 
-    public fun addParameterMapping(parameterMapping: ParameterMapping) {
+    fun addParameterMapping(parameterMapping: ParameterMapping) {
         val name = parameterMapping.name
         if (parameterMappingsByName.containsKey(name) == false) {
             parameterMappingsByName.put(name, parameterMapping)

@@ -3,6 +3,7 @@ apply plugin: 'groovy'
 dependencies {
     compile gradleApi()
     compile localGroovy()
+    testCompile "junit:junit:${project.ext.junitVersion}"
 }
 
 compileGroovy {
