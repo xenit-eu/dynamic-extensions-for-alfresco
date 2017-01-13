@@ -31,8 +31,11 @@ Dynamic Extensions is also known to work on:
 
 * Alfresco Enterprise 3.4
 * Alfresco Enterprise 4.0
+* Alfresco Enterprise 5.0
+* Alfresco Enterprise 5.1
 * Alfresco Community 4.0
 * Alfresco Community 4.2
+
 
 Example extension code
 ----------------------
