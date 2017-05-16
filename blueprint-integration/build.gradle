@@ -18,6 +18,6 @@ jar {
     manifest {
         instruction 'Fragment-Host', 'org.eclipse.gemini.blueprint.extender'
         instruction 'DynamicImport-Package', '*'
-        instruction 'Bundle-DocURL', 'https://github.com/laurentvdl/dynamic-extensions-for-alfresco'
+        instruction 'Bundle-DocURL', 'https://github.com/xenit-eu/dynamic-extensions-for-alfresco'
     }
 }

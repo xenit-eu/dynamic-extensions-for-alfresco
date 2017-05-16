@@ -34,7 +34,7 @@
             </ul>
             <ul class="nav pull-right">
               <li>
-                <a href="https://github.com/laurentvdl/dynamic-extensions-for-alfresco">
+                <a href="https://github.com/xenit-eu/dynamic-extensions-for-alfresco">
                   Github project
                 </a>
               </li>
