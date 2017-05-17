@@ -22,7 +22,7 @@ class ApiCompatibilityUtil {
 	 * Provides a workaround breaking API change in {@link ActionDefinitionImpl#setApplicableTypes(List)}. The
 	 * {@link List} argument was changed into a {@link Set} in version 4.2 of the Alfresco Community API.
 	 * <p>
-	 * See: <a href="https://github.com/laurentvdl/dynamic-extensions-for-alfresco/issues/10">Issue on Github</a>.
+	 * See: <a href="https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/10">Issue on Github</a>.
 	 * 
 	 * @param actionDefinition
 	 * @throws IllegalStateException
