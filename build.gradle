@@ -35,7 +35,11 @@ subprojects {
         }
         repositories {
             maven {
-                url project.hasProperty('de_publish_url') ? project.de_publish_url : 'https://api.bintray.com/maven/laurentvanderlinden/maven/dynamic-extensions-alfresco'
+                if(project.version.endsWith('-SNAPSHOT')) {
+                    url project.hasProperty('de_publish_url') ? project.de_publish_url : "http://artifactory.xenit.eu/artifactory/libs-snapshot-local"
+                } else {
+                    url project.hasProperty('de_publish_url') ? project.de_publish_url : "http://artifactory.xenit.eu/artifactory/libs-release-local"
+                }
                 credentials {
                     username = project.hasProperty('de_publish_username') ? project.de_publish_username : ''
                     password = project.hasProperty('de_publish_password') ? project.de_publish_password : ''
@@ -92,7 +96,7 @@ subprojects {
         }
     }
 
-    group = 'com.github.dynamicextensionsalfresco'
+    group = 'eu.xenit'
     version = '1.5.0-SNAPSHOT'
 
     configurations.all {
