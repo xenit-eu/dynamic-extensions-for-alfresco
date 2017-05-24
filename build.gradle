@@ -48,6 +48,7 @@ subprojects {
         repositories {
             mavenDeployer {
                 signing {
+                    required {false}
                     sign configurations.archives
                 }
                 beforeDeployment {
@@ -183,19 +184,19 @@ subprojects {
         compile.extendsFrom(amp)
     }
 
-    def id = project.hasProperty('keyId') ? project.keyId : ''
-    def file = project.hasProperty('secretKeyRingFile') ? project.secretKeyRingFile : ''
-    def password = project.hasProperty('password') ? project.password : ''
-
-    ext."signing.keyId" = id
-    ext."signing.secretKeyRingFile" = file
-    ext."signing.password" = password
-
     gradle.taskGraph.whenReady { graph ->
         if (graph.hasTask(uploadArchives)) {
             if (!project.hasProperty('keyId') || !project.hasProperty('secretKeyRingFile') || !project.hasProperty('password')){
                 throw new GradleException('You need to provide signing params in order to sign artifacts')
             }
+
+            def id = project.hasProperty('keyId') ? project.keyId : ''
+            def file = project.hasProperty('secretKeyRingFile') ? project.secretKeyRingFile : ''
+            def password = project.hasProperty('password') ? project.password : ''
+
+            ext."signing.keyId" = id
+            ext."signing.secretKeyRingFile" = file
+            ext."signing.password" = password
         }
     }
 
