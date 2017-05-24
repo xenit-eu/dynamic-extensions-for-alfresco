@@ -144,7 +144,7 @@ subprojects {
     }
 
     group = 'eu.xenit.de'
-    version = '1.5.0-SNAPSHOT'
+    version = '1.5.0'
 
     configurations.all {
         exclude group: 'jaxen'
