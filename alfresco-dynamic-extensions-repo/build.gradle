@@ -74,7 +74,7 @@ def ampConfig = {
 def alfrescoAmp = file("${file("$buildDir/amps")}/${project.group}-${project.version}.amp")
 
 artifacts {
-    archives sourceJar, sourceJar, alfrescoAmp
+    archives sourceJar, javadocJar, alfrescoAmp
 }
 
 task amp(type: Zip, dependsOn: jar) {
