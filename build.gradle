@@ -17,10 +17,15 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'jacoco'
     apply plugin: "maven-publish"
+    apply plugin: 'signing'
 
     task sourceJar(type: Jar) {
         classifier = 'sources'
         from sourceSets.main.allSource
+    }
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        classifier = 'javadoc'
+        from 'build/docs/javadoc'
     }
 
     publishing {
@@ -28,9 +33,8 @@ subprojects {
             mavenJava(MavenPublication) {
                 from components.java
 
-                artifact sourceJar {
-                    classifier "sources"
-                }
+                artifact sourceJar
+                artifact javadocJar
             }
         }
         repositories {
