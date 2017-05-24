@@ -71,12 +71,10 @@ def ampConfig = {
     destinationDir = file("$buildDir/amps")
 }
 
-publishing {
-    publications {
-        mavenAmp(MavenPublication) {
-            artifact "${file("$buildDir/amps")}/${project.group}-${project.version}.amp"
-        }
-    }
+def alfrescoAmp = file("${file("$buildDir/amps")}/${project.group}-${project.version}.amp")
+
+artifacts {
+    archives sourceJar, sourceJar, alfrescoAmp
 }
 
 task amp(type: Zip, dependsOn: jar) {
@@ -86,5 +84,4 @@ task amp(type: Zip, dependsOn: jar) {
 
 build.dependsOn("amp")
 
-publish.dependsOn("amp")
-publishToMavenLocal.dependsOn("amp")
+uploadArchives.dependsOn("amp")
