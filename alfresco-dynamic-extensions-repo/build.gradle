@@ -1,4 +1,5 @@
 group "eu.xenit"
+
 configurations {
     blueprint
     bundles
@@ -74,7 +75,6 @@ publishing {
     publications {
         mavenAmp(MavenPublication) {
             artifact "${file("$buildDir/amps")}/${project.group}-${project.version}.amp"
-            artifactId "alfresco-dynamic-extensions"
         }
     }
 }
