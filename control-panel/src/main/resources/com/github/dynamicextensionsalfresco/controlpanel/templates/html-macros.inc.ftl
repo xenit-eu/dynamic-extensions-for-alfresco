@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <base href="${url.serviceContext}/dynamic-extensions/"/>
-    <#assign resourceBase = "${url.serviceContext}/com-github-dynamicextensionsalfresco-control-panel/web/" />
+    <#assign resourceBase = "${url.serviceContext}/alfresco-dynamic-extensions-repo-control-panel/web/" />
 
     <link rel="stylesheet" type="text/css" href="${resourceBase}stylesheets/bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="${resourceBase}stylesheets/bootstrap/css/bootstrap-responsive.min.css"/>

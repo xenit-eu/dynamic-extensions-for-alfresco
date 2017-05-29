@@ -17,7 +17,6 @@ nexusStaging {
     username = project.hasProperty('de_publish_username') ? project.de_publish_username : ''
     password = project.hasProperty('de_publish_password') ? project.de_publish_password : ''
     packageGroup = "eu.xenit"
-//    stagingProfileId = "7edbe315063867"
 }
 
 allprojects {

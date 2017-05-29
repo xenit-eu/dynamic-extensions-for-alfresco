@@ -15,11 +15,11 @@
 	<bean id="osgi.container.ModuleComponent" class="com.github.dynamicextensionsalfresco.osgi.OsgiContainerModuleComponent" parent="module.baseComponent"
 		destroy-method="destroy">
 		<description>Instantiates the child application context and initializes the FrameworkManager within it.</description>
-		<property name="moduleId" value="com.github.dynamicextensionsalfresco" />
+		<property name="moduleId" value="alfresco-dynamic-extensions-repo" />
 		<property name="executeOnceOnly" value="false" />
 		<property name="applicationContextConfigLocations">
 			<list>
-				<value>classpath:/alfresco/module/com.github.dynamicextensionsalfresco/osgi-container-context.xml</value>
+				<value>classpath:/alfresco/module/alfresco-dynamic-extensions-repo/osgi-container-context.xml</value>
 			</list>
 		</property>
 		<property name="transactionService" ref="transactionService" />

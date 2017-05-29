@@ -44,11 +44,11 @@ dependencies {
 
 def ampConfig = {
     from(configurations.blueprint) {
-        into("config/alfresco/module/$project.group/blueprint-bundles/")
+        into("config/alfresco/module/$project.name/blueprint-bundles/")
     }
 
     from(configurations.bundles) {
-        into("config/alfresco/module/$project.group/standard-bundles")
+        into("config/alfresco/module/$project.name/standard-bundles")
     }
 
     from(configurations.amp) {
@@ -64,14 +64,14 @@ def ampConfig = {
     }
 
     from("src/main/config") {
-        into("config/alfresco/module/$project.group")
+        into("config/alfresco/module/$project.name")
     }
 
     extension "amp"
     destinationDir = file("$buildDir/amps")
 }
 
-def alfrescoAmp = file("${file("$buildDir/amps")}/${project.group}-${project.version}.amp")
+def alfrescoAmp = file("${file("$buildDir/amps")}/${project.name}-${project.version}.amp")
 
 artifacts {
     archives sourceJar, javadocJar, alfrescoAmp
@@ -79,7 +79,7 @@ artifacts {
 
 task amp(type: Zip, dependsOn: jar) {
     configure ampConfig
-    baseName = project.group
+    baseName = project.name
 }
 
 build.dependsOn("amp")
