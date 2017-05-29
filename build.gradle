@@ -7,7 +7,17 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.8.0"
     }
+}
+
+apply plugin: 'io.codearte.nexus-staging'
+
+nexusStaging {
+    username = project.hasProperty('de_publish_username') ? project.de_publish_username : ''
+    password = project.hasProperty('de_publish_password') ? project.de_publish_password : ''
+    packageGroup = "eu.xenit"
+//    stagingProfileId = "7edbe315063867"
 }
 
 allprojects {
@@ -31,15 +41,24 @@ subprojects {
     }
 
     artifacts {
-        archives sourceJar, sourceJar
+        archives sourceJar, javadocJar
     }
 
     uploadArchives {
         repositories {
             mavenDeployer {
-                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+                signing {
+                    required {false}
+                    sign configurations.archives
+                }
+                beforeDeployment {
+                    MavenDeployment deployment ->
+                        
+                        signing.signPom(deployment)
 
-                repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                }
+
+                repository(url: project.hasProperty('de_publish_url') ? project.de_publish_url : "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
                     authentication(userName: project.hasProperty('de_publish_username') ? project.de_publish_username : '', password: project.hasProperty('de_publish_password') ? project.de_publish_password : '')
                 }
 
@@ -49,6 +68,9 @@ subprojects {
 
                 pom.project {
                     url 'https://github.com/xenit-eu/dynamic-extensions-for-alfresco'
+                    name "dynamic-extensions-for-alfresco-" + project.name
+                    description "Adds an OSGi container to alfresco repository supporting dynamic code reloading, " +
+                            "classpath isolation and a bunch of other useful features"
 
                     scm {
                         connection 'scm:git:git@github.com:xenit-eu/dynamic-extensions-for-alfresco.git'
@@ -144,7 +166,7 @@ subprojects {
     }
 
     group = 'eu.xenit.de'
-    version = '1.5.0-SNAPSHOT'
+    version = '1.5.1-SNAPSHOT'
 
     configurations.all {
         exclude group: 'jaxen'
@@ -162,22 +184,19 @@ subprojects {
         compile.extendsFrom(amp)
     }
 
-    def id = project.hasProperty('keyId') ? project.keyId : ''
-    def file = project.hasProperty('secretKeyRingFile') ? project.secretKeyRingFile : ''
-    def password = project.hasProperty('password') ? project.password : ''
-
-    ext."signing.keyId" = id
-    ext."signing.secretKeyRingFile" = file
-    ext."signing.password" = password
-
     gradle.taskGraph.whenReady { graph ->
         if (graph.hasTask(uploadArchives)) {
             if (!project.hasProperty('keyId') || !project.hasProperty('secretKeyRingFile') || !project.hasProperty('password')){
                 throw new GradleException('You need to provide signing params in order to sign artifacts')
             }
-            signing {
-                sign configurations.archives
-            }
+
+            def id = project.hasProperty('keyId') ? project.keyId : ''
+            def file = project.hasProperty('secretKeyRingFile') ? project.secretKeyRingFile : ''
+            def password = project.hasProperty('password') ? project.password : ''
+
+            ext."signing.keyId" = id
+            ext."signing.secretKeyRingFile" = file
+            ext."signing.password" = password
         }
     }
 
