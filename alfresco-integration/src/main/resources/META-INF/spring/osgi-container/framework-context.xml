@@ -65,7 +65,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 		<constructor-arg name="configuration" ref="osgi.container.Configuration" />
 		<constructor-arg name="blueprintBundlesLocation" value="classpath:/alfresco/module/%module.id%/blueprint-bundles/*.jar" />
 		<constructor-arg name="standardBundlesLocation" value="classpath:/alfresco/module/%module.id%/standard-bundles/*.jar" />
-		<constructor-arg name="customBundlesLocation" value="classpath:/dynamic-extensions/bundles/*.jar" />
+		<constructor-arg name="customBundlesLocation" value="classpath*:/dynamic-extensions/bundles/*.jar" />
 	</bean>
 
 	<bean id="osgi.container.RepositoryStoreService" class="com.github.dynamicextensionsalfresco.osgi.RepositoryStoreService">
