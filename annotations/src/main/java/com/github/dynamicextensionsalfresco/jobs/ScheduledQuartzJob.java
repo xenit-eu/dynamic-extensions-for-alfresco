@@ -26,8 +26,19 @@ public @interface ScheduledQuartzJob {
 	 */
 	String name();
 
-    /**
-     * @return the job group name, defaults to {@link org.quartz.Scheduler#DEFAULT_GROUP}
-     */
-    String group() default org.quartz.Scheduler.DEFAULT_GROUP;
+	/**
+	 * @return the job group name, defaults to {@link org.quartz.Scheduler#DEFAULT_GROUP}
+	 */
+	String group() default org.quartz.Scheduler.DEFAULT_GROUP;
+
+	/**
+	 * A key to a property from alfresco-global.properties specifying
+	 * a cron-like expression, extending the usual UN*X definition to include
+	 * triggers on the second as well as minute, hour, day of month, month
+	 * and day of week.  e.g. <code>"0 * * * * MON-FRI"</code> means once
+	 * per minute on weekdays (at the top of the minute - the 0th second).
+	 * @return an expression that can be parsed to a cron schedule.
+	 * When not provided / not resolved, fallback to default cron expression.
+	 */
+	String cronProp() default "";
 }

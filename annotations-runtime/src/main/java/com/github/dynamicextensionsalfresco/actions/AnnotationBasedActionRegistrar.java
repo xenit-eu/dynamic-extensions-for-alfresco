@@ -4,12 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.github.dynamicextensionsalfresco.AbstractAnnotationBasedRegistrar;
 import com.github.dynamicextensionsalfresco.actions.annotations.ActionMethod;
@@ -47,6 +42,7 @@ import org.springframework.util.ReflectionUtils.MethodCallback;
  * 
  */
 public class AnnotationBasedActionRegistrar extends AbstractAnnotationBasedRegistrar {
+	public static final String SET_LOCALIZED_PARAMETER_DEFINITIONS = "setLocalizedParameterDefinitions";
 
 	/* Dependencies */
 
@@ -130,7 +126,27 @@ public class AnnotationBasedActionRegistrar extends AbstractAnnotationBasedRegis
 			name = String.format("%s.%s", ClassUtils.getShortName(method.getDeclaringClass()), method.getName());
 		}
 		final ActionDefinitionImpl actionDefinition = new ActionDefinitionImpl(name);
-		actionDefinition.setParameterDefinitions(parameterDefinitions);
+		Class<? extends ActionDefinitionImpl> actionDefinitionClass = actionDefinition.getClass();
+		List<Method> methodList = Arrays.asList(actionDefinitionClass.getMethods());
+		Method setLocalizedParameterDefinitions = null;
+		for(Method m : methodList){
+			if (m.getName().equals(SET_LOCALIZED_PARAMETER_DEFINITIONS)){
+				setLocalizedParameterDefinitions = m;
+				break;
+			}
+		}
+		if(setLocalizedParameterDefinitions != null) {
+			try {
+				Map<Locale, List<ParameterDefinition>> localizedParameterDefinitions = new HashMap<Locale, List<ParameterDefinition>>(2);
+				localizedParameterDefinitions.put(Locale.ROOT, parameterDefinitions);
+				setLocalizedParameterDefinitions.invoke(actionDefinition, localizedParameterDefinitions);
+			} catch (Exception e) {
+				logger.error("Could not set fallback localized parameter list", e);
+				actionDefinition.setParameterDefinitions(parameterDefinitions);
+			}
+		}else{
+			actionDefinition.setParameterDefinitions(parameterDefinitions);
+		}
 		actionDefinition.setAdhocPropertiesAllowed(actionMethod.adhocPropertiesAllowed());
 		ApiCompatibilityUtil.setApplicableTypes(actionDefinition,
 				Arrays.asList(parseQNames(actionMethod.applicableTypes(), actionMethod)));

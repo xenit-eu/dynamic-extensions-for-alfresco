@@ -10,8 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
 import org.springframework.util.Assert
-
-import java.util.ArrayList
+import java.util.*
 
 /**
  * Look for beans annotated with @ScheduledJob and register/unregister them with Quartz
@@ -36,7 +35,8 @@ public class QuartzJobRegistrar @Autowired constructor(var scheduler: Scheduler)
             val annotation = bean.javaClass.getAnnotation(ScheduledQuartzJob::class.java)
 
             try {
-                val trigger = CronTrigger(annotation.name, annotation.group, annotation.cron)
+                val cron = applicationContext!!.getBean("global-properties", Properties::class.java).getProperty(annotation.cronProp, annotation.cron);
+                val trigger = CronTrigger(annotation.name, annotation.group, cron)
                 val jobDetail = JobDetail(annotation.name, annotation.group, GenericQuartzJob::class.java)
                 jobDetail.jobDataMap.put(GenericQuartzJob.BEAN_ID, bean)
                 scheduler.scheduleJob(jobDetail, trigger)
