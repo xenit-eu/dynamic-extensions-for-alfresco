@@ -10,7 +10,7 @@ import org.springframework.extensions.webscripts.WebScript;
 
 public class AnnotationWebScriptRegistrar implements ApplicationContextAware {
 
-	
+
 	/* Dependencies */
 
 	private ApplicationContext applicationContext;

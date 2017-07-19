@@ -54,9 +54,23 @@ public open class BundleHelper constructor() : EventListener<SpringContextExcept
     var contentService: ContentService?=null;
     @Autowired
     var nodeService: NodeService?=null;
+    @Autowired
     @Resource(name = "webscripts.container")
     var webScriptsContainer: WSContainer?=null
 
+    constructor(bundleContext: BundleContext,
+                repositoryStoreService: RepositoryStoreService,
+                fileFolderService: FileFolderService,
+                contentService: ContentService,
+                nodeService: NodeService,webScriptsContainer:WSContainer):this(){
+        this.bundleContext = bundleContext;
+        this.repositoryStoreService = repositoryStoreService;
+        this.fileFolderService = fileFolderService;
+        this.contentService = contentService;
+        this.nodeService = nodeService;
+        this.webScriptsContainer = webScriptsContainer;
+
+    }
 
 
     open val bundleRepositoryLocation: String

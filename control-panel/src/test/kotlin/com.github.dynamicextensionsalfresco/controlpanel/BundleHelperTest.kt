@@ -39,13 +39,13 @@ class BundleHelperTest {
 
         bundleHelper.registerEventListeners()
 
-        whenever(bundleHelper.bundleContext.bundles).thenReturn(arrayOf())
+        whenever(bundleHelper.bundleContext!!.bundles).thenReturn(arrayOf())
 
-        whenever(bundleHelper.bundleContext.getAllServiceReferences(eq(EventListener::class.java.name), anyString()))
+        whenever(bundleHelper.bundleContext!!.getAllServiceReferences(eq(EventListener::class.java.name), anyString()))
                 .thenReturn(arrayOf(mock(ServiceReference::class.java)))
-        whenever(bundleHelper.bundleContext.getService(anyObject<ServiceReference<*>>())).thenReturn(bundleHelper)
+        whenever(bundleHelper.bundleContext!!.getService(anyObject<ServiceReference<*>>())).thenReturn(bundleHelper)
 
-        return Actors(bundleHelper, bundleHelper.bundleContext, bundleHelper)
+        return Actors(bundleHelper, bundleHelper.bundleContext!!, bundleHelper)
     }
 
     class Actors(val bundleHelper: BundleHelper, val bundleContext: BundleContext, val frameworkListener: FrameworkListener?)
@@ -159,7 +159,7 @@ class MockBundleHelper(val update: Boolean, val mockBundle: (BundleContext) -> B
     override fun resetWebScriptsCache() {}
 
     override fun findBundleBySymbolicName(identifier: BundleIdentifier): Bundle? {
-        return if (update) mockBundle(bundleContext) else null
+        return if (update) mockBundle(bundleContext!!) else null
     }
 
     override fun uninstallAndDeleteBundle(bundle: Bundle): NodeRef? {
