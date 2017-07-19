@@ -42,17 +42,25 @@ import org.springframework.extensions.webscripts.Container as WSContainer
  * @author Laurens Fridael
  */
 @Component
-public open class BundleHelper @Autowired constructor(
-        var bundleContext: BundleContext,
-        val repositoryStoreService: RepositoryStoreService,
-        val fileFolderService: FileFolderService,
-        val contentService: ContentService,
-        val nodeService: NodeService,
-        @Resource(name = "webscripts.container") val webScriptsContainer: WSContainer
-) : EventListener<SpringContextException>, FrameworkListener {
+public open class BundleHelper constructor() : EventListener<SpringContextException>, FrameworkListener {
+
+    @Autowired
+    var bundleContext: BundleContext?=null;
+    @Autowired
+    var repositoryStoreService: RepositoryStoreService?=null;
+    @Autowired
+    var fileFolderService: FileFolderService?=null;
+    @Autowired
+    var contentService: ContentService?=null;
+    @Autowired
+    var nodeService: NodeService?=null;
+    @Resource(name = "webscripts.container")
+    var webScriptsContainer: WSContainer?=null
+
+
 
     open val bundleRepositoryLocation: String
-        get() = repositoryStoreService.bundleRepositoryLocation
+        get() = repositoryStoreService!!.bundleRepositoryLocation
 
     /**
      * async backlog of bundles to start when the package-admin is done refreshing dependencies
@@ -69,21 +77,21 @@ public open class BundleHelper @Autowired constructor(
     @PostConstruct
     public fun registerEventListeners() {
         // get notified of Spring context start failures
-        bundleContext.registerService(EventListener::class.java, this, null)
+        bundleContext!!.registerService(EventListener::class.java, this, null)
     }
 
     /**
      * Obtains the [Bundle]s that comprise the core framework.
      */
     val frameworkBundles: List<Bundle>
-        get() = bundleContext.bundles
+        get() = bundleContext!!.bundles
             .filter { !isDynamicExtension(it) }
 
     /**
      * Obtains the [Bundle]s that comprise the core framework.
      */
     val extensionBundles: List<Bundle>
-        get() = bundleContext.bundles
+        get() = bundleContext!!.bundles
             .filter { isDynamicExtension(it) }
 
     /**
@@ -94,7 +102,7 @@ public open class BundleHelper @Autowired constructor(
      * @return The matching [Bundle] or null if no match could be found.
      */
     public fun getBundle(id: Long): Bundle {
-        return bundleContext.getBundle(id)
+        return bundleContext!!.getBundle(id)
     }
 
     /**
@@ -139,13 +147,13 @@ public open class BundleHelper @Autowired constructor(
         val matcher = Pattern.compile("/Company Home(/.+)+/(.+\\.jar)$").matcher(bundle.location)
         if (matcher.matches()) {
             val filename = matcher.group(2)
-            val bundleFolder = repositoryStoreService.getBundleFolder(false)
+            val bundleFolder = repositoryStoreService!!.getBundleFolder(false)
             if (bundleFolder != null) {
-                val file = fileFolderService.searchSimple(bundleFolder, filename)
+                val file = fileFolderService!!.searchSimple(bundleFolder, filename)
                 if (file != null) {
                     val properties = emptyMap<QName, Serializable>()
-                    nodeService.addAspect(file, ContentModel.ASPECT_TEMPORARY, properties)
-                    nodeService.deleteNode(file)
+                    nodeService!!.addAspect(file, ContentModel.ASPECT_TEMPORARY, properties)
+                    nodeService!!.deleteNode(file)
                     matchingNode = file
                     bundle.uninstall()
                 }
@@ -156,13 +164,13 @@ public open class BundleHelper @Autowired constructor(
     }
 
     public fun getAllServices(): Array<out ServiceReference<*>>? {
-        return bundleContext.getAllServiceReferences(null, null)
+        return bundleContext!!.getAllServiceReferences(null, null)
     }
 
     fun <T> getService(service: Class<T>): T? {
-        val serviceReference = bundleContext.getServiceReference(service)
+        val serviceReference = bundleContext!!.getServiceReference(service)
         if (serviceReference != null) {
-            return bundleContext.getService(serviceReference)
+            return bundleContext!!.getService(serviceReference)
         } else {
             return null
         }
@@ -171,7 +179,7 @@ public open class BundleHelper @Autowired constructor(
     /* Utility operations */
 
     protected open val frameworkWiring: FrameworkWiring
-        get() = bundleContext.getBundle(0).adapt(FrameworkWiring::class.java)
+        get() = bundleContext!!.getBundle(0).adapt(FrameworkWiring::class.java)
 
     fun doInstallBundleInRepository(tempFile: File, fileName: String?): Bundle? {
         var jarToInstall = tempFile
@@ -191,7 +199,7 @@ public open class BundleHelper @Autowired constructor(
             }
             val filename = identifier.toJarFilename()
             val location = generateRepositoryLocation(filename)
-            var bundle: Bundle? = bundleContext.getBundle(location)
+            var bundle: Bundle? = bundleContext!!.getBundle(location)
 
             // a classpath bundle cannot be replaced in a persistent way, so we only do temporary updates here
             var classpathBundle = false
@@ -239,7 +247,7 @@ public open class BundleHelper @Autowired constructor(
                     return bundle
                 }
             } else {
-                bundle = bundleContext.installBundle(location, inputStream)
+                bundle = bundleContext!!.installBundle(location, inputStream)
                 if (isFragmentBundle(bundle) == false) {
                     bundle!!.start()
                     installResults.add(InstallResult(null))
@@ -312,7 +320,7 @@ public open class BundleHelper @Autowired constructor(
     }
 
     protected open fun findBundleBySymbolicName(identifier: BundleIdentifier): Bundle? {
-        return bundleContext.bundles
+        return bundleContext!!.bundles
                 .firstOrNull<Bundle?>{ it?.symbolicName == identifier.symbolicName }
     }
 
@@ -341,21 +349,21 @@ public open class BundleHelper @Autowired constructor(
     }
 
     protected open fun saveBundleInRepository(file: File, filename: String, manifest: BundleManifest) {
-        val bundleFolder = repositoryStoreService.getBundleFolder(true)
-        var nodeRef: NodeRef? = fileFolderService.searchSimple(bundleFolder, filename)
+        val bundleFolder = repositoryStoreService!!.getBundleFolder(true)
+        var nodeRef: NodeRef? = fileFolderService!!.searchSimple(bundleFolder, filename)
         if (nodeRef == null) {
-            nodeRef = fileFolderService.create(bundleFolder, filename, ContentModel.TYPE_CONTENT).nodeRef
+            nodeRef = fileFolderService!!.create(bundleFolder, filename, ContentModel.TYPE_CONTENT).nodeRef
         }
         val title = "%s %s".format(manifest.bundleName, manifest.bundleVersion)
-        nodeService.setProperty(nodeRef, ContentModel.PROP_TITLE, title)
+        nodeService!!.setProperty(nodeRef, ContentModel.PROP_TITLE, title)
 
         // disable indexing
-        nodeService.setProperty(nodeRef, ContentModel.PROP_DESCRIPTION, manifest.bundleDescription)
-        nodeService.addAspect(nodeRef, ContentModel.ASPECT_INDEX_CONTROL, mapOf(
+        nodeService!!.setProperty(nodeRef, ContentModel.PROP_DESCRIPTION, manifest.bundleDescription)
+        nodeService!!.addAspect(nodeRef, ContentModel.ASPECT_INDEX_CONTROL, mapOf(
                 ContentModel.PROP_IS_INDEXED to false
         ));
 
-        val writer = contentService.getWriter(nodeRef, ContentModel.PROP_CONTENT, true)
+        val writer = contentService!!.getWriter(nodeRef, ContentModel.PROP_CONTENT, true)
         writer.mimetype = MimetypeMap.MIMETYPE_ZIP
         writer.putContent(createStreamForFile(file))
     }
@@ -374,7 +382,7 @@ public open class BundleHelper @Autowired constructor(
      */
     @Suppress("UNCHECKED_CAST")
     protected open fun resetWebScriptsCache() {
-        val registry = webScriptsContainer.registry
+        val registry = webScriptsContainer!!.registry
         if (registry is DeclarativeRegistry) {
             try {
                 val cacheField = DeclarativeRegistry::class.java.getDeclaredField("uriIndexCache")

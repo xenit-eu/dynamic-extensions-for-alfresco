@@ -33,10 +33,16 @@ import kotlin.properties.Delegates
  * @author Laurens Fridael
  * @author Laurent Van der Linden
  */
-public class AnnotationWebScriptBuilder @Autowired constructor(
-		private val handlerMethodArgumentsResolver: HandlerMethodArgumentsResolver
+
+public class AnnotationWebScriptBuilder constructor(
 	) : BeanFactoryAware {
 
+
+    @Autowired
+    private var handlerMethodArgumentsResolver: HandlerMethodArgumentsResolver? = null
+    public fun setHandlerMethodArgumentsResolver(value:HandlerMethodArgumentsResolver){
+        this.handlerMethodArgumentsResolver = value;
+    }
     /* Dependencies */
 
     protected var beanFactory: ConfigurableListableBeanFactory? = null
