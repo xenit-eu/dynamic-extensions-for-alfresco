@@ -20,7 +20,8 @@ public class WebscriptBuilderTest extends AbstractWebScriptAnnotationsTest {
 	public void testDuplicatId() {
 		final String webscriptId = "webscriptId";
 		ConfigurableListableBeanFactory dummyBeanFactory = mock(ConfigurableListableBeanFactory.class);
-		AnnotationWebScriptBuilder builder = new AnnotationWebScriptBuilder(mock(HandlerMethodArgumentsResolver.class));
+		AnnotationWebScriptBuilder builder = new AnnotationWebScriptBuilder();
+		builder.setHandlerMethodArgumentsResolver(mock(HandlerMethodArgumentsResolver.class));
 		when(dummyBeanFactory.getType(webscriptId)).thenAnswer(new Returns(DuplicateIdWebScript.class));
 		final DuplicateIdWebScript instance = new DuplicateIdWebScript();
 		when(dummyBeanFactory.findAnnotationOnBean(webscriptId, WebScript.class)).thenReturn(instance.getClass().getAnnotation(WebScript.class));

@@ -27,9 +27,10 @@ public object BundleDependencies : DependencyMetadataProvider<BundleDependencies
         return item.manifest.exportPackage.exportedPackages.map { it.packageName }
     }
 
-    override val allowCircularReferences: Boolean
+    override fun allowCircularReferences(): Boolean{
         // SLF4J has a circular reference
-        get() = true
+        return true;
+    }
 
     /**
      * Cache the manifest

@@ -15,9 +15,13 @@ import javax.annotation.PreDestroy
  *
  * @author Laurent Van der Linden
  */
-public class WebResourcesRegistrar @Autowired constructor(
-        private val webscriptRegistry: WebScriptUriRegistry,
-        private val bundleContext: BundleContext) :ResourceLoaderAware {
+public class WebResourcesRegistrar constructor() :ResourceLoaderAware {
+
+    @Autowired
+    protected var webscriptRegistry: WebScriptUriRegistry? = null;
+
+    @Autowired
+    protected var bundleContext: BundleContext? = null;
 
     private var resourcePatternResolver: ResourcePatternResolver? = null
 
@@ -26,15 +30,15 @@ public class WebResourcesRegistrar @Autowired constructor(
     @PostConstruct
     fun registerResourceWebscript() {
         if (resourcePatternResolver?.getResources("osgibundle:$WEB_PATH**")?.isNotEmpty() ?: false) {
-            currentWebscript = ResourceWebscript(bundleContext)
-            webscriptRegistry.registerWebScript(currentWebscript)
+            currentWebscript = ResourceWebscript(bundleContext!!)
+            webscriptRegistry!!.registerWebScript(currentWebscript)
         }
     }
 
     @PreDestroy
     fun unregisterResourceWebscript() {
         if (currentWebscript != null) {
-            webscriptRegistry.unregisterWebScript(currentWebscript)
+            webscriptRegistry!!.unregisterWebScript(currentWebscript)
         }
     }
 
