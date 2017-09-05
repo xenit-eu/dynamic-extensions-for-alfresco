@@ -22,6 +22,7 @@ import java.util.Properties;
 public class QuartzJobRegistrar implements ApplicationContextAware, InitializingBean, DisposableBean {
     private Logger logger = LoggerFactory.getLogger(QuartzJobRegistrar.class);
 
+    @Autowired
     protected Scheduler scheduler;
     private ArrayList<ScheduledQuartzJob> registeredJobs = new ArrayList<ScheduledQuartzJob>();
 
