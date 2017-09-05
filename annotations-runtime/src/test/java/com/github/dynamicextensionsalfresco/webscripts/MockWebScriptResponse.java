@@ -1,5 +1,6 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
@@ -16,6 +17,7 @@ public class MockWebScriptResponse implements WrappingWebScriptResponse {
 	private Writer writer;
 
 	private int status;
+	private OutputStream outputStream;
 
 	public MockWebScriptResponse next(final WebScriptResponse next) {
 		this.next = next;
@@ -80,10 +82,14 @@ public class MockWebScriptResponse implements WrappingWebScriptResponse {
 
 	}
 
+	public MockWebScriptResponse setOutputStream(OutputStream stream) {
+		this.outputStream = stream;
+		return this;
+	}
+
 	@Override
 	public OutputStream getOutputStream() throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+		return (this.outputStream != null) ? this.outputStream : new ByteArrayOutputStream();
 	}
 
 	@Override

@@ -7,12 +7,19 @@ import com.github.dynamicextensionsalfresco.webscripts.resolutions.Resolution;
 import com.github.dynamicextensionsalfresco.webscripts.resolutions.TemplateResolution;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.extensions.webscripts.*;
+import org.springframework.http.HttpOutputMessage;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -32,6 +39,8 @@ public class AnnotationWebScript implements WebScript {
 
 	private final String id;
 
+    private final List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
+
 	/* Main operations */
 
 	public AnnotationWebScript(final Description description, final Object handler,
@@ -46,6 +55,10 @@ public class AnnotationWebScript implements WebScript {
 		this.handlerMethods = handlerMethods;
 		this.argumentsResolver = argumentsResolver;
 		this.id = description.getId();
+
+        this.messageConverters.add(new MappingJackson2HttpMessageConverter());
+        this.messageConverters.add(new Jaxb2RootElementHttpMessageConverter());
+
 	}
 
 	public Object getHandler() {
@@ -182,6 +195,42 @@ public class AnnotationWebScript implements WebScript {
                 new DefaultResolutionParameters(handlerMethods.getUriMethod(), description, handler)
             );
         }
+        else {
+            String[] responseTypes = request.getHeaderValues("Accept");
+
+            MediaType acceptResponseType = MediaType.ALL; // default
+
+            if (responseTypes != null){
+                acceptResponseType = MediaType.parseMediaType(responseTypes[0]);
+            }
+
+            HttpMessageConverter converter = null;
+
+            for(HttpMessageConverter messageConverter : this.messageConverters){
+                if (messageConverter.canWrite(returnValue.getClass(), acceptResponseType)){
+                	converter = messageConverter;
+                	break;
+				}
+            }
+
+            if(converter == null) {
+                // unsupported type requested
+                // should throw error.
+
+                List<MediaType> supported = new ArrayList<MediaType>();
+
+                for(HttpMessageConverter messageConverter : this.messageConverters){
+                    supported.addAll(messageConverter.getSupportedMediaTypes());
+                }
+
+                throw new HttpMediaTypeNotSupportedException(acceptResponseType, supported);
+            }
+
+
+            HttpOutputMessage outputMessage = new AnnotationWebScriptOutputMessage(request, response);
+            converter.write(returnValue, acceptResponseType, outputMessage);
+
+		}
     }
 
 	protected void invokeExceptionHandlerMethods(final Throwable exception, final AnnotationWebScriptRequest request,
