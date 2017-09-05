@@ -16,7 +16,21 @@ import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 
-public class ResponseReturnValueTest extends AbstractWebScriptAnnotationsTest {
+public class ResponseBodyReturnValueTest extends AbstractWebScriptAnnotationsTest {
+
+    @Test
+    public void testResponseBodyAnnotationNotPresent() {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+        handleGet("/handleNoResponseBody",
+                new MockWebScriptRequest()
+                        .header("Accept", MediaType.APPLICATION_JSON_VALUE)
+                        .param("firstName", "Test")
+                        .param("lastName", "User"),
+                new MockWebScriptResponse().setOutputStream(stream));
+
+        assertThat("Webscript response should be empty", stream.toByteArray().length, is(0));
+    }
 
     @Test
     public void testHandleResponseAcceptJsonHeader() throws IOException {
@@ -29,6 +43,10 @@ public class ResponseReturnValueTest extends AbstractWebScriptAnnotationsTest {
                           .param("firstName", "Test")
                           .param("lastName", "User"),
                   new MockWebScriptResponse().setOutputStream(stream));
+
+        assertThat("Webscript response should not be empty", stream.toByteArray().length, not(0));
+
+        System.out.println(new String(stream.toByteArray()));
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -51,6 +69,7 @@ public class ResponseReturnValueTest extends AbstractWebScriptAnnotationsTest {
                         .param("lastName", "User"),
                 new MockWebScriptResponse().setOutputStream(stream));
         assertThat("Webscript response should not be empty", stream.toByteArray().length, not(0));
+        System.out.println(new String(stream.toByteArray()));
 
         JAXBContext jaxbContext = JAXBContext.newInstance(PersonXml.class);
 
@@ -78,17 +97,8 @@ public class ResponseReturnValueTest extends AbstractWebScriptAnnotationsTest {
                         .param("firstName", "Test")
                         .param("lastName", "User"),
                 new MockWebScriptResponse().setOutputStream(stream));
-        assertThat("Webscript response should not be empty", stream.toByteArray().length, not(0));
 
-        JAXBContext jaxbContext = JAXBContext.newInstance(PersonXml.class);
-
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-        PersonXml result = (PersonXml) jaxbUnmarshaller.unmarshal(new ByteArrayInputStream(stream.toByteArray()));
-
-        assertThat("Response of webscript cannot be null.", result, is(not(nullValue())));
-        assertThat("FirstName should be 'Test'", result.getFirstName(), is("Test"));
-        assertThat("LastName should be 'User'", result.getLastName(), is("User"));
+        // request should not return anything
     }
 
     /**
@@ -105,6 +115,8 @@ public class ResponseReturnValueTest extends AbstractWebScriptAnnotationsTest {
                         .param("firstName", "Test")
                         .param("lastName", "User"),
                 new MockWebScriptResponse().setOutputStream(stream));
+
+        // request should not return anything
     }
 
 

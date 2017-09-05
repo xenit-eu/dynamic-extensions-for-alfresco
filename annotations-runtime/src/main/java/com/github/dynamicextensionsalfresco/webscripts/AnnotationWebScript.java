@@ -161,41 +161,21 @@ public class AnnotationWebScript implements WebScript {
 	protected void handleUriMethodReturnValue(HandlerMethods handlerMethods, final AnnotationWebScriptRequest request,
                                               final AnnotationWebscriptResponse response, final Object returnValue) throws Exception {
         Resolution resolution = null;
-        if (returnValue instanceof Map) {
+        if (returnValue instanceof Map) { // returning a map will result in response template by default.
             resolution = new TemplateResolution((Map<String, Object>) returnValue);
-        } else if (returnValue instanceof String) {
+        } else if (returnValue instanceof String) { // returning a string will also result in a template response.
             resolution = new TemplateResolution((String)returnValue);
         } else if (returnValue instanceof Resolution) {
             resolution = (Resolution) returnValue;
         }
-        if (this.handlerMethods.useResponseTemplate()) {
-            final String responseTemplateName = handlerMethods.getResponseTemplateName();
-            if (responseTemplateName != null) {
-                if (resolution instanceof TemplateResolution) {
-                    if (((TemplateResolution) resolution).getTemplate() == null) {
-                        ((TemplateResolution) resolution).setTemplate(responseTemplateName);
-                    }
-                } else if (resolution == null) {
-                    resolution = new TemplateResolution(responseTemplateName);
-                }
-            }
-        }
-        if (resolution != null) {
-            if (resolution instanceof TemplateResolution) {
-                final TemplateResolution templateResolution = (TemplateResolution)resolution;
-                final Map<String, Object> model = request.getModel();
 
-                if (templateResolution.getModel() != null && templateResolution.getModel() != model) {
-                    model.putAll(templateResolution.getModel());
-                }
-                templateResolution.setModel(model);
-            }
-
-            resolution.resolve(request, response,
-                new DefaultResolutionParameters(handlerMethods.getUriMethod(), description, handler)
-            );
-        }
-        else {
+        /**
+         * If the method is annotated with {@link org.springframework.web.bind.annotation.ResponseBody}
+         * The response should be serialized automatically by what the request asked in the accept header.
+         * If the accept header is not present, the default format value of the methode is used.
+         * If there is no default format available, an exception is thrown.
+         */
+        if (handlerMethods.useResponseBody()){
             String[] responseTypes = request.getHeaderValues("Accept");
 
             MediaType acceptResponseType = MediaType.ALL; // default
@@ -208,9 +188,9 @@ public class AnnotationWebScript implements WebScript {
 
             for(HttpMessageConverter messageConverter : this.messageConverters){
                 if (messageConverter.canWrite(returnValue.getClass(), acceptResponseType)){
-                	converter = messageConverter;
-                	break;
-				}
+                    converter = messageConverter;
+                    break;
+                }
             }
 
             if(converter == null) {
@@ -229,6 +209,44 @@ public class AnnotationWebScript implements WebScript {
 
             HttpOutputMessage outputMessage = new AnnotationWebScriptOutputMessage(request, response);
             converter.write(returnValue, acceptResponseType, outputMessage);
+        }
+        /**
+         * If no {@link org.springframework.web.bind.annotation.ResponseBody} annotation is present,
+         * check if a template needs to be used.
+         */
+        else if (this.handlerMethods.useResponseTemplate()) {
+            final String responseTemplateName = handlerMethods.getResponseTemplateName();
+            if (responseTemplateName != null) {
+                if (resolution instanceof TemplateResolution) {
+                    if (((TemplateResolution) resolution).getTemplate() == null) {
+                        ((TemplateResolution) resolution).setTemplate(responseTemplateName);
+                    }
+                } else if (resolution == null) {
+                    resolution = new TemplateResolution(responseTemplateName);
+                }
+            }
+        }
+
+        /**
+         *
+         */
+        if (resolution != null) {
+            if (resolution instanceof TemplateResolution) {
+                final TemplateResolution templateResolution = (TemplateResolution)resolution;
+                final Map<String, Object> model = request.getModel();
+
+                if (templateResolution.getModel() != null && templateResolution.getModel() != model) {
+                    model.putAll(templateResolution.getModel());
+                }
+                templateResolution.setModel(model);
+            }
+
+            resolution.resolve(request, response,
+                new DefaultResolutionParameters(handlerMethods.getUriMethod(), description, handler)
+            );
+        }
+        else {
+
 
 		}
     }
