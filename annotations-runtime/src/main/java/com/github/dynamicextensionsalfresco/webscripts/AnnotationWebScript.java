@@ -172,7 +172,7 @@ public class AnnotationWebScript implements WebScript {
         /**
          * If the method is annotated with {@link org.springframework.web.bind.annotation.ResponseBody}
          * The response should be serialized automatically by what the request asked in the accept header.
-         * If the accept header is not present, the default format value of the methode is used.
+         * If the accept header is not present, the default format value of the method is used.
          * If there is no default format available, an exception is thrown.
          */
         if (handlerMethods.useResponseBody()){
@@ -182,6 +182,11 @@ public class AnnotationWebScript implements WebScript {
 
             if (responseTypes != null){
                 acceptResponseType = MediaType.parseMediaType(responseTypes[0]);
+            } else {
+                String defaultResponse = this.getDescription().getDefaultFormat();
+                if (defaultResponse != null && !defaultResponse.isEmpty()) {
+                    acceptResponseType = MediaType.parseMediaType(defaultResponse);
+                }
             }
 
             HttpMessageConverter converter = null;

@@ -4,12 +4,19 @@ import com.github.dynamicextensionsalfresco.spring.Spied;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.Header;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.RequestParam;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.Uri;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Component
 @Spied
 public class ResponseBodyReturnValueHandler {
+
+    @Uri(value = "/handleDefaultResponse", defaultFormat = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Person handleDefaultResponse(@RequestParam final String firstName, @RequestParam final String lastName) {
+        return new Person(firstName, lastName);
+    }
 
     @Uri("/handleResponse")
     @ResponseBody

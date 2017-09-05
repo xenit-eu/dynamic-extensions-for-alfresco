@@ -18,6 +18,10 @@ import static org.junit.Assert.assertThat;
 
 public class ResponseBodyReturnValueTest extends AbstractWebScriptAnnotationsTest {
 
+    /**
+     * If there is no {@link org.springframework.web.bind.annotation.RequestBody} annotation present,
+     * Nothing should happen.
+     */
     @Test
     public void testResponseBodyAnnotationNotPresent() {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -43,6 +47,33 @@ public class ResponseBodyReturnValueTest extends AbstractWebScriptAnnotationsTes
                           .param("firstName", "Test")
                           .param("lastName", "User"),
                   new MockWebScriptResponse().setOutputStream(stream));
+
+        assertThat("Webscript response should not be empty", stream.toByteArray().length, not(0));
+
+        System.out.println(new String(stream.toByteArray()));
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        Person result = mapper.readValue(stream.toByteArray(), Person.class);
+
+        assertThat("Response of webscript cannot be null.",result, is(not(nullValue())));
+        assertThat("FirstName should be 'Test'", result.getFirstName(), is("Test"));
+        assertThat("LastName should be 'User'", result.getLastName(), is("User"));
+    }
+
+    /**
+     * If no Accept Header is send, the webscript default should be used.
+     */
+    @Test
+    public void testHandleDefaultResponse() throws IOException {
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+        handleGet("/handleDefaultResponse",
+                new MockWebScriptRequest()
+                        .param("firstName", "Test")
+                        .param("lastName", "User"),
+                new MockWebScriptResponse().setOutputStream(stream));
 
         assertThat("Webscript response should not be empty", stream.toByteArray().length, not(0));
 
