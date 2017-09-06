@@ -5,6 +5,7 @@ import com.github.dynamicextensionsalfresco.webscripts.annotations.Before;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.ResponseTemplate;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.Uri;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -61,6 +62,10 @@ public class HandlerMethods {
 		final ResponseTemplate responseTemplate = AnnotationUtils.findAnnotation(uriMethod, ResponseTemplate.class);
 		return (responseTemplate != null ? responseTemplate.value() : null);
 	}
+
+	public boolean useResponseBody() {
+	    return (AnnotationUtils.findAnnotation(uriMethod, ResponseBody.class) != null);
+    }
 
 	/**
 	 * Creates a new instance for the specified {@link Uri}-annotated method.

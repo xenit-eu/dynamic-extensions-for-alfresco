@@ -5,21 +5,21 @@ import com.github.dynamicextensionsalfresco.webscripts.annotations.Command;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * {@link Command} parameter object using by {@link CommandTest}.
- * 
- * @author Laurens Fridael
+ * Copy From {@link Person}, but jaxb compatible.
  * 
  */
-public class Person {
+
+@XmlRootElement
+public class PersonXml {
 
 	private String firstName;
 
 	private String lastName;
 
-	public Person() {
+	public PersonXml() {
 	}
 
-	Person(final String firstName, final String lastName) {
+	PersonXml(final String firstName, final String lastName) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 	}
@@ -60,7 +60,7 @@ public class Person {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		final Person other = (Person) obj;
+		final PersonXml other = (PersonXml) obj;
 		if (firstName == null) {
 			if (other.firstName != null) {
 				return false;

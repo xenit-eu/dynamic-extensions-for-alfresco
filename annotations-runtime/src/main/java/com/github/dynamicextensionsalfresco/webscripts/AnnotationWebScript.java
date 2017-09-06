@@ -7,15 +7,19 @@ import com.github.dynamicextensionsalfresco.webscripts.resolutions.Resolution;
 import com.github.dynamicextensionsalfresco.webscripts.resolutions.TemplateResolution;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.extensions.webscripts.*;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class AnnotationWebScript implements WebScript {
 	/* Dependencies */
@@ -32,6 +36,8 @@ public class AnnotationWebScript implements WebScript {
 
 	private final String id;
 
+    private final List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
+
 	/* Main operations */
 
 	public AnnotationWebScript(final Description description, final Object handler,
@@ -46,6 +52,10 @@ public class AnnotationWebScript implements WebScript {
 		this.handlerMethods = handlerMethods;
 		this.argumentsResolver = argumentsResolver;
 		this.id = description.getId();
+
+        this.messageConverters.add(new MappingJackson2HttpMessageConverter());
+        this.messageConverters.add(new Jaxb2RootElementHttpMessageConverter());
+
 	}
 
 	public Object getHandler() {
@@ -148,14 +158,115 @@ public class AnnotationWebScript implements WebScript {
 	protected void handleUriMethodReturnValue(HandlerMethods handlerMethods, final AnnotationWebScriptRequest request,
                                               final AnnotationWebscriptResponse response, final Object returnValue) throws Exception {
         Resolution resolution = null;
-        if (returnValue instanceof Map) {
+        if (returnValue instanceof Map) { // returning a map will result in response template by default.
             resolution = new TemplateResolution((Map<String, Object>) returnValue);
-        } else if (returnValue instanceof String) {
+        } else if (returnValue instanceof String) { // returning a string will also result in a template response.
             resolution = new TemplateResolution((String)returnValue);
         } else if (returnValue instanceof Resolution) {
             resolution = (Resolution) returnValue;
         }
-        if (this.handlerMethods.useResponseTemplate()) {
+
+        /**
+         * If the method is annotated with {@link org.springframework.web.bind.annotation.ResponseBody}
+         * The response should be serialized automatically by what the request asked in the accept header.
+         * If the accept header is not present, the default format value of the method is used.
+         * If there is no default format available, an exception is thrown.
+         */
+        if (handlerMethods.useResponseBody()){
+
+            MediaType defaultResponseType = null;
+            String defaultResponse = this.getDescription().getDefaultFormat();
+            if (defaultResponse != null && !defaultResponse.isEmpty()) {
+                defaultResponseType = MediaType.parseMediaType(defaultResponse);
+            }
+
+            String[] headerResponseTypes = request.getHeaderValues("Accept"); // multiple accept headers can occur
+            Set<MediaType> acceptResponseTypes = new HashSet<MediaType>();
+            if (headerResponseTypes != null){
+                for(String headerResponseType : headerResponseTypes){
+
+                    String[] responses = headerResponseType.split(","); // can also be comma seperated https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2
+                    for (String acceptResponse : responses) {
+                        acceptResponseTypes.add(MediaType.parseMediaType(acceptResponse));
+                    }
+                }
+            }
+
+
+            MediaType responseType = null;
+           if(defaultResponse == null && acceptResponseTypes.isEmpty()) { // no Content-Type information given anywhere
+                // both default and accept cannot be null together
+               throw new HttpMediaTypeNotSupportedException(null, getSupportedMediaTypes(), "Unable to convert, mediatype is null");
+           }
+           else if (acceptResponseTypes.isEmpty()) { // use the default
+                responseType = defaultResponseType;
+           }
+           else { // loop over the set, and select the first that works
+               for (MediaType mediaType : acceptResponseTypes){
+                   if (defaultResponse != null) { // first, check against the default type
+                       if (mediaType.isCompatibleWith(defaultResponseType)){
+                           responseType = defaultResponseType;
+                           break;
+                       }
+                   }
+
+                   boolean typeFound = false;
+                   for(HttpMessageConverter messageConverter : this.messageConverters) {
+                       if (messageConverter.canWrite(returnValue.getClass(), mediaType)) {
+                           responseType = mediaType;
+                           typeFound = true;
+                           break;
+                       }
+                   }
+
+                   if (typeFound){
+                       break;
+                   }
+
+
+               }
+           }
+
+           if (responseType == null) {
+               /**
+                * When there is no default, and there is no support for the headers, this exception is thrown.
+                */
+               throw new HttpMediaTypeNotAcceptableException(getSupportedMediaTypes());
+           }
+
+
+            HttpMessageConverter converter = null;
+
+            for(HttpMessageConverter messageConverter : this.messageConverters){
+                if (messageConverter.canWrite(returnValue.getClass(), responseType)){
+                    converter = messageConverter;
+                    break;
+                }
+            }
+
+            if(converter == null) {
+                // unsupported type requested
+                List<MediaType> supported = getSupportedMediaTypes();
+
+                /**
+                 * the {@link Jaxb2RootElementHttpMessageConverter} cannot convert a class
+                 * if the {@link javax.xml.bind.annotation.XmlRootElement} is missing from the class
+                 *
+                 * If this annotation is missing, the
+                 */
+                throw new HttpMediaTypeNotSupportedException(responseType, supported);
+            }
+
+
+            AnnotationWebScriptOutputMessage outputMessage = new AnnotationWebScriptOutputMessage(request, response);
+            converter.write(returnValue, responseType, outputMessage);
+
+        }
+        /**
+         * If no {@link org.springframework.web.bind.annotation.ResponseBody} annotation is present,
+         * check if a template needs to be used.
+         */
+        else if (this.handlerMethods.useResponseTemplate()) {
             final String responseTemplateName = handlerMethods.getResponseTemplateName();
             if (responseTemplateName != null) {
                 if (resolution instanceof TemplateResolution) {
@@ -167,6 +278,10 @@ public class AnnotationWebScript implements WebScript {
                 }
             }
         }
+
+        /**
+         *
+         */
         if (resolution != null) {
             if (resolution instanceof TemplateResolution) {
                 final TemplateResolution templateResolution = (TemplateResolution)resolution;
@@ -182,9 +297,23 @@ public class AnnotationWebScript implements WebScript {
                 new DefaultResolutionParameters(handlerMethods.getUriMethod(), description, handler)
             );
         }
+        else {
+
+
+		}
     }
 
-	protected void invokeExceptionHandlerMethods(final Throwable exception, final AnnotationWebScriptRequest request,
+    @SuppressWarnings("unchecked")
+    private List<MediaType> getSupportedMediaTypes() {
+        List<MediaType> supported = new ArrayList<MediaType>();
+
+        for(HttpMessageConverter messageConverter : this.messageConverters){
+            supported.addAll(messageConverter.getSupportedMediaTypes());
+        }
+        return supported;
+    }
+
+    protected void invokeExceptionHandlerMethods(final Throwable exception, final AnnotationWebScriptRequest request,
 			final WebScriptResponse response) throws IOException {
 		final List<Method> exceptionHandlerMethods = handlerMethods.findExceptionHandlers(exception);
 		if (exceptionHandlerMethods.isEmpty()) {

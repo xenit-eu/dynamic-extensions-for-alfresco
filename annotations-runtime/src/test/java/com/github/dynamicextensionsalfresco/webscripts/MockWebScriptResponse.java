@@ -1,8 +1,10 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
+import java.util.*;
 
 import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.Runtime;
@@ -16,6 +18,9 @@ public class MockWebScriptResponse implements WrappingWebScriptResponse {
 	private Writer writer;
 
 	private int status;
+	private OutputStream outputStream;
+
+	private final Map<String, List<String>> headers = new HashMap<>();
 
 	public MockWebScriptResponse next(final WebScriptResponse next) {
 		this.next = next;
@@ -26,6 +31,10 @@ public class MockWebScriptResponse implements WrappingWebScriptResponse {
 		this.writer = writer;
 		return this;
 	}
+
+    public Map<String, List<String>> getHeaders() {
+        return headers;
+    }
 
 	/* Simulated operations */
 
@@ -52,25 +61,30 @@ public class MockWebScriptResponse implements WrappingWebScriptResponse {
 
 	@Override
 	public void setHeader(final String name, final String value) {
-		// TODO Auto-generated method stub
+		this.headers.put(name, new ArrayList<>(Arrays.asList(value)));
 
 	}
 
 	@Override
 	public void addHeader(final String name, final String value) {
-		// TODO Auto-generated method stub
+		if (this.headers.containsKey(name)){
+		    this.headers.get(name).add(value);
+        }
+        else {
+		    this.setHeader(name, value);
+        }
 
 	}
 
 	@Override
 	public void setContentType(final String contentType) {
-		// TODO Auto-generated method stub
+		this.setHeader("Content-Type", contentType);
 
 	}
 
 	@Override
 	public void setContentEncoding(final String contentEncoding) {
-		// TODO Auto-generated method stub
+		this.setHeader("Content-Encoding", contentEncoding);
 
 	}
 
@@ -80,10 +94,14 @@ public class MockWebScriptResponse implements WrappingWebScriptResponse {
 
 	}
 
+	public MockWebScriptResponse setOutputStream(OutputStream stream) {
+		this.outputStream = stream;
+		return this;
+	}
+
 	@Override
 	public OutputStream getOutputStream() throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+		return (this.outputStream != null) ? this.outputStream : new ByteArrayOutputStream();
 	}
 
 	@Override
