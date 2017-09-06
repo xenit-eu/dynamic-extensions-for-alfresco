@@ -14,14 +14,12 @@ import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConvert
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class AnnotationWebScript implements WebScript {
 	/* Dependencies */
@@ -182,33 +180,58 @@ public class AnnotationWebScript implements WebScript {
                 defaultResponseType = MediaType.parseMediaType(defaultResponse);
             }
 
-            String[] headerResponseTypes = request.getHeaderValues("Accept");
-            MediaType acceptResponseType = MediaType.ALL; // default
+            String[] headerResponseTypes = request.getHeaderValues("Accept"); // multiple accept headers can occur
+            Set<MediaType> acceptResponseTypes = new HashSet<MediaType>();
             if (headerResponseTypes != null){
-                if (headerResponseTypes.length >= 1) {
-                    acceptResponseType = MediaType.parseMediaType(headerResponseTypes[0]);
+                for(String headerResponseType : headerResponseTypes){
+
+                    String[] responses = headerResponseType.split(","); // can also be comma seperated https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2
+                    for (String acceptResponse : responses) {
+                        acceptResponseTypes.add(MediaType.parseMediaType(acceptResponse));
+                    }
                 }
             }
 
 
             MediaType responseType = null;
-           if(defaultResponse == null && acceptResponseType == null) {
+           if(defaultResponse == null && acceptResponseTypes.isEmpty()) { // no Content-Type information given anywhere
                 // both default and accept cannot be null together
                throw new HttpMediaTypeNotSupportedException(null, getSupportedMediaTypes(), "Unable to convert, mediatype is null");
            }
-           else if (acceptResponseType == null) {
+           else if (acceptResponseTypes.isEmpty()) { // use the default
                 responseType = defaultResponseType;
            }
-           else if (defaultResponseType == null) {
-               responseType = acceptResponseType;
+           else { // loop over the set, and select the first that works
+               for (MediaType mediaType : acceptResponseTypes){
+                   if (defaultResponse != null) { // first, check against the default type
+                       if (mediaType.isCompatibleWith(defaultResponseType)){
+                           responseType = defaultResponseType;
+                           break;
+                       }
+                   }
+
+                   boolean typeFound = false;
+                   for(HttpMessageConverter messageConverter : this.messageConverters) {
+                       if (messageConverter.canWrite(returnValue.getClass(), mediaType)) {
+                           responseType = mediaType;
+                           typeFound = true;
+                           break;
+                       }
+                   }
+
+                   if (typeFound){
+                       break;
+                   }
+
+
+               }
            }
-           else {
-               if (acceptResponseType.isCompatibleWith(defaultResponseType)){
-                   responseType = defaultResponseType;
-               }
-               else {
-                   responseType = acceptResponseType;
-               }
+
+           if (responseType == null) {
+               /**
+                * When there is no default, and there is no support for the headers, this exception is thrown.
+                */
+               throw new HttpMediaTypeNotAcceptableException(getSupportedMediaTypes());
            }
 
 
