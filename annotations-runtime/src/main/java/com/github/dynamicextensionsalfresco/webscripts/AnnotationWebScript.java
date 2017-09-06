@@ -7,7 +7,6 @@ import com.github.dynamicextensionsalfresco.webscripts.resolutions.Resolution;
 import com.github.dynamicextensionsalfresco.webscripts.resolutions.TemplateResolution;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.extensions.webscripts.*;
-import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -176,23 +175,47 @@ public class AnnotationWebScript implements WebScript {
          * If there is no default format available, an exception is thrown.
          */
         if (handlerMethods.useResponseBody()){
-            String[] responseTypes = request.getHeaderValues("Accept");
 
+            MediaType defaultResponseType = null;
+            String defaultResponse = this.getDescription().getDefaultFormat();
+            if (defaultResponse != null && !defaultResponse.isEmpty()) {
+                defaultResponseType = MediaType.parseMediaType(defaultResponse);
+            }
+
+            String[] headerResponseTypes = request.getHeaderValues("Accept");
             MediaType acceptResponseType = MediaType.ALL; // default
-
-            if (responseTypes != null){
-                acceptResponseType = MediaType.parseMediaType(responseTypes[0]);
-            } else {
-                String defaultResponse = this.getDescription().getDefaultFormat();
-                if (defaultResponse != null && !defaultResponse.isEmpty()) {
-                    acceptResponseType = MediaType.parseMediaType(defaultResponse);
+            if (headerResponseTypes != null){
+                if (headerResponseTypes.length >= 1) {
+                    acceptResponseType = MediaType.parseMediaType(headerResponseTypes[0]);
                 }
             }
+
+
+            MediaType responseType = null;
+           if(defaultResponse == null && acceptResponseType == null) {
+                // both default and accept cannot be null together
+               throw new HttpMediaTypeNotSupportedException(null, getSupportedMediaTypes(), "Unable to convert, mediatype is null");
+           }
+           else if (acceptResponseType == null) {
+                responseType = defaultResponseType;
+           }
+           else if (defaultResponseType == null) {
+               responseType = acceptResponseType;
+           }
+           else {
+               if (acceptResponseType.isCompatibleWith(defaultResponseType)){
+                   responseType = defaultResponseType;
+               }
+               else {
+                   responseType = acceptResponseType;
+               }
+           }
+
 
             HttpMessageConverter converter = null;
 
             for(HttpMessageConverter messageConverter : this.messageConverters){
-                if (messageConverter.canWrite(returnValue.getClass(), acceptResponseType)){
+                if (messageConverter.canWrite(returnValue.getClass(), responseType)){
                     converter = messageConverter;
                     break;
                 }
@@ -200,20 +223,21 @@ public class AnnotationWebScript implements WebScript {
 
             if(converter == null) {
                 // unsupported type requested
-                // should throw error.
+                List<MediaType> supported = getSupportedMediaTypes();
 
-                List<MediaType> supported = new ArrayList<MediaType>();
-
-                for(HttpMessageConverter messageConverter : this.messageConverters){
-                    supported.addAll(messageConverter.getSupportedMediaTypes());
-                }
-
-                throw new HttpMediaTypeNotSupportedException(acceptResponseType, supported);
+                /**
+                 * the {@link Jaxb2RootElementHttpMessageConverter} cannot convert a class
+                 * if the {@link javax.xml.bind.annotation.XmlRootElement} is missing from the class
+                 *
+                 * If this annotation is missing, the
+                 */
+                throw new HttpMediaTypeNotSupportedException(responseType, supported);
             }
 
 
-            HttpOutputMessage outputMessage = new AnnotationWebScriptOutputMessage(request, response);
-            converter.write(returnValue, acceptResponseType, outputMessage);
+            AnnotationWebScriptOutputMessage outputMessage = new AnnotationWebScriptOutputMessage(request, response);
+            converter.write(returnValue, responseType, outputMessage);
+
         }
         /**
          * If no {@link org.springframework.web.bind.annotation.ResponseBody} annotation is present,
@@ -256,7 +280,17 @@ public class AnnotationWebScript implements WebScript {
 		}
     }
 
-	protected void invokeExceptionHandlerMethods(final Throwable exception, final AnnotationWebScriptRequest request,
+    @SuppressWarnings("unchecked")
+    private List<MediaType> getSupportedMediaTypes() {
+        List<MediaType> supported = new ArrayList<MediaType>();
+
+        for(HttpMessageConverter messageConverter : this.messageConverters){
+            supported.addAll(messageConverter.getSupportedMediaTypes());
+        }
+        return supported;
+    }
+
+    protected void invokeExceptionHandlerMethods(final Throwable exception, final AnnotationWebScriptRequest request,
 			final WebScriptResponse response) throws IOException {
 		final List<Method> exceptionHandlerMethods = handlerMethods.findExceptionHandlers(exception);
 		if (exceptionHandlerMethods.isEmpty()) {

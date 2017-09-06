@@ -4,6 +4,7 @@ import com.github.dynamicextensionsalfresco.spring.Spied;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.Header;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.RequestParam;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.Uri;
+import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,6 +33,13 @@ public class ResponseBodyReturnValueHandler {
 
     @Uri("/handleNoResponseBody")
     public Person handleNoResponseBody(@RequestParam final String firstName, @RequestParam final String lastName) {
+        return new Person(firstName, lastName);
+    }
+
+    @Uri("/handleAddCustomHeader")
+    @ResponseBody
+    public Person handleCustomHeader(@RequestParam final String firstName, @RequestParam final String lastName, WebScriptResponse response) {
+        response.setHeader(firstName, lastName);
         return new Person(firstName, lastName);
     }
 }

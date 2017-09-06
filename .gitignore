@@ -13,6 +13,6 @@ tmp
 build
 out
 *.hprof
-*.log
+*.log*
 .gradle
 .idea

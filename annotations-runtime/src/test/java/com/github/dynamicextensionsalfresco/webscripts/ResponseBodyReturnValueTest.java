@@ -1,6 +1,7 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 
@@ -150,6 +151,79 @@ public class ResponseBodyReturnValueTest extends AbstractWebScriptAnnotationsTes
         // request should not return anything
     }
 
+    @Test
+    public void testContentTypeResponse(){
+        String expectedContentType = MediaType.APPLICATION_JSON_VALUE;
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+        MockWebScriptResponse response = new MockWebScriptResponse().setOutputStream(stream);
+
+        handleGet("/handleResponse",
+                new MockWebScriptRequest()
+                        .header("Accept", expectedContentType)
+                        .param("firstName", "Test")
+                        .param("lastName", "User"),
+                response);
+
+        assertThat("Webscript response should not be empty", stream.toByteArray().length, not(0));
+
+        System.out.println(new String(stream.toByteArray()));
+
+        Assert.assertTrue(response.getHeaders().containsKey("Content-Type"));
+        String actualContentType =response.getHeaders().get("Content-Type").get(0);
+        assertThat(actualContentType, is(expectedContentType));
+    }
+
+    @Test
+    public void testContentTypeResponseDefault() {
+        String expectedContentType = MediaType.APPLICATION_JSON_VALUE;
+        String acceptContentType = "application/*";
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+        MockWebScriptResponse response = new MockWebScriptResponse().setOutputStream(stream);
+
+        handleGet("/handleDefaultResponse",
+                new MockWebScriptRequest()
+                        .header("Accept", acceptContentType)
+                        .param("firstName", "Test")
+                        .param("lastName", "User"),
+                response);
+
+        assertThat("Webscript response should not be empty", stream.toByteArray().length, not(0));
+
+        System.out.println(new String(stream.toByteArray()));
+
+        Assert.assertTrue(response.getHeaders().containsKey("Content-Type"));
+        String actualContentType =response.getHeaders().get("Content-Type").get(0);
+        assertThat(actualContentType, is(expectedContentType));
+
+    }
+
+    @Test
+    public void testAddCustomHeaders() throws IOException {
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+        MockWebScriptResponse response = new MockWebScriptResponse().setOutputStream(stream);
+
+        handleGet("/handleAddCustomHeader",
+                new MockWebScriptRequest()
+                        .header("Accept", MediaType.APPLICATION_JSON_VALUE)
+                        .param("firstName", "Test")
+                        .param("lastName", "User"),
+                response);
+
+        assertThat("Webscript response should not be empty", stream.toByteArray().length, not(0));
+
+        System.out.println(new String(stream.toByteArray()));
+
+        Assert.assertTrue(response.getHeaders().containsKey("Test"));
+        String value =response.getHeaders().get("Test").get(0);
+        assertThat(value, is("User"));
+
+    }
 
 
 }
