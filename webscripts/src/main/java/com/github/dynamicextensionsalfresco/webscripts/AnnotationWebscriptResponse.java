@@ -41,7 +41,7 @@ public class AnnotationWebscriptResponse implements WrappingWebScriptResponse {
 		if (response instanceof WrappingWebScriptResponse) {
 			return ((WrappingWebScriptResponse) response).getNext();
 		} else {
-			return null;
+			return response;
 		}
 	}
 
