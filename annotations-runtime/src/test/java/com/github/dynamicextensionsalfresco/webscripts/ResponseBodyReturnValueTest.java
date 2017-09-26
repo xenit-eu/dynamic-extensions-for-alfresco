@@ -51,7 +51,7 @@ public class ResponseBodyReturnValueTest extends AbstractWebScriptAnnotationsTes
 
         assertThat("Webscript response should not be empty", stream.toByteArray().length, not(0));
 
-        System.out.println(new String(stream.toByteArray()));
+//        System.out.println(new String(stream.toByteArray()));
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -78,7 +78,7 @@ public class ResponseBodyReturnValueTest extends AbstractWebScriptAnnotationsTes
 
         assertThat("Webscript response should not be empty", stream.toByteArray().length, not(0));
 
-        System.out.println(new String(stream.toByteArray()));
+//        System.out.println(new String(stream.toByteArray()));
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -101,7 +101,7 @@ public class ResponseBodyReturnValueTest extends AbstractWebScriptAnnotationsTes
                         .param("lastName", "User"),
                 new MockWebScriptResponse().setOutputStream(stream));
         assertThat("Webscript response should not be empty", stream.toByteArray().length, not(0));
-        System.out.println(new String(stream.toByteArray()));
+//        System.out.println(new String(stream.toByteArray()));
 
         JAXBContext jaxbContext = JAXBContext.newInstance(PersonXml.class);
 
@@ -151,7 +151,7 @@ public class ResponseBodyReturnValueTest extends AbstractWebScriptAnnotationsTes
                 new MockWebScriptResponse().setOutputStream(stream));
 
         assertThat("Webscript response should not be empty", stream.toByteArray().length, not(0));
-        System.out.println(new String(stream.toByteArray()));
+//        System.out.println(new String(stream.toByteArray()));
 
         JAXBContext jaxbContext = JAXBContext.newInstance(PersonXml.class);
 
@@ -177,7 +177,7 @@ public class ResponseBodyReturnValueTest extends AbstractWebScriptAnnotationsTes
                 new MockWebScriptResponse().setOutputStream(stream));
 
         assertThat("Webscript response should not be empty", stream.toByteArray().length, not(0));
-        System.out.println(new String(stream.toByteArray()));
+//        System.out.println(new String(stream.toByteArray()));
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -206,7 +206,7 @@ public class ResponseBodyReturnValueTest extends AbstractWebScriptAnnotationsTes
                 new MockWebScriptResponse().setOutputStream(stream));
 
         assertThat("Webscript response should not be empty", stream.toByteArray().length, not(0));
-        System.out.println(new String(stream.toByteArray()));
+//        System.out.println(new String(stream.toByteArray()));
 
         JAXBContext jaxbContext = JAXBContext.newInstance(PersonXml.class);
 
@@ -236,7 +236,7 @@ public class ResponseBodyReturnValueTest extends AbstractWebScriptAnnotationsTes
                 new MockWebScriptResponse().setOutputStream(stream));
 
         assertThat("Webscript response should not be empty", stream.toByteArray().length, not(0));
-        System.out.println(new String(stream.toByteArray()));
+//        System.out.println(new String(stream.toByteArray()));
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -282,7 +282,7 @@ public class ResponseBodyReturnValueTest extends AbstractWebScriptAnnotationsTes
 
         assertThat("Webscript response should not be empty", stream.toByteArray().length, not(0));
 
-        System.out.println(new String(stream.toByteArray()));
+//        System.out.println(new String(stream.toByteArray()));
 
         Assert.assertTrue(response.getHeaders().containsKey("Content-Type"));
         String actualContentType =response.getHeaders().get("Content-Type").get(0);
@@ -307,7 +307,7 @@ public class ResponseBodyReturnValueTest extends AbstractWebScriptAnnotationsTes
 
         assertThat("Webscript response should not be empty", stream.toByteArray().length, not(0));
 
-        System.out.println(new String(stream.toByteArray()));
+//        System.out.println(new String(stream.toByteArray()));
 
         Assert.assertTrue(response.getHeaders().containsKey("Content-Type"));
         String actualContentType =response.getHeaders().get("Content-Type").get(0);
@@ -333,7 +333,7 @@ public class ResponseBodyReturnValueTest extends AbstractWebScriptAnnotationsTes
 
         assertThat("Webscript response should not be empty", stream.toByteArray().length, not(0));
 
-        System.out.println(new String(stream.toByteArray()));
+//        System.out.println(new String(stream.toByteArray()));
 
         Assert.assertTrue(response.getHeaders().containsKey("Content-Type"));
         String actualContentType =response.getHeaders().get("Content-Type").get(0);
@@ -357,7 +357,7 @@ public class ResponseBodyReturnValueTest extends AbstractWebScriptAnnotationsTes
 
         assertThat("Webscript response should not be empty", stream.toByteArray().length, not(0));
 
-        System.out.println(new String(stream.toByteArray()));
+//        System.out.println(new String(stream.toByteArray()));
 
         Assert.assertTrue(response.getHeaders().containsKey("Test"));
         String value =response.getHeaders().get("Test").get(0);

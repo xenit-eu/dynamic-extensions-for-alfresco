@@ -64,4 +64,18 @@ public abstract class AbstractWebScriptAnnotationsTest {
 		handleGet(uri, new MockWebScriptRequest());
 	}
 
+
+	protected void handlePost(final String uri, final MockWebScriptRequest request, final WebScriptResponse response) {
+	    handleRequest(HttpMethod.POST, uri, request, response);
+    }
+
+    protected void handlePost(final String uri, final MockWebScriptRequest request) {
+	    handlePost(uri, request, Mockito.mock(WebScriptResponse.class));
+    }
+
+    protected void handlePost(final String uri) {
+	    handlePost(uri, new MockWebScriptRequest());
+    }
+
+
 }

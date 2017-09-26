@@ -49,6 +49,7 @@ public class HandlerMethodArgumentsResolver implements ApplicationContextAware {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void initializeArgumentResolvers() {
 		argumentResolvers = new ArrayList<ArgumentResolver<Object, Annotation>>();
+		argumentResolvers.add((ArgumentResolver) new RequestBodyArgumentResolver());
 		argumentResolvers.add((ArgumentResolver) new RequestParamArgumentResolver(getStringValueConverter()));
 		argumentResolvers.add((ArgumentResolver) new UriVariableArgumentResolver(getStringValueConverter()));
 		argumentResolvers.add((ArgumentResolver) new AttributeArgumentResolver());

@@ -2,6 +2,7 @@ package com.github.dynamicextensionsalfresco.webscripts;
 
 import com.github.dynamicextensionsalfresco.webscripts.annotations.Attribute;
 import com.github.dynamicextensionsalfresco.webscripts.arguments.HandlerMethodArgumentsResolver;
+import com.github.dynamicextensionsalfresco.webscripts.messages.AnnotationWebScriptOutputMessage;
 import com.github.dynamicextensionsalfresco.webscripts.resolutions.DefaultResolutionParameters;
 import com.github.dynamicextensionsalfresco.webscripts.resolutions.Resolution;
 import com.github.dynamicextensionsalfresco.webscripts.resolutions.TemplateResolution;
@@ -258,7 +259,7 @@ public class AnnotationWebScript implements WebScript {
             }
 
 
-            AnnotationWebScriptOutputMessage outputMessage = new AnnotationWebScriptOutputMessage(request, response);
+            AnnotationWebScriptOutputMessage outputMessage = new AnnotationWebScriptOutputMessage(response);
             converter.write(returnValue, responseType, outputMessage);
 
         }
