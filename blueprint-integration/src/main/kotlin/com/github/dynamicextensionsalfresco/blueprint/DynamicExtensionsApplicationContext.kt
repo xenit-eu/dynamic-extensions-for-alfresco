@@ -21,6 +21,7 @@ import com.github.dynamicextensionsalfresco.resources.ResourceHelper
 import com.github.dynamicextensionsalfresco.web.WebResourcesRegistrar
 import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptBuilder
 import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptRegistrar
+import com.github.dynamicextensionsalfresco.webscripts.MessageConverterRegistry
 import com.github.dynamicextensionsalfresco.webscripts.WebScriptUriRegistry
 import com.github.dynamicextensionsalfresco.webscripts.arguments.HandlerMethodArgumentsResolver
 import com.github.dynamicextensionsalfresco.webscripts.arguments.StringValueConverter
@@ -250,13 +251,20 @@ class DynamicExtensionsApplicationContext(configurationLocations: Array<String>?
         beanFactory.bean(BeanNames.STRING_VALUE_CONVERTER, StringValueConverter::class.java) {
             addPropertyValue("namespacePrefixResolver", getService(NamespacePrefixResolver::class.java))
         }
+
+        beanFactory.bean(BeanNames.MESSAGE_CONVERTER_REGISTER, MessageConverterRegistry::class.java)
+
         beanFactory.bean(BeanNames.HANDLER_METHOD_ARGUMENTS_RESOLVER, HandlerMethodArgumentsResolver::class.java) {
             addPropertyReference("stringValueConverter", BeanNames.STRING_VALUE_CONVERTER.id())
+            addPropertyReference("messageConverterRegistry", BeanNames.MESSAGE_CONVERTER_REGISTER.id())
             addPropertyValue("bundleContext", bundleContext)
             setInitMethodName("initializeArgumentResolvers")
         }
+
+
         beanFactory.bean(BeanNames.ANNOTATION_BASED_WEB_SCRIPT_BUILDER, AnnotationWebScriptBuilder::class.java) {
-            addPropertyReference("handlerMethodArgumentsResolver",BeanNames.HANDLER_METHOD_ARGUMENTS_RESOLVER.id());
+            addPropertyReference("handlerMethodArgumentsResolver",BeanNames.HANDLER_METHOD_ARGUMENTS_RESOLVER.id())
+            addPropertyReference("messageConverterRegistry", BeanNames.MESSAGE_CONVERTER_REGISTER.id())
         }
         beanFactory.bean(BeanNames.ANNOTATION_BASED_WEB_SCRIPT_REGISTRAR, AnnotationWebScriptRegistrar::class.java) {
             addPropertyReference("annotationBasedWebScriptBuilder", BeanNames.ANNOTATION_BASED_WEB_SCRIPT_BUILDER.id())

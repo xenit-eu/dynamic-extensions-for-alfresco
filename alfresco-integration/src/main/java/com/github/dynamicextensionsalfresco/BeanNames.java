@@ -26,6 +26,8 @@ public enum BeanNames {
 
 	HANDLER_METHOD_ARGUMENTS_RESOLVER("handlerMethodArgumentsResolver"),
 
+	MESSAGE_CONVERTER_REGISTER("messageConverterRegister"),
+
 	M2_MODEL_LIST_FACTORY("m2ModelListFactoryBean"),
 
 	MODEL_REGISTRAR("modelRegistrar"),

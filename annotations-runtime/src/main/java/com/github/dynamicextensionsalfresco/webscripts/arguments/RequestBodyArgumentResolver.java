@@ -1,29 +1,24 @@
 package com.github.dynamicextensionsalfresco.webscripts.arguments;
 
+import com.github.dynamicextensionsalfresco.webscripts.MessageConverterRegistry;
 import com.github.dynamicextensionsalfresco.webscripts.messages.AnnotationWebScriptInputMessage;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PushbackInputStream;
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.List;
 
 public class RequestBodyArgumentResolver implements ArgumentResolver<Object, RequestBody> {
 
 
-    private final List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
+    private MessageConverterRegistry messageConverterRegistry;
 
-    public RequestBodyArgumentResolver() {
-        this.messageConverters.add(new MappingJackson2HttpMessageConverter());
-        this.messageConverters.add(new Jaxb2RootElementHttpMessageConverter());
+    public RequestBodyArgumentResolver(MessageConverterRegistry messageConverterRegistry) {
+        this.messageConverterRegistry = messageConverterRegistry;
     }
 
     @Override
@@ -54,13 +49,7 @@ public class RequestBodyArgumentResolver implements ArgumentResolver<Object, Req
 
         MediaType contentType = MediaType.parseMediaType(headerResponseTypes[0]);
 
-        HttpMessageConverter messageConverter = null;
-        for (HttpMessageConverter converter : this.messageConverters){
-            if (converter.canRead(argumentType, contentType)){
-                messageConverter = converter;
-                break;
-            }
-        }
+        HttpMessageConverter messageConverter = this.messageConverterRegistry.canRead(argumentType, contentType);
 
         if (messageConverter == null){
             throw new RuntimeException("Unable to find Convertor for " + contentType.toString());

@@ -43,6 +43,13 @@ public class AnnotationWebScriptBuilder constructor(
     public fun setHandlerMethodArgumentsResolver(value:HandlerMethodArgumentsResolver){
         this.handlerMethodArgumentsResolver = value;
     }
+
+    @Autowired
+    private var messageConverterRegistry: MessageConverterRegistry? = null
+    public fun setMessageConverterRegistry(value:MessageConverterRegistry){
+        this.messageConverterRegistry = value;
+    }
+
     /* Dependencies */
 
     protected var beanFactory: ConfigurableListableBeanFactory? = null
@@ -142,7 +149,7 @@ public class AnnotationWebScriptBuilder constructor(
     }
 
     protected fun createWebScript(description: Description, handler: Any, handlerMethods: HandlerMethods): AnnotationWebScript {
-        return AnnotationWebScript(description, handler, handlerMethods, handlerMethodArgumentsResolver)
+        return AnnotationWebScript(description, handler, handlerMethods, handlerMethodArgumentsResolver, messageConverterRegistry)
     }
 
     protected fun handleHandlerMethodAnnotation(uri: Uri, method: Method, description: DescriptionImpl, baseUri: String) {

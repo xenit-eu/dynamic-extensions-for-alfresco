@@ -1,5 +1,6 @@
 package com.github.dynamicextensionsalfresco.webscripts.arguments;
 
+import com.github.dynamicextensionsalfresco.webscripts.MessageConverterRegistry;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 import org.springframework.aop.support.AopUtils;
@@ -32,6 +33,8 @@ public class HandlerMethodArgumentsResolver implements ApplicationContextAware {
 
 	private StringValueConverter stringValueConverter;
 
+	private MessageConverterRegistry messageConverterRegistry;
+
     private BundleContext bundleContext;
 
 	/* Configuration */
@@ -49,7 +52,7 @@ public class HandlerMethodArgumentsResolver implements ApplicationContextAware {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void initializeArgumentResolvers() {
 		argumentResolvers = new ArrayList<ArgumentResolver<Object, Annotation>>();
-		argumentResolvers.add((ArgumentResolver) new RequestBodyArgumentResolver());
+		argumentResolvers.add((ArgumentResolver) new RequestBodyArgumentResolver(this.messageConverterRegistry));
 		argumentResolvers.add((ArgumentResolver) new RequestParamArgumentResolver(getStringValueConverter()));
 		argumentResolvers.add((ArgumentResolver) new UriVariableArgumentResolver(getStringValueConverter()));
 		argumentResolvers.add((ArgumentResolver) new AttributeArgumentResolver());
@@ -181,6 +184,14 @@ public class HandlerMethodArgumentsResolver implements ApplicationContextAware {
 	protected StringValueConverter getStringValueConverter() {
 		return stringValueConverter;
 	}
+
+    public MessageConverterRegistry getMessageConverterRegistry() {
+        return messageConverterRegistry;
+    }
+
+    public void setMessageConverterRegistry(MessageConverterRegistry messageConverterRegistry) {
+        this.messageConverterRegistry = messageConverterRegistry;
+    }
 
     public void setBundleContext(BundleContext bundleContext) {
         this.bundleContext = bundleContext;
