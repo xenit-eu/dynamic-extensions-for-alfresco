@@ -4,7 +4,7 @@ dependencies {
     compile project(':annotations-runtime')
     compile "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
     compile "javax.servlet:servlet-api:${project.ext.servletVersion}"
-    compile "org.springframework.extensions.surf:spring-webscripts:${project.ext.alfrescoVersion}"
+    compile "org.alfresco.surf:spring-webscripts:${project.ext.springWebscripts}"
     compile "org.jibx:jibx-run:${project.ext.jibxVersion}"
     compile "org.apache.felix:org.apache.felix.framework:${project.ext.felixVersion}"
     compile "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
@@ -12,5 +12,6 @@ dependencies {
 
     testCompile "junit:junit:${project.ext.junitVersion}"
     testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
+    testCompile "org.alfresco:alfresco-repository:${project.ext.alfrescoVersion}"
     testCompile "org.springframework:spring-test:${project.ext.springVersion}"
 }

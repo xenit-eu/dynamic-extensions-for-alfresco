@@ -2,10 +2,10 @@ package com.github.dynamicextensionsalfresco.webscripts.resolutions;
 
 import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptRequest;
 import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebscriptResponse;
+import org.apache.http.HttpStatus;
 import org.springframework.util.Assert;
 
 import javax.annotation.Nonnull;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -26,7 +26,7 @@ public class RedirectResolution implements Resolution {
         if (path.startsWith("/") == false) {
             path = "/" + path;
         }
-        response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY); // 302
+        response.setStatus(HttpStatus.SC_MOVED_TEMPORARILY); // 302
         response.setHeader("Location", request.getServiceContextPath() + path);
     }
 
