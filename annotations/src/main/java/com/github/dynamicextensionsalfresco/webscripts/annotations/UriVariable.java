@@ -11,6 +11,7 @@ public @interface UriVariable {
 	/**
 	 * The URI variable name. If not specified, the parameter's Java variable name will be used instead. (The variable
 	 * name is only available if classes are compiled with debug info.)
+	 * @return the name of the variable
 	 */
 	String value() default "";
 

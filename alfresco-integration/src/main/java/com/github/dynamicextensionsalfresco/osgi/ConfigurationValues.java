@@ -14,7 +14,7 @@ import java.util.Iterator;
  * 
  * @author Laurens Fridael
  * 
- * @param <T>
+ * @param <T> The type of configuration values
  */
 public class ConfigurationValues<T> implements Iterable<T> {
 

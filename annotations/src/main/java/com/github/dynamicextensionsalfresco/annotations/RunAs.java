@@ -23,7 +23,7 @@ public @interface RunAs {
 	/**
 	 * The user to run this method as.
 	 * 
-	 * @return
+	 * @return the user
 	 */
 	String value();
 }

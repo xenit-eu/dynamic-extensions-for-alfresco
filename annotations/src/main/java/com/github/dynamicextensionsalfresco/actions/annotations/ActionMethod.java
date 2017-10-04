@@ -26,7 +26,7 @@ public @interface ActionMethod {
 	 * If the name is not specified, the implementation uses the short class name combined with the method name. For
 	 * example: <code>MyClass.myAction</code>
 	 * 
-	 * @return
+	 * @return The name of the action
 	 */
 	String value() default "";
 

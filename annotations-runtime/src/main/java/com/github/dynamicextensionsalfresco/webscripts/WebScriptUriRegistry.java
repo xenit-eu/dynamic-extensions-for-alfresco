@@ -55,7 +55,7 @@ public class WebScriptUriRegistry implements UriIndex, BeanPostProcessor, Initia
 	/**
 	 * Registers a {@link WebScript} with the {@link UriIndex}.
 	 * 
-	 * @param webScript
+	 * @param webScript The webscrtipt
 	 */
 	public void registerWebScript(final WebScript webScript) {
 		lock.lock();
@@ -80,7 +80,7 @@ public class WebScriptUriRegistry implements UriIndex, BeanPostProcessor, Initia
 	 * As the {@link UriIndex} has no unregistration methods, the actual URI binding will only be cleared when the
 	 * {@link Registry} is reset.
 	 * 
-	 * @param webScript
+	 * @param webScript The webscript
 	 */
 	public void unregisterWebScript(final WebScript webScript) {
 		lock.lock();

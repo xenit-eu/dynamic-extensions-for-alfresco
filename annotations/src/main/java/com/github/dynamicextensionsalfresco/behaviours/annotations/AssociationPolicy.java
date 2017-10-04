@@ -24,7 +24,7 @@ public @interface AssociationPolicy {
 	 * <p>
 	 * If no value is specified, the Policy is applied to all types and aspects.
 	 * 
-	 * @return
+	 * @return The QNames of the types or aspects that apply's to the Policy.
 	 */
 	String[] value() default {};
 
@@ -35,14 +35,14 @@ public @interface AssociationPolicy {
 	 * If no value is specified, the Policy is applied to all associations. If an association has been specified, the
 	 * class name must also be specified. It is invalid to specify only an assocation.
 	 * 
-	 * @return
+	 * @return The QName of the association that apply's to the Policy.
 	 */
 	String association() default "";
 
 	/**
 	 * Indicates when to trigger the Behaviour.
 	 * 
-	 * @return
+	 * @return the trigger event
 	 */
 	Event event() default Event.INHERITED_OR_ALL;
 

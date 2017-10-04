@@ -11,7 +11,7 @@ import java.lang.annotation.Annotation;
  * 
  * @author Laurens Fridael
  * 
- * @param <ArgumentType>
+ * @param <ArgumentType> The type of the argument
  */
 public abstract class AbstractTypeBasedArgumentResolver<ArgumentType> implements
 		ArgumentResolver<ArgumentType, Annotation> {

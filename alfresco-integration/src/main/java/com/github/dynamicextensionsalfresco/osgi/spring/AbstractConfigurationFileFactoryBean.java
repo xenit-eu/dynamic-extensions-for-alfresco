@@ -18,7 +18,7 @@ import java.util.List;
  * 
  * @author Laurens Fridael
  * 
- * @param <T>
+ * @param <T> The class type that implements FactoryBean
  */
 public abstract class AbstractConfigurationFileFactoryBean<T> implements FactoryBean<T>, ResourceLoaderAware {
 

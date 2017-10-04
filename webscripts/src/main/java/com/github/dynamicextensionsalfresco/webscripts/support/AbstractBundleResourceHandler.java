@@ -50,6 +50,11 @@ public abstract class AbstractBundleResourceHandler {
 	 * copy the resource if any from the classpath to the outputstream
 	 * @deprecated replaced with {@link AbstractBundleResourceHandler#handleResource(String, WebScriptRequest, WebScriptResponse)}
 	 * to enable directory listing
+	 *
+	 * @param path the path of the resource to handle
+     * @param response the webscript response
+     *
+     * @throws IOException When copying the file fails
 	 */
 	protected final void handleResource(final String path, final WebScriptResponse response) throws IOException {
 		try {
@@ -63,6 +68,11 @@ public abstract class AbstractBundleResourceHandler {
 
 	/**
 	 * handle the requested path
+     * @param path the path of the resource to handle
+     * @param request the webscript request
+     * @param response the webscript response
+     *
+     * @throws IOException When copying the file fails
 	 */
 	protected final void handleResource(final String path, final WebScriptRequest request, final WebScriptResponse response) throws Exception {
 		final String entryPath = getBundleEntryPath(path.replace("//", "/")); // forgive double slashes
@@ -82,6 +92,10 @@ public abstract class AbstractBundleResourceHandler {
 	/**
 	 * copy the resource if any from the classpath to the outputstream
 	 * @deprecated replaced with {@link AbstractBundleResourceHandler#sendResource(WebScriptRequest, WebScriptResponse, URL)}
+     *
+     * @param response the webscript response
+     * @param resource  the url of the resource
+     * @throws IOException When copying the file fails
 	 */
 	protected void sendResource(final WebScriptResponse response, final URL resource) throws IOException {
 		sendResource(null, response, resource);
@@ -89,6 +103,12 @@ public abstract class AbstractBundleResourceHandler {
 
 	/**
 	 *  copy the resource if any from the classpath to the outputstream
+     *
+     * @param request the webscript request
+     * @param response the webscript response
+     * @param resource  the url of the resource
+     *
+     * @throws IOException When copying the file fails
 	 */
 	protected void sendResource(final WebScriptRequest request, final WebScriptResponse response, final URL resource) throws IOException {
 		final String contentType = getContentType(resource);
@@ -152,6 +172,7 @@ public abstract class AbstractBundleResourceHandler {
 
     /**
      * Add long term cache headers for resources that are known not to change, ie. versioned filename.
+     * @param response the webscript resonse
      */
     protected void setInfinateCache(final WebScriptResponse response) {
         final long future = new Date().getTime() + 31536000000L;

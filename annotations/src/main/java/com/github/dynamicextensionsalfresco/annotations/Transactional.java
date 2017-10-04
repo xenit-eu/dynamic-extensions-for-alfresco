@@ -32,14 +32,14 @@ public @interface Transactional {
 	/**
 	 * Specifies if the operation should be run within a read-only transaction.
 	 * 
-	 * @return
+	 * @return if operation is readonly
 	 */
 	boolean readOnly() default false;
 
 	/**
 	 * Indicates if the operation requires a new transaction.
 	 * 
-	 * @return
+	 * @return if operation required new transaction
 	 */
 	boolean requiresNew() default false;
 
