@@ -1,21 +1,17 @@
 package com.github.dynamicextensionsalfresco.blueprint;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 import org.eclipse.gemini.blueprint.context.DelegatedExecutionOsgiBundleApplicationContext;
 import org.eclipse.gemini.blueprint.context.support.DefaultContextClassLoaderProvider;
 import org.eclipse.gemini.blueprint.extender.OsgiApplicationContextCreator;
 import org.eclipse.gemini.blueprint.extender.support.ApplicationContextConfiguration;
 import org.eclipse.gemini.blueprint.extender.support.DefaultOsgiApplicationContextCreator;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleException;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
+import org.osgi.framework.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * {@link OsgiApplicationContextCreator} that creates a {@link DynamicExtensionsApplicationContext} if a bundle has been

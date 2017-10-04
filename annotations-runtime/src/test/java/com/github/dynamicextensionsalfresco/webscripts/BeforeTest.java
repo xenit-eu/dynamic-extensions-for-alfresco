@@ -1,10 +1,10 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
-import static org.mockito.Mockito.*;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.Before;
-
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.mockito.Mockito.verify;
 
 /**
  * Integration test for {@link Before} handling.

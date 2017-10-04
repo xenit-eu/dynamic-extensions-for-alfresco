@@ -1,13 +1,12 @@
 package com.github.dynamicextensionsalfresco.aop;
 
-import java.lang.reflect.InvocationTargetException;
-
 import com.github.dynamicextensionsalfresco.annotations.RunAs;
-
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
+
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Provides advice for {@link RunAs}-annotated methods.

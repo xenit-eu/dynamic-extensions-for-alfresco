@@ -1,12 +1,11 @@
 package com.github.dynamicextensionsalfresco.osgi.spring;
 
-import java.util.Map;
-
 import com.github.dynamicextensionsalfresco.osgi.FrameworkConfiguration;
-
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
 import org.springframework.beans.factory.FactoryBean;
+
+import java.util.Map;
 
 /**
  * Abstract base class for FactoryBeans that create {@link Framework}s. Subclasses must provide the

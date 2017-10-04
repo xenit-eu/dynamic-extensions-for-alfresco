@@ -1,10 +1,10 @@
 package com.github.dynamicextensionsalfresco.actions;
 
-import static org.mockito.Mockito.*;
-
 import org.alfresco.repo.dictionary.DictionaryComponent;
 import org.alfresco.service.cmr.dictionary.DataTypeDefinition;
 import org.alfresco.service.namespace.QName;
+
+import static org.mockito.Mockito.mock;
 
 /**
  * @author Laurent Van der Linden

@@ -1,10 +1,10 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
-import static org.junit.Assert.*;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.Attribute;
-
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Integration test for {@link Attribute} handling.

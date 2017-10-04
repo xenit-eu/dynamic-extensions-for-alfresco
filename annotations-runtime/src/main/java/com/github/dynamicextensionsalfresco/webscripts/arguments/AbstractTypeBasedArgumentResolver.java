@@ -1,9 +1,9 @@
 package com.github.dynamicextensionsalfresco.webscripts.arguments;
 
-import java.lang.annotation.Annotation;
-
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
+
+import java.lang.annotation.Annotation;
 
 /**
  * Convenenience adapter for {@link ArgumentResolver} implementations that rely solely on the parameter type and do not

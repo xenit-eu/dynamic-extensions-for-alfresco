@@ -1,12 +1,12 @@
 package com.github.dynamicextensionsalfresco.aop;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-
 import org.springframework.aop.Pointcut;
 import org.springframework.aop.support.StaticMethodMatcherPointcut;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.Assert;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 
 /**
  * {@link Pointcut} that matches methods with a given annotation.

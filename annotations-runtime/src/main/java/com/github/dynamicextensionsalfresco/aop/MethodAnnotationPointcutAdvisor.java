@@ -1,12 +1,12 @@
 package com.github.dynamicextensionsalfresco.aop;
 
-import java.lang.annotation.Annotation;
-
 import org.aopalliance.aop.Advice;
 import org.springframework.aop.Pointcut;
 import org.springframework.aop.PointcutAdvisor;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.util.Assert;
+
+import java.lang.annotation.Annotation;
 
 /**
  * Convenience base class for {@link PointcutAdvisor}s that advise methods annotated with a given annotation.

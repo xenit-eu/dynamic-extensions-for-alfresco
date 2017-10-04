@@ -1,11 +1,11 @@
 package com.github.dynamicextensionsalfresco.annotations;
 
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
 
 /**
  * Indicates methods that are run within a transaction using the given settings. This annotation removes the boilerplate

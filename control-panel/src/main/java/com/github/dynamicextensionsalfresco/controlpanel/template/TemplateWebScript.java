@@ -1,15 +1,14 @@
 package com.github.dynamicextensionsalfresco.controlpanel.template;
 
+import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScript;
+import org.springframework.extensions.webscripts.WebScript;
+import org.springframework.util.Assert;
+import org.springframework.util.ClassUtils;
+
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-
-import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScript;
-
-import org.springframework.extensions.webscripts.WebScript;
-import org.springframework.util.Assert;
-import org.springframework.util.ClassUtils;
 
 public class TemplateWebScript {
 

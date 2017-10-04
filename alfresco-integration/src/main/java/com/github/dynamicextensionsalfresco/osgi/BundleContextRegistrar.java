@@ -1,9 +1,9 @@
 package com.github.dynamicextensionsalfresco.osgi;
 
-import java.util.List;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+
+import java.util.List;
 
 /**
  * Strategy for registering services in a {@link BundleContext}.

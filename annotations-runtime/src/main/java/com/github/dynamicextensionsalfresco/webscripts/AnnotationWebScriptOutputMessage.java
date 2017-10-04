@@ -1,18 +1,10 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpOutputMessage;
-import org.springframework.http.MediaType;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URI;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class AnnotationWebScriptOutputMessage implements HttpOutputMessage {
 

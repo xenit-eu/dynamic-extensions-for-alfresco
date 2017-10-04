@@ -1,14 +1,14 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.extensions.webscripts.WrappingWebScriptRequest;
 import org.springframework.extensions.webscripts.WrappingWebScriptResponse;
 import org.springframework.extensions.webscripts.servlet.WebScriptServletRequest;
 import org.springframework.extensions.webscripts.servlet.WebScriptServletResponse;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Contains Web Script utility methods.

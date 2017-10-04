@@ -1,10 +1,11 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
-import static org.mockito.Mockito.*;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.Attribute;
-
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.verify;
 
 /**
  * Integration test for {@link Attribute} handling.

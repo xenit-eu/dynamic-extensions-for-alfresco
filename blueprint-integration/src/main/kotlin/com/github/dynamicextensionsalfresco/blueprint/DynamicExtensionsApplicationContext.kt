@@ -7,7 +7,6 @@ import com.github.dynamicextensionsalfresco.event.EventBus
 import com.github.dynamicextensionsalfresco.event.events.SpringContextException
 import com.github.dynamicextensionsalfresco.messages.MessagesRegistrar
 import com.github.dynamicextensionsalfresco.metrics.SpringTimer
-import com.github.dynamicextensionsalfresco.models.M2ModelListProvider
 import com.github.dynamicextensionsalfresco.models.M2ModelResourceListProvider
 import com.github.dynamicextensionsalfresco.models.RepositoryModelRegistrar
 import com.github.dynamicextensionsalfresco.osgi.webscripts.SearchPathRegistry

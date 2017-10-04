@@ -1,13 +1,10 @@
 package com.github.dynamicextensionsalfresco.webscripts
 
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.extensions.webscripts.Description
-import org.springframework.extensions.webscripts.Match
 import org.springframework.extensions.webscripts.UriIndex
-
-import org.junit.Assert.assertEquals
-import kotlin.properties.Delegates
 
 /**
  * Verify @Authentication can be overridden on a method basis.

@@ -1,11 +1,11 @@
 package com.github.dynamicextensionsalfresco.policy;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Proxy;
-
 import org.alfresco.repo.policy.PolicyComponent;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Required;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Proxy;
 
 /**
  * {@link FactoryBean} for creating proxy {@link PolicyComponent}s.

@@ -1,11 +1,11 @@
 package com.github.dynamicextensionsalfresco.blueprint;
 
-import java.net.URL;
-
 import org.osgi.framework.Bundle;
 import org.springframework.extensions.webscripts.ScriptContent;
 import org.springframework.extensions.webscripts.ScriptLoader;
 import org.springframework.util.Assert;
+
+import java.net.URL;
 
 class BundleScriptLoader implements ScriptLoader {
 
