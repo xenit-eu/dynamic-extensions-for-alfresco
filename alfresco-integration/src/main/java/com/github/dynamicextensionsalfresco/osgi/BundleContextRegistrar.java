@@ -16,7 +16,7 @@ public interface BundleContextRegistrar {
 	/**
 	 * Registers services in a {@link BundleContext} and returns the corresponding {@link ServiceRegistration}s.
 	 * 
-	 * @param bundleContext
+	 * @param bundleContext The bundle context
 	 * @return The {@link ServiceRegistration}s.
 	 */
 	List<ServiceRegistration<?>> registerInBundleContext(BundleContext bundleContext);

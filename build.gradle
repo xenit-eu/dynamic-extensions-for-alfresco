@@ -111,7 +111,7 @@ subprojects {
                     }
                 }
             }
-        }
+        }   
     }
 
     [compileJava, compileTestJava,javadoc]*.options*.encoding = 'UTF-8'

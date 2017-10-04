@@ -26,8 +26,7 @@ public class MethodAnnotationPointcutAdvisor implements PointcutAdvisor, Dynamic
 
 	/**
 	 * Constructs an instance using a {@link MethodAnnotationPointcut} for the given {@link Annotation} type.
-	 * 
-	 * @param annotationType
+	 * @param annotationType the type of the annotation
 	 */
 	protected MethodAnnotationPointcutAdvisor(final Class<? extends Annotation> annotationType) {
 		Assert.notNull(annotationType);

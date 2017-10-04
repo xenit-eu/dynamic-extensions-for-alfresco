@@ -34,8 +34,8 @@ public class WebScriptUtil {
 	/**
 	 * Extracts the {@link HttpServletRequest} from the given {@link WebScriptRequest}.
 	 * 
-	 * @param request
-	 * @return
+	 * @param request The webscript request
+	 * @return The HttpServletRequest
 	 */
 	public static HttpServletRequest extractHttpServletRequest(final WebScriptRequest request) {
 		HttpServletRequest servletRequest = null;
@@ -53,8 +53,8 @@ public class WebScriptUtil {
 	/**
 	 * Extracts the {@link HttpServletResponse} from the given {@link WebScriptResponse}.
 	 * 
-	 * @param request
-	 * @return
+	 * @param request tehe webscript response
+	 * @return the HttpServletResponse
 	 */
 	public static HttpServletResponse extractHttpServletResponse(final WebScriptResponse request) {
 		HttpServletResponse servletResponse = null;

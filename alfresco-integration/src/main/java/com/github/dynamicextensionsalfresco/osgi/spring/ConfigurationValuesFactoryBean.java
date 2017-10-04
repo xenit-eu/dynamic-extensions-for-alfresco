@@ -15,7 +15,7 @@ import java.util.Set;
  * 
  * @author Laurens Fridael
  * 
- * @param <T>
+ * @param <T> The type that is a configuration bean
  */
 public class ConfigurationValuesFactoryBean<T> implements FactoryBean<ConfigurationValues<T>> {
 

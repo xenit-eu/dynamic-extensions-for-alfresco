@@ -70,7 +70,9 @@ public class HandlerMethods {
 	/**
 	 * Creates a new instance for the specified {@link Uri}-annotated method.
 	 * 
-	 * @param uriMethod
+	 * @param uriMethod The method
+	 *
+	 * @return the method handler
 	 */
 	public HandlerMethods createForUriMethod(final Method uriMethod) {
 		final HandlerMethods handlerMethods = new HandlerMethods();

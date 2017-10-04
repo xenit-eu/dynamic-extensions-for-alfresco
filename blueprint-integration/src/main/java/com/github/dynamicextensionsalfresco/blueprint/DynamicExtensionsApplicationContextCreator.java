@@ -89,8 +89,8 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 	 * Uninstalls {@link Bundle}s with symbolic names equal to that of the {@link Bundle} represented by the given the
 	 * {@link BundleContext}
 	 * 
-	 * @param bundleContext
-	 * @throws BundleException
+	 * @param bundleContext The bundle context
+	 * @throws BundleException When the removal fails
 	 */
 	protected void uninstallBundlesWithDuplicateSymbolicName(final BundleContext bundleContext) throws BundleException {
 		final Bundle currentBundle = bundleContext.getBundle();
