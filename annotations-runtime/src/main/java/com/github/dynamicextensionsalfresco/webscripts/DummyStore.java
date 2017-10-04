@@ -1,16 +1,15 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-
+import freemarker.cache.TemplateLoader;
 import org.dom4j.Document;
 import org.springframework.extensions.surf.util.Pair;
 import org.springframework.extensions.webscripts.ScriptLoader;
 import org.springframework.extensions.webscripts.Store;
 import org.springframework.extensions.webscripts.WebScript;
 
-import freemarker.cache.TemplateLoader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
 /**
  * Dummy store implementation used by {@link AnnotationWebScriptBuilder}.

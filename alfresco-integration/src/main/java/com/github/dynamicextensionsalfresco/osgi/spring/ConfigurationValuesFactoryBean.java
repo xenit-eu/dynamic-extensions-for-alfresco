@@ -1,13 +1,12 @@
 package com.github.dynamicextensionsalfresco.osgi.spring;
 
+import com.github.dynamicextensionsalfresco.osgi.ConfigurationValues;
+import org.springframework.beans.factory.FactoryBean;
+import org.springframework.util.Assert;
+
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-
-import com.github.dynamicextensionsalfresco.osgi.ConfigurationValues;
-
-import org.springframework.beans.factory.FactoryBean;
-import org.springframework.util.Assert;
 
 /**
  * {@link FactoryBean} that combines all the items from multiple Sets into a single Set.

@@ -1,14 +1,13 @@
 package com.github.dynamicextensionsalfresco.osgi.felix;
 
-import java.util.List;
-import java.util.Map;
-
 import com.github.dynamicextensionsalfresco.osgi.FrameworkConfiguration;
-
 import org.osgi.framework.BundleActivator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * {@link FrameworkConfiguration} subclass with configuration settings specific to Felix.

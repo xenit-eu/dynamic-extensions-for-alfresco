@@ -2,30 +2,24 @@ package com.github.dynamicextensionsalfresco.webscripts
 
 import com.github.dynamicextensionsalfresco.util.hasText
 import com.github.dynamicextensionsalfresco.webscripts.annotations.*
-import java.lang.reflect.Method
-import java.util.ArrayList
-import java.util.Arrays
-import java.util.HashSet
-import java.util.LinkedHashSet
-
+import com.github.dynamicextensionsalfresco.webscripts.annotations.FormatStyle
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Lifecycle
 import com.github.dynamicextensionsalfresco.webscripts.arguments.HandlerMethodArgumentsResolver
-
 import org.springframework.beans.factory.BeanFactory
 import org.springframework.beans.factory.BeanFactoryAware
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory
 import org.springframework.core.annotation.AnnotationUtils
 import org.springframework.extensions.webscripts.Description
-import org.springframework.extensions.webscripts.Description.RequiredAuthentication
-import org.springframework.extensions.webscripts.Description.RequiredTransaction
-import org.springframework.extensions.webscripts.Description.TransactionCapability
+import org.springframework.extensions.webscripts.Description.*
 import org.springframework.extensions.webscripts.DescriptionImpl
 import org.springframework.extensions.webscripts.TransactionParameters
 import org.springframework.util.Assert
 import org.springframework.util.ClassUtils
 import org.springframework.util.ReflectionUtils
 import org.springframework.util.StringUtils
-import kotlin.properties.Delegates
+import java.lang.reflect.Method
+import java.util.*
 
 /**
  * Creates [AnnotationWebScript] instances from beans defined in a [BeanFactory].

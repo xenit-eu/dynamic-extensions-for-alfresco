@@ -1,11 +1,11 @@
 package com.github.dynamicextensionsalfresco.spring;
 
-import java.lang.annotation.Annotation;
-
 import org.mockito.Mockito;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.annotation.AnnotationUtils;
+
+import java.lang.annotation.Annotation;
 
 /**
  * Creates {@link Mockito} spies for beans of a given type or with a given annotation.

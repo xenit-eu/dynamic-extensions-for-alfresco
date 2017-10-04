@@ -1,12 +1,12 @@
 package com.github.dynamicextensionsalfresco.osgi;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.util.Assert;
+
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorSupport;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.springframework.context.ApplicationContext;
-import org.springframework.util.Assert;
 
 /**
  * {@link PropertyEditor} for configuring {@link ServiceDefinition}s in Spring {@link ApplicationContext}s.

@@ -1,14 +1,14 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
-import static org.junit.Assert.*;
-
-import javax.servlet.http.HttpServletResponse;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.extensions.webscripts.JaxRSUriIndex;
 import org.springframework.extensions.webscripts.Match;
 import org.springframework.extensions.webscripts.WebScript;
+
+import javax.servlet.http.HttpServletResponse;
+
+import static org.junit.Assert.*;
 
 public class WebScriptUriRegistryTest {
 

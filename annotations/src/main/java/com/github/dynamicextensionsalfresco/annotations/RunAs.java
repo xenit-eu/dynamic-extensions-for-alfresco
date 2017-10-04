@@ -1,11 +1,11 @@
 package com.github.dynamicextensionsalfresco.annotations;
 
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
 
 /**
  * Indicates methods that are run as a given user.

@@ -1,11 +1,10 @@
 package com.github.dynamicextensionsalfresco.webscripts.arguments;
 
-import java.lang.annotation.Annotation;
-
 import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptRequest;
-
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
+
+import java.lang.annotation.Annotation;
 
 public class ExceptionArgumentResolver implements ArgumentResolver<Throwable, Annotation> {
 

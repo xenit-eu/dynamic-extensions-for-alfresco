@@ -1,11 +1,11 @@
 package com.github.dynamicextensionsalfresco.actions.annotations;
 
+import org.alfresco.service.cmr.action.Action;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import org.alfresco.service.cmr.action.Action;
 
 /**
  * Indicates a method that maps to an annotation-based {@link Action}.
