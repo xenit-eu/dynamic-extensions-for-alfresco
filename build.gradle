@@ -168,13 +168,6 @@ subprojects {
 
     configurations.all {
         exclude group: 'jaxen'
-//        resolutionStrategy {
-//            eachDependency { details ->
-//                if (details.requested.group == 'org.springframework') {
-//                    details.useVersion project.ext.springVersion
-//                }
-//            }
-//        }
     }
 
     configurations {
