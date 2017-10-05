@@ -34,13 +34,7 @@ dependencies {
 
     testCompile "junit:junit:${project.ext.junitVersion}"
     testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
-//    testCompile "org.springframework:spring-test:${project.ext.springVersion}"
-//    testCompile "org.springframework:spring-web:${project.ext.springVersion}"
-//    testCompile "org.springframework.extensions.surf:spring-webscripts:${project.ext.alfrescoVersion}"
     testCompile("org.alfresco:alfresco-repository:${project.ext.alfrescoVersion}") // { transitive = false }
-//    testCompile("org.alfresco:alfresco-data-model:${project.ext.alfrescoVersion}") { transitive = false }
-
-//    testRuntime "org.springframework:spring-beans:${project.ext.springVersion}"
 }
 
 def ampConfig = {
