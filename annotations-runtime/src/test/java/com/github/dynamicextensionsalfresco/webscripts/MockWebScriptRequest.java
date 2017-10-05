@@ -230,4 +230,20 @@ class MockWebScriptRequest implements WrappingWebScriptRequest {
 		return false;
 	}
 
+
+    public void setContent(Content content) {
+        this.content = content;
+    }
+
+    public void setNext(WebScriptRequest next) {
+        this.next = next;
+    }
+
+    public void setRuntime(Runtime runtime) {
+        this.runtime = runtime;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
+    }
 }

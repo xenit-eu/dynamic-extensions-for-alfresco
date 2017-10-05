@@ -1,5 +1,7 @@
-package com.github.dynamicextensionsalfresco.webscripts;
+package com.github.dynamicextensionsalfresco.webscripts.messages;
 
+import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptRequest;
+import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebscriptResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpOutputMessage;
@@ -16,13 +18,11 @@ import java.util.Set;
 
 public class AnnotationWebScriptOutputMessage implements HttpOutputMessage {
 
-    private final AnnotationWebScriptRequest request;
     private final AnnotationWebscriptResponse response;
 
     private final HttpHeadersWrapper headers;
 
-    public AnnotationWebScriptOutputMessage(AnnotationWebScriptRequest request, AnnotationWebscriptResponse response) {
-        this.request = request;
+    public AnnotationWebScriptOutputMessage(AnnotationWebscriptResponse response) {
         this.response = response;
 
         this.headers = new HttpHeadersWrapper(response);

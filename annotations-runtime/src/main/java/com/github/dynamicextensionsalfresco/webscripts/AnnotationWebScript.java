@@ -2,6 +2,7 @@ package com.github.dynamicextensionsalfresco.webscripts;
 
 import com.github.dynamicextensionsalfresco.webscripts.annotations.Attribute;
 import com.github.dynamicextensionsalfresco.webscripts.arguments.HandlerMethodArgumentsResolver;
+import com.github.dynamicextensionsalfresco.webscripts.messages.AnnotationWebScriptOutputMessage;
 import com.github.dynamicextensionsalfresco.webscripts.resolutions.DefaultResolutionParameters;
 import com.github.dynamicextensionsalfresco.webscripts.resolutions.Resolution;
 import com.github.dynamicextensionsalfresco.webscripts.resolutions.TemplateResolution;
@@ -9,7 +10,6 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.extensions.webscripts.*;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
@@ -26,6 +26,8 @@ public class AnnotationWebScript implements WebScript {
 
 	private HandlerMethodArgumentsResolver argumentsResolver;
 
+	private MessageConverterRegistry messageConverterRegistry;
+
 	/* Configuration */
 
 	private final Description description;
@@ -36,12 +38,12 @@ public class AnnotationWebScript implements WebScript {
 
 	private final String id;
 
-    private final List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
 
 	/* Main operations */
 
 	public AnnotationWebScript(final Description description, final Object handler,
-			final HandlerMethods handlerMethods, final HandlerMethodArgumentsResolver argumentsResolver) {
+			final HandlerMethods handlerMethods, final HandlerMethodArgumentsResolver argumentsResolver,
+                               final MessageConverterRegistry messageConverterRegistry) {
 		Assert.notNull(description, "Description cannot be null.");
 		Assert.hasText(description.getId(), "No ID provided in Description.");
 		Assert.notNull(handler, "Handler cannot be null.");
@@ -51,11 +53,8 @@ public class AnnotationWebScript implements WebScript {
 		this.handler = handler;
 		this.handlerMethods = handlerMethods;
 		this.argumentsResolver = argumentsResolver;
+		this.messageConverterRegistry = messageConverterRegistry;
 		this.id = description.getId();
-
-        this.messageConverters.add(new MappingJackson2HttpMessageConverter());
-        this.messageConverters.add(new Jaxb2RootElementHttpMessageConverter());
-
 	}
 
 	public Object getHandler() {
@@ -196,7 +195,7 @@ public class AnnotationWebScript implements WebScript {
             MediaType responseType = null;
            if(defaultResponse == null && acceptResponseTypes.isEmpty()) { // no Content-Type information given anywhere
                 // both default and accept cannot be null together
-               throw new HttpMediaTypeNotSupportedException(null, getSupportedMediaTypes(), "Unable to convert, mediatype is null");
+               throw new HttpMediaTypeNotSupportedException(null, this.messageConverterRegistry.getSupportedMediaTypes(), "Unable to convert, mediatype is null");
            }
            else if (acceptResponseTypes.isEmpty()) { // use the default
                 responseType = defaultResponseType;
@@ -210,19 +209,10 @@ public class AnnotationWebScript implements WebScript {
                        }
                    }
 
-                   boolean typeFound = false;
-                   for(HttpMessageConverter messageConverter : this.messageConverters) {
-                       if (messageConverter.canWrite(returnValue.getClass(), mediaType)) {
-                           responseType = mediaType;
-                           typeFound = true;
-                           break;
-                       }
-                   }
-
-                   if (typeFound){
+                   if (this.messageConverterRegistry.carWrite(returnValue.getClass(), mediaType) != null) {
+                       responseType = mediaType;
                        break;
                    }
-
 
                }
            }
@@ -231,22 +221,15 @@ public class AnnotationWebScript implements WebScript {
                /**
                 * When there is no default, and there is no support for the headers, this exception is thrown.
                 */
-               throw new HttpMediaTypeNotAcceptableException(getSupportedMediaTypes());
+               throw new HttpMediaTypeNotAcceptableException(this.messageConverterRegistry.getSupportedMediaTypes());
            }
 
 
-            HttpMessageConverter converter = null;
-
-            for(HttpMessageConverter messageConverter : this.messageConverters){
-                if (messageConverter.canWrite(returnValue.getClass(), responseType)){
-                    converter = messageConverter;
-                    break;
-                }
-            }
+            HttpMessageConverter converter = this.messageConverterRegistry.carWrite(returnValue.getClass(), responseType);
 
             if(converter == null) {
                 // unsupported type requested
-                List<MediaType> supported = getSupportedMediaTypes();
+                List<MediaType> supported = this.messageConverterRegistry.getSupportedMediaTypes();
 
                 /**
                  * the {@link Jaxb2RootElementHttpMessageConverter} cannot convert a class
@@ -258,7 +241,7 @@ public class AnnotationWebScript implements WebScript {
             }
 
 
-            AnnotationWebScriptOutputMessage outputMessage = new AnnotationWebScriptOutputMessage(request, response);
+            AnnotationWebScriptOutputMessage outputMessage = new AnnotationWebScriptOutputMessage(response);
             converter.write(returnValue, responseType, outputMessage);
 
         }
@@ -301,16 +284,6 @@ public class AnnotationWebScript implements WebScript {
 
 
 		}
-    }
-
-    @SuppressWarnings("unchecked")
-    private List<MediaType> getSupportedMediaTypes() {
-        List<MediaType> supported = new ArrayList<MediaType>();
-
-        for(HttpMessageConverter messageConverter : this.messageConverters){
-            supported.addAll(messageConverter.getSupportedMediaTypes());
-        }
-        return supported;
     }
 
     protected void invokeExceptionHandlerMethods(final Throwable exception, final AnnotationWebScriptRequest request,

@@ -28,7 +28,10 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 				<property name="namespacePrefixResolver" ref="namespacePrefixResolver" />
 			</bean>
 		</property>
-	</bean>
+        <property name="messageConverterRegistry" ref="webscripts.MessageConverterRegistry" />
+    </bean>
+
+	<bean id="webscripts.MessageConverterRegistry" class="com.github.dynamicextensionsalfresco.webscripts.MessageConverterRegistry" />
 
 	<bean id="namespacePrefixResolver" class="com.github.dynamicextensionsalfresco.spring.MockFactoryBean">
 		<property name="class" value="org.alfresco.service.namespace.NamespacePrefixResolver" />
