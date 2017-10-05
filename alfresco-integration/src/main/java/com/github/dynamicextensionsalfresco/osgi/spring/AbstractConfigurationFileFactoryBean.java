@@ -1,11 +1,5 @@
 package com.github.dynamicextensionsalfresco.osgi.spring;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.Resource;
@@ -13,12 +7,18 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.util.Assert;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Abstract base class for {@link FactoryBean}s that use configuration files.
  * 
  * @author Laurens Fridael
  * 
- * @param <T>
+ * @param <T> The class type that implements FactoryBean
  */
 public abstract class AbstractConfigurationFileFactoryBean<T> implements FactoryBean<T>, ResourceLoaderAware {
 

@@ -117,14 +117,15 @@ subprojects {
     [compileJava, compileTestJava,javadoc]*.options*.encoding = 'UTF-8'
 
     compileJava {
-        sourceCompatibility = 1.6
-        targetCompatibility = 1.6
+        sourceCompatibility = 1.7
+        targetCompatibility = 1.7
         options.compilerArgs << '-Xlint:unchecked'
     }
 
     ext {
-        alfrescoVersion = '5.0.d'
-        springVersion = '3.2.10.RELEASE'
+        alfrescoVersion = '5.2.g'
+        springWebscripts = '6.13'
+        springVersion = '4.1.8.RELEASE'
         geminiVersion = '1.0.2.RELEASE'
         slf4jVersion = '1.7.5'
         osgiVersion = '4.3.1'
@@ -167,13 +168,6 @@ subprojects {
 
     configurations.all {
         exclude group: 'jaxen'
-        resolutionStrategy {
-            eachDependency { details ->
-                if (details.requested.group == 'org.springframework') {
-                    details.useVersion project.ext.springVersion
-                }
-            }
-        }
     }
 
     configurations {
@@ -197,6 +191,10 @@ subprojects {
         }
     }
 
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.2.1'
 }
 
 defaultTasks 'build'

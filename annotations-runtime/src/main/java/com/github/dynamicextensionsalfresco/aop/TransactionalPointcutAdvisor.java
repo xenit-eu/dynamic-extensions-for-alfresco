@@ -1,7 +1,6 @@
 package com.github.dynamicextensionsalfresco.aop;
 
 import com.github.dynamicextensionsalfresco.annotations.Transactional;
-
 import org.aopalliance.aop.Advice;
 import org.springframework.aop.PointcutAdvisor;
 

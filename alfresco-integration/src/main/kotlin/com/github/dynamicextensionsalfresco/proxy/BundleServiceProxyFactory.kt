@@ -1,10 +1,9 @@
 package com.github.dynamicextensionsalfresco.proxy
 
 import com.github.dynamicextensionsalfresco.osgi.FrameworkService
+import org.apache.felix.framework.FilterImpl
 import org.osgi.framework.Filter
 import org.springframework.beans.factory.FactoryBean
-
-import org.apache.felix.framework.FilterImpl
 import java.lang.reflect.Proxy
 
 /**

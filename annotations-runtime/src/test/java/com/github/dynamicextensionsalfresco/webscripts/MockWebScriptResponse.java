@@ -1,15 +1,15 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
+import org.springframework.extensions.webscripts.Cache;
+import org.springframework.extensions.webscripts.Runtime;
+import org.springframework.extensions.webscripts.WebScriptResponse;
+import org.springframework.extensions.webscripts.WrappingWebScriptResponse;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 import java.util.*;
-
-import org.springframework.extensions.webscripts.Cache;
-import org.springframework.extensions.webscripts.Runtime;
-import org.springframework.extensions.webscripts.WebScriptResponse;
-import org.springframework.extensions.webscripts.WrappingWebScriptResponse;
 
 public class MockWebScriptResponse implements WrappingWebScriptResponse {
 

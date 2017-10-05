@@ -1,11 +1,10 @@
 package com.github.dynamicextensionsalfresco.controlpanel.template;
 
-import java.util.List;
-
 import com.github.dynamicextensionsalfresco.controlpanel.Container;
 import com.github.dynamicextensionsalfresco.osgi.SystemPackage;
-
 import org.osgi.framework.Bundle;
+
+import java.util.List;
 
 public class Variables {
 

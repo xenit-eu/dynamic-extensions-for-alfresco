@@ -2,7 +2,7 @@ package com.github.dynamicextensionsalfresco.webscripts
 
 import org.springframework.extensions.webscripts.WebScriptRequest
 import org.springframework.extensions.webscripts.WrappingWebScriptRequest
-import java.util.LinkedHashMap
+import java.util.*
 
 public class AnnotationWebScriptRequest(val webScriptRequest: WebScriptRequest) : WebScriptRequest by webScriptRequest, WrappingWebScriptRequest {
     override fun toString(): String {

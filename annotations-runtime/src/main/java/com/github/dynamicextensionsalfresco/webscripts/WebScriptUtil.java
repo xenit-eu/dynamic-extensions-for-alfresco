@@ -1,14 +1,14 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.extensions.webscripts.WrappingWebScriptRequest;
 import org.springframework.extensions.webscripts.WrappingWebScriptResponse;
 import org.springframework.extensions.webscripts.servlet.WebScriptServletRequest;
 import org.springframework.extensions.webscripts.servlet.WebScriptServletResponse;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Contains Web Script utility methods.
@@ -34,8 +34,8 @@ public class WebScriptUtil {
 	/**
 	 * Extracts the {@link HttpServletRequest} from the given {@link WebScriptRequest}.
 	 * 
-	 * @param request
-	 * @return
+	 * @param request The webscript request
+	 * @return The HttpServletRequest
 	 */
 	public static HttpServletRequest extractHttpServletRequest(final WebScriptRequest request) {
 		HttpServletRequest servletRequest = null;
@@ -53,8 +53,8 @@ public class WebScriptUtil {
 	/**
 	 * Extracts the {@link HttpServletResponse} from the given {@link WebScriptResponse}.
 	 * 
-	 * @param request
-	 * @return
+	 * @param request tehe webscript response
+	 * @return the HttpServletResponse
 	 */
 	public static HttpServletResponse extractHttpServletResponse(final WebScriptResponse request) {
 		HttpServletResponse servletResponse = null;

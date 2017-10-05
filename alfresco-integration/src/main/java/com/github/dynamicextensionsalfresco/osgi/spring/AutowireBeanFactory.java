@@ -35,7 +35,7 @@ public class AutowireBeanFactory extends DefaultListableBeanFactory {
 	}
 
 	@Override
-	protected String determinePrimaryCandidate(final Map<String, Object> candidateBeans,
+	protected String determineAutowireCandidate(final Map<String, Object> candidateBeans,
 			final DependencyDescriptor descriptor) {
 		String beanName = ClassUtils.getShortName(descriptor.getDependencyType());
 
@@ -62,7 +62,7 @@ public class AutowireBeanFactory extends DefaultListableBeanFactory {
 			}
 			break;
 		}
-		return super.determinePrimaryCandidate(candidateBeans, descriptor);
+		return super.determineAutowireCandidate(candidateBeans, descriptor);
 	}
 
 	/* Utility operations */

@@ -1,14 +1,13 @@
 package com.github.dynamicextensionsalfresco.webscripts.arguments;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Array;
-
 import com.github.dynamicextensionsalfresco.webscripts.annotations.RequestParam;
-
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Array;
 
 /**
  * {@link ArgumentResolver} that handles parameters annotated with {@link RequestParam}.

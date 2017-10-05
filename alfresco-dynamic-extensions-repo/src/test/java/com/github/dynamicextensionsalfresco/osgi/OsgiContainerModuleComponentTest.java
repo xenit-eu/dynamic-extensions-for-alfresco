@@ -1,7 +1,5 @@
 package com.github.dynamicextensionsalfresco.osgi;
 
-import static org.junit.Assert.*;
-
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.repository.ContentService;
@@ -12,6 +10,8 @@ import org.alfresco.service.transaction.TransactionService;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.launch.Framework;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
+
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Integration test for {@link OsgiContainerModuleComponent}.

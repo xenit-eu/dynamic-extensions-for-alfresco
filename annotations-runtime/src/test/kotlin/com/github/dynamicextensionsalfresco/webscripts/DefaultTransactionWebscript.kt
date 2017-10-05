@@ -1,6 +1,9 @@
 package com.github.dynamicextensionsalfresco.webscripts
 
-import com.github.dynamicextensionsalfresco.webscripts.annotations.*
+import com.github.dynamicextensionsalfresco.webscripts.annotations.HttpMethod
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Transaction
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Uri
+import com.github.dynamicextensionsalfresco.webscripts.annotations.WebScript
 import org.springframework.stereotype.Component
 
 @Component

@@ -1,16 +1,15 @@
 package com.github.dynamicextensionsalfresco.policy
 
-import java.lang.reflect.InvocationHandler
-import java.lang.reflect.Method
-import java.lang.reflect.Proxy
-import java.util.concurrent.ConcurrentHashMap
-
 import com.github.dynamicextensionsalfresco.metrics.Timer
 import com.github.dynamicextensionsalfresco.metrics.time
 import org.alfresco.repo.policy.Behaviour
 import org.alfresco.repo.policy.Policy
 import org.alfresco.service.cmr.repository.NodeRef
+import java.lang.reflect.InvocationHandler
 import java.lang.reflect.InvocationTargetException
+import java.lang.reflect.Method
+import java.lang.reflect.Proxy
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Proxy that allows a [Behaviour] to be garbage-collected.
