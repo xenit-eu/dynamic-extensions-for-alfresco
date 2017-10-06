@@ -18,6 +18,12 @@ public class ResponseBodyReturnValueHandler {
         return new Person(firstName, lastName);
     }
 
+    @Uri(value = "/handlevoid")
+    @ResponseBody
+    public void handleVoidResponse(@RequestParam final String firstName, @RequestParam final String lastName) {
+        return;
+    }
+
     @Uri(value = "/handleDefaultXmlResponse", defaultFormat = MediaType.APPLICATION_XML_VALUE)
     @ResponseBody
     public PersonXml handleDefaultXmlResponse(@RequestParam final String firstName, @RequestParam final String lastName) {

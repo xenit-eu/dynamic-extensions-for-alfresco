@@ -173,76 +173,10 @@ public class AnnotationWebScript implements WebScript {
          */
         if (handlerMethods.useResponseBody()){
 
-            MediaType defaultResponseType = null;
-            String defaultResponse = this.getDescription().getDefaultFormat();
-            if (defaultResponse != null && !defaultResponse.isEmpty()) {
-                defaultResponseType = MediaType.parseMediaType(defaultResponse);
+            // if the webscript returns 'void' we should do nothing.
+        	if (handlerMethods.getUriMethod().getReturnType() != Void.TYPE) {
+                handleResponseBody(request, response, returnValue);
             }
-
-            String[] headerResponseTypes = request.getHeaderValues("Accept"); // multiple accept headers can occur
-            Set<MediaType> acceptResponseTypes = new HashSet<MediaType>();
-            if (headerResponseTypes != null){
-                for(String headerResponseType : headerResponseTypes){
-
-                    String[] responses = headerResponseType.split(","); // can also be comma seperated https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2
-                    for (String acceptResponse : responses) {
-                        acceptResponseTypes.add(MediaType.parseMediaType(acceptResponse));
-                    }
-                }
-            }
-
-
-            MediaType responseType = null;
-           if(defaultResponse == null && acceptResponseTypes.isEmpty()) { // no Content-Type information given anywhere
-                // both default and accept cannot be null together
-               throw new HttpMediaTypeNotSupportedException(null, this.messageConverterRegistry.getSupportedMediaTypes(), "Unable to convert, mediatype is null");
-           }
-           else if (acceptResponseTypes.isEmpty()) { // use the default
-                responseType = defaultResponseType;
-           }
-           else { // loop over the set, and select the first that works
-               for (MediaType mediaType : acceptResponseTypes){
-                   if (defaultResponse != null) { // first, check against the default type
-                       if (mediaType.isCompatibleWith(defaultResponseType)){
-                           responseType = defaultResponseType;
-                           break;
-                       }
-                   }
-
-                   if (this.messageConverterRegistry.carWrite(returnValue.getClass(), mediaType) != null) {
-                       responseType = mediaType;
-                       break;
-                   }
-
-               }
-           }
-
-           if (responseType == null) {
-               /**
-                * When there is no default, and there is no support for the headers, this exception is thrown.
-                */
-               throw new HttpMediaTypeNotAcceptableException(this.messageConverterRegistry.getSupportedMediaTypes());
-           }
-
-
-            HttpMessageConverter converter = this.messageConverterRegistry.carWrite(returnValue.getClass(), responseType);
-
-            if(converter == null) {
-                // unsupported type requested
-                List<MediaType> supported = this.messageConverterRegistry.getSupportedMediaTypes();
-
-                /**
-                 * the {@link Jaxb2RootElementHttpMessageConverter} cannot convert a class
-                 * if the {@link javax.xml.bind.annotation.XmlRootElement} is missing from the class
-                 *
-                 * If this annotation is missing, the
-                 */
-                throw new HttpMediaTypeNotSupportedException(responseType, supported);
-            }
-
-
-            AnnotationWebScriptOutputMessage outputMessage = new AnnotationWebScriptOutputMessage(response);
-            converter.write(returnValue, responseType, outputMessage);
 
         }
         /**
@@ -284,6 +218,77 @@ public class AnnotationWebScript implements WebScript {
 
 
 		}
+    }
+
+    private void handleResponseBody(AnnotationWebScriptRequest request, AnnotationWebscriptResponse response, Object returnValue) throws HttpMediaTypeNotSupportedException, HttpMediaTypeNotAcceptableException, IOException {
+        MediaType defaultResponseType = null;
+        String defaultResponse = this.getDescription().getDefaultFormat();
+        if (defaultResponse != null && !defaultResponse.isEmpty()) {
+            defaultResponseType = MediaType.parseMediaType(defaultResponse);
+        }
+
+        String[] headerResponseTypes = request.getHeaderValues("Accept"); // multiple accept headers can occur
+        Set<MediaType> acceptResponseTypes = new HashSet<MediaType>();
+        if (headerResponseTypes != null){
+            for(String headerResponseType : headerResponseTypes){
+
+                String[] responses = headerResponseType.split(","); // can also be comma seperated https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2
+                for (String acceptResponse : responses) {
+                    acceptResponseTypes.add(MediaType.parseMediaType(acceptResponse));
+                }
+            }
+        }
+
+        MediaType responseType = null;
+        if(defaultResponse == null && acceptResponseTypes.isEmpty()) { // no Content-Type information given anywhere
+             // both default and accept cannot be null together
+            throw new HttpMediaTypeNotSupportedException(null, this.messageConverterRegistry.getSupportedMediaTypes(), "Unable to convert, mediatype is null");
+        }
+        else if (acceptResponseTypes.isEmpty()) { // use the default
+             responseType = defaultResponseType;
+        }
+        else { // loop over the set, and select the first that works
+            for (MediaType mediaType : acceptResponseTypes){
+                if (defaultResponse != null) { // first, check against the default type
+                    if (mediaType.isCompatibleWith(defaultResponseType)){
+                        responseType = defaultResponseType;
+                        break;
+                    }
+                }
+
+                if (this.messageConverterRegistry.carWrite(returnValue.getClass(), mediaType) != null) {
+                    responseType = mediaType;
+                    break;
+                }
+
+            }
+        }
+
+        if (responseType == null) {
+            /**
+             * When there is no default, and there is no support for the headers, this exception is thrown.
+             */
+            throw new HttpMediaTypeNotAcceptableException(this.messageConverterRegistry.getSupportedMediaTypes());
+        }
+
+        HttpMessageConverter converter = this.messageConverterRegistry.carWrite(returnValue.getClass(), responseType);
+
+        if(converter == null) {
+            // unsupported type requested
+            List<MediaType> supported = this.messageConverterRegistry.getSupportedMediaTypes();
+
+            /**
+             * the {@link Jaxb2RootElementHttpMessageConverter} cannot convert a class
+             * if the {@link javax.xml.bind.annotation.XmlRootElement} is missing from the class
+             *
+             * If this annotation is missing, the can write will return false.
+             */
+            throw new HttpMediaTypeNotSupportedException(responseType, supported);
+        }
+
+
+        AnnotationWebScriptOutputMessage outputMessage = new AnnotationWebScriptOutputMessage(response);
+        converter.write(returnValue, responseType, outputMessage);
     }
 
     protected void invokeExceptionHandlerMethods(final Throwable exception, final AnnotationWebScriptRequest request,
