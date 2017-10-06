@@ -38,6 +38,20 @@ public class ResponseBodyReturnValueTest extends AbstractWebScriptAnnotationsTes
     }
 
     @Test
+    public void testResponseBodyAnnotationVoid() {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+        handleGet("/handlevoid",
+                new MockWebScriptRequest()
+                        .header("Accept", MediaType.APPLICATION_JSON_VALUE)
+                        .param("firstName", "Test")
+                        .param("lastName", "User"),
+                new MockWebScriptResponse().setOutputStream(stream));
+
+        assertThat("Webscript response should be empty", stream.toByteArray().length, is(0));
+    }
+
+    @Test
     public void testHandleResponseAcceptJsonHeader() throws IOException {
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
