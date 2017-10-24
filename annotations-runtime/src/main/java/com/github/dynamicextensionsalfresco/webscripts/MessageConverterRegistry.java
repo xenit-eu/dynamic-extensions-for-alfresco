@@ -1,24 +1,52 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
 import org.springframework.util.Assert;
+import org.springframework.util.ClassUtils;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class MessageConverterRegistry {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MessageConverterRegistry.class);
+
     private final List<HttpMessageConverter<?>> messageConverters;
+
+    private static final boolean jaxb2Present =
+            ClassUtils.isPresent("javax.xml.bind.Binder", MessageConverterRegistry.class.getClassLoader());
+
+    private static final boolean jackson2Present =
+            ClassUtils.isPresent("com.fasterxml.jackson.databind.ObjectMapper", MessageConverterRegistry.class.getClassLoader()) &&
+                    ClassUtils.isPresent("com.fasterxml.jackson.core.JsonGenerator", MessageConverterRegistry.class.getClassLoader());
+
+    private static final boolean jacksonPresent =
+            ClassUtils.isPresent("org.codehaus.jackson.map.ObjectMapper", MessageConverterRegistry.class.getClassLoader()) &&
+                    ClassUtils.isPresent("org.codehaus.jackson.JsonGenerator", MessageConverterRegistry.class.getClassLoader());
+
+
 
     public MessageConverterRegistry() {
         this.messageConverters = new ArrayList<HttpMessageConverter<?>>();
 
-        this.messageConverters.add(new MappingJackson2HttpMessageConverter());
-        this.messageConverters.add(new Jaxb2RootElementHttpMessageConverter());
+        if (jackson2Present) {
+            LOGGER.debug("Adding default converter " + MappingJackson2HttpMessageConverter.class.getName());
+            this.messageConverters.add(new MappingJackson2HttpMessageConverter());
+        }
+        else if (jacksonPresent) {
+            LOGGER.debug("Adding default converter " + MappingJacksonHttpMessageConverter.class.getName());
+            this.messageConverters.add(new MappingJacksonHttpMessageConverter());
+        }
+
+        if (jaxb2Present) {
+            LOGGER.debug("Adding default converter " + Jaxb2RootElementHttpMessageConverter.class.getName());
+            this.messageConverters.add(new Jaxb2RootElementHttpMessageConverter());
+        }
     }
 
     /**
