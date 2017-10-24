@@ -3,6 +3,7 @@ package com.github.dynamicextensionsalfresco.webscripts;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
@@ -102,6 +103,7 @@ public class RequestBodyTest extends AbstractWebScriptAnnotationsTest {
     }
 
     @Test
+    @Ignore("The required parameter is not available in the Alfresco 4.2 spring version.")
     public void requestBodyInputStreamNullRequiredFalse() {
         MockWebScriptRequest request = new MockWebScriptRequest().header("Content-Type", "application/json");
         handlePost("/requestbody/notRequired", request);
@@ -121,6 +123,7 @@ public class RequestBodyTest extends AbstractWebScriptAnnotationsTest {
     }
 
     @Test
+    @Ignore("The required parameter is not available in the Alfresco 4.2 spring version.")
     public void requestBodyEmptyRequiredFalse() {
         MockWebScriptRequest request = new MockWebScriptRequest().header("Content-Type", "application/json");
         request.setContent(new MockWebscriptContent().with(new ByteArrayInputStream(new byte[0])));

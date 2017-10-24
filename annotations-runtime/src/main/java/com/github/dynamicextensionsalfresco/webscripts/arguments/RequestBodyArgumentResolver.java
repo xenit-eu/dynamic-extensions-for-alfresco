@@ -56,22 +56,28 @@ public class RequestBodyArgumentResolver implements ArgumentResolver<Object, Req
         }
 
 
-        if (request.getContent() == null && parameterAnnotation.required()) {
+        // Because the required parameter is not available in the spring version that ships with Alfresco 4.2,
+        // we will assume that it is always true.
+        // TODO reinsert check for required parameter when alfresco 4.2 is deprecated.
+
+        //if (request.getContent() == null && parameterAnnotation.required()) {
+        if (request.getContent() == null) {
             throw new RuntimeException("The content of the request is empty while it is required.");
         }
-        else if (request.getContent() == null && !parameterAnnotation.required()) {
-            return null;
-        }
+        //else if (request.getContent() == null && !parameterAnnotation.required()) {
+//            return null;
+//        }
 
         boolean isEmpty = this.isBodyEmpty(request.getContent().getInputStream());
-        if (parameterAnnotation.required() && isEmpty) {
+        //if (parameterAnnotation.required() && isEmpty) {
+        if (isEmpty) {
            throw new RuntimeException("The body of the request is empty while it is required.");
         }
-        else {
-            if (isEmpty) {
-                return null;
-            }
-        }
+//        else {
+//            if (isEmpty) {
+//                return null;
+//            }
+//        }
 
         AnnotationWebScriptInputMessage inputMessage = new AnnotationWebScriptInputMessage(request);
 
