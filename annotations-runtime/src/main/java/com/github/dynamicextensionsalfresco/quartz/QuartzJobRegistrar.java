@@ -44,6 +44,9 @@ public class QuartzJobRegistrar implements ApplicationContextAware, Initializing
                 String cron = applicationContext.getBean("global-properties", Properties.class).getProperty(annotation.cronProp(), annotation.cron());
                 CronTrigger trigger = new CronTrigger(annotation.name(), annotation.group(), cron);
                 JobDetail jobDetail = new JobDetail(annotation.name(), annotation.group(), annotation.cluster() ? AbstractScheduledLockedJob.class : GenericQuartzJob.class);
+                JobDataMap map = new JobDataMap();
+                map.put(BEAN_ID, bean);
+                jobDetail.setJobDataMap(map);
                 scheduler.scheduleJob(jobDetail, trigger);
 
                 registeredJobs.add(annotation);
