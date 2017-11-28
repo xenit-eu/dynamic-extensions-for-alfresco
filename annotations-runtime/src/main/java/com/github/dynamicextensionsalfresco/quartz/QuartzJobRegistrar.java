@@ -1,6 +1,7 @@
 package com.github.dynamicextensionsalfresco.quartz;
 
 import com.github.dynamicextensionsalfresco.jobs.ScheduledQuartzJob;
+import org.alfresco.schedule.AbstractScheduledLockedJob;
 import org.quartz.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,8 @@ import java.util.Properties;
 public class QuartzJobRegistrar implements ApplicationContextAware, InitializingBean, DisposableBean {
     private Logger logger = LoggerFactory.getLogger(QuartzJobRegistrar.class);
 
+    public final static String BEAN_ID="bean";
+
     @Autowired
     protected Scheduler scheduler;
     private ArrayList<ScheduledQuartzJob> registeredJobs = new ArrayList<ScheduledQuartzJob>();
@@ -40,8 +43,10 @@ public class QuartzJobRegistrar implements ApplicationContextAware, Initializing
             try {
                 String cron = applicationContext.getBean("global-properties", Properties.class).getProperty(annotation.cronProp(), annotation.cron());
                 CronTrigger trigger = new CronTrigger(annotation.name(), annotation.group(), cron);
-                JobDetail jobDetail = new JobDetail(annotation.name(), annotation.group(), GenericQuartzJob.class);
-                jobDetail.getJobDataMap().put(GenericQuartzJob.Companion.getBEAN_ID(), bean);
+                JobDetail jobDetail = new JobDetail(annotation.name(), annotation.group(), annotation.cluster() ? AbstractScheduledLockedJob.class : GenericQuartzJob.class);
+                JobDataMap map = new JobDataMap();
+                map.put(BEAN_ID, bean);
+                jobDetail.setJobDataMap(map);
                 scheduler.scheduleJob(jobDetail, trigger);
 
                 registeredJobs.add(annotation);
@@ -50,7 +55,6 @@ public class QuartzJobRegistrar implements ApplicationContextAware, Initializing
             } catch (Exception e) {
                 logger.error("failed to register job " + annotation.name() + " using cron " + annotation.group(), e);
             }
-
         }
     }
 

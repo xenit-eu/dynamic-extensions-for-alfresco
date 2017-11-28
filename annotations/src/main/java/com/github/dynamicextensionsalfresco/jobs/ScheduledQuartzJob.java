@@ -41,4 +41,11 @@ public @interface ScheduledQuartzJob {
 	 * When not provided / not resolved, fallback to default cron expression.
 	 */
 	String cronProp() default "";
+
+	/**
+	 * If true the job will only run once in the Alfresco cluster by using the JobLockService
+	 *
+	 * @return
+	 */
+	boolean cluster() default false;
 }
