@@ -1,22 +1,14 @@
 package com.github.dynamicextensionsalfresco.webscripts.messages;
 
-import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptRequest;
 import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebscriptResponse;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpOutputMessage;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.server.ServerHttpResponse;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URI;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-public class AnnotationWebScriptOutputMessage implements HttpOutputMessage {
+public class AnnotationWebScriptOutputMessage implements ServerHttpResponse {
 
     private final AnnotationWebscriptResponse response;
 
@@ -36,6 +28,16 @@ public class AnnotationWebScriptOutputMessage implements HttpOutputMessage {
     @Override
     public HttpHeaders getHeaders() {
         return this.headers;
+    }
+
+    @Override
+    public void setStatusCode(HttpStatus status) {
+        response.setStatus(status.value());
+    }
+
+    @Override
+    public void close() {
+        // TODO Should we do something here? I don't think so?
     }
 
     public class HttpHeadersWrapper extends HttpHeaders {

@@ -8,9 +8,11 @@ import com.github.dynamicextensionsalfresco.webscripts.resolutions.Resolution;
 import com.github.dynamicextensionsalfresco.webscripts.resolutions.TemplateResolution;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.extensions.webscripts.*;
+import org.springframework.http.*;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
+import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
@@ -165,13 +167,16 @@ public class AnnotationWebScript implements WebScript {
             resolution = (Resolution) returnValue;
         }
 
+        if (returnValue instanceof HttpEntity) {
+            handleHttpEntityResponse(request, response, (HttpEntity<?>) returnValue);
+        }
         /**
          * If the method is annotated with {@link org.springframework.web.bind.annotation.ResponseBody}
          * The response should be serialized automatically by what the request asked in the accept header.
          * If the accept header is not present, the default format value of the method is used.
          * If there is no default format available, an exception is thrown.
          */
-        if (handlerMethods.useResponseBody()){
+        else if (handlerMethods.useResponseBody()){
 
             // if the webscript returns 'void' we should do nothing.
         	if (handlerMethods.getUriMethod().getReturnType() != Void.TYPE) {
@@ -219,6 +224,32 @@ public class AnnotationWebScript implements WebScript {
 
 		}
     }
+
+    private void handleHttpEntityResponse(AnnotationWebScriptRequest request, AnnotationWebscriptResponse response, HttpEntity<?> returnValue) throws IOException, HttpMediaTypeNotAcceptableException, HttpMediaTypeNotSupportedException {
+		if (returnValue == null) {
+			return;
+		}
+
+		AnnotationWebScriptOutputMessage outputMessage = new AnnotationWebScriptOutputMessage(response);
+		// Process status code
+		if (returnValue instanceof ResponseEntity) {
+			outputMessage.setStatusCode(((ResponseEntity) returnValue).getStatusCode());
+		}
+		HttpHeaders entityHeaders = returnValue.getHeaders();
+		if (!entityHeaders.isEmpty()) {
+			outputMessage.getHeaders().putAll(entityHeaders);
+		}
+
+		Object body = returnValue.getBody();
+		if (body != null) {
+			this.handleResponseBody(request, response, returnValue.getBody());
+		}
+		else {
+			// flush headers
+			outputMessage.getBody();
+		}
+
+	}
 
     private void handleResponseBody(AnnotationWebScriptRequest request, AnnotationWebscriptResponse response, Object returnValue) throws HttpMediaTypeNotSupportedException, HttpMediaTypeNotAcceptableException, IOException {
         MediaType defaultResponseType = null;
