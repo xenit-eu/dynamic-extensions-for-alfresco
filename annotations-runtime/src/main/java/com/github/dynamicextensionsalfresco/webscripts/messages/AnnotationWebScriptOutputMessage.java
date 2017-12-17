@@ -7,6 +7,10 @@ import org.springframework.http.server.ServerHttpResponse;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public class AnnotationWebScriptOutputMessage implements ServerHttpResponse {
 
@@ -59,6 +63,22 @@ public class AnnotationWebScriptOutputMessage implements ServerHttpResponse {
             super.set(headerName, headerValue);
 
             response.setHeader(headerName, headerValue);
+        }
+
+        @Override
+        public void putAll(Map<? extends String, ? extends List<String>> map) {
+            super.putAll(map);
+
+            // Should be supported to putAll headers of an HttpEntity.
+            for (Entry<? extends String, ? extends List<String>> entry : map.entrySet()) {
+                if (entry.getValue() == null || entry.getValue().isEmpty()) {
+                    continue;
+                }
+                response.setHeader(entry.getKey(), entry.getValue().get(0));
+                for (int i = 1; i < entry.getValue().size(); i++) {
+                    response.addHeader(entry.getKey(), entry.getValue().get(i));
+                }
+            }
         }
     }
 
