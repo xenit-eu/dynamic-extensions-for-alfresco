@@ -41,7 +41,6 @@ public class AnnotationWebScriptOutputMessage implements ServerHttpResponse {
 
     @Override
     public void close() {
-        // TODO Should we do something here? I don't think so?
     }
 
     public class HttpHeadersWrapper extends HttpHeaders {
