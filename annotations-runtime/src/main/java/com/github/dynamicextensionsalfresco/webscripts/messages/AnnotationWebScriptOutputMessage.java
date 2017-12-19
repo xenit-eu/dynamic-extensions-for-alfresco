@@ -1,22 +1,18 @@
 package com.github.dynamicextensionsalfresco.webscripts.messages;
 
-import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptRequest;
 import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebscriptResponse;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpOutputMessage;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.server.ServerHttpResponse;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URI;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-public class AnnotationWebScriptOutputMessage implements HttpOutputMessage {
+public class AnnotationWebScriptOutputMessage implements ServerHttpResponse {
 
     private final AnnotationWebscriptResponse response;
 
@@ -38,6 +34,15 @@ public class AnnotationWebScriptOutputMessage implements HttpOutputMessage {
         return this.headers;
     }
 
+    @Override
+    public void setStatusCode(HttpStatus status) {
+        response.setStatus(status.value());
+    }
+
+    @Override
+    public void close() {
+    }
+
     public class HttpHeadersWrapper extends HttpHeaders {
         private final AnnotationWebscriptResponse response;
 
@@ -57,6 +62,22 @@ public class AnnotationWebScriptOutputMessage implements HttpOutputMessage {
             super.set(headerName, headerValue);
 
             response.setHeader(headerName, headerValue);
+        }
+
+        @Override
+        public void putAll(Map<? extends String, ? extends List<String>> map) {
+            super.putAll(map);
+
+            // Should be supported to putAll headers of an HttpEntity.
+            for (Entry<? extends String, ? extends List<String>> entry : map.entrySet()) {
+                if (entry.getValue() == null || entry.getValue().isEmpty()) {
+                    continue;
+                }
+                response.setHeader(entry.getKey(), entry.getValue().get(0));
+                for (int i = 1; i < entry.getValue().size(); i++) {
+                    response.addHeader(entry.getKey(), entry.getValue().get(i));
+                }
+            }
         }
     }
 
