@@ -11,6 +11,7 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.util.Assert;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.web.util.HtmlUtils;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
@@ -126,8 +127,9 @@ public abstract class AbstractBundleResourceHandler {
 
 	protected void handleResourceNotFound(final String path, final WebScriptResponse response) throws IOException {
 		response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		response.setContentType("text/html");
 		final Writer out = response.getWriter();
-		out.write(String.format("Could not find resource at path '%s'.", path));
+		out.write(String.format("<!doctype html><head><title>Not found</title></head><body>Could not find resource at path '%s'.</body></html>", HtmlUtils.htmlEscape(path)));
 		out.close();
 	}
 
