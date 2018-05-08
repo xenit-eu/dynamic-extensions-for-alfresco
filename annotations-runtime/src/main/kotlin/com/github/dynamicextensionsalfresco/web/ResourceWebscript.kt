@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse
  * @author Laurent Van der Linden
  */
 public class ResourceWebscript(private val bundleContext: BundleContext) : WebScript, AbstractBundleResourceHandler() {
-    private val module = "alfresco-dynamic-extensions-repo-control-panel";
+    private val module = bundleContext.bundle.symbolicName.replace(".", "-").toLowerCase();
 
     init {
         initContentTypes()
