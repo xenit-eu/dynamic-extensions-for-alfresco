@@ -5,12 +5,9 @@ dependencies {
     compile project(':webscripts')
     compile "org.apache.felix:org.apache.felix.framework:${project.ext.felixVersion}"
     compile "org.slf4j:slf4j-api:${project.ext.slf4jVersion}"
-    compile("org.springframework.extensions.surf:spring-webscripts:${project.ext.alfrescoVersion}")// {transitive = false}
+    compile("org.alfresco.surf:spring-webscripts:${project.ext.springWebscripts}")// {transitive = false}
     compile "org.freemarker:freemarker:2.3.16"
     compile "javax.servlet:servlet-api:${project.ext.servletVersion}"
-    compile "org.springframework:spring-aop:${project.ext.springVersion}"
-    compile "org.springframework:spring-tx:${project.ext.springVersion}"
-    compile "org.springframework:spring-jdbc:${project.ext.springVersion}"
     compile "javax.transaction:transaction-api:${project.ext.transactionApiVersion}"
     compile("org.activiti:activiti-engine:5.7") {transitive = false}
     compile("org.activiti:activiti-spring:5.7") {transitive = false}
@@ -20,7 +17,6 @@ dependencies {
 
     testCompile "junit:junit:${project.ext.junitVersion}"
     testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
-    testCompile "org.springframework:spring-test:${project.ext.springVersion}"
 
     testRuntime "org.mybatis:mybatis:3.0.4"
     testRuntime("org.hibernate:hibernate:${project.ext.hibernateVersion}") {
@@ -30,4 +26,5 @@ dependencies {
     testRuntime 'xerces:xercesImpl:2.8.0'
 
     testCompile("org.alfresco:alfresco-repository:${project.ext.alfrescoVersion}")
+    testCompile "org.springframework:spring-test:${project.ext.springVersion}"
 }

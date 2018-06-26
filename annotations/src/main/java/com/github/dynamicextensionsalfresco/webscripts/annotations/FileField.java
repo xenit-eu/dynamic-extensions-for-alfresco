@@ -20,7 +20,7 @@ import java.lang.annotation.Target;
 public @interface FileField {
 
 	/**
-	 * The form field name.
+	 * @return The form field name.
 	 */
 	String value() default "";
 

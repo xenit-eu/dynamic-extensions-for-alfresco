@@ -3,10 +3,7 @@ package com.github.dynamicextensionsalfresco.models
 import org.alfresco.repo.dictionary.DictionaryDAO
 import org.alfresco.repo.dictionary.M2Model
 import org.alfresco.service.namespace.QName
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Required
 import java.util.*
 
 /**

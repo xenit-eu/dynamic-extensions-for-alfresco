@@ -1,14 +1,13 @@
 package com.github.dynamicextensionsalfresco.blueprint;
 
+import freemarker.cache.TemplateLoader;
+import org.osgi.framework.Bundle;
+import org.springframework.util.Assert;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
-
-import org.osgi.framework.Bundle;
-import org.springframework.util.Assert;
-
-import freemarker.cache.TemplateLoader;
 
 /**
  * Provides a Freemarker {@link TemplateLoader} that resolves resources in a {@link Bundle}.

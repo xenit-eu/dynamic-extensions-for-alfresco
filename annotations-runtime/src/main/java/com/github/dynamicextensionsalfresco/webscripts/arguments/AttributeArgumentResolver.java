@@ -1,14 +1,13 @@
 package com.github.dynamicextensionsalfresco.webscripts.arguments;
 
-import java.lang.annotation.Annotation;
-import java.util.Map;
-
 import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptRequest;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.Attribute;
-
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.util.StringUtils;
+
+import java.lang.annotation.Annotation;
+import java.util.Map;
 
 public class AttributeArgumentResolver implements ArgumentResolver<Object, Attribute> {
 

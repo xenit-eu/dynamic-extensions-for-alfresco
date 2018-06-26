@@ -62,6 +62,8 @@ public class JavaPackageScanner implements ServletContextAware {
 	 * classses into the VM.
 	 * <p>
 	 * Note: calling this for a second time during Framework restart will currently fail.
+	 *
+	 * @return The SystemPackages
 	 */
 	public Set<SystemPackage> scanWebApplicationPackages() {
 		if (resourcePatternResolver == null) {
@@ -117,9 +119,9 @@ public class JavaPackageScanner implements ServletContextAware {
 	 * Scans the given {@link JarFile} for an OSGi-compliant manifest and uses the 'Export-Package' header to determine
 	 * the {@link SystemPackage}s.
 	 * 
-	 * @param jarFile
-	 * @return
-	 * @throws IOException
+	 * @param jarFile The jarfile that needs to be scanned
+	 * @return The systempackages
+	 * @throws IOException If reading in the jarfile failes
 	 */
 	protected Set<SystemPackage> scanBundleExportPackages(final JarFile jarFile) throws IOException {
 		Set<SystemPackage> exportPackages = null;
@@ -162,9 +164,9 @@ public class JavaPackageScanner implements ServletContextAware {
 	 * For 'org.alfresco' packages the implementation uses the {@link DescriptorService} to determine the platform
 	 * version.
 	 * 
-	 * @param jarFile
-	 * @return
-	 * @throws IOException
+	 * @param jarFile The jarfile that needs to be scanned
+	 * @return The systempackages
+	 * @throws IOException If the jarfile cannot be read.
 	 */
 	protected Set<SystemPackage> scanJavaPackages(final JarFile jarFile) throws IOException {
 		final String implementationVersion = getImplementationVersion(jarFile);
@@ -198,8 +200,8 @@ public class JavaPackageScanner implements ServletContextAware {
 	 * Tests if the given {@link ZipEntry} represents a Java class in a package. (I.e. one that is not in the default
 	 * package.)
 	 * 
-	 * @param jarEntry
-	 * @return
+	 * @param jarEntry The entry that will be checked
+	 * @return if a class is in a package
 	 */
 	protected boolean isJavaClassInPackage(final JarEntry jarEntry) {
 		final String name = jarEntry.getName();

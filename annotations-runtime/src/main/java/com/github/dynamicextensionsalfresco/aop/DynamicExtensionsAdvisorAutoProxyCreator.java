@@ -1,11 +1,11 @@
 package com.github.dynamicextensionsalfresco.aop;
 
+import org.springframework.aop.Advisor;
+import org.springframework.aop.framework.autoproxy.AbstractAdvisorAutoProxyCreator;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import org.springframework.aop.Advisor;
-import org.springframework.aop.framework.autoproxy.AbstractAdvisorAutoProxyCreator;
 
 /**
  * Creates proxies for using {@link Advisor}s that are marked as {@link DynamicExtensionsAdvisor}s.

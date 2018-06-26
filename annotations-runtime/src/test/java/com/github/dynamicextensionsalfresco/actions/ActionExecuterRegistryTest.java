@@ -1,10 +1,5 @@
 package com.github.dynamicextensionsalfresco.actions;
 
-import static org.junit.Assert.*;
-
-import java.util.List;
-import java.util.Set;
-
 import org.alfresco.repo.action.executer.ActionExecuter;
 import org.alfresco.service.cmr.action.ActionDefinition;
 import org.alfresco.service.cmr.action.ParameterDefinition;
@@ -14,6 +9,12 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.List;
+import java.util.Set;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration

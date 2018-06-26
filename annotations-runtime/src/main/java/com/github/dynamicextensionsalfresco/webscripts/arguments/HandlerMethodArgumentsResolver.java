@@ -82,8 +82,8 @@ public class HandlerMethodArgumentsResolver implements ApplicationContextAware {
 	 *            The handler method.
 	 * @param handler
 	 *            The handler itself.
-	 * @param request
-	 * @param response
+	 * @param request The webscript request
+	 * @param response The webscript response
 	 * @return The arguments to invoke handlerMethod with.
 	 */
 	public Object[] resolveHandlerMethodArguments(Method method, final Object handler, final WebScriptRequest request,

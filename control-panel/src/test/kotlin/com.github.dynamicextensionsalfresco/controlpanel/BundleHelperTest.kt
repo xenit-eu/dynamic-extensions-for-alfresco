@@ -13,9 +13,7 @@ import org.alfresco.service.cmr.repository.NodeRef
 import org.alfresco.service.cmr.repository.NodeService
 import org.junit.Test
 import org.mockito.ArgumentCaptor
-import org.mockito.Matchers.anyObject
-import org.mockito.Matchers.anyString
-import org.mockito.Matchers.eq
+import org.mockito.Matchers.*
 import org.mockito.Mockito.mock
 import org.osgi.framework.*
 import org.osgi.framework.wiring.FrameworkWiring

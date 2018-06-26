@@ -1,10 +1,10 @@
 package com.github.dynamicextensionsalfresco.osgi;
 
-import static org.mockito.Mockito.*;
-
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.util.Assert;
+
+import static org.mockito.Mockito.mock;
 
 /**
  * FactoryBean that creates a mock for a given class.

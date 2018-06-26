@@ -7,8 +7,6 @@ import org.springframework.http.server.ServerHttpResponse;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +35,10 @@ public class AnnotationWebScriptOutputMessage implements ServerHttpResponse {
     @Override
     public void setStatusCode(HttpStatus status) {
         response.setStatus(status.value());
+    }
+
+    @Override
+    public void flush() {
     }
 
     @Override

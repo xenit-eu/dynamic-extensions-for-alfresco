@@ -1,10 +1,10 @@
 package com.github.dynamicextensionsalfresco.osgi;
 
-import java.util.List;
-
 import org.alfresco.repo.dictionary.DictionaryDAO;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.tenant.TenantService;
+
+import java.util.List;
 
 /**
  * Simulated {@link Repository}-like class for use in integration tests.

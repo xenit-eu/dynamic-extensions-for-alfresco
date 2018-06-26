@@ -1,11 +1,10 @@
 package com.github.dynamicextensionsalfresco.webscripts.arguments;
 
-import java.lang.annotation.Annotation;
-
 import com.github.dynamicextensionsalfresco.webscripts.annotations.Header;
-
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
+
+import java.lang.annotation.Annotation;
 
 /**
  * {@link ArgumentResolver} that maps String parameters annotated with {@link Header}.

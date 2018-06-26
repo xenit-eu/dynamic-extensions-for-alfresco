@@ -80,6 +80,11 @@ abstract class AbstractControlPanelHandler {
 	/**
 	 * Constructs a {@link Map} with a single value. This is useful for {@link Uri} handlers that contribute only one
 	 * value to a model.
+	 *
+	 * @param name the name of the value
+     * @param value the value
+     *
+     * @return a map containing the name and value pair
 	 */
 	protected Map<String, Object> model(final String name, final Object value) {
 		final HashMap<String, Object> model = new HashMap<String, Object>();

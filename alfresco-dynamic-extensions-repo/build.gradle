@@ -30,16 +30,11 @@ dependencies {
     bundles(project(":control-panel")) {transitive = false}
     bundles(project(":event-bus")) {transitive = false}
     bundles 'org.apache.felix:org.apache.felix.log:1.0.1'
+    bundles 'org.json:json:20160212'
 
     testCompile "junit:junit:${project.ext.junitVersion}"
     testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
-    testCompile "org.springframework:spring-test:${project.ext.springVersion}"
-    testCompile "org.springframework:spring-web:${project.ext.springVersion}"
-    testCompile "org.springframework.extensions.surf:spring-webscripts:${project.ext.alfrescoVersion}"
-    testCompile("org.alfresco:alfresco-repository:${project.ext.alfrescoVersion}") { transitive = false }
-    testCompile("org.alfresco:alfresco-data-model:${project.ext.alfrescoVersion}") { transitive = false }
-
-    testRuntime "org.springframework:spring-beans:${project.ext.springVersion}"
+    testCompile("org.alfresco:alfresco-repository:${project.ext.alfrescoVersion}") // { transitive = false }
 }
 
 def ampConfig = {

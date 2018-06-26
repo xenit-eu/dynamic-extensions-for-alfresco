@@ -1,20 +1,13 @@
 package com.github.dynamicextensionsalfresco.controlpanel;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.github.dynamicextensionsalfresco.controlpanel.template.TemplateWebScript;
 import com.github.dynamicextensionsalfresco.webscripts.WebScriptUriRegistry;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.extensions.webscripts.WebScript;
 import org.springframework.stereotype.Component;
+
+import java.util.*;
 
 import static java.util.Arrays.asList;
 

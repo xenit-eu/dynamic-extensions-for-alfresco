@@ -3,7 +3,6 @@ package com.github.dynamicextensionsalfresco.webscripts;
 import com.github.dynamicextensionsalfresco.spring.Spied;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.RequestParam;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.Uri;
-
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.springframework.stereotype.Component;

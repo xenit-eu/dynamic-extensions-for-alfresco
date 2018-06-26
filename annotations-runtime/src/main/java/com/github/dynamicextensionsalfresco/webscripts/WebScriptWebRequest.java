@@ -1,16 +1,11 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
-import java.security.Principal;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
-
 import com.github.dynamicextensionsalfresco.webscripts.arguments.CommandArgumentResolver;
-
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.web.context.request.WebRequest;
+
+import java.security.Principal;
+import java.util.*;
 
 /**
  * {@link WebRequest} adapter for use by {@link CommandArgumentResolver}.

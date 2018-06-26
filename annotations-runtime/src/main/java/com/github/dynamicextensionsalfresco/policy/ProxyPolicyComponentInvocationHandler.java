@@ -1,10 +1,10 @@
 package com.github.dynamicextensionsalfresco.policy;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.PolicyComponent;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
 
 /**
  * {@link InvocationHandler} for {@link PolicyComponent} operations that replaces {@link Behaviour} arguments in method
