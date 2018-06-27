@@ -1,11 +1,12 @@
 package com.github.dynamicextensionsalfresco.webscripts.arguments;
 
-import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptRequest;
-import org.springframework.extensions.webscripts.WebScriptRequest;
-import org.springframework.extensions.webscripts.WebScriptResponse;
-
 import java.lang.annotation.Annotation;
 import java.util.Map;
+
+import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptRequest;
+
+import org.springframework.extensions.webscripts.WebScriptRequest;
+import org.springframework.extensions.webscripts.WebScriptResponse;
 
 /**
  * Resolves {@link Map} handler method arguments to the model.

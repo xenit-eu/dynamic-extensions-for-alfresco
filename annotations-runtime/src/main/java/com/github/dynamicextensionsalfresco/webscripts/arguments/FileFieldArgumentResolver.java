@@ -1,16 +1,17 @@
 package com.github.dynamicextensionsalfresco.webscripts.arguments;
 
+import java.lang.annotation.Annotation;
+
 import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptRequest;
 import com.github.dynamicextensionsalfresco.webscripts.WebScriptUtil;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.FileField;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.Header;
+
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.extensions.webscripts.servlet.FormData.FormField;
 import org.springframework.extensions.webscripts.servlet.WebScriptServletRequest;
 import org.springframework.util.StringUtils;
-
-import java.lang.annotation.Annotation;
 
 /**
  * {@link ArgumentResolver} that maps String parameters annotated with {@link Header}.

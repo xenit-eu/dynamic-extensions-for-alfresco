@@ -1,18 +1,19 @@
 package com.github.dynamicextensionsalfresco.osgi.spring;
 
-import com.github.dynamicextensionsalfresco.osgi.SystemPackage;
-import com.github.dynamicextensionsalfresco.osgi.SystemPackageEditor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.FactoryBean;
-import org.springframework.core.io.Resource;
-import org.springframework.util.Assert;
-
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.util.LinkedHashSet;
 import java.util.Set;
+
+import com.github.dynamicextensionsalfresco.osgi.SystemPackage;
+import com.github.dynamicextensionsalfresco.osgi.SystemPackageEditor;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.FactoryBean;
+import org.springframework.core.io.Resource;
+import org.springframework.util.Assert;
 
 /**
  * {@link FactoryBean} for creating a List of {@link SystemPackage}s from a text file.

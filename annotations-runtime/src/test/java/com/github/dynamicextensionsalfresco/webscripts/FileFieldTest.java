@@ -1,12 +1,12 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
+import static org.mockito.Mockito.*;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.FileField;
+
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.extensions.webscripts.servlet.FormData.FormField;
 import org.springframework.extensions.webscripts.servlet.WebScriptServletRequest;
-
-import static org.mockito.Mockito.*;
 
 /**
  * Integration test for {@link FileField} handling.

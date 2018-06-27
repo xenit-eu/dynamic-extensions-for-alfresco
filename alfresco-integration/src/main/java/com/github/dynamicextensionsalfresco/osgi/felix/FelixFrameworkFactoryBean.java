@@ -1,6 +1,7 @@
 package com.github.dynamicextensionsalfresco.osgi.felix;
 
 import com.github.dynamicextensionsalfresco.osgi.spring.AbstractFrameworkFactoryBean;
+
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
 import org.springframework.beans.factory.FactoryBean;

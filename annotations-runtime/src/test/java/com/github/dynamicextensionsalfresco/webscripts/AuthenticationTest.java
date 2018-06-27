@@ -6,7 +6,7 @@ import org.springframework.extensions.webscripts.Description;
 import org.springframework.extensions.webscripts.Match;
 import org.springframework.extensions.webscripts.UriIndex;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * Verify @Authentication can be overridden on a method basis.

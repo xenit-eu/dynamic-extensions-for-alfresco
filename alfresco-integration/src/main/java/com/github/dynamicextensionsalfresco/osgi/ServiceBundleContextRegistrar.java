@@ -1,5 +1,11 @@
 package com.github.dynamicextensionsalfresco.osgi;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+
 import org.alfresco.service.descriptor.Descriptor;
 import org.alfresco.service.descriptor.DescriptorService;
 import org.alfresco.util.VersionNumber;
@@ -16,8 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-
-import java.util.*;
 
 /**
  * Registers beans from an {@link ApplicationContext} as services in a {@link BundleContext}.

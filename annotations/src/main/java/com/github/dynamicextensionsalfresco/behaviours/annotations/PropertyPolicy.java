@@ -24,7 +24,7 @@ public @interface PropertyPolicy {
 	 * <p>
 	 * If no value is specified, the Policy is applied to all types and aspects.
 	 * 
-	 * @return The QNames of the types or aspects that apply to the Policy
+	 * @return
 	 */
 	String[] value() default {};
 
@@ -34,14 +34,14 @@ public @interface PropertyPolicy {
 	 * If no value is specified, the Policy is applied to all properties. If a property has been specified, the class
 	 * name must also be specified. It is invalid to specify only a property.
 	 * 
-	 * @return The QNames of the property that apply to the Policy
+	 * @return
 	 */
 	String property() default "";
 
 	/**
 	 * Indicates when to trigger the Behaviour.
 	 * 
-	 * @return The event that triggers the behaviour.
+	 * @return
 	 */
 	Event event() default Event.INHERITED_OR_ALL;
 

@@ -1,5 +1,12 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -11,13 +18,6 @@ import org.springframework.extensions.webscripts.UriIndex;
 import org.springframework.extensions.webscripts.WebScript;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Registers {@link WebScript}s in an {@link UriIndex}.
@@ -55,7 +55,7 @@ public class WebScriptUriRegistry implements UriIndex, BeanPostProcessor, Initia
 	/**
 	 * Registers a {@link WebScript} with the {@link UriIndex}.
 	 * 
-	 * @param webScript The webscrtipt
+	 * @param webScript
 	 */
 	public void registerWebScript(final WebScript webScript) {
 		lock.lock();
@@ -80,7 +80,7 @@ public class WebScriptUriRegistry implements UriIndex, BeanPostProcessor, Initia
 	 * As the {@link UriIndex} has no unregistration methods, the actual URI binding will only be cleared when the
 	 * {@link Registry} is reset.
 	 * 
-	 * @param webScript The webscript
+	 * @param webScript
 	 */
 	public void unregisterWebScript(final WebScript webScript) {
 		lock.lock();

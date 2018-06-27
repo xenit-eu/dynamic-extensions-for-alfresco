@@ -10,8 +10,8 @@ import java.lang.annotation.Annotation;
  * 
  * @author Laurens Fridael
  * 
- * @param <ArgumentType> The type the argument resolver can be used on.
- * @param <AnnotationType> The annotation that the type needs to have
+ * @param <ArgumentType>
+ * @param <AnnotationType>
  */
 public interface ArgumentResolver<ArgumentType, AnnotationType extends Annotation> {
 
@@ -19,8 +19,7 @@ public interface ArgumentResolver<ArgumentType, AnnotationType extends Annotatio
 	 * Indicates whether this implementation support parameters of the given type in combination with an optional
 	 * {@link Annotation} type.
 	 * 
-	 * @param argumentType The type of the argument
-	 * @param annotationType The type of the annotation
+	 * @param argumentType
 	 * @return True if this implementation support the given type, false if not.
 	 */
 	boolean supports(Class<?> argumentType, Class<? extends Annotation> annotationType);
@@ -36,8 +35,8 @@ public interface ArgumentResolver<ArgumentType, AnnotationType extends Annotatio
 	 *            disregard this.
 	 * @param name
 	 *            The argument name. May be null if the calling code cannot determine the argument name.
-	 * @param request The webscript request
-	 * @param response The webscript response
+	 * @param request
+	 * @param response
 	 * @return The parameter value, may be null if the result of the evaluation is indeed null.
 	 */
 	ArgumentType resolveArgument(Class<?> argumentType, AnnotationType parameterAnnotation, String name,

@@ -24,14 +24,14 @@ public @interface ClassPolicy {
 	 * <p>
 	 * If no value is specified, the Policy is applied to all types and aspects.
 	 * 
-	 * @return The QNames of the types or aspects that apply to the Policy
+	 * @return
 	 */
 	String[] value() default {};
 
 	/**
 	 * Indicates when to trigger the Behaviour.
 	 * 
-	 * @return The event that triggers the behaviour.
+	 * @return
 	 */
 	Event event() default Event.INHERITED_OR_ALL;
 

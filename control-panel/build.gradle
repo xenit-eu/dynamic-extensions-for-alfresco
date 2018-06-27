@@ -6,7 +6,7 @@ dependencies {
     compile project(":annotations")
     compile project(":webscripts")
     compile "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
-    compile "org.alfresco.surf:spring-webscripts:${project.ext.springWebscripts}"
+    compile "org.springframework.extensions.surf:spring-webscripts:${project.ext.alfrescoVersion}"
     compile "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
     compile project(":event-bus")
     testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"

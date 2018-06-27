@@ -1,16 +1,18 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.github.dynamicextensionsalfresco.spring.Spied;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.Uri;
+
 import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.extensions.webscripts.WebScriptSession;
 import org.springframework.stereotype.Component;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 
 @Component
 @Spied

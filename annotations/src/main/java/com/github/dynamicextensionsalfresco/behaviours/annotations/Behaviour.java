@@ -23,14 +23,14 @@ public @interface Behaviour {
 	 * The class names can be overridden for each Policy method by {@link ClassPolicy}, {@link AssociationPolicy} and
 	 * {@link PropertyPolicy}.
 	 * 
-	 * @return The QNames of the types or aspects that apply to the Behaviour
+	 * @return
 	 */
 	String[] value() default {};
 
 	/**
 	 * Indicates when to trigger the Behaviour. This can be overridden for each Policy method.
 	 * 
-	 * @return The event that triggers the behaviour.
+	 * @return
 	 */
 	Event event() default Event.ALL;
 

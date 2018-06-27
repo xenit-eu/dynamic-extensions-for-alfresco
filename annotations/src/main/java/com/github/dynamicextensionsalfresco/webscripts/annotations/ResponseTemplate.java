@@ -21,7 +21,7 @@ public @interface ResponseTemplate {
 	 * The path to the template. If not specified, the implementation will generate a template path based on Web Script
 	 * conventions.
 	 * 
-	 * @return the path to the template
+	 * @return
 	 */
 	String value() default "";
 

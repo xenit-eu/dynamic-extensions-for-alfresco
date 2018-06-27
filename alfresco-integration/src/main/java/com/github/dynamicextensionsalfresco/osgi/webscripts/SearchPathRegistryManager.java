@@ -1,13 +1,13 @@
 package com.github.dynamicextensionsalfresco.osgi.webscripts;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.Store;
 import org.springframework.extensions.webscripts.TemplateProcessor;
 import org.springframework.util.Assert;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Manages the registration and unregistration of {@link Store}s in a {@link SearchPathRegistry}.

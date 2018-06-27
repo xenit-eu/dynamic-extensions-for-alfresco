@@ -22,7 +22,19 @@ Supported Alfresco versions
 ---------------------------
 
 Dynamic Extensions is developed and tested against:
-* Alfresco Community 5.2.g
+
+* Alfresco Enterprise 4.1
+* Alfresco Enterprise 4.2
+* Alfresco Community 5.0
+
+Dynamic Extensions is also known to work on:
+
+* Alfresco Enterprise 3.4
+* Alfresco Enterprise 4.0
+* Alfresco Enterprise 5.0
+* Alfresco Enterprise 5.1
+* Alfresco Community 4.0
+* Alfresco Community 4.2
 
 
 Example extension code

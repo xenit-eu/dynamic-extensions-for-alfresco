@@ -60,9 +60,6 @@ public class ManifestUtils {
     /**
      * Parse an implementation version in a lenient fashion.<br>
      * Supports versions like "5.13-alf-20130918". (no micro segment)
-     *
-     * @param rawVersion the version that needs to be parsed
-     * @return the parsed version
      */
     public static Version parseImplementationVersionValue(String rawVersion) {
         final StringTokenizer st = new StringTokenizer(rawVersion, ".", false);

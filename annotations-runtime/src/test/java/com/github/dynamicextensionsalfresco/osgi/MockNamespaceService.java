@@ -1,12 +1,12 @@
 package com.github.dynamicextensionsalfresco.osgi;
 
-import org.alfresco.service.namespace.NamespaceException;
-import org.alfresco.service.namespace.NamespaceService;
-import org.springframework.util.Assert;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.alfresco.service.namespace.NamespaceException;
+import org.alfresco.service.namespace.NamespaceService;
+import org.springframework.util.Assert;
 
 public class MockNamespaceService implements NamespaceService {
 

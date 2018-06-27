@@ -36,14 +36,14 @@ public @interface AlfrescoPlatform {
 	/**
 	 * The minimum version number in "&lt;major&gt;.&lt;minor&gt;.&lt;micro&gt;" format. (The micro version part is
 	 * optional.)
-	 * @return the min version
+	 * 
 	 */
 	String minVersion() default "";
 
 	/**
 	 * The maximum version number in "&lt;major&gt;.&lt;minor&gt;.&lt;micro&gt;" format. (The micro version part is
 	 * optional.)
-	 * @return The max version
+	 * 
 	 */
 	String maxVersion() default "";
 

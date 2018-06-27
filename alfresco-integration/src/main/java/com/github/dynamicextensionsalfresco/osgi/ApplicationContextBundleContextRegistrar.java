@@ -1,5 +1,9 @@
 package com.github.dynamicextensionsalfresco.osgi;
 
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -7,10 +11,6 @@ import org.osgi.framework.launch.Framework;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
 
 /**
  * Registers the {@link ApplicationContext} as a service in the OSGi {@link Framework}.

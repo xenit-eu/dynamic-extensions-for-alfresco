@@ -3,7 +3,7 @@ package com.github.dynamicextensionsalfresco.osgi;
 import org.junit.Test;
 import org.osgi.framework.Version;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * @author Laurent Van der Linden

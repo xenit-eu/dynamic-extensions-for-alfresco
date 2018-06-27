@@ -10,14 +10,13 @@ import java.lang.annotation.Target;
 public @interface Authentication {
 	/**
 	 * Determines the {@link AuthenticationType}.
-	 * @return the authentication type
 	 */
 	AuthenticationType value() default AuthenticationType.USER;
 
 	/**
 	 * Determines the user the Web Script is run as.
 	 * 
-	 * @return The user the webscript will run as.
+	 * @return
 	 */
 	String runAs() default "";
 

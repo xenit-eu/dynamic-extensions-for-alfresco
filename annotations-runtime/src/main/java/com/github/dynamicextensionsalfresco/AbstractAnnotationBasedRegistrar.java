@@ -1,5 +1,7 @@
 package com.github.dynamicextensionsalfresco;
 
+import java.lang.annotation.Annotation;
+
 import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
@@ -9,8 +11,6 @@ import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
-
-import java.lang.annotation.Annotation;
 
 /**
  * Abstract base class for registration services that use a {@link ConfigurableListableBeanFactory}. This class defines

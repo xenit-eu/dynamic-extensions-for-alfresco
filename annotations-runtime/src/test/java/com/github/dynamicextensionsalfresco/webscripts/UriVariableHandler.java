@@ -3,6 +3,7 @@ package com.github.dynamicextensionsalfresco.webscripts;
 import com.github.dynamicextensionsalfresco.spring.Spied;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.Uri;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.UriVariable;
+
 import org.springframework.stereotype.Component;
 
 @Component

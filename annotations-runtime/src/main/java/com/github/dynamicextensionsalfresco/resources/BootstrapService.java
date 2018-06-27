@@ -24,7 +24,7 @@ public interface BootstrapService {
      * @param mimetype set to null for auto-guess
      * @param nodeType type for newly creates nodes
      * @return mapping of resource to nodereference (create or update)
-     * @throws IOException when exception occured during writing of the content
+     * @throws IOException
      */
     Map<Resource,NodeRef> deployResources(String resourcePattern, RepositoryLocation targetLocation,
                                           UpdateStrategy updateStrategy, String encoding, String mimetype,

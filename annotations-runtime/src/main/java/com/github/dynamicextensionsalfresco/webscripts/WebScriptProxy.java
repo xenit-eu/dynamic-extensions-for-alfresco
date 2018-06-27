@@ -1,12 +1,17 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
-import org.springframework.extensions.webscripts.*;
-import org.springframework.util.Assert;
-
 import java.io.IOException;
 import java.util.ResourceBundle;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import org.springframework.extensions.webscripts.Container;
+import org.springframework.extensions.webscripts.Description;
+import org.springframework.extensions.webscripts.URLModelFactory;
+import org.springframework.extensions.webscripts.WebScript;
+import org.springframework.extensions.webscripts.WebScriptRequest;
+import org.springframework.extensions.webscripts.WebScriptResponse;
+import org.springframework.util.Assert;
 
 /**
  * {@link WebScript} proxy for internal use by {@link WebScriptUriRegistry}.

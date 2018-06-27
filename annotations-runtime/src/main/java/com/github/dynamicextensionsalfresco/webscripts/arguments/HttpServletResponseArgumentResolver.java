@@ -1,10 +1,11 @@
 package com.github.dynamicextensionsalfresco.webscripts.arguments;
 
+import javax.servlet.http.HttpServletResponse;
+
 import com.github.dynamicextensionsalfresco.webscripts.WebScriptUtil;
+
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
-
-import javax.servlet.http.HttpServletResponse;
 
 public class HttpServletResponseArgumentResolver extends AbstractTypeBasedArgumentResolver<HttpServletResponse> {
 
