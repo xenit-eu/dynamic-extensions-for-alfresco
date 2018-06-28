@@ -1,5 +1,7 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
+import com.github.dynamicextensionsalfresco.webscripts.annotations.Command;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**

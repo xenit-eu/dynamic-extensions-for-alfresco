@@ -1,10 +1,10 @@
 package com.github.dynamicextensionsalfresco.blueprint;
 
+import java.io.IOException;
+
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
-import java.io.IOException;
 
 class CompositeEntityResolver implements EntityResolver {
 

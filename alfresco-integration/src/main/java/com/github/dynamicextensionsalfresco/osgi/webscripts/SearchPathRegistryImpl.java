@@ -1,12 +1,12 @@
 package com.github.dynamicextensionsalfresco.osgi.webscripts;
 
+import java.lang.reflect.Field;
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.extensions.webscripts.SearchPath;
 import org.springframework.extensions.webscripts.Store;
 import org.springframework.util.Assert;
-
-import java.lang.reflect.Field;
-import java.util.Collection;
 
 /**
  * {@link SearchPathRegistry} implementation that manages the {@link Store}s for a {@link SearchPath} instance.

@@ -1,5 +1,7 @@
 package com.github.dynamicextensionsalfresco.policy;
 
+import java.util.ArrayList;
+
 import com.github.dynamicextensionsalfresco.metrics.Timer;
 import org.alfresco.repo.policy.Behaviour;
 import org.slf4j.Logger;
@@ -7,8 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextClosedEvent;
-
-import java.util.ArrayList;
 /**
  * Created by jasper on 19/07/17.
  */

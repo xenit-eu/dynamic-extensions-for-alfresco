@@ -5,6 +5,7 @@ import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebscriptRespon
 import org.alfresco.repo.content.MimetypeMap;
 
 import javax.annotation.Nonnull;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author Laurent Van der Linden

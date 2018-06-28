@@ -1,9 +1,9 @@
 package com.github.dynamicextensionsalfresco.webscripts.arguments;
 
+import java.lang.annotation.Annotation;
+
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
-
-import java.lang.annotation.Annotation;
 
 /**
  * Convenenience adapter for {@link ArgumentResolver} implementations that rely solely on the parameter type and do not
@@ -11,7 +11,7 @@ import java.lang.annotation.Annotation;
  * 
  * @author Laurens Fridael
  * 
- * @param <ArgumentType> The type of the argument
+ * @param <ArgumentType>
  */
 public abstract class AbstractTypeBasedArgumentResolver<ArgumentType> implements
 		ArgumentResolver<ArgumentType, Annotation> {

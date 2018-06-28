@@ -35,7 +35,6 @@ public class Tracker {
 	 * @param <T> the target service type
 	 * @return result from the service invocation
 	 * @throws IllegalStateException if an exact service match is not possible
-	 * @throws Throwable if an exception occured
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> Object invokeUsing(ServiceInvoker<T> serviceInvoker) throws Throwable {

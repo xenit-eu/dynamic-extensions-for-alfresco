@@ -1,6 +1,10 @@
 package com.github.dynamicextensionsalfresco.blueprint;
 
+import java.io.IOException;
+import java.util.Map;
+
 import com.github.dynamicextensionsalfresco.annotations.AlfrescoPlatform;
+
 import org.alfresco.service.descriptor.Descriptor;
 import org.alfresco.util.VersionNumber;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -8,9 +12,6 @@ import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.util.StringUtils;
-
-import java.io.IOException;
-import java.util.Map;
 
 /**
  * {@link ClassPathBeanDefinitionScanner} that uses the {@link AlfrescoPlatform} annotation for filtering candidate

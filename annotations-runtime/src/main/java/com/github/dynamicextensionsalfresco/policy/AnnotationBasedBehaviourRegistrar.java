@@ -18,7 +18,10 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 /**
@@ -103,7 +106,7 @@ public class AnnotationBasedBehaviourRegistrar extends AbstractAnnotationBasedRe
 			}
 			getPolicyComponent().bindClassBehaviour(policyName, bean, behaviour);
 		}
-		warnAboutInapplicablePolicyAnnotations(method, new ArrayList<>(Arrays.asList(AssociationPolicy.class, PropertyPolicy.class)));
+		warnAboutInapplicablePolicyAnnotations(method, AssociationPolicy.class, PropertyPolicy.class);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -149,7 +152,7 @@ public class AnnotationBasedBehaviourRegistrar extends AbstractAnnotationBasedRe
 			}
 			getPolicyComponent().bindAssociationBehaviour(policyName, bean, behaviour);
 		}
-		warnAboutInapplicablePolicyAnnotations(method, new ArrayList<>(Arrays.asList(ClassPolicy.class, PropertyPolicy.class)));
+		warnAboutInapplicablePolicyAnnotations(method, ClassPolicy.class, PropertyPolicy.class);
 	}
 
 	/*
@@ -197,8 +200,7 @@ public class AnnotationBasedBehaviourRegistrar extends AbstractAnnotationBasedRe
 			getPolicyComponent().bindPropertyBehaviour(policyName, bean, behaviour);
 		}
 
-
-		warnAboutInapplicablePolicyAnnotations(method, new ArrayList<>(Arrays.asList(ClassPolicy.class, AssociationPolicy.class)));
+		warnAboutInapplicablePolicyAnnotations(method, ClassPolicy.class, AssociationPolicy.class);
 	}
 
 	/* Utility operations */
@@ -224,7 +226,7 @@ public class AnnotationBasedBehaviourRegistrar extends AbstractAnnotationBasedRe
 	}
 
 	private void warnAboutInapplicablePolicyAnnotations(final Method method,
-			final List<Class<? extends Annotation>> annotationClasses) {
+			final Class<? extends Annotation>... annotationClasses) {
 		for (final Class<? extends Annotation> annotationClass : annotationClasses) {
 			final Annotation annotation = AnnotationUtils.findAnnotation(method, annotationClass);
 			if (annotation != null && logger.isWarnEnabled()) {

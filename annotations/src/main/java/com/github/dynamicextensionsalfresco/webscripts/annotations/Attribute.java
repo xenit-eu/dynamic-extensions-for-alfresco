@@ -19,14 +19,14 @@ public @interface Attribute {
 	/**
 	 * The attribute name. If not supplied, the name is inferred from the method name or the parameter name.
 	 * 
-	 * @return The name of the attribute
+	 * @return
 	 */
 	String value() default "";
 
 	/**
 	 * Indicates if the attribute is required. This only has effect when applied to a method parameter.
 	 * 
-	 * @return if a attribute is required
+	 * @return
 	 */
 	boolean required() default true;
 }

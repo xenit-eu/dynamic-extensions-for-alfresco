@@ -1,6 +1,8 @@
 package com.github.dynamicextensionsalfresco.aop;
 
+import static org.mockito.Mockito.*;
 import com.github.dynamicextensionsalfresco.annotations.Transactional;
+
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
 import org.junit.Test;
@@ -8,8 +10,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import static org.mockito.Mockito.*;
 
 /**
  * Integration test for {@link TransactionalAdvice} applied to {@link Transactional}-annotated methods.

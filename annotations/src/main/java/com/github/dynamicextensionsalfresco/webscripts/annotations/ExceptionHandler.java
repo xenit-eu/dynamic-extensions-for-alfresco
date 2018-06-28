@@ -23,7 +23,7 @@ public @interface ExceptionHandler {
 	 * Specifies the type of exceptions that the method should handle. If no types are specified the method will handle
 	 * every type of exception.
 	 * 
-	 * @return Array of Exception classes
+	 * @return
 	 */
 	Class<? extends Throwable>[] value() default {};
 

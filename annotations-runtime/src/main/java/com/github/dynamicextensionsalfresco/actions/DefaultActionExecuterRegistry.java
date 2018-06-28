@@ -1,11 +1,11 @@
 package com.github.dynamicextensionsalfresco.actions;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.alfresco.repo.action.executer.ActionExecuter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class DefaultActionExecuterRegistry implements ActionExecuterRegistry, ApplicationContextAware {
 

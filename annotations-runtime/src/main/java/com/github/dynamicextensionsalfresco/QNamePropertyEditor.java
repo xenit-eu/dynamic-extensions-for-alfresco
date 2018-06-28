@@ -1,11 +1,11 @@
 package com.github.dynamicextensionsalfresco;
 
+import java.beans.PropertyEditor;
+import java.beans.PropertyEditorSupport;
+
 import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.alfresco.service.namespace.QName;
 import org.springframework.util.StringUtils;
-
-import java.beans.PropertyEditor;
-import java.beans.PropertyEditorSupport;
 
 /**
  * JavaBeans {@link PropertyEditor} for configuring {@link QName}s using either the prefix or fully-qualified format.

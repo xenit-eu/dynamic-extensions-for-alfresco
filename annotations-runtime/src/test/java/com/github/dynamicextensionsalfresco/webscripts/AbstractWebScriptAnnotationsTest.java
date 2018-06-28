@@ -1,6 +1,11 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
+import static org.junit.Assert.*;
+
+import java.io.IOException;
+
 import com.github.dynamicextensionsalfresco.webscripts.annotations.HttpMethod;
+
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -12,10 +17,6 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.ClassUtils;
-
-import java.io.IOException;
-
-import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "webscript-integration-test-context.xml")

@@ -8,7 +8,7 @@ dependencies {
     compile("org.eclipse.gemini:org.eclipse.gemini.blueprint.extender:${project.ext.geminiVersion}") {
         exclude group: "org.springframework"
     }
-    compile "org.alfresco.surf:spring-webscripts:${project.ext.springWebscripts}"
+    compile "org.springframework.extensions.surf:spring-webscripts:${project.ext.alfrescoVersion}"
     compile "javax.servlet:servlet-api:${project.ext.servletVersion}"
     compile "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
     compile project(":event-bus")

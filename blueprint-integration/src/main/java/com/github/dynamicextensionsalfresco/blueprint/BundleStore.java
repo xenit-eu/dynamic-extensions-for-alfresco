@@ -1,6 +1,13 @@
 package com.github.dynamicextensionsalfresco.blueprint;
 
-import freemarker.cache.TemplateLoader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+
 import org.dom4j.Document;
 import org.osgi.framework.Bundle;
 import org.springframework.extensions.surf.util.Pair;
@@ -10,13 +17,7 @@ import org.springframework.extensions.webscripts.WebScript;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
+import freemarker.cache.TemplateLoader;
 
 /**
  * Provides a {@link Store} implementation backed by a {@link Bundle}.

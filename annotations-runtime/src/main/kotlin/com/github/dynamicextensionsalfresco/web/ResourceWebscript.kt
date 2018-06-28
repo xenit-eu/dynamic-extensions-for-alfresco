@@ -4,7 +4,7 @@ import com.github.dynamicextensionsalfresco.webscripts.DummyStore
 import com.github.dynamicextensionsalfresco.webscripts.support.AbstractBundleResourceHandler
 import org.osgi.framework.BundleContext
 import org.springframework.extensions.webscripts.*
-import java.util.*
+import java.util.ResourceBundle
 import javax.servlet.http.HttpServletResponse
 
 /**

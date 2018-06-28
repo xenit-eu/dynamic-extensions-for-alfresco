@@ -2,6 +2,7 @@ package com.github.dynamicextensionsalfresco.osgi.spring;
 
 import com.github.dynamicextensionsalfresco.annotations.AlfrescoService;
 import com.github.dynamicextensionsalfresco.annotations.ServiceType;
+
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.search.CategoryService;
 import org.alfresco.service.namespace.NamespaceService;

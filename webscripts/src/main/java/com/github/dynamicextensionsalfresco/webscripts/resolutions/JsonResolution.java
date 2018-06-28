@@ -3,8 +3,8 @@ package com.github.dynamicextensionsalfresco.webscripts.resolutions;
 import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptRequest;
 import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebscriptResponse;
 import org.alfresco.repo.content.MimetypeMap;
-import org.apache.http.HttpStatus;
 
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author Laurent Van der Linden
@@ -13,7 +13,7 @@ import org.apache.http.HttpStatus;
 public abstract class JsonResolution implements Resolution {
     public static final String UTF_8 = "UTF-8";
 
-    private int status = HttpStatus.SC_OK;
+    private int status = HttpServletResponse.SC_OK;
 
     protected JsonResolution() {
     }

@@ -1,11 +1,11 @@
 package com.github.dynamicextensionsalfresco.webscripts.arguments;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.alfresco.service.namespace.QName;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Used by {@link RequestParamArgumentResolver} and {@link UriVariableArgumentResolver} to convert String parameter

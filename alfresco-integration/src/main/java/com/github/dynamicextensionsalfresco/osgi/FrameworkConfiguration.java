@@ -1,14 +1,14 @@
 package com.github.dynamicextensionsalfresco.osgi;
 
-import org.osgi.framework.launch.Framework;
-import org.springframework.util.Assert;
+import static org.osgi.framework.Constants.*;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import static org.osgi.framework.Constants.*;
+import org.osgi.framework.launch.Framework;
+import org.springframework.util.Assert;
 
 /**
  * Value object representing {@link Framework} configuration.

@@ -1,6 +1,12 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
+import static org.mockito.Mockito.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.github.dynamicextensionsalfresco.webscripts.annotations.HttpMethod;
+
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.extensions.surf.util.Content;
@@ -10,11 +16,6 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.extensions.webscripts.WebScriptSession;
 import org.springframework.extensions.webscripts.servlet.WebScriptServletRequest;
 import org.springframework.extensions.webscripts.servlet.WebScriptServletResponse;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import static org.mockito.Mockito.*;
 
 /**
  * Tests the resolving of handler method arguments.

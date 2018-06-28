@@ -1,12 +1,13 @@
 package com.github.dynamicextensionsalfresco.osgi.spring;
 
-import com.github.dynamicextensionsalfresco.osgi.ConfigurationValues;
-import org.springframework.beans.factory.FactoryBean;
-import org.springframework.util.Assert;
-
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+
+import com.github.dynamicextensionsalfresco.osgi.ConfigurationValues;
+
+import org.springframework.beans.factory.FactoryBean;
+import org.springframework.util.Assert;
 
 /**
  * {@link FactoryBean} that combines all the items from multiple Sets into a single Set.
@@ -15,7 +16,7 @@ import java.util.Set;
  * 
  * @author Laurens Fridael
  * 
- * @param <T> The type that is a configuration bean
+ * @param <T>
  */
 public class ConfigurationValuesFactoryBean<T> implements FactoryBean<ConfigurationValues<T>> {
 

@@ -1,11 +1,12 @@
 package com.github.dynamicextensionsalfresco.controlpanel.template;
 
+import org.osgi.framework.ServiceReference;
+import org.springframework.util.Assert;
+
 import freemarker.template.SimpleScalar;
 import freemarker.template.TemplateHashModel;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
-import org.osgi.framework.ServiceReference;
-import org.springframework.util.Assert;
 
 class TemplateServiceReferenceProperties implements TemplateHashModel {
 

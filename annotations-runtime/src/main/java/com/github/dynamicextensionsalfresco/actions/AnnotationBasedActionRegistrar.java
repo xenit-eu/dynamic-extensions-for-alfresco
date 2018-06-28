@@ -1,8 +1,15 @@
 package com.github.dynamicextensionsalfresco.actions;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.*;
+
 import com.github.dynamicextensionsalfresco.AbstractAnnotationBasedRegistrar;
 import com.github.dynamicextensionsalfresco.actions.annotations.ActionMethod;
 import com.github.dynamicextensionsalfresco.actions.annotations.ActionParam;
+
 import com.google.common.collect.ImmutableMap;
 import org.alfresco.repo.action.ActionDefinitionImpl;
 import org.alfresco.repo.action.ParameterDefinitionImpl;
@@ -24,12 +31,6 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.ReflectionUtils.MethodCallback;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.*;
 
 /**
  * Manages annotation-based Actions in a {@link BeanFactory}.

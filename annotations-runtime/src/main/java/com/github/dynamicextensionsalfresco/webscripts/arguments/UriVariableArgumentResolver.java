@@ -1,12 +1,13 @@
 package com.github.dynamicextensionsalfresco.webscripts.arguments;
 
+import java.lang.annotation.Annotation;
+
 import com.github.dynamicextensionsalfresco.webscripts.annotations.UriVariable;
+
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
-
-import java.lang.annotation.Annotation;
 
 public class UriVariableArgumentResolver implements ArgumentResolver<Object, UriVariable> {
 

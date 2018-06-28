@@ -1,11 +1,11 @@
 package com.github.dynamicextensionsalfresco.osgi;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.osgi.framework.BundleContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.Assert;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Represents configuration for registering a bean from an {@link ApplicationContext} as a service in a

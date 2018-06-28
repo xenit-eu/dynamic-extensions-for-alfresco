@@ -1,14 +1,15 @@
 package com.github.dynamicextensionsalfresco.blueprint;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.github.dynamicextensionsalfresco.osgi.spring.AutowireBeanFactory;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.DependencyDescriptor;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Resolves dependencies on OSGi services or the {@link BundleContext}.

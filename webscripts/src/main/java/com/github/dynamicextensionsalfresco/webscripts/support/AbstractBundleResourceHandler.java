@@ -4,7 +4,6 @@ import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptReques
 import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebscriptResponse;
 import com.github.dynamicextensionsalfresco.webscripts.resolutions.Resolution;
 import com.github.dynamicextensionsalfresco.webscripts.resolutions.TemplateResolution;
-import org.apache.http.HttpStatus;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +14,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.util.HtmlUtils;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
 import java.net.URL;
@@ -50,11 +50,6 @@ public abstract class AbstractBundleResourceHandler {
 	 * copy the resource if any from the classpath to the outputstream
 	 * @deprecated replaced with {@link AbstractBundleResourceHandler#handleResource(String, WebScriptRequest, WebScriptResponse)}
 	 * to enable directory listing
-	 *
-	 * @param path the path of the resource to handle
-     * @param response the webscript response
-     *
-     * @throws IOException When copying the file fails
 	 */
 	protected final void handleResource(final String path, final WebScriptResponse response) throws IOException {
 		try {
@@ -68,11 +63,6 @@ public abstract class AbstractBundleResourceHandler {
 
 	/**
 	 * handle the requested path
-     * @param path the path of the resource to handle
-     * @param request the webscript request
-     * @param response the webscript response
-     *
-     * @throws IOException When copying the file fails
 	 */
 	protected final void handleResource(final String path, final WebScriptRequest request, final WebScriptResponse response) throws Exception {
 		final String entryPath = getBundleEntryPath(path.replace("//", "/")); // forgive double slashes
@@ -92,10 +82,6 @@ public abstract class AbstractBundleResourceHandler {
 	/**
 	 * copy the resource if any from the classpath to the outputstream
 	 * @deprecated replaced with {@link AbstractBundleResourceHandler#sendResource(WebScriptRequest, WebScriptResponse, URL)}
-     *
-     * @param response the webscript response
-     * @param resource  the url of the resource
-     * @throws IOException When copying the file fails
 	 */
 	protected void sendResource(final WebScriptResponse response, final URL resource) throws IOException {
 		sendResource(null, response, resource);
@@ -103,12 +89,6 @@ public abstract class AbstractBundleResourceHandler {
 
 	/**
 	 *  copy the resource if any from the classpath to the outputstream
-     *
-     * @param request the webscript request
-     * @param response the webscript response
-     * @param resource  the url of the resource
-     *
-     * @throws IOException When copying the file fails
 	 */
 	protected void sendResource(final WebScriptRequest request, final WebScriptResponse response, final URL resource) throws IOException {
 		final String contentType = getContentType(resource);
@@ -146,7 +126,7 @@ public abstract class AbstractBundleResourceHandler {
     }
 
 	protected void handleResourceNotFound(final String path, final WebScriptResponse response) throws IOException {
-		response.setStatus(HttpStatus.SC_NOT_FOUND);
+		response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		response.setContentType("text/html");
 		final Writer out = response.getWriter();
 		out.write(String.format("<!doctype html><head><title>Not found</title></head><body>Could not find resource at path '%s'.</body></html>", HtmlUtils.htmlEscape(path)));
@@ -172,7 +152,6 @@ public abstract class AbstractBundleResourceHandler {
 
     /**
      * Add long term cache headers for resources that are known not to change, ie. versioned filename.
-     * @param response the webscript resonse
      */
     protected void setInfinateCache(final WebScriptResponse response) {
         final long future = new Date().getTime() + 31536000000L;

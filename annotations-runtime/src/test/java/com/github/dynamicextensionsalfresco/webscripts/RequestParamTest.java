@@ -1,14 +1,14 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
+import static org.mockito.Mockito.*;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.RequestParam;
+
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.alfresco.service.namespace.NamespaceService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import static org.mockito.Mockito.*;
 
 /**
  * Integration test for {@link RequestParam} handling.

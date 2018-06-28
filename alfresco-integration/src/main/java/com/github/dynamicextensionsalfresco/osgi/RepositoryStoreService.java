@@ -84,7 +84,7 @@ public class RepositoryStoreService {
 	/**
 	 * Obtains information on the JAR files in the bundle folder.
 	 * 
-	 * @return list of fileInfos
+	 * @return
 	 */
 	public List<FileInfo> getBundleJarFiles() {
 		final List<FileInfo> jarFiles = new ArrayList<FileInfo>();
@@ -134,9 +134,8 @@ public class RepositoryStoreService {
 	/**
 	 * Obtains the child with the given association type, {@link QName} of the given node.
 	 * 
-	 * @param nodeRef The nodeRef that will be checked
-	 * @param assocType The type of the association
-	 * @param assocName the name of the annotation
+	 * @param nodeRef
+	 * @param assocName
 	 * @return the child with the given name or null if nodeRef is null
 	 */
 	protected NodeRef getChildOf(final NodeRef nodeRef, final QName assocType, final QName assocName) {
@@ -154,8 +153,8 @@ public class RepositoryStoreService {
 	/**
 	 * Obtains the child with the given {@link QName} for the association type {@link ContentModel#ASSOC_CONTAINS}.
 	 * 
-	 * @param nodeRef The nodeRef that will be checked
-	 * @param qName The name of the child
+	 * @param nodeRef
+	 * @param qName
 	 * @return the child with the given name or null if nodeRef is null
 	 */
 	protected NodeRef getChildOf(final NodeRef nodeRef, final QName qName) {
@@ -165,8 +164,8 @@ public class RepositoryStoreService {
 	/**
 	 * Obtains the child with the given name from the {@link StoreRef#STORE_REF_WORKSPACE_SPACESSTORE} root node.
 	 * 
-	 * @param qName The name of the child
-	 * @return The child with the given name
+	 * @param qName
+	 * @return
 	 */
 	protected NodeRef getChildOfRootNode(final QName qName) {
 		return getChildOf(getNodeService().getRootNode(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE),

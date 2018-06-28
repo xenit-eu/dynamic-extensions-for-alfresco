@@ -1,10 +1,16 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
-import org.springframework.extensions.webscripts.*;
-
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ResourceBundle;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.extensions.webscripts.Container;
+import org.springframework.extensions.webscripts.Description;
+import org.springframework.extensions.webscripts.URLModelFactory;
+import org.springframework.extensions.webscripts.WebScript;
+import org.springframework.extensions.webscripts.WebScriptRequest;
+import org.springframework.extensions.webscripts.WebScriptResponse;
 
 /**
  * {@link WebScript} that generates a "503 Service Unavailable" response when request is issued to an

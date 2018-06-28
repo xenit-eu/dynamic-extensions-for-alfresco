@@ -1,11 +1,11 @@
 package com.github.dynamicextensionsalfresco.actions.annotations;
 
-import org.alfresco.service.cmr.dictionary.DataTypeDefinition;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import org.alfresco.service.cmr.dictionary.DataTypeDefinition;
 
 /**
  * Indicates an {@link ActionMethod} method parameter.
@@ -25,7 +25,7 @@ public @interface ActionParam {
 	 * If the parameter name is not specified, the parameter's Java variable name will be used instead. (The variable
 	 * name is only available if classes are compiled with debug info.)
 	 * 
-	 * @return The name of the parameter
+	 * @return
 	 */
 	String value() default "";
 
@@ -33,7 +33,7 @@ public @interface ActionParam {
 	 * The qualified name of the parameter type. If not specified, the Java parameter type is used to determine a
 	 * matching {@link DataTypeDefinition}. For ambiguous cases, you need to specify the type explicitly.
 	 * 
-	 * @return The type of the parameter
+	 * @return
 	 */
 	String type() default "";
 

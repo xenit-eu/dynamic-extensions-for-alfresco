@@ -1,10 +1,10 @@
 package com.github.dynamicextensionsalfresco.osgi;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.util.Assert;
-
 import java.util.Collection;
 import java.util.Iterator;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.util.Assert;
 
 /**
  * Holds configuration values, such as {@link SystemPackage}s and {@link ServiceDefinition}s.
@@ -14,7 +14,7 @@ import java.util.Iterator;
  * 
  * @author Laurens Fridael
  * 
- * @param <T> The type of configuration values
+ * @param <T>
  */
 public class ConfigurationValues<T> implements Iterable<T> {
 

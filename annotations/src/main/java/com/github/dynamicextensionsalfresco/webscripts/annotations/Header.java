@@ -18,7 +18,7 @@ import java.lang.annotation.Target;
 public @interface Header {
 
 	/**
-	 * @return The header name.
+	 * The header name.
 	 */
 	String value();
 

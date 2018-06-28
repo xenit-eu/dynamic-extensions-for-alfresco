@@ -3,12 +3,12 @@ package com.github.dynamicextensionsalfresco.webscripts.resolutions;
 import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptRequest;
 import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebscriptResponse;
 import com.github.dynamicextensionsalfresco.webscripts.UrlModel;
-import org.apache.http.HttpStatus;
 import org.springframework.extensions.webscripts.*;
 import org.springframework.extensions.webscripts.json.JSONUtils;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,7 +50,7 @@ public class TemplateResolution extends AbstractResolution {
         final ResolutionParameters params = getParams();
 
         if (StringUtils.hasText(request.getFormat()) == false) {
-            response.setStatus(HttpStatus.SC_BAD_REQUEST);
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().write("No format specified.");
             return;
         }
@@ -115,7 +115,7 @@ public class TemplateResolution extends AbstractResolution {
                 addCacheControlHeaders(response, params);
             templateProcessor.process(templateName, model, response.getWriter());
         } else {
-            response.setStatus(HttpStatus.SC_NOT_FOUND);
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             response.getWriter().write(String.format("Could not find template: %s", templateName));
         }
     }
