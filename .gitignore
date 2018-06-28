@@ -2,6 +2,8 @@
 .settings
 .project
 *.sh
+*.bat
+!gradlew.bat
 target
 tmp
 *.sublime-project
