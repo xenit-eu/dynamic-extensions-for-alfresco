@@ -2,7 +2,6 @@
 .settings
 .project
 *.sh
-*.bat
 target
 tmp
 *.sublime-project
