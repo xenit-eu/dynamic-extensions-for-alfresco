@@ -15,9 +15,10 @@ Version template:
  -->
 # Dynamic Extensions For Alfresco Changelog
 
-## [UNRELEASED]
+## [1.7.5] - 2018-07-04
 ### Fixed
 * [#180](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/180) Use compileOnly dependencies in the gradle plugin
+* [#181](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/181) Remove hard coded static webscript url
 
 ## [1.7.4] - 2018-03-08
 ### Added
