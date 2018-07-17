@@ -1,3 +1,9 @@
+---
+title: Changelog - Dynamic Extensions for Alfresco
+date: 4 July 2018
+report: true
+colorlinks: true
+---
 <!--
 Changelog for DE
 
@@ -18,7 +24,7 @@ Version template:
 ## [1.7.5] - 2018-07-04
 ### Fixed
 * [#180](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/180) Use compileOnly dependencies in the gradle plugin
-* [#181](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/181) Remove hard coded static webscript url
+* [#181](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/181) Fixed regression for static resources embedded in DE bundle
 
 ## [1.7.4] - 2018-03-08
 ### Added
