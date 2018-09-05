@@ -1,5 +1,6 @@
 package com.github.dynamicextensionsalfresco.osgi;
 
+import java.util.Iterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,14 +29,19 @@ public class DependencySorter {
 
     private static <T> void LogDebug(Collection<T> input, ArrayList<T> result) {
         if (logger.isDebugEnabled()) {
-            logger.debug("sorting ${input.firstOrNull()}:");
+            Iterator<T> it = (input == null) ? null : input.iterator();
+            if (it == null || !it.hasNext()) {
+                logger.debug("sorting empty or 'null' collection");
+                return;
+            }
+            logger.debug("sorting {}:", it.next());
             logger.debug("  input");
             for (T item : input) {
-                logger.debug("  - $item");
+                logger.debug("  - {}", item);
             }
             logger.debug("  output");
             for (T item : result) {
-                logger.debug("  - $item");
+                logger.debug("  - {}", item);
             }
         }
     }

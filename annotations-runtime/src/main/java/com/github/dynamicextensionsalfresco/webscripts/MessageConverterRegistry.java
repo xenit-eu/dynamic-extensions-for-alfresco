@@ -35,8 +35,18 @@ public class MessageConverterRegistry {
         this.messageConverters = new ArrayList<HttpMessageConverter<?>>();
 
         if (jackson2Present) {
-            LOGGER.debug("Adding default converter " + MappingJackson2HttpMessageConverter.class.getName());
-            this.messageConverters.add(new MappingJackson2HttpMessageConverter());
+            // Json 2 (com.fasterxml) is available in the classpath.
+            if (ClassUtils.isPresent("org.springframework.http.converter.json.MappingJackson2HttpMessageConverter",
+                    MessageConverterRegistry.class.getClassLoader())) {
+                // Use the default Spring HttpMessageConverter
+                LOGGER.debug("Adding default converter " + MappingJackson2HttpMessageConverter.class.getName());
+                this.messageConverters.add(new MappingJackson2HttpMessageConverter());
+            } else {
+                // No Spring HttpMessageConverter available for Json 2. Use our own implementation.
+                LOGGER.debug("Adding default converter " + 
+                        com.github.dynamicextensionsalfresco.polyfill.MappingJackson2HttpMessageConverter.class.getName());
+                this.messageConverters.add(new com.github.dynamicextensionsalfresco.polyfill.MappingJackson2HttpMessageConverter());
+            }
         }
         else if (jacksonPresent) {
             LOGGER.debug("Adding default converter " + MappingJacksonHttpMessageConverter.class.getName());
