@@ -1,5 +1,7 @@
 apply plugin: 'kotlin'
 
+project.ext.jackson_version = "2.4.5"
+
 dependencies {
     compile project(':annotations')
     compile project(':webscripts')
@@ -17,6 +19,9 @@ dependencies {
     compile 'com.google.code.findbugs:jsr305:2.0.1'
     compile 'com.google.collections:google-collections:1.0'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    compileOnly "com.fasterxml.jackson.core:jackson-core:$jackson_version"
+    compileOnly "com.fasterxml.jackson.core:jackson-databind:$jackson_version"
 
     testCompile "junit:junit:${project.ext.junitVersion}"
     testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"

@@ -21,6 +21,10 @@ Version template:
  -->
 # Dynamic Extensions For Alfresco Changelog
 
+## [1.7.6] - UNRELEASED
+* [#189](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/189) Support Json 2 on Alfresco 4
+
+
 ## [1.7.5] - 2018-07-04
 ### Fixed
 * [#180](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/180) Use compileOnly dependencies in the gradle plugin
