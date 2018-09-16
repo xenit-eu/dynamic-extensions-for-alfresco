@@ -1,14 +1,39 @@
 apply plugin: 'osgi'
 apply plugin: 'kotlin'
 
+configurations {
+    testCompile.extendsFrom(compileOnly)
+}
+
 dependencies {
+    compile "${project.ext.alfrescoBom}"
+
     compile project(":alfresco-integration")
     compile project(":annotations")
     compile project(":webscripts")
-    compile "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
-    compile "org.springframework.extensions.surf:spring-webscripts:${project.ext.alfrescoVersion}"
-    compile "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
     compile project(":event-bus")
+
+    compile("org.alfresco.surf:spring-webscripts") { transitive = false }
+    compile("org.alfresco.surf:spring-surf-core") { transitive = false }
+    
+    compile("org.alfresco:alfresco-data-model") { transitive = false }
+    compile("org.alfresco:alfresco-repository") { transitive = false }
+    compile("org.alfresco:alfresco-core") { transitive = false }
+
+    compileOnly "org.slf4j:slf4j-api"
+    compileOnly "org.json:json"
+    compileOnly "org.alfresco:freemarker"
+
+    compileOnly ('org.springframework:spring-beans') { transitive = false }
+    compileOnly ('org.springframework:spring-context') { transitive = false }
+    compileOnly ('org.springframework:spring-core') { transitive = false }
+    compileOnly ('org.springframework:spring-aop') { transitive = false }
+
+    compile "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
+    compile "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
+
+    testCompile("org.alfresco.surf:spring-surf-core-configservice") { transitive = false }
+
     testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
     testCompile "junit:junit:${project.ext.junitVersion}"
     testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"

@@ -6,6 +6,8 @@ configurations {
 }
 
 dependencies {
+    implementation "${project.ext.alfrescoBom}"
+
     amp(project(":alfresco-integration")) {transitive = false}
     amp(project(":annotations")) {transitive = false}
     amp(project(":annotations-runtime")) {transitive = false}
@@ -33,13 +35,15 @@ dependencies {
 
     testCompile "junit:junit:${project.ext.junitVersion}"
     testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
-    testCompile "org.springframework:spring-test:${project.ext.springVersion}"
-    testCompile "org.springframework:spring-web:${project.ext.springVersion}"
-    testCompile "org.springframework.extensions.surf:spring-webscripts:${project.ext.alfrescoVersion}"
-    testCompile("org.alfresco:alfresco-repository:${project.ext.alfrescoVersion}") { transitive = false }
-    testCompile("org.alfresco:alfresco-data-model:${project.ext.alfrescoVersion}") { transitive = false }
 
-    testRuntime "org.springframework:spring-beans:${project.ext.springVersion}"
+    testCompile "org.springframework:spring-test"
+    testCompile "org.springframework:spring-web"
+    testCompile("org.alfresco.surf:spring-webscripts")
+    testCompile("org.alfresco:alfresco-repository") { transitive = false }
+    testCompile("org.alfresco:alfresco-data-model") { transitive = false }
+
+    testRuntime "org.springframework:spring-beans"
+    testCompile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 }
 
 def ampConfig = {
