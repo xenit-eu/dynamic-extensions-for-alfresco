@@ -1,10 +1,24 @@
 apply plugin: 'kotlin'
 
+configurations {
+    testCompile.extendsFrom(compileOnly)
+}
+
 dependencies {
+    compile "${project.ext.alfrescoBom}"
+
     compile project(':annotations-runtime')
+
+    compileOnly("org.alfresco.surf:spring-webscripts")
+    compileOnly("org.alfresco:alfresco-core") { transitive = false }
+    compileOnly("org.alfresco:alfresco-data-model") { transitive = false }
+    compileOnly("org.alfresco:alfresco-repository") { transitive = false }
+
+    compileOnly "org.slf4j:slf4j-api"
+
     compile "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
     compile "javax.servlet:servlet-api:${project.ext.servletVersion}"
-    compile "org.springframework.extensions.surf:spring-webscripts:${project.ext.alfrescoVersion}"
+
     compile "org.jibx:jibx-run:${project.ext.jibxVersion}"
     compile "org.apache.felix:org.apache.felix.framework:${project.ext.felixVersion}"
     compile "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
@@ -12,5 +26,7 @@ dependencies {
 
     testCompile "junit:junit:${project.ext.junitVersion}"
     testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
-    testCompile "org.springframework:spring-test:${project.ext.springVersion}"
+    testCompile "org.springframework:spring-test"
+
+    testCompile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 }

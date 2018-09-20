@@ -1,6 +1,16 @@
 dependencies {
-    compile("org.alfresco:alfresco-repository:${project.ext.alfrescoVersion}") { transitive = false }
-    compile("org.alfresco:alfresco-data-model:${project.ext.alfrescoVersion}") { transitive = false }
-    compile("org.alfresco:alfresco-remote-api:${project.ext.alfrescoVersion}") { transitive = false }
-    compile("org.alfresco:alfresco-core:${project.ext.alfrescoVersion}")
+    compile "${project.ext.alfrescoBom}"
+
+    compileOnly("org.alfresco:alfresco-repository") { transitive = false }
+    compileOnly("org.alfresco:alfresco-data-model") { transitive = false }
+    compileOnly("org.alfresco:alfresco-remote-api") { transitive = false }
+    compileOnly("org.alfresco:alfresco-core") {
+        exclude group: "org.json"
+        transitive = false
+    }
+
+    compileOnly ('org.quartz-scheduler:quartz') { transitive = false }
+
+    // required for javadoc
+    compileOnly ('org.springframework:spring-beans') { transitive = false }
 }

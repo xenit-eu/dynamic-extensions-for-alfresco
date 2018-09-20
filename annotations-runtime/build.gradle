@@ -1,38 +1,65 @@
 apply plugin: 'kotlin'
 
-project.ext.jackson_version = "2.4.5"
+configurations {
+    testCompile.extendsFrom(compileOnly)
+}
 
 dependencies {
+    compile "${project.ext.alfrescoBom}"
+
     compile project(':annotations')
     compile project(':webscripts')
+
     compile "org.apache.felix:org.apache.felix.framework:${project.ext.felixVersion}"
-    compile "org.slf4j:slf4j-api:${project.ext.slf4jVersion}"
-    compile("org.springframework.extensions.surf:spring-webscripts:${project.ext.alfrescoVersion}")// {transitive = false}
-    compile "org.freemarker:freemarker:2.3.16"
-    compile "javax.servlet:servlet-api:${project.ext.servletVersion}"
-    compile "org.springframework:spring-aop:${project.ext.springVersion}"
-    compile "org.springframework:spring-tx:${project.ext.springVersion}"
-    compile "org.springframework:spring-jdbc:${project.ext.springVersion}"
+
+    compileOnly "org.slf4j:slf4j-api"
+    compileOnly("org.alfresco.surf:spring-webscripts")
+    compileOnly("org.alfresco:alfresco-data-model") { transitive = false }
+    compileOnly("org.alfresco:alfresco-repository") { transitive = false }
+    compileOnly("org.alfresco:alfresco-core") { transitive = false }
+
+    compileOnly "org.alfresco:freemarker"
+    compileOnly ('org.quartz-scheduler:quartz') { transitive = false }
+
+    compileOnly "javax.servlet:servlet-api:${project.ext.servletVersion}"
+    compileOnly ('org.springframework:spring-aop') { transitive = false }
+    compileOnly ('org.springframework:spring-tx') { transitive = false }
+    compileOnly ('org.springframework:spring-jdbc') { transitive = false }
+    compileOnly ('org.springframework:spring-beans') { transitive = false }
+    compileOnly ('org.springframework:spring-context') { transitive = false }
+    compileOnly ('org.springframework:spring-core') { transitive = false }
+
     compile "javax.transaction:transaction-api:${project.ext.transactionApiVersion}"
     compile("org.activiti:activiti-engine:5.7") {transitive = false}
     compile("org.activiti:activiti-spring:5.7") {transitive = false}
+
     compile 'com.google.code.findbugs:jsr305:2.0.1'
     compile 'com.google.collections:google-collections:1.0'
+
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-    compileOnly "com.fasterxml.jackson.core:jackson-core:$jackson_version"
-    compileOnly "com.fasterxml.jackson.core:jackson-databind:$jackson_version"
+    compileOnly "com.fasterxml.jackson.core:jackson-databind"
+
+    testCompile project(':event-bus')
 
     testCompile "junit:junit:${project.ext.junitVersion}"
     testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
-    testCompile "org.springframework:spring-test:${project.ext.springVersion}"
+    
+    testCompile "org.springframework:spring-test"
 
-    testRuntime "org.mybatis:mybatis:3.0.4"
+    // testCompile ('org.springframework:spring-beans') { transitive = false }
+    // testCompile ('org.springframework:spring-context') { transitive = false }
+    // testCompile ('org.springframework:spring-core') { transitive = false }
+
+    testRuntime "org.mybatis:mybatis"
     testRuntime("org.hibernate:hibernate:${project.ext.hibernateVersion}") {
         exclude group: "javax.transaction"
     }
     testRuntime 'cglib:cglib-nodep:2.2'
     testRuntime 'xerces:xercesImpl:2.8.0'
 
-    testCompile("org.alfresco:alfresco-repository:${project.ext.alfrescoVersion}")
+    testCompile "com.fasterxml.jackson.core:jackson-databind"
+    testCompile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    
+    testCompile 'javax.xml.bind:jaxb-api:2.4.0-b180725.0427'
 }

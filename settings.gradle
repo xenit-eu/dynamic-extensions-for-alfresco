@@ -1,1 +1,12 @@
-include 'alfresco-integration','alfresco-dynamic-extensions-repo','annotations','annotations-runtime','blueprint-integration','gradle-plugin','webscripts','control-panel','blueprint-override','event-bus'
+enableFeaturePreview("IMPROVED_POM_SUPPORT")
+
+include 'alfresco-integration'
+include 'alfresco-dynamic-extensions-repo'
+include 'annotations'
+include 'annotations-runtime'
+include 'blueprint-integration'
+include 'gradle-plugin'
+include 'webscripts'
+include 'control-panel'
+include 'blueprint-override'
+include 'event-bus'

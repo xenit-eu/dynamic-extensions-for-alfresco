@@ -10,7 +10,7 @@ buildscript {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.8.1'
+    gradleVersion = '4.10'
 }
 
 apply plugin: 'io.codearte.nexus-staging'
@@ -36,6 +36,7 @@ subprojects {
         classifier = 'sources'
         from sourceSets.main.allSource
     }
+
     task javadocJar(type: Jar, dependsOn: javadoc) {
         classifier = 'javadoc'
         from 'build/docs/javadoc'
@@ -127,14 +128,21 @@ subprojects {
     }
 
     ext {
+
+        alfrescoEdition = 'community'
         alfrescoVersion = '5.0.d'
+
+        alfrescoBom = "eu.xenit.alfresco:alfresco-${alfrescoEdition}-bom:${alfrescoVersion}"
+
         springVersion = '3.2.10.RELEASE'
-        geminiVersion = '1.0.2.RELEASE'
-        slf4jVersion = '1.7.5'
         osgiVersion = '4.3.1'
+        geminiVersion = '1.0.2.RELEASE'
+        felixVersion = '4.2.1'
+
+        slf4jVersion = '1.7.7'
         junitVersion = '4.12'
         transactionApiVersion = '1.1'
-        felixVersion = '4.2.1'
+
         springOsgiUtilVersion = '2.0.5.RELEASE'
         mockitoVersion = '1.10.19'
         jibxVersion = '1.2.3'
@@ -153,6 +161,9 @@ subprojects {
     }
 
     repositories {
+        maven {
+            url "${rootProject.projectDir}/alfresco-bom-repo"
+        }
         mavenCentral()
         maven {
             url "https://artifacts.alfresco.com/nexus/content/groups/public/"
@@ -172,9 +183,18 @@ subprojects {
     configurations.all {
         exclude group: 'jaxen'
         resolutionStrategy {
-            eachDependency { details ->
+            eachDependency { DependencyResolveDetails details ->
                 if (details.requested.group == 'org.springframework') {
                     details.useVersion project.ext.springVersion
+                }
+
+                if (details.requested.group == 'org.alfresco.surf') {
+                    if (project.alfrescoVersion.startsWith('5.0')) {
+                        details.useTarget group: 'org.springframework.extensions.surf',
+                                          name: details.requested.name,
+                                          version: project.alfrescoVersion
+                        details.because "'org.springframework.extensions.surf' was moved to 'org.alfresco.surf'"
+                    }
                 }
             }
         }
