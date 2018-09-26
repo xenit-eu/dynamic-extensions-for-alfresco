@@ -1,18 +1,20 @@
-apply plugin: 'osgi'
-apply plugin: 'kotlin'
+subprojects {
+    apply plugin: 'osgi'
+    apply plugin: 'kotlin'
 
-dependencies {
-    compile "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    testCompile "junit:junit:${project.ext.junitVersion}"
-    testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
-}
-
-jar {
-    manifest {
-        instruction 'Bundle-Description', 'Inter-bundle event bus'
-        instruction 'Bundle-Activator', 'com.github.dynamicextensionsalfresco.event.impl.Activator'
+    dependencies {
+        compile "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
+        compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+        testCompile "junit:junit:${project.ext.junitVersion}"
+        testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
     }
-}
 
-defaultTasks 'jar'
+    jar {
+        manifest {
+            instruction 'Bundle-Description', 'Inter-bundle event bus'
+            instruction 'Bundle-Activator', 'com.github.dynamicextensionsalfresco.event.impl.Activator'
+        }
+    }
+
+    defaultTasks 'jar'
+}

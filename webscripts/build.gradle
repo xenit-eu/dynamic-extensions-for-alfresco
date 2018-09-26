@@ -1,23 +1,25 @@
-apply plugin: 'kotlin'
+subprojects {
+    apply plugin: 'kotlin'
 
-dependencies {
-    compile "${project.ext.alfrescoBom}"
+    dependencies {
+        compile "${project.ext.alfrescoBom}"
 
-    compileOnly ('org.springframework:spring-core') { transitive = false }
-    compileOnly ('org.springframework:spring-beans') { transitive = false }
-    compileOnly ('org.springframework:spring-aop') { transitive = false }
-    compileOnly ('org.springframework:spring-web') { transitive = false }
+        compileOnly('org.springframework:spring-core') { transitive = false }
+        compileOnly('org.springframework:spring-beans') { transitive = false }
+        compileOnly('org.springframework:spring-aop') { transitive = false }
+        compileOnly('org.springframework:spring-web') { transitive = false }
 
-    compileOnly("org.alfresco.surf:spring-webscripts") { transitive = false }
-    compileOnly("org.alfresco:alfresco-data-model") { transitive = false }
+        compileOnly("org.alfresco.surf:spring-webscripts") { transitive = false }
+        compileOnly("org.alfresco:alfresco-data-model") { transitive = false }
 
-    compileOnly "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
+        compileOnly "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
 
-    compileOnly "javax.servlet:servlet-api:${project.ext.servletVersion}"
+        compileOnly "javax.servlet:servlet-api:${project.ext.servletVersion}"
 
-    compileOnly ('org.apache.httpcomponents:httpcore') { transitive = false }
-    compileOnly ('org.json:json') { transitive = false }
+        compileOnly('org.apache.httpcomponents:httpcore') { transitive = false }
+        compileOnly('org.json:json') { transitive = false }
 
-    compileOnly 'com.google.code.findbugs:jsr305:2.0.1'
-    compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+        compileOnly 'com.google.code.findbugs:jsr305:2.0.1'
+        compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    }
 }

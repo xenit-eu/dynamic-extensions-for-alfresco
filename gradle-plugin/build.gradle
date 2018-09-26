@@ -1,14 +1,16 @@
-apply plugin: 'groovy'
+subprojects {
+    apply plugin: 'groovy'
 
-dependencies {
-    compile gradleApi()
-    compile localGroovy()
-    testCompile "junit:junit:${project.ext.junitVersion}"
+    dependencies {
+        compile gradleApi()
+        compile localGroovy()
+        testCompile "junit:junit:${project.ext.junitVersion}"
+    }
+
+    compileGroovy {
+        sourceCompatibility = 1.6
+        targetCompatibility = 1.6
+    }
+
+    defaultTasks 'build'
 }
-
-compileGroovy {
-    sourceCompatibility = 1.6
-    targetCompatibility = 1.6
-}
-
-defaultTasks 'build'

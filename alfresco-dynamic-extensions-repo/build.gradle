@@ -1,91 +1,107 @@
-group "eu.xenit"
+subprojects {
+    group "eu.xenit"
 
-configurations {
-    blueprint
-    bundles
+    configurations {
+        amp
+        compile.extendsFrom(amp)
+        blueprint
+        bundles
+    }
+
+    dependencies {
+        implementation "${project.ext.alfrescoBom}"
+
+        amp(project(":alfresco-integration:alfresco-integration-${project.ext.simpleAlfrescoVersion}")) {
+            transitive = false
+        }
+        amp(project(":annotations:annotations-${project.ext.simpleAlfrescoVersion}")) { transitive = false }
+        amp(project(":annotations-runtime:annotations-runtime-${project.ext.simpleAlfrescoVersion}")) {
+            transitive = false
+        }
+        amp(project(":webscripts:webscripts-${project.ext.simpleAlfrescoVersion}")) { transitive = false }
+
+        amp("org.apache.felix:org.apache.felix.framework:${project.ext.felixVersion}") { transitive = false }
+        amp "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
+        // The core asm library is already included in Alfresco distributions, so we just add asm-commons.
+        amp("asm:asm-commons:3.1") { transitive = false }
+
+        amp "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+        amp "biz.aQute.bnd:biz.aQute.bnd:${project.ext.bndVersion}"
+
+        blueprint("org.eclipse.gemini:org.eclipse.gemini.blueprint.core:${project.ext.geminiVersion}") {
+            transitive = false
+        }
+        blueprint("org.eclipse.gemini:org.eclipse.gemini.blueprint.io:${project.ext.geminiVersion}") {
+            transitive = false
+        }
+        blueprint(project(path: ":blueprint-override:blueprint-override-${project.ext.simpleAlfrescoVersion}", configuration: 'patch')) {
+            transitive = false
+        }
+        blueprint(project(":blueprint-integration:blueprint-integration-${project.ext.simpleAlfrescoVersion}")) {
+            transitive = false
+        }
+
+        bundles "org.slf4j:slf4j-api:${project.slf4jVersion}"
+        bundles("org.slf4j:slf4j-log4j12:${project.slf4jVersion}") { transitive = false }
+        bundles(project(":control-panel:control-panel-${project.ext.simpleAlfrescoVersion}")) { transitive = false }
+        bundles(project(":event-bus:event-bus-${project.ext.simpleAlfrescoVersion}")) { transitive = false }
+        bundles 'org.apache.felix:org.apache.felix.log:1.0.1'
+
+        testCompile "junit:junit:${project.ext.junitVersion}"
+        testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
+
+        testCompile "org.springframework:spring-test"
+        testCompile "org.springframework:spring-web"
+        testCompile("org.alfresco.surf:spring-webscripts")
+        testCompile("org.alfresco:alfresco-repository") { transitive = false }
+        testCompile("org.alfresco:alfresco-data-model") { transitive = false }
+
+        testRuntime "org.springframework:spring-beans"
+        testCompile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    }
+
+    def ampConfig = {
+        from(configurations.blueprint) {
+            into("config/alfresco/module/$project.name/blueprint-bundles/")
+        }
+
+        from(configurations.bundles) {
+            into("config/alfresco/module/$project.name/standard-bundles")
+        }
+
+        from(configurations.amp) {
+            into("lib")
+        }
+
+        from("${project.parent.projectDir}/module.properties") {
+            expand(project.properties)
+        }
+
+        from("${project.parent.projectDir}/shared/src/main/resources") {
+            into("config")
+        }
+
+        from("${project.parent.projectDir}/shared/src/main/config") {
+            into("config/alfresco/module/$project.name")
+        }
+
+        extension "amp"
+        destinationDir = file("$buildDir/amps")
+    }
+
+    def alfrescoAmp = file("${file("$buildDir/amps")}/${project.name}-${project.version}.amp")
+
+    artifacts {
+        archives sourceJar, javadocJar, alfrescoAmp
+    }
+
+    task amp(type: Zip, dependsOn: jar) {
+        configure ampConfig
+        baseName = project.name
+    }
+
+    build.dependsOn("amp")
+
+    uploadArchives.dependsOn("amp")
 }
-
-dependencies {
-    implementation "${project.ext.alfrescoBom}"
-
-    amp(project(":alfresco-integration")) {transitive = false}
-    amp(project(":annotations")) {transitive = false}
-    amp(project(":annotations-runtime")) {transitive = false}
-    amp(project(":webscripts")) {transitive = false}
-
-    amp("org.apache.felix:org.apache.felix.framework:${project.ext.felixVersion}") {transitive = false}
-    amp "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
-    // The core asm library is already included in Alfresco distributions, so we just add asm-commons.
-    amp("asm:asm-commons:3.1") {transitive = false}
-
-    amp "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-
-    amp "biz.aQute.bnd:biz.aQute.bnd:${project.ext.bndVersion}"
-
-    blueprint("org.eclipse.gemini:org.eclipse.gemini.blueprint.core:${project.ext.geminiVersion}") {transitive = false}
-    blueprint("org.eclipse.gemini:org.eclipse.gemini.blueprint.io:${project.ext.geminiVersion}") {transitive = false}
-    blueprint(project(path: ":blueprint-override", configuration: 'patch')) {transitive = false}
-    blueprint(project(":blueprint-integration")) {transitive = false}
-
-    bundles "org.slf4j:slf4j-api:${project.slf4jVersion}"
-    bundles("org.slf4j:slf4j-log4j12:${project.slf4jVersion}") {transitive = false}
-    bundles(project(":control-panel")) {transitive = false}
-    bundles(project(":event-bus")) {transitive = false}
-    bundles 'org.apache.felix:org.apache.felix.log:1.0.1'
-
-    testCompile "junit:junit:${project.ext.junitVersion}"
-    testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
-
-    testCompile "org.springframework:spring-test"
-    testCompile "org.springframework:spring-web"
-    testCompile("org.alfresco.surf:spring-webscripts")
-    testCompile("org.alfresco:alfresco-repository") { transitive = false }
-    testCompile("org.alfresco:alfresco-data-model") { transitive = false }
-
-    testRuntime "org.springframework:spring-beans"
-    testCompile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-}
-
-def ampConfig = {
-    from(configurations.blueprint) {
-        into("config/alfresco/module/$project.name/blueprint-bundles/")
-    }
-
-    from(configurations.bundles) {
-        into("config/alfresco/module/$project.name/standard-bundles")
-    }
-
-    from(configurations.amp) {
-        into("lib")
-    }
-
-    from("module.properties") {
-        expand(project.properties)
-    }
-
-    from("src/main/resources") {
-        into("config")
-    }
-
-    from("src/main/config") {
-        into("config/alfresco/module/$project.name")
-    }
-
-    extension "amp"
-    destinationDir = file("$buildDir/amps")
-}
-
-def alfrescoAmp = file("${file("$buildDir/amps")}/${project.name}-${project.version}.amp")
-
-artifacts {
-    archives sourceJar, javadocJar, alfrescoAmp
-}
-
-task amp(type: Zip, dependsOn: jar) {
-    configure ampConfig
-    baseName = project.name
-}
-
-build.dependsOn("amp")
-
-uploadArchives.dependsOn("amp")
