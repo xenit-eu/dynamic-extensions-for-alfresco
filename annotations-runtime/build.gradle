@@ -14,7 +14,9 @@ subprojects {
         compile "org.apache.felix:org.apache.felix.framework:${project.ext.felixVersion}"
 
         compileOnly "org.slf4j:slf4j-api"
-        compileOnly("org.alfresco.surf:spring-webscripts")
+        compileOnly("org.alfresco.surf:spring-webscripts") { 
+            exclude group: "org.quartz-scheduler"
+        }
         compileOnly("org.alfresco:alfresco-data-model") { transitive = false }
         compileOnly("org.alfresco:alfresco-repository") { transitive = false }
         compileOnly("org.alfresco:alfresco-core") { transitive = false }

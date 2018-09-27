@@ -42,6 +42,11 @@ public class AnnotationWebScriptOutputMessage implements ServerHttpResponse {
     @Override
     public void close() {
     }
+    
+    @SuppressWarnings("unused")
+    public void flush() {
+        
+    }
 
     public class HttpHeadersWrapper extends HttpHeaders {
         private final AnnotationWebscriptResponse response;

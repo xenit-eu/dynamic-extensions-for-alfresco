@@ -7,13 +7,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
-/**
- * Another implementation is used for Alfresco 5.1.x and older, see the corresponding sub projects for this implementation. 
- */
 public class MessageConverterRegistry {
     private static final Logger LOGGER = LoggerFactory.getLogger(
             MessageConverterRegistry.class);
@@ -27,6 +25,10 @@ public class MessageConverterRegistry {
             ClassUtils.isPresent("com.fasterxml.jackson.databind.ObjectMapper", MessageConverterRegistry.class.getClassLoader()) &&
                     ClassUtils.isPresent("com.fasterxml.jackson.core.JsonGenerator", MessageConverterRegistry.class.getClassLoader());
 
+    private static final boolean jacksonPresent =
+            ClassUtils.isPresent("org.codehaus.jackson.map.ObjectMapper", MessageConverterRegistry.class.getClassLoader()) &&
+                    ClassUtils.isPresent("org.codehaus.jackson.JsonGenerator", MessageConverterRegistry.class.getClassLoader());
+
 
 
     public MessageConverterRegistry() {
@@ -39,7 +41,16 @@ public class MessageConverterRegistry {
                 // Use the default Spring HttpMessageConverter
                 LOGGER.debug("Adding default converter " + MappingJackson2HttpMessageConverter.class.getName());
                 this.messageConverters.add(new MappingJackson2HttpMessageConverter());
+            } else {
+                // No Spring HttpMessageConverter available for Json 2. Use our own implementation.
+                LOGGER.debug("Adding default converter " + 
+                        com.github.dynamicextensionsalfresco.polyfill.MappingJackson2HttpMessageConverter.class.getName());
+                this.messageConverters.add(new com.github.dynamicextensionsalfresco.polyfill.MappingJackson2HttpMessageConverter());
             }
+        }
+        else if (jacksonPresent) {
+            LOGGER.debug("Adding default converter " + MappingJacksonHttpMessageConverter.class.getName());
+            this.messageConverters.add(new MappingJacksonHttpMessageConverter());
         }
 
         if (jaxb2Present) {

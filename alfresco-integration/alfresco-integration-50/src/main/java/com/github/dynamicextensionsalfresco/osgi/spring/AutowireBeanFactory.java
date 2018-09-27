@@ -14,8 +14,6 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * Another implementation is used for Alfresco 5.1.x and older, see the corresponding sub projects for this implementation. 
- * 
  * {@link BeanFactory} that augments default autowiring logic by attempting to resolve dependencies using Alfresco
  * naming conventions.
  * 
@@ -34,11 +32,9 @@ public class AutowireBeanFactory extends DefaultListableBeanFactory {
 			internalBeanNames.add(beanName.id());
 		}
 	}
-	
-	
 
 	@Override
-	protected String determineAutowireCandidate(final Map<String, Object> candidateBeans,
+	protected String determinePrimaryCandidate(final Map<String, Object> candidateBeans,
 			final DependencyDescriptor descriptor) {
 		String beanName = ClassUtils.getShortName(descriptor.getDependencyType());
 
@@ -65,7 +61,7 @@ public class AutowireBeanFactory extends DefaultListableBeanFactory {
 			}
 			break;
 		}
-		return super.determineAutowireCandidate(candidateBeans, descriptor);
+		return super.determinePrimaryCandidate(candidateBeans, descriptor);
 	}
 
 	/* Utility operations */
