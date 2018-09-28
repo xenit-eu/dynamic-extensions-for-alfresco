@@ -167,7 +167,7 @@ subprojects {
             ]
             springVersions = [
                     '50': '3.2.10.RELEASE',
-                    '52': '4.1.8.RELEASE'
+                    '52': '3.2.17.RELEASE'
             ]
 
             alfrescoEdition = 'community'
