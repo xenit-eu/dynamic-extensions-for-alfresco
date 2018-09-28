@@ -47,217 +47,225 @@ allprojects {
     }
 }
 
-subprojects {
-    subprojects {
-        buildscript {
-            repositories {
-                mavenCentral()
-            }
-            dependencies {
-                classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-            }
+// Configuration that should be applied to all subprojects. (If a sub project also has sub projects for different 
+// Alfresco versions, it should not build any artifacts.)
+def allSubProjectsConfig = {
+    buildscript {
+        repositories {
+            mavenCentral()
         }
-
-        apply plugin: 'java'
-        apply plugin: 'jacoco'
-        apply plugin: 'maven'
-        apply plugin: 'signing'
-
-        task sourceJar(type: Jar) {
-            classifier = 'sources'
-            from sourceSets.main.allSource
+        dependencies {
+            classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         }
+    }
 
-        task javadocJar(type: Jar, dependsOn: javadoc) {
-            classifier = 'javadoc'
-            from 'build/docs/javadoc'
-        }
+    apply plugin: 'java'
+    apply plugin: 'jacoco'
+    apply plugin: 'maven'
+    apply plugin: 'signing'
 
-        artifacts {
-            archives sourceJar, javadocJar
-        }
+    task sourceJar(type: Jar) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
 
-        uploadArchives {
-            repositories {
-                mavenDeployer {
-                    signing {
-                        required { false }
-                        sign configurations.archives
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        classifier = 'javadoc'
+        from 'build/docs/javadoc'
+    }
+
+    artifacts {
+        archives sourceJar, javadocJar
+    }
+
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                signing {
+                    required { false }
+                    sign configurations.archives
+                }
+                beforeDeployment {
+                    MavenDeployment deployment ->
+
+                        signing.signPom(deployment)
+
+                }
+
+                repository(url: project.hasProperty('de_publish_url') ? project.de_publish_url : "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                    authentication(userName: project.hasProperty('de_publish_username') ? project.de_publish_username : '', password: project.hasProperty('de_publish_password') ? project.de_publish_password : '')
+                }
+
+                snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                    authentication(userName: project.hasProperty('de_publish_username') ? project.de_publish_username : '', password: project.hasProperty('de_publish_password') ? project.de_publish_password : '')
+                }
+
+                pom.project {
+                    url 'https://github.com/xenit-eu/dynamic-extensions-for-alfresco'
+                    name "dynamic-extensions-for-alfresco-" + project.name
+                    description "Adds an OSGi container to alfresco repository supporting dynamic code reloading, " +
+                            "classpath isolation and a bunch of other useful features"
+
+                    scm {
+                        connection 'scm:git:git@github.com:xenit-eu/dynamic-extensions-for-alfresco.git'
+                        developerConnection 'scm:git:git@github.com:xenit-eu/dynamic-extensions-for-alfresco.git'
+                        url 'https://github.com/xenit-eu/dynamic-extensions-for-alfresco.git'
                     }
-                    beforeDeployment {
-                        MavenDeployment deployment ->
 
-                            signing.signPom(deployment)
-
-                    }
-
-                    repository(url: project.hasProperty('de_publish_url') ? project.de_publish_url : "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                        authentication(userName: project.hasProperty('de_publish_username') ? project.de_publish_username : '', password: project.hasProperty('de_publish_password') ? project.de_publish_password : '')
-                    }
-
-                    snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                        authentication(userName: project.hasProperty('de_publish_username') ? project.de_publish_username : '', password: project.hasProperty('de_publish_password') ? project.de_publish_password : '')
-                    }
-
-                    pom.project {
-                        url 'https://github.com/xenit-eu/dynamic-extensions-for-alfresco'
-                        name "dynamic-extensions-for-alfresco-" + project.name
-                        description "Adds an OSGi container to alfresco repository supporting dynamic code reloading, " +
-                                "classpath isolation and a bunch of other useful features"
-
-                        scm {
-                            connection 'scm:git:git@github.com:xenit-eu/dynamic-extensions-for-alfresco.git'
-                            developerConnection 'scm:git:git@github.com:xenit-eu/dynamic-extensions-for-alfresco.git'
-                            url 'https://github.com/xenit-eu/dynamic-extensions-for-alfresco.git'
-                        }
-
-                        licenses {
-                            license {
-                                name 'The Apache License, Version 2.0'
-                                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                            }
-                        }
-
-                        developers {
-                            developer {
-                                id "laurentvdl"
-                                name "Laurent Van der Linden"
-                                roles {
-                                    role "Founder"
-                                    role "Architect"
-                                }
-                            }
-                            developer {
-                                id 'stanmine'
-                                name 'Stan Mine'
-                                email 'stan.mine@xenit.eu'
-                                roles {
-                                    role "Architect"
-                                    role "Developer"
-                                }
-                            }
-                            developer {
-                                id 'yregaieg'
-                                name 'Younes Regaieg'
-                                email 'younes.regaieg@xenit.eu'
-                                roles {
-                                    role "Contributor"
-                                }
-                            }
+                    licenses {
+                        license {
+                            name 'The Apache License, Version 2.0'
+                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
                         }
                     }
-                }
-            }
-        }
 
-        [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
-
-        compileJava {
-            sourceCompatibility = 1.7
-            targetCompatibility = 1.7
-            options.compilerArgs << '-Xlint:unchecked'
-        }
-
-        def projectAlfrescoVersion = project.name - "${project.parent.name}-"
-
-        ext {
-            alfrescoVersions = [
-                    '50': '5.0.d',
-                    '52': '5.2.f'
-            ]
-            springVersions = [
-                    '50': '3.2.10.RELEASE',
-                    '52': '3.2.17.RELEASE'
-            ]
-
-            alfrescoEdition = 'community'
-            simpleAlfrescoVersion = "${projectAlfrescoVersion}"
-            alfrescoVersion = "${alfrescoVersions[projectAlfrescoVersion]}"
-
-            alfrescoBom = "eu.xenit.alfresco:alfresco-${alfrescoEdition}-bom:${alfrescoVersion}"
-
-            springVersion = "${springVersions[projectAlfrescoVersion]}"
-            osgiVersion = '4.3.1'
-            geminiVersion = '1.0.2.RELEASE'
-            felixVersion = '4.2.1'
-
-            slf4jVersion = '1.7.7'
-            junitVersion = '4.12'
-            transactionApiVersion = '1.1'
-
-            springOsgiUtilVersion = '2.0.5.RELEASE'
-            mockitoVersion = '1.10.19'
-            jibxVersion = '1.2.3'
-            hibernateVersion = '3.2.6.ga'
-            servletVersion = '2.5'
-            bndVersion = '2.4.1'
-        }
-
-        afterEvaluate {
-            sourceSets {
-                if (project.plugins.hasPlugin("kotlin")) {
-                    main.kotlin.srcDirs += "${project.parent.projectDir}/shared/src/main/kotlin"
-                    test.kotlin.srcDirs += "${project.parent.projectDir}/shared/src/test/kotlin"
-                }
-                if (project.plugins.hasPlugin("groovy")) {
-                    main.groovy.srcDirs += "${project.parent.projectDir}/shared/src/main/groovy"
-                    test.groovy.srcDirs += "${project.parent.projectDir}/shared/src/test/groovy"
-                }
-                main.java.srcDirs += "${project.parent.projectDir}/shared/src/main/java"
-                test.java.srcDirs += "${project.parent.projectDir}/shared/src/test/java"
-                main.resources.srcDirs += "${project.parent.projectDir}/shared/src/main/resources"
-                test.resources.srcDirs += "${project.parent.projectDir}/shared/src/test/resources"
-
-                if (project.hasProperty("excludedSharedFiles")) {
-                    def excludeFilter = {
-                        file ->
-                            if (file.file.path.contains("shared") && project.ext.excludedSharedFiles.contains(file.name)) {
-                                return true
+                    developers {
+                        developer {
+                            id "laurentvdl"
+                            name "Laurent Van der Linden"
+                            roles {
+                                role "Founder"
+                                role "Architect"
                             }
-                    }
-                    // We should use a different source file for this Alfresco version, the shared source will be excluded
-                    main.java.exclude excludeFilter
-                    javadoc.exclude excludeFilter
-                }
-            }
-        }
-
-        configurations.all {
-            exclude group: 'jaxen'
-            resolutionStrategy {
-                eachDependency { DependencyResolveDetails details ->
-                    if (details.requested.group == 'org.springframework') {
-                        details.useVersion project.ext.springVersion
-                    }
-
-                    if (details.requested.group == 'org.alfresco.surf') {
-                        if (project.alfrescoVersion.startsWith('5.0')) {
-                            details.useTarget group: 'org.springframework.extensions.surf',
-                                    name: details.requested.name,
-                                    version: project.alfrescoVersion
-                            details.because "'org.springframework.extensions.surf' was moved to 'org.alfresco.surf'"
+                        }
+                        developer {
+                            id 'stanmine'
+                            name 'Stan Mine'
+                            email 'stan.mine@xenit.eu'
+                            roles {
+                                role "Architect"
+                                role "Developer"
+                            }
+                        }
+                        developer {
+                            id 'yregaieg'
+                            name 'Younes Regaieg'
+                            email 'younes.regaieg@xenit.eu'
+                            roles {
+                                role "Contributor"
+                            }
                         }
                     }
                 }
             }
         }
+    }
 
-        gradle.taskGraph.whenReady { graph ->
-            if (graph.hasTask(uploadArchives)) {
-                if (!project.hasProperty('keyId') || !project.hasProperty('secretKeyRingFile') || !project.hasProperty('password')) {
-                    throw new GradleException('You need to provide signing params in order to sign artifacts')
+    [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+
+    compileJava {
+        sourceCompatibility = 1.7
+        targetCompatibility = 1.7
+        options.compilerArgs << '-Xlint:unchecked'
+    }
+
+    def projectAlfrescoVersion = project.name - "${project.parent.name}-"
+
+    ext {
+        alfrescoVersions = [
+                '50': '5.0.d',
+                '52': '5.2.f'
+        ]
+        springVersions = [
+                '50': '3.2.10.RELEASE',
+                '52': '3.2.17.RELEASE'
+        ]
+
+        alfrescoEdition = 'community'
+        simpleAlfrescoVersion = "${projectAlfrescoVersion}"
+        alfrescoVersion = "${alfrescoVersions[projectAlfrescoVersion]}"
+
+        alfrescoBom = "eu.xenit.alfresco:alfresco-${alfrescoEdition}-bom:${alfrescoVersion}"
+
+        springVersion = "${springVersions[projectAlfrescoVersion]}"
+        osgiVersion = '4.3.1'
+        geminiVersion = '1.0.2.RELEASE'
+        felixVersion = '4.2.1'
+
+        slf4jVersion = '1.7.7'
+        junitVersion = '4.12'
+        transactionApiVersion = '1.1'
+
+        springOsgiUtilVersion = '2.0.5.RELEASE'
+        mockitoVersion = '1.10.19'
+        jibxVersion = '1.2.3'
+        hibernateVersion = '3.2.6.ga'
+        servletVersion = '2.5'
+        bndVersion = '2.4.1'
+    }
+
+    configurations.all {
+        exclude group: 'jaxen'
+        resolutionStrategy {
+            eachDependency { DependencyResolveDetails details ->
+                if (details.requested.group == 'org.springframework') {
+                    details.useVersion project.ext.springVersion
                 }
 
-                def id = project.hasProperty('keyId') ? project.keyId : ''
-                def file = project.hasProperty('secretKeyRingFile') ? project.secretKeyRingFile : ''
-                def password = project.hasProperty('password') ? project.password : ''
+                if (details.requested.group == 'org.alfresco.surf') {
+                    if (project.alfrescoVersion.startsWith('5.0')) {
+                        details.useTarget group: 'org.springframework.extensions.surf',
+                                name: details.requested.name,
+                                version: project.alfrescoVersion
+                        details.because "'org.springframework.extensions.surf' was moved to 'org.alfresco.surf'"
+                    }
+                }
+            }
+        }
+    }
 
-                ext."signing.keyId" = id
-                ext."signing.secretKeyRingFile" = file
-                ext."signing.password" = password
+    gradle.taskGraph.whenReady { graph ->
+        if (graph.hasTask(uploadArchives)) {
+            if (!project.hasProperty('keyId') || !project.hasProperty('secretKeyRingFile') || !project.hasProperty('password')) {
+                throw new GradleException('You need to provide signing params in order to sign artifacts')
+            }
+
+            def id = project.hasProperty('keyId') ? project.keyId : ''
+            def file = project.hasProperty('secretKeyRingFile') ? project.secretKeyRingFile : ''
+            def password = project.hasProperty('password') ? project.password : ''
+
+            ext."signing.keyId" = id
+            ext."signing.secretKeyRingFile" = file
+            ext."signing.password" = password
+        }
+    }
+}
+
+// Configuration specific for projects that are split up into Alfresco-version subprojects
+def subSubProjectsConfig = {
+    afterEvaluate {
+        sourceSets {
+            if (project.plugins.hasPlugin("kotlin")) {
+                main.kotlin.srcDirs += "${project.parent.projectDir}/shared/src/main/kotlin"
+                test.kotlin.srcDirs += "${project.parent.projectDir}/shared/src/test/kotlin"
+            }
+            if (project.plugins.hasPlugin("groovy")) {
+                main.groovy.srcDirs += "${project.parent.projectDir}/shared/src/main/groovy"
+                test.groovy.srcDirs += "${project.parent.projectDir}/shared/src/test/groovy"
+            }
+            main.java.srcDirs += "${project.parent.projectDir}/shared/src/main/java"
+            test.java.srcDirs += "${project.parent.projectDir}/shared/src/test/java"
+            main.resources.srcDirs += "${project.parent.projectDir}/shared/src/main/resources"
+            test.resources.srcDirs += "${project.parent.projectDir}/shared/src/test/resources"
+
+            if (project.hasProperty("excludedSharedFiles")) {
+                def excludeFilter = {
+                    file ->
+                        if (file.file.path.contains("shared") && project.ext.excludedSharedFiles.contains(file.name)) {
+                            return true
+                        }
+                }
+                // We should use a different source file for this Alfresco version, the shared source will be excluded
+                main.java.exclude excludeFilter
+                javadoc.exclude excludeFilter
             }
         }
     }
 }
+
+configure((subprojects - project(':gradle-plugin')), {
+    subprojects allSubProjectsConfig << subSubProjectsConfig
+})
+configure([project(':gradle-plugin')], allSubProjectsConfig)
 
 defaultTasks 'build'
