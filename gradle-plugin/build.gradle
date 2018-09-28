@@ -8,8 +8,8 @@ subprojects {
     }
 
     compileGroovy {
-        sourceCompatibility = 1.6
-        targetCompatibility = 1.6
+        sourceCompatibility = 1.7
+        targetCompatibility = 1.7
     }
 
     defaultTasks 'build'
