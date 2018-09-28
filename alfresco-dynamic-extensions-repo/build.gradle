@@ -63,18 +63,18 @@ subprojects {
 
     def ampConfig = {
         from(configurations.blueprint) {
-            into("config/alfresco/module/$project.name/blueprint-bundles/")
+            into("config/alfresco/module/$project.parent.name/blueprint-bundles/")
         }
 
         from(configurations.bundles) {
-            into("config/alfresco/module/$project.name/standard-bundles")
+            into("config/alfresco/module/$project.parent.name/standard-bundles")
         }
 
         from(configurations.amp) {
             into("lib")
         }
 
-        from("${project.parent.projectDir}/module.properties") {
+        from("${project.projectDir}/module.properties") {
             expand(project.properties)
         }
 
@@ -83,7 +83,7 @@ subprojects {
         }
 
         from("${project.parent.projectDir}/shared/src/main/config") {
-            into("config/alfresco/module/$project.name")
+            into("config/alfresco/module/$project.parent.name")
         }
 
         extension "amp"

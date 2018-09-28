@@ -42,6 +42,8 @@ subprojects {
 
     jar {
         manifest {
+            name = "${project.parent.name}"
+            symbolicName = "${project.parent.group}.${project.parent.name}"
             instruction 'Alfresco-Dynamic-Extension', 'true'
             instruction 'Bundle-Description', 'Control Panel'
             instruction 'Alfresco-Spring-Configuration', 'com.github.dynamicextensionsalfresco.controlpanel'

@@ -23,6 +23,9 @@ nexusStaging {
 }
 
 allprojects {
+    group = 'eu.xenit.de'
+    version = '1.8.0-SNAPSHOT'
+    
     apply plugin: 'idea'
     apply plugin: 'eclipse'
 
@@ -218,9 +221,6 @@ subprojects {
                 }
             }
         }
-
-        group = 'eu.xenit.de'
-        version = '1.8.0-SNAPSHOT'
 
         configurations.all {
             exclude group: 'jaxen'
