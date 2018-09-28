@@ -196,6 +196,10 @@ subprojects {
                     main.kotlin.srcDirs += "${project.parent.projectDir}/shared/src/main/kotlin"
                     test.kotlin.srcDirs += "${project.parent.projectDir}/shared/src/test/kotlin"
                 }
+                if (project.plugins.hasPlugin("groovy")) {
+                    main.groovy.srcDirs += "${project.parent.projectDir}/shared/src/main/groovy"
+                    test.groovy.srcDirs += "${project.parent.projectDir}/shared/src/test/groovy"
+                }
                 main.java.srcDirs += "${project.parent.projectDir}/shared/src/main/java"
                 test.java.srcDirs += "${project.parent.projectDir}/shared/src/test/java"
                 main.resources.srcDirs += "${project.parent.projectDir}/shared/src/main/resources"
@@ -216,7 +220,7 @@ subprojects {
         }
 
         group = 'eu.xenit.de'
-        version = '1.7.7-SNAPSHOT'
+        version = '1.8.0-SNAPSHOT'
 
         configurations.all {
             exclude group: 'jaxen'
