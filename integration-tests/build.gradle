@@ -1,0 +1,72 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "com.avast.gradle:gradle-docker-compose-plugin:0.8.4"
+    }
+}
+
+apply plugin: 'java'
+
+ext {
+    slf4jVersion = '1.7.25'
+}
+
+dependencies {
+    testCompile 'org.hamcrest:hamcrest-all:1.3'
+    testCompile 'junit:junit:4.12'
+    testCompile 'io.rest-assured:rest-assured:3.0.7'
+
+    testCompile group: 'org.slf4j', name: 'slf4j-api', version: "${slf4jVersion}"
+    testCompile group: 'org.slf4j', name: 'slf4j-simple', version: "${slf4jVersion}"
+}
+
+// Tests should be executed in child projects, not in this project:
+test.enabled = false
+
+configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
+
+    task copyAmps(type: Copy) {
+        def alfrescoVersion = project.name - 'alfresco-'
+        
+        dependsOn project(":alfresco-dynamic-extensions-repo:alfresco-dynamic-extensions-repo-${alfrescoVersion}").tasks.amp
+
+        from project(":alfresco-dynamic-extensions-repo:alfresco-dynamic-extensions-repo-${alfrescoVersion}").amp
+        into "${buildDir}/amps"
+    }
+
+    task integrationTest(type: Test) {
+        testClassesDirs = project(':integration-tests').sourceSets.test.output.classesDirs
+        classpath = project(':integration-tests').sourceSets.test.runtimeClasspath
+        outputs.upToDateWhen { false }
+
+        testLogging {
+            showStandardStreams = true
+            exceptionFormat = 'full'
+        }
+    }
+
+    apply plugin: 'docker-compose'
+
+    dockerCompose {
+        projectName = "alfresco-dynamic-extensions-${project.name}"
+        useComposeFiles = [project.parent.projectDir.toString() + '/src/test/compose/docker-compose.yml']
+
+        removeVolumes = true
+        captureContainersOutput = false
+
+        buildAdditionalArgs = ['--no-cache']
+
+        // Uncomment for quick iterations when developing integration tests
+//        stopContainers = false
+
+        // expose alfresco/inflow on a random port, comment to use default ports (8080 & 8081)
+        environment.put 'COMPOSE_ALFRESCO_TCP_8080', '8080'
+        environment.put 'AMPS_DIR', "${project.buildDir}/amps"
+
+        isRequiredBy(project.tasks.integrationTest)
+    }
+
+    composeUp.dependsOn project.tasks.copyAmps
+}

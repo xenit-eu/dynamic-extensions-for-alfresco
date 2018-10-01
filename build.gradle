@@ -254,7 +254,10 @@ def subSubProjectsConfig = {
     }
 }
 
-configure((subprojects - project(':gradle-plugin') - project(':annotations')), {
+configure((subprojects 
+        - project(':gradle-plugin') 
+        - project(':annotations')
+        - project(':integration-tests')), {
     subprojects allSubProjectsConfig << subSubProjectsConfig
 })
 configure([project(':gradle-plugin'), project(':annotations')], allSubProjectsConfig)
