@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * Qualifier for distinguishing between different types of Alfresco services when autowiring dependencies by type.
  * <p>
- * This annotation should be used in conjunction with the {@link org.springframework.beans.factory.annotation.Autowired} annotation.
+ * This annotation should be used in conjunction with the Spring's Autowired annotation.
  * <p>
  * Example:
  * 

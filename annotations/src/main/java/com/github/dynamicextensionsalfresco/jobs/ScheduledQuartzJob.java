@@ -3,7 +3,7 @@ package com.github.dynamicextensionsalfresco.jobs;
 import java.lang.annotation.*;
 
 /**
- * Register any class implementing {@link org.quartz.Job} scheduled Quartz jobs.
+ * Register any class implementing scheduled Quartz jobs.
  *
  * @author Laurent Van der Linden
  */
@@ -27,9 +27,9 @@ public @interface ScheduledQuartzJob {
 	String name();
 
 	/**
-	 * @return the job group name, defaults to {@link org.quartz.Scheduler#DEFAULT_GROUP}
+	 * @return the job group name, defaults to "DEFAULT"
 	 */
-	String group() default org.quartz.Scheduler.DEFAULT_GROUP;
+	String group() default "DEFAULT";
 
 	/**
 	 * A key to a property from alfresco-global.properties specifying

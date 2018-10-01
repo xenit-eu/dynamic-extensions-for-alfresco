@@ -8,7 +8,7 @@ subprojects {
     dependencies {
         compile "${project.ext.alfrescoBom}"
 
-        compile project(":annotations:annotations-${project.ext.simpleAlfrescoVersion}")
+        compile project(':annotations')
         compile project(":webscripts:webscripts-${project.ext.simpleAlfrescoVersion}")
 
         compile "org.apache.felix:org.apache.felix.framework:${project.ext.felixVersion}"

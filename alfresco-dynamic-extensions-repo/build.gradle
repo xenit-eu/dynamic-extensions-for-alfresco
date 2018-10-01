@@ -14,7 +14,7 @@ subprojects {
         amp(project(":alfresco-integration:alfresco-integration-${project.ext.simpleAlfrescoVersion}")) {
             transitive = false
         }
-        amp(project(":annotations:annotations-${project.ext.simpleAlfrescoVersion}")) { transitive = false }
+        amp(project(':annotations')) { transitive = false }
         amp(project(":annotations-runtime:annotations-runtime-${project.ext.simpleAlfrescoVersion}")) {
             transitive = false
         }

@@ -2,6 +2,7 @@ package com.github.dynamicextensionsalfresco.policy;
 
 import com.github.dynamicextensionsalfresco.AbstractAnnotationBasedRegistrar;
 import com.github.dynamicextensionsalfresco.behaviours.annotations.*;
+import com.github.dynamicextensionsalfresco.util.EventUtil;
 import org.alfresco.repo.policy.Behaviour.NotificationFrequency;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.Policy;
@@ -54,7 +55,7 @@ public class AnnotationBasedBehaviourRegistrar extends AbstractAnnotationBasedRe
 		Assert.notNull(bean, "Bean cannot be null.");
 
 		final QName[] classNames = parseQNames(behaviour.value(), behaviour);
-		final NotificationFrequency notificationFrequency = behaviour.event().toNotificationFrequency();
+		final NotificationFrequency notificationFrequency = EventUtil.toNotificationFrequency(behaviour.event());
 
 		for (final Entry<PolicyType, List<BehaviourMethod>> entry : getBehaviourMethodsByType(bean.getClass())
 				.entrySet()) {
@@ -84,7 +85,7 @@ public class AnnotationBasedBehaviourRegistrar extends AbstractAnnotationBasedRe
 		if (classPolicy != null) {
 			classNames = parseQNames(classPolicy.value(), classPolicy);
 			if (classPolicy.event().equals(Event.INHERITED_OR_ALL) == false) {
-				notificationFrequency = classPolicy.event().toNotificationFrequency();
+				notificationFrequency = EventUtil.toNotificationFrequency(classPolicy.event());
 			}
 		}
 		final JavaBehaviour behaviour = new DescriptiveJavaBehaviour(bean, method, notificationFrequency);
@@ -122,7 +123,7 @@ public class AnnotationBasedBehaviourRegistrar extends AbstractAnnotationBasedRe
       }
 			assocationName = parseQName(associationPolicy.association(), associationPolicy);
 			if (associationPolicy.event().equals(Event.INHERITED_OR_ALL) == false) {
-				notificationFrequency = associationPolicy.event().toNotificationFrequency();
+				notificationFrequency = EventUtil.toNotificationFrequency(associationPolicy.event());
 			}
 		}
 		final JavaBehaviour behaviour = new DescriptiveJavaBehaviour(bean, method, notificationFrequency);
@@ -170,7 +171,7 @@ public class AnnotationBasedBehaviourRegistrar extends AbstractAnnotationBasedRe
 			}
 			propertyName = parseQName(propertyPolicy.property(), propertyPolicy);
 			if (propertyPolicy.event().equals(Event.INHERITED_OR_ALL) == false) {
-				notificationFrequency = propertyPolicy.event().toNotificationFrequency();
+				notificationFrequency = EventUtil.toNotificationFrequency(propertyPolicy.event());
 			}
 		}
 		final JavaBehaviour behaviour = new DescriptiveJavaBehaviour(bean, method, notificationFrequency);

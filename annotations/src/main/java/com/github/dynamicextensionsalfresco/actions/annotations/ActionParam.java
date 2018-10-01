@@ -5,8 +5,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.alfresco.service.cmr.dictionary.DataTypeDefinition;
-
 /**
  * Indicates an {@link ActionMethod} method parameter.
  * 
@@ -31,7 +29,7 @@ public @interface ActionParam {
 
 	/**
 	 * The qualified name of the parameter type. If not specified, the Java parameter type is used to determine a
-	 * matching {@link DataTypeDefinition}. For ambiguous cases, you need to specify the type explicitly.
+	 * matching Alfresco DataTypeDefinition. For ambiguous cases, you need to specify the type explicitly.
 	 * 
 	 * @return
 	 */

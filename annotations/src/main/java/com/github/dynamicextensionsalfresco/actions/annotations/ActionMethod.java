@@ -5,10 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.alfresco.service.cmr.action.Action;
-
 /**
- * Indicates a method that maps to an annotation-based {@link Action}.
+ * Indicates a method that maps to an annotation-based Alfresco Action.
  * 
  * @author Laurens Fridael
  * 

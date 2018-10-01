@@ -10,7 +10,7 @@ subprojects {
         compile "${project.ext.alfrescoBom}"
 
         compile project(":alfresco-integration:alfresco-integration-${project.ext.simpleAlfrescoVersion}")
-        compile project(":annotations:annotations-${project.ext.simpleAlfrescoVersion}")
+        compile project(':annotations')
         compile project(":webscripts:webscripts-${project.ext.simpleAlfrescoVersion}")
         compile project(":event-bus:event-bus-${project.ext.simpleAlfrescoVersion}")
 

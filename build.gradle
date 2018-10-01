@@ -263,9 +263,9 @@ def subSubProjectsConfig = {
     }
 }
 
-configure((subprojects - project(':gradle-plugin')), {
+configure((subprojects - project(':gradle-plugin') - project(':annotations')), {
     subprojects allSubProjectsConfig << subSubProjectsConfig
 })
-configure([project(':gradle-plugin')], allSubProjectsConfig)
+configure([project(':gradle-plugin'), project(':annotations')], allSubProjectsConfig)
 
 defaultTasks 'build'
