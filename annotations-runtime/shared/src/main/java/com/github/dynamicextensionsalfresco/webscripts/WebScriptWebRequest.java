@@ -170,4 +170,9 @@ public class WebScriptWebRequest implements WebRequest {
 	public boolean checkNotModified(String etag) {
 		return false;
 	}
+
+	@SuppressWarnings("unused")
+	public boolean checkNotModified(String etag, long lastModifiedTimestamp) {
+		return false;
+	}
 }

@@ -12,6 +12,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import static org.hamcrest.CoreMatchers.anyOf;
+import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
@@ -300,7 +302,7 @@ public class ResponseBodyReturnValueTest extends AbstractWebScriptAnnotationsTes
 
         Assert.assertTrue(response.getHeaders().containsKey("Content-Type"));
         String actualContentType =response.getHeaders().get("Content-Type").get(0);
-        assertThat(actualContentType, is(expectedContentType));
+        assertThat(actualContentType, startsWith(expectedContentType));
     }
 
     @Test
@@ -325,7 +327,7 @@ public class ResponseBodyReturnValueTest extends AbstractWebScriptAnnotationsTes
 
         Assert.assertTrue(response.getHeaders().containsKey("Content-Type"));
         String actualContentType =response.getHeaders().get("Content-Type").get(0);
-        assertThat(actualContentType, is(expectedContentType));
+        assertThat(actualContentType, startsWith(expectedContentType));
 
     }
 
