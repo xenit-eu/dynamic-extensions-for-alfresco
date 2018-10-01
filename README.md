@@ -43,6 +43,7 @@ Dynamic Extensions is developed and tested against:
 * Alfresco Enterprise 4.1
 * Alfresco Enterprise 4.2
 * Alfresco Community 5.0
+* Alfresco Community 5.2
 
 Dynamic Extensions is also known to work on:
 

@@ -90,15 +90,13 @@ subprojects {
         destinationDir = file("$buildDir/amps")
     }
 
-    def alfrescoAmp = file("${file("$buildDir/amps")}/${project.name}-${project.version}.amp")
-
-    artifacts {
-        archives sourceJar, javadocJar, alfrescoAmp
-    }
-
     task amp(type: Zip, dependsOn: jar) {
         configure ampConfig
         baseName = project.name
+    }
+
+    artifacts {
+        archives sourceJar, javadocJar, amp
     }
 
     build.dependsOn("amp")
