@@ -1,0 +1,20 @@
+configurations {
+    javadocOnly
+}
+
+dependencies {
+    javadocOnly "${project.ext.alfrescoBom}"
+
+    javadocOnly("org.alfresco:alfresco-repository") { transitive = false }
+    javadocOnly("org.alfresco:alfresco-data-model") { transitive = false }
+    javadocOnly("org.alfresco:alfresco-remote-api") { transitive = false }
+    javadocOnly("org.alfresco:alfresco-core") { transitive = false }
+
+    javadocOnly('org.quartz-scheduler:quartz') { transitive = false }
+
+    javadocOnly('org.springframework:spring-beans') { transitive = false }
+}
+
+javadoc {
+    classpath += configurations.javadocOnly
+}

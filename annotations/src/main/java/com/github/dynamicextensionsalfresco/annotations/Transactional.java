@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * Indicates methods that are run within a transaction using the given settings. This annotation removes the boilerplate
- * for invoking Alfresco's RetryingTransactionHelper. <h2>Spring AOP limitations</h2>
+ * for invoking {@link org.alfresco.repo.transaction.RetryingTransactionHelper}. <h2>Spring AOP limitations</h2>
  * <p>
  * The underlying implementation relies on Spring AOP and thus the transactional advice is subject to the following
  * limitations:
@@ -18,25 +18,23 @@ import java.lang.annotation.Target;
  * logic should be factored out to public methods of a separate bean.
  * <li>Method calls that are internal to the bean will bypass the transactional advice.
  * </ul>
- * 
+ *
  * @author Laurens Fridael
+ * @see org.alfresco.repo.transaction.RetryingTransactionHelper#doInTransaction(org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback,
+ * boolean, boolean)
  */
-@Target({ ElementType.METHOD })
+@Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Transactional {
 
-	/**
-	 * Specifies if the operation should be run within a read-only transaction.
-	 * 
-	 * @return
-	 */
-	boolean readOnly() default false;
+    /**
+     * Specifies if the operation should be run within a read-only transaction.
+     */
+    boolean readOnly() default false;
 
-	/**
-	 * Indicates if the operation requires a new transaction.
-	 * 
-	 * @return
-	 */
-	boolean requiresNew() default false;
+    /**
+     * Indicates if the operation requires a new transaction.
+     */
+    boolean requiresNew() default false;
 
 }

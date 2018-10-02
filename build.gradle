@@ -160,6 +160,9 @@ def allSubProjectsConfig = {
     }
 
     def projectAlfrescoVersion = project.name - "${project.parent.name}-"
+    if (!projectAlfrescoVersion.isNumber()) {
+        projectAlfrescoVersion = null
+    }
 
     ext {
         alfrescoVersions = [
@@ -173,11 +176,16 @@ def allSubProjectsConfig = {
 
         alfrescoEdition = 'community'
         simpleAlfrescoVersion = "${projectAlfrescoVersion}"
-        alfrescoVersion = "${alfrescoVersions[projectAlfrescoVersion]}"
+        alfrescoVersion = projectAlfrescoVersion?
+                "${alfrescoVersions[projectAlfrescoVersion]}" :
+                "${alfrescoVersions.values()[alfrescoVersions.size() -1]}"
 
         alfrescoBom = "eu.xenit.alfresco:alfresco-${alfrescoEdition}-bom:${alfrescoVersion}"
 
-        springVersion = "${springVersions[projectAlfrescoVersion]}"
+        springVersion = projectAlfrescoVersion? 
+                "${springVersions[projectAlfrescoVersion]}" :
+                "${springVersions.values()[springVersions.size() -1]}"
+        
         osgiVersion = '4.3.1'
         geminiVersion = '1.0.2.RELEASE'
         felixVersion = '4.2.1'

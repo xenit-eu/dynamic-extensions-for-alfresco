@@ -8,19 +8,19 @@ import java.lang.annotation.Target;
 /**
  * Indicates methods that are run as a given user.
  * <p>
- * The implementation uses Spring AOP. See the {@link Transactional} documentation for limitations regarding Spring AOP.
- * 
+ * The implementation uses Spring AOP. See the {@link Transactional} documentation for limitations regarding Spring
+ * AOP.
+ *
  * @author Laurens Fridael
- * 
+ * @see org.alfresco.repo.security.authentication.AuthenticationUtil#runAs(org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork,
+ * String)
  */
-@Target({ ElementType.METHOD })
+@Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RunAs {
 
-	/**
-	 * The user to run this method as.
-	 * 
-	 * @return
-	 */
-	String value();
+    /**
+     * The user to run this method as.
+     */
+    String value();
 }

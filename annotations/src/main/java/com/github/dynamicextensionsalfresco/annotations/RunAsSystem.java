@@ -8,12 +8,13 @@ import java.lang.annotation.Target;
 /**
  * Indicates methods that are run as the system user.
  * <p>
- * The implementation uses Spring AOP. See the {@link Transactional} documentation for limitations regarding Spring AOP.
- * 
+ * The implementation uses Spring AOP. See the {@link Transactional} documentation for limitations regarding Spring
+ * AOP.
+ *
  * @author Laurens Fridael
- * 
+ * @see org.alfresco.repo.security.authentication.AuthenticationUtil#runAsSystem(org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork)
  */
-@Target({ ElementType.METHOD })
+@Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RunAsSystem {
 

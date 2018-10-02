@@ -7,31 +7,26 @@ import java.lang.annotation.Target;
 
 /**
  * Indicates a class that acts as a Behaviour.
- * 
+ *
  * @author Laurens Fridael
- * 
  */
-@Target({ ElementType.TYPE })
+@Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Behaviour {
 
-	/**
-	 * The QNames of the types or aspects to apply the Behaviour to. Can be specified in prefix format (
-	 * <code>cm:content</code>) or fully-qualified format (
-	 * <code>{http://www.alfresco.org/model/content/1.0}content</code>).
-	 * <p>
-	 * The class names can be overridden for each Policy method by {@link ClassPolicy}, {@link AssociationPolicy} and
-	 * {@link PropertyPolicy}.
-	 * 
-	 * @return
-	 */
-	String[] value() default {};
+    /**
+     * The QNames of the types or aspects to apply the Behaviour to. Can be specified in prefix format (
+     * <code>cm:content</code>) or fully-qualified format (
+     * <code>{http://www.alfresco.org/model/content/1.0}content</code>).
+     * <p>
+     * The class names can be overridden for each Policy method by {@link ClassPolicy}, {@link AssociationPolicy} and
+     * {@link PropertyPolicy}.
+     */
+    String[] value() default {};
 
-	/**
-	 * Indicates when to trigger the Behaviour. This can be overridden for each Policy method.
-	 * 
-	 * @return
-	 */
-	Event event() default Event.ALL;
+    /**
+     * Indicates when to trigger the Behaviour. This can be overridden for each Policy method.
+     */
+    Event event() default Event.ALL;
 
 }
