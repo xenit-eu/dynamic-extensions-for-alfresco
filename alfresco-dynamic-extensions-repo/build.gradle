@@ -26,6 +26,7 @@ subprojects {
         amp("asm:asm-commons:3.1") { transitive = false }
 
         amp "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+        amp "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
         amp "biz.aQute.bnd:biz.aQute.bnd:${project.ext.bndVersion}"
 

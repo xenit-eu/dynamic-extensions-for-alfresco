@@ -1,7 +1,9 @@
 import eu.xenit.dynamicextensionsalfresco.Versions
 
 buildscript {
-    ext.kotlin_version = '1.0.3'
+//    ext.kotlin_version = '1.0.3'
+//    ext.kotlin_version = '1.1.61'
+    ext.kotlin_version = '1.2.71'
     repositories {
         mavenCentral()
     }
@@ -227,6 +229,8 @@ def subSubProjectsConfig = {
     afterEvaluate {
         sourceSets {
             if (project.plugins.hasPlugin("kotlin")) {
+                main.kotlin.srcDirs += "${project.parent.projectDir}/shared/src/main/java"
+                test.kotlin.srcDirs += "${project.parent.projectDir}/shared/src/test/java"
                 main.kotlin.srcDirs += "${project.parent.projectDir}/shared/src/main/kotlin"
                 test.kotlin.srcDirs += "${project.parent.projectDir}/shared/src/test/kotlin"
             }
