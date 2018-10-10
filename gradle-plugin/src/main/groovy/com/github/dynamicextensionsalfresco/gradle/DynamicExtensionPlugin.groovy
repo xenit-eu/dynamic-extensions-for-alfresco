@@ -45,6 +45,7 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 		def dynamicExtensions = [
 			version: project.alfrescoDynamicExtensions.versions.dynamicExtensions
 		]
+		def alfrescoVersion = surf.version.toString().replace('.', '').substring(0, 2)
 		def spring = [
 			version: project.alfrescoDynamicExtensions.versions.spring
 		]
@@ -52,8 +53,10 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 			compileOnly ("org.springframework.extensions.surf:spring-webscripts:${surf.version}") { transitive = false }
 			compileOnly ("org.springframework.extensions.surf:spring-surf-core:${surf.version}") { transitive = false }
 			compileOnly ("eu.xenit.de:annotations:${dynamicExtensions.version}") { transitive = false }
-			compileOnly ("eu.xenit.de:annotations-runtime:${dynamicExtensions.version}") { transitive = false }
-                        compileOnly ("eu.xenit.de:webscripts:${dynamicExtensions.version}") { transitive = false }
+			compileOnly("eu.xenit.de:annotations-runtime:annotations-runtime-${alfrescoVersion}:${dynamicExtensions.version}") {
+				transitive = false
+			}
+			compileOnly("eu.xenit.de:webscripts:webscripts-${alfrescoVersion}:${dynamicExtensions.version}") { transitive = false }
 			// Since Spring is so fundamental, this is the one dependency we leave as transitive.
 			compileOnly ("org.springframework:spring-context:${spring.version}")
 			// JSR-250 API contains the @Resource annotation for referencing dependencies by name.

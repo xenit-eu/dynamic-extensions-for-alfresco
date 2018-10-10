@@ -1,32 +1,35 @@
-apply plugin: 'kotlin'
+subprojects {
 
-configurations {
-    testCompile.extendsFrom(compileOnly)
-}
+    apply plugin: 'kotlin'
 
-dependencies {
-    compile "${project.ext.alfrescoBom}"
+    configurations {
+        testCompile.extendsFrom(compileOnly)
+    }
 
-    compile project(':annotations-runtime')
+    dependencies {
+        compile "${project.ext.alfrescoBom}"
 
-    compileOnly("org.alfresco.surf:spring-webscripts")
-    compileOnly("org.alfresco:alfresco-core") { transitive = false }
-    compileOnly("org.alfresco:alfresco-data-model") { transitive = false }
-    compileOnly("org.alfresco:alfresco-repository") { transitive = false }
+        compile project(":annotations-runtime:annotations-runtime-${project.ext.simpleAlfrescoVersion}")
 
-    compileOnly "org.slf4j:slf4j-api"
+        compileOnly("org.alfresco.surf:spring-webscripts")
+        compileOnly("org.alfresco:alfresco-core") { transitive = false }
+        compileOnly("org.alfresco:alfresco-data-model") { transitive = false }
+        compileOnly("org.alfresco:alfresco-repository") { transitive = false }
 
-    compile "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
-    compile "javax.servlet:servlet-api:${project.ext.servletVersion}"
+        compileOnly "org.slf4j:slf4j-api"
 
-    compile "org.jibx:jibx-run:${project.ext.jibxVersion}"
-    compile "org.apache.felix:org.apache.felix.framework:${project.ext.felixVersion}"
-    compile "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
-    compile "biz.aQute.bnd:biz.aQute.bnd:${project.ext.bndVersion}"
+        compile "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
+        compile "javax.servlet:servlet-api:${project.ext.servletVersion}"
 
-    testCompile "junit:junit:${project.ext.junitVersion}"
-    testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
-    testCompile "org.springframework:spring-test"
+        compile "org.jibx:jibx-run:${project.ext.jibxVersion}"
+        compile "org.apache.felix:org.apache.felix.framework:${project.ext.felixVersion}"
+        compile "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
+        compile "biz.aQute.bnd:biz.aQute.bnd:${project.ext.bndVersion}"
 
-    testCompile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+        testCompile "junit:junit:${project.ext.junitVersion}"
+        testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
+        testCompile "org.springframework:spring-test"
+
+        testCompile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    }
 }

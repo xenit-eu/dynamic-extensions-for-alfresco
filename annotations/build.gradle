@@ -1,16 +1,20 @@
+configurations {
+    javadocOnly
+}
+
 dependencies {
-    compile "${project.ext.alfrescoBom}"
+    javadocOnly "${project.ext.alfrescoBom}"
 
-    compileOnly("org.alfresco:alfresco-repository") { transitive = false }
-    compileOnly("org.alfresco:alfresco-data-model") { transitive = false }
-    compileOnly("org.alfresco:alfresco-remote-api") { transitive = false }
-    compileOnly("org.alfresco:alfresco-core") {
-        exclude group: "org.json"
-        transitive = false
-    }
+    javadocOnly("org.alfresco:alfresco-repository") { transitive = false }
+    javadocOnly("org.alfresco:alfresco-data-model") { transitive = false }
+    javadocOnly("org.alfresco:alfresco-remote-api") { transitive = false }
+    javadocOnly("org.alfresco:alfresco-core") { transitive = false }
 
-    compileOnly ('org.quartz-scheduler:quartz') { transitive = false }
+    javadocOnly('org.quartz-scheduler:quartz') { transitive = false }
 
-    // required for javadoc
-    compileOnly ('org.springframework:spring-beans') { transitive = false }
+    javadocOnly('org.springframework:spring-beans') { transitive = false }
+}
+
+javadoc {
+    classpath += configurations.javadocOnly
 }

@@ -21,7 +21,9 @@ Version template:
  -->
 # Dynamic Extensions For Alfresco Changelog
 
-## [1.7.7] - UNRELEASED
+## [1.8.0] - UNRELEASED
+### Changed
+* Build process refactored to build and compile for specific Alfresco versions
 
 
 ## [1.7.6] - 2018-09-05

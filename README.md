@@ -11,7 +11,24 @@ Alfresco itself is not "OSGi-fied" in any way; the OSGi container runs on top of
 Installing Dynamic Extensions
 -----------------------------
 
+To make sure Dynamic Extensions is build and compiled against the correct
+Alfresco version, build artifacts for each minor Alfresco version update 
+are distributed. E.g. if you are working with Alfresco 5.2.f, you should
+use the `alfresco-dynamic-extensions-repo-52` artifact.
+
 Dynamic Extensions is distributed as an Alfresco Module Package (AMP).
+
+### Maven Central
+```
+<dependency>
+    <groupId>eu.xenit</groupId>
+    <artifactId>alfresco-dynamic-extensions-repo-${alfresco-version}</artifactId>
+    <version>${latest-version}</version>
+    <type>amp</type>
+</dependency>
+```
+
+### Manual download and install
 
 * Download the latest <a href="https://github.com/xenit-eu/dynamic-extensions-for-alfresco/releases">Dynamic Extensions AMP</a>.
 * Use the <a href="http://docs.alfresco.com/4.0/index.jsp?topic=%2Fcom.alfresco.enterprise.doc%2Ftasks%2Famp-install.html">Module Management Tool</a> to install the AMP in the Alfresco repository of your choosing.
@@ -26,6 +43,7 @@ Dynamic Extensions is developed and tested against:
 * Alfresco Enterprise 4.1
 * Alfresco Enterprise 4.2
 * Alfresco Community 5.0
+* Alfresco Community 5.2
 
 Dynamic Extensions is also known to work on:
 
@@ -33,6 +51,7 @@ Dynamic Extensions is also known to work on:
 * Alfresco Enterprise 4.0
 * Alfresco Enterprise 5.0
 * Alfresco Enterprise 5.1
+* Alfresco Enterprise 5.2
 * Alfresco Community 4.0
 * Alfresco Community 4.2
 
