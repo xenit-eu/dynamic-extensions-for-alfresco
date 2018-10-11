@@ -6,12 +6,12 @@ subprojects {
     }
 
     dependencies {
-        compile "${project.ext.alfrescoBom}"
+        compileOnly "${project.ext.alfrescoBom}"
 
         compile project(':annotations')
         compile project(":webscripts:webscripts-${project.ext.simpleAlfrescoVersion}")
 
-        compile "org.apache.felix:org.apache.felix.framework:${project.ext.felixVersion}"
+        compileOnly "org.apache.felix:org.apache.felix.framework:${project.ext.felixVersion}"
 
         compileOnly "org.slf4j:slf4j-api"
         compileOnly("org.alfresco.surf:spring-webscripts") { 
@@ -32,11 +32,11 @@ subprojects {
         compileOnly('org.springframework:spring-context') { transitive = false }
         compileOnly('org.springframework:spring-core') { transitive = false }
 
-        compile "javax.transaction:transaction-api:${project.ext.transactionApiVersion}"
-        compile("org.activiti:activiti-engine:5.7") { transitive = false }
-        compile("org.activiti:activiti-spring:5.7") { transitive = false }
+        compileOnly "javax.transaction:transaction-api:${project.ext.transactionApiVersion}"
+        compileOnly("org.activiti:activiti-engine:5.7") { transitive = false }
+        compileOnly("org.activiti:activiti-spring:5.7") { transitive = false }
 
-        compile 'com.google.code.findbugs:jsr305:2.0.1'
+        compileOnly 'com.google.code.findbugs:jsr305:2.0.1'
         compile 'com.google.collections:google-collections:1.0'
 
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"

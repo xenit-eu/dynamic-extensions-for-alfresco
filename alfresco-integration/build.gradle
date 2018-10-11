@@ -7,7 +7,7 @@ subprojects {
     }
 
     dependencies {
-        compile "${project.ext.alfrescoBom}"
+        compileOnly "${project.ext.alfrescoBom}"
 
         compile project(":annotations-runtime:annotations-runtime-${project.ext.simpleAlfrescoVersion}")
 

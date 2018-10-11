@@ -2,7 +2,7 @@ subprojects {
     apply plugin: 'kotlin'
 
     dependencies {
-        compile "${project.ext.alfrescoBom}"
+        compileOnly "${project.ext.alfrescoBom}"
 
         compileOnly('org.springframework:spring-core') { transitive = false }
         compileOnly('org.springframework:spring-beans') { transitive = false }

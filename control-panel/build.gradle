@@ -7,19 +7,19 @@ subprojects {
     }
 
     dependencies {
-        compile "${project.ext.alfrescoBom}"
+        compileOnly "${project.ext.alfrescoBom}"
 
         compile project(":alfresco-integration:alfresco-integration-${project.ext.simpleAlfrescoVersion}")
         compile project(':annotations')
         compile project(":webscripts:webscripts-${project.ext.simpleAlfrescoVersion}")
         compile project(":event-bus:event-bus-${project.ext.simpleAlfrescoVersion}")
 
-        compile("org.alfresco.surf:spring-webscripts") { transitive = false }
-        compile("org.alfresco.surf:spring-surf-core") { transitive = false }
+        compileOnly("org.alfresco.surf:spring-webscripts") { transitive = false }
+        compileOnly("org.alfresco.surf:spring-surf-core") { transitive = false }
 
-        compile("org.alfresco:alfresco-data-model") { transitive = false }
-        compile("org.alfresco:alfresco-repository") { transitive = false }
-        compile("org.alfresco:alfresco-core") { transitive = false }
+        compileOnly("org.alfresco:alfresco-data-model") { transitive = false }
+        compileOnly("org.alfresco:alfresco-repository") { transitive = false }
+        compileOnly("org.alfresco:alfresco-core") { transitive = false }
 
         compileOnly "org.slf4j:slf4j-api"
         compileOnly "org.json:json"
@@ -30,8 +30,8 @@ subprojects {
         compileOnly('org.springframework:spring-core') { transitive = false }
         compileOnly('org.springframework:spring-aop') { transitive = false }
 
-        compile "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
-        compile "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
+        compileOnly "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
+        compileOnly "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
 
         testCompile("org.alfresco.surf:spring-surf-core-configservice") { transitive = false }
 
