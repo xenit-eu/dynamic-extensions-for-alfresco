@@ -3,8 +3,8 @@ subprojects {
     apply plugin: 'kotlin'
 
     dependencies {
-        compile "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
-        compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+        compileOnly "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
+        compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
         testCompile "junit:junit:${project.ext.junitVersion}"
         testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
     }

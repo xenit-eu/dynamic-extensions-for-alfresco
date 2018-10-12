@@ -1,28 +1,24 @@
+import eu.xenit.dynamicextensionsalfresco.Versions
+
 enableFeaturePreview("IMPROVED_POM_SUPPORT")
 
-include 'alfresco-integration'
-include 'alfresco-integration:alfresco-integration-50'
-include 'alfresco-integration:alfresco-integration-52'
-include 'alfresco-dynamic-extensions-repo'
-include 'alfresco-dynamic-extensions-repo:alfresco-dynamic-extensions-repo-50'
-include 'alfresco-dynamic-extensions-repo:alfresco-dynamic-extensions-repo-52'
 include 'annotations'
-include 'annotations-runtime'
-include 'annotations-runtime:annotations-runtime-50'
-include 'annotations-runtime:annotations-runtime-52'
-include 'blueprint-integration'
-include 'blueprint-integration:blueprint-integration-50'
-include 'blueprint-integration:blueprint-integration-52'
 include 'gradle-plugin'
-include 'webscripts'
-include 'webscripts:webscripts-50'
-include 'webscripts:webscripts-52'
-include 'control-panel'
-include 'control-panel:control-panel-50'
-include 'control-panel:control-panel-52'
-include 'blueprint-override'
-include 'blueprint-override:blueprint-override-50'
-include 'blueprint-override:blueprint-override-52'
-include 'event-bus'
-include 'event-bus:event-bus-50'
-include 'event-bus:event-bus-52'
+
+def alfrescoDependentModules =
+        [
+                'alfresco-dynamic-extensions-repo',
+                'alfresco-integration',
+                'annotations-runtime',
+                'blueprint-integration',
+                'blueprint-override',
+                'control-panel',
+                'event-bus',
+                'webscripts'
+        ]
+
+alfrescoDependentModules.each { moduleId ->
+    Versions.supportedAlfrescoVersions.each { alfrescoVersion ->
+        include "${moduleId}:${moduleId}-${alfrescoVersion}"
+    }
+}

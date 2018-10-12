@@ -3,21 +3,21 @@ subprojects {
     apply plugin: "kotlin"
 
     dependencies {
-        compile "${project.ext.alfrescoBom}"
+        compileOnly "${project.ext.alfrescoBom}"
 
         compile project(":annotations-runtime:annotations-runtime-${project.ext.simpleAlfrescoVersion}")
         compile project(":alfresco-integration:alfresco-integration-${project.ext.simpleAlfrescoVersion}")
 
-        compile("org.alfresco.surf:spring-webscripts")
-        compile("org.alfresco:alfresco-repository")
+        compileOnly("org.alfresco.surf:spring-webscripts")
+        compileOnly("org.alfresco:alfresco-repository")
 
-        compile "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
-        compile("org.eclipse.gemini:org.eclipse.gemini.blueprint.extender:${project.ext.geminiVersion}") {
+        compileOnly "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
+        compileOnly("org.eclipse.gemini:org.eclipse.gemini.blueprint.extender:${project.ext.geminiVersion}") {
             exclude group: "org.springframework"
         }
 
-        compile "javax.servlet:servlet-api:${project.ext.servletVersion}"
-        compile "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
+        compileOnly "javax.servlet:servlet-api:${project.ext.servletVersion}"
+        compileOnly "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
         compile project(":event-bus:event-bus-${project.ext.simpleAlfrescoVersion}")
     }
 

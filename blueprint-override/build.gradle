@@ -6,7 +6,7 @@ subprojects {
     }
 
     dependencies {
-        compile("org.eclipse.gemini:org.eclipse.gemini.blueprint.extender:${project.ext.geminiVersion}") {
+        compileOnly("org.eclipse.gemini:org.eclipse.gemini.blueprint.extender:${project.ext.geminiVersion}") {
             exclude group: "org.springframework"
         }
         extender("org.eclipse.gemini:org.eclipse.gemini.blueprint.extender:${project.ext.geminiVersion}") {

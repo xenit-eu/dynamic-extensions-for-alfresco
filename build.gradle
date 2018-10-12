@@ -1,3 +1,5 @@
+import eu.xenit.dynamicextensionsalfresco.Versions
+
 buildscript {
     ext.kotlin_version = '1.0.3'
     repositories {
@@ -159,32 +161,13 @@ def allSubProjectsConfig = {
         options.compilerArgs << '-Xlint:unchecked'
     }
 
-    def projectAlfrescoVersion = project.name - "${project.parent.name}-"
-    if (!projectAlfrescoVersion.isNumber()) {
-        projectAlfrescoVersion = null
-    }
-
     ext {
-        alfrescoVersions = [
-                '50': '5.0.d',
-                '52': '5.2.f'
-        ]
-        springVersions = [
-                '50': '3.2.10.RELEASE',
-                '52': '3.2.17.RELEASE'
-        ]
+        simpleAlfrescoVersion = Versions.getSimpleAlfrescoVersionFromProjectName(project.name)
+        alfrescoVersion = Versions.alfrescoVersions.get(simpleAlfrescoVersion)
+        springVersion = Versions.springVersions.get(simpleAlfrescoVersion)
 
-        alfrescoEdition = 'community'
-        simpleAlfrescoVersion = "${projectAlfrescoVersion}"
-        alfrescoVersion = projectAlfrescoVersion?
-                "${alfrescoVersions[projectAlfrescoVersion]}" :
-                "${alfrescoVersions.values()[alfrescoVersions.size() -1]}"
+        alfrescoBom = "eu.xenit.alfresco:alfresco-${Versions.alfrescoEdition}-bom:${alfrescoVersion}"
 
-        alfrescoBom = "eu.xenit.alfresco:alfresco-${alfrescoEdition}-bom:${alfrescoVersion}"
-
-        springVersion = projectAlfrescoVersion? 
-                "${springVersions[projectAlfrescoVersion]}" :
-                "${springVersions.values()[springVersions.size() -1]}"
         
         osgiVersion = '4.3.1'
         geminiVersion = '1.0.2.RELEASE'
