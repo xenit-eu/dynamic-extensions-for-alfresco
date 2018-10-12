@@ -6,9 +6,10 @@
     <release>6.0.7-ga</release>
     <versions>
       <version>5.0.d</version>
+      <version>5.1.g</version>
       <version>5.2.f</version>
       <version>6.0.7-ga</version>
     </versions>
-    <lastUpdated>20180915061934</lastUpdated>
+    <lastUpdated>20181011090726</lastUpdated>
   </versioning>
 </metadata>
