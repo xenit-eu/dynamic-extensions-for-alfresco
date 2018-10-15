@@ -1,3 +1,11 @@
+buildscript {
+    repositories {
+        maven {
+            url 'https://artifacts.alfresco.com/nexus/content/groups/public'
+        }
+    }    
+}
+
 plugins {
     id "eu.xenit.docker-alfresco" version "4.0.0" apply false
 }
@@ -71,7 +79,7 @@ configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
         captureContainersOutput = false
 
         // Uncomment for quick iterations when developing integration tests
-        stopContainers = false
+//        stopContainers = false
 
         // expose alfresco/inflow on a random port, comment to use default ports (8080 & 8081)
         environment.put 'COMPOSE_ALFRESCO_TCP_8080', '8080'
