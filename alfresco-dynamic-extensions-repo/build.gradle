@@ -2,8 +2,9 @@ subprojects {
     group "eu.xenit"
 
     configurations {
-        amp
-        compile.extendsFrom(amp)
+        ampArtifact
+        ampLib
+        compile.extendsFrom(ampLib)
         blueprint
         bundles
     }
@@ -11,24 +12,24 @@ subprojects {
     dependencies {
         implementation "${project.ext.alfrescoBom}"
 
-        amp(project(":alfresco-integration:alfresco-integration-${project.ext.simpleAlfrescoVersion}")) {
+        ampLib(project(":alfresco-integration:alfresco-integration-${project.ext.simpleAlfrescoVersion}")) {
             transitive = false
         }
-        amp(project(':annotations')) { transitive = false }
-        amp(project(":annotations-runtime:annotations-runtime-${project.ext.simpleAlfrescoVersion}")) {
+        ampLib(project(':annotations')) { transitive = false }
+        ampLib(project(":annotations-runtime:annotations-runtime-${project.ext.simpleAlfrescoVersion}")) {
             transitive = false
         }
-        amp(project(":webscripts:webscripts-${project.ext.simpleAlfrescoVersion}")) { transitive = false }
+        ampLib(project(":webscripts:webscripts-${project.ext.simpleAlfrescoVersion}")) { transitive = false }
 
-        amp("org.apache.felix:org.apache.felix.framework:${project.ext.felixVersion}") { transitive = false }
-        amp "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
+        ampLib("org.apache.felix:org.apache.felix.framework:${project.ext.felixVersion}") { transitive = false }
+        ampLib "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
         // The core asm library is already included in Alfresco distributions, so we just add asm-commons.
-        amp("asm:asm-commons:3.1") { transitive = false }
+        ampLib("asm:asm-commons:3.1") { transitive = false }
 
-        amp "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-        amp "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+        ampLib "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+        ampLib "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
-        amp "biz.aQute.bnd:biz.aQute.bnd:${project.ext.bndVersion}"
+        ampLib "biz.aQute.bnd:biz.aQute.bnd:${project.ext.bndVersion}"
 
         blueprint(project(path: ":blueprint-override:blueprint-override-${project.ext.simpleAlfrescoVersion}", configuration: 'patch')) {
             transitive = false
@@ -72,7 +73,7 @@ subprojects {
             into("config/alfresco/module/$project.parent.name/standard-bundles")
         }
 
-        from(configurations.amp) {
+        from(configurations.ampLib) {
             into("lib")
         }
 
@@ -98,7 +99,8 @@ subprojects {
     }
 
     artifacts {
-        archives sourceJar, javadocJar, amp
+        archives sourceJar, javadocJar
+        ampArtifact amp
     }
 
     build.dependsOn("amp")

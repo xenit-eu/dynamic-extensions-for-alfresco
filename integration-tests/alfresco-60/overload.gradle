@@ -1,0 +1,7 @@
+ext {
+    alfrescoBaseWar = 'org.alfresco:content-services-community:6.0.7-ga@war'
+    alfrescoBaseImage = 'alfresco/alfresco-content-repository-community:6.0.7-ga'
+    shareBaseWar = 'org.alfresco:share:6.0.c@war'
+    
+    postgresImage = 'postgres:10.1'
+}

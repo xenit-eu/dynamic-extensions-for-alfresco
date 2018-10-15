@@ -2,11 +2,7 @@ version: "2.2"
 
 services:
   alfresco:
-    build:
-      dockerfile: src/test/docker/Dockerfile
-      context: ../../..
-      args:
-      - ALFRESCO_BASE_IMAGE=${ALFRESCO_BASE_IMAGE}
+    image: ${DOCKER_IMAGE}
     environment:
       JAVA_OPTS: "
                 -Ddb.driver=org.postgresql.Driver

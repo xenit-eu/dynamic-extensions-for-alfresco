@@ -1,10 +1,5 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath "com.avast.gradle:gradle-docker-compose-plugin:0.8.4"
-    }
+plugins {
+    id "eu.xenit.docker-alfresco" version "4.0.0" apply false
 }
 
 apply plugin: 'java'
@@ -27,14 +22,10 @@ test.enabled = false
 
 configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
 
-    task copyAmps(type: Copy) {
-        def alfrescoVersion = project.name - 'alfresco-'
-        
-        dependsOn project(":alfresco-dynamic-extensions-repo:alfresco-dynamic-extensions-repo-${alfrescoVersion}").tasks.amp
+    def alfrescoVersion = project.name - 'alfresco-'
 
-        from project(":alfresco-dynamic-extensions-repo:alfresco-dynamic-extensions-repo-${alfrescoVersion}").amp
-        into "${buildDir}/amps"
-    }
+    if (new File("${project.projectDir}/overload.gradle").exists())
+        apply from: "${project.projectDir}/overload.gradle"
 
     task integrationTest(type: Test) {
         testClassesDirs = project(':integration-tests').sourceSets.test.output.classesDirs
@@ -47,7 +38,28 @@ configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
         }
     }
 
-    apply plugin: 'docker-compose'
+    apply plugin: 'eu.xenit.docker-alfresco'
+    
+    dependencies {
+        baseAlfrescoWar "${alfrescoBaseWar}"
+        alfrescoAmp project(path: ":alfresco-dynamic-extensions-repo:alfresco-dynamic-extensions-repo-${alfrescoVersion}", configuration: 'ampArtifact')
+        
+        baseShareWar "${shareBaseWar}"
+    }
+    
+    dockerAlfresco {
+        baseImage = "${alfrescoBaseImage}"
+        
+        leanImage = true
+        
+        dockerBuild {
+            automaticTags = false
+        }
+    }
+    
+    createDockerFile {
+        runCommand("sed -i 's|<secure>true</secure>|<secure>false</secure>|g' /usr/local/tomcat/conf/web.xml")
+    }
 
     dockerCompose {
         projectName = "alfresco-dynamic-extensions-${project.name}"
@@ -56,17 +68,13 @@ configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
         removeVolumes = true
         captureContainersOutput = false
 
-        buildAdditionalArgs = ['--no-cache']
-
         // Uncomment for quick iterations when developing integration tests
 //        stopContainers = false
 
         // expose alfresco/inflow on a random port, comment to use default ports (8080 & 8081)
         environment.put 'COMPOSE_ALFRESCO_TCP_8080', '8080'
-        environment.put 'AMPS_DIR', "${project.buildDir}/amps"
+        environment.put 'POSTGRES_IMAGE', "${project.ext.postgresImage}"
 
         isRequiredBy(project.tasks.integrationTest)
     }
-
-    composeUp.dependsOn project.tasks.copyAmps
 }

@@ -1,4 +1,0 @@
-dockerCompose {
-    environment.put 'ALFRESCO_BASE_IMAGE', 'alfresco/alfresco-content-repository-community:6.0.7-ga'
-    environment.put 'POSTGRES_IMAGE', 'postgres:10.1'
-}
