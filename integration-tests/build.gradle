@@ -22,14 +22,16 @@ test.enabled = false
 
 configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
 
+    apply plugin: 'java'
+
     def alfrescoVersion = project.name - 'alfresco-'
 
     if (new File("${project.projectDir}/overload.gradle").exists())
         apply from: "${project.projectDir}/overload.gradle"
 
     task integrationTest(type: Test) {
-        testClassesDirs = project(':integration-tests').sourceSets.test.output.classesDirs
-        classpath = project(':integration-tests').sourceSets.test.runtimeClasspath
+        testClassesDirs = project.parent.sourceSets.test.output.classesDirs
+        classpath = project.parent.sourceSets.test.runtimeClasspath
         outputs.upToDateWhen { false }
 
         testLogging {
@@ -69,7 +71,7 @@ configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
         captureContainersOutput = false
 
         // Uncomment for quick iterations when developing integration tests
-//        stopContainers = false
+        stopContainers = false
 
         // expose alfresco/inflow on a random port, comment to use default ports (8080 & 8081)
         environment.put 'COMPOSE_ALFRESCO_TCP_8080', '8080'

@@ -1,8 +1,6 @@
 import eu.xenit.dynamicextensionsalfresco.Versions
 
 buildscript {
-//    ext.kotlin_version = '1.0.3'
-//    ext.kotlin_version = '1.1.61'
     ext.kotlin_version = '1.2.71'
     repositories {
         mavenCentral()
@@ -15,7 +13,7 @@ buildscript {
 
 wrapper {
     distributionType = Wrapper.DistributionType.ALL
-    version = '4.10'
+    gradleVersion = '4.10.2'
 }
 
 apply plugin: 'io.codearte.nexus-staging'
@@ -261,7 +259,8 @@ def subSubProjectsConfig = {
 configure((subprojects 
         - project(':gradle-plugin') 
         - project(':annotations')
-        - project(':integration-tests')), {
+        - project(':integration-tests')
+        - project(':integration-tests:alfresco-60')), {
     subprojects allSubProjectsConfig << subSubProjectsConfig
 })
 configure([project(':gradle-plugin'), project(':annotations')], allSubProjectsConfig)
