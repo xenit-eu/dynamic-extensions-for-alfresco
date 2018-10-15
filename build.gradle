@@ -172,7 +172,7 @@ def allSubProjectsConfig = {
 
         
         osgiVersion = '4.3.1'
-        geminiVersion = '1.0.2.RELEASE'
+        geminiVersion = '3.0.0.M01'
         felixVersion = '4.2.1'
 
         slf4jVersion = '1.7.7'

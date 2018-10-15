@@ -30,12 +30,6 @@ subprojects {
 
         amp "biz.aQute.bnd:biz.aQute.bnd:${project.ext.bndVersion}"
 
-        blueprint("org.eclipse.gemini:org.eclipse.gemini.blueprint.core:${project.ext.geminiVersion}") {
-            transitive = false
-        }
-        blueprint("org.eclipse.gemini:org.eclipse.gemini.blueprint.io:${project.ext.geminiVersion}") {
-            transitive = false
-        }
         blueprint(project(path: ":blueprint-override:blueprint-override-${project.ext.simpleAlfrescoVersion}", configuration: 'patch')) {
             transitive = false
         }
@@ -60,6 +54,13 @@ subprojects {
 
         testRuntime "org.springframework:spring-beans"
         testCompile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    }
+
+    if(new File("${project.projectDir}/dependencies.gradle").exists()) {
+        // Don't use default dependencies but the ones that work with that Alfresco version
+        apply from: "${project.projectDir}/dependencies.gradle"
+    } else {
+        apply from: "${project.parent.projectDir}/default-dependencies.gradle"
     }
 
     def ampConfig = {
