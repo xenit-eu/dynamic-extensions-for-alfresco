@@ -1,5 +1,8 @@
-sudo: required
 language: java
+addons:
+  apt:
+    packages:
+    - docker-ce
 
 jdk:
 - oraclejdk8
@@ -8,8 +11,8 @@ services:
 - docker
 
 script:
-- ./gradlew build
-- ./gradlew integrationTest
+- ./gradlew check
+- ./gradlew integrationTest -i --stacktrace
 
 before_cache:
 - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock

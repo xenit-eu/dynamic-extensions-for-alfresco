@@ -17,7 +17,7 @@ services:
                 -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000
                 "
     ports:
-    - ${COMPOSE_ALFRESCO_TCP_8080:-8080:8080} # by default expose on :8080
+    - ${DOCKER_IP}:8080:8080 # by default expose on :8080
     #    - 8000:8000
     depends_on:
       postgres:

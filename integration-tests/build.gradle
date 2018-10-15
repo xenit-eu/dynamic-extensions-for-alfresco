@@ -81,8 +81,6 @@ configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
         // Uncomment for quick iterations when developing integration tests
 //        stopContainers = false
 
-        // expose alfresco/inflow on a random port, comment to use default ports (8080 & 8081)
-        environment.put 'COMPOSE_ALFRESCO_TCP_8080', '8080'
         environment.put 'POSTGRES_IMAGE', "${project.ext.postgresImage}"
 
         isRequiredBy(project.tasks.integrationTest)
