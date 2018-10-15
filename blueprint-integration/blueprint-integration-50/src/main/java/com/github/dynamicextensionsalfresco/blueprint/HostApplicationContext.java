@@ -16,7 +16,6 @@ import org.springframework.context.MessageSourceResolvable;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.core.ResolvableType;
 import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
 
@@ -27,10 +26,10 @@ import org.springframework.util.Assert;
  * Publishing {@link ApplicationEvent}s, such as {@link ContextRefreshedEvent}, has unwanted side-effects on
  * {@link ApplicationContext}s that are expected to remain static during the lifetime of an application.
  * <p>
- * We extend {@link AbstractApplicationContext} in preference to the {@link org.springframework.context.ApplicationContext}
+ * We extend {@link AbstractApplicationContext} in preference to the {@link ApplicationContext}
  * interface to avoid referencing the newly introduced Spring Environment type and this remain compatible with different
  * Alfresco versions
- * 
+ *
  * @author Laurens Fridael
  * @author Laurent Van der Linden
  */
@@ -40,15 +39,11 @@ class HostApplicationContext extends AbstractApplicationContext {
 
 	/**
 	 * No-op.
-	 * 
+	 *
 	 * @param event
 	 */
 	@Override
 	public void publishEvent(final ApplicationEvent event) {
-	}
-	
-	@Override
-	protected void publishEvent(Object event, ResolvableType eventType) {
 	}
 
 	/* Delegated operations */
