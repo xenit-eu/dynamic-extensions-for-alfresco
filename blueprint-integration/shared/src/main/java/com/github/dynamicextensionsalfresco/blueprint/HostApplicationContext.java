@@ -12,6 +12,7 @@ import org.springframework.context.MessageSourceResolvable;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.core.ResolvableType;
 import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
 
@@ -45,6 +46,12 @@ class HostApplicationContext extends AbstractApplicationContext {
 	 */
 	@Override
 	public void publishEvent(final ApplicationEvent event) {
+	}
+
+	/**
+	 * Override for Spring >= 5
+	 */
+	protected void publishEvent(Object event, org.springframework.core.ResolvableType eventType) {
 	}
 
 	/* Delegated operations */
