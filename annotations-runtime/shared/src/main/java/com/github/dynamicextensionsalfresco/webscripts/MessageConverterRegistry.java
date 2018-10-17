@@ -12,7 +12,8 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
 /**
- * Another implementation is used for Alfresco 5.1.x and older, see the corresponding sub projects for this implementation. 
+ * This class is overwritten for older versions of Alfresco. When making changes here, make sure you also take a look to
+ * the implementation for older Alfresco versions.
  */
 public class MessageConverterRegistry {
     private static final Logger LOGGER = LoggerFactory.getLogger(
