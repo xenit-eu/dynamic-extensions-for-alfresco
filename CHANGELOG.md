@@ -24,6 +24,8 @@ Version template:
 ## [2.0.0] - UNRELEASED
 ### Changed
 * Build process refactored to build and compile for specific Alfresco versions
+### Added
+* Alfresco 6 support
 
 
 ## [1.7.6] - 2018-09-05

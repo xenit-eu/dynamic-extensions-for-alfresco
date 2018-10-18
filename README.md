@@ -13,8 +13,8 @@ Installing Dynamic Extensions
 
 To make sure Dynamic Extensions is build and compiled against the correct
 Alfresco version, build artifacts for each minor Alfresco version update 
-are distributed. E.g. if you are working with Alfresco 5.2.f, you should
-use the `alfresco-dynamic-extensions-repo-52` artifact.
+are distributed. E.g. if you are working with Alfresco 6.0.7-ga, you should
+use the `alfresco-dynamic-extensions-repo-60` artifact.
 
 Dynamic Extensions is distributed as an Alfresco Module Package (AMP).
 
@@ -37,6 +37,11 @@ Dynamic Extensions is distributed as an Alfresco Module Package (AMP).
 
 Supported Alfresco versions
 ---------------------------
+
+Dynamic Extensions is systematically integration tested against:
+
+* Alfresco Enterprise 6.0
+* Alfresco Community 6.0
 
 Dynamic Extensions is developed and tested against:
 
