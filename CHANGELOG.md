@@ -27,7 +27,6 @@ Version template:
 ### Added
 * Alfresco 6 support
 
-
 ## [1.7.6] - 2018-09-05
 * [#189](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/189) Support Json 2 on Alfresco 4
 

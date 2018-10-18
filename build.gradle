@@ -256,11 +256,11 @@ def subSubProjectsConfig = {
     }
 }
 
-configure((subprojects 
-        - project(':gradle-plugin') 
-        - project(':annotations')
-        - project(':integration-tests')
-        - project(':integration-tests:alfresco-60')), {
+configure((
+        subprojects.findAll { it.parent.name == it.rootProject.name } // Only configure first level child projects
+                - project(':gradle-plugin')
+                - project(':annotations')
+                - project(':integration-tests')), {
     subprojects allSubProjectsConfig << subSubProjectsConfig
 })
 configure([project(':gradle-plugin'), project(':annotations')], allSubProjectsConfig)

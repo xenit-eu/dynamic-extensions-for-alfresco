@@ -40,7 +40,6 @@ Supported Alfresco versions
 
 Dynamic Extensions is systematically integration tested against:
 
-* Alfresco Enterprise 6.0
 * Alfresco Community 6.0
 
 Dynamic Extensions is developed and tested against:
