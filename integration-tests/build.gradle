@@ -1,13 +1,5 @@
-buildscript {
-    repositories {
-        maven {
-            url 'https://artifacts.alfresco.com/nexus/content/groups/public'
-        }
-    }    
-}
-
 plugins {
-    id "eu.xenit.docker-alfresco" version "4.0.0" apply false
+    id "eu.xenit.docker-alfresco" version "4.0.2" apply false
 }
 
 apply plugin: 'java'
@@ -76,11 +68,13 @@ configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
         useComposeFiles = [project.parent.projectDir.toString() + '/src/test/compose/docker-compose.yml']
 
         removeVolumes = true
-        captureContainersOutput = false
+        captureContainersOutput = true
 
         // Uncomment for quick iterations when developing integration tests
 //        stopContainers = false
 
+        // expose alfresco/inflow on a random port, comment to use default port (8080)
+        environment.put 'COMPOSE_ALFRESCO_TCP_8080', '8080'
         environment.put 'POSTGRES_IMAGE', "${project.ext.postgresImage}"
 
         isRequiredBy(project.tasks.integrationTest)
