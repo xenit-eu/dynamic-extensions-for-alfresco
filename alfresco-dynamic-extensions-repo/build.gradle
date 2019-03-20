@@ -37,6 +37,12 @@ subprojects {
         blueprint(project(":blueprint-integration:blueprint-integration-${project.ext.simpleAlfrescoVersion}")) {
             transitive = false
         }
+        blueprint("org.eclipse.gemini.blueprint:gemini-blueprint-core:${project.ext.geminiVersion}") {
+            transitive = false
+        }
+        blueprint("org.eclipse.gemini.blueprint:gemini-blueprint-io:${project.ext.geminiVersion}") {
+            transitive = false
+        }
 
         bundles "org.slf4j:slf4j-api:${project.slf4jVersion}"
         bundles("org.slf4j:slf4j-log4j12:${project.slf4jVersion}") { transitive = false }
@@ -55,13 +61,6 @@ subprojects {
 
         testRuntime "org.springframework:spring-beans"
         testCompile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    }
-
-    if(new File("${project.projectDir}/dependencies.gradle").exists()) {
-        // Don't use default dependencies but the ones that work with that Alfresco version
-        apply from: "${project.projectDir}/dependencies.gradle"
-    } else {
-        apply from: "${project.parent.projectDir}/default-dependencies.gradle"
     }
 
     def ampConfig = {

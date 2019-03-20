@@ -24,6 +24,13 @@ public class Versions {
         put("60", "5.0.4.RELEASE");
     }};
 
+    public static final Map<String, String> geminiVersions = new HashMap<String, String>() {{
+        put("50", "1.0.2.RELEASE");
+        put("51", "1.0.2.RELEASE");
+        put("52", "1.0.2.RELEASE");
+        put("60", "3.0.0.M01");
+    }};
+
     public static String getSimpleAlfrescoVersionFromProjectName(final String projectName) {
         for (final String shortVersion : alfrescoVersions.keySet()) {
             if (projectName.endsWith(shortVersion)) {

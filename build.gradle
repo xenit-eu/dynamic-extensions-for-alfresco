@@ -168,9 +168,11 @@ def allSubProjectsConfig = {
 
         alfrescoBom = "eu.xenit.alfresco:alfresco-${Versions.alfrescoEdition}-bom:${alfrescoVersion}"
 
-        
+        // '3.0.0.M01' for Alfresco 6.0
+        // '1.0.2.RELEASE' for Alfresco 5.x
+        geminiVersion = Versions.geminiVersions.get(simpleAlfrescoVersion)
+
         osgiVersion = '4.3.1'
-        geminiVersion = '3.0.0.M01'
         felixVersion = '4.2.1'
 
         slf4jVersion = '1.7.7'
