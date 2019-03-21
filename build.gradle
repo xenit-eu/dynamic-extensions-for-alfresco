@@ -203,6 +203,29 @@ def allSubProjectsConfig = {
                         details.because "'org.springframework.extensions.surf' was moved to 'org.alfresco.surf'"
                     }
                 }
+
+                // Eclipse Gemini Blueprint 1.0.2.RELEASE  was published as 'org.eclipse.gemini' and is
+                // the last version that supports Spring 3.x
+                // Starting from 2.0 the modules were moved to 'org.eclipse.gemini.blueprint' and artifacts
+                // were renamed.
+                //
+                // This resolution strategy checks that if we're using Spring 3.x, the requested Gemini
+                // Blueprint dependencies are resolved to the old 1.x artifacts
+                if (details.requested.group == 'org.eclipse.gemini.blueprint') {
+                    if (VersionNumber.parse("${project.ext.springVersion}").major == 3) {
+                        if (details.requested.name == 'gemini-blueprint-extender') {
+                            details.useTarget 'org.eclipse.gemini:org.eclipse.gemini.blueprint.extender:1.0.2.RELEASE'
+                        }
+                        else if (details.requested.name == 'gemini-blueprint-core') {
+                            details.useTarget 'org.eclipse.gemini:org.eclipse.gemini.blueprint.core:1.0.2.RELEASE'
+                        }
+                        else if (details.requested.name == 'gemini-blueprint-io') {
+                            details.useTarget 'org.eclipse.gemini:org.eclipse.gemini.blueprint.io:1.0.2.RELEASE'
+                        }
+                        details.because "'org.eclipse.gemini.blueprint' was replaced by 'org.eclipse.gemini 1.0.2.RELEASE' for Spring 3.x compatability"
+                    }
+                }
+
             }
         }
     }
