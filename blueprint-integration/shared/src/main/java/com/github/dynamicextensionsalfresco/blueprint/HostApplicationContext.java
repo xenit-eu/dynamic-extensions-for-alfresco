@@ -1,5 +1,9 @@
 package com.github.dynamicextensionsalfresco.blueprint;
 
+import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.util.Locale;
+import java.util.Map;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -12,13 +16,9 @@ import org.springframework.context.MessageSourceResolvable;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.core.ResolvableType;
 import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
-
-import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.util.Locale;
-import java.util.Map;
 
 /**
  * {@link ApplicationContext} wrapper that contains no-op implementation of {@link #publishEvent(ApplicationEvent)}.
@@ -45,6 +45,10 @@ class HostApplicationContext extends AbstractApplicationContext {
 	 */
 	@Override
 	public void publishEvent(final ApplicationEvent event) {
+	}
+	
+	@Override
+	protected void publishEvent(Object event, ResolvableType eventType) {
 	}
 
 	/* Delegated operations */

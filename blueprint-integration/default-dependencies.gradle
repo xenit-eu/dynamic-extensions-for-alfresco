@@ -1,0 +1,5 @@
+dependencies {
+    compileOnly("org.eclipse.gemini.blueprint:gemini-blueprint-extender:${project.ext.geminiVersion}") {
+        exclude group: "org.springframework"
+    }
+}

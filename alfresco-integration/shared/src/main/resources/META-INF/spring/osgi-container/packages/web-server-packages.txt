@@ -22,6 +22,7 @@ sun.misc
 
 # Used by Gemini Blueprint:
 org.xml.sax
+org.apache.commons.logging
 
 # Used by Spring:
 org.aopalliance.aop

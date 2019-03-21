@@ -1,7 +1,7 @@
 import eu.xenit.dynamicextensionsalfresco.Versions
 
 buildscript {
-    ext.kotlin_version = '1.0.3'
+    ext.kotlin_version = '1.2.71'
     repositories {
         mavenCentral()
     }
@@ -13,7 +13,7 @@ buildscript {
 
 wrapper {
     distributionType = Wrapper.DistributionType.ALL
-    version = '4.10'
+    gradleVersion = '4.10.2'
 }
 
 apply plugin: 'io.codearte.nexus-staging'
@@ -170,7 +170,7 @@ def allSubProjectsConfig = {
 
         
         osgiVersion = '4.3.1'
-        geminiVersion = '1.0.2.RELEASE'
+        geminiVersion = '3.0.0.M01'
         felixVersion = '4.2.1'
 
         slf4jVersion = '1.7.7'
@@ -227,6 +227,8 @@ def subSubProjectsConfig = {
     afterEvaluate {
         sourceSets {
             if (project.plugins.hasPlugin("kotlin")) {
+                main.kotlin.srcDirs += "${project.parent.projectDir}/shared/src/main/java"
+                test.kotlin.srcDirs += "${project.parent.projectDir}/shared/src/test/java"
                 main.kotlin.srcDirs += "${project.parent.projectDir}/shared/src/main/kotlin"
                 test.kotlin.srcDirs += "${project.parent.projectDir}/shared/src/test/kotlin"
             }
@@ -254,7 +256,11 @@ def subSubProjectsConfig = {
     }
 }
 
-configure((subprojects - project(':gradle-plugin') - project(':annotations')), {
+configure((
+        subprojects.findAll { it.parent.name == it.rootProject.name } // Only configure first level child projects
+                - project(':gradle-plugin')
+                - project(':annotations')
+                - project(':integration-tests')), {
     subprojects allSubProjectsConfig << subSubProjectsConfig
 })
 configure([project(':gradle-plugin'), project(':annotations')], allSubProjectsConfig)

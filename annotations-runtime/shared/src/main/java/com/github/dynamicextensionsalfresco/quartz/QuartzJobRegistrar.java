@@ -1,8 +1,21 @@
 package com.github.dynamicextensionsalfresco.quartz;
 
 import com.github.dynamicextensionsalfresco.jobs.ScheduledQuartzJob;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Properties;
 import org.alfresco.schedule.AbstractScheduledLockedJob;
-import org.quartz.*;
+import org.quartz.CronScheduleBuilder;
+import org.quartz.CronTrigger;
+import org.quartz.Job;
+import org.quartz.JobBuilder;
+import org.quartz.JobDataMap;
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.TriggerBuilder;
+import org.quartz.TriggerKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
@@ -12,13 +25,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.Assert;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Properties;
-
 /**
- * Created by jasper on 19/07/17.
+ * This class is overwritten for older versions of Alfresco. When making changes here, make sure you also take a look to
+ * the implementation for older Alfresco versions.
  */
 public class QuartzJobRegistrar implements ApplicationContextAware, InitializingBean, DisposableBean {
     private Logger logger = LoggerFactory.getLogger(QuartzJobRegistrar.class);
@@ -42,11 +51,16 @@ public class QuartzJobRegistrar implements ApplicationContextAware, Initializing
 
             try {
                 String cron = applicationContext.getBean("global-properties", Properties.class).getProperty(annotation.cronProp(), annotation.cron());
-                CronTrigger trigger = new CronTrigger(annotation.name(), annotation.group(), cron);
-                JobDetail jobDetail = new JobDetail(annotation.name(), annotation.group(), annotation.cluster() ? AbstractScheduledLockedJob.class : GenericQuartzJob.class);
+                CronTrigger trigger =TriggerBuilder.newTrigger()
+                        .withIdentity(annotation.name(), annotation.group())
+                        .withSchedule(CronScheduleBuilder.cronSchedule(cron))
+                        .build();
                 JobDataMap map = new JobDataMap();
                 map.put(BEAN_ID, bean);
-                jobDetail.setJobDataMap(map);
+                JobDetail jobDetail = JobBuilder.newJob(annotation.cluster() ? AbstractScheduledLockedJob.class : GenericQuartzJob.class)
+                        .withIdentity(annotation.name(), annotation.group())
+                        .usingJobData(map)
+                        .build();
                 scheduler.scheduleJob(jobDetail, trigger);
 
                 registeredJobs.add(annotation);
@@ -62,7 +76,7 @@ public class QuartzJobRegistrar implements ApplicationContextAware, Initializing
     public void destroy() throws SchedulerException {
         for (ScheduledQuartzJob job : registeredJobs) {
             try {
-                scheduler.unscheduleJob(job.name(), job.group());
+                scheduler.unscheduleJob(TriggerKey.triggerKey(job.name(), job.group()));
                 logger.debug("unscheduled job " + job.name() + " from group " + job.group());
             } catch (SchedulerException e) {
                 logger.error("failed to cleanup quartz job " + job, e);

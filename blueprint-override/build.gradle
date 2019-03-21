@@ -6,12 +6,14 @@ subprojects {
     }
 
     dependencies {
-        compileOnly("org.eclipse.gemini:org.eclipse.gemini.blueprint.extender:${project.ext.geminiVersion}") {
-            exclude group: "org.springframework"
-        }
-        extender("org.eclipse.gemini:org.eclipse.gemini.blueprint.extender:${project.ext.geminiVersion}") {
-            transitive = false
-        }
+        compile ("org.osgi:org.osgi.core:${project.ext.osgiVersion}")
+    }
+
+    if(new File("${project.projectDir}/dependencies.gradle").exists()) {
+        // Don't use default dependencies but the ones that work with that Alfresco version
+        apply from: "${project.projectDir}/dependencies.gradle"
+    } else {
+        apply from: "${project.parent.projectDir}/default-dependencies.gradle"
     }
 
     project.tasks.remove(jar)

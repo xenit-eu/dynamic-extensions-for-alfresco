@@ -1,0 +1,41 @@
+version: "2.2"
+
+services:
+  alfresco:
+    image: ${DOCKER_IMAGE}
+    environment:
+      JAVA_OPTS: "
+                -Ddb.driver=org.postgresql.Driver
+                -Ddb.username=alfresco
+                -Ddb.password=alfresco
+                -Ddb.url=jdbc:postgresql://postgres:5432/alfresco
+                -Dindex.subsystem.name=noindex
+                -Djodconverter.enabled=false
+                -Ddeployment.method=DOCKER_COMPOSE
+                -Dcsrf.filter.enabled=false
+                -Xms1g -Xmx1g
+                -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000
+                "
+    ports:
+    - ${ALFRESCO_TCP_8080:-8080:8080} # by default expose on :8080
+    #    - 8000:8000
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/alfresco"]
+      interval: 1s
+      timeout: 3s
+      retries: 60
+
+  postgres:
+    image: ${POSTGRES_IMAGE}
+    environment:
+    - POSTGRES_PASSWORD=alfresco
+    - POSTGRES_USER=alfresco
+    - POSTGRES_DB=alfresco
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5

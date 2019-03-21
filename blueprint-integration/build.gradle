@@ -12,13 +12,17 @@ subprojects {
         compileOnly("org.alfresco:alfresco-repository")
 
         compileOnly "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
-        compileOnly("org.eclipse.gemini:org.eclipse.gemini.blueprint.extender:${project.ext.geminiVersion}") {
-            exclude group: "org.springframework"
-        }
 
         compileOnly "javax.servlet:servlet-api:${project.ext.servletVersion}"
         compileOnly "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
         compile project(":event-bus:event-bus-${project.ext.simpleAlfrescoVersion}")
+    }
+
+    if(new File("${project.projectDir}/dependencies.gradle").exists()) {
+        // Don't use default dependencies but the ones that work with that Alfresco version
+        apply from: "${project.projectDir}/dependencies.gradle"
+    } else {
+        apply from: "${project.parent.projectDir}/default-dependencies.gradle"
     }
 
     jar {
