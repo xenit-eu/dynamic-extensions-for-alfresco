@@ -40,6 +40,8 @@ configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
         }
     }
 
+    check.dependsOn integrationTest
+
     apply plugin: 'eu.xenit.docker-alfresco'
     
     dependencies {
@@ -74,7 +76,7 @@ configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
 //        stopContainers = false
 
         // expose alfresco/inflow on a random port, comment to use default port (8080)
-        environment.put 'COMPOSE_ALFRESCO_TCP_8080', '8080'
+        environment.put 'ALFRESCO_TCP_8080', '8080'
         environment.put 'POSTGRES_IMAGE', "${project.ext.postgresImage}"
 
         isRequiredBy(project.tasks.integrationTest)
