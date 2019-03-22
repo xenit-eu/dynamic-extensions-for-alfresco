@@ -13,9 +13,21 @@ pipeline {
             }
         }
 
+        stage("Clean") {
+            when {
+                anyOf {
+                    branch "master*"
+                    changeRequest target: 'master*', comparator: 'GLOB'
+                }
+            }
+            steps {
+                sh "./gradlew clean"
+            }
+        }
+
         stage("Assemble") {
             steps {
-                sh "./gradlew clean assemble"
+                sh "./gradlew assemble"
             }
         }
 
