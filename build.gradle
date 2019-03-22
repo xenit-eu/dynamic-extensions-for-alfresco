@@ -295,3 +295,16 @@ configure((
 configure([project(':gradle-plugin'), project(':annotations')], allSubProjectsConfig)
 
 defaultTasks 'build'
+
+ext.versionFile = "${project.buildDir}/version"
+
+task makeVersionFile {
+    group "build"
+    description "Make a file containing the version"
+    outputs.file versionFile
+
+    doLast {
+        file(versionFile).write version
+        println "Version ${version}"
+    }
+}
