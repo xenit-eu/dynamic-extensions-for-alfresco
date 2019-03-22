@@ -6,6 +6,7 @@ include 'annotations'
 include 'gradle-plugin'
 include 'integration-tests'
 include 'integration-tests:alfresco-60'
+include 'integration-tests:alfresco-enterprise-60'
 
 def alfrescoDependentModules =
         [
