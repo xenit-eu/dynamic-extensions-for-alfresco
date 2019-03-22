@@ -1,8 +1,0 @@
-dependencies {
-    blueprint("org.eclipse.gemini:org.eclipse.gemini.blueprint.core:1.0.2.RELEASE") {
-        transitive = false
-    }
-    blueprint("org.eclipse.gemini:org.eclipse.gemini.blueprint.io:1.0.2.RELEASE") {
-        transitive = false
-    }
-}
