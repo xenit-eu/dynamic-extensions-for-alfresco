@@ -14,12 +14,6 @@ pipeline {
         }
 
         stage("Clean") {
-            when {
-                anyOf {
-                    branch "master*"
-                    changeRequest target: 'master*', comparator: 'GLOB'
-                }
-            }
             steps {
                 sh "./gradlew clean"
             }
@@ -38,6 +32,12 @@ pipeline {
         }
 
         stage("Integration Test") {
+            when {
+                anyOf {
+                    branch "master*"
+                    changeRequest target: 'master*', comparator: 'GLOB'
+                }
+            }
             steps {
                 sh "./gradlew integrationTest -Penterprise"
             }
@@ -73,9 +73,7 @@ pipeline {
             archiveArtifacts artifacts: '**/build/amps/*.amp'
         }
         always {
-            script {
-                junit '**/build/test-results/**/*.xml'
-            }
+            junit '**/build/test-results/**/*.xml'
         }
     }
 }
