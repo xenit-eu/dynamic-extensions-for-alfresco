@@ -4,8 +4,6 @@ enableFeaturePreview("IMPROVED_POM_SUPPORT")
 
 include 'annotations'
 include 'gradle-plugin'
-include 'integration-tests'
-include 'integration-tests:alfresco-60'
 
 def alfrescoDependentModules =
         [
@@ -23,4 +21,10 @@ alfrescoDependentModules.each { moduleId ->
     Versions.supportedAlfrescoVersions.each { alfrescoVersion ->
         include "${moduleId}:${moduleId}-${alfrescoVersion}"
     }
+}
+
+include 'integration-tests'
+include 'integration-tests:alfresco-60'
+Versions.supportedAlfrescoVersions.each { alfrescoVersion ->
+    include "integration-tests:alfresco-enterprise-${alfrescoVersion}"
 }

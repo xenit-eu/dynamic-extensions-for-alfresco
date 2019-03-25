@@ -24,7 +24,11 @@ configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
 
     apply plugin: 'java'
 
-    def alfrescoVersion = project.name - 'alfresco-'
+    if (project.name.contains("enterprise") && !project.hasProperty("enterprise")) {
+        return
+    }
+
+    def alfrescoVersion = project.name[-2..-1]
 
     if (new File("${project.projectDir}/overload.gradle").exists())
         apply from: "${project.projectDir}/overload.gradle"
