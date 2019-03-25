@@ -20,6 +20,7 @@ import java.util.Collection;
 public abstract class AbstractModelRegistrar implements ModelRegistrar, ResourceLoaderAware, DependencyMetadataProvider<M2ModelResource> {
 
     private Logger logger = LoggerFactory.getLogger(AbstractModelRegistrar.class);
+
     protected ResourcePatternResolver resourcePatternResolver;
 
     public AbstractModelRegistrar(){
