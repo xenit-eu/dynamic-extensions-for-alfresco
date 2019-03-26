@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Alfresco OSGI Test Jar
+Bundle-SymbolicName: alfresco.osgi.test.jar
+Bundle-Version: 1.0.4.SNAPSHOT
+Alfresco-Dynamic-Extension: true
+Import-Package: org.springframework.beans.factory.annotation,org.springf
+ ramework.context.annotation,org.springframework.dao,org.springframework
+ .stereotype
+Export-Package: eu.xenit.dynamicextensionsalfresco.test;version="1.0.4"
