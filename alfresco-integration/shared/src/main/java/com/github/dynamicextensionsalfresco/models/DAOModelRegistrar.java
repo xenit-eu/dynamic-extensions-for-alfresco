@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 
 public class DAOModelRegistrar extends AbstractModelRegistrar {
 
-    private Logger logger = LoggerFactory.getLogger(DAOModelRegistrar.class);
+    private final Logger logger = LoggerFactory.getLogger(DAOModelRegistrar.class);
 
     private final DictionaryDAO dictionaryDao;
 

@@ -15,7 +15,7 @@ import org.springframework.util.Assert;
 
 public class M2ModelResourceListProvider implements M2ModelListProvider, ResourceLoaderAware {
 
-    private Logger logger = LoggerFactory.getLogger(M2ModelResourceListProvider.class);
+    private final Logger logger = LoggerFactory.getLogger(M2ModelResourceListProvider.class);
 
     private final String modelLocationPattern = "osgibundle:/META-INF/alfresco/models/*.xml";
 
