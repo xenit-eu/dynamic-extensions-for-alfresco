@@ -15,8 +15,9 @@ public class SpringTimer : Timer {
 
     val identifier = javaClass.`package`.name
 
-    override val enabled: Boolean
-        get() = logger.isTraceEnabled
+    override fun isEnabled(): Boolean {
+        return logger.isTraceEnabled
+    }
 
     private val stopWatch: StopWatch
         get() {
@@ -47,7 +48,7 @@ public class SpringTimer : Timer {
     }
 
     override fun start(label: String) {
-        if (enabled) {
+        if (isEnabled) {
             with(stopWatch) {
                 if (isRunning) {
                     stop()
@@ -58,7 +59,7 @@ public class SpringTimer : Timer {
     }
 
     override fun stop() {
-        if (enabled) {
+        if (isEnabled) {
             with(stopWatch) {
                 if (isRunning) {
                     stop()

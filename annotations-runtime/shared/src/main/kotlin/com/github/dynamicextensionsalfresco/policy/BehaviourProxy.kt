@@ -6,7 +6,6 @@ import java.lang.reflect.Proxy
 import java.util.concurrent.ConcurrentHashMap
 
 import com.github.dynamicextensionsalfresco.metrics.Timer
-import com.github.dynamicextensionsalfresco.metrics.time
 import org.alfresco.repo.policy.Behaviour
 import org.alfresco.repo.policy.Policy
 import org.alfresco.service.cmr.repository.NodeRef
@@ -69,13 +68,13 @@ public class BehaviourProxy(private var behaviour: Behaviour, val timer: Timer) 
                 /* Policy interface operations always return void. */
                 if (behaviour != null) {
                     try {
-                        timer.time( {
+                        return timer.time( {
                             behaviour.toString() + " " + args?.filterIsInstance(NodeRef::class.java)?.joinToString(",")
                         } , {
                             if (args != null) {
-                                return method.invoke(target, *args)
+                                method.invoke(target, *args)
                             } else {
-                                return method.invoke(target)
+                                method.invoke(target)
                             }
                         })
                     } catch(e: InvocationTargetException) {
