@@ -23,6 +23,7 @@ public final class DescriptiveJavaBehaviour extends JavaBehaviour {
         this.methodReference = methodReference;
     }
 
+    @Override
     @NotNull
     public String toString() {
         return methodReference.getDeclaringClass().getName() + "." + methodReference.getName();
