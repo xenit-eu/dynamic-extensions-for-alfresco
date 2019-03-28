@@ -17,9 +17,13 @@ import org.osgi.framework.Bundle;
  * @author Laurent Van der Linden.
  * @author Toon Geens
  */
-public class BundleDependencies {
+public final class BundleDependencies {
 
     private static final BundleMetadataProvider bundleMetadataProvider = new BundleMetadataProvider();
+
+    private BundleDependencies() {
+
+    }
 
     public static List<Bundle> sortByDependencies(List<Bundle> bundles) {
         if (bundles.size() == 1) {
@@ -106,6 +110,7 @@ public class BundleDependencies {
      * Functional interface to support list mapping on Java 7
      */
     interface MappingFunc<T, R> {
+
         R map(T item);
     }
 
