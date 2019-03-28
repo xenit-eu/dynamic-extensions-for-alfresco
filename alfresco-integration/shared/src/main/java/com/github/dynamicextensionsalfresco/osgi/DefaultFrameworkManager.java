@@ -15,6 +15,7 @@ import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.BundleListener;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.wiring.FrameworkWiring;
@@ -29,8 +30,8 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 /**
- * Manages a [Framework]'s lifecycle. It taken care of initializing and destroying the Framework and (un)registering
- * services and [BundleListener]s.
+ * Manages a {@link Framework}'s lifecycle. It takes care of initializing and destroying the Framework and
+ * (un)registering services and {@link BundleListener}s.
  *
  * @author Laurens Fridael
  */
@@ -84,7 +85,7 @@ public class DefaultFrameworkManager implements ResourceLoaderAware, FrameworkMa
     }
 
     /**
-     * Starts the [Framework] and registers services and [BundleListener]s.
+     * Starts the {@link Framework} and registers services and {@link BundleListener}s.
      */
     public final void initialize() {
         this.startFramework();
@@ -122,11 +123,11 @@ public class DefaultFrameworkManager implements ResourceLoaderAware, FrameworkMa
      * Installs the Bundles that make up the core of the framework. These bundles are started before any extension
      * bundles.
      *
-     *
      * The core bundles consist of:
      *
-     * * Gemini Blueprint * File Install (optional, can be disabled) * Any additional standard bundles configured
-     * through [.setStandardBundlesLocation].
+     * - Gemini Blueprint
+     * - File Install (optional, can be disabled)
+     * - Any additional standard bundles configured through {@link #standardBundlesLocation}.
      *
      * @return installed bundles
      */
@@ -153,7 +154,7 @@ public class DefaultFrameworkManager implements ResourceLoaderAware, FrameworkMa
                             Bundle bundle = installBundle(bundleResource, location);
                             bundles.add(bundle);
                         } catch (BundleException e) {
-                            logger.error("Error installing Bundle: $location", e);
+                            logger.error("Error installing Bundle in {}: {}", location, e);
                         }
                     }
                 } catch (FileNotFoundException e) {
@@ -187,7 +188,7 @@ public class DefaultFrameworkManager implements ResourceLoaderAware, FrameworkMa
     protected void startBundles(List<Bundle> bundles) {
         FrameworkWiring frameworkWiring = framework.adapt(FrameworkWiring.class);
         if (!frameworkWiring.resolveBundles(bundles)) {
-            logger.warn("Could not resolve all ${bundles.size} bundles.");
+            logger.warn("Could not resolve all {} bundles.", bundles.size());
         }
 
         List<Bundle> sortedByDependency = BundleDependencies.sortByDependencies(bundles);
@@ -214,10 +215,10 @@ public class DefaultFrameworkManager implements ResourceLoaderAware, FrameworkMa
     }
 
     /**
-     * Installs the Bundles in the repository.
+     * Installs the {@link Bundle}s in the repository.
      *
      *
-     * This implementation uses RepositoryStoreService.
+     * This implementation uses {@link RepositoryStoreService}.
      */
     protected List<Bundle> installRepositoryBundles() {
         List<Bundle> bundles = new ArrayList<>();
@@ -243,7 +244,7 @@ public class DefaultFrameworkManager implements ResourceLoaderAware, FrameworkMa
     }
 
     /**
-     * Unregisters services and [BundleListener]s and stops the [Framework].
+     * Unregisters services and {@link BundleListener}s and stops the {@link Framework}.
      */
     protected void destroy() {
         unregisterServices();

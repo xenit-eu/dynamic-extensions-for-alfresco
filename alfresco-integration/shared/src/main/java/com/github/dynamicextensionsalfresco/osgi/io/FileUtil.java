@@ -1,18 +1,15 @@
 package com.github.dynamicextensionsalfresco.osgi.io;
 
+import aQute.bnd.osgi.Analyzer;
 import com.github.dynamicextensionsalfresco.osgi.ManifestUtils;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
-import aQute.bnd.osgi.Analyzer;
 import org.apache.commons.io.FilenameUtils;
 
 public class FileUtil {
@@ -35,8 +32,9 @@ public class FileUtil {
             return tempFile;
 
         } finally {
-            if (inputStream != null)
+            if (inputStream != null) {
                 inputStream.close();
+            }
         }
     }
 
