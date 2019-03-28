@@ -22,7 +22,7 @@ public class DefaultBehaviourProxyFactory  implements BehaviourProxyFactory, App
 
     @Override
     public BehaviourProxy createBehaviourProxy(Behaviour behaviour) {
-        logger.debug("Creating BehaviourProxy for "+behaviour.getClass().getName()+"${} instance.");
+        logger.debug("Creating BehaviourProxy for {} instance.", behaviour.getClass().getName());
         BehaviourProxy behaviourProxy = new BehaviourProxy(behaviour, timer);
         behaviourProxies.add(behaviourProxy);
         return behaviourProxy;
