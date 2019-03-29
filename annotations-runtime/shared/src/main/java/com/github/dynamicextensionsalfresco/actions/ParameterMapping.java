@@ -18,6 +18,17 @@ public final class ParameterMapping {
     private final boolean isMandatory;
     private final int index;
 
+    public ParameterMapping(@NotNull ParameterDefinition parameterDefinition, int index) {
+        Intrinsics.checkParameterIsNotNull(parameterDefinition, "parameterDefinition");
+
+        this.index = index;
+        String parameterDefinitionName = parameterDefinition.getName();
+        Intrinsics.checkExpressionValueIsNotNull(parameterDefinitionName, "parameterDefinition.name");
+        this.name = parameterDefinitionName;
+        this.isMultivalued = parameterDefinition.isMultiValued();
+        this.isMandatory = parameterDefinition.isMandatory();
+    }
+
     @NotNull
     public final String getName() {
         return this.name;
@@ -33,16 +44,5 @@ public final class ParameterMapping {
 
     public final int getIndex() {
         return this.index;
-    }
-
-    public ParameterMapping(@NotNull ParameterDefinition parameterDefinition, int index) {
-        Intrinsics.checkParameterIsNotNull(parameterDefinition, "parameterDefinition");
-
-        this.index = index;
-        String parameterDefinitionName = parameterDefinition.getName();
-        Intrinsics.checkExpressionValueIsNotNull(parameterDefinitionName, "parameterDefinition.name");
-        this.name = parameterDefinitionName;
-        this.isMultivalued = parameterDefinition.isMultiValued();
-        this.isMandatory = parameterDefinition.isMandatory();
     }
 }

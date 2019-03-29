@@ -15,7 +15,7 @@ public interface Timer {
 
     boolean isEnabled();
 
-    default <T> T time(Supplier<String> labelProvider, Supplier<T> operation) {
+    default <T, E extends Throwable> T time(Supplier<String> labelProvider, ThrowingSupplier<T, E> operation) throws E {
         if (isEnabled()) {
             start(labelProvider.get());
             try {
@@ -26,6 +26,11 @@ public interface Timer {
         } else {
             return operation.get();
         }
+    }
 
+    @FunctionalInterface
+    interface ThrowingSupplier<T, E extends Throwable> {
+
+        T get() throws E;
     }
 }
