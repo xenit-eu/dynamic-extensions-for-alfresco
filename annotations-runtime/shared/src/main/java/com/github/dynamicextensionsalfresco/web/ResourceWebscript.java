@@ -103,7 +103,7 @@ public final class ResourceWebscript extends AbstractBundleResourceHandler imple
     }
 
     private boolean shouldNotCache(@NotNull String path) {
-        Intrinsics.checkParameterIsNotNull(bundleContext, "path");
+        Intrinsics.checkParameterIsNotNull(path, "path");
         return path.endsWith(".map");
     }
 

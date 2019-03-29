@@ -5,7 +5,6 @@ import java.io.IOException;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import kotlin.TypeCastException;
-import kotlin.jvm.internal.Intrinsics;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.framework.BundleContext;
@@ -64,10 +63,10 @@ public final class WebResourcesRegistrar implements ResourceLoaderAware {
         }
 
         if (bundleContext == null) {
-            Intrinsics.throwNpe();
+            throw new IllegalStateException("bundleContext");
         }
         if (webscriptRegistry == null) {
-            Intrinsics.throwNpe();
+            throw new IllegalStateException("webscriptRegistry");
         }
 
         currentWebscript = new ResourceWebscript(bundleContext);
@@ -78,7 +77,7 @@ public final class WebResourcesRegistrar implements ResourceLoaderAware {
     public final void unregisterResourceWebscript() {
         if (this.currentWebscript != null) {
             if (this.webscriptRegistry == null) {
-                Intrinsics.throwNpe();
+                throw new IllegalStateException("webscriptRegistry");
             }
             this.webscriptRegistry.unregisterWebScript(this.currentWebscript);
         }
