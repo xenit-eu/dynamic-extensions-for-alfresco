@@ -103,65 +103,13 @@ public final class AnnotationWebScriptBuilder implements BeanFactoryAware {
         }
 
         final HandlerMethods handlerMethods = new HandlerMethods();
-        ReflectionUtils.doWithMethods(beanType, (method) -> {
-                    Intrinsics.checkParameterIsNotNull(method, "method");
-                    Before before = AnnotationUtils.findAnnotation(method, Before.class);
-                    if (before != null) {
-                        if (AnnotationUtils.findAnnotation(method, Attribute.class) != null
-                                || AnnotationUtils.findAnnotation(method, Uri.class) != null) {
-                            throw new RuntimeException(
-                                    "Cannot combine @Before, @Attribute and @Uri on a single method. Method: "
-                                            + ClassUtils.getQualifiedMethodName(method));
-                        }
-                        handlerMethods.getBeforeMethods().add(method);
-                    }
-                }
-        );
-        ReflectionUtils.doWithMethods(beanType, (method) -> {
-                    Intrinsics.checkParameterIsNotNull(method, "method");
-                    Attribute attribute = AnnotationUtils.findAnnotation(method, Attribute.class);
-                    if (attribute != null) {
-                        if (AnnotationUtils.findAnnotation(method, Before.class) != null
-                                || AnnotationUtils.findAnnotation(method, Uri.class) != null) {
-                            throw new RuntimeException(
-                                    "Cannot combine @Before, @Attribute and @Uri on a single method. Method: "
-                                            + ClassUtils.getQualifiedMethodName(method));
-                        }
-                        if (Void.TYPE.equals(method.getReturnType())) {
-                            throw new RuntimeException("@Attribute methods cannot have a void return type.");
-                        }
-                        handlerMethods.getAttributeMethods().add(method);
-                    }
-                }
-        );
-        ReflectionUtils.doWithMethods(beanType, (method) -> {
-                    Intrinsics.checkParameterIsNotNull(method, "method");
-                    ExceptionHandler exceptionHandler = AnnotationUtils.findAnnotation(method, ExceptionHandler.class);
-                    if (exceptionHandler != null) {
-                        if (AnnotationUtils.findAnnotation(method, Attribute.class) != null
-                                || AnnotationUtils.findAnnotation(method, Before.class) != null
-                                || AnnotationUtils.findAnnotation(method, Uri.class) != null) {
-                            throw new RuntimeException(
-                                    "Cannot combine @Before, @Attribute @ExceptionHandler or @Uri on a single method. Method: "
-                                            + ClassUtils.getQualifiedMethodName(method));
-                        }
-                        handlerMethods.getExceptionHandlerMethods().add(new ExceptionHandlerMethod(exceptionHandler, method));
-                    }
-                }
-        );
-
         final ArrayList<org.springframework.extensions.webscripts.WebScript> webScripts = new ArrayList<>();
-        ReflectionUtils.doWithMethods(beanType, (method) -> {
-                    Intrinsics.checkParameterIsNotNull(method, "method");
-                    Uri uri = AnnotationUtils.findAnnotation(method, Uri.class);
-                    if (uri != null) {
-                        org.springframework.extensions.webscripts.WebScript webScript =
-                                createWebScript(beanName, webScriptAnnotation, uri, handlerMethods.createForUriMethod(method));
-                        webScripts.add(webScript);
-                    }
-
-                }
-        );
+        final MethodHandler methodHandler = new MethodHandler(beanName, handlerMethods, webScriptAnnotation,
+                webScripts);
+        ReflectionUtils.doWithMethods(beanType, methodHandler::registerBeforeHandlerMethod);
+        ReflectionUtils.doWithMethods(beanType, methodHandler::registerAttributeHandlerMethod);
+        ReflectionUtils.doWithMethods(beanType, methodHandler::registerExceptionHandlerMethod);
+        ReflectionUtils.doWithMethods(beanType, methodHandler::registerWebscriptHandlerMethod);
 
         HashSet<String> ids = new HashSet<>();
         for (org.springframework.extensions.webscripts.WebScript webScript : webScripts) {
@@ -174,6 +122,78 @@ public final class AnnotationWebScriptBuilder implements BeanFactoryAware {
         }
 
         return webScripts;
+    }
+
+    private class MethodHandler {
+
+        private final String beanName;
+        private final HandlerMethods handlerMethods;
+        private final WebScript webScriptAnnotation;
+        private final List<org.springframework.extensions.webscripts.WebScript> webScripts;
+
+        public MethodHandler(String beanName, HandlerMethods handlerMethods,
+                WebScript webScriptAnnotation, List<org.springframework.extensions.webscripts.WebScript> webScripts) {
+            this.beanName = beanName;
+            this.handlerMethods = handlerMethods;
+            this.webScriptAnnotation = webScriptAnnotation;
+            this.webScripts = webScripts;
+        }
+
+        private void registerBeforeHandlerMethod(Method method) {
+            Intrinsics.checkParameterIsNotNull(method, "method");
+            Before before = AnnotationUtils.findAnnotation(method, Before.class);
+            if (before != null) {
+                if (AnnotationUtils.findAnnotation(method, Attribute.class) != null
+                        || AnnotationUtils.findAnnotation(method, Uri.class) != null) {
+                    throw new RuntimeException(
+                            "Cannot combine @Before, @Attribute and @Uri on a single method. Method: "
+                                    + ClassUtils.getQualifiedMethodName(method));
+                }
+                handlerMethods.getBeforeMethods().add(method);
+            }
+        }
+
+        private void registerAttributeHandlerMethod(Method method) {
+            Intrinsics.checkParameterIsNotNull(method, "method");
+            Attribute attribute = AnnotationUtils.findAnnotation(method, Attribute.class);
+            if (attribute != null) {
+                if (AnnotationUtils.findAnnotation(method, Before.class) != null
+                        || AnnotationUtils.findAnnotation(method, Uri.class) != null) {
+                    throw new RuntimeException(
+                            "Cannot combine @Before, @Attribute and @Uri on a single method. Method: "
+                                    + ClassUtils.getQualifiedMethodName(method));
+                }
+                if (Void.TYPE.equals(method.getReturnType())) {
+                    throw new RuntimeException("@Attribute methods cannot have a void return type.");
+                }
+                handlerMethods.getAttributeMethods().add(method);
+            }
+        }
+
+        private void registerExceptionHandlerMethod(Method method) {
+            Intrinsics.checkParameterIsNotNull(method, "method");
+            ExceptionHandler exceptionHandler = AnnotationUtils.findAnnotation(method, ExceptionHandler.class);
+            if (exceptionHandler != null) {
+                if (AnnotationUtils.findAnnotation(method, Attribute.class) != null
+                        || AnnotationUtils.findAnnotation(method, Before.class) != null
+                        || AnnotationUtils.findAnnotation(method, Uri.class) != null) {
+                    throw new RuntimeException(
+                            "Cannot combine @Before, @Attribute @ExceptionHandler or @Uri on a single method. Method: "
+                                    + ClassUtils.getQualifiedMethodName(method));
+                }
+                handlerMethods.getExceptionHandlerMethods().add(new ExceptionHandlerMethod(exceptionHandler, method));
+            }
+        }
+
+        private void registerWebscriptHandlerMethod(Method method) {
+            Intrinsics.checkParameterIsNotNull(method, "method");
+            Uri uri = AnnotationUtils.findAnnotation(method, Uri.class);
+            if (uri != null) {
+                org.springframework.extensions.webscripts.WebScript webScript =
+                        createWebScript(beanName, webScriptAnnotation, uri, handlerMethods.createForUriMethod(method));
+                webScripts.add(webScript);
+            }
+        }
     }
 
     /* Utility operations */
