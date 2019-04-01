@@ -1,5 +1,4 @@
 subprojects {
-    apply plugin: 'kotlin'
 
     configurations {
         testCompile.extendsFrom(compileOnly)
@@ -62,7 +61,6 @@ subprojects {
         testRuntime 'xerces:xercesImpl:2.8.0'
 
         testCompile "com.fasterxml.jackson.core:jackson-databind"
-        testCompile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
         testCompile 'javax.xml.bind:jaxb-api:2.4.0-b180725.0427'
     }
