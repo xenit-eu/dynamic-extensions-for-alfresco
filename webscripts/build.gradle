@@ -1,6 +1,4 @@
 subprojects {
-    apply plugin: 'kotlin'
-
     dependencies {
         compileOnly "${project.ext.alfrescoBom}"
 
@@ -9,8 +7,9 @@ subprojects {
         compileOnly('org.springframework:spring-aop') { transitive = false }
         compileOnly('org.springframework:spring-web') { transitive = false }
 
-        compileOnly("org.alfresco.surf:spring-webscripts") { transitive = false }
         compileOnly("org.alfresco:alfresco-data-model") { transitive = false }
+        compileOnly("org.alfresco.surf:spring-webscripts") { transitive = false }
+        compileOnly("org.alfresco.surf:spring-surf-core") { transitive = false }
 
         compileOnly "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
 
@@ -20,6 +19,5 @@ subprojects {
         compileOnly('org.json:json') { transitive = false }
 
         compileOnly 'com.google.code.findbugs:jsr305:2.0.1'
-        compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     }
 }

@@ -25,7 +25,7 @@ public class WebScriptUtil {
 			if (nextRequest instanceof WebScriptServletRequest) {
 				webScriptServletRequest = ((WebScriptServletRequest) nextRequest);
 			} else if (nextRequest != null) {
-				extractWebScriptServletRequest(nextRequest);
+				webScriptServletRequest = extractWebScriptServletRequest(nextRequest);
 			}
 		}
 		return webScriptServletRequest;
