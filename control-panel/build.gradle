@@ -11,7 +11,7 @@ subprojects {
 
         compile project(":alfresco-integration:alfresco-integration-${project.ext.simpleAlfrescoVersion}")
         compile project(':annotations')
-        compile project(":webscripts:webscripts-${project.ext.simpleAlfrescoVersion}")
+        compile project(":webscripts")
         compile project(":event-bus:event-bus-${project.ext.simpleAlfrescoVersion}")
 
         compileOnly("org.alfresco.surf:spring-webscripts") { transitive = false }

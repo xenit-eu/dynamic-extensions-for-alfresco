@@ -56,7 +56,7 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 			compileOnly("eu.xenit.de:annotations-runtime:annotations-runtime-${alfrescoVersion}:${dynamicExtensions.version}") {
 				transitive = false
 			}
-			compileOnly("eu.xenit.de:webscripts:webscripts-${alfrescoVersion}:${dynamicExtensions.version}") { transitive = false }
+			compileOnly("eu.xenit.de:webscripts:${dynamicExtensions.version}") { transitive = false }
 			// Since Spring is so fundamental, this is the one dependency we leave as transitive.
 			compileOnly ("org.springframework:spring-context:${spring.version}")
 			// JSR-250 API contains the @Resource annotation for referencing dependencies by name.

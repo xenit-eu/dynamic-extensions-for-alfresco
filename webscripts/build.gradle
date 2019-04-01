@@ -1,23 +1,32 @@
-subprojects {
-    dependencies {
-        compileOnly "${project.ext.alfrescoBom}"
+plugins {
+    id 'java'
+}
 
-        compileOnly('org.springframework:spring-core') { transitive = false }
-        compileOnly('org.springframework:spring-beans') { transitive = false }
-        compileOnly('org.springframework:spring-aop') { transitive = false }
-        compileOnly('org.springframework:spring-web') { transitive = false }
+ext {
+    alfrescoVersion = '5.0.d'
+    osgiVersion = '4.3.1'
+}
 
-        compileOnly("org.alfresco:alfresco-data-model") { transitive = false }
-        compileOnly("org.alfresco.surf:spring-webscripts") { transitive = false }
-        compileOnly("org.alfresco.surf:spring-surf-core") { transitive = false }
+dependencies {
+    compileOnly "eu.xenit.alfresco:alfresco-community-bom:5.0.d"
 
-        compileOnly "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
+    compileOnly('org.springframework:spring-core') { transitive = false }
+    compileOnly('org.springframework:spring-beans') { transitive = false }
+    compileOnly('org.springframework:spring-aop') { transitive = false }
+    compileOnly('org.springframework:spring-web') { transitive = false }
 
-        compileOnly "javax.servlet:servlet-api:${project.ext.servletVersion}"
+    compileOnly("org.alfresco:alfresco-data-model") { transitive = false }
+    compileOnly("org.alfresco.surf:spring-webscripts") { transitive = false }
+    compileOnly("org.alfresco.surf:spring-surf-core") { transitive = false }
 
-        compileOnly('org.apache.httpcomponents:httpcore') { transitive = false }
-        compileOnly('org.json:json') { transitive = false }
+    // Find a solution to hide AbstractBundleResourceHandler from the API
+    // and we can drop this dependency
+    compileOnly "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
 
-        compileOnly 'com.google.code.findbugs:jsr305:2.0.1'
-    }
+    compileOnly "javax.servlet:servlet-api:2.5"
+
+    compileOnly('org.apache.httpcomponents:httpcore') { transitive = false }
+    compileOnly('org.json:json') { transitive = false }
+
+    compileOnly 'com.google.code.findbugs:jsr305:2.0.1'
 }
