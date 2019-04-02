@@ -415,7 +415,9 @@ public open class BundleHelper constructor() : EventListener<SpringContextExcept
         installResults.add(InstallResult(event.exception))
     }
 
-    override val supportedEventTypes: Array<Class<*>> = arrayOf(SpringContextException::class.java)
+    override fun supportedEventTypes(): Array<Class<*>> {
+        return arrayOf(SpringContextException::class.java);
+    }
 
     override fun frameworkEvent(event: FrameworkEvent) {
         if (event.type == FrameworkEvent.PACKAGES_REFRESHED) {
