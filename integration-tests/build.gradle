@@ -77,7 +77,7 @@ configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
         captureContainersOutput = true
 
         // Uncomment for quick iterations when developing integration tests
-//        stopContainers = false
+        // stopContainers = false
 
         // expose alfresco/inflow on a random port, comment to use default port (8080)
         environment.put 'ALFRESCO_TCP_8080', '8080'
