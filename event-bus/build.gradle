@@ -1,6 +1,5 @@
 subprojects {
     apply plugin: 'osgi'
-    apply plugin: 'kotlin'
 
     dependencies {
         compileOnly "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
