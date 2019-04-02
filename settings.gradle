@@ -3,7 +3,10 @@ import eu.xenit.dynamicextensionsalfresco.Versions
 enableFeaturePreview("IMPROVED_POM_SUPPORT")
 
 include 'annotations'
+include 'webscripts'
+
 include 'gradle-plugin'
+
 
 def alfrescoDependentModules =
         [
@@ -13,8 +16,7 @@ def alfrescoDependentModules =
                 'blueprint-integration',
                 'blueprint-override',
                 'control-panel',
-                'event-bus',
-                'webscripts'
+                'event-bus'
         ]
 
 alfrescoDependentModules.each { moduleId ->

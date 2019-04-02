@@ -202,10 +202,11 @@ public class DefaultFrameworkManager implements ResourceLoaderAware, FrameworkMa
 
     protected void startBundle(Bundle bundle) {
         try {
-            logger.debug("Starting Bundle {}.", bundle.getBundleId());
+            logger.debug("Starting Bundle {}.", bundle.getSymbolicName());
             bundle.start();
         } catch (Exception e) {
-            logger.error("Error starting Bundle {}.", bundle.getBundleId());
+            logger.error("Error starting bundle {}:", bundle.getSymbolicName(), e);
+
         }
     }
 

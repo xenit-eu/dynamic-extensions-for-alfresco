@@ -19,7 +19,7 @@ subprojects {
         ampLib(project(":annotations-runtime:annotations-runtime-${project.ext.simpleAlfrescoVersion}")) {
             transitive = false
         }
-        ampLib(project(":webscripts:webscripts-${project.ext.simpleAlfrescoVersion}")) { transitive = false }
+        ampLib(project(":webscripts")) { transitive = false }
 
         ampLib("org.apache.felix:org.apache.felix.framework:${project.ext.felixVersion}") { transitive = false }
         ampLib "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
