@@ -2,10 +2,11 @@ package com.github.dynamicextensionsalfresco.controlpanel;
 
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
+import com.github.dynamicextensionsalfresco.controlpanel.BundleHelper;
+import com.github.dynamicextensionsalfresco.controlpanel.BundleHelperTest.ThrowingFunction;
+import com.github.dynamicextensionsalfresco.controlpanel.BundleIdentifier;
 import com.github.dynamicextensionsalfresco.osgi.RepositoryStoreService;
 import com.springsource.util.osgi.manifest.BundleManifest;
 import com.springsource.util.osgi.manifest.internal.StandardBundleManifest;
@@ -22,6 +23,7 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.mockito.ArgumentCaptor;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.wiring.FrameworkWiring;
@@ -31,7 +33,7 @@ class MockBundleHelper extends BundleHelper
         {
 
         private boolean update;
-        private Function<BundleContext, Bundle> mockBundle;
+        private ThrowingFunction<Bundle, BundleContext, BundleException> mockBundle;
 
         public MockBundleHelper(BundleContext bundleContext,
                 RepositoryStoreService repositoryStoreService,
@@ -40,12 +42,11 @@ class MockBundleHelper extends BundleHelper
                 NodeService nodeService,
                 Container webScriptsContainer,
                 boolean update,
-                Function<BundleContext, Bundle> mockBundle)
-                throws IOException, InterruptedException {
+                ThrowingFunction<Bundle, BundleContext, BundleException> mockBundleProvider) {
             super(bundleContext, repositoryStoreService, fileFolderService, contentService, nodeService,
                     webScriptsContainer);
             this.update = update;
-            this.mockBundle = mockBundle;
+            this.mockBundle = mockBundleProvider;
         }
 
         @Override
@@ -78,8 +79,8 @@ class MockBundleHelper extends BundleHelper
         public void resetWebScriptsCache() {}
 
         @Override
-        public Bundle findBundleBySymbolicName(BundleIdentifier identifier) {
-            return update ? mockBundle.apply(bundleContext) : null;
+        public Bundle findBundleBySymbolicName(BundleIdentifier identifier) throws BundleException {
+            return update ? mockBundle.get(this.getBundleContext()) : null;
         }
 
         @Override

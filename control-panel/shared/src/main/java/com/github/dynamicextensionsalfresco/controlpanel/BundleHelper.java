@@ -89,6 +89,9 @@ public class BundleHelper implements EventListener<SpringContextException>, Fram
         this.webScriptsContainer = webScriptsContainer;
     }
 
+    public BundleContext getBundleContext() {
+        return this.bundleContext;
+    }
 
     public String getBundleRepositoryLocation() {
         return repositoryStoreService.getBundleRepositoryLocation();
@@ -372,7 +375,7 @@ public class BundleHelper implements EventListener<SpringContextException>, Fram
         }
     }
 
-    protected Bundle findBundleBySymbolicName(BundleIdentifier identifier) {
+    protected Bundle findBundleBySymbolicName(BundleIdentifier identifier) throws BundleException {
         for(Bundle bundle : bundleContext.getBundles()) {
             if(bundle == null) {
                 continue;
