@@ -53,8 +53,6 @@ import org.springframework.extensions.webscripts.Container;
 
 /**
  * Helper for working with {@link Bundle}s.
-
- * @author Laurens Fridael
  */
 @Component
 public class BundleHelper implements EventListener<SpringContextException>, FrameworkListener {
@@ -116,7 +114,7 @@ public class BundleHelper implements EventListener<SpringContextException>, Fram
     }
 
     /**
-     * Obtains the [Bundle]s that comprise the core framework.
+     * Obtains the {@link Bundle}s that comprise the core framework.
      */
     public List<Bundle> getFrameworkBundles() {
         return Arrays.stream(bundleContext.getBundles())
@@ -125,7 +123,7 @@ public class BundleHelper implements EventListener<SpringContextException>, Fram
     }
 
     /**
-     * Obtains the [Bundle]s that comprise the core framework.
+     * Obtains the {@link Bundle}s that comprise the core framework.
      */
     public List<Bundle> getExtensionBundles() {
         return Arrays.stream(bundleContext.getBundles())
@@ -134,11 +132,11 @@ public class BundleHelper implements EventListener<SpringContextException>, Fram
     }
 
     /**
-     * Obtains the [Bundle] for the given id.
+     * Obtains the {@link Bundle} for the given id.
 
      * @param id BundleId
      * *
-     * @return The matching [Bundle] or null if no match could be found.
+     * @return The matching {@link Bundle} or null if no match could be found.
      */
     public Bundle getBundle(Long id) {
         return bundleContext.getBundle(id);
@@ -164,11 +162,11 @@ public class BundleHelper implements EventListener<SpringContextException>, Fram
     }
 
     /**
-     * Installs a bundle using the given [Content] and filename.
+     * Installs a bundle using the given {@link Content} and filename.
 
      * @param content uploaded content
      * *
-     * @return installted Bundle
+     * @return installted {@link Bundle}
      * *
      * @throws IOException
      * *
@@ -440,7 +438,7 @@ public class BundleHelper implements EventListener<SpringContextException>, Fram
     }
 
     /**
-     * The DeclarativeRegistry caches 404 results, which can hide new webscript deployments.
+     * The {@link DeclarativeRegistry} caches 404 results, which can hide new webscript deployments.
      * Unfortunately there is no public API for resetting this cache.
      */
     protected void resetWebScriptsCache() {

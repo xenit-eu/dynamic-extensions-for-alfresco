@@ -17,7 +17,7 @@ import java.util.*;
 import org.osgi.framework.Version;
 
 /**
- * Adapts an [Bundle] for display in a Freemarker template.
+ * Adapts an {@link Bundle} for display in a Freemarker template.
 
  * @author Laurens Fridael
  */
