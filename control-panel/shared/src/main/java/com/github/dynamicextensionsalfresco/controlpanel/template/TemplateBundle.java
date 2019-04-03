@@ -183,7 +183,7 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 
         int compare = this.getName().compareToIgnoreCase(other.getName());
         if (compare == 0) {
-            return other.getVersion().compareTo(this.getVersion());
+            return this.getVersion().compareTo(other.getVersion());
         }
 
         return compare;
