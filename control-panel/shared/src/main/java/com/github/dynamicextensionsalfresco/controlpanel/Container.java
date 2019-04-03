@@ -16,6 +16,7 @@ import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.launch.Framework;
 import org.springframework.aop.support.AopUtils;
@@ -74,12 +75,13 @@ public class Container extends AbstractControlPanelHandler {
 	}
 
 	@Uri(method = HttpMethod.GET, value = "/services")
-	public Map<String, Object> services() {
+	public Map<String, Object> services() throws InvalidSyntaxException {
 		return model(Variables.SERVICES_BY_BUNDLE, getTemplateServicesByBundle());
 	}
 
 	@Uri(method = HttpMethod.GET, value = "/services/bundle/{bundleid}/{serviceIndex}")
-	public Map<String, Object> service(@UriVariable final long bundleid, @UriVariable int serviceIndex) {
+	public Map<String, Object> service(@UriVariable final long bundleid, @UriVariable int serviceIndex)
+			throws InvalidSyntaxException {
         final List<TemplateBundle> servicesByBundle = getTemplateServicesByBundle();
         TemplateServiceReference serviceReferences = null;
         for (TemplateBundle templateBundle : servicesByBundle) {
@@ -123,7 +125,7 @@ public class Container extends AbstractControlPanelHandler {
 	/* Utility operations */
 
 	@SuppressWarnings("rawtypes")
-	protected List<TemplateBundle> getTemplateServicesByBundle() {
+	protected List<TemplateBundle> getTemplateServicesByBundle() throws InvalidSyntaxException {
         final Map<Long, List<ServiceReference<Object>>> servicesByBundleId = getServicesByBundleId();
 		final List<TemplateBundle> templateBundles = new ArrayList<TemplateBundle>(servicesByBundleId.keySet().size());
 		for (final Entry<Long, List<ServiceReference<Object>>> entry : servicesByBundleId.entrySet()) {
@@ -135,7 +137,7 @@ public class Container extends AbstractControlPanelHandler {
 	}
 
     @SuppressWarnings("unchecked")
-	protected Map<Long, List<ServiceReference<Object>>> getServicesByBundleId() {
+	protected Map<Long, List<ServiceReference<Object>>> getServicesByBundleId() throws InvalidSyntaxException {
         final Map<Long, List<ServiceReference<Object>>> servicesByBundleId = new LinkedHashMap<Long, List<ServiceReference<Object>>>();
         final ServiceReference<?>[] allServices = bundleHelper.getAllServices();
 		if (allServices != null) {
