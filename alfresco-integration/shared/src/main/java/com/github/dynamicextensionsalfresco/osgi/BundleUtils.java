@@ -2,9 +2,9 @@ package com.github.dynamicextensionsalfresco.osgi;
 
 import org.osgi.framework.Bundle;
 
-public class BundleHelpers {
+public class BundleUtils {
 
-    private BundleHelpers() {
+    private BundleUtils() {
     }
 
     public static String getBundleStateDescription(int bundleState) {

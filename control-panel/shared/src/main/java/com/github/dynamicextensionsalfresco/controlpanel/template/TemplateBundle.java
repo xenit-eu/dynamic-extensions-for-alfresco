@@ -2,7 +2,7 @@ package com.github.dynamicextensionsalfresco.controlpanel.template;
 
 import static java.util.Collections.emptyList;
 
-import com.github.dynamicextensionsalfresco.osgi.BundleHelpers;
+import com.github.dynamicextensionsalfresco.osgi.BundleUtils;
 import com.github.dynamicextensionsalfresco.controlpanel.BundleHelper.BundleHelperCompanion;
 import com.springsource.util.osgi.manifest.BundleManifest;
 import com.springsource.util.osgi.manifest.BundleManifestFactory;
@@ -115,9 +115,9 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 
     public String getStatus() {
         if(bundle == null){
-            return BundleHelpers.getBundleStateDescription(0);
+            return BundleUtils.getBundleStateDescription(0);
         }
-        return BundleHelpers.getBundleStateDescription(bundle.getState());
+        return BundleUtils.getBundleStateDescription(bundle.getState());
     }
 
     public String getExportPackage() { return getHeader(Constants.EXPORT_PACKAGE); }
