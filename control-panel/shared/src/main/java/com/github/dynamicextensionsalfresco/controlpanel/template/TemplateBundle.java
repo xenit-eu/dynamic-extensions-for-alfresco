@@ -9,6 +9,7 @@ import com.springsource.util.osgi.manifest.BundleManifestFactory;
 import com.springsource.util.osgi.manifest.ExportedPackage;
 import com.springsource.util.osgi.manifest.ImportedPackage;
 import freemarker.template.utility.NullArgumentException;
+import java.util.stream.Collectors;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
@@ -47,12 +48,10 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
             this.services = emptyList();
             return;
         }
-        this.services = Arrays.asList(
-                            initServices.stream()
+        this.services = initServices.stream()
                                     .map(TemplateServiceReference::new)
                                     .sorted()
-                                    .toArray(TemplateServiceReference[]::new)
-                        );
+                                    .collect(Collectors.toList());
     }
 
     public Long getBundleId(){
