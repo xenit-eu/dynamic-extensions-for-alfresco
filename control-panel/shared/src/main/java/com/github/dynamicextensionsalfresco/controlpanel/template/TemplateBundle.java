@@ -28,19 +28,17 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
     }
     public TemplateBundle(Bundle bundle, List<ServiceReference<Object>> services) {
         this.bundle = bundle;
-        this.initServices = services;
-        init();
+        init(services);
     }
 
     private Bundle bundle;
-    private List<ServiceReference<Object>> initServices;
     private List<TemplateServiceReference> services = null;
 
     public List<TemplateServiceReference> getServices() {
         return this.services;
     }
 
-    private void init(){
+    private void init(List<ServiceReference<Object>> initServices){
         if(initServices == null) {
             this.services = emptyList();
             return;
@@ -65,7 +63,7 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 
     public String getName() {
         return getHeader(Constants.BUNDLE_NAME) != null
-                ? bundle.getHeaders().get(Constants.BUNDLE_NAME)
+                ? getHeader(Constants.BUNDLE_NAME)
                 : getSymbolicName();
     }
 

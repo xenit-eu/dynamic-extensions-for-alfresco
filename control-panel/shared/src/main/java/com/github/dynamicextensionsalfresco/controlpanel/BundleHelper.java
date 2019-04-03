@@ -52,7 +52,7 @@ import javax.annotation.Resource;
 import org.springframework.extensions.webscripts.Container;
 
 /**
- * Helper for working with [Bundle]s.
+ * Helper for working with {@link Bundle}s.
 
  * @author Laurens Fridael
  */

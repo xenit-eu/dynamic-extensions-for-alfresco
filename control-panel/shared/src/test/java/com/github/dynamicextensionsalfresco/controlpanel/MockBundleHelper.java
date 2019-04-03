@@ -29,76 +29,79 @@ import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.wiring.FrameworkWiring;
 import org.springframework.extensions.webscripts.Container;
 
-class MockBundleHelper extends BundleHelper
-        {
+class MockBundleHelper extends BundleHelper {
 
-        private boolean update;
-        private ThrowingFunction<Bundle, BundleContext, BundleException> mockBundle;
+    private boolean update;
+    private ThrowingFunction<Bundle, BundleContext, BundleException> mockBundle;
 
-        public MockBundleHelper(BundleContext bundleContext,
-                RepositoryStoreService repositoryStoreService,
-                FileFolderService fileFolderService,
-                ContentService contentService,
-                NodeService nodeService,
-                Container webScriptsContainer,
-                boolean update,
-                ThrowingFunction<Bundle, BundleContext, BundleException> mockBundleProvider) {
-            super(bundleContext, repositoryStoreService, fileFolderService, contentService, nodeService,
-                    webScriptsContainer);
-            this.update = update;
-            this.mockBundle = mockBundleProvider;
-        }
+    public MockBundleHelper(BundleContext bundleContext,
+            RepositoryStoreService repositoryStoreService,
+            FileFolderService fileFolderService,
+            ContentService contentService,
+            NodeService nodeService,
+            Container webScriptsContainer,
+            boolean update,
+            ThrowingFunction<Bundle, BundleContext, BundleException> mockBundleProvider) {
+        super(bundleContext, repositoryStoreService, fileFolderService, contentService, nodeService,
+                webScriptsContainer);
+        this.update = update;
+        this.mockBundle = mockBundleProvider;
+    }
 
-        @Override
-        public BundleIdentifier getBundleIdentifier(File tempFile) {
-            return BundleIdentifier.fromSymbolicNameAndVersion("test-bundle", "1.0");
-        }
+    @Override
+    public BundleIdentifier getBundleIdentifier(File tempFile) {
+        return BundleIdentifier.fromSymbolicNameAndVersion("test-bundle", "1.0");
+    }
 
-        @Override
-        public String getBundleRepositoryLocation() { return "/app:any"; }
+    @Override
+    public String getBundleRepositoryLocation() {
+        return "/app:any";
+    }
 
-        @Override
-        public InputStream createStreamForFile(File file) {
-            return new ByteArrayInputStream(new byte[0]);
-        }
+    @Override
+    public InputStream createStreamForFile(File file) {
+        return new ByteArrayInputStream(new byte[0]);
+    }
 
-        @Override
-        public Boolean isFragmentBundle(Bundle bundle) {
-            return false;
-        }
+    @Override
+    public Boolean isFragmentBundle(Bundle bundle) {
+        return false;
+    }
 
-        @Override
-        public BundleManifest createBundleManifest(Bundle bundle) {
-            return new StandardBundleManifest(new DummyParserLogger());
-        }
+    @Override
+    public BundleManifest createBundleManifest(Bundle bundle) {
+        return new StandardBundleManifest(new DummyParserLogger());
+    }
 
-        @Override
-        public void saveBundleInRepository(File file,String filename,BundleManifest manifest) {}
+    @Override
+    public void saveBundleInRepository(File file, String filename, BundleManifest manifest) {
+    }
 
-        @Override
-        public void resetWebScriptsCache() {}
+    @Override
+    public void resetWebScriptsCache() {
+    }
 
-        @Override
-        public Bundle findBundleBySymbolicName(BundleIdentifier identifier) throws BundleException {
-            return update ? mockBundle.get(this.getBundleContext()) : null;
-        }
+    @Override
+    public Bundle findBundleBySymbolicName(BundleIdentifier identifier) throws BundleException {
+        return update ? mockBundle.get(this.getBundleContext()) : null;
+    }
 
-        @Override
-        public NodeRef uninstallAndDeleteBundle(Bundle bundle) {
-            return null;
-        }
+    @Override
+    public NodeRef uninstallAndDeleteBundle(Bundle bundle) {
+        return null;
+    }
 
-        @Override
-        protected FrameworkWiring getFrameworkWiring() {
-            FrameworkWiring wiring = mock(FrameworkWiring.class);
-            ArgumentCaptor<FrameworkListener> frameworkListener = ArgumentCaptor.forClass(FrameworkListener.class);
-            doAnswer(invocation -> {
-                frameworkListener.getValue().frameworkEvent(
-                        new FrameworkEvent(FrameworkEvent.PACKAGES_REFRESHED, mock(Bundle.class), null)
-                );
-                return invocation;
-            })
-            .when(wiring).refreshBundles(anyObject(), frameworkListener.capture());
-            return wiring;
-        }
+    @Override
+    protected FrameworkWiring getFrameworkWiring() {
+        FrameworkWiring wiring = mock(FrameworkWiring.class);
+        ArgumentCaptor<FrameworkListener> frameworkListener = ArgumentCaptor.forClass(FrameworkListener.class);
+        doAnswer(invocation -> {
+            frameworkListener.getValue().frameworkEvent(
+                    new FrameworkEvent(FrameworkEvent.PACKAGES_REFRESHED, mock(Bundle.class), null)
+            );
+            return invocation;
+        })
+                .when(wiring).refreshBundles(anyObject(), frameworkListener.capture());
+        return wiring;
+    }
 }

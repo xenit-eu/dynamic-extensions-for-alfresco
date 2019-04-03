@@ -42,8 +42,8 @@ public class BundleHelperTest {
         when(actors.getBundleContext().installBundle(anyString(), any(InputStream.class))).then(invocation -> {
             SpringContextException springContextException
                     = new SpringContextException(
-                                mock(Bundle.class),
-                                new ApplicationContextException("Spring could not autowire some stuff"));
+                    mock(Bundle.class),
+                    new ApplicationContextException("Spring could not autowire some stuff"));
             new DefaultEventBus(actors.getBundleContext()).publish(springContextException);
             return mock(Bundle.class);
         });
@@ -108,8 +108,8 @@ public class BundleHelperTest {
         Actors actors = stageActors(true, this::defaultMockBundleProvider);
 
         FrameworkEvent frameworkEvent = new FrameworkEvent(FrameworkEvent.PACKAGES_REFRESHED,
-                                                            mock(Bundle.class),
-                                                            null);
+                mock(Bundle.class),
+                null);
         when(actors.getBundleContext().installBundle(anyString(), any(InputStream.class)))
                 .then(invocation -> {
                     actors.getFrameworkListener().frameworkEvent(frameworkEvent);
@@ -131,9 +131,9 @@ public class BundleHelperTest {
         bundleHelper.registerEventListeners();
         when(bundleHelper.getBundleContext().getBundles()).thenReturn(new Bundle[]{});
         when(bundleHelper.getBundleContext().getAllServiceReferences(eq(EventListener.class.getName()), anyString()))
-                .thenReturn(new ServiceReference[] { mock(ServiceReference.class) });
+                .thenReturn(new ServiceReference[]{mock(ServiceReference.class)});
 
-        when((BundleHelper)bundleHelper.getBundleContext().getService(Matchers.<ServiceReference<?>>any()))
+        when((BundleHelper) bundleHelper.getBundleContext().getService(Matchers.<ServiceReference<?>>any()))
                 .thenReturn(bundleHelper);
 
         return new Actors(bundleHelper, bundleHelper.getBundleContext(), bundleHelper);
@@ -149,7 +149,7 @@ public class BundleHelperTest {
         private final BundleContext bundleContext;
         private final FrameworkListener frameworkListener;
 
-        public Actors(BundleHelper bundleHelper, BundleContext bundleContext, FrameworkListener frameworkListener){
+        public Actors(BundleHelper bundleHelper, BundleContext bundleContext, FrameworkListener frameworkListener) {
             this.bundleHelper = bundleHelper;
             this.bundleContext = bundleContext;
             this.frameworkListener = frameworkListener;
