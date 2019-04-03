@@ -246,10 +246,11 @@ configure((
         subprojects.findAll { it.parent.name == it.rootProject.name } // Only configure first level child projects
                 - project(':gradle-plugin')
                 - project(':annotations')
+                - project(':webscripts')
                 - project(':integration-tests')), {
     subprojects allSubProjectsConfig << subSubProjectsConfig
 })
-configure([project(':gradle-plugin'), project(':annotations')], allSubProjectsConfig)
+configure([project(':gradle-plugin'), project(':annotations'), project(':webscripts')], allSubProjectsConfig)
 
 defaultTasks 'build'
 
