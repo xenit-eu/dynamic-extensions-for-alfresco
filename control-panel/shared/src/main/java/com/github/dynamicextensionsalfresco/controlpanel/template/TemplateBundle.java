@@ -8,6 +8,7 @@ import com.springsource.util.osgi.manifest.BundleManifest;
 import com.springsource.util.osgi.manifest.BundleManifestFactory;
 import com.springsource.util.osgi.manifest.ExportedPackage;
 import com.springsource.util.osgi.manifest.ImportedPackage;
+import freemarker.template.utility.NullArgumentException;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
@@ -27,6 +28,9 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
         this(bundle, null);
     }
     public TemplateBundle(Bundle bundle, List<ServiceReference<Object>> services) {
+        if(bundle == null){
+            throw new NullArgumentException("bundle");
+        }
         this.bundle = bundle;
         init(services);
     }
@@ -52,11 +56,11 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
     }
 
     public Long getBundleId(){
-        return bundle != null ? bundle.getBundleId() : 0;
+        return bundle.getBundleId();
     }
 
     public String getSymbolicName() {
-        return bundle != null && bundle.getSymbolicName() != null
+        return bundle.getSymbolicName() != null
                 ? bundle.getSymbolicName()
                 : "non OSGi jar file";
     }
@@ -72,7 +76,7 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
     }
 
     private String getHeader(String header) {
-        return bundle != null && bundle.getHeaders() != null
+        return bundle.getHeaders() != null
                 ? bundle.getHeaders().get(header)
                 : null;
     }
@@ -81,13 +85,9 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 
     public Boolean getFragmentBundle() { return getHeader(Constants.FRAGMENT_HOST) != null; }
 
-    public String getLocation() { return bundle != null ? bundle.getLocation() : ""; }
+    public String getLocation() { return bundle.getLocation(); }
 
     public String getLastModified() {
-        if(bundle == null) {
-            return null;
-        }
-
         long lastModified = bundle.getLastModified();
         if (lastModified > 0) {
             return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z").format(new Date(lastModified));
@@ -96,13 +96,10 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
         }
     }
 
-    public String getVersion() { return bundle != null ? bundle.getVersion().toString() : ""; }
+    public String getVersion() { return bundle.getVersion().toString(); }
 
     public String getStore() {
         String defaultStore = "n/a";
-        if(bundle == null){
-            return defaultStore;
-        }
 
         if (bundle.getLocation().startsWith("file:")) {
             return "filesystem";
@@ -114,9 +111,6 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
     }
 
     public String getStatus() {
-        if(bundle == null){
-            return BundleUtils.getBundleStateDescription(0);
-        }
         return BundleUtils.getBundleStateDescription(bundle.getState());
     }
 
@@ -129,9 +123,6 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
     public List<TemplateImportedPackage> getImportedPackages() {
         ArrayList<TemplateImportedPackage> packages = new ArrayList<TemplateImportedPackage>();
         BundleManifest manifest = getManifest();
-        if(manifest == null) {
-            return packages;
-        }
 
         for (ImportedPackage importedPackage : manifest.getImportPackage().getImportedPackages()) {
             TemplateImportedPackage bundlePackage = new TemplateImportedPackage();
@@ -157,10 +148,6 @@ public class TemplateBundle implements Comparable<TemplateBundle> {
 
     private BundleManifest manifestCache = null;
     public BundleManifest getManifest() {
-        if(bundle == null){
-            return null;
-        }
-
         if(manifestCache == null) {
             manifestCache = BundleManifestFactory.createBundleManifest(bundle.getHeaders());
         }
