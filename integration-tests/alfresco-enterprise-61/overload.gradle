@@ -1,0 +1,7 @@
+ext {
+    alfrescoBaseWar = 'org.alfresco:alfresco-enterprise:6.1.0.1@war'
+    alfrescoBaseImage = 'hub.xenit.eu/alfresco-enterprise:6.0.0'
+    shareBaseWar = 'org.alfresco:share:6.1.0@war'
+
+    postgresImage = 'postgres:10.1'
+}
