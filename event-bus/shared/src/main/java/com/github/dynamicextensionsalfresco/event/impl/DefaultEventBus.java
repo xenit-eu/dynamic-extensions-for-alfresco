@@ -8,6 +8,7 @@ import kotlin.jvm.internal.Intrinsics;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 
 /**
  * Synchronous implementation that only notifies listeners based on their supported events.
@@ -29,7 +30,12 @@ public final class DefaultEventBus implements EventBus {
         Intrinsics.checkParameterIsNotNull(event, "event");
 
         try {
-            Arrays.stream(bundleContext.getAllServiceReferences(EventListener.class.getName(), null))
+            ServiceReference<?>[] serviceReferences = bundleContext
+                    .getAllServiceReferences(EventListener.class.getName(), null);
+            if (serviceReferences == null || serviceReferences.length == 0) {
+                return;
+            }
+            Arrays.stream(serviceReferences)
                     .map(bundleContext::getService)
                     .filter(e -> e instanceof EventListener)
                     .filter(e -> Arrays.stream(((EventListener) e).supportedEventTypes())
