@@ -64,10 +64,10 @@ pipeline {
 
     post {
         aborted {
-            sh "./gradlew composeDownForced"
+            sh "./gradlew composeDownForced -Penterprise"
         }
         failure {
-            sh "./gradlew composeDownForced"
+            sh "./gradlew composeDownForced -Penterprise"
         }
         success {
             archiveArtifacts artifacts: '**/build/amps/*.amp'
