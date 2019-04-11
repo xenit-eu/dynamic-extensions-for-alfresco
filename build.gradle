@@ -63,7 +63,7 @@ def allSubProjectsConfig = {
 
     apply plugin: 'java'
     apply plugin: 'jacoco'
-    apply plugin: 'maven'
+    apply plugin: 'maven-publish'
     apply plugin: 'signing'
 
     task sourceJar(type: Jar) {
@@ -77,77 +77,60 @@ def allSubProjectsConfig = {
     }
 
     artifacts {
-        archives sourceJar, javadocJar
+        archives jar
+        archives sourceJar
+        archives javadocJar
     }
 
-    uploadArchives {
-        repositories {
-            mavenDeployer {
-                signing {
-                    required { false }
-                    sign configurations.archives
-                }
-                beforeDeployment {
-                    MavenDeployment deployment ->
+    signing {
+        required { !version.endsWith('SNAPSHOT') && gradle.taskGraph.hasTask("publish") }
+        sign configurations.archives
+    }
 
-                        signing.signPom(deployment)
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+                artifact sourceJar
+                artifact javadocJar
 
-                }
-
-                repository(url: project.hasProperty('de_publish_url') ? project.de_publish_url : "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                    authentication(userName: project.hasProperty('de_publish_username') ? project.de_publish_username : '', password: project.hasProperty('de_publish_password') ? project.de_publish_password : '')
-                }
-
-                snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                    authentication(userName: project.hasProperty('de_publish_username') ? project.de_publish_username : '', password: project.hasProperty('de_publish_password') ? project.de_publish_password : '')
+                afterEvaluate {
+                    if (!project.getTasksByName('amp', false).isEmpty()) {
+                        artifact amp
+                    }
                 }
 
-                pom.project {
-                    url 'https://github.com/xenit-eu/dynamic-extensions-for-alfresco'
-                    name "dynamic-extensions-for-alfresco-" + project.name
-                    description "Adds an OSGi container to alfresco repository supporting dynamic code reloading, " +
+                pom {
+                    url = 'https://github.com/xenit-eu/dynamic-extensions-for-alfresco'
+                    name = "dynamic-extensions-for-alfresco-" + project.name
+                    description = "Adds an OSGi container to alfresco repository supporting dynamic code reloading, " +
                             "classpath isolation and a bunch of other useful features"
 
                     scm {
-                        connection 'scm:git:git@github.com:xenit-eu/dynamic-extensions-for-alfresco.git'
-                        developerConnection 'scm:git:git@github.com:xenit-eu/dynamic-extensions-for-alfresco.git'
-                        url 'https://github.com/xenit-eu/dynamic-extensions-for-alfresco.git'
+                        connection = 'scm:git:git@github.com:xenit-eu/dynamic-extensions-for-alfresco.git'
+                        developerConnection = 'scm:git:git@github.com:xenit-eu/dynamic-extensions-for-alfresco.git'
+                        url = 'https://github.com/xenit-eu/dynamic-extensions-for-alfresco.git'
                     }
 
                     licenses {
                         license {
-                            name 'The Apache License, Version 2.0'
-                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
                         }
                     }
+                }
+            }
+        }
 
-                    developers {
-                        developer {
-                            id "laurentvdl"
-                            name "Laurent Van der Linden"
-                            roles {
-                                role "Founder"
-                                role "Architect"
-                            }
-                        }
-                        developer {
-                            id 'stanmine'
-                            name 'Stan Mine'
-                            email 'stan.mine@xenit.eu'
-                            roles {
-                                role "Architect"
-                                role "Developer"
-                            }
-                        }
-                        developer {
-                            id 'yregaieg'
-                            name 'Younes Regaieg'
-                            email 'younes.regaieg@xenit.eu'
-                            roles {
-                                role "Contributor"
-                            }
-                        }
-                    }
+        repositories {
+            maven {
+                def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+                def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+
+                credentials {
+                    username = project.hasProperty('de_publish_username') ? project.de_publish_username : ''
+                    password = project.hasProperty('de_publish_password') ? project.de_publish_password : ''
                 }
             }
         }
@@ -189,10 +172,8 @@ def allSubProjectsConfig = {
         bndVersion = '2.4.1'
     }
 
-
-
     gradle.taskGraph.whenReady { graph ->
-        if (graph.hasTask(uploadArchives)) {
+        if (graph.hasTask(publish)) {
             if (!project.hasProperty('keyId') || !project.hasProperty('secretKeyRingFile') || !project.hasProperty('password')) {
                 throw new GradleException('You need to provide signing params in order to sign artifacts')
             }
