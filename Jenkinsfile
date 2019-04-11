@@ -55,7 +55,7 @@ pipeline {
             }
             steps {
                 script {
-                    sh "./gradlew uploadArchives -Pde_publish_username=${SONNATYPE_CREDENTIALS_USR} -Pde_publish_password=${SONNATYPE_CREDENTIALS_PSW} -PkeyId=DF8285F0 -Ppassword=${GPGPASSPHRASE} -PsecretKeyRingFile=/var/jenkins_home/secring.gpg"
+                    sh "./gradlew publish -Pde_publish_username=${SONNATYPE_CREDENTIALS_USR} -Pde_publish_password=${SONNATYPE_CREDENTIALS_PSW} -PkeyId=DF8285F0 -Ppassword=${GPGPASSPHRASE} -PsecretKeyRingFile=/var/jenkins_home/secring.gpg"
                 }
             }
         }

@@ -98,11 +98,8 @@ subprojects {
     }
 
     artifacts {
-        archives sourceJar, javadocJar
         ampArtifact amp
     }
 
     build.dependsOn("amp")
-
-    uploadArchives.dependsOn("amp")
 }
