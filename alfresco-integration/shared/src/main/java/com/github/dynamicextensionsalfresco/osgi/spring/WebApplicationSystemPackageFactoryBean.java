@@ -66,7 +66,7 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<Set<S
 		final boolean cacheDoesNotExist = CollectionUtils.isEmpty(packages);
 
 		final PackageCacheMode packageCacheMode = configuration.getSystemPackageCacheMode();
-		if (packageCacheMode.isReadFromCache() == false || cacheDoesNotExist || !validCache) {
+		if (!packageCacheMode.isReadFromCache() || cacheDoesNotExist || !validCache) {
 			packages = packageScanner.scanWebApplicationPackages();
 		}
 
@@ -74,7 +74,7 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<Set<S
 			writeCachedPackages(packages);
 		}
 
-		if (packageCacheMode.isWriteToCache() == false) {
+		if (!packageCacheMode.isWriteToCache()) {
             final File cacheFile = configuration.getSystemPackageCache();
 			if (cacheFile.isFile()) {
 				cacheFile.delete();
@@ -93,7 +93,7 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<Set<S
                     final Set<SystemPackage> systemPackages = new LinkedHashSet<SystemPackage>(4500, 0.1f);
                     for (String line; (line = in.readLine()) != null;) {
                         line = line.trim();
-                        if (line.isEmpty() == false) {
+                        if (!line.isEmpty()) {
                             systemPackages.add(SystemPackage.fromString(line));
                         }
                     }

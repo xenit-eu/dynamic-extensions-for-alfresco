@@ -1,5 +1,6 @@
 package com.github.dynamicextensionsalfresco.proxy;
 
+import java.util.List;
 import org.apache.felix.framework.FilterImpl;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
@@ -11,11 +12,11 @@ import org.osgi.framework.InvalidSyntaxException;
  * @author Laurent Van der Linden
  */
 public class DefaultFilterModel implements FilterModel {
-	private final Class<?>[] targetInterfaces;
+	private final List<Class<?>> targetInterfaces;
 
 	private Filter filter;
 
-	public DefaultFilterModel(Class<?>[] targetInterfaces, Filter filter) {
+	public DefaultFilterModel(List<Class<?>> targetInterfaces, Filter filter) {
 		this.targetInterfaces = targetInterfaces;
 		this.filter = filter;
 	}

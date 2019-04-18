@@ -19,8 +19,9 @@ import java.lang.reflect.InvocationHandler;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "/com/github/dynamicextensionsalfresco/osgi/spring/BundleServiceProxyTest.xml" })
 public class BundleServiceProxyTest {
-	@Autowired @Resource(name = "someDynamicService")
-	Runnable someDynamicService;
+	@Autowired
+	@Resource(name = "someDynamicService")
+	public Runnable someDynamicService = null;
 
 	@Test
 	public void testServiceProxy() {

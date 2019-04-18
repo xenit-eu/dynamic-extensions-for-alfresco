@@ -18,6 +18,7 @@ public class MockFrameworkService implements FrameworkService {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public FrameworkManager getFrameworkManager() {
 		final FrameworkManager frameworkManagerMock = mock(FrameworkManager.class);
 		final Framework frameworkMock = mock(Framework.class);
