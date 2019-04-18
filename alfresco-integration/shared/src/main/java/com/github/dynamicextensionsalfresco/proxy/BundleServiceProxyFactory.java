@@ -11,18 +11,18 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.springframework.beans.factory.FactoryBean;
 
 /**
- * Spring [FactoryBean] to allow registration of service proxies at the global Alfresco level.
+ * Spring {@link FactoryBean} to allow registration of service proxies at the global Alfresco level.
  * The emitted proxy will delegate to a service implemented by a Dynamic Extension, if any.
  *
  * These proxies are not guaranteed to be available at all times (startup or bundle uninstall),
- * so users of these proxies should handle [IllegalStateException] explicitly.
+ * so users of these proxies should handle {@link IllegalStateException} explicitly.
  *
- * The [Filter] will select the appropriate target instance for the proxy.
+ * The {@link Filter} will select the appropriate target instance for the proxy.
  * If you do not define it explicitly, the targetInterfaces will be used to compose one.
  * (find a extension service, implementing all specified interfaces.
  *
  * Note, that the filter should be specific enough to limit any matches to 1 service: if more then 1 match is found,
- * an [IllegalStateException] will be throw.
+ * an {@link IllegalStateException} will be throw.
  */
 public class BundleServiceProxyFactory<T> implements FactoryBean<T> {
 
