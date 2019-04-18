@@ -1,7 +1,6 @@
 package com.github.dynamicextensionsalfresco.event.impl;
 
 import com.github.dynamicextensionsalfresco.event.EventBus;
-import kotlin.jvm.internal.Intrinsics;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -12,11 +11,15 @@ import org.osgi.framework.BundleContext;
 public final class Activator implements BundleActivator {
 
     public void start(@NotNull BundleContext context) {
-        Intrinsics.checkParameterIsNotNull(context, "context");
+        if (context == null) {
+            throw new IllegalArgumentException("context is null");
+        }
         context.registerService(EventBus.class, new DefaultEventBus(context), null);
     }
 
     public void stop(@NotNull BundleContext context) {
-        Intrinsics.checkParameterIsNotNull(context, "context");
+        if (context == null) {
+            throw new IllegalArgumentException("context is null");
+        }
     }
 }

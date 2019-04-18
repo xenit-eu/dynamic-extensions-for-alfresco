@@ -1,7 +1,6 @@
 package com.github.dynamicextensionsalfresco.actions;
 
 import com.github.dynamicextensionsalfresco.actions.annotations.ActionMethod;
-import kotlin.jvm.internal.Intrinsics;
 import org.alfresco.service.cmr.action.ParameterDefinition;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,11 +18,17 @@ public final class ParameterMapping {
     private final int index;
 
     public ParameterMapping(@NotNull ParameterDefinition parameterDefinition, int index) {
-        Intrinsics.checkParameterIsNotNull(parameterDefinition, "parameterDefinition");
+
+        if (parameterDefinition == null) {
+            throw new IllegalArgumentException("parameterDefinition is null");
+        }
 
         this.index = index;
         String parameterDefinitionName = parameterDefinition.getName();
-        Intrinsics.checkExpressionValueIsNotNull(parameterDefinitionName, "parameterDefinition.name");
+
+        if (parameterDefinitionName == null) {
+            throw new IllegalStateException("parameterDefinitionName is null");
+        }
         this.name = parameterDefinitionName;
         this.isMultivalued = parameterDefinition.isMultiValued();
         this.isMandatory = parameterDefinition.isMandatory();

@@ -4,7 +4,6 @@ import java.beans.ExceptionListener;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import kotlin.jvm.internal.Intrinsics;
 import org.activiti.engine.delegate.ExecutionListener;
 import org.activiti.engine.delegate.JavaDelegate;
 import org.activiti.engine.delegate.TaskListener;
@@ -37,8 +36,12 @@ public class WorkflowTaskRegistrar implements InitializingBean, ApplicationConte
 
     public WorkflowTaskRegistrar(@NotNull Map<String, Object> activitiBeanRegistry,
             @NotNull WorkflowTaskRegistry workflowTaskRegistry) {
-        Intrinsics.checkParameterIsNotNull(activitiBeanRegistry, "activitiBeanRegistry");
-        Intrinsics.checkParameterIsNotNull(workflowTaskRegistry, "workflowTaskRegistry");
+        if (activitiBeanRegistry == null) {
+            throw new IllegalArgumentException("activitiBeanRegistry is null");
+        }
+        if (workflowTaskRegistry == null) {
+            throw new IllegalArgumentException("workflowTaskRegistry is null");
+        }
 
         this.activitiBeanRegistry = activitiBeanRegistry;
         this.workflowTaskRegistry = workflowTaskRegistry;
@@ -87,7 +90,9 @@ public class WorkflowTaskRegistrar implements InitializingBean, ApplicationConte
 
     @Override
     public void setApplicationContext(@NotNull ApplicationContext applicationContext) {
-        Intrinsics.checkParameterIsNotNull(applicationContext, "applicationContext");
+        if (applicationContext == null) {
+            throw new IllegalArgumentException("applicationContext is null");
+        }
         this.applicationContext = applicationContext;
     }
 

@@ -7,7 +7,6 @@ import com.springsource.util.osgi.manifest.ImportedPackage;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import kotlin.jvm.internal.Intrinsics;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.framework.Bundle;
 
@@ -86,7 +85,9 @@ public final class BundleDependencies {
         private final BundleManifest manifest;
 
         BundleDescriptor(@NotNull Bundle bundle) {
-            Intrinsics.checkParameterIsNotNull(bundle, "bundle");
+            if (bundle == null) {
+                throw new IllegalArgumentException("bundle is null");
+            }
 
             this.bundle = bundle;
             this.manifest = BundleManifestFactory.createBundleManifest(bundle.getHeaders());
@@ -117,8 +118,12 @@ public final class BundleDependencies {
     static class Mapper {
 
         public static <T, R> List<R> map(Collection<T> list, MappingFunc<T, R> func) {
-            Intrinsics.checkParameterIsNotNull(list, "list");
-            Intrinsics.checkParameterIsNotNull(func, "func");
+            if (list == null) {
+                throw new IllegalArgumentException("list is null");
+            }
+            if (func == null) {
+                throw new IllegalArgumentException("func is null");
+            }
 
             List<R> result = new ArrayList<>(list.size());
             for (T item : list) {

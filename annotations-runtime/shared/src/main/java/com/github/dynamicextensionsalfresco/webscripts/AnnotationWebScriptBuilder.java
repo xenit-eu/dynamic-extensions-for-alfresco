@@ -16,7 +16,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
-import kotlin.jvm.internal.Intrinsics;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.BeanFactory;
@@ -51,12 +50,16 @@ public final class AnnotationWebScriptBuilder implements BeanFactoryAware {
     private MessageConverterRegistry messageConverterRegistry;
 
     public final void setHandlerMethodArgumentsResolver(@NotNull HandlerMethodArgumentsResolver value) {
-        Intrinsics.checkParameterIsNotNull(value, "value");
+        if (value == null) {
+            throw new IllegalArgumentException("value is null");
+        }
         this.handlerMethodArgumentsResolver = value;
     }
 
     public final void setMessageConverterRegistry(@NotNull MessageConverterRegistry value) {
-        Intrinsics.checkParameterIsNotNull(value, "value");
+        if (value == null) {
+            throw new IllegalArgumentException("value is null");
+        }
         this.messageConverterRegistry = value;
     }
 
@@ -140,7 +143,9 @@ public final class AnnotationWebScriptBuilder implements BeanFactoryAware {
         }
 
         private void registerBeforeHandlerMethod(Method method) {
-            Intrinsics.checkParameterIsNotNull(method, "method");
+            if (method == null) {
+                throw new IllegalArgumentException("method is null");
+            }
             Before before = AnnotationUtils.findAnnotation(method, Before.class);
             if (before != null) {
                 if (AnnotationUtils.findAnnotation(method, Attribute.class) != null
@@ -154,7 +159,9 @@ public final class AnnotationWebScriptBuilder implements BeanFactoryAware {
         }
 
         private void registerAttributeHandlerMethod(Method method) {
-            Intrinsics.checkParameterIsNotNull(method, "method");
+            if (method == null) {
+                throw new IllegalArgumentException("method is null");
+            }
             Attribute attribute = AnnotationUtils.findAnnotation(method, Attribute.class);
             if (attribute != null) {
                 if (AnnotationUtils.findAnnotation(method, Before.class) != null
@@ -171,7 +178,9 @@ public final class AnnotationWebScriptBuilder implements BeanFactoryAware {
         }
 
         private void registerExceptionHandlerMethod(Method method) {
-            Intrinsics.checkParameterIsNotNull(method, "method");
+            if (method == null) {
+                throw new IllegalArgumentException("method is null");
+            }
             ExceptionHandler exceptionHandler = AnnotationUtils.findAnnotation(method, ExceptionHandler.class);
             if (exceptionHandler != null) {
                 if (AnnotationUtils.findAnnotation(method, Attribute.class) != null
@@ -186,7 +195,9 @@ public final class AnnotationWebScriptBuilder implements BeanFactoryAware {
         }
 
         private void registerWebscriptHandlerMethod(Method method) {
-            Intrinsics.checkParameterIsNotNull(method, "method");
+            if (method == null) {
+                throw new IllegalArgumentException("method is null");
+            }
             Uri uri = AnnotationUtils.findAnnotation(method, Uri.class);
             if (uri != null) {
                 org.springframework.extensions.webscripts.WebScript webScript =
@@ -201,10 +212,18 @@ public final class AnnotationWebScriptBuilder implements BeanFactoryAware {
     @NotNull
     protected final AnnotationWebScript createWebScript(@NotNull String beanName, @NotNull WebScript webScript,
             @NotNull Uri uri, @NotNull HandlerMethods handlerMethods) {
-        Intrinsics.checkParameterIsNotNull(beanName, "beanName");
-        Intrinsics.checkParameterIsNotNull(webScript, "webScript");
-        Intrinsics.checkParameterIsNotNull(uri, "uri");
-        Intrinsics.checkParameterIsNotNull(handlerMethods, "handlerMethods");
+        if (beanName == null) {
+            throw new IllegalArgumentException("beanName is null");
+        }
+        if (webScript == null) {
+            throw new IllegalArgumentException("webScript is null");
+        }
+        if (uri == null) {
+            throw new IllegalArgumentException("uri is null");
+        }
+        if (handlerMethods == null) {
+            throw new IllegalArgumentException("handlerMethods is null");
+        }
         DescriptionImpl description = new DescriptionImpl();
         if (StringUtils.hasText(webScript.defaultFormat())) {
             description.setDefaultFormat(webScript.defaultFormat());
@@ -227,9 +246,15 @@ public final class AnnotationWebScriptBuilder implements BeanFactoryAware {
     @NotNull
     protected final AnnotationWebScript createWebScript(@NotNull Description description, @NotNull Object handler,
             @NotNull HandlerMethods handlerMethods) {
-        Intrinsics.checkParameterIsNotNull(description, "description");
-        Intrinsics.checkParameterIsNotNull(handler, "handler");
-        Intrinsics.checkParameterIsNotNull(handlerMethods, "handlerMethods");
+        if (description == null) {
+            throw new IllegalArgumentException("description is null");
+        }
+        if (handler == null) {
+            throw new IllegalArgumentException("handler is null");
+        }
+        if (handlerMethods == null) {
+            throw new IllegalArgumentException("handlerMethods is null");
+        }
         return new AnnotationWebScript(description, handler, handlerMethods, this.handlerMethodArgumentsResolver,
                 this.messageConverterRegistry);
     }
@@ -239,7 +264,9 @@ public final class AnnotationWebScriptBuilder implements BeanFactoryAware {
         Assert.notNull(uri, "Uri cannot be null.");
         Assert.notNull(method, "HttpMethod cannot be null.");
         Assert.notNull(description, "Description cannot be null.");
-        Intrinsics.checkParameterIsNotNull(baseUri, "baseUri");
+        if (baseUri == null) {
+            throw new IllegalArgumentException("baseUri is null");
+        }
 
         String[] uris;
         if (uri.value().length > 0) {
@@ -298,9 +325,15 @@ public final class AnnotationWebScriptBuilder implements BeanFactoryAware {
 
     protected final void handleTypeAnnotations(@NotNull String beanName, @NotNull WebScript webScript,
             @NotNull DescriptionImpl description) {
-        Intrinsics.checkParameterIsNotNull(beanName, "beanName");
-        Intrinsics.checkParameterIsNotNull(webScript, "webScript");
-        Intrinsics.checkParameterIsNotNull(description, "description");
+        if (beanName == null) {
+            throw new IllegalArgumentException("beanName is null");
+        }
+        if (webScript == null) {
+            throw new IllegalArgumentException("webScript is null");
+        }
+        if (description == null) {
+            throw new IllegalArgumentException("description is null");
+        }
 
         this.handleWebScriptAnnotation(webScript, beanName, description);
 
@@ -470,9 +503,13 @@ public final class AnnotationWebScriptBuilder implements BeanFactoryAware {
             throw new IllegalStateException("beanFactory");
         }
         Class<?> clazz = beanFactory.getType(beanName);
-        Intrinsics.checkExpressionValueIsNotNull(clazz, "clazz");
+        if (clazz == null) {
+            throw new IllegalStateException("clazz is null");
+        }
         String id = clazz.getName();
-        Intrinsics.checkExpressionValueIsNotNull(id, "clazz.name");
+        if (id == null) {
+            throw new IllegalStateException("clazz.name is null");
+        }
         return id;
     }
 
@@ -484,9 +521,13 @@ public final class AnnotationWebScriptBuilder implements BeanFactoryAware {
             throw new IllegalStateException("beanFactory");
         }
         final Class<?> clazz = beanFactory.getType(beanName);
-        Intrinsics.checkExpressionValueIsNotNull(clazz, "clazz");
+        if (clazz == null) {
+            throw new IllegalStateException("clazz is null");
+        }
         final String shortName = ClassUtils.getShortName(clazz);
-        Intrinsics.checkExpressionValueIsNotNull(shortName, "ClassUtils.getShortName(clazz)");
+        if (shortName == null) {
+            throw new IllegalStateException("ClassUtils.getShortName(clazz) is null");
+        }
         return shortName;
     }
 
@@ -538,7 +579,9 @@ public final class AnnotationWebScriptBuilder implements BeanFactoryAware {
 
     @Override
     public void setBeanFactory(@NotNull BeanFactory beanFactory) {
-        Intrinsics.checkParameterIsNotNull(beanFactory, "beanFactory");
+        if (beanFactory == null) {
+            throw new IllegalArgumentException("beanFactory is null");
+        }
         Assert.isInstanceOf(ConfigurableListableBeanFactory.class, beanFactory,
                 "BeanFactory is not of type ConfigurableListableBeanFactory.");
         this.beanFactory = (ConfigurableListableBeanFactory) beanFactory;
