@@ -38,7 +38,7 @@ subprojects {
         compileOnly 'com.google.code.findbugs:jsr305:2.0.1'
         compile 'com.google.collections:google-collections:1.0'
 
-        compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+        compileOnly "org.jetbrains:annotations:$jetbrains_annotations_version"
 
         compileOnly "com.fasterxml.jackson.core:jackson-databind"
 

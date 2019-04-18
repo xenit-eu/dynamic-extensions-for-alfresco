@@ -1,6 +1,5 @@
 subprojects {
     apply plugin: 'osgi'
-    apply plugin: 'kotlin'
 
     configurations {
         testCompile.extendsFrom(compileOnly)
@@ -37,7 +36,6 @@ subprojects {
 
         testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
         testCompile "junit:junit:${project.ext.junitVersion}"
-        testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
     }
 
     jar {

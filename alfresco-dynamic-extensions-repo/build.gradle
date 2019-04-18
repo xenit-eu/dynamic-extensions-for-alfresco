@@ -27,8 +27,7 @@ subprojects {
         // The core asm library is already included in Alfresco distributions, so we just add asm-commons.
         ampLib("asm:asm-commons:3.1") { transitive = false }
 
-        ampLib "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-        ampLib "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+        ampLib "org.jetbrains:annotations:$jetbrains_annotations_version"
 
         ampLib "biz.aQute.bnd:biz.aQute.bnd:${project.ext.bndVersion}"
 
@@ -61,7 +60,6 @@ subprojects {
         testCompile("org.alfresco:alfresco-data-model") { transitive = false }
 
         testRuntime "org.springframework:spring-beans"
-        testCompile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     }
 
     def ampConfig = {

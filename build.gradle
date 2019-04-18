@@ -1,12 +1,11 @@
 import eu.xenit.dynamicextensionsalfresco.Versions
 
 buildscript {
-    ext.kotlin_version = '1.2.71'
+    ext.jetbrains_annotations_version = '17.0.0'
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.8.0"
     }
 }
@@ -52,14 +51,6 @@ allprojects {
 // Configuration that should be applied to all subprojects. (If a sub project also has sub projects for different 
 // Alfresco versions, it should not build any artifacts.)
 def allSubProjectsConfig = {
-    buildscript {
-        repositories {
-            mavenCentral()
-        }
-        dependencies {
-            classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        }
-    }
 
     apply plugin: 'java'
     apply plugin: 'jacoco'
@@ -193,12 +184,6 @@ def allSubProjectsConfig = {
 def subSubProjectsConfig = {
     afterEvaluate {
         sourceSets {
-            if (project.plugins.hasPlugin("kotlin")) {
-                main.kotlin.srcDirs += "${project.parent.projectDir}/shared/src/main/java"
-                test.kotlin.srcDirs += "${project.parent.projectDir}/shared/src/test/java"
-                main.kotlin.srcDirs += "${project.parent.projectDir}/shared/src/main/kotlin"
-                test.kotlin.srcDirs += "${project.parent.projectDir}/shared/src/test/kotlin"
-            }
             if (project.plugins.hasPlugin("groovy")) {
                 main.groovy.srcDirs += "${project.parent.projectDir}/shared/src/main/groovy"
                 test.groovy.srcDirs += "${project.parent.projectDir}/shared/src/test/groovy"
