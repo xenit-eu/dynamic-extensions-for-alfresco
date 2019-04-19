@@ -155,7 +155,7 @@ public class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicatio
     }
 
     @Override
-    protected void initBeanDefinitionReader(@Nullable XmlBeanDefinitionReader beanDefinitionReader) {
+    protected void initBeanDefinitionReader(@NotNull XmlBeanDefinitionReader beanDefinitionReader) {
         if (beanDefinitionReader == null) {
             throw new IllegalArgumentException("beanDefinitionReader is null");
         }

@@ -27,7 +27,7 @@ public final class ParameterMapping {
         String parameterDefinitionName = parameterDefinition.getName();
 
         if (parameterDefinitionName == null) {
-            throw new IllegalStateException("parameterDefinitionName is null");
+            throw new IllegalArgumentException("parameterDefinitionName is null");
         }
         this.name = parameterDefinitionName;
         this.isMultivalued = parameterDefinition.isMultiValued();

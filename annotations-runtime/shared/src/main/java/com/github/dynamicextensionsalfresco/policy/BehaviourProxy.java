@@ -60,9 +60,6 @@ public final class BehaviourProxy implements Behaviour {
                         this.timer);
                 Object proxy = Proxy
                         .newProxyInstance(this.getClass().getClassLoader(), new Class[]{policy}, proxyHandler);
-                if (proxy == null) {
-                    throw new IllegalStateException("proxy is null");
-                }
                 proxyPolicy = new ProxyPolicy(proxy, proxyHandler);
             } else {
                 Object originalHandler = this.behaviour.getInterface(policy);
@@ -70,9 +67,6 @@ public final class BehaviourProxy implements Behaviour {
                         this.behaviour, this.timer);
                 Object proxy = Proxy
                         .newProxyInstance(this.getClass().getClassLoader(), new Class[]{policy}, proxyHandler);
-                if (proxy == null) {
-                    throw new IllegalStateException("proxy is null");
-                }
                 proxyPolicy = new ProxyPolicy(proxy, proxyHandler);
             }
             proxiesByPolicyClass.put(policy, proxyPolicy);
