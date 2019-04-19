@@ -18,7 +18,7 @@ subprojects {
 
         compileOnly "javax.servlet:servlet-api:${project.ext.servletVersion}"
         compileOnly "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
-        compile project(":event-bus:event-bus-${project.ext.simpleAlfrescoVersion}")
+        compile project(":event-bus")
 
         compileOnly "org.jetbrains:annotations:$jetbrains_annotations_version"
     }
