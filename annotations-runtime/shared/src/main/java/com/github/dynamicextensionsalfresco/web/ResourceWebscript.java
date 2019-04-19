@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.function.Function;
 import javax.servlet.http.HttpServletResponse;
-import kotlin.jvm.internal.Intrinsics;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.framework.BundleContext;
@@ -59,7 +58,9 @@ public final class ResourceWebscript extends AbstractBundleResourceHandler imple
     };
 
     public ResourceWebscript(@NotNull BundleContext bundleContext) {
-        Intrinsics.checkParameterIsNotNull(bundleContext, "bundleContext");
+        if (bundleContext == null) {
+            throw new IllegalArgumentException("bundleContext is null");
+        }
 
         this.bundleContext = bundleContext;
         this.module = bundleContext.getBundle().getSymbolicName().replace(".", "-").toLowerCase();
@@ -103,7 +104,9 @@ public final class ResourceWebscript extends AbstractBundleResourceHandler imple
     }
 
     private boolean shouldNotCache(@NotNull String path) {
-        Intrinsics.checkParameterIsNotNull(path, "path");
+        if (path == null) {
+            throw new IllegalArgumentException("path is null");
+        }
         return path.endsWith(".map");
     }
 

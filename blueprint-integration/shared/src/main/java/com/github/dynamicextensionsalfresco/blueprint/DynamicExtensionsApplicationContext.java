@@ -30,7 +30,6 @@ import com.github.dynamicextensionsalfresco.workflow.activiti.WorkflowTaskRegist
 import com.github.dynamicextensionsalfresco.workflow.activiti.WorkflowTaskRegistry;
 import java.io.IOException;
 import java.util.Collection;
-import kotlin.jvm.internal.Intrinsics;
 import org.alfresco.service.descriptor.Descriptor;
 import org.alfresco.service.descriptor.DescriptorService;
 import org.alfresco.service.namespace.NamespacePrefixResolver;
@@ -127,7 +126,9 @@ public class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicatio
 
     @Override
     protected void loadBeanDefinitions(@NotNull DefaultListableBeanFactory beanFactory) throws IOException {
-        Intrinsics.checkParameterIsNotNull(beanFactory, "beanFactory");
+        if (beanFactory == null) {
+            throw new IllegalArgumentException("beanFactory is null");
+        }
 
         boolean isAlfrescoDynamicExtension = this.isAlfrescoDynamicExtension();
         if (this.hasSpringConfigurationHeader()) {
@@ -154,9 +155,9 @@ public class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicatio
     }
 
     @Override
-    protected void initBeanDefinitionReader(@Nullable XmlBeanDefinitionReader beanDefinitionReader) {
+    protected void initBeanDefinitionReader(@NotNull XmlBeanDefinitionReader beanDefinitionReader) {
         if (beanDefinitionReader == null) {
-            Intrinsics.throwNpe();
+            throw new IllegalArgumentException("beanDefinitionReader is null");
         }
 
         beanDefinitionReader.setResourceLoader(this);
@@ -176,7 +177,9 @@ public class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicatio
 
     @Override
     protected void cancelRefresh(@NotNull BeansException ex) {
-        Intrinsics.checkParameterIsNotNull(ex, "ex");
+        if (ex == null) {
+            throw new IllegalArgumentException("ex is null");
+        }
         super.cancelRefresh(ex);
 
         try {
@@ -285,7 +288,9 @@ public class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicatio
      * Registers infrastructure beans for additional services such as annotation-based Behaviours.
      */
     protected void registerInfrastructureBeans(DefaultListableBeanFactory beanFactory) {
-        Intrinsics.checkParameterIsNotNull(beanFactory, "beanFactory");
+        if (beanFactory == null) {
+            throw new IllegalArgumentException("beanFactory is null");
+        }
         registerContentSupportBeans(beanFactory);
         registerModelDeploymentBeans(beanFactory);
         registerWorkflowDeployment(beanFactory);
@@ -341,9 +346,15 @@ public class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicatio
 
     private void bean(@NotNull BeanDefinitionRegistry beanFactory, @NotNull BeanNames name,
             @NotNull Class beanClass, @Nullable BeanDefinitionBuilderCustomizer body) {
-        Intrinsics.checkParameterIsNotNull(beanFactory, "beanFactory");
-        Intrinsics.checkParameterIsNotNull(name, "name");
-        Intrinsics.checkParameterIsNotNull(beanClass, "beanClass");
+        if (beanFactory == null) {
+            throw new IllegalArgumentException("beanFactory is null");
+        }
+        if (name == null) {
+            throw new IllegalArgumentException("name is null");
+        }
+        if (beanClass == null) {
+            throw new IllegalArgumentException("beanClass is null");
+        }
 
         if (!beanFactory.containsBeanDefinition(name.id())) {
             BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.rootBeanDefinition(beanClass);

@@ -1,7 +1,6 @@
 package com.github.dynamicextensionsalfresco.policy;
 
 import java.lang.reflect.Method;
-import kotlin.jvm.internal.Intrinsics;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,7 +18,9 @@ public final class DescriptiveJavaBehaviour extends JavaBehaviour {
             @Nullable NotificationFrequency frequency) {
         super(instance, methodReference.getName(), frequency);
 
-        Intrinsics.checkParameterIsNotNull(methodReference, "methodReference");
+        if (methodReference == null) {
+            throw new IllegalArgumentException("methodReference is null");
+        }
         this.methodReference = methodReference;
     }
 

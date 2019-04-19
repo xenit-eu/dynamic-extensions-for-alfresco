@@ -1,7 +1,5 @@
 subprojects {
 
-    apply plugin: 'kotlin'
-
     configurations {
         testCompile.extendsFrom(compileOnly)
     }
@@ -17,6 +15,7 @@ subprojects {
         compileOnly("org.alfresco:alfresco-repository") { transitive = false }
 
         compileOnly "org.slf4j:slf4j-api"
+        compileOnly "org.jetbrains:annotations:$jetbrains_annotations_version"
 
         compile "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
         compile "javax.servlet:servlet-api:${project.ext.servletVersion}"
@@ -29,7 +28,5 @@ subprojects {
         testCompile "junit:junit:${project.ext.junitVersion}"
         testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
         testCompile "org.springframework:spring-test"
-
-        testCompile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     }
 }

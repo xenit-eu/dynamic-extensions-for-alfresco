@@ -4,7 +4,6 @@ import com.github.dynamicextensionsalfresco.event.Event;
 import com.github.dynamicextensionsalfresco.event.EventBus;
 import com.github.dynamicextensionsalfresco.event.EventListener;
 import java.util.Arrays;
-import kotlin.jvm.internal.Intrinsics;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
@@ -20,14 +19,18 @@ public final class DefaultEventBus implements EventBus {
     private final BundleContext bundleContext;
 
     public DefaultEventBus(@NotNull BundleContext bundleContext) {
-        Intrinsics.checkParameterIsNotNull(bundleContext, "bundleContext");
+        if (bundleContext == null) {
+            throw new IllegalArgumentException("bundleContext is null");
+        }
 
         this.bundleContext = bundleContext;
     }
 
     @SuppressWarnings("unchecked")
     public void publish(@NotNull final Event event) {
-        Intrinsics.checkParameterIsNotNull(event, "event");
+        if (event == null) {
+            throw new IllegalArgumentException("event is null");
+        }
 
         try {
             ServiceReference<?>[] serviceReferences = bundleContext

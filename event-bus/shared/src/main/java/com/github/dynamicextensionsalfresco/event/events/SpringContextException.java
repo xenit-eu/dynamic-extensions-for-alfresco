@@ -1,7 +1,6 @@
 package com.github.dynamicextensionsalfresco.event.events;
 
 import com.github.dynamicextensionsalfresco.event.Event;
-import kotlin.jvm.internal.Intrinsics;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.framework.Bundle;
 
@@ -16,8 +15,12 @@ public final class SpringContextException implements Event {
     private final Exception exception;
 
     public SpringContextException(@NotNull Bundle bundle, @NotNull Exception exception) {
-        Intrinsics.checkParameterIsNotNull(bundle, "bundle");
-        Intrinsics.checkParameterIsNotNull(exception, "exception");
+        if (bundle == null) {
+            throw new IllegalArgumentException("bundle is null");
+        }
+        if (exception == null) {
+            throw new IllegalArgumentException("exception is null");
+        }
 
         this.bundle = bundle;
         this.exception = exception;

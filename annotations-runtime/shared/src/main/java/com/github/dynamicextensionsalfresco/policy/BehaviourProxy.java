@@ -8,7 +8,6 @@ import java.lang.reflect.Proxy;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
-import kotlin.jvm.internal.Intrinsics;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.Policy;
 import org.alfresco.repo.policy.PolicyComponent;
@@ -36,8 +35,12 @@ public final class BehaviourProxy implements Behaviour {
     private final Timer timer;
 
     public BehaviourProxy(@NotNull Behaviour behaviour, @NotNull Timer timer) {
-        Intrinsics.checkParameterIsNotNull(behaviour, "behaviour");
-        Intrinsics.checkParameterIsNotNull(timer, "timer");
+        if (behaviour == null) {
+            throw new IllegalArgumentException("behaviour is null");
+        }
+        if (timer == null) {
+            throw new IllegalArgumentException("timer is null");
+        }
 
         this.behaviour = behaviour;
         this.timer = timer;
@@ -57,7 +60,6 @@ public final class BehaviourProxy implements Behaviour {
                         this.timer);
                 Object proxy = Proxy
                         .newProxyInstance(this.getClass().getClassLoader(), new Class[]{policy}, proxyHandler);
-                Intrinsics.checkExpressionValueIsNotNull(proxy, "proxy");
                 proxyPolicy = new ProxyPolicy(proxy, proxyHandler);
             } else {
                 Object originalHandler = this.behaviour.getInterface(policy);
@@ -65,7 +67,6 @@ public final class BehaviourProxy implements Behaviour {
                         this.behaviour, this.timer);
                 Object proxy = Proxy
                         .newProxyInstance(this.getClass().getClassLoader(), new Class[]{policy}, proxyHandler);
-                Intrinsics.checkExpressionValueIsNotNull(proxy, "proxy");
                 proxyPolicy = new ProxyPolicy(proxy, proxyHandler);
             }
             proxiesByPolicyClass.put(policy, proxyPolicy);
@@ -124,7 +125,9 @@ public final class BehaviourProxy implements Behaviour {
 
         public ProxyPolicyInvocationHandler(@Nullable Object target, @Nullable Behaviour behaviour,
                 @NotNull Timer timer) {
-            Intrinsics.checkParameterIsNotNull(timer, "timer");
+            if (timer == null) {
+                throw new IllegalArgumentException("timer is null");
+            }
 
             this.target = target;
             this.behaviour = behaviour;
@@ -135,8 +138,12 @@ public final class BehaviourProxy implements Behaviour {
         @Nullable
         public Object invoke(@NotNull Object proxy, @NotNull final Method method, @Nullable final Object[] args)
                 throws Throwable {
-            Intrinsics.checkParameterIsNotNull(proxy, "proxy");
-            Intrinsics.checkParameterIsNotNull(method, "method");
+            if (proxy == null) {
+                throw new IllegalArgumentException("proxy is null");
+            }
+            if (method == null) {
+                throw new IllegalArgumentException("method is null");
+            }
 
             if (method.getDeclaringClass().isAssignableFrom(Object.class)) {
                 // Direct Object methods to ourselves.
@@ -196,7 +203,9 @@ public final class BehaviourProxy implements Behaviour {
         private final ProxyPolicyInvocationHandler handler;
 
         public ProxyPolicy(@NotNull Object proxy, @NotNull ProxyPolicyInvocationHandler handler) {
-            Intrinsics.checkParameterIsNotNull(proxy, "proxy");
+            if (proxy == null) {
+                throw new IllegalArgumentException("proxy is null");
+            }
 
             this.proxy = proxy;
             this.handler = handler;

@@ -4,7 +4,6 @@ import com.github.dynamicextensionsalfresco.webscripts.WebScriptUriRegistry;
 import java.io.IOException;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import kotlin.TypeCastException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.framework.BundleContext;
@@ -86,7 +85,7 @@ public final class WebResourcesRegistrar implements ResourceLoaderAware {
 
     public void setResourceLoader(@Nullable ResourceLoader resourceLoader) {
         if (resourceLoader == null) {
-            throw new TypeCastException(
+            throw new IllegalArgumentException(
                     "null cannot be cast to non-null type org.springframework.core.io.support.ResourcePatternResolver");
         } else {
             this.resourcePatternResolver = (ResourcePatternResolver) resourceLoader;

@@ -5,8 +5,6 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import kotlin.collections.CollectionsKt;
-import kotlin.jvm.internal.Intrinsics;
 import org.alfresco.repo.action.executer.ActionExecuter;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -30,8 +28,12 @@ public final class ActionMethodMapping {
     private final Method method;
 
     public ActionMethodMapping(@NotNull Object bean, @NotNull Method method) {
-        Intrinsics.checkParameterIsNotNull(bean, "bean");
-        Intrinsics.checkParameterIsNotNull(method, "method");
+        if (bean == null) {
+            throw new IllegalArgumentException("bean is null");
+        }
+        if (method == null) {
+            throw new IllegalArgumentException("method is null");
+        }
         this.bean = bean;
         this.method = method;
         this.parameterMappingsByName = new HashMap<>();
@@ -55,7 +57,9 @@ public final class ActionMethodMapping {
     }
 
     public final void invokeActionMethod(@NotNull Action action, @Nullable NodeRef nodeRef) {
-        Intrinsics.checkParameterIsNotNull(action, "action");
+        if (action == null) {
+            throw new IllegalArgumentException("action is null");
+        }
 
         Object[] parameters = new Object[this.parameterCount];
         if (this.nodeRefParameterIndex > -1) {
@@ -76,7 +80,7 @@ public final class ActionMethodMapping {
             }
             /* Single values for a multi-valued property are wrapped in an ArrayList automatically. */
             if (parameterMapping.isMultivalued() && !(value instanceof Collection)) {
-                value = CollectionsKt.arrayListOf(value);
+                value = Arrays.asList(value);
             }
             parameters[parameterMapping.getIndex()] = value;
         }
@@ -85,13 +89,17 @@ public final class ActionMethodMapping {
     }
 
     public final boolean hasParameter(@NotNull String name) {
-        Intrinsics.checkParameterIsNotNull(name, "name");
+        if (name == null) {
+            throw new IllegalArgumentException("name is null");
+        }
 
         return this.parameterMappingsByName.containsKey(name);
     }
 
     public final void addParameterMapping(@NotNull ParameterMapping parameterMapping) {
-        Intrinsics.checkParameterIsNotNull(parameterMapping, "parameterMapping");
+        if (parameterMapping == null) {
+            throw new IllegalArgumentException("parameterMapping is null");
+        }
 
         String name = parameterMapping.getName();
         if (!this.parameterMappingsByName.containsKey(name)) {
