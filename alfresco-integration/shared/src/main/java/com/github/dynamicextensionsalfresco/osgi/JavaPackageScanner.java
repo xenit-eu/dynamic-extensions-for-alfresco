@@ -139,7 +139,7 @@ public class JavaPackageScanner implements ServletContextAware {
 				}
 			} catch (BundleManifestParseException e) {
 				if (logger.isDebugEnabled()) {
-					logger.debug(String.format("Failed to parse manifest for %s, reverting to content scanning.", jarFile), e);
+					logger.debug(String.format("Failed to parse manifest for %s, reverting to content scanning.", jarFile.getName()), e);
 				}
 			}
 		}

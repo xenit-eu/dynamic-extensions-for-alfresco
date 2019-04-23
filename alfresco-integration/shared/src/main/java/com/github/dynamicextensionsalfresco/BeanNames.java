@@ -48,7 +48,8 @@ public enum BeanNames {
 
     OSGI_SERVICE_REGISTRAR("osgiServiceRegistrar"),
 
-	QUARTZ_JOB_REGISTRAR("quartzJobRegistrar"),
+	SCHEDULED_TASK_REGISTRAR("scheduledTaskRegistrar"),
+	QUARTZ_TASK_SCHEDULER("quartzTaskScheduler"),
 
 	RESOURCES_WEB("resourcesWeb"),
 

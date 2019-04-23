@@ -25,6 +25,9 @@ com.github.dynamicextensionsalfresco.policy
 com.github.dynamicextensionsalfresco.aop
 com.github.dynamicextensionsalfresco.webscripts
 com.github.dynamicextensionsalfresco.webscripts.arguments
+com.github.dynamicextensionsalfresco.schedule
+com.github.dynamicextensionsalfresco.schedule.quartz1
+com.github.dynamicextensionsalfresco.schedule.quartz2
 
 # Models
 com.github.dynamicextensionsalfresco.models

@@ -9,19 +9,19 @@ subprojects {
 
         compile project(':annotations')
         compile project(":webscripts")
+        compile project(':annotations-runtime-schedule') // schedule abstraction
 
         compileOnly "org.apache.felix:org.apache.felix.framework:${project.ext.felixVersion}"
 
         compileOnly "org.slf4j:slf4j-api"
         compileOnly("org.alfresco.surf:spring-webscripts") { 
-            exclude group: "org.quartz-scheduler"
+            exclude group: "org.schedule-schedule"
         }
         compileOnly("org.alfresco:alfresco-data-model") { transitive = false }
         compileOnly("org.alfresco:alfresco-repository") { transitive = false }
         compileOnly("org.alfresco:alfresco-core") { transitive = false }
 
         compileOnly "org.alfresco:freemarker"
-        compileOnly('org.quartz-scheduler:quartz') { transitive = false }
 
         compileOnly "javax.servlet:servlet-api:${project.ext.servletVersion}"
         compileOnly('org.springframework:spring-aop') { transitive = false }

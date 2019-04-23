@@ -1,3 +1,3 @@
 ext {
-    excludedSharedFiles = ["MessageConverterRegistry.java", "QuartzJobRegistrar.java"]
+    excludedSharedFiles = ["MessageConverterRegistry.java"]
 }

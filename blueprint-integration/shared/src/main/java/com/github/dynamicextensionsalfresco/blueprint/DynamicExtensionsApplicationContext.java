@@ -14,9 +14,11 @@ import com.github.dynamicextensionsalfresco.osgi.webscripts.SearchPathRegistryMa
 import com.github.dynamicextensionsalfresco.policy.AnnotationBasedBehaviourRegistrar;
 import com.github.dynamicextensionsalfresco.policy.DefaultBehaviourProxyFactory;
 import com.github.dynamicextensionsalfresco.policy.ProxyPolicyComponentFactoryBean;
-import com.github.dynamicextensionsalfresco.quartz.QuartzJobRegistrar;
 import com.github.dynamicextensionsalfresco.resources.DefaultBootstrapService;
 import com.github.dynamicextensionsalfresco.resources.ResourceHelper;
+import com.github.dynamicextensionsalfresco.schedule.ScheduledTaskRegistrar;
+import com.github.dynamicextensionsalfresco.schedule.quartz.QuartzTaskScheduler;
+import com.github.dynamicextensionsalfresco.schedule.quartz2.Quartz2TaskScheduler;
 import com.github.dynamicextensionsalfresco.web.WebResourcesRegistrar;
 import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptBuilder;
 import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptRegistrar;
@@ -33,6 +35,7 @@ import java.util.Collection;
 import org.alfresco.service.descriptor.Descriptor;
 import org.alfresco.service.descriptor.DescriptorService;
 import org.alfresco.service.namespace.NamespacePrefixResolver;
+import org.alfresco.util.VersionNumber;
 import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -291,6 +294,9 @@ public class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicatio
         if (beanFactory == null) {
             throw new IllegalArgumentException("beanFactory is null");
         }
+
+        Descriptor serverDescriptor = this.getService(DescriptorService.class).getServerDescriptor();
+
         registerContentSupportBeans(beanFactory);
         registerModelDeploymentBeans(beanFactory);
         registerWorkflowDeployment(beanFactory);
@@ -301,7 +307,7 @@ public class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicatio
         registerAopProxyBeans(beanFactory);
         registerWorkflowBeans(beanFactory);
         registerOsgiServiceBeans(beanFactory);
-        registerQuartzBeans(beanFactory);
+        registerTaskSchedulingBeans(beanFactory, serverDescriptor);
         registerMetrics(beanFactory);
         registerWebResources(beanFactory);
     }
@@ -494,8 +500,19 @@ public class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicatio
         this.bean(beanFactory, BeanNames.OSGI_SERVICE_REGISTRAR, OsgiServiceRegistrar.class);
     }
 
-    private void registerQuartzBeans(DefaultListableBeanFactory beanFactory) {
-        this.bean(beanFactory, BeanNames.QUARTZ_JOB_REGISTRAR, QuartzJobRegistrar.class, beanAutowireByType);
+    void registerTaskSchedulingBeans(DefaultListableBeanFactory beanFactory, Descriptor serverDescriptor) {
+
+        VersionNumber version = serverDescriptor.getVersionNumber();
+
+
+        if (version.compareTo(new VersionNumber("6.0")) >= 0) {
+            // From Alfresco 6.x, we
+            this.bean(beanFactory, BeanNames.QUARTZ_TASK_SCHEDULER, Quartz2TaskScheduler.class, beanAutowireByType);
+        } else  {
+            // Fallback to ScheduledTaskRegistrar on Alfresco 5.x
+            this.bean(beanFactory, BeanNames.QUARTZ_TASK_SCHEDULER, QuartzTaskScheduler.class, beanAutowireByType);
+        }
+        this.bean(beanFactory, BeanNames.SCHEDULED_TASK_REGISTRAR, ScheduledTaskRegistrar.class, beanAutowireByType);
     }
 
     private void registerMetrics(DefaultListableBeanFactory beanFactory) {

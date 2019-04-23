@@ -1,6 +1,5 @@
-package com.github.dynamicextensionsalfresco.jobs;
+package com.github.dynamicextensionsalfresco.schedule;
 
-import com.github.dynamicextensionsalfresco.schedule.ScheduledTask;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -8,13 +7,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @deprecated Replaced by vendor-neutral drop-in replacement {@link ScheduledTask}"
+ * Register any class implementing {@link Task} as a task to be scheduled
  */
+
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Deprecated
-public @interface ScheduledQuartzJob {
+public @interface ScheduledTask {
 
     /**
      * A cron-like expression, extending the usual UN*X definition to include triggers on the second as well as minute,
@@ -26,7 +25,7 @@ public @interface ScheduledQuartzJob {
     String cron();
 
     /**
-     * @return the unique name of the Quartz job shown in JMX/admin page
+     * @return the unique name of the task
      */
     String name();
 
