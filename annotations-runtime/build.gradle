@@ -42,7 +42,7 @@ subprojects {
 
         compileOnly "com.fasterxml.jackson.core:jackson-databind"
 
-        testCompile project(":event-bus:event-bus-${project.ext.simpleAlfrescoVersion}")
+        testCompile project(":event-bus")
 
         testCompile "junit:junit:${project.ext.junitVersion}"
         testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"

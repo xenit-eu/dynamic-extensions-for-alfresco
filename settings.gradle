@@ -5,6 +5,7 @@ enableFeaturePreview('STABLE_PUBLISHING')
 
 include 'annotations'
 include 'webscripts'
+include 'event-bus'
 
 include 'gradle-plugin'
 
@@ -16,8 +17,7 @@ def alfrescoDependentModules =
                 'annotations-runtime',
                 'blueprint-integration',
                 'blueprint-override',
-                'control-panel',
-                'event-bus'
+                'control-panel'
         ]
 
 alfrescoDependentModules.each { moduleId ->

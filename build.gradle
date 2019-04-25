@@ -213,10 +213,11 @@ configure((
                 - project(':gradle-plugin')
                 - project(':annotations')
                 - project(':webscripts')
-                - project(':integration-tests')), {
+                - project(':integration-tests')
+                - project(':event-bus')), {
     subprojects allSubProjectsConfig << subSubProjectsConfig
 })
-configure([project(':gradle-plugin'), project(':annotations'), project(':webscripts')], allSubProjectsConfig)
+configure([project(':gradle-plugin'), project(':annotations'), project(':webscripts'), project(':event-bus')], allSubProjectsConfig)
 
 defaultTasks 'build'
 
