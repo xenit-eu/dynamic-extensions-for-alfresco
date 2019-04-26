@@ -1,10 +1,10 @@
 package com.github.dynamicextensionsalfresco.quartz;
 
 import com.github.dynamicextensionsalfresco.jobs.ScheduledQuartzJob;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
+import org.alfresco.repo.lock.JobLockService;
 import org.alfresco.schedule.AbstractScheduledLockedJob;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.Assert;
@@ -30,46 +31,71 @@ import org.springframework.util.Assert;
  * the implementation for older Alfresco versions.
  */
 public class QuartzJobRegistrar implements ApplicationContextAware, InitializingBean, DisposableBean {
+
+
     private Logger logger = LoggerFactory.getLogger(QuartzJobRegistrar.class);
 
-    public final static String BEAN_ID="bean";
+    public final static String BEAN_ID = "bean";
+    public static final String JOB_LOCK_SERVICE = "jobLockService";
+
+    private ArrayList<ScheduledQuartzJob> registeredJobs = new ArrayList<ScheduledQuartzJob>();
 
     @Autowired
     protected Scheduler scheduler;
-    private ArrayList<ScheduledQuartzJob> registeredJobs = new ArrayList<ScheduledQuartzJob>();
+
+    @Autowired
+    protected JobLockService jobLockService;
+
+    @Autowired
+    @Qualifier("global-properties")
+    protected Properties globalProperties = new Properties();
 
     private ApplicationContext applicationContext;
 
     @Override
-    public void afterPropertiesSet() throws ParseException, SchedulerException {
+    public void afterPropertiesSet() {
+        this.registerScheduledQuartzJobAnnotatedBeans();
+    }
+
+    public void registerScheduledQuartzJobAnnotatedBeans() {
         Map<String, Object> scheduledBeans = applicationContext.getBeansWithAnnotation(ScheduledQuartzJob.class);
         for (Map.Entry entry : scheduledBeans.entrySet()) {
             Object bean = entry.getValue();
-            Assert.isInstanceOf(Job.class, bean, "annotated Quartz job classes should implement org.quartz.Job");
-
-            ScheduledQuartzJob annotation = bean.getClass().getAnnotation(ScheduledQuartzJob.class);
-
             try {
-                String cron = applicationContext.getBean("global-properties", Properties.class).getProperty(annotation.cronProp(), annotation.cron());
-                CronTrigger trigger =TriggerBuilder.newTrigger()
-                        .withIdentity(annotation.name(), annotation.group())
-                        .withSchedule(CronScheduleBuilder.cronSchedule(cron))
-                        .build();
-                JobDataMap map = new JobDataMap();
-                map.put(BEAN_ID, bean);
-                JobDetail jobDetail = JobBuilder.newJob(annotation.cluster() ? AbstractScheduledLockedJob.class : GenericQuartzJob.class)
-                        .withIdentity(annotation.name(), annotation.group())
-                        .usingJobData(map)
-                        .build();
-                scheduler.scheduleJob(jobDetail, trigger);
-
-                registeredJobs.add(annotation);
-
-                logger.debug("scheduled job " + annotation.name() + " from group " + annotation.group() + " using cron " + annotation.cron());
+                this.registerJob(bean);
             } catch (Exception e) {
-                logger.error("failed to register job " + annotation.name() + " using cron " + annotation.group(), e);
+                logger.error("Failed to register job: ", e);
             }
         }
+    }
+
+    public void registerJob(Object bean) throws SchedulerException {
+        Assert.isInstanceOf(Job.class, bean, "annotated Quartz job classes should implement org.quartz.Job");
+
+        ScheduledQuartzJob annotation = bean.getClass().getAnnotation(ScheduledQuartzJob.class);
+
+        String cron = this.globalProperties.getProperty(annotation.cronProp(), annotation.cron());
+        CronTrigger trigger = TriggerBuilder.newTrigger()
+                .withIdentity(annotation.name(), annotation.group())
+                .withSchedule(CronScheduleBuilder.cronSchedule(cron))
+                .build();
+        JobDataMap map = new JobDataMap();
+        map.put(BEAN_ID, bean);
+        map.put(JOB_LOCK_SERVICE, this.jobLockService);
+        map.put("name", trigger.getKey().toString());
+
+        JobDetail jobDetail = JobBuilder
+                .newJob(annotation.cluster() ? ClusterLockedJob.class : GenericQuartzJob.class)
+                .withIdentity(annotation.name(), annotation.group())
+                .usingJobData(map)
+                .build();
+        scheduler.scheduleJob(jobDetail, trigger);
+
+        registeredJobs.add(annotation);
+
+        logger.debug("scheduled job " + annotation.name() + " from group " + annotation.group() + " using cron "
+                + annotation.cron());
+
     }
 
     @Override
@@ -86,6 +112,14 @@ public class QuartzJobRegistrar implements ApplicationContextAware, Initializing
 
     public void setApplicationContext(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
+    }
+
+    public void setScheduler(Scheduler scheduler) {
+        this.scheduler = scheduler;
+    }
+
+    public void setJobLockService(JobLockService jobLockService) {
+        this.jobLockService = jobLockService;
     }
 
 }
