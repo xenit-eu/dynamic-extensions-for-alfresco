@@ -75,6 +75,7 @@ public class QuartzJobRegistrar implements ApplicationContextAware, Initializing
         JobDataMap map = new JobDataMap();
         map.put(BEAN_ID, bean);
         map.put(JOB_LOCK_SERVICE, this.jobLockService);
+        map.put("name", trigger.getKey().toString());
 
         jobDetail.setJobDataMap(map);
         scheduler.scheduleJob(jobDetail, trigger);
