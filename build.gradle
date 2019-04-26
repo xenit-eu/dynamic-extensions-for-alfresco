@@ -149,7 +149,7 @@ def allSubProjectsConfig = {
         geminiVersion = Versions.geminiVersions.get(simpleAlfrescoVersion)
 
         osgiVersion = '4.3.1'
-        felixVersion = '4.2.1'
+        felixVersion = '6.0.2'
 
         slf4jVersion = '1.7.7'
         junitVersion = '4.12'

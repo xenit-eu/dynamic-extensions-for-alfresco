@@ -13,6 +13,7 @@ services:
                 -Djodconverter.enabled=false
                 -Ddeployment.method=DOCKER_COMPOSE
                 -Dcsrf.filter.enabled=false
+                -Dmessaging.subsystem.autoStart=false
                 -Xms1g -Xmx1g
                 -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000
                 "
