@@ -51,6 +51,11 @@ configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
     dependencies {
         baseAlfrescoWar "${alfrescoBaseWar}"
         alfrescoAmp project(path: ":alfresco-dynamic-extensions-repo:alfresco-dynamic-extensions-repo-${alfrescoVersion}", configuration: 'ampArtifact')
+
+        if ("61" == "${alfrescoVersion}") {
+            // Workaround for https://issues.alfresco.com/jira/browse/MNT-20557
+            alfrescoAmp "eu.xenit.alfresco:alfresco-hotfix-MNT-20557:1.0.1@amp"
+        }
         
         baseShareWar "${shareBaseWar}"
     }
@@ -68,10 +73,6 @@ configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
     createDockerFile {
         // Workaround for https://issues.alfresco.com/jira/browse/MNT-20007
         runCommand("sed -i 's|<secure>true</secure>|<secure>false</secure>|g' /usr/local/tomcat/conf/web.xml")
-
-        // Workaround for https://issues.alfresco.com/jira/browse/MNT-20557
-        runCommand("rm -f /usr/local/tomcat/webapps/alfresco/WEB-INF/lib/jsr250-api-1.0.jar")
-        runCommand("rm -f /usr/local/tomcat/webapps/alfresco/WEB-INF/lib/geronimo-annotation_1.0_spec-1.1.1.jar")
     }
 
     dockerCompose {
