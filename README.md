@@ -80,8 +80,11 @@ of the `Resource` class embedded in the distribution, and the
 [`bootstrap` classloader has the highest priority](https://tomcat.apache.org/tomcat-9.0-doc/class-loader-howto.html).
 
 This issue has been reported to Alfresco: [MNT-20557](https://issues.alfresco.com/jira/browse/MNT-20557). 
-As a workaround DE can work on Alfresco 6.1 if the `jsr250-api` and `geronimo-annotation_1.0_spec` jars are 
-removed from the `WEB-INF/lib` folder.
+Waiting for Alfresco to fix the issue, following workarounds can be used to make DE work on Alfresco 6.1:
+
+* Remove the `jsr250-api` and `geronimo-annotation_1.0_spec` jars from the `WEB-INF/lib` folder of the Alfresco webapp.
+* Install [this hotfix AMP](https://github.com/xenit-eu/alfresco-hotfix-MNT-20557) in your Alfresco distribution, 
+which will overwrite the `jsr250-api` and `geronimo-annotation_1.0_spec` jars with empty jars.
 
 Example extension code
 ----------------------
