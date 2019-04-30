@@ -42,6 +42,8 @@ subprojects {
 
         compileOnly "com.fasterxml.jackson.core:jackson-databind"
 
+
+        testCompile "${project.ext.alfrescoBom}"
         testCompile project(":event-bus")
 
         testCompile "junit:junit:${project.ext.junitVersion}"
@@ -49,9 +51,7 @@ subprojects {
 
         testCompile "org.springframework:spring-test"
 
-        // testCompile ('org.springframework:spring-beans') { transitive = false }
-        // testCompile ('org.springframework:spring-context') { transitive = false }
-        // testCompile ('org.springframework:spring-core') { transitive = false }
+        testCompile('org.quartz-scheduler:quartz') { transitive = false }
 
         testRuntime "org.mybatis:mybatis"
         testRuntime("org.hibernate:hibernate:${project.ext.hibernateVersion}") {
@@ -61,8 +61,9 @@ subprojects {
         testRuntime 'cglib:cglib-nodep:2.2'
         testRuntime 'xerces:xercesImpl:2.8.0'
 
-        testCompile "com.fasterxml.jackson.core:jackson-databind"
 
+
+        testCompile "com.fasterxml.jackson.core:jackson-databind"
         testCompile 'javax.xml.bind:jaxb-api:2.4.0-b180725.0427'
     }
 }
