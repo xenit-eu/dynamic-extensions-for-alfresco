@@ -15,7 +15,7 @@ subprojects {
 
         compileOnly "org.slf4j:slf4j-api"
         compileOnly("org.alfresco.surf:spring-webscripts") { 
-            exclude group: "org.schedule-schedule"
+            exclude group: "org.quartz-scheduler"
         }
         compileOnly("org.alfresco:alfresco-data-model") { transitive = false }
         compileOnly("org.alfresco:alfresco-repository") { transitive = false }
