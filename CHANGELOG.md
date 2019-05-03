@@ -24,6 +24,8 @@ Version template:
 ## [2.0.0] - UNRELEASED
 ### Changed
 * Build process refactored to build and compile for specific Alfresco versions
+* `@ScheduledQuartzJob` deprecated in favour for vendor-neutral `@ScheduledTask`
+
 ### Added
 * Alfresco 6 support
 
@@ -44,14 +46,14 @@ Version template:
 
 ## [1.7.3] - 2017-12-22
 ### Added
-* [#167](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issue/167) Make WebScripts work with HttpEntity return value
-* [#169](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issue/169) Add an issue and pull request template
+* [#167](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/167) Make WebScripts work with HttpEntity return value
+* [#169](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/169) Add an issue and pull request template
 
 
 ## [1.7.2] - 2017-12-11
 ### Fixed
-* [#156](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issue/156) NullPointerException in GenericQuartzJob
-* [#160](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issue/160) Dynamic Extensions 1.7.1 fails to load on Alfresco 4.2.4
+* [#156](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/156) NullPointerException in GenericQuartzJob
+* [#160](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/160) Dynamic Extensions 1.7.1 fails to load on Alfresco 4.2.4
 
 
 ## [1.7.1] - 2017-10-16

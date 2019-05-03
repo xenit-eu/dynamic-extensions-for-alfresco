@@ -4,6 +4,9 @@ subprojects {
     dependencies {
         compileOnly "${project.ext.alfrescoBom}"
 
+        compile project(':annotations-runtime-schedule:scheduler-quartz-1')
+        compile project(':annotations-runtime-schedule:scheduler-quartz-2')
+
         compile project(":annotations-runtime:annotations-runtime-${project.ext.simpleAlfrescoVersion}")
         compile project(":alfresco-integration:alfresco-integration-${project.ext.simpleAlfrescoVersion}")
 
@@ -21,6 +24,18 @@ subprojects {
         compile project(":event-bus")
 
         compileOnly "org.jetbrains:annotations:$jetbrains_annotations_version"
+
+
+        testCompile "${project.ext.alfrescoBom}"
+
+        testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
+        testCompile "junit:junit:${project.ext.junitVersion}"
+        testCompile('org.springframework:spring-beans') { transitive = false }
+        testCompile("org.alfresco:alfresco-repository")
+
+        testCompile("org.eclipse.gemini.blueprint:gemini-blueprint-extender:${project.ext.geminiVersion}") {
+            exclude group: "org.springframework"
+        }
     }
 
     jar {

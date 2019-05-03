@@ -1,0 +1,27 @@
+plugins {
+    id 'java'
+}
+
+configurations {
+    testCompile.extendsFrom(compileOnly)
+}
+
+dependencies {
+
+    compileOnly "eu.xenit.alfresco:alfresco-community-bom:6.0.7-ga"
+
+    compile project(':annotations-runtime-schedule')
+
+    compileOnly('org.quartz-scheduler:quartz') { transitive = false }
+    compileOnly('org.alfresco:alfresco-repository') { transitive = false }
+    compileOnly('org.springframework:spring-beans') { transitive = false }
+    compileOnly('org.springframework:spring-context-support') { transitive = false }
+    compileOnly('org.alfresco:alfresco-repository') { transitive = false }
+    compileOnly "org.slf4j:slf4j-api"
+
+    testCompile "junit:junit:${project.ext.junitVersion}"
+    testCompile('org.springframework:spring-core') { transitive = false }
+    testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
+
+    testRuntime "org.slf4j:slf4j-simple:${slf4jVersion}"
+}

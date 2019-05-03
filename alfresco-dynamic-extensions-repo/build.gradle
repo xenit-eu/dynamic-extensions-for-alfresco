@@ -20,6 +20,10 @@ subprojects {
         ampLib(project(":annotations-runtime:annotations-runtime-${project.ext.simpleAlfrescoVersion}")) {
             transitive = false
         }
+        ampLib(project(":annotations-runtime-schedule")) { transitive = false }
+        ampLib(project(":annotations-runtime-schedule:scheduler-quartz-1")) { transitive = false }
+        ampLib(project(":annotations-runtime-schedule:scheduler-quartz-2")) { transitive = false }
+
         ampLib(project(":webscripts")) { transitive = false }
 
         ampLib("org.apache.felix:org.apache.felix.framework:${project.ext.felixVersion}") { transitive = false }

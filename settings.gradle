@@ -7,7 +7,13 @@ include 'annotations'
 include 'webscripts'
 include 'event-bus'
 
+include 'annotations-runtime-schedule'
+include 'annotations-runtime-schedule:scheduler-quartz-1'
+include 'annotations-runtime-schedule:scheduler-quartz-2'
+
 include 'gradle-plugin'
+
+
 
 
 def alfrescoDependentModules =
