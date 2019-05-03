@@ -31,7 +31,7 @@ public class MessageConverterRegistry {
 
 
     public MessageConverterRegistry() {
-        this.messageConverters = new ArrayList<HttpMessageConverter<?>>();
+        this.messageConverters = new ArrayList<>();
 
         if (jackson2Present) {
             // Json 2 (com.fasterxml) is available in the classpath.
@@ -40,6 +40,8 @@ public class MessageConverterRegistry {
                 // Use the default Spring HttpMessageConverter
                 LOGGER.debug("Adding default converter " + MappingJackson2HttpMessageConverter.class.getName());
                 this.messageConverters.add(new MappingJackson2HttpMessageConverter());
+            } else {
+                LOGGER.warn("MappingJackson2HttpMessageConverter not found on the classpath");
             }
         }
 

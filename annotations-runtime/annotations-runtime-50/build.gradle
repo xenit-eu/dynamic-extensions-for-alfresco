@@ -1,3 +1,0 @@
-ext {
-    excludedSharedFiles = ["MessageConverterRegistry.java"]
-}
