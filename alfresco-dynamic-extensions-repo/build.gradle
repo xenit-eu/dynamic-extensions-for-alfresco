@@ -17,7 +17,7 @@ subprojects {
             transitive = false
         }
         ampLib(project(':annotations')) { transitive = false }
-        ampLib(project(":annotations-runtime:annotations-runtime-${project.ext.simpleAlfrescoVersion}")) {
+        ampLib(project(":annotations-runtime")) {
             transitive = false
         }
         ampLib(project(":annotations-runtime-schedule")) { transitive = false }

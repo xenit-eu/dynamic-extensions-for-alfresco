@@ -26,7 +26,7 @@ nexusStaging {
 allprojects {
     group = 'eu.xenit.de'
     version = '2.0.0-SNAPSHOT'
-    
+
     apply plugin: 'idea'
     apply plugin: 'eclipse'
 
@@ -51,6 +51,8 @@ allprojects {
 // Configuration that should be applied to all subprojects. (If a sub project also has sub projects for different 
 // Alfresco versions, it should not build any artifacts.)
 def allSubProjectsConfig = {
+
+//    println "allSubProjectsConfig for project ${project.name}"
 
     apply plugin: 'java'
     apply plugin: 'jacoco'
@@ -153,7 +155,6 @@ def allSubProjectsConfig = {
 
         slf4jVersion = '1.7.7'
         junitVersion = '4.12'
-        transactionApiVersion = '1.1'
 
         springOsgiUtilVersion = '2.0.5.RELEASE'
         mockitoVersion = '1.10.19'
@@ -217,7 +218,14 @@ configure((
                 - project(':event-bus')), {
     subprojects allSubProjectsConfig << subSubProjectsConfig
 })
-configure([project(':gradle-plugin'), project(':annotations'), project(':webscripts'), project(':event-bus')], allSubProjectsConfig)
+configure(
+        [
+                project(':gradle-plugin'),
+                project(':annotations'),
+                project(':annotations-runtime'),
+                project(':webscripts'),
+                project(':event-bus')],
+        allSubProjectsConfig)
 
 defaultTasks 'build'
 
@@ -263,13 +271,11 @@ allprojects {
                         details.useTarget group: 'org.eclipse.gemini',
                                 name: 'org.eclipse.gemini.blueprint.extender',
                                 version: details.requested.version
-                    }
-                    else if (details.requested.name == 'gemini-blueprint-core') {
+                    } else if (details.requested.name == 'gemini-blueprint-core') {
                         details.useTarget group: 'org.eclipse.gemini',
                                 name: 'org.eclipse.gemini.blueprint.core',
                                 version: details.requested.version
-                    }
-                    else if (details.requested.name == 'gemini-blueprint-io') {
+                    } else if (details.requested.name == 'gemini-blueprint-io') {
                         details.useTarget group: 'org.eclipse.gemini',
                                 name: 'org.eclipse.gemini.blueprint.io',
                                 version: details.requested.version
