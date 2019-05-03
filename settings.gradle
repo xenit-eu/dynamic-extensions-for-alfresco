@@ -8,9 +8,8 @@ include 'webscripts'
 include 'event-bus'
 
 include 'annotations-runtime'
-include 'annotations-runtime-schedule'
-include 'annotations-runtime-schedule:scheduler-quartz-1'
-include 'annotations-runtime-schedule:scheduler-quartz-2'
+include 'annotations-runtime:scheduler-quartz-1'
+include 'annotations-runtime:scheduler-quartz-2'
 
 include 'gradle-plugin'
 

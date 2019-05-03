@@ -7,7 +7,6 @@ dependencies {
 
     compile project(':annotations')
     compile project(":webscripts")
-    compile project(':annotations-runtime-schedule') // schedule abstraction
 
     compileOnly "org.apache.felix:org.apache.felix.framework:${project.ext.felixVersion}"
 

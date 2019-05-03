@@ -20,9 +20,8 @@ subprojects {
         ampLib(project(":annotations-runtime")) {
             transitive = false
         }
-        ampLib(project(":annotations-runtime-schedule")) { transitive = false }
-        ampLib(project(":annotations-runtime-schedule:scheduler-quartz-1")) { transitive = false }
-        ampLib(project(":annotations-runtime-schedule:scheduler-quartz-2")) { transitive = false }
+        ampLib(project(":annotations-runtime:scheduler-quartz-1")) { transitive = false }
+        ampLib(project(":annotations-runtime:scheduler-quartz-2")) { transitive = false }
 
         ampLib(project(":webscripts")) { transitive = false }
 
