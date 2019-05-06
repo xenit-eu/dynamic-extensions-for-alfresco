@@ -4,6 +4,9 @@ import com.github.dynamicextensionsalfresco.BeanNames;
 import com.github.dynamicextensionsalfresco.annotations.AlfrescoService;
 import com.github.dynamicextensionsalfresco.annotations.ServiceType;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -16,14 +19,11 @@ import org.springframework.util.StringUtils;
 /**
  * {@link BeanFactory} that augments default autowiring logic by attempting to resolve dependencies using Alfresco
  * naming conventions.
- * 
- * This class is overwritten for older versions of Alfresco.
- * When making changes here, make sure you also take a look to the implementation for older Alfresco versions.
  *
  * @author Laurens Fridael
- *
  */
 public class AutowireBeanFactory extends DefaultListableBeanFactory {
+
     private final Set<String> internalBeanNames = new HashSet<String>();
 
     /* Main operations */
@@ -36,10 +36,29 @@ public class AutowireBeanFactory extends DefaultListableBeanFactory {
         }
     }
 
+    // @Override for Spring < 5
+    protected String determinePrimaryCandidate(final Map<String, Object> candidateBeans,
+            final DependencyDescriptor descriptor) {
+        final String candidateBean = tryToDetermineBean(candidateBeans, descriptor);
+        if (candidateBean != null) {
+            return candidateBean;
+        }
 
+        return this.tryToInvokeSuperMethod("determinePrimaryCandidate", candidateBeans, descriptor);
+    }
 
-    @Override
+    // @Override for Spring >= 5
     protected String determineAutowireCandidate(final Map<String, Object> candidateBeans,
+            final DependencyDescriptor descriptor) {
+        final String candidateBean = tryToDetermineBean(candidateBeans, descriptor);
+        if (candidateBean != null) {
+            return candidateBean;
+        }
+
+        return this.tryToInvokeSuperMethod("determineAutowireCandidate", candidateBeans, descriptor);
+    }
+
+    private String tryToDetermineBean(final Map<String, Object> candidateBeans,
             final DependencyDescriptor descriptor) {
         String beanName = ClassUtils.getShortName(descriptor.getDependencyType());
 
@@ -66,13 +85,25 @@ public class AutowireBeanFactory extends DefaultListableBeanFactory {
                 }
                 break;
         }
-        return super.determineAutowireCandidate(candidateBeans, descriptor);
+
+        return null;
+    }
+
+    private String tryToInvokeSuperMethod(final String methodName, Object... args) {
+        try {
+            Class<?>[] argsClasses = Arrays.stream(args).map(Object::getClass).toArray(Class<?>[]::new);
+            Method m = super.getClass().getDeclaredMethod(methodName, argsClasses);
+            return (String) m.invoke(this, args);
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new IllegalStateException("Unable to call '" + methodName + "' super method", e);
+        }
     }
 
     /* Utility operations */
 
     @SuppressWarnings("unchecked")
-    private <T extends Annotation> T getAnnotation(final DependencyDescriptor descriptor, final Class<T> annotationType) {
+    private <T extends Annotation> T getAnnotation(final DependencyDescriptor descriptor,
+            final Class<T> annotationType) {
         for (final Annotation annotation : descriptor.getAnnotations()) {
             if (annotationType.isAssignableFrom(annotation.annotationType())) {
                 return (T) annotation;
