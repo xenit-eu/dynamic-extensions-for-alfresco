@@ -10,7 +10,7 @@ dependencies {
 
     compileOnly "eu.xenit.alfresco:alfresco-community-bom:6.0.7-ga"
 
-    compile project(':annotations-runtime-schedule')
+    compileOnly project(':annotations-runtime')
 
     compileOnly('org.quartz-scheduler:quartz') { transitive = false }
     compileOnly('org.alfresco:alfresco-repository') { transitive = false }
