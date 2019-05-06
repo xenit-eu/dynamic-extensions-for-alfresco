@@ -7,7 +7,7 @@ subprojects {
     dependencies {
         compileOnly "${project.ext.alfrescoBom}"
 
-        compile project(":annotations-runtime:annotations-runtime-${project.ext.simpleAlfrescoVersion}")
+        compile project(":annotations-runtime")
 
         compileOnly("org.alfresco.surf:spring-webscripts")
         compileOnly("org.alfresco:alfresco-core") { transitive = false }

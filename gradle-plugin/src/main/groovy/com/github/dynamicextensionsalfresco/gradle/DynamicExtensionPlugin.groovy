@@ -53,7 +53,7 @@ class DynamicExtensionPlugin implements Plugin<Project> {
 			compileOnly ("org.springframework.extensions.surf:spring-webscripts:${surf.version}") { transitive = false }
 			compileOnly ("org.springframework.extensions.surf:spring-surf-core:${surf.version}") { transitive = false }
 			compileOnly ("eu.xenit.de:annotations:${dynamicExtensions.version}") { transitive = false }
-			compileOnly("eu.xenit.de:annotations-runtime:annotations-runtime-${alfrescoVersion}:${dynamicExtensions.version}") {
+			compileOnly("eu.xenit.de:annotations-runtime:${dynamicExtensions.version}") {
 				transitive = false
 			}
 			compileOnly("eu.xenit.de:webscripts:${dynamicExtensions.version}") { transitive = false }
