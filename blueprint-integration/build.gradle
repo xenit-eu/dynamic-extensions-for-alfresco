@@ -9,7 +9,7 @@ subprojects {
         compile project(':annotations-runtime:scheduler-quartz-2')
 
 
-        compile project(":alfresco-integration:alfresco-integration-${project.ext.simpleAlfrescoVersion}")
+        compile project(":alfresco-integration")
 
         compileOnly("org.alfresco.surf:spring-webscripts")
         compileOnly("org.alfresco:alfresco-repository")

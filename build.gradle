@@ -215,7 +215,8 @@ configure((
                 - project(':annotations')
                 - project(':webscripts')
                 - project(':integration-tests')
-                - project(':event-bus')), {
+                - project(':event-bus')
+                - project(':alfresco-integration')), {
     subprojects allSubProjectsConfig << subSubProjectsConfig
 })
 configure(
@@ -224,7 +225,8 @@ configure(
                 project(':annotations'),
                 project(':annotations-runtime'),
                 project(':webscripts'),
-                project(':event-bus')],
+                project(':event-bus'),
+                project(':alfresco-integration')],
         allSubProjectsConfig)
 
 defaultTasks 'build'

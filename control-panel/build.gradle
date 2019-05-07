@@ -8,7 +8,7 @@ subprojects {
     dependencies {
         compileOnly "${project.ext.alfrescoBom}"
 
-        compile project(":alfresco-integration:alfresco-integration-${project.ext.simpleAlfrescoVersion}")
+        compile project(":alfresco-integration")
         compile project(':annotations')
         compile project(":webscripts")
         compile project(":event-bus")

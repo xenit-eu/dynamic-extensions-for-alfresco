@@ -13,7 +13,7 @@ subprojects {
     dependencies {
         compileOnly "${project.ext.alfrescoBom}"
 
-        ampLib(project(":alfresco-integration:alfresco-integration-${project.ext.simpleAlfrescoVersion}")) {
+        ampLib(project(":alfresco-integration")) {
             transitive = false
         }
         ampLib(project(':annotations')) { transitive = false }
