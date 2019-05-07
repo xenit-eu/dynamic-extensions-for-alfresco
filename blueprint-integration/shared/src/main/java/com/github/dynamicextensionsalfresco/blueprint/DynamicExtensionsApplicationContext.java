@@ -9,6 +9,7 @@ import com.github.dynamicextensionsalfresco.messages.MessagesRegistrar;
 import com.github.dynamicextensionsalfresco.metrics.SpringTimer;
 import com.github.dynamicextensionsalfresco.models.M2ModelResourceListProvider;
 import com.github.dynamicextensionsalfresco.models.RepositoryModelRegistrar;
+import com.github.dynamicextensionsalfresco.osgi.spring.AutowireBeanFactory;
 import com.github.dynamicextensionsalfresco.osgi.webscripts.SearchPathRegistry;
 import com.github.dynamicextensionsalfresco.osgi.webscripts.SearchPathRegistryManager;
 import com.github.dynamicextensionsalfresco.policy.AnnotationBasedBehaviourRegistrar;
@@ -47,6 +48,7 @@ import org.osgi.service.packageadmin.PackageAdmin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.parsing.BeanDefinitionParsingException;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -124,7 +126,8 @@ public class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicatio
     @NotNull
     @Override
     protected DefaultListableBeanFactory createBeanFactory() {
-        return new OsgiAutowireBeanFactory(this.getInternalParentBeanFactory(), this.getBundleContext());
+        BeanFactory bf = new AutowireBeanFactory(this.getInternalParentBeanFactory());
+        return new OsgiAutowireBeanFactory(bf, this.getBundleContext());
     }
 
     @Override
