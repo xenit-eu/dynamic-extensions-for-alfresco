@@ -216,7 +216,8 @@ configure((
                 - project(':webscripts')
                 - project(':integration-tests')
                 - project(':event-bus')
-                - project(':alfresco-integration')), {
+                - project(':alfresco-integration')
+                - project(':blueprint-integration')), {
     subprojects allSubProjectsConfig << subSubProjectsConfig
 })
 configure(
@@ -226,7 +227,8 @@ configure(
                 project(':annotations-runtime'),
                 project(':webscripts'),
                 project(':event-bus'),
-                project(':alfresco-integration')],
+                project(':alfresco-integration'),
+                project(':blueprint-integration')],
         allSubProjectsConfig)
 
 defaultTasks 'build'
@@ -250,7 +252,7 @@ allprojects {
         resolutionStrategy {
             eachDependency { DependencyResolveDetails details ->
                 if (details.requested.group == 'org.springframework'
-                        && project.hasProperty('springVersion')) {
+                        && project.ext.has('springVersion')) {
                     details.useVersion project.ext.springVersion
                 }
 

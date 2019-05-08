@@ -1,42 +1,9 @@
-subprojects {
+allprojects {
+    apply plugin: "java"
     apply plugin: "osgi"
 
-    dependencies {
-        compileOnly "${project.ext.alfrescoBom}"
-
-        compile project(":annotations-runtime")
-        compile project(':annotations-runtime:scheduler-quartz-1')
-        compile project(':annotations-runtime:scheduler-quartz-2')
-
-
-        compile project(":alfresco-integration")
-
-        compileOnly("org.alfresco.surf:spring-webscripts")
-        compileOnly("org.alfresco:alfresco-repository")
-
-        compileOnly "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
-
-        compileOnly("org.eclipse.gemini.blueprint:gemini-blueprint-extender:${project.ext.geminiVersion}") {
-            exclude group: "org.springframework"
-        }
-
-        compileOnly "javax.servlet:servlet-api:${project.ext.servletVersion}"
-        compileOnly "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
-        compile project(":event-bus")
-
-        compileOnly "org.jetbrains:annotations:$jetbrains_annotations_version"
-
-
-        testCompile "${project.ext.alfrescoBom}"
-
-        testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
-        testCompile "junit:junit:${project.ext.junitVersion}"
-        testCompile('org.springframework:spring-beans') { transitive = false }
-        testCompile("org.alfresco:alfresco-repository")
-
-        testCompile("org.eclipse.gemini.blueprint:gemini-blueprint-extender:${project.ext.geminiVersion}") {
-            exclude group: "org.springframework"
-        }
+    configurations {
+        testCompile.extendsFrom(compileOnly)
     }
 
     jar {
@@ -45,5 +12,47 @@ subprojects {
             instruction 'DynamicImport-Package', '*'
             instruction 'Bundle-DocURL', 'https://github.com/xenit-eu/dynamic-extensions-for-alfresco'
         }
+    }
+
+}
+
+dependencies {
+    compileOnly "${project.ext.alfrescoBom}"
+
+    compile project(":annotations-runtime")
+    compile project(':annotations-runtime:scheduler-quartz-1')
+    compile project(':annotations-runtime:scheduler-quartz-2')
+
+    compile project(':blueprint-integration:spring-3')
+    compile project(':blueprint-integration:spring-5')
+
+
+    compile project(":alfresco-integration")
+
+    compileOnly("org.alfresco.surf:spring-webscripts")
+    compileOnly("org.alfresco:alfresco-repository")
+
+    compileOnly "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
+
+    compileOnly("org.eclipse.gemini.blueprint:gemini-blueprint-extender:${project.ext.geminiVersion}") {
+        exclude group: "org.springframework"
+    }
+
+    compileOnly "javax.servlet:servlet-api:${project.ext.servletVersion}"
+    compileOnly "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
+    compile project(":event-bus")
+
+    compileOnly "org.jetbrains:annotations:$jetbrains_annotations_version"
+
+
+    testCompile "${project.ext.alfrescoBom}"
+
+    testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
+    testCompile "junit:junit:${project.ext.junitVersion}"
+    testCompile('org.springframework:spring-beans') { transitive = false }
+    testCompile("org.alfresco:alfresco-repository")
+
+    testCompile("org.eclipse.gemini.blueprint:gemini-blueprint-extender:${project.ext.geminiVersion}") {
+        exclude group: "org.springframework"
     }
 }

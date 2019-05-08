@@ -6,7 +6,9 @@ subprojects {
         ampLib
         compileOnly.extendsFrom(ampLib)
         testCompile.extendsFrom(compileOnly)
-        blueprint
+        blueprint {
+            transitive = false
+        }
         bundles
     }
 
@@ -34,18 +36,12 @@ subprojects {
 
         ampLib "biz.aQute.bnd:biz.aQute.bnd:${project.ext.bndVersion}"
 
-        blueprint(project(path: ":blueprint-override:blueprint-override-${project.ext.simpleAlfrescoVersion}", configuration: 'patch')) {
-            transitive = false
-        }
-        blueprint(project(":blueprint-integration:blueprint-integration-${project.ext.simpleAlfrescoVersion}")) {
-            transitive = false
-        }
-        blueprint("org.eclipse.gemini.blueprint:gemini-blueprint-core:${project.ext.geminiVersion}") {
-            transitive = false
-        }
-        blueprint("org.eclipse.gemini.blueprint:gemini-blueprint-io:${project.ext.geminiVersion}") {
-            transitive = false
-        }
+        blueprint(project(path: ":blueprint-override:blueprint-override-${project.ext.simpleAlfrescoVersion}", configuration: 'patch'))
+        blueprint(project(":blueprint-integration"))
+        blueprint(project(":blueprint-integration:spring-3"))
+        blueprint(project(":blueprint-integration:spring-5"))
+        blueprint("org.eclipse.gemini.blueprint:gemini-blueprint-core:${project.ext.geminiVersion}")
+        blueprint("org.eclipse.gemini.blueprint:gemini-blueprint-io:${project.ext.geminiVersion}")
 
         bundles "org.slf4j:slf4j-api:${project.slf4jVersion}"
         bundles("org.slf4j:slf4j-log4j12:${project.slf4jVersion}") { transitive = false }

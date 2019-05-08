@@ -1,0 +1,11 @@
+dependencies {
+
+    compileOnly "eu.xenit.alfresco:alfresco-community-bom:5.0.d"
+
+    compileOnly project(':annotations-runtime')
+
+    compileOnly('org.springframework:spring-core') { transitive = false }
+    compileOnly('org.springframework:spring-beans') { transitive = false }
+    compileOnly('org.springframework:spring-context') { transitive = false }
+    compileOnly('org.springframework:spring-context-support') { transitive = false }
+}
