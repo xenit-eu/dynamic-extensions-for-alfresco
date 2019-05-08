@@ -121,7 +121,12 @@ public class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicatio
     @NotNull
     @Override
     protected DefaultListableBeanFactory createBeanFactory() {
-        return new OsgiAutowireBeanFactory(this.getInternalParentBeanFactory(), this.getBundleContext());
+        VersionNumber version = this.getService(DescriptorService.class).getServerDescriptor().getVersionNumber();
+        if (version.compareTo(new VersionNumber("6.0")) >= 0) {
+            return new Spring5OsgiAutowireBeanFactory(this.getInternalParentBeanFactory(), this.getBundleContext());
+        } else {
+            return new Spring3OsgiAutowireBeanFactory(this.getInternalParentBeanFactory(), this.getBundleContext());
+        }
     }
 
     @Override

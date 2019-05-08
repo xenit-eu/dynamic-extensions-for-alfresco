@@ -8,19 +8,19 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
- * {@link ApplicationContext} that uses an {@link OsgiAutowireBeanFactory}.
+ * {@link ApplicationContext} that uses an {@link Spring3OsgiAutowireBeanFactory}.
  * 
  * @author Laurens Fridael
  * 
  */
-class AutowireApplicationContext extends ClassPathXmlApplicationContext {
+class Spring3OsgiAutowireApplicationContext extends ClassPathXmlApplicationContext {
 
-	AutowireApplicationContext(final String location, final ApplicationContext parent) {
-		super(new String[] { location }, AutowireApplicationContext.class, parent);
+	Spring3OsgiAutowireApplicationContext(final String location, final ApplicationContext parent) {
+		super(new String[] { location }, Spring3OsgiAutowireApplicationContext.class, parent);
 	}
 
 	@Override
 	protected DefaultListableBeanFactory createBeanFactory() {
-		return new OsgiAutowireBeanFactory(getInternalParentBeanFactory(), mock(BundleContext.class));
+		return new Spring3OsgiAutowireBeanFactory(getInternalParentBeanFactory(), mock(BundleContext.class));
 	}
 }

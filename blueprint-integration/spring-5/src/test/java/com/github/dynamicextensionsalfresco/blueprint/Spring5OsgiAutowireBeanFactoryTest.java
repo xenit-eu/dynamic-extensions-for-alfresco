@@ -9,12 +9,12 @@ import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
- * Integration test for {@link OsgiAutowireBeanFactory}.
+ * Integration test for {@link Spring5OsgiAutowireBeanFactory}.
  * 
  * @author Laurens Fridael
  * 
  */
-public class AutowireBeanFactoryTest {
+public class Spring5OsgiAutowireBeanFactoryTest {
 
 	/* Dependencies */
 
@@ -25,9 +25,9 @@ public class AutowireBeanFactoryTest {
 	@Before
 	public void setup() {
 		final ClassPathXmlApplicationContext parentApplicationContext = new ClassPathXmlApplicationContext(
-				"AutowireBeanFactoryTest-parent-context.xml", getClass());
-		final AutowireApplicationContext applicationContext = new AutowireApplicationContext(
-				"AutowireBeanFactoryTest-child-context.xml", parentApplicationContext);
+				"OsgiAutowireBeanFactoryTest-parent-context.xml", getClass());
+		final Spring5OsgiAutowireApplicationContext applicationContext = new Spring5OsgiAutowireApplicationContext(
+				"OsgiAutowireBeanFactoryTest-child-context.xml", parentApplicationContext);
 		example = applicationContext.getBean(Example.class);
 	}
 
