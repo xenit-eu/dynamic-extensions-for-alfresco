@@ -31,7 +31,7 @@ Dynamic Extensions is distributed as an Alfresco Module Package (AMP).
 ### Manual download and install
 
 * Download the latest <a href="https://github.com/xenit-eu/dynamic-extensions-for-alfresco/releases">Dynamic Extensions AMP</a>.
-* Use the <a href="http://docs.alfresco.com/4.0/index.jsp?topic=%2Fcom.alfresco.enterprise.doc%2Ftasks%2Famp-install.html">Module Management Tool</a> to install the AMP in the Alfresco repository of your choosing.
+* Use the <a href="https://docs.alfresco.com/6.1/concepts/dev-extensions-modules-management-tool.html">Module Management Tool</a> to install the AMP in the Alfresco repository of your choosing.
 * After restarting Alfresco, open the Control Panel: <a href="http://localhost:8080/alfresco/service/dynamic-extensions/">http://localhost:8080/alfresco/service/dynamic-extensions/</a>.
 * Accessing the Control Panel requires an admin account.
 
@@ -172,4 +172,4 @@ determine the root of the classpath from the location of 'alfresco-global.proper
 Barcelona 2013 presentation
 ---------------------------
 
-<a href="http://summit.alfresco.com/barcelona/sessions/life-too-short-endless-restarts">One hour presentation on using and exploring Dynamic Extensions for Alfresco</a>
+<a href="https://www.youtube.com/watch?v=Pc62PM7U3Ns">Youtube - One hour presentation on using and exploring Dynamic Extensions for Alfresco</a>
