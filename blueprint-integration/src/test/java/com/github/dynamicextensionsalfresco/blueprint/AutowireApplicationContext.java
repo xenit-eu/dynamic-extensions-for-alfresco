@@ -1,11 +1,14 @@
-package com.github.dynamicextensionsalfresco.osgi.spring;
+package com.github.dynamicextensionsalfresco.blueprint;
 
+import static org.mockito.Mockito.mock;
+
+import org.osgi.framework.BundleContext;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
- * {@link ApplicationContext} that uses an {@link AutowireBeanFactory}.
+ * {@link ApplicationContext} that uses an {@link OsgiAutowireBeanFactory}.
  * 
  * @author Laurens Fridael
  * 
@@ -18,6 +21,6 @@ class AutowireApplicationContext extends ClassPathXmlApplicationContext {
 
 	@Override
 	protected DefaultListableBeanFactory createBeanFactory() {
-		return new AutowireBeanFactory(getInternalParentBeanFactory());
+		return new OsgiAutowireBeanFactory(getInternalParentBeanFactory(), mock(BundleContext.class));
 	}
 }

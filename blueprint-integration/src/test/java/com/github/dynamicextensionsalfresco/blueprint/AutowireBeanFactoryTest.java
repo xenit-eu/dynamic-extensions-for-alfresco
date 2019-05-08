@@ -1,4 +1,4 @@
-package com.github.dynamicextensionsalfresco.osgi.spring;
+package com.github.dynamicextensionsalfresco.blueprint;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
- * Integration test for {@link AutowireBeanFactory}.
+ * Integration test for {@link OsgiAutowireBeanFactory}.
  * 
  * @author Laurens Fridael
  * 

@@ -1,4 +1,4 @@
-package com.github.dynamicextensionsalfresco.osgi.spring;
+package com.github.dynamicextensionsalfresco.blueprint;
 
 import org.mockito.Mockito;
 import org.springframework.beans.factory.FactoryBean;

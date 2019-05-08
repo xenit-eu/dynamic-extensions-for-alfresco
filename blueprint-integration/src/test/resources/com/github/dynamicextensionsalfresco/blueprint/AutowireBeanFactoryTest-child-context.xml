@@ -7,6 +7,6 @@ http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<context:annotation-config />
 
-	<bean class="com.github.dynamicextensionsalfresco.osgi.spring.Example" />
+	<bean class="com.github.dynamicextensionsalfresco.blueprint.Example" />
 
 </beans>

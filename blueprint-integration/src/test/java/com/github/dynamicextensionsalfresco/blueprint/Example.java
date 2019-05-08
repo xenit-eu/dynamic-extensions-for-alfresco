@@ -1,4 +1,4 @@
-package com.github.dynamicextensionsalfresco.osgi.spring;
+package com.github.dynamicextensionsalfresco.blueprint;
 
 import com.github.dynamicextensionsalfresco.annotations.AlfrescoService;
 import com.github.dynamicextensionsalfresco.annotations.ServiceType;

@@ -9,7 +9,6 @@ import com.github.dynamicextensionsalfresco.messages.MessagesRegistrar;
 import com.github.dynamicextensionsalfresco.metrics.SpringTimer;
 import com.github.dynamicextensionsalfresco.models.M2ModelResourceListProvider;
 import com.github.dynamicextensionsalfresco.models.RepositoryModelRegistrar;
-import com.github.dynamicextensionsalfresco.osgi.spring.AutowireBeanFactory;
 import com.github.dynamicextensionsalfresco.osgi.webscripts.SearchPathRegistry;
 import com.github.dynamicextensionsalfresco.osgi.webscripts.SearchPathRegistryManager;
 import com.github.dynamicextensionsalfresco.policy.AnnotationBasedBehaviourRegistrar;
@@ -32,7 +31,6 @@ import com.github.dynamicextensionsalfresco.workflow.activiti.DefaultWorkflowTas
 import com.github.dynamicextensionsalfresco.workflow.activiti.WorkflowTaskRegistrar;
 import com.github.dynamicextensionsalfresco.workflow.activiti.WorkflowTaskRegistry;
 import java.io.IOException;
-import java.util.Collection;
 import org.alfresco.service.descriptor.Descriptor;
 import org.alfresco.service.descriptor.DescriptorService;
 import org.alfresco.service.namespace.NamespacePrefixResolver;
@@ -41,14 +39,11 @@ import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationCont
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.framework.Constants;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.packageadmin.ExportedPackage;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.parsing.BeanDefinitionParsingException;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -126,8 +121,7 @@ public class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicatio
     @NotNull
     @Override
     protected DefaultListableBeanFactory createBeanFactory() {
-        BeanFactory bf = new AutowireBeanFactory(this.getInternalParentBeanFactory());
-        return new OsgiAutowireBeanFactory(bf, this.getBundleContext());
+        return new OsgiAutowireBeanFactory(this.getInternalParentBeanFactory(), this.getBundleContext());
     }
 
     @Override
