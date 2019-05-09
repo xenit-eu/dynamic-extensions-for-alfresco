@@ -79,8 +79,6 @@ subprojects {
         bndVersion = '2.4.1'
     }
 
-    apply from: "${rootProject.projectDir}/publish.gradle"
-
     if (project.name == 'alfresco-dynamic-extensions-repo' || project.parent.name == 'alfresco-dynamic-extensions-repo') {
         return
     }
@@ -107,6 +105,8 @@ subprojects {
         options.encoding = "UTF-8"
         options.compilerArgs << '-Xlint:unchecked'
     }
+
+    apply from: "${rootProject.projectDir}/publish.gradle"
 
     publishing {
         publications {

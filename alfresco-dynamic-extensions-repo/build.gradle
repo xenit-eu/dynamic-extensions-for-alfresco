@@ -92,9 +92,11 @@ subprojects {
 
     build.dependsOn("amp")
 
+    apply from: "${rootProject.projectDir}/publish.gradle"
+
     publishing {
         publications {
-            maven(MavenPublication) {
+            mavenJava(MavenPublication) {
                 artifact amp
             }
         }
