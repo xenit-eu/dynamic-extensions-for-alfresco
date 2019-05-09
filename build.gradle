@@ -10,6 +10,10 @@ buildscript {
     }
 }
 
+plugins {
+    id "biz.aQute.bnd.builder" version "4.2.0" apply false
+}
+
 wrapper {
     distributionType = Wrapper.DistributionType.ALL
     gradleVersion = '5.4.1'

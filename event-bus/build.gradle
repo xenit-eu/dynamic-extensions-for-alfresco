@@ -1,4 +1,4 @@
-apply plugin: 'osgi'
+apply plugin: 'biz.aQute.bnd.builder'
 
 dependencies {
     compileOnly "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
@@ -9,10 +9,9 @@ dependencies {
 }
 
 jar {
-    manifest {
-        instruction 'Bundle-Description', 'Inter-bundle event bus'
-        instruction 'Bundle-Activator', 'com.github.dynamicextensionsalfresco.event.impl.Activator'
-    }
+    bnd ('Bundle-Description' : 'Inter-bundle event bus',
+        'Bundle-Activator': 'com.github.dynamicextensionsalfresco.event.impl.Activator',
+        'Export-Package': 'com.github.dynamicextensionsalfresco.event.*')
 }
 
 defaultTasks 'jar'
