@@ -39,8 +39,8 @@ dependencies {
 
 jar {
     bnd(
-            'Bundle-Name': "${project.parent.name}",
-            'Bundle-SymbolicName': "${project.parent.group}.${project.parent.name}",
+            'Bundle-Name': "${project.name}",
+            'Bundle-SymbolicName': "${project.group}.${project.name}",
             'Alfresco-Dynamic-Extension': 'true',
             'Bundle-Description': 'Control Panel',
             'Alfresco-Spring-Configuration': 'com.github.dynamicextensionsalfresco.controlpanel',
