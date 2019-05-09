@@ -1,4 +1,6 @@
 subprojects {
+    apply plugin: 'base'
+
     group "eu.xenit"
 
     configurations {
@@ -10,12 +12,6 @@ subprojects {
             transitive = false
         }
         bundles
-    }
-
-    sourceSets {
-        test.java.srcDirs += "${project.parent.projectDir}/shared/src/test/java"
-        main.resources.srcDirs += "${project.parent.projectDir}/shared/src/main/resources"
-        test.resources.srcDirs += "${project.parent.projectDir}/shared/src/test/resources"
     }
 
     dependencies {
@@ -54,17 +50,6 @@ subprojects {
         bundles(project(":control-panel")) { transitive = false }
         bundles(project(":event-bus")) { transitive = false }
         bundles 'org.apache.felix:org.apache.felix.log:1.0.1'
-
-        testCompile "junit:junit:${project.ext.junitVersion}"
-        testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
-
-        testCompile "org.springframework:spring-test"
-        testCompile "org.springframework:spring-web"
-        testCompile("org.alfresco.surf:spring-webscripts")
-        testCompile("org.alfresco:alfresco-repository") { transitive = false }
-        testCompile("org.alfresco:alfresco-data-model") { transitive = false }
-
-        testRuntime "org.springframework:spring-beans"
     }
 
     def ampConfig = {
@@ -96,7 +81,7 @@ subprojects {
         destinationDir = file("$buildDir/amps")
     }
 
-    task amp(type: Zip, dependsOn: jar) {
+    task amp(type: Zip) {
         configure ampConfig
         baseName = project.name
     }
@@ -106,4 +91,12 @@ subprojects {
     }
 
     build.dependsOn("amp")
+
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                artifact amp
+            }
+        }
+    }
 }

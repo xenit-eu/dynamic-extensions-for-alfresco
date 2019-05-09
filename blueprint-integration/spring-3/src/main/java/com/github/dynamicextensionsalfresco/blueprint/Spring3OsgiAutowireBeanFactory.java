@@ -26,7 +26,7 @@ import org.springframework.util.StringUtils;
  *
  * @author Laurens Fridael
  */
-class Spring3OsgiAutowireBeanFactory extends DefaultListableBeanFactory {
+public class Spring3OsgiAutowireBeanFactory extends DefaultListableBeanFactory {
 
     private final BundleContext bundleContext;
     private final Set<String> internalBeanNames = new HashSet<>();
