@@ -1,11 +1,6 @@
-
-tasks.withType(Jar) {
-    baseName = 'blueprint-integration-spring-5'
-}
-
 dependencies {
 
-    compileOnly "eu.xenit.alfresco:alfresco-community-bom:6.0.7-ga"
+    compileOnly platform("eu.xenit.alfresco:alfresco-community-bom:6.0.7-ga")
 
     compileOnly project(':annotations-runtime')
     compileOnly project(":alfresco-integration")

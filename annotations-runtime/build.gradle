@@ -3,7 +3,7 @@ configurations {
 }
 
 dependencies {
-    compileOnly "${project.ext.alfrescoBom}"
+    compileOnly platform("${project.ext.alfrescoBom}")
 
     compile project(':annotations')
     compile project(":webscripts")

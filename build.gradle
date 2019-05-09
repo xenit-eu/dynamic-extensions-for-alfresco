@@ -12,7 +12,7 @@ buildscript {
 
 wrapper {
     distributionType = Wrapper.DistributionType.ALL
-    gradleVersion = '4.10.2'
+    gradleVersion = '5.4.1'
 }
 
 apply plugin: 'io.codearte.nexus-staging'

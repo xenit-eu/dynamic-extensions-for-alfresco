@@ -5,7 +5,7 @@ configurations {
 }
 
 dependencies {
-    compileOnly "${project.ext.alfrescoBom}"
+    compileOnly platform("${project.ext.alfrescoBom}")
 
     compile project(":alfresco-integration")
     compile project(':annotations')
