@@ -11,14 +11,18 @@ include 'annotations-runtime'
 include 'annotations-runtime:scheduler-quartz-1'
 include 'annotations-runtime:scheduler-quartz-2'
 
+include 'alfresco-integration'
+
+include 'blueprint-integration'
+include 'blueprint-integration:spring-3'
+include 'blueprint-integration:spring-5'
+
 include 'gradle-plugin'
 
 
 def alfrescoDependentModules =
         [
                 'alfresco-dynamic-extensions-repo',
-                'alfresco-integration',
-                'blueprint-integration',
                 'blueprint-override',
                 'control-panel'
         ]
