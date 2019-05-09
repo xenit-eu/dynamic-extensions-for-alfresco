@@ -217,7 +217,8 @@ configure((
                 - project(':integration-tests')
                 - project(':event-bus')
                 - project(':alfresco-integration')
-                - project(':blueprint-integration')), {
+                - project(':blueprint-integration')
+                - project(':control-panel')), {
     subprojects allSubProjectsConfig << subSubProjectsConfig
 })
 configure(
@@ -228,7 +229,8 @@ configure(
                 project(':webscripts'),
                 project(':event-bus'),
                 project(':alfresco-integration'),
-                project(':blueprint-integration')],
+                project(':blueprint-integration'),
+                project(':control-panel')],
         allSubProjectsConfig)
 
 defaultTasks 'build'

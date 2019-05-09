@@ -1,52 +1,51 @@
-subprojects {
-    apply plugin: 'osgi'
+apply plugin: 'osgi'
 
-    configurations {
-        testCompile.extendsFrom(compileOnly)
-    }
+configurations {
+    testCompile.extendsFrom(compileOnly)
+}
 
-    dependencies {
-        compileOnly "${project.ext.alfrescoBom}"
+dependencies {
+    compileOnly "${project.ext.alfrescoBom}"
 
-        compile project(":alfresco-integration")
-        compile project(':annotations')
-        compile project(":webscripts")
-        compile project(":event-bus")
+    compile project(":alfresco-integration")
+    compile project(':annotations')
+    compile project(":webscripts")
+    compile project(":event-bus")
 
-        compileOnly("org.alfresco.surf:spring-webscripts") { transitive = false }
-        compileOnly("org.alfresco.surf:spring-surf-core") { transitive = false }
+    compileOnly("org.alfresco.surf:spring-webscripts") { transitive = false }
+    compileOnly("org.alfresco.surf:spring-surf-core") { transitive = false }
 
-        compileOnly("org.alfresco:alfresco-data-model") { transitive = false }
-        compileOnly("org.alfresco:alfresco-repository") { transitive = false }
-        compileOnly("org.alfresco:alfresco-core") { transitive = false }
+    compileOnly("org.alfresco:alfresco-data-model") { transitive = false }
+    compileOnly("org.alfresco:alfresco-repository") { transitive = false }
+    compileOnly("org.alfresco:alfresco-core") { transitive = false }
 
-        compileOnly "org.slf4j:slf4j-api"
-        compileOnly "org.json:json"
-        compileOnly "org.alfresco:freemarker"
+    compileOnly "org.slf4j:slf4j-api"
+    compileOnly "org.json:json"
+    compileOnly "org.alfresco:freemarker"
 
-        compileOnly('org.springframework:spring-beans') { transitive = false }
-        compileOnly('org.springframework:spring-context') { transitive = false }
-        compileOnly('org.springframework:spring-core') { transitive = false }
-        compileOnly('org.springframework:spring-aop') { transitive = false }
+    compileOnly('org.springframework:spring-beans') { transitive = false }
+    compileOnly('org.springframework:spring-context') { transitive = false }
+    compileOnly('org.springframework:spring-core') { transitive = false }
+    compileOnly('org.springframework:spring-aop') { transitive = false }
 
-        compileOnly "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
-        compileOnly "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
+    compileOnly "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
+    compileOnly "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
 
-        testCompile("org.alfresco.surf:spring-surf-core-configservice") { transitive = false }
+    testCompile("org.alfresco.surf:spring-surf-core-configservice") { transitive = false }
 
-        testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
-        testCompile "junit:junit:${project.ext.junitVersion}"
-    }
+    testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
+    testCompile "junit:junit:${project.ext.junitVersion}"
+}
 
-    jar {
-        manifest {
-            name = "${project.parent.name}"
-            symbolicName = "${project.parent.group}.${project.parent.name}"
-            instruction 'Alfresco-Dynamic-Extension', 'true'
-            instruction 'Bundle-Description', 'Control Panel'
-            instruction 'Alfresco-Spring-Configuration', 'com.github.dynamicextensionsalfresco.controlpanel'
-            instruction 'Spring-Context', ';publish-context:=false'
-            instruction 'Import-Package', """*,
+jar {
+    manifest {
+        name = "${project.parent.name}"
+        symbolicName = "${project.parent.group}.${project.parent.name}"
+        instruction 'Alfresco-Dynamic-Extension', 'true'
+        instruction 'Bundle-Description', 'Control Panel'
+        instruction 'Alfresco-Spring-Configuration', 'com.github.dynamicextensionsalfresco.controlpanel'
+        instruction 'Spring-Context', ';publish-context:=false'
+        instruction 'Import-Package', """*,
 							net.sf.cglib.core,
 							net.sf.cglib.proxy,
 							net.sf.cglib.reflect,
@@ -54,8 +53,7 @@ subprojects {
 							org.aopalliance.intercept,
 							org.springframework.aop,
 							org.springframework.aop.framework"""
-        }
     }
-
-    defaultTasks 'jar'
 }
+
+defaultTasks 'jar'

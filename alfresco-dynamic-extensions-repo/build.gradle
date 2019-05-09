@@ -45,7 +45,7 @@ subprojects {
 
         bundles "org.slf4j:slf4j-api:${project.slf4jVersion}"
         bundles("org.slf4j:slf4j-log4j12:${project.slf4jVersion}") { transitive = false }
-        bundles(project(":control-panel:control-panel-${project.ext.simpleAlfrescoVersion}")) { transitive = false }
+        bundles(project(":control-panel")) { transitive = false }
         bundles(project(":event-bus")) { transitive = false }
         bundles 'org.apache.felix:org.apache.felix.log:1.0.1'
 
