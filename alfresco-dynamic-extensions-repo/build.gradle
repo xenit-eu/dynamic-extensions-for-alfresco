@@ -12,6 +12,12 @@ subprojects {
         bundles
     }
 
+    sourceSets {
+        test.java.srcDirs += "${project.parent.projectDir}/shared/src/test/java"
+        main.resources.srcDirs += "${project.parent.projectDir}/shared/src/main/resources"
+        test.resources.srcDirs += "${project.parent.projectDir}/shared/src/test/resources"
+    }
+
     dependencies {
         compileOnly "${project.ext.alfrescoBom}"
 

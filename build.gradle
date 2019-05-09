@@ -181,34 +181,6 @@ def allSubProjectsConfig = {
     }
 }
 
-// Configuration specific for projects that are split up into Alfresco-version subprojects
-def subSubProjectsConfig = {
-    afterEvaluate {
-        sourceSets {
-            if (project.plugins.hasPlugin("groovy")) {
-                main.groovy.srcDirs += "${project.parent.projectDir}/shared/src/main/groovy"
-                test.groovy.srcDirs += "${project.parent.projectDir}/shared/src/test/groovy"
-            }
-            main.java.srcDirs += "${project.parent.projectDir}/shared/src/main/java"
-            test.java.srcDirs += "${project.parent.projectDir}/shared/src/test/java"
-            main.resources.srcDirs += "${project.parent.projectDir}/shared/src/main/resources"
-            test.resources.srcDirs += "${project.parent.projectDir}/shared/src/test/resources"
-
-            if (project.hasProperty("excludedSharedFiles")) {
-                def excludeFilter = {
-                    file ->
-                        if (file.file.path.contains("shared") && project.ext.excludedSharedFiles.contains(file.name)) {
-                            return true
-                        }
-                }
-                // We should use a different source file for this Alfresco version, the shared source will be excluded
-                main.java.exclude excludeFilter
-                javadoc.exclude excludeFilter
-            }
-        }
-    }
-}
-
 configure((
         subprojects.findAll { it.parent.name == it.rootProject.name } // Only configure first level child projects
                 - project(':gradle-plugin')
@@ -220,7 +192,7 @@ configure((
                 - project(':blueprint-integration')
                 - project(':blueprint-override')
                 - project(':control-panel')), {
-    subprojects allSubProjectsConfig << subSubProjectsConfig
+    subprojects allSubProjectsConfig
 })
 configure(
         [
