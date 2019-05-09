@@ -1,0 +1,68 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            pom {
+                url = 'https://github.com/xenit-eu/dynamic-extensions-for-alfresco'
+                name = "dynamic-extensions-for-alfresco-" + project.name
+                description = "Adds an OSGi container to alfresco repository supporting dynamic code reloading, " +
+                        "classpath isolation and a bunch of other useful features"
+
+                scm {
+                    connection = 'scm:git:git@github.com:xenit-eu/dynamic-extensions-for-alfresco.git'
+                    developerConnection = 'scm:git:git@github.com:xenit-eu/dynamic-extensions-for-alfresco.git'
+                    url = 'https://github.com/xenit-eu/dynamic-extensions-for-alfresco.git'
+                }
+                developers {
+                    developer {
+                        id = "xenit"
+                        name = "Xenit Solutions NV"
+                    }
+                }
+
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+
+            credentials {
+                username = project.hasProperty('de_publish_username') ? project.de_publish_username : ''
+                password = project.hasProperty('de_publish_password') ? project.de_publish_password : ''
+            }
+        }
+    }
+}
+
+signing {
+    required { !version.endsWith('SNAPSHOT') && gradle.taskGraph.hasTask("publish") }
+    sign publishing.publications.mavenJava
+}
+
+gradle.taskGraph.whenReady { graph ->
+    if (graph.hasTask(publish)) {
+        if (!project.hasProperty('keyId') || !project.hasProperty('secretKeyRingFile') || !project.hasProperty('password')) {
+            throw new GradleException('You need to provide signing params in order to sign artifacts')
+        }
+
+        def id = project.hasProperty('keyId') ? project.keyId : ''
+        def file = project.hasProperty('secretKeyRingFile') ? project.secretKeyRingFile : ''
+        def password = project.hasProperty('password') ? project.password : ''
+
+        ext."signing.keyId" = id
+        ext."signing.secretKeyRingFile" = file
+        ext."signing.password" = password
+    }
+}

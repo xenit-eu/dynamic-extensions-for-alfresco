@@ -48,95 +48,10 @@ allprojects {
     }
 }
 
-// Configuration that should be applied to all subprojects. (If a sub project also has sub projects for different 
-// Alfresco versions, it should not build any artifacts.)
-def allSubProjectsConfig = {
+subprojects {
 
-//    println "allSubProjectsConfig for project ${project.name}"
-
-    apply plugin: 'java'
-    apply plugin: 'jacoco'
-    apply plugin: 'maven-publish'
-    apply plugin: 'signing'
-
-    task sourceJar(type: Jar) {
-        classifier = 'sources'
-        from sourceSets.main.allSource
-    }
-
-    task javadocJar(type: Jar, dependsOn: javadoc) {
-        classifier = 'javadoc'
-        from 'build/docs/javadoc'
-    }
-
-    artifacts {
-        archives jar
-        archives sourceJar
-        archives javadocJar
-    }
-
-    signing {
-        required { !version.endsWith('SNAPSHOT') && gradle.taskGraph.hasTask("publish") }
-        sign configurations.archives
-    }
-
-    publishing {
-        publications {
-            mavenJava(MavenPublication) {
-                from components.java
-                artifact sourceJar
-                artifact javadocJar
-
-                afterEvaluate {
-                    if (!project.getTasksByName('amp', false).isEmpty()) {
-                        artifact amp
-                    }
-                }
-
-                pom {
-                    url = 'https://github.com/xenit-eu/dynamic-extensions-for-alfresco'
-                    name = "dynamic-extensions-for-alfresco-" + project.name
-                    description = "Adds an OSGi container to alfresco repository supporting dynamic code reloading, " +
-                            "classpath isolation and a bunch of other useful features"
-
-                    scm {
-                        connection = 'scm:git:git@github.com:xenit-eu/dynamic-extensions-for-alfresco.git'
-                        developerConnection = 'scm:git:git@github.com:xenit-eu/dynamic-extensions-for-alfresco.git'
-                        url = 'https://github.com/xenit-eu/dynamic-extensions-for-alfresco.git'
-                    }
-
-                    licenses {
-                        license {
-                            name = 'The Apache License, Version 2.0'
-                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                        }
-                    }
-                }
-            }
-        }
-
-        repositories {
-            maven {
-                def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-                def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
-                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-
-                credentials {
-                    username = project.hasProperty('de_publish_username') ? project.de_publish_username : ''
-                    password = project.hasProperty('de_publish_password') ? project.de_publish_password : ''
-                }
-            }
-        }
-    }
-
-    [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
-
-    tasks.withType(JavaCompile) {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
-
-        options.encoding = "UTF-8"
-        options.compilerArgs << '-Xlint:unchecked'
+    if (project.name == 'integration-tests' || project.parent.name == 'integration-tests') {
+        return
     }
 
     ext {
@@ -164,74 +79,46 @@ def allSubProjectsConfig = {
         bndVersion = '2.4.1'
     }
 
-    gradle.taskGraph.whenReady { graph ->
-        if (graph.hasTask(publish)) {
-            if (!project.hasProperty('keyId') || !project.hasProperty('secretKeyRingFile') || !project.hasProperty('password')) {
-                throw new GradleException('You need to provide signing params in order to sign artifacts')
-            }
-
-            def id = project.hasProperty('keyId') ? project.keyId : ''
-            def file = project.hasProperty('secretKeyRingFile') ? project.secretKeyRingFile : ''
-            def password = project.hasProperty('password') ? project.password : ''
-
-            ext."signing.keyId" = id
-            ext."signing.secretKeyRingFile" = file
-            ext."signing.password" = password
-        }
+    if (project.name == 'alfresco-dynamic-extensions-repo' || project.parent.name == 'alfresco-dynamic-extensions-repo') {
+        return
     }
-}
 
-// Configuration specific for projects that are split up into Alfresco-version subprojects
-def subSubProjectsConfig = {
-    afterEvaluate {
-        sourceSets {
-            if (project.plugins.hasPlugin("groovy")) {
-                main.groovy.srcDirs += "${project.parent.projectDir}/shared/src/main/groovy"
-                test.groovy.srcDirs += "${project.parent.projectDir}/shared/src/test/groovy"
-            }
-            main.java.srcDirs += "${project.parent.projectDir}/shared/src/main/java"
-            test.java.srcDirs += "${project.parent.projectDir}/shared/src/test/java"
-            main.resources.srcDirs += "${project.parent.projectDir}/shared/src/main/resources"
-            test.resources.srcDirs += "${project.parent.projectDir}/shared/src/test/resources"
+    apply plugin: 'java'
+    apply plugin: 'jacoco'
 
-            if (project.hasProperty("excludedSharedFiles")) {
-                def excludeFilter = {
-                    file ->
-                        if (file.file.path.contains("shared") && project.ext.excludedSharedFiles.contains(file.name)) {
-                            return true
-                        }
-                }
-                // We should use a different source file for this Alfresco version, the shared source will be excluded
-                main.java.exclude excludeFilter
-                javadoc.exclude excludeFilter
+    task sourceJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        classifier = 'javadoc'
+        from javadoc.destinationDir
+    }
+
+    [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+
+    tasks.withType(JavaCompile) {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+
+        options.encoding = "UTF-8"
+        options.compilerArgs << '-Xlint:unchecked'
+    }
+
+    apply from: "${rootProject.projectDir}/publish.gradle"
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+                artifact sourceJar
+                artifact javadocJar
             }
         }
     }
+    
 }
-
-configure((
-        subprojects.findAll { it.parent.name == it.rootProject.name } // Only configure first level child projects
-                - project(':gradle-plugin')
-                - project(':annotations')
-                - project(':webscripts')
-                - project(':integration-tests')
-                - project(':event-bus')
-                - project(':alfresco-integration')
-                - project(':blueprint-integration')
-                - project(':control-panel')), {
-    subprojects allSubProjectsConfig << subSubProjectsConfig
-})
-configure(
-        [
-                project(':gradle-plugin'),
-                project(':annotations'),
-                project(':annotations-runtime'),
-                project(':webscripts'),
-                project(':event-bus'),
-                project(':alfresco-integration'),
-                project(':blueprint-integration'),
-                project(':control-panel')],
-        allSubProjectsConfig)
 
 defaultTasks 'build'
 
@@ -253,10 +140,6 @@ allprojects {
         exclude group: 'jaxen'
         resolutionStrategy {
             eachDependency { DependencyResolveDetails details ->
-                if (details.requested.group == 'org.springframework'
-                        && project.ext.has('springVersion')) {
-                    details.useVersion project.ext.springVersion
-                }
 
                 if (details.requested.group == 'org.alfresco.surf') {
                     if (project.alfrescoVersion.startsWith('5.0')) {

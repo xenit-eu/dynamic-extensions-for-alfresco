@@ -23,9 +23,8 @@ dependencies {
     compile project(':annotations-runtime:scheduler-quartz-1')
     compile project(':annotations-runtime:scheduler-quartz-2')
 
-    compile project(':blueprint-integration:spring-3')
-    compile project(':blueprint-integration:spring-5')
-
+    compile project(':blueprint-integration:blueprint-integration-spring-3')
+    compile project(':blueprint-integration:blueprint-integration-spring-5')
 
     compile project(":alfresco-integration")
 

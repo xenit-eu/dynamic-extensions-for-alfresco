@@ -46,7 +46,7 @@ dependencies {
     testCompile "junit:junit:${project.ext.junitVersion}"
     testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
 
-    testCompile "org.springframework:spring-test"
+    testCompile "org.springframework:spring-test:${project.ext.springVersion}"
 
     testCompile('org.quartz-scheduler:quartz') { transitive = false }
 

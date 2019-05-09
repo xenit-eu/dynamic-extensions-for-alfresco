@@ -1,4 +1,6 @@
 subprojects {
+    apply plugin: 'base'
+
     group "eu.xenit"
 
     configurations {
@@ -36,10 +38,10 @@ subprojects {
 
         ampLib "biz.aQute.bnd:biz.aQute.bnd:${project.ext.bndVersion}"
 
-        blueprint(project(path: ":blueprint-override:blueprint-override-${project.ext.simpleAlfrescoVersion}", configuration: 'patch'))
+        blueprint(project(path: ":blueprint-override", configuration: "patchBlueprint${project.ext.geminiVersion.substring(0, 1)}"))
         blueprint(project(":blueprint-integration"))
-        blueprint(project(":blueprint-integration:spring-3"))
-        blueprint(project(":blueprint-integration:spring-5"))
+        blueprint(project(":blueprint-integration:blueprint-integration-spring-3"))
+        blueprint(project(":blueprint-integration:blueprint-integration-spring-5"))
         blueprint("org.eclipse.gemini.blueprint:gemini-blueprint-core:${project.ext.geminiVersion}")
         blueprint("org.eclipse.gemini.blueprint:gemini-blueprint-io:${project.ext.geminiVersion}")
 
@@ -48,17 +50,6 @@ subprojects {
         bundles(project(":control-panel")) { transitive = false }
         bundles(project(":event-bus")) { transitive = false }
         bundles 'org.apache.felix:org.apache.felix.log:1.0.1'
-
-        testCompile "junit:junit:${project.ext.junitVersion}"
-        testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
-
-        testCompile "org.springframework:spring-test"
-        testCompile "org.springframework:spring-web"
-        testCompile("org.alfresco.surf:spring-webscripts")
-        testCompile("org.alfresco:alfresco-repository") { transitive = false }
-        testCompile("org.alfresco:alfresco-data-model") { transitive = false }
-
-        testRuntime "org.springframework:spring-beans"
     }
 
     def ampConfig = {
@@ -90,7 +81,7 @@ subprojects {
         destinationDir = file("$buildDir/amps")
     }
 
-    task amp(type: Zip, dependsOn: jar) {
+    task amp(type: Zip) {
         configure ampConfig
         baseName = project.name
     }
@@ -100,4 +91,14 @@ subprojects {
     }
 
     build.dependsOn("amp")
+
+    apply from: "${rootProject.projectDir}/publish.gradle"
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                artifact amp
+            }
+        }
+    }
 }
