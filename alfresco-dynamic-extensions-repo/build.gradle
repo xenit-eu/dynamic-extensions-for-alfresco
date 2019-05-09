@@ -36,7 +36,7 @@ subprojects {
 
         ampLib "biz.aQute.bnd:biz.aQute.bnd:${project.ext.bndVersion}"
 
-        blueprint(project(path: ":blueprint-override:blueprint-override-${project.ext.simpleAlfrescoVersion}", configuration: 'patch'))
+        blueprint(project(path: ":blueprint-override", configuration: "patchBlueprint${project.ext.geminiVersion.substring(0, 1)}"))
         blueprint(project(":blueprint-integration"))
         blueprint(project(":blueprint-integration:spring-3"))
         blueprint(project(":blueprint-integration:spring-5"))

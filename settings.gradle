@@ -16,6 +16,7 @@ include 'alfresco-integration'
 include 'blueprint-integration'
 include 'blueprint-integration:spring-3'
 include 'blueprint-integration:spring-5'
+include 'blueprint-override'
 
 include 'control-panel'
 
@@ -25,7 +26,6 @@ include 'gradle-plugin'
 def alfrescoDependentModules =
         [
                 'alfresco-dynamic-extensions-repo',
-                'blueprint-override'
         ]
 
 alfrescoDependentModules.each { moduleId ->

@@ -1,38 +1,57 @@
-subprojects {
+import eu.xenit.dynamicextensionsalfresco.Versions
 
-    configurations {
-        extender
-        patch
-    }
+configurations {
+    blueprint1Extender
+    blueprint3Extender
 
-    dependencies {
-        compile ("org.osgi:org.osgi.core:${project.ext.osgiVersion}")
-
-        compileOnly("org.eclipse.gemini.blueprint:gemini-blueprint-extender:${project.ext.geminiVersion}") {
-            exclude group: "org.springframework"
-        }
-        extender("org.eclipse.gemini.blueprint:gemini-blueprint-extender:${project.ext.geminiVersion}") {
-            transitive = false
-        }
-    }
-
-    project.tasks.remove(jar)
-
-    task patch(type: Zip) {
-        from(zipTree(configurations.extender.first())) {
-            exclude("**/DefaultApplicationContextConfigurationFactory.class")
-        }
-        from(sourceSets.main.output)
-
-        destinationDir = libsDir
-        extension = 'jar'
-        baseName = 'blueprint-synchronous'
-    }
-
-    artifacts {
-        patch file: patch.archivePath, name: 'blueprint-synchronous', type: 'jar', builtBy: patch
-    }
-
-    defaultTasks 'patch'
-
+    patchBlueprint1
+    patchBlueprint3
 }
+
+dependencies {
+    compile("org.osgi:org.osgi.core:${project.ext.osgiVersion}")
+
+    // Compile against the lowest version of Gemini Blueprint
+    compileOnly("org.eclipse.gemini:org.eclipse.gemini.blueprint.extender:${Versions.geminiVersions.get('50')}") {
+        exclude group: "org.springframework"
+    }
+
+    blueprint1Extender("org.eclipse.gemini:org.eclipse.gemini.blueprint.extender:${Versions.geminiVersions.get('50')}") {
+        transitive = false
+    }
+
+    blueprint3Extender("org.eclipse.gemini.blueprint:gemini-blueprint-extender:${Versions.geminiVersions.get('60')}") {
+        transitive = false
+    }
+}
+
+project.tasks.remove(jar)
+
+task patchBlueprint1(type: Zip) {
+    from(zipTree(configurations.blueprint1Extender.first())) {
+        exclude("**/DefaultApplicationContextConfigurationFactory.class")
+    }
+    from(sourceSets.main.output)
+
+    destinationDir = libsDir
+    extension = 'jar'
+    baseName = 'blueprint-1-synchronous'
+}
+
+task patchBlueprint3(type: Zip) {
+    from(zipTree(configurations.blueprint3Extender.first())) {
+        exclude("**/DefaultApplicationContextConfigurationFactory.class")
+    }
+    from(sourceSets.main.output)
+
+    destinationDir = libsDir
+    extension = 'jar'
+    baseName = 'blueprint-3-synchronous'
+}
+
+artifacts {
+    patchBlueprint1 file: patchBlueprint1.archivePath, name: 'blueprint-1-synchronous', type: 'jar', builtBy: patchBlueprint1
+    patchBlueprint3 file: patchBlueprint3.archivePath, name: 'blueprint-3-synchronous', type: 'jar', builtBy: patchBlueprint3
+}
+
+defaultTasks 'patchBlueprint1', 'patchBlueprint3'

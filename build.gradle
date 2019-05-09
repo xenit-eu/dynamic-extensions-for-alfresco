@@ -218,6 +218,7 @@ configure((
                 - project(':event-bus')
                 - project(':alfresco-integration')
                 - project(':blueprint-integration')
+                - project(':blueprint-override')
                 - project(':control-panel')), {
     subprojects allSubProjectsConfig << subSubProjectsConfig
 })
@@ -230,6 +231,7 @@ configure(
                 project(':event-bus'),
                 project(':alfresco-integration'),
                 project(':blueprint-integration'),
+                project(':blueprint-override'),
                 project(':control-panel')],
         allSubProjectsConfig)
 
