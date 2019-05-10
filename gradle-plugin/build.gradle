@@ -1,14 +1,46 @@
-apply plugin: 'groovy'
+plugins {
+    id "com.gradle.plugin-publish" version "0.10.1"
+    id "java-gradle-plugin"
+    id "groovy"
+}
+
+repositories {
+    gradlePluginPortal()
+}
 
 dependencies {
-    compile gradleApi()
-    compile localGroovy()
+    implementation gradleApi()
+    implementation "biz.aQute.bnd:biz.aQute.bnd.gradle:4.2.0"
+    implementation "org.apache.commons:commons-io:1.3.2"
     testCompile "junit:junit:${project.ext.junitVersion}"
 }
 
-compileGroovy {
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+gradlePlugin {
+    plugins {
+        de {
+            id = "eu.xenit.de"
+            implementationClass = "com.github.dynamicextensionsalfresco.gradle.DynamicExtensionPlugin"
+        }
+    }
+}
+
+pluginBundle {
+    pluginBundle {
+        vcsUrl = "https://github.com/xenit-eu/dynamic-extensions-for-alfresco"
+        website = vcsUrl
+        description = "Gradle plugin to support Dynamic Extension development"
+        tags = ["alfresco", "dynamic-extensions", "osgi"]
+        plugins {
+            de {
+                displayName = "Dynamic Extensions for Alfresco gradle plugin"
+            }
+        }
+
+        mavenCoordinates {
+            groupId = project.group
+            artifactId = project.name
+        }
+    }
 }
 
 defaultTasks 'build'
