@@ -29,6 +29,10 @@ Version template:
 ### Added
 * Alfresco 6 support
 
+### Fixed
+* [#189](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/189)
+Registering a component implementing multiple Activiti listener Interfaces throws exception on startup
+
 ## [1.7.6] - 2018-09-05
 * [#189](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/189) Support Json 2 on Alfresco 4
 

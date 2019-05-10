@@ -1,6 +1,5 @@
 package com.github.dynamicextensionsalfresco.workflow.activiti;
 
-import java.beans.ExceptionListener;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -58,11 +57,11 @@ public class WorkflowTaskRegistrar implements InitializingBean, ApplicationConte
                 }
                 logger.debug("registered Bundle component {} (type: {}) -> {}", name, type, bean);
 
-                if (bean instanceof JavaDelegate) {
+                if (JavaDelegate.class.equals(type)) {
                     this.workflowTaskRegistry.registerDelegate(name, (JavaDelegate) bean);
-                } else if (bean instanceof TaskListener) {
+                } else if (TaskListener.class.equals(type)) {
                     this.workflowTaskRegistry.registerTaskListener(name, (TaskListener) bean);
-                } else if (bean instanceof ExecutionListener) {
+                } else if (ExecutionListener.class.equals(type)) {
                     this.workflowTaskRegistry.registerExecutionListener(name, (ExecutionListener) bean);
                 }
             });
@@ -77,11 +76,11 @@ public class WorkflowTaskRegistrar implements InitializingBean, ApplicationConte
                 activitiBeanRegistry.remove(name);
                 logger.debug("unregistered Bundle component {} (type: {}) -> {}", name, type, bean);
 
-                if (bean instanceof JavaDelegate) {
+                if (JavaDelegate.class.equals(type)) {
                     this.workflowTaskRegistry.unregisterDelegate(name);
-                } else if (bean instanceof TaskListener) {
+                } else if (TaskListener.class.equals(type)) {
                     this.workflowTaskRegistry.unregisterTaskListener(name);
-                } else if (bean instanceof ExecutionListener) {
+                } else if (ExecutionListener.class.equals(type)) {
                     this.workflowTaskRegistry.unregisterExecutionListener(name);
                 }
             });
@@ -107,6 +106,6 @@ public class WorkflowTaskRegistrar implements InitializingBean, ApplicationConte
     }
 
     private List<Class<?>> workflowDelegateTypes() {
-        return Arrays.asList(JavaDelegate.class, TaskListener.class, ExceptionListener.class);
+        return Arrays.asList(JavaDelegate.class, TaskListener.class, ExecutionListener.class);
     }
 }
