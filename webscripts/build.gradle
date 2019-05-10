@@ -2,13 +2,8 @@ plugins {
     id 'java'
 }
 
-ext {
-    alfrescoVersion = '5.0.d'
-    osgiVersion = '4.3.1'
-}
-
 dependencies {
-    compileOnly "eu.xenit.alfresco:alfresco-community-bom:5.0.d"
+    compileOnly platform("eu.xenit.alfresco:alfresco-community-bom:5.0.d")
 
     compileOnly('org.springframework:spring-core') { transitive = false }
     compileOnly('org.springframework:spring-beans') { transitive = false }

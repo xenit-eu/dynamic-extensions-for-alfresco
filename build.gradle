@@ -10,9 +10,13 @@ buildscript {
     }
 }
 
+plugins {
+    id "biz.aQute.bnd.builder" version "4.2.0" apply false
+}
+
 wrapper {
     distributionType = Wrapper.DistributionType.ALL
-    gradleVersion = '4.10.2'
+    gradleVersion = '5.4.1'
 }
 
 apply plugin: 'io.codearte.nexus-staging'
@@ -65,8 +69,8 @@ subprojects {
         // '1.0.2.RELEASE' for Alfresco 5.x
         geminiVersion = Versions.geminiVersions.get(simpleAlfrescoVersion)
 
-        osgiVersion = '4.3.1'
-        felixVersion = '6.0.2'
+        osgiVersion = '6.0.0'
+        felixVersion = '6.0.3'
 
         slf4jVersion = '1.7.7'
         junitVersion = '4.12'
@@ -95,8 +99,6 @@ subprojects {
         classifier = 'javadoc'
         from javadoc.destinationDir
     }
-
-    [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
 
     tasks.withType(JavaCompile) {
         sourceCompatibility = 1.8

@@ -25,8 +25,6 @@ dependencies {
     }
 }
 
-project.tasks.remove(jar)
-
 task patchBlueprint1(type: Zip) {
     from(zipTree(configurations.blueprint1Extender.first())) {
         exclude("**/DefaultApplicationContextConfigurationFactory.class")

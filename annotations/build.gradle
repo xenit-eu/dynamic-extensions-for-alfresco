@@ -3,7 +3,7 @@ configurations {
 }
 
 dependencies {
-    javadocOnly "${project.ext.alfrescoBom}"
+    javadocOnly platform("${project.ext.alfrescoBom}")
 
     javadocOnly("org.alfresco:alfresco-repository") { transitive = false }
     javadocOnly("org.alfresco:alfresco-data-model") { transitive = false }

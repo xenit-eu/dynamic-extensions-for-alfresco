@@ -1,8 +1,5 @@
 import eu.xenit.dynamicextensionsalfresco.Versions
 
-enableFeaturePreview("IMPROVED_POM_SUPPORT")
-enableFeaturePreview('STABLE_PUBLISHING')
-
 include 'annotations'
 include 'webscripts'
 include 'event-bus'

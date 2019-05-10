@@ -8,7 +8,7 @@ configurations {
 
 dependencies {
 
-    compileOnly "eu.xenit.alfresco:alfresco-community-bom:5.0.d"
+    compileOnly platform("eu.xenit.alfresco:alfresco-community-bom:5.0.d")
 
     compileOnly project(':annotations-runtime')
 
