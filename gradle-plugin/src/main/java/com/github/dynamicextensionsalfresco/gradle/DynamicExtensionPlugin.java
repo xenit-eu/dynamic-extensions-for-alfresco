@@ -6,14 +6,19 @@ import aQute.bnd.osgi.Constants;
 import com.github.dynamicextensionsalfresco.gradle.configuration.BaseConfig;
 import com.github.dynamicextensionsalfresco.gradle.internal.BndHandler;
 import com.github.dynamicextensionsalfresco.gradle.tasks.InstallBundle;
+import org.gradle.api.GradleException;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.jvm.tasks.Jar;
+import org.gradle.util.GradleVersion;
 
 public class DynamicExtensionPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project project) {
+        if(GradleVersion.current().compareTo(GradleVersion.version("4.10")) < 0) {
+            throw new GradleException("The Dynamic Extension plugin requires at least Gradle 4.10. Your current gradle version is: "+GradleVersion.current().getVersion());
+        }
         // Apply BND plugin to handle OSGi manifest
         project.getPlugins().apply(BndBuilderPlugin.class);
 
