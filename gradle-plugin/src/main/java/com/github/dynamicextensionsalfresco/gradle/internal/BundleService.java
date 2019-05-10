@@ -12,7 +12,7 @@ import java.io.IOException;
  */
 public class BundleService {
 
-	private RestClient client;
+	private final RestClient client;
 	
 	private String apiPath;
 

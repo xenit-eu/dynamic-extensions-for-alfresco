@@ -10,12 +10,15 @@ import java.util.Map;
 import javax.inject.Inject;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.GradleException;
-import org.gradle.api.file.FileCollection;
+import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
 import org.gradle.api.model.ObjectFactory;
+import org.gradle.api.provider.Property;
+import org.gradle.api.provider.ProviderFactory;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputFiles;
+import org.gradle.api.tasks.Internal;
 import org.gradle.api.tasks.SkipWhenEmpty;
 import org.gradle.api.tasks.TaskAction;
 
@@ -24,30 +27,37 @@ import org.gradle.api.tasks.TaskAction;
  */
 public class InstallBundle extends DefaultTask {
     private static final Logger LOGGER = Logging.getLogger(InstallBundle.class);
-    private Repository repository;
-    private FileCollection files = getProject().files();
+    private ConfigurableFileCollection files = getProject().files();
+    private Property<Repository> repository;
+    private Property<BundleService> bundleService;
 
-    @Input
-    public Repository getRepository() {
-        return repository;
+    @Inject
+    public InstallBundle(ObjectFactory objectFactory, ProviderFactory providerFactory) {
+        repository = objectFactory.property(Repository.class);
+        bundleService = objectFactory.property(BundleService.class);
+        bundleService.set(repository.map(repo ->
+                new BundleService(new RestClient(repo.getEndpoint(), repo.getAuthentication()))
+        ));
     }
 
-    public void setRepository(Repository repository) {
-        this.repository = repository;
+    @Internal
+    public Property<BundleService> getBundleService() {
+        return bundleService;
+    }
+
+    @Input
+    public Property<Repository> getRepository() {
+        return repository;
     }
 
     @InputFiles
     @SkipWhenEmpty
-    public FileCollection getFiles() {
+    public ConfigurableFileCollection getFiles() {
         return files;
     }
 
-    public void setFiles(FileCollection files) {
-        this.files = files;
-    }
-
-    private BundleService createBundleService() {
-        return new BundleService(new RestClient(repository.getEndpoint(), repository.getAuthentication()));
+    public void setFiles(Object... paths) {
+        this.files.setFrom(paths);
     }
 
     @TaskAction
@@ -59,18 +69,18 @@ public class InstallBundle extends DefaultTask {
                 throw new GradleException("User not authorized to install bundles in repository. " +
                         "Make sure you specify the correct username and password for an admin-level account.", e);
             } else {
-                throw new GradleException("Error installing bundles in repository "+repository.getEndpoint().getUrl()+": "+e.getMessage(), e);
+                throw new GradleException("Error installing bundles in repository "+repository.get().getEndpoint().getUrl()+": "+e.getMessage(), e);
             }
         }
     }
 
     private void install(File bundle) {
         try {
-            Map<String, Object> response = (Map<String, Object>) createBundleService().installBundle(bundle);
+            Map<String, Object> response = (Map<String, Object>) bundleService.get().installBundle(bundle);
             LOGGER.debug((String)response.get("message"));
-            LOGGER.info("{} deployed to {}: Bundle ID {}", bundle.getName(), repository.getEndpoint().getUrl(), response.get("bundleId"));
+            LOGGER.info("{} deployed to {}: Bundle ID {}", bundle.getName(), repository.get().getEndpoint().getUrl(), response.get("bundleId"));
         } catch (IOException e) {
-            throw new GradleException("Error installing bundle "+bundle.getName()+" in repository "+repository.getEndpoint().getUrl()+": "+e.getMessage(), e);
+            throw new GradleException("Error installing bundle "+bundle.getName()+" in repository "+repository.get().getEndpoint().getUrl()+": "+e.getMessage(), e);
         }
     }
 }

@@ -1,19 +1,15 @@
 package com.github.dynamicextensionsalfresco.gradle.internal;
 
 import aQute.bnd.gradle.BundleTaskConvention;
-import aQute.bnd.gradle.PropertiesWrapper;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
-import java.io.StringBufferInputStream;
 import java.io.StringReader;
 import java.io.UncheckedIOException;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import org.gradle.api.GradleException;
 import org.gradle.api.Task;
 
 public class BndHandler {

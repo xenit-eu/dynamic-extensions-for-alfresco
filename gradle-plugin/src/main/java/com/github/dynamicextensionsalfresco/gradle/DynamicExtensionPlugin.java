@@ -43,8 +43,8 @@ public class DynamicExtensionPlugin implements Plugin<Project> {
 
         // Configure all InstallBundle type tasks to point to the default repository if none is explicitly set
         project.getTasks().withType(InstallBundle.class, task -> {
-            if(task.getRepository() == null) {
-                task.setRepository(config.getRepository());
+            if(!task.getRepository().isPresent()) {
+                task.getRepository().set(config.getRepository());
             }
         });
 
