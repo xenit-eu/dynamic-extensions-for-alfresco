@@ -47,3 +47,11 @@ pluginBundle {
 }
 
 defaultTasks 'build'
+
+afterEvaluate {
+    plugins.withType(IdeaPlugin.class) { idea ->
+        idea.model.module {
+            testSourceDirs += sourceSets.integTest.allSource.srcDirs
+        }
+    }
+}
