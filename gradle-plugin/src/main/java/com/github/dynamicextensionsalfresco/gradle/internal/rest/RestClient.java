@@ -75,7 +75,7 @@ public class RestClient {
                 onConnect.throwingAccept(conn);
             }
 
-            return new JsonSlurper().parseText((String)conn.getContent());
+            return new JsonSlurper().parse((InputStream) conn.getContent());
         } catch (Exception e) {
             String message = e.getMessage();
             String errorText = IOUtils.toString(conn.getErrorStream());
