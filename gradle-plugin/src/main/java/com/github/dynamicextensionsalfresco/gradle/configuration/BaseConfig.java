@@ -10,27 +10,18 @@ import org.gradle.api.model.ObjectFactory;
  */
 public class BaseConfig {
     private final Repository repository;
-    private final Versions versions;
 
     @Inject
     public BaseConfig(ObjectFactory objectFactory) {
         repository = objectFactory.newInstance(Repository.class);
-        versions = objectFactory.newInstance(Versions.class);
     }
 
     public Repository getRepository() {
         return repository;
     }
 
-    public Versions getVersions() {
-        return versions;
-    }
-
     public void repository(Action<? super Repository> action) {
         action.execute(repository);
     }
 
-    public void versions(Action<? super Versions> action) {
-        action.execute(versions);
-    }
 }
