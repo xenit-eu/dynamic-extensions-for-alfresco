@@ -26,7 +26,7 @@ public class Authentication {
         password.set("admin");
 
         basic = providerFactory.provider(() -> {
-            return Base64.getEncoder().encodeToString((username+":"+password).getBytes());
+            return Base64.getEncoder().encodeToString((username.get()+":"+password.get()).getBytes());
         });
     }
 
