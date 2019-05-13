@@ -19,6 +19,7 @@ class InstallBundleTest {
     public void installsBundles() {
         Project project = ProjectBuilder.builder().build()
         project.apply plugin: 'alfresco-dynamic-extension'
+        project.apply plugin: 'java'
 
         RestClient restClientMock = Mockito.mock(RestClient.class)
         BundleService bundleService = new BundleService(restClientMock)
@@ -44,6 +45,7 @@ class InstallBundleTest {
     public void installBundleTasksConfiguredAutomatically() {
         Project project = ProjectBuilder.builder().build()
         project.apply plugin: 'alfresco-dynamic-extension'
+        project.apply plugin: 'java'
         project.tasks.jar.destinationDir.mkdirs()
         project.tasks.jar.archivePath.write("test jar")
 
@@ -61,6 +63,7 @@ class InstallBundleTest {
     public void installBundleTasksConfiguredManually() {
         Project project = ProjectBuilder.builder().build()
         project.apply plugin: 'alfresco-dynamic-extension'
+        project.apply plugin: 'java'
 
         project.ext.otherAlfresco = project.objects.newInstance(Repository)
         project.ext.otherAlfresco.endpoint {
@@ -86,6 +89,7 @@ class InstallBundleTest {
     public void installBundleTaskIsCreated() {
         Project project = ProjectBuilder.builder().build()
         project.apply plugin: 'alfresco-dynamic-extension'
+        project.apply plugin: 'java'
 
         project.configure(project.alfrescoDynamicExtensions, {
             repository {
@@ -98,9 +102,6 @@ class InstallBundleTest {
                     username = 'admin'
                     password = 'password'
                 }
-            }
-            versions {
-                dynamicExtensions = '1.1.0'
             }
         })
 

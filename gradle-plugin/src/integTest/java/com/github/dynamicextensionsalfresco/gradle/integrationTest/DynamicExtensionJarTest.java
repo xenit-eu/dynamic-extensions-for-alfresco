@@ -104,7 +104,7 @@ public class DynamicExtensionJarTest extends AbstractIntegrationTest {
             Attributes mainAttributes = jarManifest.getMainAttributes();
 
             assertEquals("true", mainAttributes.getValue("Alfresco-Dynamic-Extension"));
-            assertEquals("*", mainAttributes.getValue(Constants.DYNAMICIMPORT_PACKAGE));
+            assertNull(mainAttributes.getValue(Constants.DYNAMICIMPORT_PACKAGE));
             String[] packageImports = mainAttributes.getValue(Constants.IMPORT_PACKAGE).split(",");
             assertArrayEquals(new String[] {
                     "com.github.dynamicextensionsalfresco.webscripts.annotations",
