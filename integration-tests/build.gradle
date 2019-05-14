@@ -1,5 +1,5 @@
 plugins {
-    id "eu.xenit.docker-alfresco" version "4.0.2" apply false
+    id "eu.xenit.docker-alfresco" version "4.0.3" apply false
 }
 
 apply plugin: 'java'

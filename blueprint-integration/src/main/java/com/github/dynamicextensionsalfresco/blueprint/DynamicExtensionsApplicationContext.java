@@ -44,6 +44,8 @@ import org.osgi.service.packageadmin.PackageAdmin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.parsing.BeanDefinitionParsingException;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -51,6 +53,7 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.DefaultNamespaceHandlerResolver;
 import org.springframework.beans.factory.xml.DelegatingEntityResolver;
+import org.springframework.beans.factory.xml.NamespaceHandler;
 import org.springframework.beans.factory.xml.NamespaceHandlerResolver;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.ApplicationContext;
@@ -60,10 +63,10 @@ import org.springframework.util.StringUtils;
 import org.xml.sax.EntityResolver;
 
 /**
- * [ApplicationContext] for Dynamic Extensions.
+ * {@link ApplicationContext} for Dynamic Extensions.
  *
  *
- * This implementation populates the [BeanFactory] with [BeanDefinition]s by scanning for classes in packages listed in
+ * This implementation populates the {@link BeanFactory} with {@link BeanDefinition}s by scanning for classes in packages listed in
  * the bundle's {@value #SPRING_CONFIGURATION_HEADER} header. This enables XML-free configuration.
  *
  *
@@ -78,7 +81,7 @@ import org.xml.sax.EntityResolver;
  *
  *
  * If Spring XML configuration is present in the classpath folder `/META-INF/spring` this implementation falls back on
- * creating an [ApplicationContext] by combining configuration from all XML files in this folder.
+ * creating an {@link ApplicationContext} by combining configuration from all XML files in this folder.
  *
  *
  * This implementation works around classloading issues for Spring XML [NamespaceHandler]s when *embedding* the
@@ -87,9 +90,9 @@ import org.xml.sax.EntityResolver;
  * framework, but through the embedding application's classloader.
  *
  *
- * Specifically, this class loads bean definitions by creating an [XmlBeanDefinitionReader] configured with a
- * [NamespaceHandlerResolver] and an [EntityResolver] obtained from the embedding application. This, in turn, causes the
- * Spring XML configuration to be handled by [NamespaceHandler]s from the Spring libraries bundled with Alfresco. These
+ * Specifically, this class loads bean definitions by creating an {@link XmlBeanDefinitionReader} configured with a
+ * {@link NamespaceHandlerResolver} and an {@link EntityResolver} obtained from the embedding application. This, in turn, causes the
+ * Spring XML configuration to be handled by {@link NamespaceHandler}s from the Spring libraries bundled with Alfresco. These
  * services must have a `hostApplication` property that is set to the value "alfresco" for this to work.
  *
  *
