@@ -69,7 +69,7 @@ public class InstallBundle extends DefaultTask {
                 throw new GradleException("User not authorized to install bundles in repository. " +
                         "Make sure you specify the correct username and password for an admin-level account.", e);
             } else {
-                throw new GradleException("Error installing bundles in repository "+repository.get().getEndpoint().getUrl()+": "+e.getMessage(), e);
+                throw new GradleException("Error installing bundles in repository "+repository.get().getEndpoint().getUrl().get()+": "+e.getMessage(), e);
             }
         }
     }
@@ -78,9 +78,9 @@ public class InstallBundle extends DefaultTask {
         try {
             Map<String, Object> response = (Map<String, Object>) bundleService.get().installBundle(bundle);
             LOGGER.debug((String)response.get("message"));
-            LOGGER.info("{} deployed to {}: Bundle ID {}", bundle.getName(), repository.get().getEndpoint().getUrl(), response.get("bundleId"));
+            LOGGER.info("{} deployed to {}: Bundle ID {}", bundle.getName(), repository.get().getEndpoint().getUrl().get(), response.get("bundleId"));
         } catch (IOException e) {
-            throw new GradleException("Error installing bundle "+bundle.getName()+" in repository "+repository.get().getEndpoint().getUrl()+": "+e.getMessage(), e);
+            throw new GradleException("Error installing bundle "+bundle.getName()+" in repository "+repository.get().getEndpoint().getUrl().get()+": "+e.getMessage(), e);
         }
     }
 }

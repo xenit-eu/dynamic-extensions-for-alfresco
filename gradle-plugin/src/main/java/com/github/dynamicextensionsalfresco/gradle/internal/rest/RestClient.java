@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import org.apache.commons.io.IOUtils;
 
@@ -78,15 +80,18 @@ public class RestClient {
             return new JsonSlurper().parse((InputStream) conn.getContent());
         } catch (Exception e) {
             String message = e.getMessage();
-            String errorText = IOUtils.toString(conn.getErrorStream());
-            if (errorText != null) {
-                message = errorText;
-            }
-            String contentType = conn.getHeaderField("Content-Type");
-            if(contentType != null && contentType.contains("application/json")) {
-                Map<String, Object> json = (Map<String, Object>) new JsonSlurper().parseText(errorText);
-                if (json.containsKey("message")) {
-                    message = (String) json.get("message");
+            InputStream errorStream = conn.getErrorStream();
+            if(errorStream != null) {
+                String errorText = IOUtils.toString(errorStream, StandardCharsets.UTF_8);
+                if (errorText != null) {
+                    message = errorText;
+                    String contentType = conn.getHeaderField("Content-Type");
+                    if(contentType != null && contentType.contains("application/json")) {
+                        Map<String, Object> json = (Map<String, Object>) new JsonSlurper().parseText(errorText);
+                        if (json.containsKey("message")) {
+                            message = (String) json.get("message");
+                        }
+                    }
                 }
             }
             throw new RestClientException(new RestClientStatus(conn.getResponseCode(), conn.getResponseMessage()), message);
