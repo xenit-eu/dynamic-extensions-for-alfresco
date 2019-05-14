@@ -42,7 +42,9 @@ public class ScheduledTaskRegistrar implements ApplicationContextAware, Initiali
     }
 
     public void registerScheduledTaskAnnotatedBeans() {
-        Map<String, Object> scheduledBeans = applicationContext.getBeansWithAnnotation(ScheduledQuartzJob.class);
+        Map<String, Object> scheduledBeans = applicationContext.getBeansWithAnnotation(ScheduledTask.class);
+        scheduledBeans.putAll(applicationContext.getBeansWithAnnotation(ScheduledQuartzJob.class));
+
         for (Map.Entry entry : scheduledBeans.entrySet()) {
             Object bean = entry.getValue();
             try {
