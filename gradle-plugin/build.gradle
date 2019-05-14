@@ -21,6 +21,7 @@ dependencies {
     implementation "commons-io:commons-io:2.6"
     testImplementation "junit:junit:${project.ext.junitVersion}"
     testImplementation "org.mockito:mockito-core:2.27.0"
+    testImplementation "eu.xenit.gradle:alfresco-sdk:0.2.0" // For testing with this plugin applied
 }
 
 gradlePlugin {
