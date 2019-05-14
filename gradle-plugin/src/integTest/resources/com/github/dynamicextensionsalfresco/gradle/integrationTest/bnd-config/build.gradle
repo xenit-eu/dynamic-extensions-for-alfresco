@@ -1,0 +1,28 @@
+plugins {
+    id "eu.xenit.de"
+    id "java"
+    id "eu.xenit.alfresco" version "0.2.0"
+}
+
+repositories {
+    mavenCentral()
+    alfrescoPublic()
+}
+
+alfrescoDynamicExtensions {
+    versions {
+        dynamicExtensions = null
+    }
+}
+
+dependencies {
+    alfrescoProvided("eu.xenit.de:annotations:1.7.6") { transitive = false }
+    alfrescoProvided("eu.xenit.de:webscripts:1.7.6") { transitive = false }
+    alfrescoProvided("org.alfresco:alfresco-repository:5.0.d")
+}
+
+jar {
+    bnd([
+        'Export-Package': 'com.github.dynamicextensionsalfresco.examples'
+    ])
+}

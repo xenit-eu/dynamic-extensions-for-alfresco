@@ -1,14 +1,64 @@
-apply plugin: 'groovy'
-
-dependencies {
-    compile gradleApi()
-    compile localGroovy()
-    testCompile "junit:junit:${project.ext.junitVersion}"
+plugins {
+    id "com.gradle.plugin-publish" version "0.10.1"
+    id "nebula.integtest" version "6.0.3"
+    id "de.fuerstenau.buildconfig" version "1.1.8"
+    id "java-gradle-plugin"
+    id "groovy"
 }
 
-compileGroovy {
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+repositories {
+    gradlePluginPortal()
+}
+
+buildConfig {
+    packageName = "com.github.dynamicextensionsalfresco.gradle.internal"
+}
+
+
+dependencies {
+    implementation gradleApi()
+    implementation "biz.aQute.bnd:biz.aQute.bnd.gradle:4.2.0"
+    implementation "commons-io:commons-io:2.6"
+    testImplementation "junit:junit:${project.ext.junitVersion}"
+    testImplementation "org.mockito:mockito-core:2.27.0"
+    testImplementation "eu.xenit.gradle:alfresco-sdk:0.2.0" // For testing with this plugin applied
+}
+
+gradlePlugin {
+    plugins {
+        de {
+            id = "eu.xenit.de"
+            implementationClass = "com.github.dynamicextensionsalfresco.gradle.DynamicExtensionPlugin"
+        }
+    }
+}
+
+pluginBundle {
+    pluginBundle {
+        vcsUrl = "https://github.com/xenit-eu/dynamic-extensions-for-alfresco"
+        website = vcsUrl
+        description = "Gradle plugin to support Dynamic Extension development"
+        tags = ["alfresco", "dynamic-extensions", "osgi"]
+        plugins {
+            de {
+                displayName = "Dynamic Extensions for Alfresco gradle plugin"
+            }
+        }
+
+        mavenCoordinates {
+            groupId = project.group
+            artifactId = project.name
+        }
+    }
 }
 
 defaultTasks 'build'
+
+afterEvaluate {
+    plugins.withType(IdeaPlugin.class) { idea ->
+        idea.model.module {
+            testSourceDirs += sourceSets.integTest.allSource.srcDirs
+            generatedSourceDirs += project.tasks.generateBuildConfig.outputDir
+        }
+    }
+}

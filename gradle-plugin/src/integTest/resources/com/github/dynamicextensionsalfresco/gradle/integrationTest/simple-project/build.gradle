@@ -1,0 +1,20 @@
+plugins {
+    id "eu.xenit.de"
+    id "java"
+    id "eu.xenit.alfresco" version "0.2.0"
+}
+
+repositories {
+    mavenCentral()
+    alfrescoPublic()
+}
+
+alfrescoDynamicExtensions {
+    versions {
+        dynamicExtensions = "1.7.6"
+    }
+}
+
+dependencies {
+    alfrescoProvided("org.alfresco:alfresco-repository:5.0.d")
+}
