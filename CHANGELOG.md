@@ -25,6 +25,11 @@ Version template:
 ### Changed
 * Build process refactored to build and compile for specific Alfresco versions
 * `@ScheduledQuartzJob` deprecated in favour for vendor-neutral `@ScheduledTask`
+* Gradle plugin refactored
+  * Only adds dynamic extensions dependencies to `compileOnly`, and this can be turned off
+  * Removed `CallWebScript` task type
+  * The `jar` task now used bnd to build OSGi bundles
+  * Added `DeBundle` task type that can be used to manually create dynamic extension bundles
 
 ### Added
 * Alfresco 6 support
