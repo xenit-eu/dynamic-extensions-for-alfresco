@@ -1,4 +1,4 @@
-package com.github.dynamicextensionsalfresco.blueprint;
+package com.github.dynamicextensionsalfresco.blueprint.spring5;
 
 import com.github.dynamicextensionsalfresco.BeanNames;
 import com.github.dynamicextensionsalfresco.annotations.AlfrescoService;
@@ -18,7 +18,7 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * Spring 3 compatible {@link BeanFactory} that
+ * Spring 5 compatible {@link BeanFactory} that
  * <ul>
  * <li>Augments default autowiring logic by attempting to resolve dependencies using Alfresco naming conventions.</li>
  * <li>Resolves dependencies on OSGi services or the {@link BundleContext}</li>
@@ -26,12 +26,12 @@ import org.springframework.util.StringUtils;
  *
  * @author Laurens Fridael
  */
-public class Spring3OsgiAutowireBeanFactory extends DefaultListableBeanFactory {
+public class Spring5OsgiAutowireBeanFactory extends DefaultListableBeanFactory {
 
     private final BundleContext bundleContext;
     private final Set<String> internalBeanNames = new HashSet<>();
 
-    Spring3OsgiAutowireBeanFactory(final BeanFactory parentBeanFactory, final BundleContext bundleContext) {
+    public Spring5OsgiAutowireBeanFactory(final BeanFactory parentBeanFactory, final BundleContext bundleContext) {
         super(parentBeanFactory);
         this.bundleContext = bundleContext;
 
@@ -64,7 +64,7 @@ public class Spring3OsgiAutowireBeanFactory extends DefaultListableBeanFactory {
     }
 
     @Override
-    protected String determinePrimaryCandidate(final Map<String, Object> candidateBeans,
+    protected String determineAutowireCandidate(final Map<String, Object> candidateBeans,
             final DependencyDescriptor descriptor) {
         String beanName = ClassUtils.getShortName(descriptor.getDependencyType());
 
@@ -91,7 +91,7 @@ public class Spring3OsgiAutowireBeanFactory extends DefaultListableBeanFactory {
                 }
                 break;
         }
-        return super.determinePrimaryCandidate(candidateBeans, descriptor);
+        return super.determineAutowireCandidate(candidateBeans, descriptor);
     }
 
     /* Utility operations */

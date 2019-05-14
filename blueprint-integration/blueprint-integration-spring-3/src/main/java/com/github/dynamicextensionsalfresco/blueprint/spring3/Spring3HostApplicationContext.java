@@ -1,4 +1,4 @@
-package com.github.dynamicextensionsalfresco.blueprint;
+package com.github.dynamicextensionsalfresco.blueprint.spring3;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -33,7 +33,7 @@ import org.springframework.util.Assert;
  * @author Laurens Fridael
  * @author Laurent Van der Linden
  */
-class Spring3HostApplicationContext extends AbstractApplicationContext {
+public class Spring3HostApplicationContext extends AbstractApplicationContext {
 
 	private final ApplicationContext applicationContext;
 
@@ -215,7 +215,7 @@ class Spring3HostApplicationContext extends AbstractApplicationContext {
 		return applicationContext.getAliases(name);
 	}
 
-	Spring3HostApplicationContext(final ApplicationContext applicationContext) {
+	public Spring3HostApplicationContext(final ApplicationContext applicationContext) {
 		Assert.notNull(applicationContext);
 		this.applicationContext = applicationContext;
 	}

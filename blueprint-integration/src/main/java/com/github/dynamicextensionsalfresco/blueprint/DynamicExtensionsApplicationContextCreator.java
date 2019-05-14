@@ -1,9 +1,10 @@
 package com.github.dynamicextensionsalfresco.blueprint;
 
+import com.github.dynamicextensionsalfresco.blueprint.spring3.Spring3HostApplicationContext;
+import com.github.dynamicextensionsalfresco.blueprint.spring5.Spring5HostApplicationContext;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.alfresco.service.descriptor.Descriptor;
 import org.alfresco.service.descriptor.DescriptorService;
 import org.alfresco.util.VersionNumber;
 import org.eclipse.gemini.blueprint.context.DelegatedExecutionOsgiBundleApplicationContext;

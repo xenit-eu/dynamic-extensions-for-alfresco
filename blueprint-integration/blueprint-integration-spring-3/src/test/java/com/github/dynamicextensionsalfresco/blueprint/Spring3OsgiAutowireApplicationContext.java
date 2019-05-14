@@ -2,6 +2,7 @@ package com.github.dynamicextensionsalfresco.blueprint;
 
 import static org.mockito.Mockito.mock;
 
+import com.github.dynamicextensionsalfresco.blueprint.spring3.Spring3OsgiAutowireBeanFactory;
 import org.osgi.framework.BundleContext;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;

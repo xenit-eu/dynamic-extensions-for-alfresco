@@ -3,6 +3,8 @@ package com.github.dynamicextensionsalfresco.blueprint;
 import com.github.dynamicextensionsalfresco.BeanNames;
 import com.github.dynamicextensionsalfresco.actions.AnnotationBasedActionRegistrar;
 import com.github.dynamicextensionsalfresco.aop.DynamicExtensionsAdvisorAutoProxyCreator;
+import com.github.dynamicextensionsalfresco.blueprint.spring3.Spring3OsgiAutowireBeanFactory;
+import com.github.dynamicextensionsalfresco.blueprint.spring5.Spring5OsgiAutowireBeanFactory;
 import com.github.dynamicextensionsalfresco.event.EventBus;
 import com.github.dynamicextensionsalfresco.event.events.SpringContextException;
 import com.github.dynamicextensionsalfresco.messages.MessagesRegistrar;
