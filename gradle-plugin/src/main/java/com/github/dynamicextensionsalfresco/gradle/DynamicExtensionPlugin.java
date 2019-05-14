@@ -79,7 +79,8 @@ public class DynamicExtensionPlugin implements Plugin<Project> {
      */
     private void configureDependencies(Project project) {
         // Detached configuration, so we can attach it to multiple different configurations if we want to
-        Configuration dynamicExtensions = project.getConfigurations().detachedConfiguration();
+        // FIXME: replaced with a named configuration to work around https://github.com/gradle/gradle/issues/9398
+        Configuration dynamicExtensions = project.getConfigurations().create("__dynamicExtensionsInternalDetachedConfiguration");
         dynamicExtensions.defaultDependencies(dependencies -> {
             if(baseConfig.getVersions().getDynamicExtensions().isPresent()) {
                 String dynamicExtensionsVersion = baseConfig.getVersions().getDynamicExtensions().get();
