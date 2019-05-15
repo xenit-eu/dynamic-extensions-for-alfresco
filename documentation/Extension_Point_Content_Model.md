@@ -1,6 +1,4 @@
-# Dynamic Extensions Alfresco Platform extension points
-
-## Content Model
+# Content Model
 
 Dynamic Extensions provides a convenient way of registering custom content models with the Alfresco Data Dictionary. (See the <a href="http://wiki.alfresco.com/wiki/Data_Dictionary_Guide">Data Dictionary Guide</a> for more info on content models.)
 
@@ -12,14 +10,14 @@ When Dynamic Extensions installs an extension it scans for the presence of XML f
 
 Dynamic Extensions assumes the XML files in this folder contain content models, any other XML content will yield an error. It ignores everything in this folder that is not an XML file.
 
-### Reference
+## Reference
 
 * <a href="http://wiki.alfresco.com/wiki/Data_Dictionary_Guide">Data Dictionary Guide</a> (Alfresco Wiki)
 
 Note that you cannot make breaking changes to your model. Alfresco will refuse to update the model in this case.
 (same behaviour as manual upload to Data Dictionary / Models)
 
-### Direct Model DAO access
+## Direct Model DAO access
 
 During development, it can be usefull to bypass the registration of models via the repository when doing heavy refactoring of a model. As Alfresco does not allow breaking changes (such as adding a required aspect or removing types that are in use), you can opt for a bypass of this validation during __development__.
 

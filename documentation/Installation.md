@@ -47,10 +47,8 @@ Dynamic Extensions is systematically integration tested against:
 * Alfresco Enterprise 5.1
 * Alfresco Enterprise 5.0
 
-### Known Alfresco issues that impact Dynamic Extensions
-
-#### Alfresco 6.1 - wrong version of 'Commons annotations' used
-When using DE on Alfresco 6.1, it is possible that it fails to startup due to following error:
+### Known Alfresco issues that impact Dynamic Extensions</summary>
+<details><summary>Alfresco 6.1 - wrong version of 'Commons annotations' used</summary>When using DE on Alfresco 6.1, it is possible that it fails to startup due to following error:
 
 ```
 Caused by: java.lang.NoSuchMethodError: javax.annotation.Resource.lookup()Ljava/lang/String;
@@ -84,3 +82,4 @@ Waiting for Alfresco to fix the issue, following workarounds can be used to make
 * Remove the `jsr250-api` and `geronimo-annotation_1.0_spec` jars from the `WEB-INF/lib` folder of the Alfresco webapp.
 * Install [this hotfix AMP](https://github.com/xenit-eu/alfresco-hotfix-MNT-20557) in your Alfresco distribution, 
 which will overwrite the `jsr250-api` and `geronimo-annotation_1.0_spec` jars with empty jars.
+<details>

@@ -1,5 +1,27 @@
 # Building Dynamic Extensions compatible Bundles
 
+## Required Java dependencies
+
+To be able to use the Dynamic Extensions annotations and webscripts, following two dependencies are required
+to compile a Dynamic Extensions Java Bundle:
+
+```xml
+        <dependency>
+            <groupId>eu.xenit.de</groupId>
+            <artifactId>annotations</artifactId>
+            <version>${dynamic.extensions.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>eu.xenit.de</groupId>
+            <artifactId>webscripts</artifactId>
+            <version>${dynamic.extensions.version}</version>
+            <scope>provided</scope>
+        </dependency>
+```
+
+When using the Dynamic Extensions Gradle plugin, these dependencies will automatically be included to your project.
+
 ## Building DE OSGi Bundles
 
 Dynamic Extensions uses the OSGi specification to enable hot reloading of Java 
@@ -53,7 +75,7 @@ Bundles.
     </plugin>
 ```
 
-Have a look at the plugin's [detailed documentation](https://felix.apache.org/documentation/subprojects/apache-felix-maven-bundle-plugin-bnd.html). 
+Have a look at the plugin's [detailed documentation](https://felix.apache.org/documentation/subprojects/apache-felix-maven-bundle-plugin-bnd.html)
 for more information.
 
 ## Assembling DE Bundles into an AMP
