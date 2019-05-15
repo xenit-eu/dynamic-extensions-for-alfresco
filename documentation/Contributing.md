@@ -18,6 +18,10 @@ use the following command:
 
 * `./gradlew :integration-tests:alfresco-61:composeUp`
 
+> For Alfresco Enterprise, Xenit interal docker images are used. If you have access to the Xenit docker 
+> infrastructure, it is possible to startup an Alfresco EE by using the Gradle `-Penterprise parameter`.  
+> E.g. `./gradlew :integration-tests:alfresco-enterprise-61:composeUp -Penterprise`
+
 Once started, e.g. the `docker ps` command can be used to see on which port Alfresco is available. To stop the Alfresco,
 use the `composeDown` task can be used:
 

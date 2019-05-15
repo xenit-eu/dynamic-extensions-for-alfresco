@@ -20,7 +20,8 @@ to compile a Dynamic Extensions Java Bundle:
         </dependency>
 ```
 
-When using the Dynamic Extensions Gradle plugin, these dependencies will automatically be included to your project.
+When using the [Dynamic Extensions Gradle plugin](#Building DE OSGi Bundles using Gradle), 
+these dependencies will automatically be included to your project.
 
 ## Building DE OSGi Bundles
 

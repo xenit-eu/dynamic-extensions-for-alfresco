@@ -64,8 +64,6 @@ We can now finally deploy junit-osgi.jar and extensions using the junit classes.
 
 A final benefit is the isolation towards Alfresco: none of the deployed OSGi libraries will be visible to Alfresco and thus we can safely deploy newer versions of eg. Guava without conflicting with Alfresco code dependencies.
 
-You can avoid the use of **bnd** by first checking the Spring bundle repository: <http://ebr.springsource.com/repository/app/>. They host OSGi versions of many popular Java libraries.
-
 ## ClassNotFoundException
 
 When using libraries such as Hibernate or Spring's @Configuration support, you may encounter `ClassNotFoundException` (ie. references to cglib).
