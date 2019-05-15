@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import javax.inject.Inject;
+import org.gradle.api.Action;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.GradleException;
 import org.gradle.api.file.ConfigurableFileCollection;
@@ -15,7 +16,6 @@ import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.Property;
-import org.gradle.api.provider.ProviderFactory;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputFiles;
 import org.gradle.api.tasks.Internal;
@@ -23,7 +23,7 @@ import org.gradle.api.tasks.SkipWhenEmpty;
 import org.gradle.api.tasks.TaskAction;
 
 /**
- * @author Laurent Van der Linden
+ * Installs a (set of) bundles into a running Alfresco server with Dynamic Extensions.
  */
 public class InstallBundle extends DefaultTask {
     private static final Logger LOGGER = Logging.getLogger(InstallBundle.class);
@@ -32,7 +32,7 @@ public class InstallBundle extends DefaultTask {
     private Property<BundleService> bundleService;
 
     @Inject
-    public InstallBundle(ObjectFactory objectFactory, ProviderFactory providerFactory) {
+    public InstallBundle(ObjectFactory objectFactory) {
         repository = objectFactory.property(Repository.class);
         bundleService = objectFactory.property(BundleService.class);
         bundleService.set(repository.map(repo ->
@@ -45,17 +45,38 @@ public class InstallBundle extends DefaultTask {
         return bundleService;
     }
 
+    /**
+     * @return the repository coordinates to install bundles into
+     */
     @Input
     public Property<Repository> getRepository() {
         return repository;
     }
 
+
+    /**
+     * Create new repository coordinates and configures them
+     * @param repositoryAction Action that configures repository coordinates
+     */
+    public void repository(Action<? super Repository> repositoryAction) {
+        Repository repo = getProject().getObjects().newInstance(Repository.class);
+        repositoryAction.execute(repo);
+        repository.set(repo);
+    }
+
+    /**
+     * @return Set of files that will be installed into the repository
+     */
     @InputFiles
     @SkipWhenEmpty
     public ConfigurableFileCollection getFiles() {
         return files;
     }
 
+    /**
+     * Sets the files that will be installed into the repository
+     * @param paths The paths to bundles. The given paths are evaluated as per {@link org.gradle.api.Project#files(Object...)}.
+     */
     public void setFiles(Object... paths) {
         this.files.setFrom(paths);
     }
