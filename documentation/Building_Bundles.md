@@ -28,7 +28,7 @@ Dynamic Extensions uses the OSGi specification to enable hot reloading of Java
 code. Therefore, [OSGi bundles](https://en.wikipedia.org/wiki/OSGi#Bundles) 
 are the unit of deployment for Dynamic Extensions Alfresco extension points.
 
-Dynamic Extensions Bundles are build by just adding some custom `META-INF/MANIFEST.MF` headers
+Dynamic Extensions Bundles are built by adding custom `META-INF/MANIFEST.MF` headers
 to the standard OSGi Bundle headers.
 
 * `Alfresco-Dynamic-Extension: true`  
@@ -36,10 +36,10 @@ to the standard OSGi Bundle headers.
     Alfresco integration.
     
 * `Alfresco-Spring-Configuration: eu.xenit.de.example`  
-    This header can be used to indicate which packages of your Bundle need to be scanned for Spring beans.  
+    This optional header can be used to indicate which packages of your Bundle need to be scanned for Spring beans.  
     If this header is not present, Dynamic Extensions will scan for Spring XML configuration files in the 
     `/META-INF/spring` directory of the Bundle.  
-    If the header is not provided and there is not Spring XML configuration present in the bundle, all the packages
+    If there also is no Spring XML configuration present in the bundle, all the packages
     inside the Bundle will be scanned for Spring beans.
     
 
@@ -75,7 +75,7 @@ Bundles.
     </plugin>
 ```
 
-Have a look at the plugin's [detailed documentation](https://felix.apache.org/documentation/subprojects/apache-felix-maven-bundle-plugin-bnd.html)
+Have a look at the [detailed documentation of the bundle plugin](https://felix.apache.org/documentation/subprojects/apache-felix-maven-bundle-plugin-bnd.html)
 for more information.
 
 ## Assembling DE Bundles into an AMP
@@ -85,7 +85,7 @@ To package DE Bundles into an AMP, all that need to happen is to put the DE Bund
 
 ### Assembling Bundles into an AMP using Gradle
 
-The Alfresco Gradle SDK has support for building AMP's with DE Bundles. Please have a look at the 
+The Alfresco Gradle SDK has support for building AMPs with DE Bundles. Please have a look at the 
 [corresponding documentation](https://github.com/xenit-eu/alfresco-gradle-sdk#dynamicextension) in that project.
 
 ### Assembling Bundles into an AMP using Maven

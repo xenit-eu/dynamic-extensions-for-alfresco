@@ -1,10 +1,10 @@
 # Content Model
 
-Dynamic Extensions provides a convenient way of registering custom content models with the Alfresco Data Dictionary. (See the <a href="http://wiki.alfresco.com/wiki/Data_Dictionary_Guide">Data Dictionary Guide</a> for more info on content models.)
+Dynamic Extensions provides a convenient way of registering custom content models with the Alfresco Data Dictionary. (See the <a href="https://docs.alfresco.com/5.0/concepts/content-modeling-about.html?m=2">Content Modeling</a> for more info on content models.)
 
 To have XML content models registered automatically, place them in this location in your extension:
 
-<code>/META-INF/alfresco/models</code> <a href="https://github.com/laurentvdl/example-dynamic-extension/tree/master/src/main/resources/META-INF/alfresco/models">See example project</a>
+<code>/META-INF/alfresco/models</code> <a href="https://github.com/xenit-eu/example-dynamic-extension/tree/master/src/main/resources/META-INF/alfresco/models">See example project</a>
 
 When Dynamic Extensions installs an extension it scans for the presence of XML files in this folder and registers/updates the content models with the Data Dictionary. Uninstalling an extension does not remove the model as this would cause the model to disappear during restarts.
 
@@ -12,7 +12,7 @@ Dynamic Extensions assumes the XML files in this folder contain content models, 
 
 ## Reference
 
-* [Content modelling](https://docs.alfresco.com/5.0/concepts/content-modeling-about.html?m=2) (Alfresco Documentation)
+* [Content modeling](https://docs.alfresco.com/5.0/concepts/content-modeling-about.html?m=2) (Alfresco Documentation)
 
 Note that you cannot make breaking changes to your model. Alfresco will refuse to update the model in this case.
 (same behaviour as manual upload to Data Dictionary / Models)

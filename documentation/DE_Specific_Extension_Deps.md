@@ -4,11 +4,11 @@
 
 Dynamic extensions can use any library present in Alfresco's webapp classpath. (not tomcat shared)
 
-When you first install dynamic extensions, it scans the webapp classpath for libraries and stores the results in the repository. (for performance)
+When you first install dynamic extensions, it scans the webapp classpath for libraries and stores the results in the repository to reduce future startup times.
 
 Whenever the `WEB-INF/lib` changes, the list of libraries is refreshed upon restart. This means you can simply restart Alfresco after adding/removing a jar to `WEB-INF/lib` folder.
 
-You can consult the complete list at <http://localhost:8080/alfresco/service/dynamic-extensions/container/system-packages>.
+You can consult the complete list at `/alfresco/service/dynamic-extensions/container/system-packages`.
 
 A more modular and dynamic way of providing dependencies is by deploying the dependency as an OSGi bundle.
 However not any jar file can be deployed as a bundle. It needs to have an OSGi manifest.
@@ -21,7 +21,7 @@ The filename is used as a Symbolic-Name. (required for OSGi)
 
 Should you want to perform this manually, (to get more control), you can use the BND tools manually.
 
-Let's take JUnit as an example. Upload the junit jar using <http://localhost:8080/alfresco/service/dynamic-extensions/bundles>.
+Let's take JUnit as an example. Upload the junit jar using `/alfresco/service/dynamic-extensions/bundles/`.
 The operation will fail with:
 ```
 Error installing Bundle: Could not generate Bundle filename. Make sure the content is an OSGi bundle.
@@ -72,6 +72,6 @@ When using libraries such as Hibernate or Spring's @Configuration support, you m
 
 The reason for this is dynamic loading of classes that the bnd tool can not detect from your compiled .class files.
 
-The Gradle plugin sets the `instruction 'DynamicImport-Package', '*'` by default since DE 1.3.
+The Gradle plugin sets the `'DynamicImport-Package': '*'` by default when no `Import-Package` header is present.
 
 This means that, if you did not override the `Import-Package` instruction, the classes need to be added to the system classpath: `WEB-INF/lib`.

@@ -39,12 +39,12 @@ All required artifacts, including the AMP to be installed in Alfresco, are avail
 ```
 
 ```groovy
-alfrescoAmp "eu.xenit:alfresco-dynamic-extensions-repo-${alfrescoVersion}:${latest-dynamic-extensions-version}@amp"
+alfrescoAmp "eu.xenit:alfresco-dynamic-extensions-repo-${alfrescoVersion}:${dynamicExtensionsVersion}@amp"
 
 ```
 
-These artifacts can be used to automatically install DE in Alfresco using e.g. the Alfresco Maven SDK or 
-the [Alfresco Gradle Docker Plugins](https://github.com/xenit-eu/alfresco-docker-gradle-plugin)
+These artifacts can be used to automatically install Dynamic Extensions in Alfresco using e.g. the Alfresco Maven SDK or 
+the [Alfresco Docker Gradle Plugins](https://github.com/xenit-eu/alfresco-docker-gradle-plugin)
 
 #### Manual download and install
 
@@ -65,7 +65,7 @@ Dynamic Extensions is systematically integration-tested against:
 * Alfresco Enterprise 5.1
 * Alfresco Enterprise 5.0
 
-#### Known Alfresco issues that impact Dynamic Extensions</summary>
+#### Known Alfresco issues that impact Dynamic Extensions
 <details><summary>Alfresco 6.1 - wrong version of 'Commons annotations' used</summary>When using DE on Alfresco 6.1, it is possible that it fails to startup due to following error:
 
 ```

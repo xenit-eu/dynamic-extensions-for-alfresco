@@ -23,7 +23,7 @@ Also we can override when the policy should be triggered by setting the even att
 * COMMIT:  triggered from Spring commit listener, before DB commit
 * ALL: both
 
-A more complex example can be found at https://github.com/laurentvdl/example-dynamic-extension/blob/master/src/main/java/com/github/dynamicextensionsalfresco/examples/ExampleBehaviour.java.
+A more complex example can be found at https://github.com/xenit-eu/example-dynamic-extension/blob/master/src/main/java/com/github/dynamicextensionsalfresco/examples/ExampleBehaviour.java.
 
 # Behaviour troubleshooting
 

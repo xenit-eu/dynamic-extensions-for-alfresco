@@ -32,7 +32,7 @@ public class MyBootstrap implements InitializingBean {
 }
 ```
 
-First, we specify the source: you can use a Spring resource pattern here: osgibundle is used to reference the extension scope. In this case the jar of the extension.
+First, we specify the source: you can use a Spring resource pattern here: `osgibundle:` is used to reference the extension scope. In this case the jar of the extension.
 All xml files in `/META-INF/alfresco/bootstrap` will be copied to the repository.
 
 Next, specify a target location: XPATH makes a good candidate here.
