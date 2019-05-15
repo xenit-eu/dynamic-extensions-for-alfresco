@@ -37,7 +37,7 @@ public class DefaultReplicator implements IReplicator {
 ```
 
 ### Consumption
-In an Alfresco x-context.xml file, register a proxy:
+In an Alfresco X-context.xml file (where X is the name of your service), register a proxy:
 ```xml
 <bean id="replicator" parent="abstractBundleServiceProxy">
   <property name="targetInterfaces">

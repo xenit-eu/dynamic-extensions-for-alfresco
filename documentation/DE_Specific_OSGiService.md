@@ -4,13 +4,11 @@ For simple use cases, annotating a service with `@Component` or `@Service` is al
 
 ## Injecting OSGi services
 
-If you want to move common services to a separate extension, you can mark public services using the `@OsgiService` annotation.
+If you want to move common services to a separate extension (= OSGi Bundle), you can mark public services using the `@OsgiService` annotation.
 
 By default all Spring beans are only visible to other beans in the same extension Spring context, but this annotation will publish your service as an OSGi services, meaning it can be accessed from any other extension.
 
 Note that this makes the importing extension dependent on the life cycle of the exporting extension: if the Spring context for the exported has not started, no services will be available to the importing extension.
-
-_extension being an OSGi bundle_
 
 Note that it is best practice to define an interface for your service and autowire using that interface.
 While not a strict requirement at the moment, it could be in the future.

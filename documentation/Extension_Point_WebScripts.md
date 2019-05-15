@@ -31,6 +31,7 @@ public class NodeScript {
     * Boolean[]
     * QName
     * NodeRef
+* `@Authentication` can be used to indicate which type of authentication we should have to use this endpoint.
 
 If you need either the WebScriptRequest or WebScriptResponse, simply add a parameter with the matching type. (like the response in the example)
 
@@ -98,7 +99,7 @@ public class TimeController extends MyAbstractController {
 ```
 
 In addition, your can provide your own type based attribute resolvers.
-Let's say we want to able to add JsonObject to are Uri method arguments so that it would contain a JSON POST body:
+Let's say we want to be able to add JsonObject to our Uri method arguments so that it would contain a JSON POST body:
 ```java
 @Component
 public class JsonObjectArgumentResolver extends AbstractTypeBasedArgumentResolver<JSONObject> {
@@ -166,7 +167,7 @@ The template is expected to reside in the same package and the name is construct
 
 If you do not provide a template with the correct name, the expected path + name will be printed in the output.
 
-You can also define an explicit template path using `@ResponseTemplate`. With this annotation set on the method, a template will be used despite the return type. (Map no longer required)
+You can also define an explicit template path using `@ResponseTemplate`. With this annotation set on the method, a template will be used regardless of the return type. (Map no longer required)
 
 As a final note, you can also inject the model:
 
@@ -180,7 +181,7 @@ This can be very useful in combination with `@Before` handlers. (provide default
 
 ## Error templates
 
-When (not if) errors occur, you might want to have a special template in place to render the error or a useful error message for the user.
+When errors occur, you might want to have a special template in place to render the error or a useful error message for the user.
 
 You can do this at several granularities:
 * `<classname>.<method>.html.404.ftl`
@@ -201,46 +202,6 @@ protected void handleIllegalArgument(IllegalArgumentException exception, WebScri
 ## Before
 
 Any generic initialization can be put in WebScript initialization method, marked with `@Before`. (inherited from superclasses)
-
-## Resolutions
-
-So far, the output of a webscript was either handled manually (using response argument) or by returning a model from the controller method.
-
-In order to improve control flow and enable reuse of output strategies, you can use/implement resolutions.
-
-All webscript Uri methods can return an implementation of `com.github.dynamicextensionsalfresco.webscripts.resolutions.Resolution`.
-
-This is a simple interface, capable of handling a webrequest by itself:
-
-```java
-public interface Resolution {
-    void resolve(final AnnotationWebScriptRequest request, final AnnotationWebscriptResponse response,
-                 final ResolutionParameters params) throws Exception;
-}
-```
-
-Whenever your return a model from your Uri method, you're implicitly returning a `TemplateResolution` from your method.
-
-The power of a Resoluton comes with reuse:
-if your webscript needs to output JSON, you can return an anonymous implementation of `JsonWriterResolution`:
-
-
-```java
-@Uri("/api/hello")
-public Resolution sayHello() {
-  return new JsonWriterResolution() {
-    void writeJson(JSONWriter jsonWriter) throws JSONException {
-      jsonWriter.object()
-        .key("message").value("hello")
-        .endObject();
-    }
-  };
-}
-```
-
-If you want to use another Json serialisation library, create a new subclass of `JsonResolution`.
-
-Because resolutions are returned, they automatically control the flow of your Uri method.
 
 ## Request and ResponseBody
 
@@ -285,6 +246,46 @@ public ResponseEntity<Person> handleDefaultResponse(@RequestParam final String f
     return new ResponseEntity<Person>(ret, headers, HttpStatus.I_AM_A_TEAPOT);
 }
 ```
+
+## Resolutions
+
+So far, the output of a webscript was either handled manually (using response argument) or by returning a model from the controller method.
+
+In order to improve control flow and enable reuse of output strategies, you can use/implement resolutions.
+
+All webscript Uri methods can return an implementation of `com.github.dynamicextensionsalfresco.webscripts.resolutions.Resolution`.
+
+This is a simple interface, capable of handling a webrequest by itself:
+
+```java
+public interface Resolution {
+    void resolve(final AnnotationWebScriptRequest request, final AnnotationWebscriptResponse response,
+                 final ResolutionParameters params) throws Exception;
+}
+```
+
+Whenever your return a model from your Uri method, you're implicitly returning a `TemplateResolution` from your method.
+
+The power of a Resoluton comes with reuse:
+if your webscript needs to output JSON, you can return an anonymous implementation of `JsonWriterResolution`:
+
+
+```java
+@Uri("/api/hello")
+public Resolution sayHello() {
+  return new JsonWriterResolution() {
+    void writeJson(JSONWriter jsonWriter) throws JSONException {
+      jsonWriter.object()
+        .key("message").value("hello")
+        .endObject();
+    }
+  };
+}
+```
+
+If you want to use another Json serialisation library, create a new subclass of `JsonResolution`.
+
+Because resolutions are returned, they automatically control the flow of your Uri method.
  
 
 ## Resetting the Webscript index

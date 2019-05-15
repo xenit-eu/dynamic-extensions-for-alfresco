@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/xenit-eu/dynamic-extensions-for-alfresco.svg)](https://travis-ci.org/xenit-eu/dynamic-extensions-for-alfresco)
 
-Add OSGi based hot-deploy functionality and Spring annotation based configuration to your Alfresco.
+Add OSGi based hot-deploy functionality and Spring annotation based configuration to Alfresco.
 
 ## Introduction
 
@@ -11,59 +11,19 @@ Rapid development of Alfresco repository extensions in Java. Deploy your code in
 Dynamic Extensions adds an OSGi container to the Alfresco repository, enabling live deployment of Java code, with no need to restart the server.
 Alfresco itself is not "OSGi-fied" in any way; the OSGi container runs on top of the core Alfresco platform.
 
-Default Alfresco Platform Extensions use Spring XML based configuration. With Dynamic Extensions, developers
+Standard Alfresco Platform Extensions use Spring XML based configuration. With Dynamic Extensions, developers
 have the ability to create Alfresco Platform Extensions using Spring's annotations based configuration.
-
-## Example Dynamic Extensions based Alfresco Platform extension
-
-This example Web Script examines a node and passes information to a Freemarker template:
-```java
-@Component
-@WebScript
-public ExampleWebScript {
-
-  @Autowired
-  private NodeService nodeService;
-
-  @Uri("/show-node")
-  // Example: http://localhost/alfresco/service/show-node?nodeRef=workspace://SpacesStore/12345
-  public Map<String, Object> displayNodeName(@RequestParam NodeRef nodeRef) {
-    Map<String, Object> model = new HashMap<String, Object>();
-    model.put("properties", nodeService.getProperties(nodeRef));    
-    return model; // Model is passed to Freemarker template.
-  }
-}
-```
-
-Note that this is an _annotation Web Script_. These types of Web Script are configured through Java annotations instead of `*.desc.xml` descriptors. Annotation Web Scripts are similar to Spring MVC's annotation-based controllers.
-
-Here's the accompanying Freemarker template fragment:
-
-```html
-<table>
-  <#list properties?keys as name>    
-    <tr>
-      <th>${name}</th>
-      <td>${properties[name]!''}</td>
-    </tr>
-  </#list>
-</table>
-```
-
-This is all the code that is required; there's no need for Spring XML config or Web Script XML descriptors. Hot-reloading and reducing configuration overhead are not particularly novel concepts in the Java development world at large. Essentially, Dynamic Extensions modernizes the development of Alfresco repository extensions.
-
-The example above may be trivial, but the point is that, behind the scenes, services are still wired together through Spring and handled by the Web Script framework. Conceptually there is no real difference between a Dynamic Extension and a regular Alfresco extension. There's just less overhead and more convenience.
-
 
 ## Installing Dynamic Extensions in Alfresco
 
 Dynamic Extensions (DE) is distributed as an 
 [Alfresco Module Package (AMP)](https://docs.alfresco.com/5.2/concepts/dev-extensions-packaging-techniques-amps.html) extension that can be installed in Alfresco.
 
-### Installing the DE AMP
+### Installing the Dynamic Extensions AMP
 
-To support multiple Alfresco versions, different AMP's for each minor Alfresco version update are 
-build and distributed. E.g. if you are working with Alfresco 6.0.7-ga, you should
+To support multiple Alfresco versions, different AMPs for each minor Alfresco version update are 
+build and distributed.  
+E.g. if you are working with Alfresco 6.0.7-ga, you should
 use the `alfresco-dynamic-extensions-repo-60` artifact.
 
 #### Maven Central Coordinates
@@ -95,7 +55,7 @@ the [Alfresco Gradle Docker Plugins](https://github.com/xenit-eu/alfresco-docker
 
 ### Supported Alfresco versions
 
-Dynamic Extensions is systematically integration tested against:
+Dynamic Extensions is systematically integration-tested against:
 
 * Alfresco Enterprise 6.1
 * Alfresco Community 6.1
@@ -142,8 +102,48 @@ Waiting for Alfresco to fix the issue, following workarounds can be used to make
 which will overwrite the `jsr250-api` and `geronimo-annotation_1.0_spec` jars with empty jars.
 </details>
 
+## Example Dynamic Extensions based Alfresco Platform extension
+
+This example Web Script examines a node and passes information to a Freemarker template:
+```java
+@Component
+@WebScript
+public ExampleWebScript {
+
+  @Autowired
+  private NodeService nodeService;
+
+  @Uri("/show-node")
+  // Example: http://localhost/alfresco/service/show-node?nodeRef=workspace://SpacesStore/12345
+  public Map<String, Object> displayNodeName(@RequestParam NodeRef nodeRef) {
+    Map<String, Object> model = new HashMap<String, Object>();
+    model.put("properties", nodeService.getProperties(nodeRef));    
+    return model; // Model is passed to Freemarker template.
+  }
+}
+```
+
+Note that this is an _annotation Web Script_. These types of Web Script are configured through Java annotations instead of `*.desc.xml` descriptors. Annotation Web Scripts are similar to Spring MVC's annotation-based controllers.
+
+Here's the accompanying Freemarker template fragment:
+
+```html
+<table>
+  <#list properties?keys as name>    
+    <tr>
+      <th>${name}</th>
+      <td>${properties[name]!''}</td>
+    </tr>
+  </#list>
+</table>
+```
+
+This is all the code that is required; there's no need for Spring XML config or Web Script XML descriptors. Hot-reloading and reducing configuration overhead are not particularly novel concepts in the Java development world at large. Essentially, Dynamic Extensions modernizes the development of Alfresco repository extensions.
+
+The example above may be trivial, but the point is that, behind the scenes, services are still wired together through Spring and handled by the Web Script framework. Conceptually there is no real difference between a Dynamic Extension and a regular Alfresco extension. There's just less overhead and more convenience.
+
 ## Documentation
-Please checkout the [documentation](documentation) for further instructions.
+Please checkout the [documentation](documentation/README.md) for further instructions.
 
 ## License 
 This project is licensed under the Apache V2 License - see the [LICENSE](LICENSE) file for details.

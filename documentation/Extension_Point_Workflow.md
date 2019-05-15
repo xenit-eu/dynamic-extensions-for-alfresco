@@ -33,8 +33,8 @@ Here is the complete example:
 
 ```java
 @Component("MyextensionSomeComponent")
-public class DoSomething implements JavaDelegate {
-  public void execute(DelegateExecution execution) {}
+public class DoSomething implements JavaDelegate { 
+    public void execute(DelegateExecution execution) {}
 }
 ```
 
@@ -50,8 +50,8 @@ The concept is very similar, in the extensionelements of a task:
 
 ```java
 @Component("MyextensionSomeComponent")
-public class DoSomething implements TaskListener {
-  public void notify(DelegateTask delegateTask) {}
+public class DoSomething implements TaskListener { 
+    public void notify(DelegateTask delegateTask) {}
 }
 ```
 
@@ -65,8 +65,8 @@ And finally, listeners to be used for the execution level (workflow process):
 
 ```java
 @Component("MyextensionSomeComponent")
-public class DoSomething implements ExecutionListener {
-  public void notify(DelegateExecution delegateTask) {}
+public class DoSomething implements ExecutionListener { 
+    public void notify(DelegateExecution delegateTask) {}
 }
 ```
 
@@ -94,15 +94,15 @@ We can match this in our Java code by adding a `org.activiti.engine.impl.el.Fixe
 We can then read the parameter both literally or evaluated in the task or execution content:
 ```java
 public class CompleteListener implements TaskListener {
-  private FixedValue color;
-
-  public void setColor(FixedValue color) {
-    this.color = color;
-  }
-
-  @Override public void notify(DelegateTask delegateTask) {
-    String literal = color.getExpressionText();
-    Object evaluated = color.getValue(delegateTask);
-  }
+    private FixedValue color;
+    
+    public void setColor(FixedValue color) {
+        this.color = color;
+    }
+    
+    @Override public void notify(DelegateTask delegateTask) {
+        String literal = color.getExpressionText();
+        Object evaluated = color.getValue(delegateTask);
+    }
 }
 ```

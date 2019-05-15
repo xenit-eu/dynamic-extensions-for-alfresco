@@ -25,8 +25,7 @@ public class ResponseBodyReturnValueHandler {
     }
 
     @Uri(value = "/handleDefaultXmlResponse", defaultFormat = MediaType.APPLICATION_XML_VALUE)
-    @ResponseBody
-    public PersonXml handleDefaultXmlResponse(@RequestParam final String firstName, @RequestParam final String lastName) {
+    public @ResponseBody  PersonXml handleDefaultXmlResponse(@RequestParam final String firstName, @RequestParam final String lastName) {
         return new PersonXml(firstName, lastName);
     }
 

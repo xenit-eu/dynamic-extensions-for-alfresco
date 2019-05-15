@@ -25,8 +25,8 @@ use the `composeDown` task can be used:
 
 ## Usage
 Once started up Alfresco with Dynamic Extensions, the dashboard is available on 
-`${host}:${port}/alfresco/s/dynamic-extensions`, where `${host}` can be `localhost` or your docker IP.
+`${host}:${port}/alfresco/s/dynamic-extensions/`, where `${host}` can be `localhost` or your docker IP.
 
-![alt text](assets/DE_Dashboard.png)
+![Screenshot of the DE dashboard](assets/DE_Dashboard.png)
 
 Via this dashboard it is possible to inspect and upload custom Dynamic Extensions Bundles. 

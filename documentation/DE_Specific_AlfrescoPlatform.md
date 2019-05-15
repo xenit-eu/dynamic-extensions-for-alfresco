@@ -8,7 +8,7 @@ should be initialized.
 ```java
 @Component
 @AlfrescoPlatform(minVersion = "6.0")
-public class Alfresco4SpecificBean {
+public class Alfresco6SpecificBean {
 
 }
 ```

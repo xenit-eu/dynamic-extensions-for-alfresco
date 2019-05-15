@@ -12,7 +12,7 @@ Dynamic Extensions assumes the XML files in this folder contain content models, 
 
 ## Reference
 
-* <a href="http://wiki.alfresco.com/wiki/Data_Dictionary_Guide">Data Dictionary Guide</a> (Alfresco Wiki)
+* [Content modelling](https://docs.alfresco.com/5.0/concepts/content-modeling-about.html?m=2) (Alfresco Documentation)
 
 Note that you cannot make breaking changes to your model. Alfresco will refuse to update the model in this case.
 (same behaviour as manual upload to Data Dictionary / Models)
@@ -40,7 +40,7 @@ public class ModelRegistrar extends DAOModelRegistrar implements InitializingBea
 }
 ```
 
-> Note that this can break you data consistency and thus should only be used on a local development Alfresco !
+**Note that this can break you data consistency and thus should only be used on a local development Alfresco !**
 
 # Translations
 

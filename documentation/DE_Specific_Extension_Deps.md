@@ -68,7 +68,7 @@ You can avoid the use of **bnd** by first checking the Spring bundle repository:
 
 ## ClassNotFoundException
 
-When using libraries such as Hibernate or Spring's @Configuration support, you may encounter `ClassNotFoundException`. (ie. references to cglib)
+When using libraries such as Hibernate or Spring's @Configuration support, you may encounter `ClassNotFoundException` (ie. references to cglib).
 
 The reason for this is dynamic loading of classes that the bnd tool can not detect from your compiled .class files.
 

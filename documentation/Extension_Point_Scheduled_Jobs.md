@@ -3,6 +3,9 @@
 To schedule the execution of some logic, annotate the class implementing the logic with `@ScheduledTask` 
 and implement the `com.github.dynamicextensionsalfresco.schedule.Task` interface. 
 
+Dynamic Extension supports cron expressions of the Quart format. The `cron` parameter should therefore be a valid
+Quartz cron expression. 
+
 ```java
 import com.github.dynamicextensionsalfresco.schedule.ScheduledTask;
 import com.github.dynamicextensionsalfresco.schedule.Task;
