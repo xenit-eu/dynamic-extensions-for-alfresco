@@ -194,6 +194,9 @@ public class DefaultFrameworkManager implements ResourceLoaderAware, FrameworkMa
         List<Bundle> sortedByDependency = BundleDependencies.sortByDependencies(bundles);
 
         for (Bundle bundle : sortedByDependency) {
+            if((bundle.getState() & Bundle.RESOLVED) != Bundle.RESOLVED) {
+                logger.error("Bundle {} failed to resolve.", bundle.getSymbolicName());
+            }
             if (!isFragmentBundle(bundle)) {
                 this.startBundle(bundle);
             }

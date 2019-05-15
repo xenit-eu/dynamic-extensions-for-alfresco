@@ -1,21 +1,43 @@
 allprojects {
     apply plugin: "java"
-    apply plugin: "osgi"
+    apply plugin: 'biz.aQute.bnd.builder'
 
     configurations {
         testCompile.extendsFrom(compileOnly)
     }
+}
+def extender = 'org.eclipse.gemini.blueprint.extender'
 
+subprojects { p ->
     jar {
-        manifest {
-            instruction 'Fragment-Host', 'org.eclipse.gemini.blueprint.extender'
-            instruction 'DynamicImport-Package', '*'
-            instruction 'Bundle-DocURL', 'https://github.com/xenit-eu/dynamic-extensions-for-alfresco'
-        }
+        bnd(
+                'Bundle-SymbolicName': p.group+'.'+p.name,
+                'Fragment-Host': extender,
+                'DynamicImport-Package': '*',
+                'Export-Package': 'com.github.dynamicextensionsalfresco.blueprint.*',
+                'Import-Package': '*',
+                'Bundle-DocURL': 'https://github.com/xenit-eu/dynamic-extensions-for-alfresco',
+        )
     }
-
 }
 
+jar {
+    bnd(
+            'Bundle-SymbolicName': project.group+'.'+project.name,
+            'Fragment-Host': extender,
+            'DynamicImport-Package': '*',
+            'Export-Package': 'com.github.dynamicextensionsalfresco.blueprint',
+            'Import-Package':
+                    // We remove version dependencies on some gemini blueprint packages here,
+                    // because they are different for alfresco 5.x and 6.x (see geminiVersion in the root build.gradle)
+                    // This bundle is shared between those versions, and it should always be able to find some version to import.
+                    'org.eclipse.gemini.blueprint.context;version=!,' +
+                    'org.eclipse.gemini.blueprint.context.support;version=!,' +
+                    'org.eclipse.gemini.blueprint.service.exporter.support;version=!,' +
+                    '*',
+            'Bundle-DocURL': 'https://github.com/xenit-eu/dynamic-extensions-for-alfresco',
+    )
+}
 dependencies {
     compileOnly platform("${project.ext.alfrescoBom}")
 
@@ -44,14 +66,9 @@ dependencies {
     compileOnly "org.jetbrains:annotations:$jetbrains_annotations_version"
 
 
-    testCompile "${project.ext.alfrescoBom}"
+    testCompile platform("${project.ext.alfrescoBom}")
 
     testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
     testCompile "junit:junit:${project.ext.junitVersion}"
     testCompile('org.springframework:spring-beans') { transitive = false }
-    testCompile("org.alfresco:alfresco-repository")
-
-    testCompile("org.eclipse.gemini.blueprint:gemini-blueprint-extender:${project.ext.geminiVersion}") {
-        exclude group: "org.springframework"
-    }
 }
