@@ -1,5 +1,6 @@
 package com.github.dynamicextensionsalfresco.gradle;
 
+import aQute.bnd.gradle.BndBuilderPlugin;
 import com.github.dynamicextensionsalfresco.gradle.configuration.BaseConfig;
 import com.github.dynamicextensionsalfresco.gradle.configuration.Repository;
 import com.github.dynamicextensionsalfresco.gradle.configuration.Versions;
@@ -20,8 +21,12 @@ public class DynamicExtensionPlugin implements Plugin<Project> {
     @Override
     public void apply(Project project) {
         if(GradleVersion.current().compareTo(GradleVersion.version("4.10")) < 0) {
-            throw new GradleException("The Dynamic Extension plugin requires at least Gradle 4.10. Your current gradle version is: "+GradleVersion.current().getVersion());
+            throw new GradleException("The Dynamic Extensions plugin requires at least Gradle 4.10. Your current gradle version is: "+GradleVersion.current().getVersion());
         }
+        project.getPlugins().withId(BndBuilderPlugin.PLUGINID, p -> {
+            throw new GradleException("The Dynamic Extensions plugin can not be used together with " + BndBuilderPlugin.PLUGINID);
+        });
+
         // Register alfrescoDynamicExtensions configuration block
         baseConfig = project.getObjects().newInstance(BaseConfig.class);
         project.getExtensions().add("alfrescoDynamicExtensions", baseConfig);
@@ -56,9 +61,6 @@ public class DynamicExtensionPlugin implements Plugin<Project> {
             project.getTasks().withType(Jar.class).named(JavaPlugin.JAR_TASK_NAME).configure(jar -> {
                 DeBundleTaskConvention deBundleTaskConvention = new DeBundleTaskConvention(jar);
                 jar.getConvention().getPlugins().put("bundle", deBundleTaskConvention);
-                jar.doLast(t -> {
-                    deBundleTaskConvention.buildDeBundle();
-                });
             });
 
             // Add installBundle task that uploads the jar by default
