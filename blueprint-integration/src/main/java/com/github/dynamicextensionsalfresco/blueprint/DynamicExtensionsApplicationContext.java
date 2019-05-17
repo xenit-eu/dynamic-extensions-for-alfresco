@@ -32,7 +32,14 @@ import com.github.dynamicextensionsalfresco.workflow.WorkflowDefinitionRegistrar
 import com.github.dynamicextensionsalfresco.workflow.activiti.DefaultWorkflowTaskRegistry;
 import com.github.dynamicextensionsalfresco.workflow.activiti.WorkflowTaskRegistrar;
 import com.github.dynamicextensionsalfresco.workflow.activiti.WorkflowTaskRegistry;
+import com.springsource.util.osgi.manifest.BundleManifest;
+import com.springsource.util.osgi.manifest.BundleManifestFactory;
+import com.springsource.util.osgi.manifest.ImportedPackage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.alfresco.service.descriptor.Descriptor;
 import org.alfresco.service.descriptor.DescriptorService;
 import org.alfresco.service.namespace.NamespacePrefixResolver;
@@ -200,6 +207,10 @@ public class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicatio
     }
 
     private void scanPackages(DefaultListableBeanFactory beanFactory, String[] configurationPackages) {
+        if (log.isWarnEnabled()) {
+            logWarnScanningOfImports(configurationPackages);
+        }
+
         if (configurationPackages != null) {
             Descriptor serverDescriptor = this.getService(DescriptorService.class).getServerDescriptor();
             AlfrescoPlatformBeanDefinitionScanner scanner = new AlfrescoPlatformBeanDefinitionScanner(beanFactory,
@@ -207,6 +218,50 @@ public class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicatio
             scanner.setResourceLoader(this);
             scanner.scan(configurationPackages);
         }
+    }
+
+    private void logWarnScanningOfImports(final String[] packagesToScan) {
+        if (packagesToScan == null || packagesToScan.length == 0) {
+            return;
+        }
+
+        BundleManifest bundleManifest = BundleManifestFactory.createBundleManifest(this.getBundle().getHeaders());
+        final List<String> importedPackages =
+                bundleManifest.getImportPackage().getImportedPackages().stream()
+                        .map(ImportedPackage::getPackageName)
+                        .flatMap(p -> recursifyPackage(p).stream())
+                        .collect(Collectors.toList());
+
+        if (importedPackages.isEmpty()) {
+            return;
+        }
+
+        final List<String> violatingPackages = Arrays.stream(packagesToScan)
+                .filter(importedPackages::contains)
+                .collect(Collectors.toList());
+
+        if (!violatingPackages.isEmpty()) {
+            log.warn("Bundle: '{}' --> Package(s) '{}' will be scanned for Spring beans but these are imported packages "
+                    + "(see 'Import-Package' MANIFEST header), this can cause several issues like e.g. "
+                    + "unintended, duplicate registration of some beans.", getBundle().getSymbolicName(), violatingPackages);
+        }
+    }
+
+    /**
+     * "eu.xenit.test" -> [eu, eu.xenit, eu.xenit.test]
+     */
+    static List<String> recursifyPackage(final String s) {
+        List<String> packagesRecursive = new ArrayList<>();
+
+        final String[] packageParts = s.split("\\.");
+        StringBuilder sb = new StringBuilder();
+        for (final String packagePart : packageParts) {
+            sb.append(packagePart);
+            packagesRecursive.add(sb.toString());
+            sb.append(".");
+        }
+
+        return packagesRecursive;
     }
 
     /* Dependencies */

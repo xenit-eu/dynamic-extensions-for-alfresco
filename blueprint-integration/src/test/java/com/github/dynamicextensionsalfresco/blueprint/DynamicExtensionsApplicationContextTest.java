@@ -1,9 +1,9 @@
 package com.github.dynamicextensionsalfresco.blueprint;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -13,13 +13,12 @@ import static org.mockito.Mockito.when;
 import com.github.dynamicextensionsalfresco.BeanNames;
 import com.github.dynamicextensionsalfresco.schedule.quartz.QuartzTaskScheduler;
 import com.github.dynamicextensionsalfresco.schedule.quartz2.Quartz2TaskScheduler;
+import java.util.List;
 import org.alfresco.service.descriptor.Descriptor;
 import org.alfresco.util.VersionNumber;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 
 public class DynamicExtensionsApplicationContextTest {
@@ -63,5 +62,16 @@ public class DynamicExtensionsApplicationContextTest {
             // Expecting class Quartz2TaskScheduler on Alfresco 6.x
             assertThat(beanDefCaptor.getValue().getBeanClassName(), is(Quartz2TaskScheduler.class.getName()));
         }
+    }
+
+    public static class UtilityOperationsTest {
+
+        @Test
+        public void recursifyPackage() {
+            List<String> packagesRecursive = DynamicExtensionsApplicationContext.recursifyPackage("eu.xenit.test");
+            assertThat(packagesRecursive, containsInAnyOrder("eu", "eu.xenit", "eu.xenit.test"));
+            assertThat(packagesRecursive, hasSize(3));
+        }
+
     }
 }
