@@ -46,7 +46,26 @@ to the standard OSGi Bundle headers.
 
 ### Building DE OSGi Bundles using Gradle
 
-// TODO
+You can build Dynamic Extensions by applying the `eu.xenit.de` Gradle plugin.
+
+The plugin will automatically add dependencies on the Dynamic Extensions packages and extend the `jar` task to enable OSGi bundling.
+
+You will have to configure either `Alfresco-Spring-Configuration` (recommended)
+or add the packages containing your Spring components to `Export-Package`.
+
+```groovy
+plugins {
+    id "eu.xenit.de" version "2.0.0" // For the latest version, see: https://plugins.gradle.org/plugin/eu.xenit.de
+}
+
+jar {
+    bnd(
+        'Alfresco-Spring-Configuration': 'eu.xenit.de.example'
+    )
+}
+```
+
+Detailed documentation can be found in the [Gradle Plugin documentation](./Gradle_Plugin.md)
 
 ### Building DE OSGi Bundles using Maven
 
