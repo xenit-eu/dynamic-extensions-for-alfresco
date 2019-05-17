@@ -33,9 +33,6 @@ import com.github.dynamicextensionsalfresco.workflow.activiti.DefaultWorkflowTas
 import com.github.dynamicextensionsalfresco.workflow.activiti.WorkflowTaskRegistrar;
 import com.github.dynamicextensionsalfresco.workflow.activiti.WorkflowTaskRegistry;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 import org.alfresco.service.descriptor.Descriptor;
 import org.alfresco.service.descriptor.DescriptorService;
 import org.alfresco.service.namespace.NamespacePrefixResolver;
@@ -43,7 +40,9 @@ import org.alfresco.util.VersionNumber;
 import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.osgi.framework.wiring.BundleWiring;
+import org.osgi.framework.Constants;
+import org.osgi.service.packageadmin.ExportedPackage;
+import org.osgi.service.packageadmin.PackageAdmin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -156,7 +155,7 @@ public class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicatio
                 log.warn("Error parsing bean definitions.", ex);
             }
         } else if (isAlfrescoDynamicExtension) {
-            this.scanPackages(beanFactory, this.getAllPackagesInBundle());
+            this.scanPackages(beanFactory, this.getBundleExportPackages());
         }
 
         if (isAlfrescoDynamicExtension) {
@@ -242,27 +241,23 @@ public class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicatio
         return getService(EntityResolver.class, HOST_APPLICATION_ALFRESCO_FILTER);
     }
 
-    private String[] getAllPackagesInBundle() {
-        final Set<String> packagesInBundle = new HashSet<>();
+    /**
+     * Use the deprecated PackageAdmin to get the list of exported packages.
+     */
+    protected String[] getBundleExportPackages() {
+        String exportPackageHeader = this.getBundle().getHeaders().get(Constants.EXPORT_PACKAGE);
+        if (StringUtils.hasText(exportPackageHeader)) {
+            PackageAdmin packageAdmin = getService(PackageAdmin.class);
+            ExportedPackage[] packages = packageAdmin.getExportedPackages(this.getBundle());
 
-        BundleWiring bundleWiring = this.getBundle().adapt(BundleWiring.class);
-        if (bundleWiring != null) {
-            Collection<String> classes = bundleWiring.listResources("/", "*.class",
-                    BundleWiring.LISTRESOURCES_LOCAL | BundleWiring.LISTRESOURCES_RECURSE);
-            for (String path : classes) {
-                int beginIndex = 0;
-                if (path.startsWith("/")) {
-                    beginIndex = 1;
-                }
-                int endIndex = path.lastIndexOf('/');
-                if (endIndex >= 0) {
-                    path = path.substring(beginIndex, endIndex);
-                    packagesInBundle.add(path.replace('/', '.'));
-                }
+            String[] pkgNames = new String[packages.length];
+            for (int index = 0; index != packages.length; index++) {
+                pkgNames[index] = packages[index].getName();
             }
-        }
 
-        return packagesInBundle.toArray(new String[0]);
+            return pkgNames;
+        }
+        return new String[0];
     }
 
     protected boolean hasXmlConfiguration() {
