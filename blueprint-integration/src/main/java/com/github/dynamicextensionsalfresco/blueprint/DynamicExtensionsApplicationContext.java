@@ -32,10 +32,14 @@ import com.github.dynamicextensionsalfresco.workflow.WorkflowDefinitionRegistrar
 import com.github.dynamicextensionsalfresco.workflow.activiti.DefaultWorkflowTaskRegistry;
 import com.github.dynamicextensionsalfresco.workflow.activiti.WorkflowTaskRegistrar;
 import com.github.dynamicextensionsalfresco.workflow.activiti.WorkflowTaskRegistry;
+import com.springsource.util.osgi.manifest.BundleManifest;
+import com.springsource.util.osgi.manifest.BundleManifestFactory;
+import com.springsource.util.osgi.manifest.ImportedPackage;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.alfresco.service.descriptor.Descriptor;
 import org.alfresco.service.descriptor.DescriptorService;
 import org.alfresco.service.namespace.NamespacePrefixResolver;
@@ -43,7 +47,9 @@ import org.alfresco.util.VersionNumber;
 import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.osgi.framework.wiring.BundleWiring;
+import org.osgi.framework.Constants;
+import org.osgi.service.packageadmin.ExportedPackage;
+import org.osgi.service.packageadmin.PackageAdmin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -156,7 +162,7 @@ public class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicatio
                 log.warn("Error parsing bean definitions.", ex);
             }
         } else if (isAlfrescoDynamicExtension) {
-            this.scanPackages(beanFactory, this.getAllPackagesInBundle());
+            this.scanPackages(beanFactory, this.getBundleExportPackages());
         }
 
         if (isAlfrescoDynamicExtension) {
@@ -201,6 +207,10 @@ public class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicatio
     }
 
     private void scanPackages(DefaultListableBeanFactory beanFactory, String[] configurationPackages) {
+        if (log.isWarnEnabled()) {
+            logWarnScanningOfImports(configurationPackages);
+        }
+
         if (configurationPackages != null) {
             Descriptor serverDescriptor = this.getService(DescriptorService.class).getServerDescriptor();
             AlfrescoPlatformBeanDefinitionScanner scanner = new AlfrescoPlatformBeanDefinitionScanner(beanFactory,
@@ -208,6 +218,50 @@ public class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicatio
             scanner.setResourceLoader(this);
             scanner.scan(configurationPackages);
         }
+    }
+
+    private void logWarnScanningOfImports(final String[] packagesToScan) {
+        if (packagesToScan == null || packagesToScan.length == 0) {
+            return;
+        }
+
+        BundleManifest bundleManifest = BundleManifestFactory.createBundleManifest(this.getBundle().getHeaders());
+        final List<String> importedPackages =
+                bundleManifest.getImportPackage().getImportedPackages().stream()
+                        .map(ImportedPackage::getPackageName)
+                        .flatMap(p -> recursifyPackage(p).stream())
+                        .collect(Collectors.toList());
+
+        if (importedPackages.isEmpty()) {
+            return;
+        }
+
+        final List<String> violatingPackages = Arrays.stream(packagesToScan)
+                .filter(importedPackages::contains)
+                .collect(Collectors.toList());
+
+        if (!violatingPackages.isEmpty()) {
+            log.warn("Bundle: '{}' --> Package(s) '{}' will be scanned for Spring beans but these are imported packages "
+                    + "(see 'Import-Package' MANIFEST header), this can cause several issues like e.g. "
+                    + "unintended, duplicate registration of some beans.", getBundle().getSymbolicName(), violatingPackages);
+        }
+    }
+
+    /**
+     * "eu.xenit.test" -> [eu, eu.xenit, eu.xenit.test]
+     */
+    static List<String> recursifyPackage(final String s) {
+        List<String> packagesRecursive = new ArrayList<>();
+
+        final String[] packageParts = s.split("\\.");
+        StringBuilder sb = new StringBuilder();
+        for (final String packagePart : packageParts) {
+            sb.append(packagePart);
+            packagesRecursive.add(sb.toString());
+            sb.append(".");
+        }
+
+        return packagesRecursive;
     }
 
     /* Dependencies */
@@ -242,27 +296,23 @@ public class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicatio
         return getService(EntityResolver.class, HOST_APPLICATION_ALFRESCO_FILTER);
     }
 
-    private String[] getAllPackagesInBundle() {
-        final Set<String> packagesInBundle = new HashSet<>();
+    /**
+     * Use the deprecated PackageAdmin to get the list of exported packages.
+     */
+    protected String[] getBundleExportPackages() {
+        String exportPackageHeader = this.getBundle().getHeaders().get(Constants.EXPORT_PACKAGE);
+        if (StringUtils.hasText(exportPackageHeader)) {
+            PackageAdmin packageAdmin = getService(PackageAdmin.class);
+            ExportedPackage[] packages = packageAdmin.getExportedPackages(this.getBundle());
 
-        BundleWiring bundleWiring = this.getBundle().adapt(BundleWiring.class);
-        if (bundleWiring != null) {
-            Collection<String> classes = bundleWiring.listResources("/", "*.class",
-                    BundleWiring.LISTRESOURCES_LOCAL | BundleWiring.LISTRESOURCES_RECURSE);
-            for (String path : classes) {
-                int beginIndex = 0;
-                if (path.startsWith("/")) {
-                    beginIndex = 1;
-                }
-                int endIndex = path.lastIndexOf('/');
-                if (endIndex >= 0) {
-                    path = path.substring(beginIndex, endIndex);
-                    packagesInBundle.add(path.replace('/', '.'));
-                }
+            String[] pkgNames = new String[packages.length];
+            for (int index = 0; index != packages.length; index++) {
+                pkgNames[index] = packages[index].getName();
             }
-        }
 
-        return packagesInBundle.toArray(new String[0]);
+            return pkgNames;
+        }
+        return new String[0];
     }
 
     protected boolean hasXmlConfiguration() {

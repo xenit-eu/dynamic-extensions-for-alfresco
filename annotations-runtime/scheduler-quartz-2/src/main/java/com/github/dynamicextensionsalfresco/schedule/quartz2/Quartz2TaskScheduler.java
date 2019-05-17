@@ -54,8 +54,8 @@ public class Quartz2TaskScheduler implements TaskScheduler {
             if (Task.class.isAssignableFrom(bean.getClass())) {
                 // this is the expected type, carry on
             } else if (Job.class.isAssignableFrom(bean.getClass())) {
-                log.warn("[DEPRECATION] Implementing {} directly is deprecated, please implement {}",
-                        Job.class.getName(), Task.class.getName());
+                log.warn("[DEPRECATION] '{}' Implementing {} directly is deprecated, please implement {}",
+                        bean.getClass().getCanonicalName(), Job.class.getName(), Task.class.getName());
             } else {
                 throw new IllegalArgumentException(String.format("argument 'bean' does not implement interface " +
                         Task.class.getName()));

@@ -37,11 +37,16 @@ to the standard OSGi Bundle headers.
     Alfresco integration.
     
 * `Alfresco-Spring-Configuration: eu.xenit.de.example`  
-    This optional header can be used to indicate which packages of your Bundle need to be scanned for Spring beans.  
+    This optional header can be used to indicate which packages of your Bundle need to be scanned for Spring beans. 
+    Package scanning works recursively and you **SHOULD NOT** add any parent package of a package 
+    listed in the `Import-Package` MANIFEST header. This could cause issue like the unintended, duplicate 
+    registration of Spring beans.
+    
     If this header is not present, Dynamic Extensions will scan for Spring XML configuration files in the 
-    `/META-INF/spring` directory of the Bundle.  
-    If there also is no Spring XML configuration present in the bundle, all the packages
-    inside the Bundle will be scanned for Spring beans.
+    `/META-INF/spring` directory of the Bundle.
+    
+    If there also is no Spring XML configuration present in the bundle, all the packages of the 'Export-Package'
+    MANIFEST header will be recursively scanned for Spring beans.
     
 
 ### Building DE OSGi Bundles using Gradle
