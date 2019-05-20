@@ -55,11 +55,25 @@ pipeline {
             environment {
                 SONNATYPE_CREDENTIALS = credentials('sonatype')
                 GPGPASSPHRASE = credentials('gpgpassphrase')
-                GRADLE_PUBLISH = credentials('gradle-plugin-portal')
             }
             steps {
                 script {
                     sh "./gradlew publish -Pde_publish_username=${SONNATYPE_CREDENTIALS_USR} -Pde_publish_password=${SONNATYPE_CREDENTIALS_PSW} -PkeyId=DF8285F0 -Ppassword=${GPGPASSPHRASE} -PsecretKeyRingFile=/var/jenkins_home/secring.gpg"
+                }
+            }
+        }
+
+        stage('Publish Gradle plugin') {
+            when {
+                anyOf {
+                    branch "release*"
+                }
+            }
+            environment {
+                GRADLE_PUBLISH = credentials('gradle-plugin-portal')
+            }
+            steps {
+                script {
                     sh "./gradlew publishPlugins -Pgradle.publish.key=${GRADLE_PUBLISH_USR} -Pgradle.publish.secret=${GRADLE_PUBLISH_PSW}"
                 }
             }

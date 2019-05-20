@@ -49,7 +49,7 @@ publishing {
 afterEvaluate {
     signing {
         required { !version.endsWith('SNAPSHOT') && gradle.taskGraph.hasTask("publish") }
-        sign publishing.publications.findAll {}.toArray(new Publication[0])
+        sign publishing.publications
     }
 }
 
