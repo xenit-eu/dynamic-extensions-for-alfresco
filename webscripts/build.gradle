@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    compileOnly platform("eu.xenit.alfresco:alfresco-community-bom:5.0.d")
+    compileOnly enforcedPlatform("eu.xenit.alfresco:alfresco-community-bom:5.0.d")
 
     compileOnly('org.springframework:spring-core') { transitive = false }
     compileOnly('org.springframework:spring-beans') { transitive = false }
