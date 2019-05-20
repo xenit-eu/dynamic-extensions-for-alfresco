@@ -1,6 +1,6 @@
 ---
 title: Changelog - Dynamic Extensions for Alfresco
-date: 4 July 2018
+date: 20 May 2019
 report: true
 colorlinks: true
 ---
@@ -21,7 +21,10 @@ Version template:
  -->
 # Dynamic Extensions For Alfresco Changelog
 
-## [2.0.0] - UNRELEASED
+## [2.0.0] - 2019-05-20
+### Added
+* Alfresco 6 support
+
 ### Changed
 * Build process refactored to build and compile for specific Alfresco versions
 * `@ScheduledQuartzJob` deprecated in favour for vendor-neutral `@ScheduledTask`
@@ -30,9 +33,6 @@ Version template:
   * Removed `CallWebScript` task type
   * The `jar` task now used bnd to build OSGi bundles
   * Added `DeBundle` task type that can be used to manually create dynamic extension bundles
-
-### Added
-* Alfresco 6 support
 
 ### Fixed
 * [#189](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/189)
