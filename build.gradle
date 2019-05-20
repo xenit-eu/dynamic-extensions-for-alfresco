@@ -95,8 +95,7 @@ subprojects {
         options.compilerArgs << '-Xlint:unchecked'
     }
 
-    if (project.name == 'alfresco-dynamic-extensions-repo' || project.parent.name == 'alfresco-dynamic-extensions-repo'
-            || project.name == 'gradle-plugin') {
+    if (project.name == 'alfresco-dynamic-extensions-repo' || project.parent.name == 'alfresco-dynamic-extensions-repo') {
         return
     }
 
@@ -124,7 +123,6 @@ subprojects {
             }
         }
     }
-    
 }
 
 defaultTasks 'build'

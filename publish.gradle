@@ -3,7 +3,7 @@ apply plugin: 'signing'
 
 publishing {
     publications {
-        mavenJava(MavenPublication) {
+        all {
             pom {
                 url = 'https://github.com/xenit-eu/dynamic-extensions-for-alfresco'
                 name = "dynamic-extensions-for-alfresco-" + project.name
@@ -46,9 +46,11 @@ publishing {
     }
 }
 
-signing {
-    required { !version.endsWith('SNAPSHOT') && gradle.taskGraph.hasTask("publish") }
-    sign publishing.publications.mavenJava
+afterEvaluate {
+    signing {
+        required { !version.endsWith('SNAPSHOT') && gradle.taskGraph.hasTask("publish") }
+        sign publishing.publications.findAll {}.toArray(new Publication[0])
+    }
 }
 
 gradle.taskGraph.whenReady { graph ->

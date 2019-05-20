@@ -93,7 +93,7 @@ subprojects {
 
     publishing {
         publications {
-            mavenJava(MavenPublication) {
+            mavenAmp(MavenPublication) {
                 artifact amp
             }
         }
