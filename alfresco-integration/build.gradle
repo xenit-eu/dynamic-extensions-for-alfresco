@@ -3,7 +3,7 @@ configurations {
 }
 
 dependencies {
-    compileOnly platform("${project.ext.alfrescoBom}")
+    compileOnly enforcedPlatform("${project.ext.alfrescoBom}")
 
     compile project(":annotations-runtime")
 
