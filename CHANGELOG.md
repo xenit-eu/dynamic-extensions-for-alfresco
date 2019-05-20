@@ -21,6 +21,8 @@ Version template:
  -->
 # Dynamic Extensions For Alfresco Changelog
 
+## [2.0.1] - UNRELEASED
+
 ## [2.0.0] - 2019-05-20
 ### Added
 * Alfresco 6 support
