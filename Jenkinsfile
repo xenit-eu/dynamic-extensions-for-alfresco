@@ -36,6 +36,8 @@ pipeline {
                 anyOf {
                     branch "master*"
                     changeRequest target: 'master*', comparator: 'GLOB'
+                    branch "release*"
+                    changeRequest target: 'release*', comparator: 'GLOB'
                 }
             }
             steps {
@@ -47,6 +49,7 @@ pipeline {
             when {
                 anyOf {
                     branch "master*"
+                    branch "release*"
                 }
             }
             environment {
