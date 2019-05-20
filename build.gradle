@@ -87,7 +87,16 @@ subprojects {
         bndVersion = '2.4.1'
     }
 
-    if (project.name == 'alfresco-dynamic-extensions-repo' || project.parent.name == 'alfresco-dynamic-extensions-repo') {
+    tasks.withType(JavaCompile) {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+
+        options.encoding = "UTF-8"
+        options.compilerArgs << '-Xlint:unchecked'
+    }
+
+    if (project.name == 'alfresco-dynamic-extensions-repo' || project.parent.name == 'alfresco-dynamic-extensions-repo'
+            || project.name == 'gradle-plugin') {
         return
     }
 
@@ -102,14 +111,6 @@ subprojects {
     task javadocJar(type: Jar, dependsOn: javadoc) {
         classifier = 'javadoc'
         from javadoc.destinationDir
-    }
-
-    tasks.withType(JavaCompile) {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
-
-        options.encoding = "UTF-8"
-        options.compilerArgs << '-Xlint:unchecked'
     }
 
     apply from: "${rootProject.projectDir}/publish.gradle"
