@@ -60,7 +60,7 @@ or add the packages containing your Spring components to `Export-Package`.
 
 ```groovy
 plugins {
-    id "eu.xenit.de" version "2.0.0" // For the latest version, see: https://plugins.gradle.org/plugin/eu.xenit.de
+    id "eu.xenit.de" version "2.0.1" // For the latest version, see: https://plugins.gradle.org/plugin/eu.xenit.de
 }
 
 jar {

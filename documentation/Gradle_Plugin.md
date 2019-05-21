@@ -9,7 +9,7 @@ The Dynamic Extensions Gradle plugin, [`eu.xenit.de`](https://plugins.gradle.org
 
 ```groovy
 plugins {
-    id "eu.xenit.de" version "2.0.0" // For the latest version, see: https://plugins.gradle.org/plugin/eu.xenit.de
+    id "eu.xenit.de" version "2.0.1" // For the latest version, see: https://plugins.gradle.org/plugin/eu.xenit.de
 }
 ```
 
@@ -26,7 +26,7 @@ alfrescoDynamicExtensions {
         // Configure the version of eu.xenit.de:annotations and eu.xenit.de:webscripts dependencies.
         // By default, it is equal to the plugin version
         // If set to null, no dependencies are added.
-        dynamicExtensions = '2.0.0' 
+        dynamicExtensions = '2.0.1' 
     }
     
     // Configuring the repository is only used by `InstallBundle`, you can leave it out when you are not automatically installing bundles.

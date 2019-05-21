@@ -21,6 +21,8 @@ Version template:
  -->
 # Dynamic Extensions For Alfresco Changelog
 
+## [2.0.2] - UNRELEASED
+
 ## [2.0.1] - 2019-05-21
 ### Fixed
  * [#258](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/258) Dynamic Extensions Gradle plugin fails with `java.lang.NoClassDefFoundError: aQute/bnd/osgi/Builder`
