@@ -17,7 +17,18 @@ buildConfig {
 
 dependencies {
     implementation gradleApi()
-    implementation "biz.aQute.bnd:biz.aQute.bnd.gradle:4.2.0"
+
+    // Workaround for https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/258
+
+    implementation("biz.aQute.bnd:biz.aQute.bnd.gradle:4.2.0") {
+        // Emulate the actual situation of the plugin on the plugin portal, where dependencies are missing
+        transitive = false
+    }
+    // Extracted from https://search.maven.org/remotecontent?filepath=biz/aQute/bnd/biz.aQute.bnd.gradle/4.2.0/biz.aQute.bnd.gradle-4.2.0.pom
+    implementation "biz.aQute.bnd:biz.aQute.resolve:4.2.0"
+    implementation "biz.aQute.bnd:biz.aQute.repository:4.2.0"
+    implementation "biz.aQute.bnd:biz.aQute.bndlib:4.2.0"
+
     implementation "commons-io:commons-io:2.6"
     testImplementation "junit:junit:${project.ext.junitVersion}"
     testImplementation "org.mockito:mockito-core:2.27.0"
