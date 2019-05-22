@@ -1,6 +1,8 @@
 # Dynamic Extensions for Alfresco
 
+[![Apache License 2](https://img.shields.io/badge/license-Apache%202-blue.svg)](LICENSE)
 [![Build Status](https://travis-ci.org/xenit-eu/dynamic-extensions-for-alfresco.svg)](https://travis-ci.org/xenit-eu/dynamic-extensions-for-alfresco)
+[![Maven Central](https://img.shields.io/maven-central/v/eu.xenit/alfresco-dynamic-extensions-repo-61.svg?maxAge=300)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22eu.xenit%22%20AND%20a%3A%22alfresco-dynamic-extensions-repo-*%22)
 
 Add OSGi based hot-deploy functionality and Spring annotation based configuration to Alfresco.
 
