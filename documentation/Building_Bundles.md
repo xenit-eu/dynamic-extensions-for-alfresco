@@ -80,24 +80,30 @@ Nevertheless, since DE Bundles are basically just OSGi bundles, the
 Bundles.
 
 ```xml
-    <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <version>${version}</version>
-        <!-- This option enables custom bundle headers in the <instructions> -->
-        <extensions>true</extensions>
-        <configuration>
-            <instructions>
-                <Alfresco-Dynamic-Extension>true</Alfresco-Dynamic-Extension>
-                <Alfresco-Spring-Configuration>eu.xenit.de.example</Alfresco-Spring-Configuration>
-                
-                <!-- Optionally, the Package headers can be customized
-                <Import-Package></Import-Package>
-                <Export-Package></Export-Package>                
-                 -->
-            </instructions>
-        </configuration>
-    </plugin>
+...
+    <packaging>bundle</packaging>
+...
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>${version}</version>
+                <!-- This option enables custom bundle headers in the <instructions> -->
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Alfresco-Dynamic-Extension>true</Alfresco-Dynamic-Extension>
+                        <Alfresco-Spring-Configuration>eu.xenit.de.example</Alfresco-Spring-Configuration>
+                        
+                        <!-- Optionally, the Package headers can be customized
+                        <Import-Package></Import-Package>
+                        <Export-Package></Export-Package>                
+                         -->
+                    </instructions>
+                </configuration>
+            </plugin>
+...
 ```
 
 Have a look at the [detailed documentation of the bundle plugin](https://felix.apache.org/documentation/subprojects/apache-felix-maven-bundle-plugin-bnd.html)
