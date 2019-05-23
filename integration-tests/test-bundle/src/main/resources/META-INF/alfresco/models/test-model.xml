@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="test:testModel" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+    <description>Metadata model for testing purposes</description>
+    <author>Daan Kerkhofs</author>
+    <version>1.0</version>
+
+    <imports>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+    </imports>
+
+    <namespaces>
+        <namespace uri="test.model" prefix="test"/>
+    </namespaces>
+
+    <types>
+        <type name="test:document">
+            <title>Test document</title>
+            <parent>cm:content</parent>
+        </type>
+    </types>
+
+    <aspects>
+        <aspect name="test:testBehaviourAspect">
+            <title>Test aspect</title>
+            <properties>
+                <property name="test:testBehaviourProperty">
+                    <title>Test Behaviour Property</title>
+                    <description>Will be filled by the TestBehaviour</description>
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                </property>
+            </properties>
+        </aspect>
+    </aspects>
+
+</model>
