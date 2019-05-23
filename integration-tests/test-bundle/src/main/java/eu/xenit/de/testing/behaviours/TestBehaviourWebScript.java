@@ -24,6 +24,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @WebScript(families = TEST_WEBSCRIPTS_FAMILY, baseUri = TEST_WEBSCRIPTS_BASE_URI + "/behaviours")
+@SuppressWarnings("unused")
 public class TestBehaviourWebScript {
 
     private RetryingTransactionHelper retryingTransactionHelper;

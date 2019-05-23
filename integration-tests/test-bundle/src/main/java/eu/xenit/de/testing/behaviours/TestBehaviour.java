@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Behaviour("test:document")
+@SuppressWarnings("unused")
 public class TestBehaviour implements OnCreateNodePolicy {
 
     private static final Logger logger = LoggerFactory.getLogger(TestBehaviour.class);
