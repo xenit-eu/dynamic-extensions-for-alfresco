@@ -22,7 +22,7 @@ public class BehaviourTest extends RestAssuredTest {
         given()
                 .log().ifValidationFails()
                 .when()
-                .get("s/dynamic-extensions/testing/behaviours/OnCreateNodePolicy")
+                .post("s/dynamic-extensions/testing/behaviours/OnCreateNodePolicy")
                 .then()
                 .log().ifValidationFails()
                 .statusCode(200)

@@ -3,6 +3,7 @@ package eu.xenit.de.testing.behaviours;
 import static eu.xenit.de.testing.Constants.TEST_WEBSCRIPTS_BASE_URI;
 import static eu.xenit.de.testing.Constants.TEST_WEBSCRIPTS_FAMILY;
 
+import com.github.dynamicextensionsalfresco.webscripts.annotations.HttpMethod;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.Transaction;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.Uri;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.WebScript;
@@ -45,8 +46,7 @@ public class TestBehaviourWebScript {
     }
 
 
-    @Uri("/OnCreateNodePolicy")
-    @Transaction
+    @Uri(value = "/OnCreateNodePolicy", method = HttpMethod.POST)
     public ResponseEntity<String> testBehaviour_OnCreateNodePolicy() {
 
         final NodeRef createdNode = retryingTransactionHelper.doInTransaction(
