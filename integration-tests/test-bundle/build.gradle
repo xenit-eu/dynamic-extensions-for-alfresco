@@ -1,0 +1,36 @@
+plugins {
+    id 'eu.xenit.alfresco' version "0.2.0"
+}
+
+apply plugin: 'java'
+apply plugin: 'biz.aQute.bnd.builder'
+
+// Actual integration tests are executed in the parent project
+test.enabled = false
+
+dependencies {
+    compileOnly enforcedPlatform("eu.xenit.alfresco:alfresco-community-bom:5.0.d")
+
+    alfrescoProvided project(':annotations')
+    alfrescoProvided project(':webscripts')
+
+    alfrescoProvided('org.alfresco:alfresco-repository') { transitive = false }
+    alfrescoProvided('org.alfresco:alfresco-data-model') { transitive = false }
+    alfrescoProvided('org.alfresco:alfresco-core') { transitive = false }
+    alfrescoProvided('org.springframework:spring-core') { transitive = false }
+    alfrescoProvided('org.springframework:spring-beans') { transitive = false }
+    alfrescoProvided('org.springframework:spring-context') { transitive = false }
+    alfrescoProvided('org.springframework:spring-web') { transitive = false }
+
+    alfrescoProvided('org.slf4j:slf4j-api')
+}
+
+jar {
+    bnd(
+            'Alfresco-Dynamic-Extension': 'true',
+            'Bundle-Description': 'Bundle for integration testing purposes',
+            'Alfresco-Spring-Configuration': 'eu.xenit.de.testing',
+            'DynamicImport-Package': '*'
+    )
+}
+

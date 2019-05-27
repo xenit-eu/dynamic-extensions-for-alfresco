@@ -4,7 +4,7 @@ Dynamic Extensions provides a convenient way of registering custom content model
 
 To have XML content models registered automatically, place them in this location in your extension:
 
-<code>/META-INF/alfresco/models</code> <a href="https://github.com/xenit-eu/example-dynamic-extension/tree/master/src/main/resources/META-INF/alfresco/models">See example project</a>
+<code>/META-INF/alfresco/models</code> <a href="https://github.com/xenit-eu/example-dynamic-extension/tree/master/gradle-with-plugin/src/main/resources/META-INF/alfresco/models">See example project</a>
 
 When Dynamic Extensions installs an extension it scans for the presence of XML files in this folder and registers/updates the content models with the Data Dictionary. Uninstalling an extension does not remove the model as this would cause the model to disappear during restarts.
 

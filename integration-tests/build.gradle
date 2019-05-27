@@ -56,6 +56,8 @@ configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
             // Workaround for https://issues.alfresco.com/jira/browse/MNT-20557
             alfrescoAmp "eu.xenit.alfresco:alfresco-hotfix-MNT-20557:1.0.1@amp"
         }
+
+        alfrescoDE project(':integration-tests:test-bundle')
         
         baseShareWar "${shareBaseWar}"
     }
