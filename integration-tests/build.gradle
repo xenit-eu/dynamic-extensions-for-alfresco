@@ -58,8 +58,6 @@ configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
         }
 
         alfrescoDE project(':integration-tests:test-bundle')
-        
-        baseShareWar "${shareBaseWar}"
     }
     
     dockerAlfresco {
