@@ -33,8 +33,7 @@ alfrescoDependentModules.each { moduleId ->
 
 include 'integration-tests'
 include 'integration-tests:test-bundle'
-include 'integration-tests:alfresco-60'
-include 'integration-tests:alfresco-61'
 Versions.supportedAlfrescoVersions.each { alfrescoVersion ->
+    include "integration-tests:alfresco-community-${alfrescoVersion}"
     include "integration-tests:alfresco-enterprise-${alfrescoVersion}"
 }

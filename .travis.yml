@@ -10,6 +10,8 @@ jdk:
 services:
 - docker
 
+install: ./gradlew assemble -i
+
 script:
 - ./gradlew test
 - if [ "$TRAVIS_PULL_REQUEST" = "true" ]; then ./gradlew integrationTest; fi
