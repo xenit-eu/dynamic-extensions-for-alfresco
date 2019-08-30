@@ -22,6 +22,8 @@ Version template:
 # Dynamic Extensions For Alfresco Changelog
 
 ## [2.0.2] - UNRELEASED
+### Fixed
+ * [#267](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/267) Dynamic Extensions not starting with Spring 5 and no internet
 
 ## [2.0.1] - 2019-05-21
 ### Fixed
