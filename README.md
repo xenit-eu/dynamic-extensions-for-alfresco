@@ -1,7 +1,8 @@
 # Dynamic Extensions for Alfresco
 
 [![Apache License 2](https://img.shields.io/badge/license-Apache%202-blue.svg)](LICENSE)
-[![Build Status](https://travis-ci.org/xenit-eu/dynamic-extensions-for-alfresco.svg)](https://travis-ci.org/xenit-eu/dynamic-extensions-for-alfresco)
+[![Travis Build Status](https://img.shields.io/travis/xenit-eu/dynamic-extensions-for-alfresco?label=Travis)](https://travis-ci.org/xenit-eu/dynamic-extensions-for-alfresco)
+[![Jenkins Build Status](https://jenkins-2.xenit.eu/buildStatus/icon?job=Xenit+Github%2Fdynamic-extensions-for-alfresco%2Fmaster&subject=Jenkins)](https://jenkins-2.xenit.eu/job/Xenit%20Github/job/dynamic-extensions-for-alfresco/job/master/)
 [![Maven Central](https://img.shields.io/maven-central/v/eu.xenit/alfresco-dynamic-extensions-repo-61.svg?maxAge=300)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22eu.xenit%22%20AND%20a%3A%22alfresco-dynamic-extensions-repo-*%22)
 
 Add OSGi based hot-deploy functionality and Spring annotation based configuration to Alfresco.
@@ -59,13 +60,13 @@ the [Alfresco Docker Gradle Plugins](https://github.com/xenit-eu/alfresco-docker
 
 Dynamic Extensions is systematically integration-tested against:
 
-* Alfresco Enterprise 6.1
-* Alfresco Community 6.1
-* Alfresco Enterprise 6.0
-* Alfresco Community 6.0
-* Alfresco Enterprise 5.2
-* Alfresco Enterprise 5.1
-* Alfresco Enterprise 5.0
+* Alfresco Enterprise & Community 6.1
+* Alfresco Enterprise & Community 6.0
+* Alfresco Enterprise & Community 5.2
+* Alfresco Enterprise & Community 5.1
+* Alfresco Enterprise & Community 5.0
+
+> Integration tests are currently only executed on our private Jenkins build server. 
 
 #### Known Alfresco issues that impact Dynamic Extensions
 <details><summary>Alfresco 6.1 - wrong version of 'Commons annotations' used</summary>When using DE on Alfresco 6.1, it is possible that it fails to startup due to following error:
