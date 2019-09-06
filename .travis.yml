@@ -14,9 +14,6 @@ install: ./gradlew assemble -i
 
 script:
 - ./gradlew test
-- if [ "$TRAVIS_PULL_REQUEST" = "true" ]; then ./gradlew integrationTest; fi
-- if [ "$TRAVIS_BRANCH" = "master" ]; then ./gradlew integrationTest; fi
-- if [ "$TRAVIS_BRANCH" = "release" ]; then ./gradlew integrationTest; fi
 
 before_cache:
 - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
