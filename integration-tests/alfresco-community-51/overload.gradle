@@ -1,6 +1,6 @@
 ext {
     alfrescoBaseWar = 'org.alfresco:alfresco:5.1.e@war'
-    alfrescoBaseImage = 'xeniteu/alfresco-repository-community:5.1.e'
+    alfrescoBaseImage = 'xenit/alfresco-repository-community:5.1.e'
     
     postgresImage = 'postgres:10.1'
 }
