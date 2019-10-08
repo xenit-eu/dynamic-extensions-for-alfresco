@@ -29,7 +29,7 @@ nexusStaging {
 
 allprojects {
     group = 'eu.xenit.de'
-    version = '2.0.2'
+    version = '2.0.3'
 
     boolean isRelease = System.env.BRANCH_NAME?.startsWith("release")
     if (!isRelease)
