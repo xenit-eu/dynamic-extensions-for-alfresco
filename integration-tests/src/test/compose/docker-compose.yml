@@ -19,9 +19,6 @@ services:
                 -Xms1g -Xmx1g
                 -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000
                 "
-    ports:
-    - ${ALFRESCO_TCP_8080:-8080:8080} # by default expose on :8080
-    #    - 8000:8000
     depends_on:
       postgres:
         condition: service_healthy
@@ -42,3 +39,23 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  haproxy:
+    image: haproxy:alpine
+    ports:
+      - ${ALFRESCO_TCP_8080:-8080}:80 # by default expose on :8080
+    depends_on:
+      alfresco:
+        condition: service_healthy
+    volumes:
+      - ./haproxy:/usr/local/etc/haproxy:ro
+    networks:
+      - external
+      - default
+
+
+networks:
+  default:
+    internal: true
+
+  external:
