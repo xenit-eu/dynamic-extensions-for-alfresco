@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="another:anotherTestModel" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+    <description>Metadata model for testing purposes, this model depends on the test-model</description>
+    <author>Daan Kerkhofs</author>
+    <version>1.0</version>
+
+    <imports>
+        <import uri="test.model" prefix="test"/>
+    </imports>
+
+    <namespaces>
+        <namespace uri="another.test.model" prefix="another"/>
+    </namespaces>
+
+    <types>
+        <type name="another:document">
+            <title>Another document type</title>
+            <description>Type is child of test:document</description>
+            <parent>test:document</parent>
+        </type>
+    </types>
+
+</model>
