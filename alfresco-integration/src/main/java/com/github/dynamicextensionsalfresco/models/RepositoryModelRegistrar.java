@@ -52,7 +52,7 @@ public class RepositoryModelRegistrar extends AbstractModelRegistrar {
                                 modelResource.getName(), e);
                     }
                     return null;
-                },false,false);
+                },false,true);
                 } catch(Exception e){
                     logger.error("tx error", e);
                 }
