@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-@Behaviour("test:document")
+@Behaviour
 @SuppressWarnings("unused")
 public class TestBehaviour implements OnCreateNodePolicy {
 
@@ -22,7 +22,7 @@ public class TestBehaviour implements OnCreateNodePolicy {
     private NodeService nodeService;
 
     @Override
-    @ClassPolicy
+    @ClassPolicy("test:document")
     public void onCreateNode(ChildAssociationRef childAssocRef) {
 
         nodeService.setProperty(
