@@ -2,6 +2,7 @@ package eu.xenit.dynamicextensionsalfresco;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.isEmptyString;
 
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -17,7 +18,8 @@ public class BehaviourTest extends RestAssuredTest {
 
     @Test
     public void testBehaviour_OnCreateNodePolicy() {
-        logger.info("Test scenario: adding a property to a node using an annotated 'OnCreateNodePolicy' behaviour");
+        logger.info("Test scenario: check that the 'OnCreateNodePolicy' behaviour is triggered when creating an "
+                + "applicable node");
 
         given()
                 .log().ifValidationFails()
@@ -27,5 +29,20 @@ public class BehaviourTest extends RestAssuredTest {
                 .log().ifValidationFails()
                 .statusCode(200)
                 .body(equalTo("\"TestBehaviour successfully processed\""));
+    }
+
+    @Test
+    public void testBehaviour_OnCreateNodePolicy_notTriggeredIfTypeNotApplicable() {
+        logger.info("Test scenario: check that the 'OnCreateNodePolicy' behaviour is not triggered when creating a "
+                + "node that is not applicable");
+
+        given()
+                .log().ifValidationFails()
+                .when()
+                .post("s/dynamic-extensions/testing/behaviours/OnCreateNodePolicyNotTriggeredIfTypeNotApplicable")
+                .then()
+                .log().ifValidationFails()
+                .statusCode(200)
+                .body(isEmptyString());
     }
 }

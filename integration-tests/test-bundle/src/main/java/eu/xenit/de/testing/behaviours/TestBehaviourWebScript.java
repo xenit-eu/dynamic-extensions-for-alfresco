@@ -4,7 +4,6 @@ import static eu.xenit.de.testing.Constants.TEST_WEBSCRIPTS_BASE_URI;
 import static eu.xenit.de.testing.Constants.TEST_WEBSCRIPTS_FAMILY;
 
 import com.github.dynamicextensionsalfresco.webscripts.annotations.HttpMethod;
-import com.github.dynamicextensionsalfresco.webscripts.annotations.Transaction;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.Uri;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.WebScript;
 import eu.xenit.de.testing.Model;
@@ -48,13 +47,26 @@ public class TestBehaviourWebScript {
 
     @Uri(value = "/OnCreateNodePolicy", method = HttpMethod.POST)
     public ResponseEntity<String> testBehaviour_OnCreateNodePolicy() {
+        return createTestNodeAndReturnTestBehaviourProperty(
+                Model.TYPE_TESTDOCUMENT,
+                "testBehaviour_OnCreateNodePolicy");
+    }
 
+
+    @Uri(value = "/OnCreateNodePolicyNotTriggeredIfTypeNotApplicable", method = HttpMethod.POST)
+    public ResponseEntity<String> testBehaviour_OnCreateNodePolicy_notTriggeredIfTypeNotApplicable() {
+        return createTestNodeAndReturnTestBehaviourProperty(
+                ContentModel.TYPE_CONTENT,
+                "testBehaviour_OnCreateNodePolicy_notTriggeredIfTypeNotApplicable");
+    }
+
+    private ResponseEntity<String> createTestNodeAndReturnTestBehaviourProperty(final QName type, final String name) {
         final NodeRef createdNode = retryingTransactionHelper.doInTransaction(
                 () -> nodeService.createNode(
                         testFolder,
                         ContentModel.ASSOC_CONTAINS,
-                        QName.createQName("{test.model}", "testBehaviour_OnCreateNodePolicy"),
-                        Model.TYPE_TESTDOCUMENT),
+                        QName.createQName("{test.model}", name),
+                        type),
                 false,
                 true).getChildRef();
 
@@ -66,7 +78,6 @@ public class TestBehaviourWebScript {
                 .getProperty(createdNode, Model.PROP_TESTBEHAVIOURPROPERTY);
 
         return new ResponseEntity<>(testBehaviourProperty, HttpStatus.OK);
-
     }
 
     private NodeRef createOrResetTestFolder() {
