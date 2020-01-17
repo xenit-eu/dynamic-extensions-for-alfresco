@@ -22,6 +22,8 @@ Version template:
 # Dynamic Extensions For Alfresco Changelog
 
 ## [2.0.3] - UNRELEASED
+### Fixed
+* [#265](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/265) `DeBundle` task failing to use build cache
 
 ## [2.0.2] - 2019-10-08
 ### Fixed

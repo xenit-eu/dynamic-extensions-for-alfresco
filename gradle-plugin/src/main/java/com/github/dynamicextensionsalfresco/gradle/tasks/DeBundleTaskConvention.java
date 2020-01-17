@@ -4,6 +4,7 @@ import aQute.bnd.gradle.BundleTaskConvention;
 import aQute.bnd.osgi.Constants;
 import com.github.dynamicextensionsalfresco.gradle.internal.BndHandler;
 import org.gradle.api.Action;
+import org.gradle.api.Task;
 import org.gradle.api.tasks.bundling.Jar;
 
 /**
@@ -24,7 +25,13 @@ public class DeBundleTaskConvention {
         this.task = task;
         bndConvention = new BundleTaskConvention(task);
         task.getConvention().getPlugins().put("_bundle_bnd", bndConvention);
-        task.doLast("buildDeBundle", t -> buildDeBundle());
+        // This is an anonymous inner class instead of a lambda because of a gradle issue where lambdas break up-to-date checks
+        task.doLast("buildDeBundle", new Action<Task>() {
+            @Override
+            public void execute(Task task) {
+                buildDeBundle();
+            }
+        });
     }
 
     /**
