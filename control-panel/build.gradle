@@ -31,6 +31,8 @@ dependencies {
     compileOnly "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
     compileOnly "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
 
+    implementation "javax.annotation:javax.annotation-api:${javaxAnnotationApiVersion}"
+
     testCompile("org.alfresco.surf:spring-surf-core-configservice") { transitive = false }
 
     testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"

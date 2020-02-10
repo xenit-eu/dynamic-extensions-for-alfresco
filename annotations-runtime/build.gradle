@@ -39,6 +39,7 @@ dependencies {
 
     compileOnly "com.fasterxml.jackson.core:jackson-databind"
 
+    implementation "javax.annotation:javax.annotation-api:${javaxAnnotationApiVersion}"
 
     testCompile "${project.ext.alfrescoBom}"
     testCompile project(":event-bus")
