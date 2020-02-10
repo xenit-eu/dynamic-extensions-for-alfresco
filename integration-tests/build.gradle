@@ -1,5 +1,5 @@
 plugins {
-    id "eu.xenit.docker-alfresco" version "4.0.3" apply false
+    id "eu.xenit.docker-alfresco" version "5.0.1" apply false
 }
 
 apply plugin: 'java'
@@ -47,7 +47,8 @@ configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
     check.dependsOn integrationTest
 
     apply plugin: 'eu.xenit.docker-alfresco'
-    
+    apply plugin: 'eu.xenit.docker-compose.auto'
+
     dependencies {
         baseAlfrescoWar "${alfrescoBaseWar}"
         alfrescoAmp project(path: ":alfresco-dynamic-extensions-repo:alfresco-dynamic-extensions-repo-${alfrescoVersion}", configuration: 'ampArtifact')
