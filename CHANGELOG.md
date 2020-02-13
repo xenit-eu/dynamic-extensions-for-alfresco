@@ -24,6 +24,7 @@ Version template:
 ## [2.0.3] - UNRELEASED
 ### Fixed
 * [#265](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/265) `DeBundle` task failing to use build cache
+* [#287](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/287) Dynamic Extensions not starting with Spring 3 and no internet
 
 ## [2.0.2] - 2019-10-08
 ### Fixed
