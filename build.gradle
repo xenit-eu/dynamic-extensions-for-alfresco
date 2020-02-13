@@ -38,6 +38,10 @@ allprojects {
     apply plugin: 'idea'
     apply plugin: 'eclipse'
 
+    project.pluginManager.withPlugin('java-base') {
+        project.sourceCompatibility = 1.8
+    }
+
     repositories {
         maven {
             url "${rootProject.projectDir}/alfresco-bom-repo"
