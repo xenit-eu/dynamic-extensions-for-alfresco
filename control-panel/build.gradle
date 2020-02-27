@@ -47,15 +47,15 @@ jar {
             'Bundle-Description': 'Control Panel',
             'Alfresco-Spring-Configuration': 'com.github.dynamicextensionsalfresco.controlpanel',
             'Spring-Context': ';publish-context:=false',
-            'Import-Package': '*, ' +
-                    'javax.annotation;version=!, ' +
+            'Import-Package': 'javax.annotation;version=!, ' +
                     'net.sf.cglib.core, ' +
                     'net.sf.cglib.proxy, ' +
                     'net.sf.cglib.reflect, ' +
                     'org.aopalliance.aop, ' +
                     'org.aopalliance.intercept, ' +
                     'org.springframework.aop, ' +
-                    'org.springframework.aop.framework'
+                    'org.springframework.aop.framework' +
+                    '* '
     )
 }
 
