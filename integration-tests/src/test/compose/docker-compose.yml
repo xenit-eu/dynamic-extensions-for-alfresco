@@ -43,7 +43,7 @@ services:
   haproxy:
     image: haproxy:alpine
     ports:
-      - ${ALFRESCO_TCP_8080:-8080}:80 # by default expose on :8080
+      - ${ALFRESCO_TCP_80:-8080:80}
     depends_on:
       alfresco:
         condition: service_healthy
