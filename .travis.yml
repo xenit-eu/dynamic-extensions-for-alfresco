@@ -5,6 +5,9 @@ addons:
     packages:
     - docker-ce
 
+git:
+  depth: false
+
 jdk:
 - oraclejdk8
 
@@ -15,6 +18,24 @@ install: ./gradlew assemble -i
 
 script:
 - ./gradlew test
+- |
+    if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then
+      ./gradlew sonarqube -x check \
+                          -Dsonar.host.url=https://sonarcloud.io \
+                          -Dsonar.login="$SONAR_TOKEN" \
+                          -Dsonar.organization="xenit-eu" \
+                          -Dsonar.projectKey="$SONAR_PROJECT_KEY" \
+                          -Dsonar.branch.name="$TRAVIS_BRANCH";
+    else
+       ./gradlew sonarqube -x check \
+                            -Dsonar.host.url=https://sonarcloud.io \
+                            -Dsonar.login="$SONAR_TOKEN" \
+                            -Dsonar.organization=xenit-eu \
+                            -Dsonar.projectKey="$SONAR_PROJECT_KEY" \
+                            -Dsonar.pullrequest.key="$TRAVIS_PULL_REQUEST" \
+                            -Dsonar.pullrequest.base="$TRAVIS_BRANCH" \
+                            -Dsonar.pullrequest.branch="$TRAVIS_PULL_REQUEST_BRANCH";
+    fi;
 
 before_cache:
 - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock

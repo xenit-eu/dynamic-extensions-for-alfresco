@@ -7,11 +7,13 @@ buildscript {
     }
     dependencies {
         classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.8.0"
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7"
     }
 }
 
 plugins {
     id "biz.aQute.bnd.builder" version "4.2.0" apply false
+    id "org.sonarqube" version "2.8"
 }
 
 wrapper {
