@@ -25,5 +25,5 @@ dependencies {
 
     compileOnly 'com.google.code.findbugs:jsr305:2.0.1'
 
-    implementation "javax.annotation:javax.annotation-api:${javaxAnnotationApiVersion}"
+    compileOnly "javax.annotation:javax.annotation-api:${javaxAnnotationApiVersion}"
 }
