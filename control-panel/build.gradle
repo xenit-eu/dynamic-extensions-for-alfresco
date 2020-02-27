@@ -54,7 +54,7 @@ jar {
                     'org.aopalliance.aop, ' +
                     'org.aopalliance.intercept, ' +
                     'org.springframework.aop, ' +
-                    'org.springframework.aop.framework' +
+                    'org.springframework.aop.framework, ' +
                     '* '
     )
 }
