@@ -4,6 +4,17 @@ import com.github.dynamicextensionsalfresco.osgi.Configuration;
 import com.github.dynamicextensionsalfresco.osgi.JavaPackageScanner;
 import com.github.dynamicextensionsalfresco.osgi.PackageCacheMode;
 import com.github.dynamicextensionsalfresco.osgi.SystemPackage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
+import java.io.PrintWriter;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,16 +23,11 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
-import java.io.*;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 /**
  * Provides {@link SystemPackage}s by scanning the web application for Java packages.
- * 
+ *
  * @author Laurens Fridael
- * 
+ *
  */
 public class WebApplicationSystemPackageFactoryBean implements FactoryBean<Set<SystemPackage>> {
 
@@ -47,8 +53,16 @@ public class WebApplicationSystemPackageFactoryBean implements FactoryBean<Set<S
 	}
 
 	@Override
-	public Set<SystemPackage> getObject() throws Exception {
-		return createSystemPackages();
+	public Set<SystemPackage> getObject() {
+		final long start = System.currentTimeMillis();
+		Set<SystemPackage> systemPackages = createSystemPackages();
+		final long finish = System.currentTimeMillis();
+		if (finish - start > 1500L) {
+			logger.info("System Package scanning took '{}' milliseconds. Possible improvement: enable System Package "
+					+ "cache by adding 'osgi.container.system-package-cache.mode:ENABLE' "
+					+ "to 'osgi-container.properties'", (finish - start));
+		}
+		return systemPackages;
 	}
 
 	/* Utility operations */
