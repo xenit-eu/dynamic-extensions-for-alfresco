@@ -4,7 +4,7 @@ import org.springframework.beans.factory.xml.NamespaceHandler;
 import org.springframework.beans.factory.xml.NamespaceHandlerResolver;
 
 /**
- * {@link NamespaceHandlerResolver} for internal use by {@link DynamicExtensionsApplicationContext}
+ * {@link NamespaceHandlerResolver} for internal use by {@link DynamicExtensionsApplicationContextBase}
  * 
  * @author Laurens Fridael
  * 

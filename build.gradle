@@ -68,8 +68,9 @@ allprojects {
 }
 
 subprojects {
-
-    if (project.name == 'integration-tests' || project.parent.name == 'integration-tests') {
+    if (project.name == 'integration-tests'
+        || project.parent.name == 'integration-tests'
+        || project.name == 'blueprint-integration') {
         return
     }
 
