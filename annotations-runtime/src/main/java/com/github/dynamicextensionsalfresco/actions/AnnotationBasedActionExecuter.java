@@ -1,11 +1,13 @@
 package com.github.dynamicextensionsalfresco.actions;
 
 import org.alfresco.repo.action.executer.ActionExecuter;
+import org.alfresco.repo.action.executer.LoggingAwareExecuter;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.action.ActionDefinition;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.apache.commons.logging.Log;
 
-class AnnotationBasedActionExecuter implements ActionExecuter {
+class AnnotationBasedActionExecuter implements ActionExecuter, LoggingAwareExecuter {
 
 	private final ActionMethodMapping mapping;
 
@@ -50,6 +52,11 @@ class AnnotationBasedActionExecuter implements ActionExecuter {
 
 	@Override
 	public boolean getTrackStatus() {
+		return false;
+	}
+
+	@Override
+	public boolean onLogException(Log logger, Throwable t, String message) {
 		return false;
 	}
 

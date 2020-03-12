@@ -19,6 +19,8 @@ include 'control-panel'
 
 include 'gradle-plugin'
 
+include 'polyfill:polyfill-alfresco-50'
+
 
 def alfrescoDependentModules =
         [

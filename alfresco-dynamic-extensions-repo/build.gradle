@@ -46,6 +46,10 @@ subprojects {
             blueprint(project(":blueprint-integration:blueprint-integration-spring-5"))
         }
 
+        if(project.name.endsWith("-50")) {
+            ampLib(project(":polyfill:polyfill-alfresco-50")) { transitive = false }
+        }
+
         blueprint("org.eclipse.gemini.blueprint:gemini-blueprint-core:${project.ext.geminiVersion}")
         blueprint("org.eclipse.gemini.blueprint:gemini-blueprint-io:${project.ext.geminiVersion}")
 
