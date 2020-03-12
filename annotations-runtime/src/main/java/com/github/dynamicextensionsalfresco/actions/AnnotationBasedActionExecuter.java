@@ -5,6 +5,7 @@ import org.alfresco.repo.action.executer.LoggingAwareExecuter;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.action.ActionDefinition;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.apache.commons.logging.Log;
 
 class AnnotationBasedActionExecuter implements ActionExecuter, LoggingAwareExecuter {
 
