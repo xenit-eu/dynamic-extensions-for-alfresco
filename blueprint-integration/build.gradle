@@ -1,75 +1,76 @@
-allprojects {
+subprojects { Project p ->
     apply plugin: "java"
     apply plugin: 'biz.aQute.bnd.builder'
+    apply from: "${p.getProjectDir()}/override.gradle"
 
     configurations {
         testCompile.extendsFrom(compileOnly)
     }
-}
-def extender = 'org.eclipse.gemini.blueprint.extender'
 
-subprojects { p ->
     jar {
         bnd(
                 'Bundle-SymbolicName': p.group+'.'+p.name,
-                'Fragment-Host': extender,
+                'Fragment-Host': 'org.eclipse.gemini.blueprint.extender',
                 'DynamicImport-Package': '*',
-                'Export-Package': 'com.github.dynamicextensionsalfresco.blueprint.*',
-                'Import-Package': '*',
+                'Export-Package': 'com.github.dynamicextensionsalfresco.blueprint, com.github.dynamicextensionsalfresco.blueprint.*',
+                'Import-Package':
+                        // We remove version dependencies on some gemini blueprint packages here,
+                        // because they are different for alfresco 5.x and 6.x (see geminiVersion in the root build.gradle)
+                        // This bundle is shared between those versions, and it should always be able to find some version to import.
+                        'org.eclipse.gemini.blueprint.context;version=!,' +
+                        'org.eclipse.gemini.blueprint.context.support;version=!,' +
+                        'org.eclipse.gemini.blueprint.service.exporter.support;version=!,' +
+                        '*',
                 'Bundle-DocURL': 'https://github.com/xenit-eu/dynamic-extensions-for-alfresco',
         )
     }
-}
 
-jar {
-    bnd(
-            'Bundle-SymbolicName': project.group+'.'+project.name,
-            'Fragment-Host': extender,
-            'DynamicImport-Package': '*',
-            'Export-Package': 'com.github.dynamicextensionsalfresco.blueprint',
-            'Import-Package':
-                    // We remove version dependencies on some gemini blueprint packages here,
-                    // because they are different for alfresco 5.x and 6.x (see geminiVersion in the root build.gradle)
-                    // This bundle is shared between those versions, and it should always be able to find some version to import.
-                    'org.eclipse.gemini.blueprint.context;version=!,' +
-                    'org.eclipse.gemini.blueprint.context.support;version=!,' +
-                    'org.eclipse.gemini.blueprint.service.exporter.support;version=!,' +
-                    '*',
-            'Bundle-DocURL': 'https://github.com/xenit-eu/dynamic-extensions-for-alfresco',
-    )
-}
-dependencies {
-    compileOnly enforcedPlatform("${project.ext.alfrescoBom}")
+    p.sourceSets.main.java.srcDirs = [
+            "${p.getProjectDir()}/src/main/java/",
+            "${p.getParent().getProjectDir()}/src/main/java/"
+    ]
+    p.sourceSets.main.resources.srcDirs = [
+            "${p.getProjectDir()}/src/main/resources/",
+            "${p.getParent().getProjectDir()}/src/main/resources/"
+    ]
+    p.sourceSets.test.java.srcDirs = [
+            "${p.getProjectDir()}/src/test/java/",
+            "${p.getParent().getProjectDir()}/src/test/java/"
+    ]
+    p.sourceSets.test.resources.srcDirs = [
+            "${p.getProjectDir()}/src/test/resources/",
+            "${p.getParent().getProjectDir()}/src/test/resources/"
+    ]
 
-    compile project(":annotations-runtime")
-    compile project(':annotations-runtime:scheduler-quartz-1')
-    compile project(':annotations-runtime:scheduler-quartz-2')
+    p.dependencies {
+        compileOnly(enforcedPlatform("eu.xenit.alfresco:alfresco-community-bom:${p.ext.springSpecificAlfrescoBom}"))
+        testCompile(enforcedPlatform("eu.xenit.alfresco:alfresco-community-bom:${p.ext.springSpecificAlfrescoBom}"))
 
-    compile project(':blueprint-integration:blueprint-integration-spring-3')
-    compile project(':blueprint-integration:blueprint-integration-spring-5')
+        compile(project(":event-bus"))
+        compile(project(":alfresco-integration"))
+        compile(project(":annotations-runtime"))
+        compile(project(':annotations-runtime:scheduler-quartz-1'))
+        compile(project(':annotations-runtime:scheduler-quartz-2'))
 
-    compile project(":alfresco-integration")
+        compileOnly("org.alfresco.surf:spring-webscripts")
+        compileOnly("org.alfresco:alfresco-repository")
+        compileOnly("org.osgi:org.osgi.core:${p.ext.osgiVersion}")
+        compileOnly("org.eclipse.gemini.blueprint:gemini-blueprint-extender:${p.ext.geminiVersion}") {
+            exclude group: "org.springframework"
+        }
+        compileOnly("javax.servlet:servlet-api:${p.ext.servletVersion}")
+        compileOnly("org.jetbrains:annotations:$jetbrains_annotations_version")
+        compileOnly("com.springsource.util:com.springsource.util.osgi:${p.ext.springOsgiUtilVersion}")
+        compileOnly('org.springframework:spring-core') { transitive = false }
+        compileOnly('org.springframework:spring-beans') { transitive = false }
+        compileOnly('org.springframework:spring-context') { transitive = false }
+        compileOnly('org.springframework:spring-context-support') { transitive = false }
 
-    compileOnly("org.alfresco.surf:spring-webscripts")
-    compileOnly("org.alfresco:alfresco-repository")
-
-    compileOnly "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
-
-    compileOnly("org.eclipse.gemini.blueprint:gemini-blueprint-extender:${project.ext.geminiVersion}") {
-        exclude group: "org.springframework"
+        testCompile('org.hamcrest:hamcrest-all:1.3')
+        testCompile("org.mockito:mockito-core:${p.ext.mockitoVersion}")
+        testCompile("junit:junit:${p.ext.junitVersion}")
+        testCompile("org.mockito:mockito-core:${mockitoVersion}")
+        testCompile("junit:junit:${junitVersion}")
+        testCompile("org.alfresco:alfresco-repository")
     }
-
-    compileOnly "javax.servlet:servlet-api:${project.ext.servletVersion}"
-    compileOnly "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
-    compile project(":event-bus")
-
-    compileOnly "org.jetbrains:annotations:$jetbrains_annotations_version"
-
-
-    testCompile enforcedPlatform("${project.ext.alfrescoBom}")
-
-    testCompile 'org.hamcrest:hamcrest-all:1.3'
-    testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
-    testCompile "junit:junit:${project.ext.junitVersion}"
-    testCompile('org.springframework:spring-beans') { transitive = false }
 }

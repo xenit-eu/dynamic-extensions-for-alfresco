@@ -24,4 +24,6 @@ dependencies {
     compileOnly('org.json:json') { transitive = false }
 
     compileOnly 'com.google.code.findbugs:jsr305:2.0.1'
+
+    compileOnly "javax.annotation:javax.annotation-api:${javaxAnnotationApiVersion}"
 }

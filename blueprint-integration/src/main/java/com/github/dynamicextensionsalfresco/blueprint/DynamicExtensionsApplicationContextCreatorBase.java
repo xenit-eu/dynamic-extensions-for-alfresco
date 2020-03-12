@@ -1,7 +1,5 @@
 package com.github.dynamicextensionsalfresco.blueprint;
 
-import com.github.dynamicextensionsalfresco.blueprint.spring3.Spring3HostApplicationContext;
-import com.github.dynamicextensionsalfresco.blueprint.spring5.Spring5HostApplicationContext;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -22,7 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
 /**
- * {@link OsgiApplicationContextCreator} that creates a {@link DynamicExtensionsApplicationContext} if a bundle has been
+ * {@link OsgiApplicationContextCreator} that creates a {@link DynamicExtensionsApplicationContextBase} if a bundle has been
  * marked as an Alfresco Dynamic Extension. Otherwise the implementation delegates to
  * {@link DefaultOsgiApplicationContextCreator} to support the creation of regular Spring DM bundles.
  * <p>
@@ -36,7 +34,7 @@ import org.springframework.context.ApplicationContext;
  * @author Laurens Fridael
  * 
  */
-public class DynamicExtensionsApplicationContextCreator implements OsgiApplicationContextCreator {
+public abstract class DynamicExtensionsApplicationContextCreatorBase implements OsgiApplicationContextCreator {
 
 	private static final String ALFRESCO_DYNAMIC_EXTENSION_HEADER = "Alfresco-Dynamic-Extension";
 
@@ -75,7 +73,7 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 		if (isAlfrescoDynamicExtension(bundle)) {
 			uninstallBundlesWithDuplicateSymbolicName(bundleContext);
 		}
-		final DynamicExtensionsApplicationContext applicationContext = new DynamicExtensionsApplicationContext(
+		final DynamicExtensionsApplicationContextBase applicationContext = createNewInstance(
 				configurationLocations, getHostApplicationContext(bundleContext));
 		applicationContext.setBundleContext(bundleContext);
 
@@ -88,6 +86,9 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 		return applicationContext;
 
 	}
+
+	protected abstract DynamicExtensionsApplicationContextBase createNewInstance(String[] configurationLocations, ApplicationContext hostApplicationContext);
+
 
 	protected boolean isAlfrescoDynamicExtension(final Bundle bundle) {
 		return Boolean.valueOf(bundle.getHeaders().get(ALFRESCO_DYNAMIC_EXTENSION_HEADER));
@@ -129,17 +130,14 @@ public class DynamicExtensionsApplicationContextCreator implements OsgiApplicati
 		if (serviceReference != null) {
 			VersionNumber version = BundleUtils.getService(bundleContext, DescriptorService.class).getServerDescriptor()
 					.getVersionNumber();
-			if (version.compareTo(new VersionNumber("6.0")) >= 0) {
-				return new Spring5HostApplicationContext(
-						(ApplicationContext) bundleContext.getService(serviceReference));
-			} else {
-				return new Spring3HostApplicationContext(
-						(ApplicationContext) bundleContext.getService(serviceReference));
-			}
+			return getSpringSpecificHostApplicationContext(bundleContext, serviceReference);
 		} else {
 			return null;
 		}
 	}
+
+	protected abstract ApplicationContext getSpringSpecificHostApplicationContext(BundleContext bundleContext, ServiceReference<?> serviceReference);
+
 
 	protected ServiceReference<?> getServiceReferenceWithBeanName(final BundleContext bundleContext,
 			final String serviceName, final String beanName) {

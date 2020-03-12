@@ -1,0 +1,3 @@
+ext {
+    springSpecificAlfrescoBom = "5.0.d"
+}

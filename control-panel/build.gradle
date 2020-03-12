@@ -31,6 +31,8 @@ dependencies {
     compileOnly "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
     compileOnly "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
 
+    implementation "javax.annotation:javax.annotation-api:${javaxAnnotationApiVersion}"
+
     testCompile("org.alfresco.surf:spring-surf-core-configservice") { transitive = false }
 
     testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
@@ -45,14 +47,15 @@ jar {
             'Bundle-Description': 'Control Panel',
             'Alfresco-Spring-Configuration': 'com.github.dynamicextensionsalfresco.controlpanel',
             'Spring-Context': ';publish-context:=false',
-            'Import-Package': '*, ' +
+            'Import-Package': 'javax.annotation;version=!, ' +
                     'net.sf.cglib.core, ' +
                     'net.sf.cglib.proxy, ' +
                     'net.sf.cglib.reflect, ' +
                     'org.aopalliance.aop, ' +
                     'org.aopalliance.intercept, ' +
                     'org.springframework.aop, ' +
-                    'org.springframework.aop.framework'
+                    'org.springframework.aop.framework, ' +
+                    '* '
     )
 }
 

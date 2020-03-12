@@ -60,7 +60,8 @@ the [Alfresco Docker Gradle Plugins](https://github.com/xenit-eu/alfresco-docker
 
 Dynamic Extensions is systematically integration-tested against:
 
-* Alfresco Enterprise & Community 6.1
+* Alfresco Enterprise & Community 6.2 (Requires hotfix, see below)
+* Alfresco Enterprise & Community 6.1 (Requires hotfix, see below)
 * Alfresco Enterprise & Community 6.0
 * Alfresco Enterprise & Community 5.2
 * Alfresco Enterprise & Community 5.1
@@ -69,7 +70,7 @@ Dynamic Extensions is systematically integration-tested against:
 > Integration tests are currently only executed on our private Jenkins build server. 
 
 #### Known Alfresco issues that impact Dynamic Extensions
-<details><summary>Alfresco 6.1 - wrong version of 'Commons annotations' used</summary>When using DE on Alfresco 6.1, it is possible that it fails to startup due to following error:
+<details><summary>Alfresco 6.1 / 6.2 - wrong version of 'Commons annotations' used</summary>When using DE on Alfresco 6.1 or 6.2, it is possible that it fails to startup due to following error:
 
 ```
 Caused by: java.lang.NoSuchMethodError: javax.annotation.Resource.lookup()Ljava/lang/String;
@@ -98,7 +99,7 @@ of the `Resource` class embedded in the distribution, and the
 [`bootstrap` classloader has the highest priority](https://tomcat.apache.org/tomcat-9.0-doc/class-loader-howto.html).
 
 This issue has been reported to Alfresco: [MNT-20557](https://issues.alfresco.com/jira/browse/MNT-20557). 
-Waiting for Alfresco to fix the issue, following workarounds can be used to make DE work on Alfresco 6.1:
+Waiting for Alfresco to fix the issue, following workarounds can be used to make DE work on Alfresco 6.1 and 6.2:
 
 * Remove the `jsr250-api` and `geronimo-annotation_1.0_spec` jars from the `WEB-INF/lib` folder of the Alfresco webapp.
 * Install [this hotfix AMP](https://github.com/xenit-eu/alfresco-hotfix-MNT-20557) in your Alfresco distribution, 

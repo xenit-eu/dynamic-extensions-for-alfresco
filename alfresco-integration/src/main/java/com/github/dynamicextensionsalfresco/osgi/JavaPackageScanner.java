@@ -98,7 +98,7 @@ public class JavaPackageScanner implements ServletContextAware {
 		} catch (final IOException e) {
 			if (logger.isWarnEnabled()) {
 				logger.warn("Error scanning Java packages. This will cause Dynamic Extensions framework not to work!",
-						e.getMessage(), e);
+						e);
 			}
 		}
 		return systemPackages;

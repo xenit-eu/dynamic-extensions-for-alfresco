@@ -23,6 +23,8 @@ dependencies {
     compile "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
     compile "biz.aQute.bnd:biz.aQute.bnd:${project.ext.bndVersion}"
 
+    implementation "javax.annotation:javax.annotation-api:${javaxAnnotationApiVersion}"
+
     testCompile "junit:junit:${project.ext.junitVersion}"
     testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
     testCompile "org.springframework:spring-test:${project.ext.springVersion}"

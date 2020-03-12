@@ -4,7 +4,6 @@ package com.github.dynamicextensionsalfresco.models;
 import com.github.dynamicextensionsalfresco.resources.ResourceHelper;
 import org.alfresco.repo.dictionary.RepositoryLocation;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.admin.RepoAdminService;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.transaction.TransactionService;
@@ -13,9 +12,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * Register models in the repository as cm:dictionaryModel's using the [RepoAdminService].
+ * Register models in the repository as cm:dictionaryModel's using the {@link RepoAdminService}.
  */
 public class RepositoryModelRegistrar extends AbstractModelRegistrar {
+
+    private Logger logger = LoggerFactory.getLogger(RepositoryModelRegistrar.class);
+
     @Autowired
     public RepositoryLocation customModelsRepositoryLocation;
     @Autowired
@@ -26,7 +28,6 @@ public class RepositoryModelRegistrar extends AbstractModelRegistrar {
     public TransactionService transactionService;
     @Autowired
     public ResourceHelper resourceHelper;
-    private Logger logger = LoggerFactory.getLogger(RepositoryModelRegistrar.class);
 
     @Override
     public void unregisterModels() {
@@ -35,32 +36,27 @@ public class RepositoryModelRegistrar extends AbstractModelRegistrar {
 
     @Override
     public void registerModel(final M2ModelResource modelResource) {
-        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
-            @Override
-            public Object doWork() throws Exception {
-                try {
-                    transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
-                        @Override
-                        public Object execute() throws Throwable {
-                            try {
-                                if (resourceHelper.nodeDiffersFromResource(modelResource.getResource(), customModelsRepositoryLocation)) {
-                                    repoAdminService.deployModel(
-                                            modelResource.getResource().getInputStream(),
-                                            modelResource.getResource().getFilename());
-                                    logger.debug("Registered model ${modelResource.name}");
-                                }
-                            }
-                            catch (Exception e){
-                                logger.error("Failed to deploy M2Model ${modelResource.name} as a cm:dictionaryModel", e);
-                            }
-                            return null;
+        AuthenticationUtil.runAsSystem(() -> {
+            try {
+                transactionService.getRetryingTransactionHelper().doInTransaction(() -> {
+                    try {
+                        if (resourceHelper.nodeDiffersFromResource(modelResource.getResource(), customModelsRepositoryLocation)) {
+                            repoAdminService.deployModel(
+                                    modelResource.getResource().getInputStream(),
+                                    modelResource.getResource().getFilename());
+                            logger.debug("Registered model {}", modelResource.getName());
                         }
-                    },false,false);
-                    } catch(Exception e){
-                        logger.error("tx error", e);
+                    }
+                    catch (Exception e){
+                        logger.error("Failed to deploy M2Model {} as a cm:dictionaryModel",
+                                modelResource.getName(), e);
                     }
                     return null;
+                },false,true);
+                } catch(Exception e){
+                    logger.error("tx error", e);
                 }
+                return null;
             });
         }
     }

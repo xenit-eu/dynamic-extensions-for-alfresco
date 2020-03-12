@@ -195,7 +195,7 @@ public class DefaultFrameworkManager implements ResourceLoaderAware, FrameworkMa
 
         for (Bundle bundle : sortedByDependency) {
             if((bundle.getState() & Bundle.RESOLVED) != Bundle.RESOLVED) {
-                logger.error("Bundle {} failed to resolve.", bundle.getSymbolicName());
+                logger.error("Bundle {} failed to resolve. State: {}", bundle.getSymbolicName(), bundle.getState());
             }
             if (!isFragmentBundle(bundle)) {
                 this.startBundle(bundle);
@@ -209,7 +209,6 @@ public class DefaultFrameworkManager implements ResourceLoaderAware, FrameworkMa
             bundle.start();
         } catch (Exception e) {
             logger.error("Error starting bundle {}:", bundle.getSymbolicName(), e);
-
         }
     }
 

@@ -3,8 +3,6 @@ package com.github.dynamicextensionsalfresco.blueprint;
 import com.github.dynamicextensionsalfresco.BeanNames;
 import com.github.dynamicextensionsalfresco.actions.AnnotationBasedActionRegistrar;
 import com.github.dynamicextensionsalfresco.aop.DynamicExtensionsAdvisorAutoProxyCreator;
-import com.github.dynamicextensionsalfresco.blueprint.spring3.Spring3OsgiAutowireBeanFactory;
-import com.github.dynamicextensionsalfresco.blueprint.spring5.Spring5OsgiAutowireBeanFactory;
 import com.github.dynamicextensionsalfresco.event.EventBus;
 import com.github.dynamicextensionsalfresco.event.events.SpringContextException;
 import com.github.dynamicextensionsalfresco.messages.MessagesRegistrar;
@@ -113,9 +111,9 @@ import org.xml.sax.EntityResolver;
  * @author Toon Geens
  */
 
-public class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicationContext {
+public abstract class DynamicExtensionsApplicationContextBase extends OsgiBundleXmlApplicationContext {
 
-    private final static Logger log = LoggerFactory.getLogger(DynamicExtensionsApplicationContext.class);
+    private final static Logger log = LoggerFactory.getLogger(DynamicExtensionsApplicationContextBase.class);
 
     private final boolean hasXmlConfiguration;
 
@@ -124,7 +122,7 @@ public class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicatio
 
     private static final String HOST_APPLICATION_ALFRESCO_FILTER = "(hostApplication=alfresco)";
 
-    public DynamicExtensionsApplicationContext(String[] configurationLocations, ApplicationContext parent) {
+    public DynamicExtensionsApplicationContextBase(String[] configurationLocations, ApplicationContext parent) {
         super(configurationLocations, parent);
 
         this.hasXmlConfiguration = !ObjectUtils.isEmpty(configurationLocations);
@@ -134,12 +132,10 @@ public class DynamicExtensionsApplicationContext extends OsgiBundleXmlApplicatio
     @Override
     protected DefaultListableBeanFactory createBeanFactory() {
         VersionNumber version = this.getService(DescriptorService.class).getServerDescriptor().getVersionNumber();
-        if (version.compareTo(new VersionNumber("6.0")) >= 0) {
-            return new Spring5OsgiAutowireBeanFactory(this.getInternalParentBeanFactory(), this.getBundleContext());
-        } else {
-            return new Spring3OsgiAutowireBeanFactory(this.getInternalParentBeanFactory(), this.getBundleContext());
-        }
+        return createVersionSpecificBeanFactory(version);
     }
+
+    protected abstract DefaultListableBeanFactory createVersionSpecificBeanFactory(VersionNumber version);
 
     @Override
     protected void loadBeanDefinitions(@NotNull DefaultListableBeanFactory beanFactory) throws IOException {

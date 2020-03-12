@@ -18,9 +18,9 @@ public abstract class RestAssuredTest {
     public static void initializeRestAssured() {
         logger.info("Initializing REST-Assured for smoke tests");
 
-        final String baseURI = "http://" + System.getProperty("alfresco.host", "localhost");
+        final String baseURI = "http://" + System.getProperty("haproxy.host", "localhost");
         RestAssured.baseURI = baseURI;
-        int port = Integer.parseInt(System.getProperty("alfresco.tcp.8080", "8080"));
+        int port = Integer.parseInt(System.getProperty("haproxy.tcp.80", "8080"));
         RestAssured.port = port;
         final String basePath = "/alfresco";
         RestAssured.basePath = basePath;
