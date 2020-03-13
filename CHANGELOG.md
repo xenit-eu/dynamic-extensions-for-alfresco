@@ -21,6 +21,9 @@ Version template:
  -->
 # Dynamic Extensions For Alfresco Changelog
 
+## [2.0.4] - UNRELEASED
+
+
 ## [2.0.3] - 2020-03-12
 ### Added
 * Alfresco 6.2 compatible AMP artifact
