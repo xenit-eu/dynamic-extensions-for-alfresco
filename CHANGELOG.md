@@ -30,10 +30,12 @@ Version template:
 
 ### Fixed
 * [#287](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/287) Dynamic Extensions not starting with Spring 3 and no internet
+* [#284](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/pull/284) Fixes `AnnotationBasedActionExecuter` throws `ClassCastException`
 * [#281](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/281) Invalid system packages (WEB-INF/lib) cache state in a docker based setup
 * [#275](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/275) Registering behaviours for model that are deployed in the same extension fail
 * [#197](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/197) Deploying dependent document models from the same bundle are not loaded in the correct order
 * [#265](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/265) `DeBundle` task failing to use build cache
+
 
 ## [2.0.2] - 2019-10-08
 ### Fixed
