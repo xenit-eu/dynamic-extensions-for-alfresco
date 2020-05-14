@@ -19,6 +19,7 @@ import org.quartz.TriggerBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  * Pluggable TaskScheduler adaptor for Quartz 2 used in Alfresco 6.x
@@ -31,6 +32,7 @@ public class Quartz2TaskScheduler implements TaskScheduler {
     static final String JOB_LOCK_SERVICE = "jobLockService";
 
     @Autowired
+    @Qualifier("schedulerFactory")
     private Scheduler scheduler;
 
     @Autowired
