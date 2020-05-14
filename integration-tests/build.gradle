@@ -70,10 +70,18 @@ configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
             automaticTags = false
         }
     }
-    
+
+    def issue_297_config = project.getName().contains("-6")
+            ? "github-issue-297-6.x-application-context.xml"
+            : "github-issue-297-5.x-application-context.xml"
+
     createDockerFile {
         // Workaround for https://issues.alfresco.com/jira/browse/MNT-20007
         runCommand("sed -i 's|<secure>true</secure>|<secure>false</secure>|g' /usr/local/tomcat/conf/web.xml")
+        smartCopy(
+                "${project.getParent().getProjectDir()}/src/test/resources/${issue_297_config}",
+                "/usr/local/tomcat/shared/classes/alfresco/extension/${issue_297_config}"
+        )
     }
 
     dockerCompose {
