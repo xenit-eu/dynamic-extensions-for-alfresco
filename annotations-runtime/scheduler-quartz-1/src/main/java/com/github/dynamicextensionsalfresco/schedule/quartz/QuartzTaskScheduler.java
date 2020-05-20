@@ -1,6 +1,5 @@
 package com.github.dynamicextensionsalfresco.schedule.quartz;
 
-
 import com.github.dynamicextensionsalfresco.schedule.Task;
 import com.github.dynamicextensionsalfresco.schedule.TaskConfiguration;
 import com.github.dynamicextensionsalfresco.schedule.TaskRegistration;
@@ -16,6 +15,7 @@ import org.quartz.Scheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  * Pluggable TaskScheduler adaptor for Quartz 1 used in Alfresco 5.x
@@ -28,6 +28,7 @@ public class QuartzTaskScheduler implements TaskScheduler {
     static final String JOB_LOCK_SERVICE = "jobLockService";
 
     @Autowired
+    @Qualifier("schedulerFactory")
     private Scheduler scheduler;
 
     @Autowired

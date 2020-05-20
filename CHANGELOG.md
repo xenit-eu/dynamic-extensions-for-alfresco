@@ -22,6 +22,8 @@ Version template:
 # Dynamic Extensions For Alfresco Changelog
 
 ## [2.0.4] - UNRELEASED
+### Fixed
+* [#297](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/297) Multiple bean candidates for a Quartz' `SchedulerFactoryBean`
 
 
 ## [2.0.3] - 2020-03-12

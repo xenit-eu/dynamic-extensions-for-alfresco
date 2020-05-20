@@ -553,10 +553,10 @@ public abstract class DynamicExtensionsApplicationContextBase extends OsgiBundle
 
         if (version.compareTo(new VersionNumber("6.0")) >= 0) {
             // From Alfresco 6.x, we
-            this.bean(beanFactory, BeanNames.QUARTZ_TASK_SCHEDULER, Quartz2TaskScheduler.class, beanAutowireByType);
+            this.bean(beanFactory, BeanNames.QUARTZ_TASK_SCHEDULER, Quartz2TaskScheduler.class, beanAutowireByName);
         } else  {
             // Fallback to ScheduledTaskRegistrar on Alfresco 5.x
-            this.bean(beanFactory, BeanNames.QUARTZ_TASK_SCHEDULER, QuartzTaskScheduler.class, beanAutowireByType);
+            this.bean(beanFactory, BeanNames.QUARTZ_TASK_SCHEDULER, QuartzTaskScheduler.class, beanAutowireByName);
         }
         this.bean(beanFactory, BeanNames.SCHEDULED_TASK_REGISTRAR, ScheduledTaskRegistrar.class, beanAutowireByType);
     }
@@ -580,6 +580,13 @@ public abstract class DynamicExtensionsApplicationContextBase extends OsgiBundle
         @Override
         public void customize(BeanDefinitionBuilder builder) {
             builder.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
+        }
+    };
+
+    public static BeanDefinitionBuilderCustomizer beanAutowireByName = new BeanDefinitionBuilderCustomizer() {
+        @Override
+        public void customize(BeanDefinitionBuilder builder) {
+            builder.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_NAME);
         }
     };
 }
