@@ -24,6 +24,7 @@ Version template:
 ## [2.0.4] - UNRELEASED
 ### Fixed
 * [#297](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/297) Multiple bean candidates for a Quartz' `SchedulerFactoryBean`
+* [#201](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/201) Fixed issue where Alfresco would not start when Dynamic-extensions and Records Management are installed at the same time
 
 
 ## [2.0.3] - 2020-03-12
