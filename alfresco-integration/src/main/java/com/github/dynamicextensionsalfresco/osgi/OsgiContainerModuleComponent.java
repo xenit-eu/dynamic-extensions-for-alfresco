@@ -8,6 +8,10 @@ import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransacti
 import org.alfresco.service.transaction.TransactionService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.event.ApplicationEventMulticaster;
+import org.springframework.context.event.ContextClosedEvent;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
@@ -101,7 +105,7 @@ public class OsgiContainerModuleComponent extends AbstractModuleComponent implem
 	}
 
 	private void initializeOsgiContainerApplicationContext() {
-		childApplicationContext = new XmlWebApplicationContext();
+		childApplicationContext = new EventHandlingXmlWebApplicationContext();
 		childApplicationContext.setParent(getApplicationContext());
 		childApplicationContext.setServletContext(getApplicationContext().getServletContext());
 		childApplicationContext.setConfigLocation(StringUtils.arrayToDelimitedString(
@@ -158,4 +162,16 @@ public class OsgiContainerModuleComponent extends AbstractModuleComponent implem
 		return childApplicationContext.getBean(BeanNames.CONTAINER_FRAMEWORK_MANAGER, FrameworkManager.class);
 	}
 
+	private static class EventHandlingXmlWebApplicationContext extends XmlWebApplicationContext {
+		@Override
+		public void publishEvent(ApplicationEvent event) {
+			Assert.notNull(event, "Event must not be null");
+			((ApplicationEventMulticaster) getBean(APPLICATION_EVENT_MULTICASTER_BEAN_NAME)).multicastEvent(event);
+			if (event instanceof ContextRefreshedEvent || event instanceof ContextClosedEvent) {
+				return;
+			}
+
+			super.publishEvent(event);
+		}
+	}
 }
