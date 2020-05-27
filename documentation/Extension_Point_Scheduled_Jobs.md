@@ -1,5 +1,7 @@
 # Scheduled Jobs
 
+## Using Dynamic Extensions Annotations to Schedule Jobs
+
 To schedule the execution of some logic, annotate the class implementing the logic with `@ScheduledTask` 
 and implement the `com.github.dynamicextensionsalfresco.schedule.Task` interface. 
 
@@ -43,3 +45,17 @@ fallback to the value of the `cron` parameter as a default.
  
 > The `@ScheduledQuartzJob` annotation has been deprecated since Dynamic Extensions 2.0 and replace by the 
 > vendor neutral `@ScheduledTask` annotation. It still works on 2.0, but is scheduled for removing in later versions.
+
+## Implementation Notes
+
+Dynamic Extensions bundles should delegate the scheduling work to the DE Platform, rather than creating new - or 
+accessing existing Quartz schedulers directly.
+
+Should one need, for some reason, to access the scheduler directly, a simple `@Autowired` will not be sufficient, 
+due to the fact that there might be multiple beans of the same type.
+To get access to the Quartz Scheduler bean, please use `@Autowire` in combination with the `@Qualifier` notation:
+```java
+@Autowired
+@Qualifier("schedulerFactory")
+private Scheduler scheduler;
+``` 
