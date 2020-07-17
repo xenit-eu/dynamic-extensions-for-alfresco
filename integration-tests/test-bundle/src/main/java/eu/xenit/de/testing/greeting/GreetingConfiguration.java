@@ -12,4 +12,14 @@ public class GreetingConfiguration {
         return new GreetingService();
     }
 
+    @Bean
+    public GreetingServiceWrapper greetingServiceWrapper() {
+        return new GreetingServiceWrapper(greetingService());
+    }
+
+    @Bean
+    public GreetingServiceWrapper anotherGreetingServiceWrapper() {
+        return new GreetingServiceWrapper(greetingService());
+    }
+
 }

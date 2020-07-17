@@ -5,7 +5,9 @@ import static eu.xenit.de.testing.Constants.TEST_WEBSCRIPTS_FAMILY;
 
 import com.github.dynamicextensionsalfresco.webscripts.annotations.Uri;
 import com.github.dynamicextensionsalfresco.webscripts.annotations.WebScript;
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -15,8 +17,19 @@ import org.springframework.stereotype.Component;
 @SuppressWarnings("unused")
 public class GreetingWebScript {
 
+    private final GreetingService greetingService;
+
     @Autowired
-    private GreetingService greetingService;
+    public GreetingWebScript(
+            @Qualifier("greetingServiceWrapper") GreetingServiceWrapper first,
+            @Qualifier("anotherGreetingServiceWrapper") GreetingServiceWrapper second) {
+
+        if (!Objects.equals(first.getGreetingService(), second.getGreetingService())) {
+            throw new IllegalStateException("Requiring only one GreetingService to rule them all");
+        }
+
+        this.greetingService = first.getGreetingService();
+    }
 
     @Uri
     public ResponseEntity<String> getGreeting() {
@@ -25,7 +38,7 @@ public class GreetingWebScript {
 
     @Uri("/number-of-instances")
     public ResponseEntity<Integer> getNumberOfInstances() {
-        return new ResponseEntity<>(greetingService.getNumberOfInstances(), HttpStatus.OK);
+        return new ResponseEntity<>(GreetingService.getNumberOfInstances(), HttpStatus.OK);
     }
 
 

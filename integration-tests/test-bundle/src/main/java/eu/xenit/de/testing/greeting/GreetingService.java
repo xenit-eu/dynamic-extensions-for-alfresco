@@ -12,7 +12,7 @@ public class GreetingService {
         return "Hello there, adventurer!";
     }
 
-    public int getNumberOfInstances() {
+    public static int getNumberOfInstances() {
         return numberOfInstances;
     }
 
