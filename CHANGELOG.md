@@ -1,6 +1,6 @@
 ---
 title: Changelog - Dynamic Extensions for Alfresco
-date: 8 October 2019
+date: 17 July 2020
 report: true
 colorlinks: true
 ---
@@ -22,6 +22,8 @@ Version template:
 # Dynamic Extensions For Alfresco Changelog
 
 ## [2.0.5] - UNRELEASED
+### Fixed
+* [#306](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/306) Alfresco 6.2.1 issues due to cglib imports in control-panel bundle
 
 ## [2.0.4] - 2020-05-27
 ### Fixed
