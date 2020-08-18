@@ -1,14 +1,21 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.github.dynamicextensionsalfresco.webscripts.annotations.RequestParam;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.alfresco.service.namespace.NamespaceService;
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.extensions.webscripts.WebScriptException;
 
 /**
  * Integration test for {@link RequestParam} handling.
@@ -90,5 +97,45 @@ public class RequestParamTest extends AbstractWebScriptAnnotationsTest {
 		handleGet("/handleNodeRef", new MockWebScriptRequest().param("nodeRef",
 				"workspace://SpacesStore/c269c803-4fd6-4aad-9114-3a42ff263fdc"));
 		verify(handler).handleNodeRef(new NodeRef("workspace://SpacesStore/c269c803-4fd6-4aad-9114-3a42ff263fdc"));
+	}
+
+	@Test
+	public void testHandleMissingRequiredParameterDefault() {
+		try {
+			handleGet("/handleMissingRequiredParameterDefault", new MockWebScriptRequest());
+			verify(handler).handleMissingRequiredParameterDefault(eq(null));
+			Assert.fail("Must throw an WebScriptException!");
+		} catch (WebScriptException ex) {
+			assertEquals(422, ex.getStatus());
+		} catch (Exception ex) {
+			Assert.fail("Must throw an WebScriptException!");
+		}
+	}
+
+	@Test
+	public void testHandleMissingRequiredParameterWithCustomHttpStatus() {
+		try {
+			handleGet("/handleMissingRequiredParameter123", new MockWebScriptRequest());
+			verify(handler).handleMissingRequiredParameter123(eq(null));
+			Assert.fail("Must throw an WebScriptException!");
+		} catch (WebScriptException ex) {
+			assertEquals(ex.getStatus(), 123);
+		} catch (Exception ex) {
+			Assert.fail("Must throw an WebScriptException!");
+		}
+	}
+
+	@Test
+	public void testHandleMissingParameterDefault() {
+		handleGet("/handleMissingParameterDefault", new MockWebScriptRequest());
+		verify(handler).handleMissingParameterDefault(eq(null));
+		assertTrue(true); // no exceptions thrown = GOOD!
+	}
+
+	@Test
+	public void testHandleMissingParameterWithCustomHttpStatus() {
+		handleGet("/handleMissingParameter123", new MockWebScriptRequest());
+		verify(handler).handleMissingParameter123(eq(null));
+		assertTrue(true); // no exceptions thrown = GOOD!
 	}
 }

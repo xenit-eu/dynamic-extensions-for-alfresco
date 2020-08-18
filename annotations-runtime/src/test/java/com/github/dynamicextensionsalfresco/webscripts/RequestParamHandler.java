@@ -53,4 +53,20 @@ public class RequestParamHandler {
 	@Uri("/handleNodeRef")
 	public void handleNodeRef(@RequestParam final NodeRef nodeRef) {
 	}
+
+	@Uri("/handleMissingRequiredParameterDefault")
+	public void handleMissingRequiredParameterDefault(@RequestParam final String expectedCode) {
+	}
+
+	@Uri("/handleMissingRequiredParameter123")
+	public void handleMissingRequiredParameter123(@RequestParam(missingParameterHttpStatusCode = 123) final String expectedCode) {
+	}
+
+	@Uri("/handleMissingParameterDefault")
+	public void handleMissingParameterDefault(@RequestParam(required = false) final String expectedCode) {
+	}
+
+	@Uri("/handleMissingParameter123")
+	public void handleMissingParameter123(@RequestParam(missingParameterHttpStatusCode = 123, required = false) final String expectedCode) {
+	}
 }
