@@ -126,16 +126,16 @@ public class RequestParamTest extends AbstractWebScriptAnnotationsTest {
 	}
 
 	@Test
-	public void testHandleMissingParameterDefault() {
-		handleGet("/handleMissingParameterDefault", new MockWebScriptRequest());
-		verify(handler).handleMissingParameterDefault(eq(null));
+	public void testHandleNonRequiredMissingParameter() {
+		handleGet("/handleNonRequiredMissingParameter", new MockWebScriptRequest());
+		verify(handler).handleNonRequiredMissingParameter(eq(null));
 		assertTrue(true); // no exceptions thrown = GOOD!
 	}
 
 	@Test
-	public void testHandleMissingParameterWithCustomHttpStatus() {
-		handleGet("/handleMissingParameter123", new MockWebScriptRequest());
-		verify(handler).handleMissingParameter123(eq(null));
+	public void testHandleNonRequiredMissingParameterWithCustomHttpStatus() {
+		handleGet("/handleNonRequiredMissingParameter123", new MockWebScriptRequest());
+		verify(handler).handleNonRequiredMissingParameter123(eq(null));
 		assertTrue(true); // no exceptions thrown = GOOD!
 	}
 }

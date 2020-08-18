@@ -62,11 +62,11 @@ public class RequestParamHandler {
 	public void handleMissingRequiredParameter123(@RequestParam(missingParameterHttpStatusCode = 123) final String expectedCode) {
 	}
 
-	@Uri("/handleMissingParameterDefault")
-	public void handleMissingParameterDefault(@RequestParam(required = false) final String expectedCode) {
+	@Uri("/handleNonRequiredMissingParameter")
+	public void handleNonRequiredMissingParameter(@RequestParam(required = false) final String expectedCode) {
 	}
 
-	@Uri("/handleMissingParameter123")
-	public void handleMissingParameter123(@RequestParam(missingParameterHttpStatusCode = 123, required = false) final String expectedCode) {
+	@Uri("/handleNonRequiredMissingParameter123")
+	public void handleNonRequiredMissingParameter123(@RequestParam(missingParameterHttpStatusCode = 123, required = false) final String expectedCode) {
 	}
 }
