@@ -106,7 +106,7 @@ public class RequestParamTest extends AbstractWebScriptAnnotationsTest {
 			verify(handler).handleMissingRequiredParameterDefault(eq(null));
 			Assert.fail("Must throw an WebScriptException!");
 		} catch (WebScriptException ex) {
-			assertEquals(422, ex.getStatus());
+			assertEquals(400, ex.getStatus());
 		} catch (Exception ex) {
 			Assert.fail("Must throw an WebScriptException!");
 		}
