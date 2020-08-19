@@ -115,27 +115,27 @@ public class RequestParamTest extends AbstractWebScriptAnnotationsTest {
 	@Test
 	public void testHandleMissingRequiredParameterWithCustomHttpStatus() {
 		try {
-			handleGet("/handleMissingRequiredParameter123", new MockWebScriptRequest());
-			verify(handler).handleMissingRequiredParameter123(eq(null));
+			handleGet("/handleMissingRequiredParameter422", new MockWebScriptRequest());
+			verify(handler).handleMissingRequiredParameter422(eq(null));
 			Assert.fail("Must throw an WebScriptException!");
 		} catch (WebScriptException ex) {
-			assertEquals(ex.getStatus(), 123);
+			assertEquals(ex.getStatus(), 422);
 		} catch (Exception ex) {
 			Assert.fail("Must throw an WebScriptException!");
 		}
 	}
 
 	@Test
-	public void testHandleNonRequiredMissingParameter() {
-		handleGet("/handleNonRequiredMissingParameter", new MockWebScriptRequest());
-		verify(handler).handleNonRequiredMissingParameter(eq(null));
+	public void testHandleOptionalMissingParameter() {
+		handleGet("/handleOptionalMissingParameter", new MockWebScriptRequest());
+		verify(handler).handleOptionalMissingParameter(eq(null));
 		assertTrue(true); // no exceptions thrown = GOOD!
 	}
 
 	@Test
-	public void testHandleNonRequiredMissingParameterWithCustomHttpStatus() {
-		handleGet("/handleNonRequiredMissingParameter123", new MockWebScriptRequest());
-		verify(handler).handleNonRequiredMissingParameter123(eq(null));
+	public void testHandleOptionalMissingParameterWithCustomHttpStatus() {
+		handleGet("/handleOptionalMissingParameter422", new MockWebScriptRequest());
+		verify(handler).handleOptionalMissingParameter422(eq(null));
 		assertTrue(true); // no exceptions thrown = GOOD!
 	}
 }
