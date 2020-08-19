@@ -24,6 +24,7 @@ Version template:
 ## [2.0.5] - UNRELEASED
 ### Fixed
 * [#306](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/306) Alfresco 6.2.1 issues due to cglib imports in control-panel bundle
+* [#308](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/308) Calling webscript without required `@RequestParam` causes 500 error response
 
 ## [2.0.4] - 2020-05-27
 ### Fixed
@@ -112,5 +113,4 @@ Registering a component implementing multiple Activiti listener Interfaces throw
 ### Fixed
 * [#143](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/143) WebScriptUtil.extractHttpServletResponse() not working.
 * [#151](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/151) @ResponseBody with void return type causes NullpointerException
-
 

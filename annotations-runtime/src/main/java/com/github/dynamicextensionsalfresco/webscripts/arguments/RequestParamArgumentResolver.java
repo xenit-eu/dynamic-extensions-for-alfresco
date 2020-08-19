@@ -5,6 +5,7 @@ import java.lang.reflect.Array;
 
 import com.github.dynamicextensionsalfresco.webscripts.annotations.RequestParam;
 
+import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.util.Assert;
@@ -72,8 +73,8 @@ public class RequestParamArgumentResolver implements ArgumentResolver<Object, Re
 			if (StringUtils.hasText(requestParam.defaultValue())) {
 				value = getStringValueConverter().convertStringValue(parameterType, requestParam.defaultValue());
 			}
-			if (requestParam.required() && value == null) {
-				throw new IllegalStateException(String.format("Request parameter not available: %s", parameterName));
+			if (value == null) {
+				throwMissingParameterIfMandatory(requestParam, parameterName);
 			}
 		}
 		return value;
@@ -85,8 +86,8 @@ public class RequestParamArgumentResolver implements ArgumentResolver<Object, Re
 		if (parameterValue == null) {
 			if (StringUtils.hasText(requestParam.defaultValue())) {
 				parameterValue = requestParam.defaultValue();
-			} else if (requestParam.required()) {
-				throw new IllegalStateException(String.format("Request parameter not available: %s", parameterName));
+			} else {
+				throwMissingParameterIfMandatory(requestParam, parameterName);
 			}
 		}
         if (parameterValue != null) {
@@ -101,13 +102,19 @@ public class RequestParamArgumentResolver implements ArgumentResolver<Object, Re
 			final WebScriptRequest request, final String parameterName) {
 		String[] parameterValues = request.getParameterValues(parameterName);
 		if (parameterValues == null) {
-			if (requestParam.required()) {
-				throw new IllegalStateException(String.format("Request parameter not available: %s", parameterName));
-			} else {
-				parameterValues = new String[] { requestParam.defaultValue() };
-			}
+			throwMissingParameterIfMandatory(requestParam, parameterName);
+			parameterValues = new String[] { requestParam.defaultValue() };
 		}
 		return convertToArray(parameterType.getComponentType(), parameterValues);
+	}
+
+	private void throwMissingParameterIfMandatory(RequestParam requestParam, String parameterName) {
+		if(requestParam.required()) {
+			throw new WebScriptException(
+					requestParam.missingParameterHttpStatusCode(),
+					String.format("Request parameter not available: %s", parameterName)
+			);
+		}
 	}
 
 	private Object[] convertToArray(final Class<?> arrayComponentType, final String[] parameterValues) {
