@@ -198,6 +198,27 @@ protected void handleIllegalArgument(IllegalArgumentException exception, WebScri
     response.setStatus(400);
 }
 ```
+This handler method must be defined in the same `@WebScript` annotated class that will throw the Exceptions to be handled.
+
+It is also possible to separate out exception handler methods into their own class, using an interface with default methods.
+The interface can then be implemented by any `@WebScript` class that requires it:
+```java
+public interface ExceptionHandlers {
+    @ExceptionHandler(IllegalArgumentException.class)
+    default void handleIllegalArgument(IllegalArgumentException exception, WebScriptResponse response) {
+        response.setStatus(400);
+    }
+}
+
+@Component @Webscript
+public class SampleWebscript implements ExceptionHandlers {
+    @Uri(value = "/document")
+    public void retrieveDocument(@RequestParam String name) {
+        if (!isValid(name))
+            throw new IllegalArgumentException();
+    }
+}
+```
 
 ## Before
 
