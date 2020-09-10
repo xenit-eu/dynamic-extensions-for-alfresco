@@ -31,4 +31,8 @@ public @interface RequestParam {
 	 */
 	String delimiter() default "";
 
+	/**
+	 * Specifies the status code to be returned when a required parameter is missing
+	 */
+	int missingParameterHttpStatusCode() default 400;
 }
