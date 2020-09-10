@@ -1,6 +1,6 @@
 ---
 title: Changelog - Dynamic Extensions for Alfresco
-date: 17 July 2020
+date: 10 September 2020
 report: true
 colorlinks: true
 ---
@@ -21,7 +21,7 @@ Version template:
  -->
 # Dynamic Extensions For Alfresco Changelog
 
-## [2.0.5] - UNRELEASED
+## [2.0.5] - 2020-09-10
 ### Fixed
 * [#306](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/306) Alfresco 6.2.1 issues due to cglib imports in control-panel bundle
 * [#308](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/308) Calling webscript without required `@RequestParam` causes 500 error response
