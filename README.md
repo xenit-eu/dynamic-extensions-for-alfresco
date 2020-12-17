@@ -1,7 +1,7 @@
 # Dynamic Extensions for Alfresco
 
 [![Apache License 2](https://img.shields.io/badge/license-Apache%202-blue.svg)](LICENSE)
-[![Travis Build Status](https://img.shields.io/travis/xenit-eu/dynamic-extensions-for-alfresco?label=Travis)](https://travis-ci.org/xenit-eu/dynamic-extensions-for-alfresco)
+[![CI](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/workflows/CI/badge.svg)](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/actions?query=workflow%3ACI+branch%3Amaster)
 [![Jenkins Build Status](https://jenkins-2.xenit.eu/buildStatus/icon?job=Xenit+Github%2Fdynamic-extensions-for-alfresco%2Fmaster&subject=Jenkins)](https://jenkins-2.xenit.eu/job/Xenit%20Github/job/dynamic-extensions-for-alfresco/job/master/)
 [![Maven Central](https://img.shields.io/maven-central/v/eu.xenit/alfresco-dynamic-extensions-repo-61.svg?maxAge=300)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22eu.xenit%22%20AND%20a%3A%22alfresco-dynamic-extensions-repo-*%22)
 
