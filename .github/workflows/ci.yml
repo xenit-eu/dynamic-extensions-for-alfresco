@@ -2,7 +2,6 @@ name: CI
 
 on:
   push:
-  pull_request:
 
 jobs:
   build:
@@ -21,4 +20,4 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ github.token }}
-        run: ./gradlew sonarqube -Dsonar.projectKey=dynamic-extensions-for-alfresco -Dsonar.organization=xenit-eu -Dsonar.host.url=https://sonarcloud.io 
+        run: ./gradlew sonarqube -Dsonar.projectKey=dynamic-extensions-for-alfresco -Dsonar.organization=xenit-eu -Dsonar.host.url=https://sonarcloud.io
