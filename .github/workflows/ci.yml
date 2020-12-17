@@ -17,3 +17,8 @@ jobs:
           java-version: 11
       - name: Test
         run: ./gradlew test
+      - name: Upload analysis to sonarcloud
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: ./gradlew sonarqube -Dsonar.projectKey=dynamic-extensions-for-alfresco -Dsonar.organization=xenit-eu -Dsonar.host.url=https://sonarcloud.io 
