@@ -27,18 +27,7 @@ public abstract class AbstractIntegrationTest {
    public static Collection<Object[]> testData() {
        return Arrays.asList(new Object[][]{
                {"6.7.1"},
-               {"6.6.1"},
-               {"6.5.1"},
-               {"6.4.1"},
-               {"6.3"},
-               {"6.1.1"},
-               {"6.0.1"},
                {"5.6.4"},
-               {"5.4.1"},
-               {"5.3.1"},
-               {"5.2.1"},
-               {"5.1.1"},
-               {"5.0"},
                {"4.10.3"},
        });
     }
