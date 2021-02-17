@@ -200,8 +200,9 @@ protected void handleIllegalArgument(IllegalArgumentException exception, WebScri
 ```
 This handler method must be defined in the same `@WebScript` annotated class that will throw the Exceptions to be handled.
 
-It is also possible to separate out exception handler methods into their own class, using an interface with default methods.
-The interface can then be implemented by any `@WebScript` class that requires it:
+**As of Alfresco 6**, it is also possible to separate out exception handler methods into their own class, 
+using an interface with default methods. The interface can then be implemented by any `@WebScript` class that 
+requires it:
 ```java
 public interface ExceptionHandlers {
     @ExceptionHandler(IllegalArgumentException.class)
