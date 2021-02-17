@@ -1,10 +1,8 @@
 package com.github.dynamicextensionsalfresco.webscripts;
 
-import static org.junit.Assert.assertNotNull;
-
 import com.github.dynamicextensionsalfresco.webscripts.annotations.ExceptionHandler;
 
-public abstract class ExceptionHandlerAbstractClass extends AbstractWebScriptAnnotationsTest {
+public abstract class ExceptionHandlerAbstractClass {
 
     IndexOutOfBoundsException indexOutOfBoundsException;
 
