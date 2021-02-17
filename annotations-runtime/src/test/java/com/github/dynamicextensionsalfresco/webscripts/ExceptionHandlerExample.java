@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Spied
-public class ExceptionHandlerExample {
+public class ExceptionHandlerExample extends ExceptionHandlerAbstractClass implements ExceptionHandlerInterface {
 
 	IllegalArgumentException illegalArgumentException;
 
@@ -26,6 +26,16 @@ public class ExceptionHandlerExample {
 	@Uri("/throwIllegalStateException")
 	public void throwIllegalStateException() {
 		throw new IllegalStateException();
+	}
+
+	@Uri("/throwUnsupportedOperationException")
+	public void throwUnsupportedOperationException() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Uri("/throwIndexOutOfBoundsException")
+	public void throwIndexOutOfBoundsException() {
+		throw new IndexOutOfBoundsException();
 	}
 
 	/* Utility operations */
