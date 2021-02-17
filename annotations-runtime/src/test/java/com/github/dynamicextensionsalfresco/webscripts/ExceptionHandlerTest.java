@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
@@ -33,6 +34,7 @@ public class ExceptionHandlerTest extends AbstractWebScriptAnnotationsTest {
     }
 
     @Test
+    @Ignore // @ExceptionHandler annotated default method in interfaces do not work for Alfresco <= 5.
     public void testHandleExceptionByDefaultInterfaceMethod() {
         handleGet("/throwUnsupportedOperationException");
         assertNull(handler.illegalArgumentException);
