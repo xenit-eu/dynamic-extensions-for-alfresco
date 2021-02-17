@@ -1,5 +1,6 @@
 package eu.xenit.dynamicextensionsalfresco;
 
+import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.preemptive;
 
 import io.restassured.RestAssured;
@@ -28,6 +29,20 @@ public abstract class RestAssuredTest {
         logger.info("REST-Assured initialized with following URI: {}:{}{}", baseURI, port, basePath);
 
         RestAssured.authentication = preemptive().basic(ALFRESCO_USERNAME, ALFRESCO_PASSWORD);
+    }
+
+    protected int getAlfrescoMajorVersion() {
+        return given()
+                .log().ifValidationFails()
+                .when()
+                .get("s/dynamic-extensions/testing/alfresco-version")
+                .then()
+                .log().ifValidationFails()
+                .statusCode(200)
+                .extract()
+                .body()
+                .jsonPath()
+                .getInt("major");
     }
 
 }

@@ -2,12 +2,14 @@ package com.github.dynamicextensionsalfresco.webscripts;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assume.assumeTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 
-import org.junit.Ignore;
+import java.util.Objects;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.SpringVersion;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
@@ -34,8 +36,10 @@ public class ExceptionHandlerTest extends AbstractWebScriptAnnotationsTest {
     }
 
     @Test
-    @Ignore // @ExceptionHandler annotated default method in interfaces do not work for Alfresco <= 5.
     public void testHandleExceptionByDefaultInterfaceMethod() {
+        assumeTrue("Annotated default methods in interfaces is only supported starting from Alfresco 6",
+                getSpringMajorVersion() >= 5);
+
         handleGet("/throwUnsupportedOperationException");
         assertNull(handler.illegalArgumentException);
         assertNotNull(handler.throwable);
@@ -49,5 +53,9 @@ public class ExceptionHandlerTest extends AbstractWebScriptAnnotationsTest {
         assertNotNull(handler.throwable);
         assertNotNull(handler.indexOutOfBoundsException);
         verify(handler).handleIndexOutOfBoundsException(any(IndexOutOfBoundsException.class));
+    }
+
+    private static int getSpringMajorVersion() {
+        return Integer.parseInt(Objects.requireNonNull(SpringVersion.getVersion()).substring(0, 1));
     }
 }
