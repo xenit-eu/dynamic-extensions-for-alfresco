@@ -41,8 +41,8 @@ public class RestClient {
         return connect(options, "POST", conn -> {
             conn.setDoOutput(true);
 
-            if(options.body != null) {
-                IOUtils.copy(options.body, conn.getOutputStream());
+            if(options.getBody() != null) {
+                IOUtils.copy(options.getBody(), conn.getOutputStream());
 
             }
             conn.getOutputStream().flush();

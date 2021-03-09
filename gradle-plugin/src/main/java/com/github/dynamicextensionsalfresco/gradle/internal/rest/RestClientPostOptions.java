@@ -13,5 +13,5 @@ public class RestClientPostOptions extends RestClientOptions {
         return body;
     }
 
-    InputStream body;
+    private InputStream body;
 }
