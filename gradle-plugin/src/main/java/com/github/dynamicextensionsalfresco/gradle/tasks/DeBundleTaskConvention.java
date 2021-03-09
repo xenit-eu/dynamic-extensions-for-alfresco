@@ -49,10 +49,6 @@ public class DeBundleTaskConvention {
         return bndConvention;
     }
 
-    public static void apply(TaskProvider<Jar> jarTaskProvider) {
-        jarTaskProvider.configure(DeBundleTaskConvention::apply);
-    }
-
     public static DeBundleTaskConvention apply(Jar jar) {
         DeBundleTaskConvention convention = jar.getConvention().findPlugin(DeBundleTaskConvention.class);
         if(convention == null) {
