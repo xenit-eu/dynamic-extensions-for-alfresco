@@ -17,11 +17,10 @@ public class BaseConfig {
     private final Repository repository;
     private final Versions versions;
 
-    @Inject
-    public BaseConfig(Project project, ObjectFactory objectFactory) {
+    public BaseConfig(Project project) {
         this.project = project;
-        repository = objectFactory.newInstance(Repository.class);
-        versions = objectFactory.newInstance(Versions.class);
+        repository = project.getObjects().newInstance(Repository.class);
+        versions = project.getObjects().newInstance(Versions.class);
     }
 
     public Repository getRepository() {

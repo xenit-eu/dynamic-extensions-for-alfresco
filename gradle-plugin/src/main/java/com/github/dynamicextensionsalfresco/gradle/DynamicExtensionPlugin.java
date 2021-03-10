@@ -20,8 +20,8 @@ public class DynamicExtensionPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project project) {
-        if(GradleVersion.current().compareTo(GradleVersion.version("4.10")) < 0) {
-            throw new GradleException("The Dynamic Extensions plugin requires at least Gradle 4.10. Your current gradle version is: "+GradleVersion.current().getVersion());
+        if(GradleVersion.current().compareTo(GradleVersion.version("5.3")) < 0) {
+            throw new GradleException("The Dynamic Extensions plugin requires at least Gradle 5.3. Your current gradle version is: "+GradleVersion.current().getVersion());
         }
         project.getPlugins().withId(BndBuilderPlugin.PLUGINID, p -> {
             throw new GradleException("The Dynamic Extensions plugin can not be used together with " + BndBuilderPlugin.PLUGINID);
