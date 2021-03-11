@@ -20,19 +20,18 @@ public class DynamicExtensionPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project project) {
-        if(GradleVersion.current().compareTo(GradleVersion.version("4.10")) < 0) {
-            throw new GradleException("The Dynamic Extensions plugin requires at least Gradle 4.10. Your current gradle version is: "+GradleVersion.current().getVersion());
+        if(GradleVersion.current().compareTo(GradleVersion.version("5.3")) < 0) {
+            throw new GradleException("The Dynamic Extensions plugin requires at least Gradle 5.3. Your current gradle version is: "+GradleVersion.current().getVersion());
         }
         project.getPlugins().withId(BndBuilderPlugin.PLUGINID, p -> {
             throw new GradleException("The Dynamic Extensions plugin can not be used together with " + BndBuilderPlugin.PLUGINID);
         });
 
         // Register alfrescoDynamicExtensions configuration block
-        baseConfig = project.getObjects().newInstance(BaseConfig.class);
-        project.getExtensions().add("alfrescoDynamicExtensions", baseConfig);
+        baseConfig = project.getExtensions().create("alfrescoDynamicExtensions", BaseConfig.class, project);
 
         configureDependencies(project);
-        configureDefaultTasks(project);
+        configureDefaultTasks(project, baseConfig);
 
         // Configure all InstallBundle type tasks to point to the default repository if none is explicitly set
         project.getTasks().withType(InstallBundle.class, task -> {
@@ -55,20 +54,11 @@ public class DynamicExtensionPlugin implements Plugin<Project> {
      * Adds the {@link DeBundleTaskConvention} convention to the default {@link Jar} task
      * and creates an {@code installBundle} task that uploads the built jar.
      */
-    private void configureDefaultTasks(Project project) {
-        project.getPlugins().withType(JavaPlugin.class, p -> {
-            // Apply DeBundleTaskConvention to the default Jar task
-            project.getTasks().withType(Jar.class).named(JavaPlugin.JAR_TASK_NAME).configure(jar -> {
-                DeBundleTaskConvention deBundleTaskConvention = new DeBundleTaskConvention(jar);
-                jar.getConvention().getPlugins().put("bundle", deBundleTaskConvention);
-            });
-
-            // Add installBundle task that uploads the jar by default
-            project.getTasks().register("installBundle", InstallBundle.class, task -> {
-                task.dependsOn(project.getTasks().named(JavaPlugin.JAR_TASK_NAME));
-                task.setFiles(project.files(project.getTasks().named(JavaPlugin.JAR_TASK_NAME)));
-            });
-        });
+    private void configureDefaultTasks(Project project,
+            BaseConfig baseConfig) {
+        project.getPlugins().withType(JavaPlugin.class,
+                p -> baseConfig.configureBundle(project.getTasks().withType(Jar.class).named(JavaPlugin.JAR_TASK_NAME))
+        );
     }
 
     /**

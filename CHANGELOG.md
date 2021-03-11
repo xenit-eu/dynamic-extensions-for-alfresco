@@ -22,6 +22,8 @@ Version template:
 # Dynamic Extensions For Alfresco Changelog
 
 ## [2.0.6] - UNRELEASED
+### Added
+* [#321](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/pull/321) Gradle plugin supports creating DE Bundles from arbitrary Jars
 
 
 ## [2.0.5] - 2020-09-10
