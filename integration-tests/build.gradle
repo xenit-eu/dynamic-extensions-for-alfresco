@@ -61,6 +61,9 @@ configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
     apply plugin: 'eu.xenit.docker-compose.auto'
 
     dependencies {
+        if (project.hasProperty("alfrescoBaseWarBom")) {
+            baseAlfrescoWar platform("${alfrescoBaseWarBom}")
+        }
         baseAlfrescoWar "${alfrescoBaseWar}"
         alfrescoAmp project(path: ":alfresco-dynamic-extensions-repo:alfresco-dynamic-extensions-repo-${alfrescoVersion}", configuration: 'ampArtifact')
 
