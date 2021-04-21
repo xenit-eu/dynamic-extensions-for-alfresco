@@ -8,33 +8,36 @@ public class Versions {
 
     public static final String alfrescoEdition = "community";
 
-    public static final Map<String, String> alfrescoVersions = new HashMap<String, String>() {{
+    public static final Map<String, String> alfrescoVersions = new HashMap<>() {{
         put("50", "5.0.d");
         put("51", "5.1.g");
         put("52", "5.2.f");
         put("60", "6.0.7-ga");
         put("61", "6.1.2-ga");
         put("62", "6.2.0-ga");
+        put("70", "7.0.0");
     }};
 
     public static final Set<String> supportedAlfrescoVersions = alfrescoVersions.keySet();
 
-    public static final Map<String, String> springVersions = new HashMap<String, String>() {{
+    public static final Map<String, String> springVersions = new HashMap<>() {{
         put("50", "3.2.10.RELEASE");
         put("51", "3.2.14.RELEASE");
         put("52", "3.2.17.RELEASE");
         put("60", "5.0.4.RELEASE");
         put("61", "5.1.3.RELEASE");
         put("62", "5.1.8.RELEASE");
+        put("70", "5.3.3.RELEASE");
     }};
 
-    public static final Map<String, String> geminiVersions = new HashMap<String, String>() {{
+    public static final Map<String, String> geminiVersions = new HashMap<>() {{
         put("50", "1.0.2.RELEASE");
         put("51", "1.0.2.RELEASE");
         put("52", "1.0.2.RELEASE");
         put("60", "3.0.0.M01");
         put("61", "3.0.0.M01");
         put("62", "3.0.0.M01");
+        put("70", "3.0.0.M01");
     }};
 
     public static String getSimpleAlfrescoVersionFromProjectName(final String projectName) {
