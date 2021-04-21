@@ -5,6 +5,13 @@
 [![Jenkins Build Status](https://jenkins-2.xenit.eu/buildStatus/icon?job=Xenit+Github%2Fdynamic-extensions-for-alfresco%2Fmaster&subject=Jenkins)](https://jenkins-2.xenit.eu/job/Xenit%20Github/job/dynamic-extensions-for-alfresco/job/master/)
 [![Maven Central](https://img.shields.io/maven-central/v/eu.xenit/alfresco-dynamic-extensions-repo-61.svg?maxAge=300)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22eu.xenit%22%20AND%20a%3A%22alfresco-dynamic-extensions-repo-*%22)
 
+> [![Xenit Logo](https://xenit.eu/wp-content/uploads/2017/09/XeniT_Website_Logo.png)](https://xenit.eu/open-source)
+>
+> Dynamic Extensions is a part of the Xenit Open Source Tooling around Alfresco. Xenit is company with a big expertise 
+> and a strong team around Alfresco. If you'd like to learn more about our 
+> [tools](https://xenit.eu/open-source), [services](https://xenit.eu/alfresco) and 
+> [products](https://xenit.eu/alfresco-products), please visit our [website](https://xenit.eu).
+
 Add OSGi based hot-deploy functionality and Spring annotation based configuration to Alfresco.
 
 ## Introduction
