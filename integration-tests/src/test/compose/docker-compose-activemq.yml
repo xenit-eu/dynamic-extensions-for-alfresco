@@ -1,0 +1,8 @@
+version: "2.2"
+
+services:
+  activemq:
+    image: alfresco/alfresco-activemq:5.16.1
+#    ports:
+#      - 8161:8161 # Web Console
+#      - 61616:61616 # OpenWire

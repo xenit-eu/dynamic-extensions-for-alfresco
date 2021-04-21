@@ -101,6 +101,9 @@ configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
     dockerCompose {
         projectName = "alfresco-dynamic-extensions-${project.name}"
         useComposeFiles = [project.parent.projectDir.toString() + '/src/test/compose/docker-compose.yml']
+        if (("${alfrescoVersion}" as int) >= 61) {
+            useComposeFiles += project.parent.projectDir.toString() + '/src/test/compose/docker-compose-activemq.yml'
+        }
 
         removeVolumes = true
         captureContainersOutput = true
