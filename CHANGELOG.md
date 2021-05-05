@@ -1,6 +1,6 @@
 ---
 title: Changelog - Dynamic Extensions for Alfresco
-date: 10 September 2020
+date: 5 May 2021
 report: true
 colorlinks: true
 ---
@@ -21,10 +21,10 @@ Version template:
  -->
 # Dynamic Extensions For Alfresco Changelog
 
-## [2.0.6] - UNRELEASED
+## [2.1.0] - UNRELEASED
 ### Added
+* Alfresco 7 support
 * [#321](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/pull/321) Gradle plugin supports creating DE Bundles from arbitrary Jars
-
 
 ## [2.0.5] - 2020-09-10
 ### Fixed
