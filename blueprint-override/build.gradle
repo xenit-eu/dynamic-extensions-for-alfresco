@@ -1,5 +1,3 @@
-import eu.xenit.dynamicextensionsalfresco.Versions
-
 configurations {
     blueprint1Extender
     blueprint3Extender
@@ -12,15 +10,15 @@ dependencies {
     compile("org.osgi:org.osgi.core:${project.ext.osgiVersion}")
 
     // Compile against the lowest version of Gemini Blueprint
-    compileOnly("org.eclipse.gemini:org.eclipse.gemini.blueprint.extender:${Versions.geminiVersions.get('50')}") {
+    compileOnly("org.eclipse.gemini:org.eclipse.gemini.blueprint.extender:${geminiVersions.get('50')}") {
         exclude group: "org.springframework"
     }
 
-    blueprint1Extender("org.eclipse.gemini:org.eclipse.gemini.blueprint.extender:${Versions.geminiVersions.get('50')}") {
+    blueprint1Extender("org.eclipse.gemini:org.eclipse.gemini.blueprint.extender:${geminiVersions.get('50')}") {
         transitive = false
     }
 
-    blueprint3Extender("org.eclipse.gemini.blueprint:gemini-blueprint-extender:${Versions.geminiVersions.get('60')}") {
+    blueprint3Extender("org.eclipse.gemini.blueprint:gemini-blueprint-extender:${geminiVersions.get('60')}") {
         transitive = false
     }
 }
