@@ -29,9 +29,8 @@ task patchBlueprint1(type: Zip) {
     }
     from(sourceSets.main.output)
 
-    destinationDir = libsDir
-    extension = 'jar'
-    baseName = 'blueprint-1-synchronous'
+    archiveExtension = 'jar'
+    archiveBaseName = 'blueprint-1-synchronous'
 }
 
 task patchBlueprint3(type: Zip) {
@@ -40,9 +39,8 @@ task patchBlueprint3(type: Zip) {
     }
     from(sourceSets.main.output)
 
-    destinationDir = libsDir
-    extension = 'jar'
-    baseName = 'blueprint-3-synchronous'
+    archiveExtension = 'jar'
+    archiveBaseName = 'blueprint-3-synchronous'
 }
 
 artifacts {
