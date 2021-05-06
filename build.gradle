@@ -4,35 +4,48 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.8.0"
         classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7"
     }
 }
 
 plugins {
+    id "be.vbgn.ci-detect" version "0.5.0"
     id "biz.aQute.bnd.builder" version "4.2.0" apply false
     id "org.sonarqube" version "2.8"
 }
 
 apply from: "${rootProject.projectDir}/gradle/versions.gradle"
-apply plugin: 'io.codearte.nexus-staging'
 
-nexusStaging {
-    username = project.hasProperty('de_publish_username') ? project.de_publish_username : ''
-    password = project.hasProperty('de_publish_password') ? project.de_publish_password : ''
-    packageGroup = "eu.xenit"
+sonarqube {
+    properties {
+        property "sonar.projectKey", "dynamic-extensions-for-alfresco"
+        property "sonar.organization", "xenit-eu"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
+}
+
+def copyPropertyValueIfExists(sourcePropertyName, targetPropertyName) {
+    if (project.hasProperty(sourcePropertyName)) {
+        project.ext[targetPropertyName] = project.property(sourcePropertyName)
+    }
 }
 
 allprojects {
     group = 'eu.xenit.de'
-    version = '2.0.6'
+    version = '2.1.0'
 
-    boolean isRelease = System.env.BRANCH_NAME?.startsWith("release")
-    if (!isRelease)
+    boolean isRelease = ci.branch?.startsWith("release")
+    if (!isRelease) {
         version += "-SNAPSHOT"
+    }
 
-    apply plugin: 'idea'
-    apply plugin: 'eclipse'
+    // It is not possible to set properties with a dot via GitHub Actions env variables, therefore we introduce support
+    // for a non-dotted-equivalent
+    copyPropertyValueIfExists('alfresco_nexus_username', 'org.alfresco.maven.nexus.username')
+    copyPropertyValueIfExists('alfresco_nexus_password', 'org.alfresco.maven.nexus.password')
+    copyPropertyValueIfExists('xenit_docker_registry_url', 'eu.xenit.docker.registry.url')
+    copyPropertyValueIfExists('xenit_docker_registry_username', 'eu.xenit.docker.registry.username')
+    copyPropertyValueIfExists('xenit_docker_registry_password', 'eu.xenit.docker.registry.password')
 
     project.pluginManager.withPlugin('java-base') {
         project.sourceCompatibility = 1.8
@@ -48,10 +61,17 @@ allprojects {
             url "${rootProject.projectDir}/alfresco-bom-repo"
         }
         mavenCentral()
+        jcenter()
         maven {
             url "https://artifacts.alfresco.com/nexus/content/groups/public/"
         }
-        jcenter()
+        maven {
+            url 'https://artifacts.alfresco.com/nexus/content/groups/private'
+            credentials {
+                username project.property('org.alfresco.maven.nexus.username')
+                password project.property('org.alfresco.maven.nexus.password')
+            }
+        }
         maven {
             url "http://repository.springsource.com/maven/bundles/release"
         }
@@ -144,17 +164,6 @@ subprojects {
 defaultTasks 'build'
 
 ext.versionFile = "${project.buildDir}/version"
-
-task makeVersionFile {
-    group "build"
-    description "Make a file containing the version"
-    outputs.file versionFile
-
-    doLast {
-        file(versionFile).write version
-        println "Version ${version}"
-    }
-}
 
 allprojects {
     configurations.all {

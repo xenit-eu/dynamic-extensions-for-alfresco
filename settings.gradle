@@ -33,7 +33,12 @@ alfrescoDependentModules.each { moduleId ->
 
 include 'integration-tests'
 include 'integration-tests:test-bundle'
-supportedAlfrescoVersions.each { alfrescoVersion ->
-    include "integration-tests:alfresco-community-${alfrescoVersion}"
-    include "integration-tests:alfresco-enterprise-${alfrescoVersion}"
+if (hasProperty("enterprise")) {
+    supportedAlfrescoVersions.each { alfrescoVersion ->
+        include "integration-tests:alfresco-enterprise-${alfrescoVersion}"
+    }
+} else {
+    supportedAlfrescoVersions.each { alfrescoVersion ->
+        include "integration-tests:alfresco-community-${alfrescoVersion}"
+    }
 }
