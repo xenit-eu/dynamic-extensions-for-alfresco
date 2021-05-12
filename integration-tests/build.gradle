@@ -1,5 +1,5 @@
 plugins {
-    id "eu.xenit.docker-alfresco" version "5.0.1" apply false
+    id "eu.xenit.docker-alfresco" version "5.0.7" apply false
 }
 
 apply plugin: 'java'
@@ -27,6 +27,17 @@ configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
     if (project.name.contains("enterprise") && !project.hasProperty("enterprise")) {
         return
     }
+    
+    repositories {
+        maven {
+            name 'release'
+            url "https://artifactory.xenit.eu/artifactory/libs-release"
+            credentials {
+                username project.hasProperty('eu.xenit.artifactory.username') ? property('eu.xenit.artifactory.username') : ''
+                password project.hasProperty('eu.xenit.artifactory.password') ? property('eu.xenit.artifactory.password') : ''
+            }
+        }
+    }
 
     def alfrescoVersion = project.name[-2..-1]
 
@@ -50,6 +61,9 @@ configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
     apply plugin: 'eu.xenit.docker-compose.auto'
 
     dependencies {
+        if (project.hasProperty("alfrescoBaseWarBom")) {
+            baseAlfrescoWar platform("${alfrescoBaseWarBom}")
+        }
         baseAlfrescoWar "${alfrescoBaseWar}"
         alfrescoAmp project(path: ":alfresco-dynamic-extensions-repo:alfresco-dynamic-extensions-repo-${alfrescoVersion}", configuration: 'ampArtifact')
 
@@ -87,6 +101,9 @@ configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
     dockerCompose {
         projectName = "alfresco-dynamic-extensions-${project.name}"
         useComposeFiles = [project.parent.projectDir.toString() + '/src/test/compose/docker-compose.yml']
+        if (("${alfrescoVersion}" as int) >= 61) {
+            useComposeFiles += project.parent.projectDir.toString() + '/src/test/compose/docker-compose-activemq.yml'
+        }
 
         removeVolumes = true
         captureContainersOutput = true

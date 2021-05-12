@@ -115,6 +115,23 @@ task installFile(type: InstallBundle) {
 }
 ```
 
+## Creating Dynamic Extensions bundle from existing Jar tasks
+
+You can use the `alfrescoDynamicExtensions.configureBundle(<task-or-taskprovider>)` function to make dynamic extensions bundles from Jar tasks (or task providers)
+
+This configures your Jar task to create a Dynamic Extensions bundle in the same way as the default `jar` task is configured,
+and creates an `install*Bundle` task to install the created bundle.
+
+```groovy
+tasks.register("shadowJar", Jar) // Usually this will be created by a different plugin
+
+alfrescoDynamicExtensions.configureBundle(tasks.named("shadowJar"))
+
+installShadowBundle {
+    // This install task is automatically created by makeBundle
+}
+```
+
 ## Building bundles for Dynamic Extensions 1.x
 
 You can use the Gradle plugin 2.x to build extensions for Dynamic Extensions 1.x.

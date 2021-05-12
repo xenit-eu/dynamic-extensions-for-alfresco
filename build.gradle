@@ -1,44 +1,51 @@
-import eu.xenit.dynamicextensionsalfresco.Versions
-
 buildscript {
     ext.jetbrains_annotations_version = '17.0.0'
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.8.0"
         classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7"
     }
 }
 
 plugins {
+    id "be.vbgn.ci-detect" version "0.5.0"
     id "biz.aQute.bnd.builder" version "4.2.0" apply false
     id "org.sonarqube" version "2.8"
 }
 
-wrapper {
-    distributionType = Wrapper.DistributionType.ALL
-    gradleVersion = '5.4.1'
+apply from: "${rootProject.projectDir}/gradle/versions.gradle"
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "dynamic-extensions-for-alfresco"
+        property "sonar.organization", "xenit-eu"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
 }
 
-apply plugin: 'io.codearte.nexus-staging'
-
-nexusStaging {
-    username = project.hasProperty('de_publish_username') ? project.de_publish_username : ''
-    password = project.hasProperty('de_publish_password') ? project.de_publish_password : ''
-    packageGroup = "eu.xenit"
+def copyPropertyValueIfExists(sourcePropertyName, targetPropertyName) {
+    if (project.hasProperty(sourcePropertyName)) {
+        project.ext[targetPropertyName] = project.property(sourcePropertyName)
+    }
 }
 
 allprojects {
     group = 'eu.xenit.de'
-    version = '2.0.5'
+    version = '2.1.0'
 
-    boolean isRelease = System.env.BRANCH_NAME?.startsWith("release")
-    if (!isRelease)
+    boolean isRelease = ci.branch?.startsWith("release")
+    if (!isRelease) {
         version += "-SNAPSHOT"
+    }
 
-    apply plugin: 'idea'
-    apply plugin: 'eclipse'
+    // It is not possible to set properties with a dot via GitHub Actions env variables, therefore we introduce support
+    // for a non-dotted-equivalent
+    copyPropertyValueIfExists('alfresco_nexus_username', 'org.alfresco.maven.nexus.username')
+    copyPropertyValueIfExists('alfresco_nexus_password', 'org.alfresco.maven.nexus.password')
+    copyPropertyValueIfExists('xenit_docker_registry_url', 'eu.xenit.docker.registry.url')
+    copyPropertyValueIfExists('xenit_docker_registry_username', 'eu.xenit.docker.registry.username')
+    copyPropertyValueIfExists('xenit_docker_registry_password', 'eu.xenit.docker.registry.password')
 
     project.pluginManager.withPlugin('java-base') {
         project.sourceCompatibility = 1.8
@@ -54,10 +61,17 @@ allprojects {
             url "${rootProject.projectDir}/alfresco-bom-repo"
         }
         mavenCentral()
+        jcenter()
         maven {
             url "https://artifacts.alfresco.com/nexus/content/groups/public/"
         }
-        jcenter()
+        maven {
+            url 'https://artifacts.alfresco.com/nexus/content/groups/private'
+            credentials {
+                username project.property('org.alfresco.maven.nexus.username')
+                password project.property('org.alfresco.maven.nexus.password')
+            }
+        }
         maven {
             url "http://repository.springsource.com/maven/bundles/release"
         }
@@ -65,6 +79,18 @@ allprojects {
             url "http://repository.springsource.com/maven/bundles/external"
         }
     }
+}
+
+def getSimpleAlfrescoVersionFromProjectName(final String projectName) {
+    for (final String shortVersion : alfrescoVersions.keySet()) {
+        if (projectName.endsWith(shortVersion)) {
+            // Subproject for a specific Alfresco version
+            return shortVersion;
+        }
+    }
+    // Return a default version for project that require an Alfresco dependency for javadoc only
+    return "50";
+
 }
 
 subprojects {
@@ -77,15 +103,15 @@ subprojects {
     }
 
     ext {
-        simpleAlfrescoVersion = Versions.getSimpleAlfrescoVersionFromProjectName(project.name)
-        alfrescoVersion = Versions.alfrescoVersions.get(simpleAlfrescoVersion)
-        springVersion = Versions.springVersions.get(simpleAlfrescoVersion)
+        simpleAlfrescoVersion = getSimpleAlfrescoVersionFromProjectName(project.name)
+        alfrescoVersion = alfrescoVersions.get(simpleAlfrescoVersion)
+        springVersion = springVersions.get(simpleAlfrescoVersion)
 
-        alfrescoBom = "eu.xenit.alfresco:alfresco-${Versions.alfrescoEdition}-bom:${alfrescoVersion}"
+        alfrescoBom = "eu.xenit.alfresco:alfresco-community-bom:${alfrescoVersion}"
 
         // '3.0.0.M01' for Alfresco 6.0
         // '1.0.2.RELEASE' for Alfresco 5.x
-        geminiVersion = Versions.geminiVersions.get(simpleAlfrescoVersion)
+        geminiVersion = geminiVersions.get(simpleAlfrescoVersion)
 
         osgiVersion = '6.0.0'
         felixVersion = '6.0.3'
@@ -138,17 +164,6 @@ subprojects {
 defaultTasks 'build'
 
 ext.versionFile = "${project.buildDir}/version"
-
-task makeVersionFile {
-    group "build"
-    description "Make a file containing the version"
-    outputs.file versionFile
-
-    doLast {
-        file(versionFile).write version
-        println "Version ${version}"
-    }
-}
 
 allprojects {
     configurations.all {

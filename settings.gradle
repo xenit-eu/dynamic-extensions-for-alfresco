@@ -1,5 +1,3 @@
-import eu.xenit.dynamicextensionsalfresco.Versions
-
 include 'annotations'
 include 'webscripts'
 include 'event-bus'
@@ -21,21 +19,26 @@ include 'gradle-plugin'
 
 include 'polyfill:polyfill-alfresco-50'
 
-
+def supportedAlfrescoVersions = ["50", "51", "52", "60", "61", "62", "70"]
 def alfrescoDependentModules =
         [
                 'alfresco-dynamic-extensions-repo',
         ]
 
 alfrescoDependentModules.each { moduleId ->
-    Versions.supportedAlfrescoVersions.each { alfrescoVersion ->
+    supportedAlfrescoVersions.each { alfrescoVersion ->
         include "${moduleId}:${moduleId}-${alfrescoVersion}"
     }
 }
 
 include 'integration-tests'
 include 'integration-tests:test-bundle'
-Versions.supportedAlfrescoVersions.each { alfrescoVersion ->
-    include "integration-tests:alfresco-community-${alfrescoVersion}"
-    include "integration-tests:alfresco-enterprise-${alfrescoVersion}"
+if (hasProperty("enterprise")) {
+    supportedAlfrescoVersions.each { alfrescoVersion ->
+        include "integration-tests:alfresco-enterprise-${alfrescoVersion}"
+    }
+} else {
+    supportedAlfrescoVersions.each { alfrescoVersion ->
+        include "integration-tests:alfresco-community-${alfrescoVersion}"
+    }
 }

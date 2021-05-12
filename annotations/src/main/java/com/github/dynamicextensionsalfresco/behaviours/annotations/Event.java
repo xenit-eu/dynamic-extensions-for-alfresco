@@ -17,8 +17,12 @@ public enum Event {
     FIRST(),
 
     /**
-     * Indicates the Behaviour should be triggered at every event. In practice, this means the Behaviour is triggered at
-     * the start and at the commit. (I.e. the start and transaction commit are the only events.)
+     * Maps to Alfresco's EVERY_EVENT NotificationFrequency. From the official Alfresco documentation: "The event
+     * handler is then just executed wherever it is being invoked in the code. The name of this notification frequency
+     * implies that the event handler will be called multiple times, which is true. The EVERY_EVENT notification
+     * frequency can be called numerous times within a single transaction (a lot more than you might expect), so unless
+     * your behavior logic is fast+in-repository-only (no RPCs, no external data access, etc.) or asynchronous, it’s
+     * easy to seriously impact Alfresco’s performance. ..."
      *
      * @see org.alfresco.repo.policy.Behaviour.NotificationFrequency#EVERY_EVENT
      */

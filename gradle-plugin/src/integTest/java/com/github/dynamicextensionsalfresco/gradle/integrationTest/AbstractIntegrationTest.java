@@ -26,12 +26,10 @@ public abstract class AbstractIntegrationTest {
    @Parameters(name = "Gradle v{0}")
    public static Collection<Object[]> testData() {
        return Arrays.asList(new Object[][]{
-               {"5.4.1"},
-               {"5.3.1"},
-               {"5.2.1"},
-               {"5.1.1"},
-               {"5.0"},
-               {"4.10.3"},
+               {"6.8.3"},
+               {"6.0"},
+               {"5.6.4"},
+               {"5.3"},
        });
     }
 
@@ -48,7 +46,6 @@ public abstract class AbstractIntegrationTest {
                 .withPluginClasspath()
                 .withGradleVersion(gradleVersion)
                 .withArguments(task, "--stacktrace", "--rerun-tasks")
-                .withDebug(true)
                 .forwardOutput()
                 .build();
     }

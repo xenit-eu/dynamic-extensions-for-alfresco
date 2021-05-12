@@ -13,7 +13,9 @@ services:
                 -Djodconverter.enabled=false
                 -Ddeployment.method=DOCKER_COMPOSE
                 -Dcsrf.filter.enabled=false
-                -Dmessaging.subsystem.autoStart=false
+                -Dmessaging.broker.url=nio://activemq:61616
+                -Dlocal.transform.service.enabled=false
+                -Dlegacy.transform.service.enabled=false
                 -Dhttp.proxyHost=webcache.example.com
                 -Dhttp.proxyPort=8080
                 -Xms1g -Xmx1g

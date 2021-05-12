@@ -42,9 +42,20 @@ public class ScheduledExampleTask implements Task {
 
 If the property `eu.xenit.example.cron` is available it's value is used as cron expression. Otherwise DE will 
 fallback to the value of the `cron` parameter as a default. 
- 
-> The `@ScheduledQuartzJob` annotation has been deprecated since Dynamic Extensions 2.0 and replace by the 
-> vendor neutral `@ScheduledTask` annotation. It still works on 2.0, but is scheduled for removing in later versions.
+
+If in a clustered environment the job may only run on one node at a time, set the property `cluster = true` on the `ScheduledTask` annotation.
+
+```java
+...
+@Component
+@ScheduledTask(name = "example", cron = "0/15 * * * * ?", cluster = true)
+public class ScheduledExampleTask implements Task {
+...
+```
+
+## Deprication Notice: `ScheduledQuartzJob` 
+The `@ScheduledQuartzJob` annotation has been deprecated since Dynamic Extensions 2.0 and replace by the 
+vendor neutral `@ScheduledTask` annotation. It still works on 2.0, but is scheduled for removing in later versions.
 
 ## Implementation Notes
 

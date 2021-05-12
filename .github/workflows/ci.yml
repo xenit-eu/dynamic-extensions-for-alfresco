@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+env:
+  ORG_GRADLE_PROJECT_alfresco_nexus_username: ${{ secrets.ALFRESCO_NEXUS_USERNAME }}
+  ORG_GRADLE_PROJECT_alfresco_nexus_password: ${{ secrets.ALFRESCO_NEXUS_PASSWORD }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Test
+        run: ./gradlew test
+      - name: Upload analysis to sonarcloud
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: ./gradlew sonarqube
+  integration-test:
+    runs-on: ubuntu-latest
+    if: ${{ startsWith(github.ref, 'refs/heads/master') || startsWith(github.base_ref, 'master') || startswith(github.ref, 'refs/heads/release') }}
+    strategy:
+      matrix:
+        flavour: [ "community", "enterprise" ]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Test
+        run: ./gradlew integrationTest -P${{ matrix.flavour }}
+        env:
+          ORG_GRADLE_PROJECT_xenit_docker_registry_url: ${{ secrets.XENIT_DOCKER_REGISTRY_URL }}
+          ORG_GRADLE_PROJECT_xenit_docker_registry_username: ${{ secrets.XENIT_DOCKER_REGISTRY_USERNAME }}
+          ORG_GRADLE_PROJECT_xenit_docker_registry_password: ${{ secrets.XENIT_DOCKER_REGISTRY_PASSWORD }}
+  publish:
+    needs: [test, integration-test]
+    runs-on: ubuntu-latest
+    if: ${{ startsWith(github.ref, 'refs/heads/master') || startswith(github.ref, 'refs/heads/release') }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Publish
+        env:
+          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.MAVEN_CENTRAL_GPG_KEY }}
+          ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.MAVEN_CENTRAL_GPG_PASSWORD }}
+          ORG_GRADLE_PROJECT_sonatype_username: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_sonatype_password: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+        run: ./gradlew publish -PsigningKeyId=CDE3528F
