@@ -1,5 +1,9 @@
 include 'annotations'
+
 include 'webscripts'
+include 'webscripts:webscripts-50'
+include 'webscripts:webscripts-70'
+
 include 'event-bus'
 
 include 'annotations-runtime'

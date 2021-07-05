@@ -26,4 +26,13 @@ dependencies {
     compileOnly 'com.google.code.findbugs:jsr305:2.0.1'
 
     compileOnly "javax.annotation:javax.annotation-api:${javaxAnnotationApiVersion}"
+    compileOnly project(':webscripts:webscripts-70')
+}
+
+subprojects {
+    apply plugin: 'java'
+    dependencies {
+        compileOnly enforcedPlatform("${project.ext.alfrescoBom}")
+        compileOnly('org.json:json') { transitive = false }
+    }
 }
