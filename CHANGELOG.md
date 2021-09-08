@@ -21,9 +21,10 @@ Version template:
  -->
 # Dynamic Extensions For Alfresco Changelog
 
-## [2.1.1] - UNRELEASED
+## [2.1.1] - 2021-09-08
 ### Fixed
-* [#332](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/pull/332) DEVEM-486 Fix regresssion in JSONWriterResolution
+* [#329](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/329) Reenable publishing of gradle plugin
+* [#331](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/331) DEVEM-486 Fix regresssion in JSONWriterResolution
 
 ## [2.1.0] - 2021-05-10
 ### Added
