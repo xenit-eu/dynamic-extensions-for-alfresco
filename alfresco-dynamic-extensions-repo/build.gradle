@@ -38,15 +38,22 @@ subprojects {
 
         ampLib "biz.aQute.bnd:biz.aQute.bnd:${project.ext.bndVersion}"
 
+
         blueprint(project(path: ":blueprint-override", configuration: "patchBlueprint${project.ext.geminiVersion.substring(0, 1)}"))
 
-        if(project.name.contains("-5")) {
+        if (project.name.contains("-5")) {
             blueprint(project(":blueprint-integration:blueprint-integration-spring-3"))
         } else {
             blueprint(project(":blueprint-integration:blueprint-integration-spring-5"))
         }
 
-        if(project.name.endsWith("-50")) {
+        if (project.name.endsWith('-70')) {
+            ampLib project(':webscripts:webscripts-70')
+        } else {
+            ampLib project(':webscripts:webscripts-50')
+        }
+
+        if (project.name.endsWith("-50")) {
             ampLib(project(":polyfill:polyfill-alfresco-50")) { transitive = false }
         }
 
