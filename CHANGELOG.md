@@ -21,6 +21,8 @@ Version template:
  -->
 # Dynamic Extensions For Alfresco Changelog
 
+## [2.1.2] - UNRELEASED
+
 ## [2.1.1] - 2021-09-08
 ### Fixed
 * [#329](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/329) Reenable publishing of gradle plugin
