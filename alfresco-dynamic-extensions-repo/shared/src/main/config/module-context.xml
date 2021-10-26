@@ -16,7 +16,7 @@
 		destroy-method="destroy">
 		<description>Instantiates the child application context and initializes the FrameworkManager within it.</description>
 		<property name="moduleId" value="alfresco-dynamic-extensions-repo" />
-		<property name="executeOnceOnly" value="false" />
+		<property name="executeOnceOnly" value="true" />
 		<property name="applicationContextConfigLocations">
 			<list>
 				<value>classpath:/alfresco/module/alfresco-dynamic-extensions-repo/osgi-container-context.xml</value>
