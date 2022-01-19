@@ -22,6 +22,8 @@ Version template:
 # Dynamic Extensions For Alfresco Changelog
 
 ## [2.1.2] - UNRELEASED
+### Fixed
+* [#338](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/338) DEVEM-499 Fix @ActionMethod usage on Alfresco 7.0
 
 ## [2.1.1] - 2021-09-08
 ### Fixed
