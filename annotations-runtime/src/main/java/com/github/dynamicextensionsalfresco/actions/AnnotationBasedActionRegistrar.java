@@ -22,7 +22,6 @@ import org.alfresco.service.cmr.dictionary.DataTypeDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
@@ -31,6 +30,7 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.ReflectionUtils.MethodCallback;
+import org.springframework.util.StringUtils;
 
 /**
  * Manages annotation-based Actions in a {@link BeanFactory}.
@@ -229,7 +229,8 @@ public class AnnotationBasedActionRegistrar extends AbstractAnnotationBasedRegis
 					}
 					final boolean mandatory = actionParameter.mandatory();
 					final String displayLabel = actionParameter.displayLabel();
-					final String constraintName = StringUtils.stripToNull(actionParameter.constraintName());
+					String trimmedConstraintName = StringUtils.trimWhitespace(actionParameter.constraintName());
+					final String constraintName = trimmedConstraintName.isEmpty() ? null : trimmedConstraintName;
 					final ParameterDefinition parameterDefinition = new ParameterDefinitionImpl(name,
 							dataType.getName(), mandatory, displayLabel, multivalued, constraintName);
 					parameterDefinitions.add(parameterDefinition);
@@ -249,7 +250,7 @@ public class AnnotationBasedActionRegistrar extends AbstractAnnotationBasedRegis
 
 	private DataTypeDefinition getDataType(final Class<?> clazz, final ActionParam actionParameter) {
 		final DataTypeDefinition dataType;
-		if (StringUtils.isNotEmpty(actionParameter.type())) {
+		if (!StringUtils.isEmpty(actionParameter.type())) {
 			dataType = getDictionaryService().getDataType(parseQName(actionParameter.type(), actionParameter));
 			if (dataType == null) {
 				throw new RuntimeException(String.format("Invalid or unknown DataType: %s", actionParameter.type()));

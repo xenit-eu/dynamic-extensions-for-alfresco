@@ -1,6 +1,6 @@
 ---
 title: Changelog - Dynamic Extensions for Alfresco
-date: 10 May 2021
+date: 03 February 2022
 report: true
 colorlinks: true
 ---
@@ -20,6 +20,10 @@ Version template:
 ### YANKED (for reverted functionality in)
  -->
 # Dynamic Extensions For Alfresco Changelog
+
+## [2.1.2] - 2022-02-03
+### Fixed
+* [#338](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/338) DEVEM-499 Fix @ActionMethod usage on Alfresco 7.0
 
 ## [2.1.1] - 2021-09-08
 ### Fixed
