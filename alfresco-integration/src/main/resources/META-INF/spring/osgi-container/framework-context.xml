@@ -12,6 +12,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
 		<property name="hotDeployEnabled" value="${osgi.container.hot-deploy:true}" />
 		<property name="repositoryBundlesEnabled" value="${osgi.container.repository-bundles:true}" />
 		<property name="storageDirectory" value="${osgi.container.storage-directory:#{null}}" />
+		<property name="bootdelegation" value="${osgi.container.bootdelegation:#{null}" />
 
 		<!-- DISABLE by default, see: https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/281 -->
 		<property name="systemPackageCacheMode" value="${osgi.container.system-package-cache.mode:DISABLE}" />
