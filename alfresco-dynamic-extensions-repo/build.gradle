@@ -47,7 +47,7 @@ subprojects {
             blueprint(project(":blueprint-integration:blueprint-integration-spring-5"))
         }
 
-        if (project.name.endsWith('-70')) {
+        if (project.name.endsWith('-70') || project.name.endsWith('-71')) {
             ampLib project(':webscripts:webscripts-70')
         } else {
             ampLib project(':webscripts:webscripts-50')
