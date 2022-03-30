@@ -4,5 +4,5 @@ ext {
 
     alfrescoBaseImage = 'xenit/alfresco-repository-community:7.1.1'
 
-    postgresImage = 'postgres:13.3'
+    postgresImage = 'postgres:13'
 }
