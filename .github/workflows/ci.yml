@@ -27,7 +27,6 @@ jobs:
         run: ./gradlew sonarqube
   integration-test:
     runs-on: ubuntu-latest
-    if: ${{ startsWith(github.ref, 'refs/heads/master') || startsWith(github.base_ref, 'master') || startswith(github.ref, 'refs/heads/release') }}
     strategy:
       matrix:
         flavour: [ "community", "enterprise" ]
