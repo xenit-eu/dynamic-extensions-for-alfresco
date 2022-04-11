@@ -1,6 +1,6 @@
 ---
 title: Changelog - Dynamic Extensions for Alfresco
-date: 03 February 2022
+date: 11 April 2022
 report: true
 colorlinks: true
 ---
@@ -21,7 +21,11 @@ Version template:
  -->
 # Dynamic Extensions For Alfresco Changelog
 
-## [2.1.3] - UNRELEASED
+## [2.1.3] - 2022-04-11
+### Added
+* [#344](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/344) Made it possible to configure boot delegation in OSGI framework context
+* [#346](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/346) Added Alfresc 7.1 compatibility
+* [#347](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/347) Added Alfresc 7.2 compatibility
 
 ## [2.1.2] - 2022-02-03
 ### Fixed
