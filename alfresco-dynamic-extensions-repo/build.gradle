@@ -47,7 +47,9 @@ subprojects {
             blueprint(project(":blueprint-integration:blueprint-integration-spring-5"))
         }
 
-        if (project.name.endsWith('-70')) {
+        PrintWriter writer = null;
+        writer.println("project name: "+project.name);
+        if (project.name.matches("alfresco-dynamic-extensions-repo-7\\d*")) {
             ampLib project(':webscripts:webscripts-70')
         } else {
             ampLib project(':webscripts:webscripts-50')

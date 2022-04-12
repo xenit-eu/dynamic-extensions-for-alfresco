@@ -23,7 +23,7 @@ include 'gradle-plugin'
 
 include 'polyfill:polyfill-alfresco-50'
 
-def supportedAlfrescoVersions = ["50", "51", "52", "60", "61", "62", "70"]
+def supportedAlfrescoVersions = ["50", "51", "52", "60", "61", "62", "70", "71", "72"]
 def alfrescoDependentModules =
         [
                 'alfresco-dynamic-extensions-repo',
