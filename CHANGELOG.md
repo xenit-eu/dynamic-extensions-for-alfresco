@@ -20,6 +20,9 @@ Version template:
 ### YANKED (for reverted functionality in)
  -->
 # Dynamic Extensions For Alfresco Changelog
+## [2.1.4] - unreleased
+### Fixed
+* [#350](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/350) Added missing curly brace in osgi framework spring context
 
 ## [2.1.3] - 2022-04-11
 ### Added
