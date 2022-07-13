@@ -55,15 +55,15 @@ public class Configuration {
         return this.systemPackageCache;
     }
 
-    public String getBootdelegation() {
-        return bootdelegation;
+    public String getBootDelegation() {
+        return bootDelegation;
     }
 
-    public void setBootdelegation(String bootdelegation) {
-        this.bootdelegation = bootdelegation;
+    public void setBootDelegation(String bootDelegation) {
+        this.bootDelegation = bootDelegation;
     }
 
-    private String bootdelegation = null;
+    private String bootDelegation = null;
 
 
     private static File createTempFile(String child) {

@@ -50,8 +50,8 @@ public class FrameworkConfiguration {
 			configuration.put(FRAMEWORK_SYSTEMPACKAGES_EXTRA,
 					createSystemPackagesConfiguration(getAdditionalSystemPackages()));
 		}
-		if (getBootdelegation() != null) {
-			configuration.put(FRAMEWORK_BOOTDELEGATION, getBootdelegation());
+		if (getBootDelegation() != null) {
+			configuration.put(FRAMEWORK_BOOTDELEGATION, getBootDelegation());
 		}
 		return configuration;
 	}
@@ -90,8 +90,8 @@ public class FrameworkConfiguration {
 		return getConfiguration().getStorageDirectory();
 	}
 
-	public String getBootdelegation() {
-		return getConfiguration().getBootdelegation();
+	public String getBootDelegation() {
+		return getConfiguration().getBootDelegation();
 	}
 
 	public boolean isFlushBundleCacheOnFirstInit() {
