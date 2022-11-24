@@ -89,16 +89,14 @@ def getSimpleAlfrescoVersionFromProjectName(final String projectName) {
         }
     }
     // Return a default version for project that require an Alfresco dependency for javadoc only
-    return "50";
+    return "60";
 
 }
 
 subprojects {
     if (project.name == 'integration-tests'
         || project.parent.name == 'integration-tests'
-        || project.name == 'blueprint-integration'
-        || project.name == 'polyfill'
-        || project.parent.name == 'polyfill') {
+        || project.name == 'blueprint-integration') {
         return
     }
 
@@ -164,47 +162,3 @@ subprojects {
 defaultTasks 'build'
 
 ext.versionFile = "${project.buildDir}/version"
-
-allprojects {
-    configurations.all {
-        exclude group: 'jaxen'
-        resolutionStrategy {
-            eachDependency { DependencyResolveDetails details ->
-
-                if (details.requested.group == 'org.alfresco.surf') {
-                    if (project.alfrescoVersion.startsWith('5.0')) {
-                        details.useTarget group: 'org.springframework.extensions.surf',
-                                name: details.requested.name,
-                                version: project.alfrescoVersion
-                        details.because "'org.springframework.extensions.surf' was moved to 'org.alfresco.surf'"
-                    }
-                }
-
-                // Eclipse Gemini Blueprint 1.0.2.RELEASE was published as 'org.eclipse.gemini' and is
-                // the last version that supports Spring 3.x
-                // Starting from 2.0 the modules were moved to 'org.eclipse.gemini.blueprint' and artifacts
-                // were renamed.
-                if (details.requested.group == 'org.eclipse.gemini.blueprint'
-                        && details.requested.version.startsWith('1.0')) {
-                    if (details.requested.name == 'gemini-blueprint-extender') {
-                        details.useTarget group: 'org.eclipse.gemini',
-                                name: 'org.eclipse.gemini.blueprint.extender',
-                                version: details.requested.version
-                    } else if (details.requested.name == 'gemini-blueprint-core') {
-                        details.useTarget group: 'org.eclipse.gemini',
-                                name: 'org.eclipse.gemini.blueprint.core',
-                                version: details.requested.version
-                    } else if (details.requested.name == 'gemini-blueprint-io') {
-                        details.useTarget group: 'org.eclipse.gemini',
-                                name: 'org.eclipse.gemini.blueprint.io',
-                                version: details.requested.version
-                    } else {
-                        throw new GradleException("No module substitution mapping found for ${details.requested}")
-                    }
-                    details.because "'org.eclipse.gemini.blueprint' was 'org.eclipse.gemini' in the 1.x version range"
-                }
-
-            }
-        }
-    }
-}

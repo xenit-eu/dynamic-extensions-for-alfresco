@@ -49,7 +49,6 @@ subprojects { Project p ->
         compile(project(":event-bus"))
         compile(project(":alfresco-integration"))
         compile(project(":annotations-runtime"))
-        compile(project(':annotations-runtime:scheduler-quartz-1'))
         compile(project(':annotations-runtime:scheduler-quartz-2'))
 
         compileOnly("org.alfresco.surf:spring-webscripts")

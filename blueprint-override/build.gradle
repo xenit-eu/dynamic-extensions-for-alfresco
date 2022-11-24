@@ -1,8 +1,6 @@
 configurations {
-    blueprint1Extender
     blueprint3Extender
 
-    patchBlueprint1
     patchBlueprint3
 }
 
@@ -10,27 +8,12 @@ dependencies {
     compile("org.osgi:org.osgi.core:${project.ext.osgiVersion}")
 
     // Compile against the lowest version of Gemini Blueprint
-    compileOnly("org.eclipse.gemini:org.eclipse.gemini.blueprint.extender:${geminiVersions.get('50')}") {
+    compileOnly("org.eclipse.gemini.blueprint:gemini-blueprint-extender:${geminiVersions.get('60')}") {
         exclude group: "org.springframework"
     }
-
-    blueprint1Extender("org.eclipse.gemini:org.eclipse.gemini.blueprint.extender:${geminiVersions.get('50')}") {
-        transitive = false
-    }
-
     blueprint3Extender("org.eclipse.gemini.blueprint:gemini-blueprint-extender:${geminiVersions.get('60')}") {
         transitive = false
     }
-}
-
-task patchBlueprint1(type: Zip) {
-    from(zipTree(configurations.blueprint1Extender.first())) {
-        exclude("**/DefaultApplicationContextConfigurationFactory.class")
-    }
-    from(sourceSets.main.output)
-
-    archiveExtension = 'jar'
-    archiveBaseName = 'blueprint-1-synchronous'
 }
 
 task patchBlueprint3(type: Zip) {
@@ -44,8 +27,7 @@ task patchBlueprint3(type: Zip) {
 }
 
 artifacts {
-    patchBlueprint1 file: patchBlueprint1.archivePath, name: 'blueprint-1-synchronous', type: 'jar', builtBy: patchBlueprint1
     patchBlueprint3 file: patchBlueprint3.archivePath, name: 'blueprint-3-synchronous', type: 'jar', builtBy: patchBlueprint3
 }
 
-defaultTasks 'patchBlueprint1', 'patchBlueprint3'
+defaultTasks 'patchBlueprint3'

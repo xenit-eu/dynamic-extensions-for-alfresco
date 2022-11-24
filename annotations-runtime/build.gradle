@@ -32,7 +32,6 @@ dependencies {
     compileOnly("org.activiti:activiti-engine:5.7") { transitive = false }
     compileOnly("org.activiti:activiti-spring:5.7") { transitive = false }
 
-    compileOnly project(':polyfill:polyfill-alfresco-50')
 
     compileOnly 'com.google.code.findbugs:jsr305:2.0.1'
     compile 'com.google.collections:google-collections:1.0'
@@ -42,6 +41,7 @@ dependencies {
     compileOnly "com.fasterxml.jackson.core:jackson-databind"
 
     implementation "javax.annotation:javax.annotation-api:${javaxAnnotationApiVersion}"
+    implementation 'javax.activation:javax.activation-api:1.2.0'
 
     testCompile "${project.ext.alfrescoBom}"
     testCompile project(":event-bus")

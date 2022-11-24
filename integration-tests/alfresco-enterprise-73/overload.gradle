@@ -1,0 +1,8 @@
+ext {
+    alfrescoBaseWarBom = 'org.alfresco:acs-packaging:7.3.0'
+    alfrescoBaseWar = 'org.alfresco:content-services@war'
+
+    alfrescoBaseImage = 'docker.xenit.eu/private/alfresco-enterprise/alfresco-repository-enterprise:7.3.0'
+
+    postgresImage = 'postgres:13'
+}

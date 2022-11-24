@@ -17,6 +17,6 @@ alfrescoDynamicExtensions {
 
 dependencies {
     alfrescoProvided 'org.springframework:spring-context:3.2.14.RELEASE'
-    alfrescoProvided("org.alfresco:alfresco-repository:5.0.d") { transitive = false }
+    alfrescoProvided("org.alfresco:alfresco-repository:6.0.7-ga") { transitive = false }
     alfrescoProvided("org.springframework.extensions.surf:spring-webscripts:5.0.d") { transitive = false }
 }
