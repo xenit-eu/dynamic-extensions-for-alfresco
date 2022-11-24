@@ -2,8 +2,9 @@ name: CI
 
 on:
   push:
-  pull_request:
-
+  workflow_dispatch:
+  schedule:
+    - cron: '7 0 * * SUN'
 env:
   ORG_GRADLE_PROJECT_alfresco_nexus_username: ${{ secrets.ALFRESCO_NEXUS_USERNAME }}
   ORG_GRADLE_PROJECT_alfresco_nexus_password: ${{ secrets.ALFRESCO_NEXUS_PASSWORD }}
@@ -25,9 +26,15 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ github.token }}
         run: ./gradlew sonarqube
+      - name: 'Upload Artifact'
+        if: success() || failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-result
+          path: /home/runner/work/**/build/reports
+          retention-days: 2
   integration-test:
     runs-on: ubuntu-latest
-    if: ${{ startsWith(github.ref, 'refs/heads/master') || startsWith(github.base_ref, 'master') || startswith(github.ref, 'refs/heads/release') }}
     strategy:
       matrix:
         flavour: [ "community", "enterprise" ]
@@ -44,6 +51,13 @@ jobs:
           ORG_GRADLE_PROJECT_xenit_docker_registry_url: ${{ secrets.XENIT_DOCKER_REGISTRY_URL }}
           ORG_GRADLE_PROJECT_xenit_docker_registry_username: ${{ secrets.XENIT_DOCKER_REGISTRY_USERNAME }}
           ORG_GRADLE_PROJECT_xenit_docker_registry_password: ${{ secrets.XENIT_DOCKER_REGISTRY_PASSWORD }}
+      - name: 'Upload Artifact'
+        if: success() || failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-result-${{ matrix.flavour }}
+          path: /home/runner/work/**/build/reports
+          retention-days: 2
   publish:
     needs: [test, integration-test]
     runs-on: ubuntu-latest
