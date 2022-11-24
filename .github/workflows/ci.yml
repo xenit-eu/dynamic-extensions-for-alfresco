@@ -45,12 +45,13 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: 11
+      - name: Login to CloudSmith docker registry
+        env:
+          DOCKER_USER: ${{ secrets.CLOUDSMITH_USER }}
+          DOCKER_PASSWORD: ${{ secrets.CLOUDSMITH_APIKEY }}
+        run: echo "$DOCKER_PASSWORD" | docker login docker.xenit.eu --username "$DOCKER_USER" --password-stdin
       - name: Test
         run: ./gradlew integrationTest -P${{ matrix.flavour }}
-        env:
-          ORG_GRADLE_PROJECT_xenit_docker_registry_url: ${{ secrets.XENIT_DOCKER_REGISTRY_URL }}
-          ORG_GRADLE_PROJECT_xenit_docker_registry_username: ${{ secrets.XENIT_DOCKER_REGISTRY_USERNAME }}
-          ORG_GRADLE_PROJECT_xenit_docker_registry_password: ${{ secrets.XENIT_DOCKER_REGISTRY_PASSWORD }}
       - name: 'Upload Artifact'
         if: success() || failure()
         uses: actions/upload-artifact@v3

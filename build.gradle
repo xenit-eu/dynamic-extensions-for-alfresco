@@ -89,7 +89,7 @@ def getSimpleAlfrescoVersionFromProjectName(final String projectName) {
         }
     }
     // Return a default version for project that require an Alfresco dependency for javadoc only
-    return "60";
+    return "61";
 
 }
 

@@ -8,7 +8,7 @@ configurations {
 
 dependencies {
 
-    compileOnly enforcedPlatform("eu.xenit.alfresco:alfresco-community-bom:6.0.7-ga")
+    compileOnly enforcedPlatform("eu.xenit.alfresco:alfresco-community-bom:6.1.2-ga")
 
     compileOnly project(':annotations-runtime')
 

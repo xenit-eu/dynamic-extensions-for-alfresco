@@ -8,10 +8,10 @@ dependencies {
     compile("org.osgi:org.osgi.core:${project.ext.osgiVersion}")
 
     // Compile against the lowest version of Gemini Blueprint
-    compileOnly("org.eclipse.gemini.blueprint:gemini-blueprint-extender:${geminiVersions.get('60')}") {
+    compileOnly("org.eclipse.gemini.blueprint:gemini-blueprint-extender:${geminiVersions.get('61')}") {
         exclude group: "org.springframework"
     }
-    blueprint3Extender("org.eclipse.gemini.blueprint:gemini-blueprint-extender:${geminiVersions.get('60')}") {
+    blueprint3Extender("org.eclipse.gemini.blueprint:gemini-blueprint-extender:${geminiVersions.get('61')}") {
         transitive = false
     }
 }
