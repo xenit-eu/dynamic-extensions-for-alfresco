@@ -20,7 +20,8 @@ subprojects { Project p ->
                         'org.eclipse.gemini.blueprint.context;version=!,' +
                         'org.eclipse.gemini.blueprint.context.support;version=!,' +
                         'org.eclipse.gemini.blueprint.service.exporter.support;version=!,' +
-                        '*',
+                        'org.slf4j;version="[1.7.2,2.1)", ' +
+                                '*',
                 'Bundle-DocURL': 'https://github.com/xenit-eu/dynamic-extensions-for-alfresco',
         )
     }
