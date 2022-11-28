@@ -1,3 +1,6 @@
+plugins {
+    id 'java-library'
+}
 configurations {
     testImplementation.extendsFrom(compileOnly)
 }
@@ -5,7 +8,7 @@ configurations {
 dependencies {
     compileOnly enforcedPlatform("${project.ext.alfrescoBom}")
 
-    implementation project(":annotations-runtime")
+    api project(":annotations-runtime")
 
     compileOnly("org.alfresco.surf:spring-webscripts")
     compileOnly("org.alfresco:alfresco-core") { transitive = false }
@@ -16,12 +19,12 @@ dependencies {
     compileOnly "org.jetbrains:annotations:$jetbrains_annotations_version"
 
     implementation "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
-    implementation "javax.servlet:servlet-api:${project.ext.servletVersion}"
+    api "javax.servlet:servlet-api:${project.ext.servletVersion}"
 
     implementation "org.jibx:jibx-run:${project.ext.jibxVersion}"
     implementation "org.apache.felix:org.apache.felix.framework:${project.ext.felixVersion}"
     implementation "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
-    implementation "biz.aQute.bnd:biz.aQute.bnd:${project.ext.bndVersion}"
+    api "biz.aQute.bnd:biz.aQute.bnd:${project.ext.bndVersion}"
 
     implementation "javax.annotation:javax.annotation-api:${javaxAnnotationApiVersion}"
 

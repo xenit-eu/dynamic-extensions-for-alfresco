@@ -1,3 +1,6 @@
+plugins {
+    id 'java-library'
+}
 configurations {
     testImplementation.extendsFrom(compileOnly)
 }
@@ -5,7 +8,7 @@ configurations {
 dependencies {
     compileOnly enforcedPlatform("${project.ext.alfrescoBom}")
 
-    implementation project(':annotations')
+    api project(':annotations')
     implementation project(":webscripts")
 
     compileOnly "org.apache.felix:org.apache.felix.framework:${project.ext.felixVersion}"
@@ -34,7 +37,7 @@ dependencies {
 
 
     compileOnly 'com.google.code.findbugs:jsr305:2.0.1'
-    implementation 'com.google.collections:google-collections:1.0'
+    api 'com.google.collections:google-collections:1.0'
 
     compileOnly "org.jetbrains:annotations:$jetbrains_annotations_version"
 
