@@ -1,7 +1,6 @@
 plugins {
-    id "com.gradle.plugin-publish" version "0.12.0"
-    id "nebula.integtest" version "6.0.3"
-    id "de.fuerstenau.buildconfig" version "1.1.8"
+    id "com.gradle.plugin-publish" version "1.1.0"
+    id "nebula.integtest" version "9.6.3"
     id "java-gradle-plugin"
     id "groovy"
     id "maven-publish"
@@ -12,9 +11,7 @@ repositories {
     gradlePluginPortal()
 }
 
-buildConfig {
-    packageName = "com.github.dynamicextensionsalfresco.gradle.internal"
-}
+
 
 
 dependencies {
@@ -31,6 +28,7 @@ gradlePlugin {
         de {
             id = "eu.xenit.de"
             implementationClass = "com.github.dynamicextensionsalfresco.gradle.DynamicExtensionPlugin"
+            displayName = "Dynamic Extensions for Alfresco gradle plugin"
         }
     }
 }
@@ -41,25 +39,8 @@ pluginBundle {
         website = vcsUrl
         description = "Gradle plugin to support Dynamic Extension development"
         tags = ["alfresco", "dynamic-extensions", "osgi"]
-        plugins {
-            de {
-                displayName = "Dynamic Extensions for Alfresco gradle plugin"
-            }
-        }
-
-        mavenCoordinates {
-            groupId = project.group
-            artifactId = project.name
-        }
     }
 }
 
 defaultTasks 'build'
 
-afterEvaluate {
-    plugins.withType(IdeaPlugin.class) { idea ->
-        idea.model.module {
-            generatedSourceDirs += project.tasks.generateBuildConfig.outputDir
-        }
-    }
-}

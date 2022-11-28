@@ -256,8 +256,8 @@
       </dependency>
       <dependency>
         <groupId>org.apache.geronimo.specs</groupId>
-        <artifactId>geronimo-jta_1.0.1b_spec</artifactId>
-        <version>1.0.1</version>
+        <artifactId>geronimo-jta_1.1_spec</artifactId>
+        <version>1.1.1</version>
       </dependency>
       <dependency>
         <groupId>org.mozilla</groupId>
@@ -767,7 +767,7 @@
       <dependency>
         <groupId>javax.transaction</groupId>
         <artifactId>jta</artifactId>
-        <version>1.0.1b</version>
+        <version>1.1</version>
       </dependency>
       <dependency>
         <groupId>org.springframework</groupId>

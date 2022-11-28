@@ -5,7 +5,7 @@ configurations {
 }
 
 dependencies {
-    compile("org.osgi:org.osgi.core:${project.ext.osgiVersion}")
+    implementation("org.osgi:org.osgi.core:${project.ext.osgiVersion}")
 
     // Compile against the lowest version of Gemini Blueprint
     compileOnly("org.eclipse.gemini.blueprint:gemini-blueprint-extender:${geminiVersions.get('61')}") {

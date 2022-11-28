@@ -3,7 +3,6 @@ package com.github.dynamicextensionsalfresco.workflow;
 import com.github.dynamicextensionsalfresco.resources.BootstrapService;
 import com.github.dynamicextensionsalfresco.resources.ContentCompareStrategy;
 import com.github.dynamicextensionsalfresco.resources.ResourceHelper;
-import com.google.common.collect.ImmutableMap;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;
 import org.alfresco.repo.dictionary.RepositoryLocation;
@@ -21,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.alfresco.repo.security.authentication.AuthenticationUtil.runAs;
@@ -78,9 +79,7 @@ public class WorkflowDefinitionRegistrar implements InitializingBean {
                                 nodeService.setProperty(nodeRef, WorkflowModel.PROP_WORKFLOW_DEF_ENGINE_ID, "activiti");
                                 nodeService.setProperty(nodeRef, WorkflowModel.PROP_WORKFLOW_DEF_NAME, fileName);
                                 nodeService.setProperty(nodeRef, WorkflowModel.PROP_WORKFLOW_DEFINITION_NAME, fileName);
-                                nodeService.addAspect(nodeRef, ContentModel.ASPECT_TITLED, ImmutableMap.<QName, Serializable>builder()
-                                    .put(ContentModel.PROP_TITLE, fileName)
-                                    .build()
+                                nodeService.addAspect(nodeRef, ContentModel.ASPECT_TITLED, Collections.unmodifiableMap(new HashMap<QName, Serializable>(){{put(ContentModel.PROP_TITLE, fileName);}})
                                 );
                                 nodeService.setProperty(nodeRef, WorkflowModel.PROP_WORKFLOW_DEF_DEPLOYED, true);
                             }

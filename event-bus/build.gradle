@@ -4,8 +4,8 @@ dependencies {
     compileOnly "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
     compileOnly "org.jetbrains:annotations:$jetbrains_annotations_version"
     
-    testCompile "junit:junit:${project.ext.junitVersion}"
-    testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
+    testImplementation "junit:junit:${project.ext.junitVersion}"
+    testImplementation "org.mockito:mockito-core:${project.ext.mockitoVersion}"
 }
 
 jar {

@@ -1,16 +1,16 @@
 apply plugin: 'biz.aQute.bnd.builder'
 
 configurations {
-    testCompile.extendsFrom(compileOnly)
+    testImplementation.extendsFrom(compileOnly)
 }
 
 dependencies {
     compileOnly enforcedPlatform("${project.ext.alfrescoBom}")
 
-    compile project(":alfresco-integration")
-    compile project(':annotations')
-    compile project(":webscripts")
-    compile project(":event-bus")
+    implementation project(":alfresco-integration")
+    implementation project(':annotations')
+    implementation project(":webscripts")
+    implementation project(":event-bus")
 
     compileOnly("org.alfresco.surf:spring-webscripts") { transitive = false }
     compileOnly("org.alfresco.surf:spring-surf-core") { transitive = false }
@@ -33,10 +33,10 @@ dependencies {
 
     implementation "javax.annotation:javax.annotation-api:${javaxAnnotationApiVersion}"
 
-    testCompile("org.alfresco.surf:spring-surf-core-configservice") { transitive = false }
+    testImplementation("org.alfresco.surf:spring-surf-core-configservice") { transitive = false }
 
-    testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
-    testCompile "junit:junit:${project.ext.junitVersion}"
+    testImplementation "org.mockito:mockito-core:${project.ext.mockitoVersion}"
+    testImplementation "junit:junit:${project.ext.junitVersion}"
 }
 
 jar {
