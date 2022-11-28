@@ -5,7 +5,6 @@ import com.github.dynamicextensionsalfresco.gradle.internal.BuildConfig;
 import javax.inject.Inject;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.Property;
-import org.gradle.api.provider.Provider;
 
 /**
  * Default versions for the various dependencies.
