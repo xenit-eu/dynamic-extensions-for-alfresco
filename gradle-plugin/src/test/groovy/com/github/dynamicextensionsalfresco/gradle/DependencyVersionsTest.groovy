@@ -1,6 +1,5 @@
 package com.github.dynamicextensionsalfresco.gradle
 
-
 import com.github.dynamicextensionsalfresco.gradle.internal.BuildConfig
 import eu.xenit.gradle.alfrescosdk.AlfrescoPlugin
 import org.gradle.api.Project
@@ -12,7 +11,7 @@ import org.junit.Test
 class DependencyVersionsTest {
 
     @Test
-    public void addsDefaultDependencies() {
+    void addsDefaultDependencies() {
         Project project = ProjectBuilder.builder().build()
         project.apply plugin: 'alfresco-dynamic-extension'
         project.apply plugin: 'java'

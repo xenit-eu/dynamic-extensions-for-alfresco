@@ -24,7 +24,6 @@ subprojects {
         ampLib(project(":annotations-runtime")) {
             transitive = false
         }
-        ampLib(project(":annotations-runtime:scheduler-quartz-1")) { transitive = false }
         ampLib(project(":annotations-runtime:scheduler-quartz-2")) { transitive = false }
 
         ampLib(project(":webscripts")) { transitive = false }
@@ -41,22 +40,16 @@ subprojects {
 
         blueprint(project(path: ":blueprint-override", configuration: "patchBlueprint${project.ext.geminiVersion.substring(0, 1)}"))
 
-        if (project.name.contains("-5")) {
-            blueprint(project(":blueprint-integration:blueprint-integration-spring-3"))
-        } else {
-            blueprint(project(":blueprint-integration:blueprint-integration-spring-5"))
-        }
+
+        blueprint(project(":blueprint-integration:blueprint-integration-spring-5"))
+
 
         PrintWriter writer = null;
-        writer.println("project name: "+project.name);
+        writer.println("project name: " + project.name);
         if (project.name.matches("alfresco-dynamic-extensions-repo-7\\d*")) {
             ampLib project(':webscripts:webscripts-70')
         } else {
             ampLib project(':webscripts:webscripts-50')
-        }
-
-        if (project.name.endsWith("-50")) {
-            ampLib(project(":polyfill:polyfill-alfresco-50")) { transitive = false }
         }
 
         blueprint("org.eclipse.gemini.blueprint:gemini-blueprint-core:${project.ext.geminiVersion}")

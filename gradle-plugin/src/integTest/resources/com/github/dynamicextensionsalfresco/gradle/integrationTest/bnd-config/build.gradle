@@ -16,10 +16,11 @@ alfrescoDynamicExtensions {
 }
 
 dependencies {
+    alfrescoProvided enforcedPlatform("org.alfresco:acs-community-packaging:6.1.2-ga")
     alfrescoProvided("eu.xenit.de:annotations:1.7.6") { transitive = false }
     alfrescoProvided("eu.xenit.de:webscripts:1.7.6") { transitive = false }
     alfrescoProvided 'org.springframework:spring-context:3.2.14.RELEASE'
-    alfrescoProvided("org.alfresco:alfresco-repository:5.0.d") { transitive = false }
+    alfrescoProvided("org.alfresco:alfresco-repository") { transitive = false }
     alfrescoProvided("org.springframework.extensions.surf:spring-webscripts:5.0.d") { transitive = false }
 }
 

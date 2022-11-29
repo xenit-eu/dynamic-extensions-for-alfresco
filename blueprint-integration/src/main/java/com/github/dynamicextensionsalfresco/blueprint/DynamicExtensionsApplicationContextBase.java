@@ -17,7 +17,6 @@ import com.github.dynamicextensionsalfresco.policy.ProxyPolicyComponentFactoryBe
 import com.github.dynamicextensionsalfresco.resources.DefaultBootstrapService;
 import com.github.dynamicextensionsalfresco.resources.ResourceHelper;
 import com.github.dynamicextensionsalfresco.schedule.ScheduledTaskRegistrar;
-import com.github.dynamicextensionsalfresco.schedule.quartz.QuartzTaskScheduler;
 import com.github.dynamicextensionsalfresco.schedule.quartz2.Quartz2TaskScheduler;
 import com.github.dynamicextensionsalfresco.web.WebResourcesRegistrar;
 import com.github.dynamicextensionsalfresco.webscripts.AnnotationWebScriptBuilder;
@@ -33,11 +32,6 @@ import com.github.dynamicextensionsalfresco.workflow.activiti.WorkflowTaskRegist
 import com.springsource.util.osgi.manifest.BundleManifest;
 import com.springsource.util.osgi.manifest.BundleManifestFactory;
 import com.springsource.util.osgi.manifest.ImportedPackage;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.alfresco.service.descriptor.Descriptor;
 import org.alfresco.service.descriptor.DescriptorService;
 import org.alfresco.service.namespace.NamespacePrefixResolver;
@@ -69,40 +63,46 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.xml.sax.EntityResolver;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * {@link ApplicationContext} for Dynamic Extensions.
- *
- *
+ * <p>
+ * <p>
  * This implementation populates the {@link BeanFactory} with {@link BeanDefinition}s by scanning for classes in packages listed in
  * the bundle's {@value #SPRING_CONFIGURATION_HEADER} header. This enables XML-free configuration.
- *
- *
+ * <p>
+ * <p>
  * Using annotation for configuring the ApplicationContext is the default and preferred option. (See below for notes on
  * configuring the ApplicationContext through XML.)
- *
- *
+ * <p>
+ * <p>
  * This class also registers infrastructure beans that facilitate annotation-based Behaviours, Actions and Web Scripts.
- *
- *
+ * <p>
+ * <p>
  * Creating ApplicationContexts using XML configuration
- *
- *
+ * <p>
+ * <p>
  * If Spring XML configuration is present in the classpath folder `/META-INF/spring` this implementation falls back on
  * creating an {@link ApplicationContext} by combining configuration from all XML files in this folder.
- *
- *
+ * <p>
+ * <p>
  * This implementation works around classloading issues for Spring XML [NamespaceHandler]s when *embedding* the
  * Blueprint container within an application that exposes Spring library classes through system packages. The main
  * difference from a more typical setup is that the Spring library classes are NOT loaded as OSGi bundles by the OSGi
  * framework, but through the embedding application's classloader.
- *
- *
+ * <p>
+ * <p>
  * Specifically, this class loads bean definitions by creating an {@link XmlBeanDefinitionReader} configured with a
  * {@link NamespaceHandlerResolver} and an {@link EntityResolver} obtained from the embedding application. This, in turn, causes the
  * Spring XML configuration to be handled by {@link NamespaceHandler}s from the Spring libraries bundled with Alfresco. These
  * services must have a `hostApplication` property that is set to the value "alfresco" for this to work.
- *
- *
+ * <p>
+ * <p>
  * The alternative would be to load the Spring libraries as OSGi bundles. (The Spring JARs are already OSGi-enabled.)
  * While this could be considered a cleaner approach, it has the disadvantage of loading the Spring libraries twice: in
  * both the embedding application and the OSGi container.
@@ -392,12 +392,12 @@ public abstract class DynamicExtensionsApplicationContextBase extends OsgiBundle
     }
 
     private void bean(@NotNull DefaultListableBeanFactory beanFactory, @NotNull BeanNames name,
-            @NotNull Class beanClass) {
+                      @NotNull Class beanClass) {
         this.bean(beanFactory, name, beanClass, null);
     }
 
     private void bean(@NotNull BeanDefinitionRegistry beanFactory, @NotNull BeanNames name,
-            @NotNull Class beanClass, @Nullable BeanDefinitionBuilderCustomizer body) {
+                      @NotNull Class beanClass, @Nullable BeanDefinitionBuilderCustomizer body) {
         if (beanFactory == null) {
             throw new IllegalArgumentException("beanFactory is null");
         }
@@ -551,13 +551,9 @@ public abstract class DynamicExtensionsApplicationContextBase extends OsgiBundle
         VersionNumber version = serverDescriptor.getVersionNumber();
 
 
-        if (version.compareTo(new VersionNumber("6.0")) >= 0) {
-            // From Alfresco 6.x, we
-            this.bean(beanFactory, BeanNames.QUARTZ_TASK_SCHEDULER, Quartz2TaskScheduler.class, beanAutowireByName);
-        } else  {
-            // Fallback to ScheduledTaskRegistrar on Alfresco 5.x
-            this.bean(beanFactory, BeanNames.QUARTZ_TASK_SCHEDULER, QuartzTaskScheduler.class, beanAutowireByName);
-        }
+        // From Alfresco 6.x, we
+        this.bean(beanFactory, BeanNames.QUARTZ_TASK_SCHEDULER, Quartz2TaskScheduler.class, beanAutowireByName);
+
         this.bean(beanFactory, BeanNames.SCHEDULED_TASK_REGISTRAR, ScheduledTaskRegistrar.class, beanAutowireByType);
     }
 

@@ -4,7 +4,7 @@ subprojects { Project p ->
     apply from: "${p.getProjectDir()}/override.gradle"
 
     configurations {
-        testCompile.extendsFrom(compileOnly)
+        testImplementation.extendsFrom(compileOnly)
     }
 
     jar {
@@ -20,7 +20,8 @@ subprojects { Project p ->
                         'org.eclipse.gemini.blueprint.context;version=!,' +
                         'org.eclipse.gemini.blueprint.context.support;version=!,' +
                         'org.eclipse.gemini.blueprint.service.exporter.support;version=!,' +
-                        '*',
+                        'org.slf4j;version="[1.7.2,2.1)", ' +
+                                '*',
                 'Bundle-DocURL': 'https://github.com/xenit-eu/dynamic-extensions-for-alfresco',
         )
     }
@@ -44,13 +45,12 @@ subprojects { Project p ->
 
     p.dependencies {
         compileOnly(enforcedPlatform("eu.xenit.alfresco:alfresco-community-bom:${p.ext.springSpecificAlfrescoBom}"))
-        testCompile(enforcedPlatform("eu.xenit.alfresco:alfresco-community-bom:${p.ext.springSpecificAlfrescoBom}"))
+        testImplementation(enforcedPlatform("eu.xenit.alfresco:alfresco-community-bom:${p.ext.springSpecificAlfrescoBom}"))
 
-        compile(project(":event-bus"))
-        compile(project(":alfresco-integration"))
-        compile(project(":annotations-runtime"))
-        compile(project(':annotations-runtime:scheduler-quartz-1'))
-        compile(project(':annotations-runtime:scheduler-quartz-2'))
+        implementation(project(":event-bus"))
+        implementation(project(":alfresco-integration"))
+        implementation(project(":annotations-runtime"))
+        implementation(project(':annotations-runtime:scheduler-quartz-2'))
 
         compileOnly("org.alfresco.surf:spring-webscripts")
         compileOnly("org.alfresco:alfresco-repository")
@@ -66,11 +66,11 @@ subprojects { Project p ->
         compileOnly('org.springframework:spring-context') { transitive = false }
         compileOnly('org.springframework:spring-context-support') { transitive = false }
 
-        testCompile('org.hamcrest:hamcrest-all:1.3')
-        testCompile("org.mockito:mockito-core:${p.ext.mockitoVersion}")
-        testCompile("junit:junit:${p.ext.junitVersion}")
-        testCompile("org.mockito:mockito-core:${mockitoVersion}")
-        testCompile("junit:junit:${junitVersion}")
-        testCompile("org.alfresco:alfresco-repository")
+        testImplementation('org.hamcrest:hamcrest-all:1.3')
+        testImplementation("org.mockito:mockito-core:${p.ext.mockitoVersion}")
+        testImplementation("junit:junit:${p.ext.junitVersion}")
+        testImplementation("org.mockito:mockito-core:${mockitoVersion}")
+        testImplementation("junit:junit:${junitVersion}")
+        testImplementation("org.alfresco:alfresco-repository")
     }
 }
