@@ -46,7 +46,7 @@ subprojects { Project p ->
     p.dependencies {
         compileOnly(enforcedPlatform("eu.xenit.alfresco:alfresco-community-bom:${p.ext.springSpecificAlfrescoBom}"))
         testImplementation(enforcedPlatform("eu.xenit.alfresco:alfresco-community-bom:${p.ext.springSpecificAlfrescoBom}"))
-
+        implementation group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: '1.7.22'
         implementation(project(":event-bus"))
         implementation(project(":alfresco-integration"))
         implementation(project(":annotations-runtime"))
