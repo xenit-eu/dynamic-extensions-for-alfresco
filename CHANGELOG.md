@@ -21,7 +21,7 @@ Version template:
  -->
 # Dynamic Extensions For Alfresco Changelog
 
-## [2.1.5] - 2022-11-28
+## [3.0.0] - 2022-11-29
 
 ### Added
 

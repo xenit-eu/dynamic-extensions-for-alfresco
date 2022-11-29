@@ -32,7 +32,7 @@ def copyPropertyValueIfExists(sourcePropertyName, targetPropertyName) {
 
 allprojects {
     group = 'eu.xenit.de'
-    version = '2.2.0'
+    version = '3.0.0'
 
     boolean isRelease = ci.branch?.startsWith("release")
     if (!isRelease) {
