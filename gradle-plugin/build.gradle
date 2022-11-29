@@ -17,6 +17,7 @@ repositories {
 
 dependencies {
     implementation "biz.aQute.bnd:biz.aQute.bnd.gradle:5.3.0"
+    implementation group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: '1.7.22'
 
     implementation "commons-io:commons-io:2.6"
     testImplementation "junit:junit:${project.ext.junitVersion}"
