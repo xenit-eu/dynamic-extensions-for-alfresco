@@ -46,7 +46,6 @@ subprojects { Project p ->
     p.dependencies {
         compileOnly(enforcedPlatform("eu.xenit.alfresco:alfresco-community-bom:${p.ext.springSpecificAlfrescoBom}"))
         testImplementation(enforcedPlatform("eu.xenit.alfresco:alfresco-community-bom:${p.ext.springSpecificAlfrescoBom}"))
-        implementation group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: '1.7.22'
         implementation(project(":event-bus"))
         implementation(project(":alfresco-integration"))
         implementation(project(":annotations-runtime"))
@@ -57,6 +56,7 @@ subprojects { Project p ->
         compileOnly("org.osgi:org.osgi.core:${p.ext.osgiVersion}")
         compileOnly("org.eclipse.gemini.blueprint:gemini-blueprint-extender:${p.ext.geminiVersion}") {
             exclude group: "org.springframework"
+            exclude group: "org.apache.servicemix.bundles"
         }
         compileOnly("javax.servlet:servlet-api:${p.ext.servletVersion}")
         compileOnly "javax.validation:validation-api:$javax_annotations_version"
