@@ -1,9 +1,10 @@
 package com.github.dynamicextensionsalfresco.event.impl;
 
 import com.github.dynamicextensionsalfresco.event.EventBus;
-import org.jetbrains.annotations.NotNull;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * @author Laurent Van der Linden

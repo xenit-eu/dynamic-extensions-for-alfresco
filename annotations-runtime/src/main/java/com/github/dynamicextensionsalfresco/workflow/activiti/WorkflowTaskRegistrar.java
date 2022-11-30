@@ -1,18 +1,19 @@
 package com.github.dynamicextensionsalfresco.workflow.activiti;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 import org.activiti.engine.delegate.ExecutionListener;
 import org.activiti.engine.delegate.JavaDelegate;
 import org.activiti.engine.delegate.TaskListener;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+
+import javax.validation.constraints.NotNull;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Detects workflow tasks from Spring beans implementing the {@link DelegateTask} or {@link TaskListener} interface.

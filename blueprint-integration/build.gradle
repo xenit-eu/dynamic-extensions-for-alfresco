@@ -59,7 +59,7 @@ subprojects { Project p ->
             exclude group: "org.springframework"
         }
         compileOnly("javax.servlet:servlet-api:${p.ext.servletVersion}")
-        compileOnly("org.jetbrains:annotations:$jetbrains_annotations_version")
+        compileOnly "javax.validation:validation-api:$javax_annotations_version"
         compileOnly("com.springsource.util:com.springsource.util.osgi:${p.ext.springOsgiUtilVersion}")
         compileOnly('org.springframework:spring-core') { transitive = false }
         compileOnly('org.springframework:spring-beans') { transitive = false }

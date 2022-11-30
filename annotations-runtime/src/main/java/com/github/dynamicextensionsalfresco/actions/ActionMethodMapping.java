@@ -1,17 +1,18 @@
 package com.github.dynamicextensionsalfresco.actions;
 
 import com.github.dynamicextensionsalfresco.actions.annotations.ActionMethod;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
 import org.alfresco.repo.action.executer.ActionExecuter;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.rule.RuleServiceException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.util.ReflectionUtils;
+
+import javax.annotation.Nullable;
+import javax.validation.constraints.NotNull;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
 
 /**
  * Represents a mapping from {@link ActionExecuter#execute} to an {@link ActionMethod} -annotated method.

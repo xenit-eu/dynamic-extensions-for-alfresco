@@ -1,12 +1,10 @@
 package com.github.dynamicextensionsalfresco;
 
-import org.jetbrains.annotations.NotNull;
-
 /**
  * Contains constants for bean names used by the bundle Spring application contexts.
- * 
+ *
  * @author Laurens Fridael
- * 
+ *
  */
 public enum BeanNames {
 

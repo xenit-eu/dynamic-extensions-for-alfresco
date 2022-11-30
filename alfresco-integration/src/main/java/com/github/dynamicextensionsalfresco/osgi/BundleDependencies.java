@@ -4,11 +4,12 @@ import com.springsource.util.osgi.manifest.BundleManifest;
 import com.springsource.util.osgi.manifest.BundleManifestFactory;
 import com.springsource.util.osgi.manifest.ExportedPackage;
 import com.springsource.util.osgi.manifest.ImportedPackage;
+import org.osgi.framework.Bundle;
+
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import org.jetbrains.annotations.NotNull;
-import org.osgi.framework.Bundle;
 
 /**
  * Sort a list of bundles by their dependency graph. Bundles without or satisfied dependencies come first.

@@ -38,9 +38,7 @@ dependencies {
 
     compileOnly 'com.google.code.findbugs:jsr305:2.0.1'
     api 'com.google.collections:google-collections:1.0'
-
-    compileOnly "org.jetbrains:annotations:$jetbrains_annotations_version"
-
+    compileOnly "javax.validation:validation-api:$javax_annotations_version"
     compileOnly "com.fasterxml.jackson.core:jackson-databind"
 
     implementation "javax.annotation:javax.annotation-api:${javaxAnnotationApiVersion}"

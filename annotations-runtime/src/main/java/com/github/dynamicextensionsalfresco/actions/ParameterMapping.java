@@ -2,7 +2,8 @@ package com.github.dynamicextensionsalfresco.actions;
 
 import com.github.dynamicextensionsalfresco.actions.annotations.ActionMethod;
 import org.alfresco.service.cmr.action.ParameterDefinition;
-import org.jetbrains.annotations.NotNull;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * Represents a mapping of an Action parameter to a parameter of an {@link ActionMethod}-annotated method.
