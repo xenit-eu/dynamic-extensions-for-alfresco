@@ -7,13 +7,11 @@ include 'webscripts:webscripts-70'
 include 'event-bus'
 
 include 'annotations-runtime'
-include 'annotations-runtime:scheduler-quartz-1'
 include 'annotations-runtime:scheduler-quartz-2'
 
 include 'alfresco-integration'
 
 include 'blueprint-integration'
-include 'blueprint-integration:blueprint-integration-spring-3'
 include 'blueprint-integration:blueprint-integration-spring-5'
 include 'blueprint-override'
 
@@ -21,9 +19,7 @@ include 'control-panel'
 
 include 'gradle-plugin'
 
-include 'polyfill:polyfill-alfresco-50'
-
-def supportedAlfrescoVersions = ["50", "51", "52", "60", "61", "62", "70", "71", "72"]
+def supportedAlfrescoVersions = [ "61", "62", "70", "71", "72", "73"]
 def alfrescoDependentModules =
         [
                 'alfresco-dynamic-extensions-repo',

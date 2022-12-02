@@ -3,11 +3,12 @@ package com.github.dynamicextensionsalfresco.event.impl;
 import com.github.dynamicextensionsalfresco.event.Event;
 import com.github.dynamicextensionsalfresco.event.EventBus;
 import com.github.dynamicextensionsalfresco.event.EventListener;
-import java.util.Arrays;
-import org.jetbrains.annotations.NotNull;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+
+import javax.validation.constraints.NotNull;
+import java.util.Arrays;
 
 /**
  * Synchronous implementation that only notifies listeners based on their supported events.

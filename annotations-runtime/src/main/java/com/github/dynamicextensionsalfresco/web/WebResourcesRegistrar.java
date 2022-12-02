@@ -1,11 +1,6 @@
 package com.github.dynamicextensionsalfresco.web;
 
 import com.github.dynamicextensionsalfresco.webscripts.WebScriptUriRegistry;
-import java.io.IOException;
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.osgi.framework.BundleContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ResourceLoaderAware;
@@ -13,6 +8,12 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.extensions.webscripts.WebScript;
+
+import javax.annotation.Nullable;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.validation.constraints.NotNull;
+import java.io.IOException;
 
 /**
  * Register resources webscript if /META-INF/alfresco/web resources are found

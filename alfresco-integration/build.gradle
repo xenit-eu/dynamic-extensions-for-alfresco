@@ -1,11 +1,14 @@
+plugins {
+    id 'java-library'
+}
 configurations {
-    testCompile.extendsFrom(compileOnly)
+    testImplementation.extendsFrom(compileOnly)
 }
 
 dependencies {
     compileOnly enforcedPlatform("${project.ext.alfrescoBom}")
 
-    compile project(":annotations-runtime")
+    api project(":annotations-runtime")
 
     compileOnly("org.alfresco.surf:spring-webscripts")
     compileOnly("org.alfresco:alfresco-core") { transitive = false }
@@ -13,19 +16,18 @@ dependencies {
     compileOnly("org.alfresco:alfresco-repository") { transitive = false }
 
     compileOnly "org.slf4j:slf4j-api"
-    compileOnly "org.jetbrains:annotations:$jetbrains_annotations_version"
+    compileOnly "javax.validation:validation-api:$javax_annotations_version"
+    implementation "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
+    api "javax.servlet:servlet-api:${project.ext.servletVersion}"
 
-    compile "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
-    compile "javax.servlet:servlet-api:${project.ext.servletVersion}"
-
-    compile "org.jibx:jibx-run:${project.ext.jibxVersion}"
-    compile "org.apache.felix:org.apache.felix.framework:${project.ext.felixVersion}"
-    compile "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
-    compile "biz.aQute.bnd:biz.aQute.bnd:${project.ext.bndVersion}"
+    implementation "org.jibx:jibx-run:${project.ext.jibxVersion}"
+    implementation "org.apache.felix:org.apache.felix.framework:${project.ext.felixVersion}"
+    implementation "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
+    api "biz.aQute.bnd:biz.aQute.bnd:${project.ext.bndVersion}"
 
     implementation "javax.annotation:javax.annotation-api:${javaxAnnotationApiVersion}"
 
-    testCompile "junit:junit:${project.ext.junitVersion}"
-    testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
-    testCompile "org.springframework:spring-test:${project.ext.springVersion}"
+    testImplementation "junit:junit:${project.ext.junitVersion}"
+    testImplementation "org.mockito:mockito-core:${project.ext.mockitoVersion}"
+    testImplementation "org.springframework:spring-test:${project.ext.springVersion}"
 }

@@ -2,14 +2,6 @@ package com.github.dynamicextensionsalfresco.web;
 
 import com.github.dynamicextensionsalfresco.webscripts.DummyStore;
 import com.github.dynamicextensionsalfresco.webscripts.support.AbstractBundleResourceHandler;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.ResourceBundle;
-import java.util.function.Function;
-import javax.servlet.http.HttpServletResponse;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.osgi.framework.BundleContext;
 import org.springframework.extensions.webscripts.Container;
 import org.springframework.extensions.webscripts.Description;
@@ -20,6 +12,15 @@ import org.springframework.extensions.webscripts.URLModelFactory;
 import org.springframework.extensions.webscripts.WebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
+
+import javax.annotation.Nullable;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.ResourceBundle;
+import java.util.function.Function;
 
 /**
  * Webscript to serve static web resources found in an extension When requests are prefixed with symbolic-name/web, no

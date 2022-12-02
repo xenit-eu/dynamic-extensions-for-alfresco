@@ -1,9 +1,10 @@
 package com.github.dynamicextensionsalfresco.policy;
 
-import java.lang.reflect.Method;
 import org.alfresco.repo.policy.JavaBehaviour;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
+import javax.validation.constraints.NotNull;
+import java.lang.reflect.Method;
 
 /**
  * Simplify toString to method signature
@@ -15,7 +16,7 @@ public final class DescriptiveJavaBehaviour extends JavaBehaviour {
     private final Method methodReference;
 
     public DescriptiveJavaBehaviour(@Nullable Object instance, @NotNull Method methodReference,
-            @Nullable NotificationFrequency frequency) {
+                                    @Nullable NotificationFrequency frequency) {
         super(instance, methodReference.getName(), frequency);
 
         if (methodReference == null) {

@@ -2,16 +2,15 @@ apply plugin: 'biz.aQute.bnd.builder'
 
 dependencies {
     compileOnly "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
-    compileOnly "org.jetbrains:annotations:$jetbrains_annotations_version"
-    
-    testCompile "junit:junit:${project.ext.junitVersion}"
-    testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
+    compileOnly "javax.validation:validation-api:$javax_annotations_version"
+    testImplementation "junit:junit:${project.ext.junitVersion}"
+    testImplementation "org.mockito:mockito-core:${project.ext.mockitoVersion}"
 }
 
 jar {
-    bnd ('Bundle-Description' : 'Inter-bundle event bus',
-        'Bundle-Activator': 'com.github.dynamicextensionsalfresco.event.impl.Activator',
-        'Export-Package': 'com.github.dynamicextensionsalfresco.event.*')
+    bnd('Bundle-Description': 'Inter-bundle event bus',
+            'Bundle-Activator': 'com.github.dynamicextensionsalfresco.event.impl.Activator',
+            'Export-Package': 'com.github.dynamicextensionsalfresco.event.*')
 }
 
 defaultTasks 'jar'

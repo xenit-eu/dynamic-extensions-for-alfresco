@@ -20,6 +20,13 @@ Version template:
 ### YANKED (for reverted functionality in)
  -->
 # Dynamic Extensions For Alfresco Changelog
+
+## [3.0.0] - 2022-11-29
+
+### Added
+
+* [#356](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/356) Added Alfresco 7.3 compatibility
+
 ## [2.1.4] - 2022-07-13
 ### Fixed
 * [#350](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/350) Added missing curly brace in osgi framework spring context
@@ -27,8 +34,8 @@ Version template:
 ## [2.1.3] - 2022-04-11
 ### Added
 * [#344](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/344) Made it possible to configure boot delegation in OSGI framework context
-* [#346](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/346) Added Alfresc 7.1 compatibility
-* [#347](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/347) Added Alfresc 7.2 compatibility
+* [#346](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/346) Added Alfresco 7.1 compatibility
+* [#347](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/347) Added Alfresco 7.2 compatibility
 
 ## [2.1.2] - 2022-02-03
 ### Fixed

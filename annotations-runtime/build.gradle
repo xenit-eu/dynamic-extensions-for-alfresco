@@ -1,12 +1,15 @@
+plugins {
+    id 'java-library'
+}
 configurations {
-    testCompile.extendsFrom(compileOnly)
+    testImplementation.extendsFrom(compileOnly)
 }
 
 dependencies {
     compileOnly enforcedPlatform("${project.ext.alfrescoBom}")
 
-    compile project(':annotations')
-    compile project(":webscripts")
+    api project(':annotations')
+    implementation project(":webscripts")
 
     compileOnly "org.apache.felix:org.apache.felix.framework:${project.ext.felixVersion}"
 
@@ -32,29 +35,29 @@ dependencies {
     compileOnly("org.activiti:activiti-engine:5.7") { transitive = false }
     compileOnly("org.activiti:activiti-spring:5.7") { transitive = false }
 
-    compileOnly project(':polyfill:polyfill-alfresco-50')
 
     compileOnly 'com.google.code.findbugs:jsr305:2.0.1'
-    compile 'com.google.collections:google-collections:1.0'
-
-    compileOnly "org.jetbrains:annotations:$jetbrains_annotations_version"
-
+    api 'com.google.collections:google-collections:1.0'
+    compileOnly "javax.validation:validation-api:$javax_annotations_version"
     compileOnly "com.fasterxml.jackson.core:jackson-databind"
 
     implementation "javax.annotation:javax.annotation-api:${javaxAnnotationApiVersion}"
+    implementation 'javax.activation:javax.activation-api:1.2.0'
 
-    testCompile "${project.ext.alfrescoBom}"
-    testCompile project(":event-bus")
+    testImplementation "${project.ext.alfrescoBom}"
+    testImplementation project(":event-bus")
 
-    testCompile "junit:junit:${project.ext.junitVersion}"
-    testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
+    testImplementation "junit:junit:${project.ext.junitVersion}"
+    testImplementation "org.mockito:mockito-core:${project.ext.mockitoVersion}"
 
-    testCompile "org.springframework:spring-test:${project.ext.springVersion}"
+    testImplementation "org.springframework:spring-test:${project.ext.springVersion}"
 
-    testCompile('org.quartz-scheduler:quartz') { transitive = false }
+    testImplementation('org.quartz-scheduler:quartz') { transitive = false }
 
     testImplementation "org.mybatis:mybatis"
-    testImplementation "org.hibernate:hibernate:${project.ext.hibernateVersion}"
+    testImplementation("org.hibernate:hibernate:${project.ext.hibernateVersion}") {
+        exclude(group: 'javax.transaction', module: 'jta')
+    }
     testImplementation 'xerces:xercesImpl:2.8.0' // Required at runtime for org.alfresco.util.ISO9075#encode(String)
 
     testImplementation "com.fasterxml.jackson.core:jackson-databind"
@@ -62,4 +65,3 @@ dependencies {
     testImplementation "org.glassfish.jaxb:jaxb-runtime:${jaxbApiVersion}"
 
 }
-//}

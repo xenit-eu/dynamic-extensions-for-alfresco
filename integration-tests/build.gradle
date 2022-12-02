@@ -1,5 +1,5 @@
 plugins {
-    id "eu.xenit.docker-alfresco" version "5.0.7" apply false
+    id "eu.xenit.docker-alfresco" version "5.3.2" apply false
 }
 
 apply plugin: 'java'
@@ -9,12 +9,12 @@ ext {
 }
 
 dependencies {
-    testCompile 'org.hamcrest:hamcrest-all:1.3'
-    testCompile 'junit:junit:4.12'
-    testCompile 'io.rest-assured:rest-assured:3.0.7'
+    testImplementation 'org.hamcrest:hamcrest-all:1.3'
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'io.rest-assured:rest-assured:3.0.7'
 
-    testCompile group: 'org.slf4j', name: 'slf4j-api', version: "${slf4jVersion}"
-    testCompile group: 'org.slf4j', name: 'slf4j-simple', version: "${slf4jVersion}"
+    testImplementation group: 'org.slf4j', name: 'slf4j-api', version: "${slf4jVersion}"
+    testImplementation group: 'org.slf4j', name: 'slf4j-simple', version: "${slf4jVersion}"
 }
 
 // Tests should be executed in child projects, not in this project:
@@ -91,7 +91,7 @@ configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
 
     createDockerFile {
         // Workaround for https://issues.alfresco.com/jira/browse/MNT-20007
-        runCommand("sed -i 's|<secure>true</secure>|<secure>false</secure>|g' /usr/local/tomcat/conf/web.xml")
+//        runCommand("sed -i 's|<secure>true</secure>|<secure>false</secure>|g' /usr/local/tomcat/conf/web.xml")
         smartCopy(
                 "${project.getParent().getProjectDir()}/src/test/resources/${issue_297_config}",
                 "/usr/local/tomcat/shared/classes/alfresco/extension/${issue_297_config}"

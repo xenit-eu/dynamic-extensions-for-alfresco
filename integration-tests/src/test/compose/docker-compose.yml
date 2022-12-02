@@ -4,23 +4,16 @@ services:
   alfresco:
     image: ${DOCKER_IMAGE}
     environment:
-      JAVA_OPTS: "
-                -Ddb.driver=org.postgresql.Driver
-                -Ddb.username=alfresco
-                -Ddb.password=alfresco
-                -Ddb.url=jdbc:postgresql://postgres:5432/alfresco
-                -Dindex.subsystem.name=noindex
-                -Djodconverter.enabled=false
-                -Ddeployment.method=DOCKER_COMPOSE
-                -Dcsrf.filter.enabled=false
-                -Dmessaging.broker.url=nio://activemq:61616
-                -Dlocal.transform.service.enabled=false
-                -Dlegacy.transform.service.enabled=false
-                -Dhttp.proxyHost=webcache.example.com
-                -Dhttp.proxyPort=8080
-                -Xms1g -Xmx1g
-                -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000
-                "
+      - GLOBAL_db.driver=org.postgresql.Driver
+      - GLOBAL_db.username=alfresco
+      - GLOBAL_db.password=alfresco
+      - GLOBAL_db.url=jdbc:postgresql://postgres:5432/alfresco
+      - GLOBAL_index.subsystem.name=noindex
+      - GLOBAL_jodconverter.enabled=false
+      - GLOBAL_messaging.broker.url=nio://activemq:61616
+      - GLOBAL_local.transform.service.enabled=false
+      - GLOBAL_legacy.transform.service.enabled=false
+#      - DEBUG=true
     depends_on:
       postgres:
         condition: service_healthy
