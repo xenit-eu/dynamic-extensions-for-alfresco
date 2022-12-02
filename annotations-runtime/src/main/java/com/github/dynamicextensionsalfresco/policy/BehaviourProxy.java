@@ -1,6 +1,13 @@
 package com.github.dynamicextensionsalfresco.policy;
 
 import com.github.dynamicextensionsalfresco.metrics.Timer;
+import org.alfresco.repo.policy.Behaviour;
+import org.alfresco.repo.policy.Policy;
+import org.alfresco.repo.policy.PolicyComponent;
+import org.alfresco.service.cmr.repository.NodeRef;
+
+import javax.annotation.Nullable;
+import javax.validation.constraints.NotNull;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -8,12 +15,6 @@ import java.lang.reflect.Proxy;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
-import org.alfresco.repo.policy.Behaviour;
-import org.alfresco.repo.policy.Policy;
-import org.alfresco.repo.policy.PolicyComponent;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Proxy that allows a {@link Behaviour} to be garbage-collected.

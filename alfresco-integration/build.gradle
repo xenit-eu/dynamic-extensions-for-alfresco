@@ -16,8 +16,7 @@ dependencies {
     compileOnly("org.alfresco:alfresco-repository") { transitive = false }
 
     compileOnly "org.slf4j:slf4j-api"
-    compileOnly "org.jetbrains:annotations:$jetbrains_annotations_version"
-
+    compileOnly "javax.validation:validation-api:$javax_annotations_version"
     implementation "org.osgi:org.osgi.core:${project.ext.osgiVersion}"
     api "javax.servlet:servlet-api:${project.ext.servletVersion}"
 

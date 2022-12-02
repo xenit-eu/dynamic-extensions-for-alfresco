@@ -2,11 +2,12 @@ package com.github.dynamicextensionsalfresco.metrics;
 
 import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
 import org.alfresco.repo.transaction.TransactionListener;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.StopWatch;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * {@link Timer} based on Spring's {@link StopWatch} collects data during a transaction and logs to log4j after commit

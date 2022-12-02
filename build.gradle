@@ -1,5 +1,5 @@
 buildscript {
-    ext.jetbrains_annotations_version = '17.0.0'
+    ext.javax_annotations_version='2.0.1.Final'
     repositories {
         mavenCentral()
     }

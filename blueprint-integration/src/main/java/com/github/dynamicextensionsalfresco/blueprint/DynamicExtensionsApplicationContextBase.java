@@ -37,8 +37,6 @@ import org.alfresco.service.descriptor.DescriptorService;
 import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.alfresco.util.VersionNumber;
 import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationContext;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.osgi.framework.Constants;
 import org.osgi.service.packageadmin.ExportedPackage;
 import org.osgi.service.packageadmin.PackageAdmin;
@@ -63,6 +61,8 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.xml.sax.EntityResolver;
 
+import javax.annotation.Nullable;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;

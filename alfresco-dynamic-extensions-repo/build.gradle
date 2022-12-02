@@ -32,8 +32,7 @@ subprojects {
         ampLib "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
         // The core asm library is already included in Alfresco distributions, so we just add asm-commons.
         ampLib("asm:asm-commons:3.1") { transitive = false }
-
-        ampLib "org.jetbrains:annotations:$jetbrains_annotations_version"
+        ampLib "javax.validation:validation-api:$javax_annotations_version"
 
         ampLib "biz.aQute.bnd:biz.aQute.bnd:${project.ext.bndVersion}"
 

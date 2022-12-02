@@ -46,7 +46,6 @@ subprojects { Project p ->
     p.dependencies {
         compileOnly(enforcedPlatform("eu.xenit.alfresco:alfresco-community-bom:${p.ext.springSpecificAlfrescoBom}"))
         testImplementation(enforcedPlatform("eu.xenit.alfresco:alfresco-community-bom:${p.ext.springSpecificAlfrescoBom}"))
-
         implementation(project(":event-bus"))
         implementation(project(":alfresco-integration"))
         implementation(project(":annotations-runtime"))
@@ -57,9 +56,10 @@ subprojects { Project p ->
         compileOnly("org.osgi:org.osgi.core:${p.ext.osgiVersion}")
         compileOnly("org.eclipse.gemini.blueprint:gemini-blueprint-extender:${p.ext.geminiVersion}") {
             exclude group: "org.springframework"
+            exclude group: "org.apache.servicemix.bundles"
         }
         compileOnly("javax.servlet:servlet-api:${p.ext.servletVersion}")
-        compileOnly("org.jetbrains:annotations:$jetbrains_annotations_version")
+        compileOnly "javax.validation:validation-api:$javax_annotations_version"
         compileOnly("com.springsource.util:com.springsource.util.osgi:${p.ext.springOsgiUtilVersion}")
         compileOnly('org.springframework:spring-core') { transitive = false }
         compileOnly('org.springframework:spring-beans') { transitive = false }
