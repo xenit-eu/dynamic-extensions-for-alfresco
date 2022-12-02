@@ -78,7 +78,6 @@ jobs:
           ORG_GRADLE_PROJECT_sonatype_password: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
         run: ./gradlew publish -PsigningKeyId=CDE3528F
       - name: Publish Gradle Plugin
-        if: ${{ startswith(github.ref, 'refs/heads/release') }}
         env:
           GRADLE_PUBLISH_KEY: ${{ secrets.GRADLE_PLUGINS_PUBLISH_KEY }}
           GRADLE_PUBLISH_SECRET: ${{ secrets.GRADLE_PLUGINS_PUBLISH_SECRET }}
