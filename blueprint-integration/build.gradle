@@ -1,7 +1,6 @@
 subprojects { Project p ->
     apply plugin: "java"
     apply plugin: 'biz.aQute.bnd.builder'
-    apply from: "${p.getProjectDir()}/override.gradle"
 
     configurations {
         testImplementation.extendsFrom(compileOnly)

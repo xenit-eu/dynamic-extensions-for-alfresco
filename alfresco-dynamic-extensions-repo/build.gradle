@@ -16,7 +16,6 @@ subprojects {
 
     dependencies {
         compileOnly platform ("org.alfresco:acs-community-packaging:${alfrescoVersion}")
-//        compileOnly "${project.ext.alfrescoBom}"
 
         ampLib(project(":alfresco-integration")) {
             transitive = false
