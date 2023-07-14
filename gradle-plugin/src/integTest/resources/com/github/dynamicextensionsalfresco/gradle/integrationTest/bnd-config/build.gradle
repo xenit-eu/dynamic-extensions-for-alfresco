@@ -16,7 +16,7 @@ alfrescoDynamicExtensions {
 }
 
 dependencies {
-    alfrescoProvided enforcedPlatform("org.alfresco:acs-community-packaging:6.1.2-ga")
+    alfrescoProvided platform ("org.alfresco:acs-community-packaging:${alfrescoVersion}")
     alfrescoProvided("eu.xenit.de:annotations:1.7.6") { transitive = false }
     alfrescoProvided("eu.xenit.de:webscripts:1.7.6") { transitive = false }
     alfrescoProvided 'org.springframework:spring-context:3.2.14.RELEASE'

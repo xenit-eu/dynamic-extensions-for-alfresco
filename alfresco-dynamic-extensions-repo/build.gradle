@@ -46,11 +46,7 @@ subprojects {
 
         PrintWriter writer = null;
         writer.println("project name: " + project.name);
-        if (project.name.matches("alfresco-dynamic-extensions-repo-7\\d*")) {
-            ampLib project(':webscripts:webscripts-70')
-        } else {
-            ampLib project(':webscripts:webscripts-50')
-        }
+        ampLib project(':webscripts:webscripts-70')
 
         blueprint("org.eclipse.gemini.blueprint:gemini-blueprint-core:${project.ext.geminiVersion}")
         blueprint("org.eclipse.gemini.blueprint:gemini-blueprint-io:${project.ext.geminiVersion}")

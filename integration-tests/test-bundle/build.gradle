@@ -9,7 +9,7 @@ apply plugin: 'biz.aQute.bnd.builder'
 test.enabled = false
 
 dependencies {
-    alfrescoProvided enforcedPlatform("eu.xenit.alfresco:alfresco-community-bom:6.1.2-ga")
+    alfrescoProvided platform ("org.alfresco:acs-community-packaging:6.1.2-ga")
 
     alfrescoProvided project(':annotations')
     alfrescoProvided project(':webscripts')

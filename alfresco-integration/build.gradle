@@ -6,7 +6,7 @@ configurations {
 }
 
 dependencies {
-    compileOnly "org.alfresco:acs-community-packaging:${alfrescoVersion}"
+    compileOnly platform ("org.alfresco:acs-community-packaging:${alfrescoVersion}")
 
     api project(":annotations-runtime")
 

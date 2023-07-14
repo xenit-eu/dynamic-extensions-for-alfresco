@@ -6,7 +6,7 @@ configurations {
 }
 
 dependencies {
-    compileOnly "org.alfresco:acs-community-packaging:${alfrescoVersion}"
+    compileOnly platform ("org.alfresco:acs-community-packaging:${alfrescoVersion}")
 
     api project(':annotations')
     implementation project(":webscripts")
@@ -21,7 +21,7 @@ dependencies {
     compileOnly("org.alfresco:alfresco-repository")
     compileOnly("org.alfresco:alfresco-core")
 
-    compileOnly "org.alfresco:freemarker"
+    compileOnly "org.freemarker:freemarker"
 
     compileOnly "javax.servlet:servlet-api:${project.ext.servletVersion}"
     compileOnly('org.springframework:spring-aop') { transitive = false }

@@ -3,7 +3,7 @@ configurations {
 }
 
 dependencies {
-    javadocOnly "org.alfresco:acs-community-packaging:${alfrescoVersion}"
+    javadocOnly platform ("org.alfresco:acs-community-packaging:${alfrescoVersion}")
 
     javadocOnly("org.alfresco:alfresco-repository")
     javadocOnly("org.alfresco:alfresco-data-model")
