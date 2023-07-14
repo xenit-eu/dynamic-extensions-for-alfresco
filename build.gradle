@@ -57,10 +57,10 @@ allprojects {
     }
 
     repositories {
-        maven {
-            url "${rootProject.projectDir}/alfresco-bom-repo"
-            allowInsecureProtocol = true
-        }
+//        maven {
+//            url "${rootProject.projectDir}/alfresco-bom-repo"
+//            allowInsecureProtocol = true
+//        }
         mavenCentral()
         jcenter()
         maven {
@@ -109,7 +109,8 @@ subprojects {
         alfrescoVersion = alfrescoVersions.get(simpleAlfrescoVersion)
         springVersion = springVersions.get(simpleAlfrescoVersion)
 
-        alfrescoBom = "eu.xenit.alfresco:alfresco-community-bom:${alfrescoVersion}"
+//        System.out.println("alfrescoversieke: "+alfrescoVersion)
+//        alfrescoBom = "eu.xenit.alfresco:alfresco-community-bom:${alfrescoVersion}"
 
         // '3.0.0.M01' for Alfresco 6.0
         // '1.0.2.RELEASE' for Alfresco 5.x

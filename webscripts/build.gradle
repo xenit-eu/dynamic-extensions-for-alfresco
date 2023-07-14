@@ -3,14 +3,14 @@ plugins {
 }
 
 dependencies {
-    compileOnly enforcedPlatform("${project.ext.alfrescoBom}")
+    compileOnly platform ("org.alfresco:acs-community-packaging:${alfrescoVersion}")
 
     compileOnly('org.springframework:spring-core') { transitive = false }
     compileOnly('org.springframework:spring-beans') { transitive = false }
     compileOnly('org.springframework:spring-aop') { transitive = false }
     compileOnly('org.springframework:spring-web') { transitive = false }
 
-    compileOnly("org.alfresco:alfresco-data-model") { transitive = false }
+    compileOnly("org.alfresco:alfresco-data-model")
     compileOnly("org.alfresco.surf:spring-webscripts") { transitive = false }
     compileOnly("org.alfresco.surf:spring-surf-core") { transitive = false }
 
@@ -32,7 +32,7 @@ dependencies {
 subprojects {
     apply plugin: 'java'
     dependencies {
-        compileOnly enforcedPlatform("${project.ext.alfrescoBom}")
+        compileOnly platform ("org.alfresco:acs-community-packaging:${alfrescoVersion}")
         compileOnly('org.json:json') { transitive = false }
     }
 }

@@ -6,14 +6,14 @@ configurations {
 }
 
 dependencies {
-    compileOnly enforcedPlatform("${project.ext.alfrescoBom}")
+    compileOnly "org.alfresco:acs-community-packaging:${alfrescoVersion}"
 
     api project(":annotations-runtime")
 
     compileOnly("org.alfresco.surf:spring-webscripts")
-    compileOnly("org.alfresco:alfresco-core") { transitive = false }
-    compileOnly("org.alfresco:alfresco-data-model") { transitive = false }
-    compileOnly("org.alfresco:alfresco-repository") { transitive = false }
+    compileOnly("org.alfresco:alfresco-core")
+    compileOnly("org.alfresco:alfresco-data-model")
+    compileOnly("org.alfresco:alfresco-repository")
 
     compileOnly "org.slf4j:slf4j-api"
     compileOnly "javax.validation:validation-api:$javax_annotations_version"

@@ -29,14 +29,14 @@ configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
     }
     
     repositories {
-        maven {
-            name 'release'
-            url "https://artifactory.xenit.eu/artifactory/libs-release"
-            credentials {
-                username project.hasProperty('eu.xenit.artifactory.username') ? property('eu.xenit.artifactory.username') : ''
-                password project.hasProperty('eu.xenit.artifactory.password') ? property('eu.xenit.artifactory.password') : ''
-            }
-        }
+//        maven {
+//            name 'release'
+//            url "https://artifactory.xenit.eu/artifactory/libs-release"
+//            credentials {
+//                username project.hasProperty('eu.xenit.artifactory.username') ? property('eu.xenit.artifactory.username') : ''
+//                password project.hasProperty('eu.xenit.artifactory.password') ? property('eu.xenit.artifactory.password') : ''
+//            }
+//        }
     }
 
     def alfrescoVersion = project.name[-2..-1]

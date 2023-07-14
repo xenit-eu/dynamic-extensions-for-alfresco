@@ -1,5 +1,5 @@
 ext {
-    alfrescoBaseWarBom = 'org.alfresco:acs-packaging:7.0.1.3'
+    alfrescoBaseWarBom = 'org.alfresco:acs-community-packaging:7.0.1.3'
     alfrescoBaseWar = 'org.alfresco:content-services@war'
 
     alfrescoBaseImage = 'docker.xenit.eu/private/alfresco-enterprise/alfresco-repository-enterprise:7.0.1.3'

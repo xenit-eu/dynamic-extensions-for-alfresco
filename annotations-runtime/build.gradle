@@ -6,7 +6,7 @@ configurations {
 }
 
 dependencies {
-    compileOnly enforcedPlatform("${project.ext.alfrescoBom}")
+    compileOnly "org.alfresco:acs-community-packaging:${alfrescoVersion}"
 
     api project(':annotations')
     implementation project(":webscripts")
@@ -17,9 +17,9 @@ dependencies {
     compileOnly("org.alfresco.surf:spring-webscripts") {
         exclude group: "org.quartz-scheduler"
     }
-    compileOnly("org.alfresco:alfresco-data-model") { transitive = false }
-    compileOnly("org.alfresco:alfresco-repository") { transitive = false }
-    compileOnly("org.alfresco:alfresco-core") { transitive = false }
+    compileOnly("org.alfresco:alfresco-data-model")
+    compileOnly("org.alfresco:alfresco-repository")
+    compileOnly("org.alfresco:alfresco-core")
 
     compileOnly "org.alfresco:freemarker"
 
@@ -44,7 +44,7 @@ dependencies {
     implementation "javax.annotation:javax.annotation-api:${javaxAnnotationApiVersion}"
     implementation 'javax.activation:javax.activation-api:1.2.0'
 
-    testImplementation "${project.ext.alfrescoBom}"
+    testImplementation platform("org.alfresco:acs-community-packaging:${alfrescoVersion}")
     testImplementation project(":event-bus")
 
     testImplementation "junit:junit:${project.ext.junitVersion}"

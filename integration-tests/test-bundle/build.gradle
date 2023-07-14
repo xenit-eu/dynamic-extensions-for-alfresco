@@ -14,9 +14,9 @@ dependencies {
     alfrescoProvided project(':annotations')
     alfrescoProvided project(':webscripts')
 
-    alfrescoProvided('org.alfresco:alfresco-repository') { transitive = false }
-    alfrescoProvided('org.alfresco:alfresco-data-model') { transitive = false }
-    alfrescoProvided('org.alfresco:alfresco-core') { transitive = false }
+    alfrescoProvided('org.alfresco:alfresco-repository')
+    alfrescoProvided('org.alfresco:alfresco-data-model')
+    alfrescoProvided('org.alfresco:alfresco-core')
     alfrescoProvided('org.springframework:spring-core') { transitive = false }
     alfrescoProvided('org.springframework:spring-beans') { transitive = false }
     alfrescoProvided('org.springframework:spring-context') { transitive = false }

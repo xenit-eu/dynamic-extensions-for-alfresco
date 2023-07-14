@@ -5,7 +5,7 @@ configurations {
 }
 
 dependencies {
-    compileOnly enforcedPlatform("${project.ext.alfrescoBom}")
+    compileOnly platform ("org.alfresco:acs-community-packaging:${alfrescoVersion}")
 
     implementation project(":alfresco-integration")
     implementation project(':annotations')
@@ -15,13 +15,13 @@ dependencies {
     compileOnly("org.alfresco.surf:spring-webscripts") { transitive = false }
     compileOnly("org.alfresco.surf:spring-surf-core") { transitive = false }
 
-    compileOnly("org.alfresco:alfresco-data-model") { transitive = false }
-    compileOnly("org.alfresco:alfresco-repository") { transitive = false }
-    compileOnly("org.alfresco:alfresco-core") { transitive = false }
+    compileOnly("org.alfresco:alfresco-data-model")
+    compileOnly("org.alfresco:alfresco-repository")
+    compileOnly("org.alfresco:alfresco-core")
 
     compileOnly "org.slf4j:slf4j-api"
     compileOnly "org.json:json"
-    compileOnly "org.alfresco:freemarker"
+    compileOnly "org.freemarker:freemarker"
 
     compileOnly('org.springframework:spring-beans') { transitive = false }
     compileOnly('org.springframework:spring-context') { transitive = false }

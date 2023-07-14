@@ -3,12 +3,12 @@ configurations {
 }
 
 dependencies {
-    javadocOnly enforcedPlatform("${project.ext.alfrescoBom}")
+    javadocOnly "org.alfresco:acs-community-packaging:${alfrescoVersion}"
 
-    javadocOnly("org.alfresco:alfresco-repository") { transitive = false }
-    javadocOnly("org.alfresco:alfresco-data-model") { transitive = false }
-    javadocOnly("org.alfresco:alfresco-remote-api") { transitive = false }
-    javadocOnly("org.alfresco:alfresco-core") { transitive = false }
+    javadocOnly("org.alfresco:alfresco-repository")
+    javadocOnly("org.alfresco:alfresco-data-model")
+    javadocOnly("org.alfresco:alfresco-remote-api")
+    javadocOnly("org.alfresco:alfresco-core")
 
     javadocOnly('org.quartz-scheduler:quartz') { transitive = false }
 
