@@ -1,7 +1,7 @@
 ext {
+    alfrescoBaseWarBom = 'org.alfresco:acs-community-packaging:7.4.0'
     alfrescoBaseWar = 'org.alfresco:content-services-community@war'
     alfrescoBaseImage = 'xenit/alfresco-repository-community:7.4.0'
-    platformVersion = '7.4.0'
 
     postgresImage = 'postgres:13'
 }
