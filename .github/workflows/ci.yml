@@ -49,7 +49,7 @@ jobs:
         env:
           DOCKER_USER: ${{ secrets.CLOUDSMITH_USER }}
           DOCKER_PASSWORD: ${{ secrets.CLOUDSMITH_APIKEY }}
-        run: echo "$DOCKER_PASSWORD" | docker login docker.xenit.eu --username "$DOCKER_USER" --password-stdin
+        run: echo "$DOCKER_PASSWORD" | docker login private.docker.xenit.eu --username "$DOCKER_USER" --password-stdin
       - name: Test
         run: ./gradlew integrationTest -P${{ matrix.flavour }}
       - name: 'Upload Artifact'

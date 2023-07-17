@@ -1,6 +1,7 @@
 ext {
     alfrescoBaseWar = 'org.alfresco:content-services-community:6.1.2-ga@war'
     alfrescoBaseImage = 'xenit/alfresco-repository-community:6.1.2-ga'
+    platformVersion = '6.1.2-ga'
 
     postgresImage = 'postgres:10.1'
 }

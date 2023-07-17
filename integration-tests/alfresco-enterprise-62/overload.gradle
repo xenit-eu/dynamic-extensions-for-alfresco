@@ -1,6 +1,6 @@
 ext {
     alfrescoBaseWar = 'org.alfresco:content-services@war'
-    alfrescoBaseImage = 'docker.xenit.eu/private/alfresco-enterprise/alfresco-repository-enterprise:6.2.2.19'
+    alfrescoBaseImage = 'private.docker.xenit.eu/alfresco-enterprise/alfresco-repository-enterprise:6.2.2.19'
 
     postgresImage = 'postgres:10.1'
 }
