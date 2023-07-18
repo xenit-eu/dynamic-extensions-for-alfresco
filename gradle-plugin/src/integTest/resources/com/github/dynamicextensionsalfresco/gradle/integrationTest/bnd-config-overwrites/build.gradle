@@ -17,6 +17,7 @@ alfrescoDynamicExtensions {
 
 
 dependencies {
+    System.out.println("alfrescoVersion bnd-config-overwites: "+alfrescoVersion)
     alfrescoProvided platform ("org.alfresco:acs-community-packaging:${alfrescoVersion}")
     alfrescoProvided("eu.xenit.de:annotations:1.7.6") { transitive = false }
     alfrescoProvided("eu.xenit.de:webscripts:1.7.6") { transitive = false }

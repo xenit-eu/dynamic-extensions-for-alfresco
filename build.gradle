@@ -95,12 +95,15 @@ def getSimpleAlfrescoVersionFromProjectName(final String projectName) {
 subprojects {
     if (project.name == 'integration-tests'
         || project.parent.name == 'integration-tests'
-        || project.name == 'blueprint-integration') {
+        || project.name == 'blueprint-integration'
+        || project.name == 'alfresco-dynamic-extensions-repo') {
         return
     }
 
     ext {
         simpleAlfrescoVersion = getSimpleAlfrescoVersionFromProjectName(project.name)
+//        System.out.println("project name root: "+project.name)
+//        System.out.println("simpleAlfrescoVersion root: "+simpleAlfrescoVersion)
         alfrescoVersion = alfrescoVersions.get(simpleAlfrescoVersion)
         springVersion = springVersions.get(simpleAlfrescoVersion)
 

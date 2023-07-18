@@ -43,8 +43,10 @@ subprojects { Project p ->
     ]
 
     p.dependencies {
-        compileOnly(platform ("org.alfresco:acs-community-packaging:${alfrescoVersion}"))
-        testImplementation(platform ("org.alfresco:acs-community-packaging:${alfrescoVersion}"))
+        def acsPackageVersion = project.property("acsPackageVersion")
+//        System.out.println("acsPackageVersion blueprint-integration: "+acsPackageVersion)
+        compileOnly(platform ("org.alfresco:acs-community-packaging:${acsPackageVersion}"))
+        testImplementation(platform ("org.alfresco:acs-community-packaging:${acsPackageVersion}"))
         implementation(project(":event-bus"))
         implementation(project(":alfresco-integration"))
         implementation(project(":annotations-runtime"))

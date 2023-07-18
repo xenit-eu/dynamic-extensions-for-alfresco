@@ -6,7 +6,9 @@ configurations {
 }
 
 dependencies {
-    compileOnly platform ("org.alfresco:acs-community-packaging:${alfrescoVersion}")
+    def acsPackageVersion = project.property("acsPackageVersion")
+//    System.out.println("acsPackageVersion annotations-runtime: "+acsPackageVersion)
+    compileOnly platform ("org.alfresco:acs-community-packaging:${acsPackageVersion}")
 
     api project(':annotations')
     implementation project(":webscripts")
@@ -44,7 +46,8 @@ dependencies {
     implementation "javax.annotation:javax.annotation-api:${javaxAnnotationApiVersion}"
     implementation 'javax.activation:javax.activation-api:1.2.0'
 
-    testImplementation platform("org.alfresco:acs-community-packaging:${alfrescoVersion}")
+//    System.out.println("acsPackageVersion annotations-runtime test: "+acsPackageVersion)
+    testImplementation platform("org.alfresco:acs-community-packaging:${acsPackageVersion}")
     testImplementation project(":event-bus")
 
     testImplementation "junit:junit:${project.ext.junitVersion}"

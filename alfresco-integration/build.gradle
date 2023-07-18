@@ -6,7 +6,9 @@ configurations {
 }
 
 dependencies {
-    compileOnly platform ("org.alfresco:acs-community-packaging:${alfrescoVersion}")
+    def acsPackageVersion = project.property("acsPackageVersion")
+//    System.out.println("acsPackageVersion alfresco-integration: "+acsPackageVersion)
+    compileOnly platform ("org.alfresco:acs-community-packaging:${acsPackageVersion}")
 
     api project(":annotations-runtime")
 

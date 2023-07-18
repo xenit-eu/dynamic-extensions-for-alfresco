@@ -7,7 +7,9 @@ configurations {
 }
 
 dependencies {
-    compileOnly platform ("org.alfresco:acs-community-packaging:${alfrescoVersion}")
+    def acsPackageVersion = project.property("acsPackageVersion")
+//    System.out.println("acsPackageVersion scheduler-quartz: "+acsPackageVersion)
+    compileOnly platform ("org.alfresco:acs-community-packaging:${acsPackageVersion}")
 
     compileOnly project(':annotations-runtime')
 

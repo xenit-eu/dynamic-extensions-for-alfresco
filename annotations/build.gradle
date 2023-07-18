@@ -3,7 +3,9 @@ configurations {
 }
 
 dependencies {
-    javadocOnly platform ("org.alfresco:acs-community-packaging:${alfrescoVersion}")
+    def acsPackageVersion = project.property("acsPackageVersion")
+//    System.out.println("acsPackageVersion annotations: "+acsPackageVersion)
+    javadocOnly platform ("org.alfresco:acs-community-packaging:${acsPackageVersion}")
 
     javadocOnly("org.alfresco:alfresco-repository")
     javadocOnly("org.alfresco:alfresco-data-model")

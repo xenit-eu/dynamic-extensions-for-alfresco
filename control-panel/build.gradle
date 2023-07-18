@@ -5,13 +5,13 @@ configurations {
 }
 
 dependencies {
-    System.out.println("platform version for control-panel: "+alfrescoVersion)
     if (project.hasProperty("acsPackageVersion")) {
         def acsPackageVersion = project.property("acsPackageVersion")
-        System.out.println("acsPackageVersion for control-panel: "+acsPackageVersion)
+//        System.out.println("acsPackageVersion for control-panel: "+acsPackageVersion)
         compileOnly platform ("org.alfresco:acs-community-packaging:${acsPackageVersion}")
     }
     else {
+//        System.out.println("alfrescoVersion control-panel: "+alfrescoVersion)
         compileOnly platform ("org.alfresco:acs-community-packaging:${alfrescoVersion}")
     }
 

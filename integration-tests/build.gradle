@@ -27,19 +27,9 @@ configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
     if (project.name.contains("enterprise") && !project.hasProperty("enterprise")) {
         return
     }
-    
-//    repositories {
-//        maven {
-//            name 'release'
-//            url "https://artifactory.xenit.eu/artifactory/libs-release"
-//            credentials {
-//                username project.hasProperty('eu.xenit.artifactory.username') ? property('eu.xenit.artifactory.username') : ''
-//                password project.hasProperty('eu.xenit.artifactory.password') ? property('eu.xenit.artifactory.password') : ''
-//            }
-//        }
-//    }
 
     def alfrescoVersion = project.name[-2..-1]
+    System.out.println("alfrescoVersion integrations-tests: "+alfrescoVersion)
 
     if (new File("${project.projectDir}/overload.gradle").exists())
         apply from: "${project.projectDir}/overload.gradle"

@@ -16,6 +16,7 @@ alfrescoDynamicExtensions {
 }
 
 dependencies {
+    System.out.println("alfrescoVersion simple project: "+alfrescoVersion)
     alfrescoProvided platform ("org.alfresco:acs-community-packaging:${alfrescoVersion}")
     alfrescoProvided 'org.springframework:spring-context:3.2.14.RELEASE'
     alfrescoProvided("org.alfresco:alfresco-repository") { transitive = false }

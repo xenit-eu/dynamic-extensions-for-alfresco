@@ -3,7 +3,9 @@ plugins {
 }
 
 dependencies {
-    compileOnly platform ("org.alfresco:acs-community-packaging:${alfrescoVersion}")
+    def acsPackageVersion = project.property("acsPackageVersion")
+//    System.out.println("acsPackageVersion webscripts: "+acsPackageVersion)
+    compileOnly platform ("org.alfresco:acs-community-packaging:${acsPackageVersion}")
 
     compileOnly('org.springframework:spring-core') { transitive = false }
     compileOnly('org.springframework:spring-beans') { transitive = false }
@@ -32,7 +34,8 @@ dependencies {
 subprojects {
     apply plugin: 'java'
     dependencies {
-        compileOnly platform ("org.alfresco:acs-community-packaging:${alfrescoVersion}")
+//        System.out.println("acsPackageVersion integrations-tests subprojects: "+acsPackageVersion)
+        compileOnly platform ("org.alfresco:acs-community-packaging:${acsPackageVersion}")
         compileOnly('org.json:json') { transitive = false }
     }
 }

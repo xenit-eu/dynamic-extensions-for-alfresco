@@ -15,18 +15,30 @@ subprojects {
     }
 
     dependencies {
+        System.out.println("alfrescoVersion repo: "+alfrescoVersion)
         compileOnly platform ("org.alfresco:acs-community-packaging:${alfrescoVersion}")
 
         ampLib(project(":alfresco-integration")) {
+            project(":alfresco-integration").ext.set("acsPackageVersion", alfrescoVersion)
             transitive = false
         }
-        ampLib(project(':annotations')) { transitive = false }
+        ampLib(project(':annotations')) {
+            project(":annotations").ext.set("acsPackageVersion", alfrescoVersion)
+            transitive = false
+        }
         ampLib(project(":annotations-runtime")) {
+            project(":annotations-runtime").ext.set("acsPackageVersion", alfrescoVersion)
             transitive = false
         }
-        ampLib(project(":annotations-runtime:scheduler-quartz-2")) { transitive = false }
+        ampLib(project(":annotations-runtime:scheduler-quartz-2")) {
+            project(":annotations-runtime:scheduler-quartz-2").ext.set("acsPackageVersion", alfrescoVersion)
+            transitive = false
+        }
 
-        ampLib(project(":webscripts")) { transitive = false }
+        ampLib(project(":webscripts")) {
+            project(":webscripts").ext.set("acsPackageVersion", alfrescoVersion)
+            transitive = false
+        }
 
         ampLib("org.apache.felix:org.apache.felix.framework:${project.ext.felixVersion}") { transitive = false }
         ampLib "com.springsource.util:com.springsource.util.osgi:${project.ext.springOsgiUtilVersion}"
@@ -40,7 +52,9 @@ subprojects {
         blueprint(project(path: ":blueprint-override", configuration: "patchBlueprint${project.ext.geminiVersion.substring(0, 1)}"))
 
 
-        blueprint(project(":blueprint-integration:blueprint-integration-spring-5"))
+        blueprint(project(":blueprint-integration:blueprint-integration-spring-5")) {
+            project(":blueprint-integration:blueprint-integration-spring-5").ext.set("acsPackageVersion", alfrescoVersion)
+        }
 
 
         PrintWriter writer = null;
