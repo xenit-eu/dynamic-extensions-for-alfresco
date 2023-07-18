@@ -18,7 +18,8 @@ include 'control-panel'
 
 include 'gradle-plugin'
 
-def supportedAlfrescoVersions = [ "61", "62", "70", "71", "72", "73", "74"]
+//def supportedAlfrescoVersions = [ "61", "62", "70", "71", "72", "73", "74"]
+def supportedAlfrescoVersions = [ "72"]
 def alfrescoDependentModules =
         [
                 'alfresco-dynamic-extensions-repo',

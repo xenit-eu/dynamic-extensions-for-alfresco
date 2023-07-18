@@ -5,7 +5,15 @@ configurations {
 }
 
 dependencies {
-    compileOnly platform ("org.alfresco:acs-community-packaging:${alfrescoVersion}")
+    System.out.println("platform version for control-panel: "+alfrescoVersion)
+    if (project.hasProperty("acsPackageVersion")) {
+        def acsPackageVersion = project.property("acsPackageVersion")
+        System.out.println("acsPackageVersion for control-panel: "+acsPackageVersion)
+        compileOnly platform ("org.alfresco:acs-community-packaging:${acsPackageVersion}")
+    }
+    else {
+        compileOnly platform ("org.alfresco:acs-community-packaging:${alfrescoVersion}")
+    }
 
     implementation project(":alfresco-integration")
     implementation project(':annotations')

@@ -28,7 +28,7 @@ configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
         return
     }
     
-    repositories {
+//    repositories {
 //        maven {
 //            name 'release'
 //            url "https://artifactory.xenit.eu/artifactory/libs-release"
@@ -37,7 +37,7 @@ configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
 //                password project.hasProperty('eu.xenit.artifactory.password') ? property('eu.xenit.artifactory.password') : ''
 //            }
 //        }
-    }
+//    }
 
     def alfrescoVersion = project.name[-2..-1]
 
@@ -70,7 +70,9 @@ configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
             alfrescoAmp "eu.xenit.alfresco:alfresco-hotfix-MNT-20557:1.0.2@amp"
         }
 
-        alfrescoDE project(':integration-tests:test-bundle')
+        alfrescoDE project(':integration-tests:test-bundle') {
+            project.ext.set("acsPackage", alfrescoBaseWarBom)
+        }
     }
     
     dockerAlfresco {

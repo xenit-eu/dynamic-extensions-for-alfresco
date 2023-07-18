@@ -9,7 +9,16 @@ apply plugin: 'biz.aQute.bnd.builder'
 test.enabled = false
 
 dependencies {
-    alfrescoProvided platform ("org.alfresco:acs-community-packaging:6.1.2-ga")
+    def acsPackage = project.property("acsPackage")
+    if (acsPackage != null) {
+        System.out.println("acsPackage is $acsPackage")
+        alfrescoProvided platform ("${acsPackage}")
+    }
+    else {
+        System.out.println("acsPackage is NULL")
+        alfrescoProvided platform ("org.alfresco:acs-community-packaging:6.1.2-ga")
+    }
+//    alfrescoProvided platform ("org.alfresco:acs-community-packaging:6.1.2-ga")
 
     alfrescoProvided project(':annotations')
     alfrescoProvided project(':webscripts')

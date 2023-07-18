@@ -50,7 +50,10 @@ subprojects {
         blueprint("org.eclipse.gemini.blueprint:gemini-blueprint-core:${project.ext.geminiVersion}")
         blueprint("org.eclipse.gemini.blueprint:gemini-blueprint-io:${project.ext.geminiVersion}")
 
-        bundles(project(":control-panel")) { transitive = false }
+        bundles(project(":control-panel")) {
+            transitive = false
+            project(":control-panel").ext.set("acsPackageVersion", alfrescoVersion)
+        }
         bundles(project(":event-bus")) { transitive = false }
     }
 
