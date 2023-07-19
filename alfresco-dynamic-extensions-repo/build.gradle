@@ -56,10 +56,18 @@ subprojects {
             project(":blueprint-integration:blueprint-integration-spring-5").ext.set("acsPackageVersion", alfrescoVersion)
         }
 
-
         PrintWriter writer = null;
         writer.println("project name: " + project.name);
-        ampLib project(':webscripts:webscripts-70')
+        if (project.name.matches("alfresco-dynamic-extensions-repo-7\\d*")) {
+            System.out.println("Using webscripts-70")
+            ampLib project(':webscripts:webscripts-70')
+        } else if (project.name.matches("alfresco-dynamic-extensions-repo-6\\d*")) {
+            System.out.println("Using webscripts-6x")
+            ampLib project(':webscripts:webscripts-6x')
+        }
+        else {
+            System.out.println("Not using any webscripts subproject")
+        }
 
         blueprint("org.eclipse.gemini.blueprint:gemini-blueprint-core:${project.ext.geminiVersion}")
         blueprint("org.eclipse.gemini.blueprint:gemini-blueprint-io:${project.ext.geminiVersion}")

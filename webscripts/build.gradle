@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
     def acsPackageVersion = project.property("acsPackageVersion")
-//    System.out.println("acsPackageVersion webscripts: "+acsPackageVersion)
+    System.out.println("acsPackageVersion webscripts: "+acsPackageVersion)
     compileOnly platform ("org.alfresco:acs-community-packaging:${acsPackageVersion}")
 
     compileOnly('org.springframework:spring-core') { transitive = false }
@@ -13,7 +13,7 @@ dependencies {
     compileOnly('org.springframework:spring-web') { transitive = false }
 
     compileOnly("org.alfresco:alfresco-data-model")
-    compileOnly("org.alfresco.surf:spring-webscripts") { transitive = false }
+    compileOnly("org.alfresco.surf:spring-webscripts")
     compileOnly("org.alfresco.surf:spring-surf-core") { transitive = false }
 
     // Find a solution to hide AbstractBundleResourceHandler from the API
@@ -28,7 +28,17 @@ dependencies {
     compileOnly 'com.google.code.findbugs:jsr305:2.0.1'
 
     compileOnly "javax.annotation:javax.annotation-api:${javaxAnnotationApiVersion}"
-    compileOnly project(':webscripts:webscripts-70')
+    if (acsPackageVersion.toString().startsWith("7")) {
+        System.out.println("Using webscripts-70")
+        compileOnly project(':webscripts:webscripts-70')
+    }
+    else if (acsPackageVersion.toString().startsWith("6")) {
+        System.out.println("Using webscripts-6x")
+        compileOnly project(':webscripts:webscripts-6x')
+    }
+    else {
+        System.out.println("Not using any webscripts subproject")
+    }
 }
 
 subprojects {
@@ -37,5 +47,6 @@ subprojects {
 //        System.out.println("acsPackageVersion integrations-tests subprojects: "+acsPackageVersion)
         compileOnly platform ("org.alfresco:acs-community-packaging:${acsPackageVersion}")
         compileOnly('org.json:json') { transitive = false }
+        compileOnly("org.alfresco.surf:spring-webscripts")
     }
 }

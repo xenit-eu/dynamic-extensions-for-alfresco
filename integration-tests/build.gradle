@@ -61,7 +61,8 @@ configure(subprojects.findAll { it.name.startsWith("alfresco-") }) {
         }
 
         alfrescoDE project(':integration-tests:test-bundle') {
-            project.ext.set("acsPackage", alfrescoBaseWarBom)
+            System.out.println("acsPackage for test-bundle is: "+alfrescoBaseWarBom)
+            project(":integration-tests:test-bundle").ext.set("acsPackage", alfrescoBaseWarBom)
         }
     }
     

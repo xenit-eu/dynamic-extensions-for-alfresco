@@ -12,6 +12,17 @@ dependencies {
 
     api project(':annotations')
     implementation project(":webscripts")
+    if (acsPackageVersion.toString().startsWith("7")) {
+        System.out.println("Using webscripts-70")
+        implementation project(":webscripts:webscripts-70")
+    }
+    else if (acsPackageVersion.toString().startsWith("6")) {
+        System.out.println("Using webscripts-6x")
+        implementation project(":webscripts:webscripts-6x")
+    }
+    else {
+        System.out.println("Not using any webscripts subprojects")
+    }
 
     compileOnly "org.apache.felix:org.apache.felix.framework:${project.ext.felixVersion}"
 
