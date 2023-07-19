@@ -60,10 +60,14 @@ subprojects {
         writer.println("project name: " + project.name);
         if (project.name.matches("alfresco-dynamic-extensions-repo-7\\d*")) {
             System.out.println("Using webscripts-70")
-            ampLib project(':webscripts:webscripts-70')
+            ampLib project(':webscripts:webscripts-70') {
+                project(":webscripts:webscripts-70").ext.set("acsPackageVersion", alfrescoVersion)
+            }
         } else if (project.name.matches("alfresco-dynamic-extensions-repo-6\\d*")) {
             System.out.println("Using webscripts-6x")
-            ampLib project(':webscripts:webscripts-6x')
+            ampLib project(':webscripts:webscripts-6x') {
+                project(":webscripts:webscripts-6x").ext.set("acsPackageVersion", alfrescoVersion)
+            }
         }
         else {
             System.out.println("Not using any webscripts subproject")
