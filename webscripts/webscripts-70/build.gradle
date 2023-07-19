@@ -1,0 +1,6 @@
+apply plugin: 'java'
+dependencies {
+    compileOnly platform ("org.alfresco:acs-community-packaging:7.0.0")
+    compileOnly('org.json:json') { transitive = false }
+    compileOnly("org.alfresco.surf:spring-webscripts")
+}

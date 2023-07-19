@@ -41,12 +41,12 @@ dependencies {
     }
 }
 
-subprojects {
-    apply plugin: 'java'
-    dependencies {
-//        System.out.println("acsPackageVersion integrations-tests subprojects: "+acsPackageVersion)
-        compileOnly platform ("org.alfresco:acs-community-packaging:${acsPackageVersion}")
-        compileOnly('org.json:json') { transitive = false }
-        compileOnly("org.alfresco.surf:spring-webscripts")
-    }
-}
+//subprojects {
+//    apply plugin: 'java'
+//    dependencies {
+////        System.out.println("acsPackageVersion integrations-tests subprojects: "+acsPackageVersion)
+//        compileOnly platform ("org.alfresco:acs-community-packaging:${acsPackageVersion}")
+//        compileOnly('org.json:json') { transitive = false }
+//        compileOnly("org.alfresco.surf:spring-webscripts")
+//    }
+//}
