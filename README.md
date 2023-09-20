@@ -66,6 +66,7 @@ the [Alfresco Docker Gradle Plugins](https://github.com/xenit-eu/alfresco-docker
 
 Dynamic Extensions is systematically integration-tested against:
 
+* Alfresco Enterprise & Community 7.4
 * Alfresco Enterprise & Community 7.3
 * Alfresco Enterprise & Community 7.2
 * Alfresco Enterprise & Community 7.1

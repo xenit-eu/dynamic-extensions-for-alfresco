@@ -21,6 +21,12 @@ Version template:
  -->
 # Dynamic Extensions For Alfresco Changelog
 
+## [3.1.0] - 2023-07-18
+
+### Added
+
+* [#363](https://github.com/xenit-eu/dynamic-extensions-for-alfresco/issues/363) Added Alfresco 7.4 compatibility
+
 ## [3.0.0] - 2022-11-29
 
 ### Added
