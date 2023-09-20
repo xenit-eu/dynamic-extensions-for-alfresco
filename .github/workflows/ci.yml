@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 env:
   GRADLE_OPTS: >-
-    -Dorg.gradle.project.org.alfresco.maven.nexus.username=${{ secrets.ALFRESCO_NEXUS_USERNAME }} 
+    -Dorg.gradle.project.org.alfresco.maven.nexus.username=${{ secrets.ALFRESCO_NEXUS_USERNAME }}
     -Dorg.gradle.project.org.alfresco.maven.nexus.password=${{ secrets.ALFRESCO_NEXUS_PASSWORD }}
 jobs:
   test:
@@ -72,8 +72,8 @@ jobs:
         env:
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.MAVEN_CENTRAL_GPG_KEY }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.MAVEN_CENTRAL_GPG_PASSWORD }}
-          ORG_GRADLE_PROJECT_sonatype_username: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
-          ORG_GRADLE_PROJECT_sonatype_password: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_sonatype_username: ${{ secrets.SONATYPE_S01_USERNAME }}
+          ORG_GRADLE_PROJECT_sonatype_password: ${{ secrets.SONATYPE_S01_PASSWORD }}
         run: ./gradlew publish -PsigningKeyId=CDE3528F
       - name: Publish Gradle Plugin
         if: ${{ startswith(github.ref, 'refs/heads/release') }}
