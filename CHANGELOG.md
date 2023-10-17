@@ -1,6 +1,6 @@
 ---
 title: Changelog - Dynamic Extensions for Alfresco
-date: 11 April 2022
+date: 27 September 2023
 report: true
 colorlinks: true
 ---
@@ -20,6 +20,12 @@ Version template:
 ### YANKED (for reverted functionality in)
  -->
 # Dynamic Extensions For Alfresco Changelog
+
+## [3.2.0] - 2023-09-23
+
+### Changed
+
+* Support for Java 11
 
 ## [3.1.0] - 2023-07-18
 

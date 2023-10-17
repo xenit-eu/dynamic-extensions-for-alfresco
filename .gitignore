@@ -17,3 +17,4 @@ out
 *.log*
 .gradle
 .idea
+**/bin/

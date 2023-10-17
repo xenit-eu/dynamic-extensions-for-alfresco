@@ -27,7 +27,7 @@ sonarqube {
 
 allprojects {
     group = 'eu.xenit.de'
-    version = '3.1.0'
+    version = '3.2.0'
 
     boolean isRelease = ci.branch?.startsWith("release")
     if (!isRelease) {
@@ -35,7 +35,7 @@ allprojects {
     }
 
     project.pluginManager.withPlugin('java-base') {
-        project.sourceCompatibility = 1.8
+        project.sourceCompatibility = 11
     }
 
     tasks.withType(JavaCompile) {
