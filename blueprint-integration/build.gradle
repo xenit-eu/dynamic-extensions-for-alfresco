@@ -8,22 +8,24 @@ subprojects { Project p ->
     }
 
     jar {
-        bnd(
+        bundle {
+            // We remove version dependencies on some gemini blueprint packages here,
+            // because they are different for alfresco 5.x and 6.x (see geminiVersion in the root build.gradle)
+            // This bundle is shared between those versions, and it should always be able to find some version to import.
+            bnd(
                 'Bundle-SymbolicName': p.group+'.'+p.name,
                 'Fragment-Host': 'org.eclipse.gemini.blueprint.extender',
                 'DynamicImport-Package': '*',
                 'Export-Package': 'com.github.dynamicextensionsalfresco.blueprint, com.github.dynamicextensionsalfresco.blueprint.*',
                 'Import-Package':
-                        // We remove version dependencies on some gemini blueprint packages here,
-                        // because they are different for alfresco 5.x and 6.x (see geminiVersion in the root build.gradle)
-                        // This bundle is shared between those versions, and it should always be able to find some version to import.
                         'org.eclipse.gemini.blueprint.context;version=!,' +
                         'org.eclipse.gemini.blueprint.context.support;version=!,' +
                         'org.eclipse.gemini.blueprint.service.exporter.support;version=!,' +
                         'org.slf4j;version="[1.7.2,2.1)", ' +
                                 '*',
                 'Bundle-DocURL': 'https://github.com/xenit-eu/dynamic-extensions-for-alfresco',
-        )
+            )
+        }
     }
 
     p.sourceSets.main.java.srcDirs = [

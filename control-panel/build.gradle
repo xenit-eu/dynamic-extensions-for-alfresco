@@ -40,21 +40,23 @@ dependencies {
 }
 
 jar {
-    bnd(
-            'Bundle-Name': "${project.name}",
-            'Bundle-SymbolicName': "${project.group}.${project.name}",
-            'Alfresco-Dynamic-Extension': 'true',
-            'Bundle-Description': 'Control Panel',
-            'Alfresco-Spring-Configuration': 'com.github.dynamicextensionsalfresco.controlpanel',
-            'Spring-Context': ';publish-context:=false',
-            'Import-Package': 'javax.annotation;version=!, ' +
-                    'org.aopalliance.aop, ' +
-                    'org.aopalliance.intercept, ' +
-                    'org.springframework.aop, ' +
-                    'org.springframework.aop.framework, ' +
-                    'org.slf4j;version="[1.7.2,2.1)", ' +
-                    '* '
-    )
+    bundle {
+        bnd(
+                'Bundle-Name': "${project.name}",
+                'Bundle-SymbolicName': "${project.group}.${project.name}",
+                'Alfresco-Dynamic-Extension': 'true',
+                'Bundle-Description': 'Control Panel',
+                'Alfresco-Spring-Configuration': 'com.github.dynamicextensionsalfresco.controlpanel',
+                'Spring-Context': ';publish-context:=false',
+                'Import-Package': 'javax.annotation;version=!, ' +
+                        'org.aopalliance.aop, ' +
+                        'org.aopalliance.intercept, ' +
+                        'org.springframework.aop, ' +
+                        'org.springframework.aop.framework, ' +
+                        'org.slf4j;version="[1.7.2,2.1)", ' +
+                        '* '
+        )
+    }
 }
 
 defaultTasks 'jar'

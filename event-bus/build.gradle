@@ -8,9 +8,11 @@ dependencies {
 }
 
 jar {
-    bnd('Bundle-Description': 'Inter-bundle event bus',
-            'Bundle-Activator': 'com.github.dynamicextensionsalfresco.event.impl.Activator',
-            'Export-Package': 'com.github.dynamicextensionsalfresco.event.*')
+    bundle {
+        bnd('Bundle-Description': 'Inter-bundle event bus',
+                'Bundle-Activator': 'com.github.dynamicextensionsalfresco.event.impl.Activator',
+                'Export-Package': 'com.github.dynamicextensionsalfresco.event.*')
+    }
 }
 
 defaultTasks 'jar'
