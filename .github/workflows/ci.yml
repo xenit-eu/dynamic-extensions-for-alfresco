@@ -16,7 +16,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-java@v1
         with:
-          java-version: 11
+          java-version: 17
       - name: Test
         run: ./gradlew test
       - name: Upload analysis to sonarcloud
@@ -42,7 +42,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-java@v1
         with:
-          java-version: 11
+          java-version: 17
       - name: Login to CloudSmith docker registry
         env:
           DOCKER_USER: ${{ secrets.CLOUDSMITH_USER }}
@@ -67,7 +67,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-java@v1
         with:
-          java-version: 11
+          java-version: 17
       - name: Publish
         env:
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.MAVEN_CENTRAL_GPG_KEY }}
