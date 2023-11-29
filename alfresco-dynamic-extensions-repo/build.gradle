@@ -89,7 +89,7 @@ subprojects {
 
     task amp(type: Zip) {
         configure ampConfig
-        baseName = project.name
+        archiveBaseName = project.name
     }
 
     artifacts {

@@ -10,7 +10,7 @@ buildscript {
 
 plugins {
     id "be.vbgn.ci-detect" version "0.5.0"
-    id "biz.aQute.bnd.builder" version "4.2.0" apply false
+    id "biz.aQute.bnd.builder" version "7.0.0" apply false
     id "org.sonarqube" version "3.5.0.2730"
 }
 
@@ -27,7 +27,7 @@ sonarqube {
 
 allprojects {
     group = 'eu.xenit.de'
-    version = '3.2.0'
+    version = '3.3.0'
 
     boolean isRelease = ci.branch?.startsWith("release")
     if (!isRelease) {
@@ -128,12 +128,12 @@ subprojects {
     apply plugin: 'jacoco'
 
     task sourceJar(type: Jar, dependsOn: classes) {
-        classifier = 'sources'
+        archiveClassifier = 'sources'
         from sourceSets.main.allSource
     }
 
     task javadocJar(type: Jar, dependsOn: javadoc) {
-        classifier = 'javadoc'
+        archiveClassifier = 'javadoc'
         from javadoc.destinationDir
     }
 
