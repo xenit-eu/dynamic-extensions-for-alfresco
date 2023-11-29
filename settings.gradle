@@ -1,7 +1,7 @@
 include 'annotations'
 
 include 'webscripts'
-//include 'webscripts:webscripts-50'
+include 'webscripts:webscripts-50'
 include 'webscripts:webscripts-70'
 
 include 'event-bus'
@@ -19,7 +19,7 @@ include 'control-panel'
 
 include 'gradle-plugin'
 
-def supportedAlfrescoVersions = ["74"] // "61", "62", "70", "71", "72", "73",
+def supportedAlfrescoVersions = [ "61", "62", "70", "71", "72", "73", "74"]
 def alfrescoDependentModules =
         [
                 'alfresco-dynamic-extensions-repo',

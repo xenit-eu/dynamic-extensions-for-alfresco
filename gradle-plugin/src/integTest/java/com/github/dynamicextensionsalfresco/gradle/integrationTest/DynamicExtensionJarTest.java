@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 import org.gradle.util.GradleVersion;
@@ -38,7 +39,7 @@ public class DynamicExtensionJarTest extends AbstractIntegrationTest {
 
         assertPath(Files::exists, jarFile);
 
-        FileSystem jarFs = FileSystems.newFileSystem(jarFile, null);
+        FileSystem jarFs = FileSystems.newFileSystem(jarFile, (ClassLoader) null);
 
         assertPath(Files::exists, jarFs.getPath("META-INF/MANIFEST.MF"));
         assertPath(Files::exists, jarFs.getPath("com/github/dynamicextensionsalfresco/examples/TemplateWebScript.class"));
@@ -70,7 +71,7 @@ public class DynamicExtensionJarTest extends AbstractIntegrationTest {
 
         assertPath(Files::exists, jarFile);
 
-        FileSystem jarFs = FileSystems.newFileSystem(jarFile, null);
+        FileSystem jarFs = FileSystems.newFileSystem(jarFile, (ClassLoader) null);
 
         assertPath(Files::exists, jarFs.getPath("META-INF/MANIFEST.MF"));
         assertPath(Files::exists, jarFs.getPath("com/github/dynamicextensionsalfresco/examples/TemplateWebScript.class"));
@@ -102,7 +103,7 @@ public class DynamicExtensionJarTest extends AbstractIntegrationTest {
 
         assertPath(Files::exists, jarFile);
 
-        FileSystem jarFs = FileSystems.newFileSystem(jarFile, null);
+        FileSystem jarFs = FileSystems.newFileSystem(jarFile, (ClassLoader) null);
 
         assertPath(Files::exists, jarFs.getPath("META-INF/MANIFEST.MF"));
         assertPath(Files::exists, jarFs.getPath("com/github/dynamicextensionsalfresco/examples/TemplateWebScript.class"));
@@ -132,7 +133,7 @@ public class DynamicExtensionJarTest extends AbstractIntegrationTest {
 
         assertPath(Files::exists, jarFile);
 
-        FileSystem jarFs = FileSystems.newFileSystem(jarFile, null);
+        FileSystem jarFs = FileSystems.newFileSystem(jarFile, (ClassLoader) null);
 
         assertPath(Files::exists, jarFs.getPath("META-INF/MANIFEST.MF"));
         assertPath(Files::exists, jarFs.getPath("com/github/dynamicextensionsalfresco/examples/TemplateWebScript.class"));
