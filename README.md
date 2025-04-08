@@ -1,3 +1,18 @@
+## A farewell to an era
+
+After many wonderful years of service, we have decided to discontinue our support of Dynamic Extensions.  
+There was a time when Dynamic Extensions saved us days in development time.  
+However, nowadays with containerization and other techniques, startup time is so low that it makes it is no longer worth carying the load of maintenance for such a big product.
+We thank you for joining us on this journey towards reducing friction and improving inertia in our development.
+
+---
+📌 **Deprecation Notice**
+
+This repository is deprecated and no more work will be done on this by Xenit Solutions NV.  
+You can continue to use this and it should work as-is but any future issues will not be fixed by the Alfresco community.  
+Feel free to fork this repository and improve your fork. 
+---
+
 # Dynamic Extensions for Alfresco
 
 [![Apache License 2](https://img.shields.io/badge/license-Apache%202-blue.svg)](LICENSE)
